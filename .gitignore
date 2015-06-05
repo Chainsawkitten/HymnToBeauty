@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# CMake user files
+*.user
+
 # Precompiled Headers
 *.gch
 *.pch
