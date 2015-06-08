@@ -10,6 +10,8 @@ EditorWindow::EditorWindow() {
     }
 
     glfwMakeContextCurrent(window);
+
+    gameWindow = nullptr;
 }
 
 EditorWindow::~EditorWindow() {
@@ -21,9 +23,22 @@ bool EditorWindow::ShouldClose() const {
 }
 
 void EditorWindow::Update() {
-
+    // Handle running game.
+    if (gameWindow != nullptr) {
+        gameWindow->Update();
+        if (gameWindow->ShouldClose()) {
+            delete gameWindow;
+            gameWindow = nullptr;
+        }
+    } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
+        gameWindow = new GameWindow();
+    }
 }
 
 void EditorWindow::Render() {
+    if (gameWindow != nullptr)
+        gameWindow->Render();
+
+    glfwMakeContextCurrent(window);
     glfwSwapBuffers(window);
 }

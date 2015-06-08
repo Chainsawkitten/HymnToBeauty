@@ -25,5 +25,6 @@ void GameWindow::Update() {
 }
 
 void GameWindow::Render() {
+    glfwMakeContextCurrent(window);
     glfwSwapBuffers(window);
 }

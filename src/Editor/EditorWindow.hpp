@@ -2,6 +2,7 @@
 #define EDITORWINDOW_HPP
 
 #include <GLFW/glfw3.h>
+#include <Core/GameWindow.hpp>
 
 /** @ingroup Editor
  * @{
@@ -30,6 +31,7 @@ class EditorWindow {
 
     private:
         GLFWwindow* window;
+        GameWindow* gameWindow;
 };
 
 /** @} */
