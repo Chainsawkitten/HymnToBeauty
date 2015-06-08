@@ -1,2 +1,3 @@
-add_executable(HymnToBeauty test.cpp)
-target_link_libraries(HymnToBeauty glfw ${GLFW_LIBRARIES})
+add_subdirectory(Core)
+add_subdirectory(Editor)
+add_subdirectory(Game)
