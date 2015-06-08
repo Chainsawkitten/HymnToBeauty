@@ -1,3 +1,4 @@
+#include "game.hpp"
 #include <GLFW/glfw3.h>
 
 int main() {
@@ -25,3 +26,4 @@ int main() {
 
     return 0;
 }
+

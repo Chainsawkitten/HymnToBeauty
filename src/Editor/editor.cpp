@@ -1,3 +1,4 @@
+#include "editor.hpp"
 #include <GLFW/glfw3.h>
 
 int main() {

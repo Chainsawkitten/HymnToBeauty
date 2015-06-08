@@ -1,9 +1,9 @@
 set(SRCS
-        main.cpp
+        editor.cpp
     )
 
 set(HEADERS
-
+        editor.hpp
     )
 
 create_directory_groups(${SRCS} ${HEADERS})

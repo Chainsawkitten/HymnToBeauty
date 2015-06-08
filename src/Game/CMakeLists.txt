@@ -1,9 +1,9 @@
 set(SRCS
-        main.cpp
+        game.cpp
     )
 
 set(HEADERS
-
+        game.hpp
     )
 
 create_directory_groups(${SRCS} ${HEADERS})

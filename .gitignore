@@ -7,6 +7,9 @@
 # CMake user files
 *.user
 
+# Doxygen
+doxybuild
+
 # Precompiled Headers
 *.gch
 *.pch
