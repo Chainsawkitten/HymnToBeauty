@@ -1,27 +1,21 @@
 #include "editor.hpp"
 #include <GLFW/glfw3.h>
+#include "EditorWindow.hpp"
 
 int main() {
-    GLFWwindow* window;
-
     if (!glfwInit())
         return 1;
 
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    EditorWindow* editorWindow = new EditorWindow();
 
-    window = glfwCreateWindow(640, 480, "Hymn to Beauty", nullptr, nullptr);
-    if (!window) {
-        glfwTerminate();
-        return 1;
-    }
-    glfwMakeContextCurrent(window);
-
-    while (!glfwWindowShouldClose(window)) {
-        glfwSwapBuffers(window);
+    while (!editorWindow->ShouldClose()) {
+        editorWindow->Update();
+        editorWindow->Render();
         glfwPollEvents();
     }
 
-    glfwDestroyWindow(window);
+    delete editorWindow;
+
     glfwTerminate();
 
     return 0;
