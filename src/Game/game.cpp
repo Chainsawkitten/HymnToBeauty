@@ -1,29 +1,22 @@
 #include "game.hpp"
 #include <GLFW/glfw3.h>
+#include <Core/GameWindow.hpp>
 
 int main() {
-    GLFWwindow* window;
-
     if (!glfwInit())
         return 1;
 
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    GameWindow* gameWindow = new GameWindow();
 
-    window = glfwCreateWindow(640, 480, "Hymn to Beauty", nullptr, nullptr);
-    if (!window) {
-        glfwTerminate();
-        return 1;
-    }
-    glfwMakeContextCurrent(window);
-
-    while (!glfwWindowShouldClose(window)) {
-        glfwSwapBuffers(window);
+    while (!gameWindow->ShouldClose()) {
+        gameWindow->Update();
+        gameWindow->Render();
         glfwPollEvents();
     }
 
-    glfwDestroyWindow(window);
+    delete gameWindow;
+
     glfwTerminate();
 
     return 0;
 }
-
