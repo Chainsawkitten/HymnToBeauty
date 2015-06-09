@@ -10,6 +10,10 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "Don't build GLFW tests" FORCE)
 add_subdirectory(externals/glfw)
 include_directories(externals/glfw/include)
 
+# GLEW
+add_subdirectory(externals/glew/build/cmake)
+include_directories(externals/glew/include)
+
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
 # one in the filesystem.

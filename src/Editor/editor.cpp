@@ -1,4 +1,5 @@
 #include "editor.hpp"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "EditorWindow.hpp"
 
@@ -7,6 +8,7 @@ int main() {
         return 1;
 
     EditorWindow* editorWindow = new EditorWindow();
+    glewInit();
 
     while (!editorWindow->ShouldClose()) {
         editorWindow->Update();

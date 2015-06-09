@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
 
@@ -7,6 +8,7 @@ int main() {
         return 1;
 
     GameWindow* gameWindow = new GameWindow();
+    glewInit();
 
     while (!gameWindow->ShouldClose()) {
         gameWindow->Update();
