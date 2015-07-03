@@ -68,7 +68,13 @@ class Settings {
          */
         void SetString(std::string& settingName, std::string& value);
         
+        /// Save the settings to an INI file.
+        virtual void Save() = 0;
+        
     protected:
+        /// Ini file.
+        CSimpleIni ini;
+        
         /// Add a bool setting.
         /**
          * @param settingName Setting name.
@@ -105,9 +111,6 @@ class Settings {
          */
         void AddStringSetting(std::string& settingName, std::string& section, std::string& key, std::string& defaultValue);
         
-        /// Save the settings to an INI file.
-        virtual void Save() = 0;
-        
     private:
         struct BoolSetting {
             std::string section;
@@ -133,14 +136,10 @@ class Settings {
             std::string defaultValue;
         };
         
-        CSimpleIni ini;
-        
         std::map<std::string, BoolSetting> boolSettings;
         std::map<std::string, LongSetting> longSettings;
         std::map<std::string, DoubleSetting> doubleSettings;
         std::map<std::string, StringSetting> stringSettings;
-        
-        Settings();
 };
 
 /** @} */

@@ -2,10 +2,6 @@
 
 using namespace std;
 
-Settings::Settings() {
-    ini.SetUnicode(true);
-}
-
 bool Settings::GetBool(string& settingName) {
     BoolSetting setting = boolSettings[settingName];
     
