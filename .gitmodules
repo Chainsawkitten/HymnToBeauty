@@ -7,3 +7,6 @@
 [submodule "externals/Headerize"]
 	path = externals/Headerize
 	url = https://github.com/Chainsawkitten/Headerize.git
+[submodule "externals/simpleini"]
+	path = externals/simpleini
+	url = https://github.com/brofield/simpleini.git
