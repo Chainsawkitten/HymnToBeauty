@@ -1,9 +1,11 @@
 set(SRCS
         GameWindow.cpp
+        Util/FileSystem.cpp
     )
 
 set(HEADERS
         GameWindow.hpp
+        Util/FileSystem.hpp
     )
 
 create_directory_groups(${SRCS} ${HEADERS})

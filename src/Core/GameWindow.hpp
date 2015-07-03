@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-/** @ingroup Game
+/** @ingroup Core
  * @{
  */
 
