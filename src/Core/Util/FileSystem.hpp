@@ -12,6 +12,14 @@ namespace FileSystem {
     /// Delimiter, '\' on Windows, '/' elsewhere.
     extern const char DELIMITER;
     
+    /// Check if a file exists.
+    /**
+     * Works for directories as well.
+     * @param filename Filename (either relative or absolute) to check.
+     * @return Whether the file exists
+     */
+    bool FileExists(const char* filename);
+    
     /// Create a directory if it does not already exist.
     /**
      * Permission for new directory is 0777 on Unix.

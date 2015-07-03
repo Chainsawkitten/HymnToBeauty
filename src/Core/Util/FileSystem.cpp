@@ -1,6 +1,8 @@
 #include "FileSystem.hpp"
 
 #include <cstdlib>
+#include <sys/types.h>
+#include <sys/stat.h>
 #if defined(_WIN32) || defined(WIN32)
 #include <direct.h>
 #endif
@@ -13,6 +15,19 @@ namespace FileSystem {
 	// MacOS and Linux
 	const char DELIMITER = '/';
 #endif
+    
+    bool FileExists(const char* filename) {
+#if defined(_WIN32) || defined(WIN32)
+        // Windows
+        struct _stat buf;
+        int result = _stat(filename, &buf);
+#else
+        // MacOS and Linux
+        struct stat buf;
+        int result = stat(Name.c_str(), &buf);
+#endif
+        return result == 0;
+    }
     
     void CreateDirectory(const char* filename) {
 #if defined(_WIN32) || defined(WIN32)
