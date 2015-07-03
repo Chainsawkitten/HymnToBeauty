@@ -56,7 +56,6 @@ namespace FileSystem {
         
         path += appName;
         
-        /// @todo: Create directory if it doesn't exist
         CreateDirectory(path.c_str());
         
         return path;
