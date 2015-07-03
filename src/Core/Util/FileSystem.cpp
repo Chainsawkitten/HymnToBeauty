@@ -1,6 +1,9 @@
 #include "FileSystem.hpp"
 
 #include <cstdlib>
+#if defined(_WIN32) || defined(WIN32)
+#include <direct.h>
+#endif
 
 namespace FileSystem {
 #if defined(_WIN32) || defined(WIN32)
@@ -10,6 +13,16 @@ namespace FileSystem {
 	// MacOS and Linux
 	const char DELIMITER = '/';
 #endif
+    
+    void CreateDirectory(const char* filename) {
+#if defined(_WIN32) || defined(WIN32)
+        // Windows
+        _mkdir(filename);
+#else
+        // MacOS and Linux
+        mkdir(filename, ACCESSPERMS);
+#endif
+    }
     
     std::string SavePath(const char* appName) {
         std::string path;
@@ -29,7 +42,7 @@ namespace FileSystem {
         path += appName;
         
         /// @todo: Create directory if it doesn't exist
-        //CreateDirectory(path.c_str());
+        CreateDirectory(path.c_str());
         
         return path;
     }

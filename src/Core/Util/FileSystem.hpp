@@ -12,6 +12,13 @@ namespace FileSystem {
     /// Delimiter, '\' on Windows, '/' elsewhere.
     extern const char DELIMITER;
     
+    /// Create a directory if it does not already exist.
+    /**
+     * Permission for new directory is 0777 on Unix.
+     * @param filename Filename (either absolute or relative) for the directory to create.
+     */
+    void CreateDirectory(const char* filename);
+    
     /// Get save path for application data folder.
     /**
      * The application data folder is created if it does not already exist.
