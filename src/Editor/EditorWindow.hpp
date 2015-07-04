@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
 #include <Core/Shader/ShaderProgram.hpp>
-#include <glm/glm.hpp>
+#include <Core/Geometry/Rectangle.hpp>
 
 /** @ingroup Editor
  * @{
@@ -38,25 +38,12 @@ class EditorWindow {
         GLFWwindow* window;
         GameWindow* gameWindow;
         
-        // Full screen quad
-        static const glm::vec2 vertices[4];
-        static const unsigned int indices[6];
-        
-        // Vertex buffer
-        GLuint vertexBuffer;
-        GLuint vertexAttribute;
-        unsigned int vertexCount;
-        
-        // Index buffer
-        GLuint indexBuffer;
-        unsigned int indexCount;
+        Geometry::Rectangle* rectangle;
         
         // Shaders
         Shader* vertexShader;
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
-        
-        void BindQuad();
 };
 
 /** @} */

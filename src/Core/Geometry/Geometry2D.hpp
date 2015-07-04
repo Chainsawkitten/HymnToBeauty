@@ -14,7 +14,7 @@ class Geometry2D {
         /// A vertex point.
         struct Vertex {
                 /// Position.
-                glm::vec3 position;
+                glm::vec2 position;
                 /// %Texture coordinate.
                 glm::vec2 textureCoordinate;
         };
