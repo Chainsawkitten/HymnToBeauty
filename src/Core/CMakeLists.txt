@@ -4,6 +4,7 @@ set(SRCS
         Util/Settings.cpp
         Util/Log.cpp
         Shader/Shader.cpp
+        Shader/ShaderProgram.cpp
     )
 
 set(HEADERS
@@ -11,7 +12,8 @@ set(HEADERS
         Util/FileSystem.hpp
         Util/Settings.hpp
         Util/Log.hpp
-        Shader/Shader.cpp
+        Shader/Shader.hpp
+        Shader/ShaderProgram.hpp
     )
 
 create_directory_groups(${SRCS} ${HEADERS})
