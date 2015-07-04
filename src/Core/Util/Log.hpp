@@ -2,6 +2,7 @@
 #define LOG_HPP
 
 #include <string>
+#include <ctime>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -41,6 +42,14 @@ class Log {
          * @return The %Log instance
          */
         Log& operator<<(float value);
+        
+        /// Output a time to stderr.
+        /**
+         * Formatted Y-m-d H:M:S.
+         * @param value Value to output.
+         * @return The %Log instance
+         */
+        Log& operator<<(time_t value);
 };
 
 /// Handles errors by printing them to the standard error stream.

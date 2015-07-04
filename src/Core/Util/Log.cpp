@@ -23,6 +23,16 @@ Log& Log::operator <<(float value) {
     return *this;
 }
 
+Log& Log::operator <<(time_t value) {
+    struct tm * timeinfo = localtime(&value);
+    
+    char buffer[24];
+    strftime(buffer, 24, "%Y-%m-%d %H:%M:%S", timeinfo);
+    *this << buffer;
+    
+    return *this;
+}
+
 void ErrorCallback(int error, const char* description) {
 	fputs(description, stderr);
 }

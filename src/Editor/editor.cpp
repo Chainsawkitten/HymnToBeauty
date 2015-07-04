@@ -7,15 +7,17 @@
 #include <Core/Util/Log.hpp>
 
 int main() {
+    // Enable logging if requested.
+    if (EditorSettings::GetInstance().GetBool("Logging"))
+        freopen(FileSystem::SavePath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
+    
+    Log() << "Editor started - " << time(nullptr) << "\n";
+    
     if (!glfwInit())
         return 1;
 
     EditorWindow* editorWindow = new EditorWindow();
     glewInit();
-    
-    // Enable logging if requested.
-    if (EditorSettings::GetInstance().GetBool("Logging"))
-        freopen(FileSystem::SavePath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
     
     // Setup error callbacks.
     glfwSetErrorCallback(ErrorCallback);
@@ -33,6 +35,8 @@ int main() {
     glfwTerminate();
     
     EditorSettings::GetInstance().Save();
+    
+    Log() << "Editor ended - " << time(nullptr) << "\n";
 
     return 0;
 }
