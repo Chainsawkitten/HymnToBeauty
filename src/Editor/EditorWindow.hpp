@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
 #include <Core/Shader/ShaderProgram.hpp>
+#include <glm/glm.hpp>
 
 /** @ingroup Editor
  * @{
@@ -37,13 +38,8 @@ class EditorWindow {
         GLFWwindow* window;
         GameWindow* gameWindow;
         
-        struct vec2 {
-            float x;
-            float y;
-        };
-        
         // Full screen quad
-        static const vec2 vertices[4];
+        static const glm::vec2 vertices[4];
         static const unsigned int indices[6];
         
         // Vertex buffer

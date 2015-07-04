@@ -6,7 +6,7 @@
 
 #define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
-const EditorWindow::vec2 EditorWindow::vertices[4] = { { -1.f, 1.f }, { 1.f, 1.f }, { -1.f, -1.f }, { 1.f, -1.f } };
+const glm::vec2 EditorWindow::vertices[4] = { { -1.f, 1.f }, { 1.f, 1.f }, { -1.f, -1.f }, { 1.f, -1.f } };
 const unsigned int EditorWindow::indices[6] = { 0, 1, 3, 0, 3, 2 };
 
 EditorWindow::EditorWindow() {
@@ -90,7 +90,7 @@ void EditorWindow::BindQuad() {
     vertexCount = 4;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(vec2), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(glm::vec2), vertices, GL_STATIC_DRAW);
     
     // Index buffer
     indexCount = 6;
@@ -99,7 +99,7 @@ void EditorWindow::BindQuad() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indices, GL_STATIC_DRAW);
     
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), BUFFER_OFFSET(0));
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), BUFFER_OFFSET(0));
     
     glBindVertexArray(0);
 }

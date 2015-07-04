@@ -17,6 +17,9 @@ include_directories(externals/glew/include)
 # SimpleIni
 include_directories(externals/simpleini)
 
+# GLM
+include_directories(externals/glm)
+
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
 # one in the filesystem.
