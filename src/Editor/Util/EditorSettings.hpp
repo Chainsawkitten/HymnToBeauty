@@ -6,9 +6,10 @@
 /// %Settings for the editor.
 /**
  * Available settings:
- * Name    | Description                   | Type | Default Value
- * ------- | ----------------------------- | ---- | -------------
- * Logging | Whether to output a log file. | Bool | false
+ * Name          | Description                     | Type | Default Value
+ * ------------- | ------------------------------- | ---- | -------------
+ * Logging       | Output a log file.              | bool | false
+ * Debug Context | Create an OpenGL Debug Context. | bool | false
  */
 class EditorSettings : public Settings {
     public:

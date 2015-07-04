@@ -2,6 +2,8 @@
 #define LOG_HPP
 
 #include <string>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 /** @ingroup Core
  * @{
@@ -40,6 +42,29 @@ class Log {
          */
         Log& operator<<(float value);
 };
+
+/// Handles errors by printing them to the standard error stream.
+/**
+ * GLFW error callback function. Prints incoming errors to the standard error stream (stderr).
+ * @param error <a href="http://www.glfw.org/docs/3.0/group__errors.html">GLFW error code</a>.
+ * @param description Description text of the error.
+ * @see <a href="http://www.glfw.org/docs/3.0/group__error.html">GLFW error handling</a>
+ */
+void ErrorCallback(int error, const char* description);
+
+/// Handles OpenGL debug messages.
+/**
+ * OpenGL debug message callback function. Prints debug messages to standard error stream (stderr).
+ * @param source The source that produced the message.
+ * @param type The type of message.
+ * @param id The message's identifier.
+ * @param severity The message severity (how important it is).
+ * @param length Length of the message.
+ * @param message A null-terminated string describing the message.
+ * @param userParam User parameters set with glDebugMessageCallback().
+ * @see <a href="https://www.opengl.org/wiki/Debug_Output">OpenGL Debug Output</a>
+ */
+void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 /** @} */
 

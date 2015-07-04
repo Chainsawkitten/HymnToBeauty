@@ -4,6 +4,7 @@
 #include "EditorWindow.hpp"
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/FileSystem.hpp>
+#include <Core/Util/Log.hpp>
 
 int main() {
     if (!glfwInit())
@@ -15,6 +16,11 @@ int main() {
     // Enable logging if requested.
     if (EditorSettings::GetInstance().GetBool("Logging"))
         freopen(FileSystem::SavePath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
+    
+    // Setup error callbacks.
+    glfwSetErrorCallback(ErrorCallback);
+    if (EditorSettings::GetInstance().GetBool("Debug Context"))
+        glDebugMessageCallback(DebugMessageCallback, nullptr);
 
     while (!editorWindow->ShouldClose()) {
         editorWindow->Update();

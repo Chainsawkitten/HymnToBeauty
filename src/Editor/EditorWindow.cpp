@@ -1,8 +1,16 @@
+#include <GL/glew.h>
 #include "EditorWindow.hpp"
+
+#include "Util/EditorSettings.hpp"
+#include <Core/Util/Log.hpp>
 
 EditorWindow::EditorWindow() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
+    // Enable debug context and set message callback.
+    if (EditorSettings::GetInstance().GetBool("Debug Context"))
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    
     window = glfwCreateWindow(640, 480, "Hymn to Beauty", nullptr, nullptr);
     if (!window) {
         glfwTerminate();

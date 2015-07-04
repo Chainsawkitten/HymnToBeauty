@@ -7,6 +7,7 @@ EditorSettings::EditorSettings() {
     ini.LoadFile(FileSystem::SavePath("Hymn to Beauty", "Settings.ini").c_str());
     
     AddBoolSetting("Logging", "Debug", "Logging", false);
+    AddBoolSetting("Debug Context", "Debug", "Debug Context", false);
 }
 
 EditorSettings& EditorSettings::GetInstance() {
