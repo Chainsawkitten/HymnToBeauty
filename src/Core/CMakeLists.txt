@@ -5,6 +5,7 @@ set(SRCS
         Util/Log.cpp
         Shader/Shader.cpp
         Shader/ShaderProgram.cpp
+        Geometry/Geometry2D.cpp
     )
 
 set(HEADERS
@@ -14,6 +15,7 @@ set(HEADERS
         Util/Log.hpp
         Shader/Shader.hpp
         Shader/ShaderProgram.hpp
+        Geometry/Geometry2D.hpp
     )
 
 create_directory_groups(${SRCS} ${HEADERS})
