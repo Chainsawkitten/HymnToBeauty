@@ -24,6 +24,8 @@ int main() {
     if (EditorSettings::GetInstance().GetBool("Debug Context"))
         glDebugMessageCallback(DebugMessageCallback, nullptr);
 
+    editorWindow->Init();
+    
     while (!editorWindow->ShouldClose()) {
         editorWindow->Update();
         editorWindow->Render();
