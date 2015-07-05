@@ -8,6 +8,7 @@
  */
 
 namespace Geometry {
+    /// A renderable 2D rectangle.
     class Rectangle : public Geometry2D {
         public:
             /// Constructor.
