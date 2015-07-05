@@ -6,7 +6,7 @@
 #include "test.vert.hzz"
 #include "test.frag.hzz"
 
-EditorWindow::EditorWindow() {
+EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Enable debug context and set message callback.
@@ -60,6 +60,10 @@ void EditorWindow::Update() {
 }
 
 void EditorWindow::Render() {
+    Render(0, 0);
+}
+
+void EditorWindow::Render(int width, int height) {
     if (gameWindow != nullptr)
         gameWindow->Render();
 

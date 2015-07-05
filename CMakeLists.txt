@@ -86,6 +86,8 @@ set(CORE_SRCS
         src/Core/Shader/ShaderProgram.cpp
         src/Core/Geometry/Geometry2D.cpp
         src/Core/Geometry/Rectangle.cpp
+        src/Core/GUI/Widget.cpp
+        src/Core/GUI/Container.cpp
     )
 
 set(CORE_HEADERS
@@ -97,6 +99,8 @@ set(CORE_HEADERS
         src/Core/Shader/ShaderProgram.hpp
         src/Core/Geometry/Geometry2D.hpp
         src/Core/Geometry/Rectangle.hpp
+        src/Core/GUI/Widget.hpp
+        src/Core/GUI/Container.hpp
     )
 
 create_directory_groups(${CORE_SRCS} ${CORE_HEADERS})

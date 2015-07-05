@@ -5,13 +5,14 @@
 #include <Core/GameWindow.hpp>
 #include <Core/Shader/ShaderProgram.hpp>
 #include <Core/Geometry/Rectangle.hpp>
+#include <Core/GUI/Container.hpp>
 
 /** @ingroup Editor
  * @{
  */
 
 /// Handles the main editor window.
-class EditorWindow {
+class EditorWindow : public GUI::Container {
     public:
         /// Create new editor window.
         EditorWindow();
@@ -33,6 +34,13 @@ class EditorWindow {
 
         /// Render the editor.
         void Render();
+        
+        /// Render the editor.
+        /**
+         * @param screenWidth Width of the screen in pixels.
+         * @param screenHeight Height of the screen in pixels.
+         */
+        void Render(int screenWidth, int screenHeight);
 
     private:
         GLFWwindow* window;
