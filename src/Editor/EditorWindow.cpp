@@ -60,7 +60,10 @@ void EditorWindow::Update() {
 }
 
 void EditorWindow::Render() {
-    Render(0, 0);
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    
+    Render(width, height);
 }
 
 void EditorWindow::Render(int width, int height) {
