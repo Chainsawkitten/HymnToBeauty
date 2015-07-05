@@ -27,10 +27,8 @@ namespace GUI {
         glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
         
         // Set location and size.
-        glm::vec2 topLeft(0.f, 0.f);
-        glUniform2fv(shaderProgram->UniformLocation("topLeft"), 1, &topLeft[0]);
-        glm::vec2 bottomRight(static_cast<float>(screenWidth), 64.f);
-        glUniform2fv(shaderProgram->UniformLocation("bottomRight"), 1, &bottomRight[0]);
+        glUniform2fv(shaderProgram->UniformLocation("position"), 1, &Position()[0]);
+        glUniform2fv(shaderProgram->UniformLocation("size"), 1, &size[0]);
         
         // Set screen size.
         glm::vec2 screenSize(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
@@ -39,5 +37,13 @@ namespace GUI {
         glBindVertexArray(rectangle->VertexArray());
         
         glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    }
+    
+    const glm::vec2& HorizontalLayout::Size() const {
+        return this->size;
+    }
+    
+    void HorizontalLayout::SetSize(const glm::vec2& size) {
+        this->size = size;
     }
 }

@@ -1,6 +1,8 @@
 #ifndef WIDGET_HPP
 #define WIDGET_HPP
 
+#include <glm/glm.hpp>
+
 /** @ingroup Core
  * @{
  */
@@ -31,8 +33,22 @@ namespace GUI {
              */
             virtual void Render(int screenWidth, int screenHeight) = 0;
             
+            /// Get widget's position.
+            /**
+             * @return The widget's position
+             */
+            const glm::vec2& Position() const;
+            
+            /// Set widget's position.
+            /**
+             * @param position New position.
+             */
+            void SetPosition(const glm::vec2& position);
+            
         private:
             Widget* parent;
+            
+            glm::vec2 position;
     };
 }
 

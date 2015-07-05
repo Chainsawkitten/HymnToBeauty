@@ -29,6 +29,18 @@ namespace GUI {
              */
             void Render(int screenWidth, int screenHeight);
             
+            /// Get the size of the horizontal layout.
+            /**
+             * @return The size
+             */
+            const glm::vec2& Size() const;
+            
+            /// Set the size of the horizontal layout.
+            /**
+             * @param size The new size.
+             */
+            void SetSize(const glm::vec2& size);
+            
         private:
             Geometry::Rectangle* rectangle;
             
@@ -36,6 +48,8 @@ namespace GUI {
             Shader* vertexShader;
             Shader* fragmentShader;
             ShaderProgram* shaderProgram;
+            
+            glm::vec2 size;
     };
 }
 

@@ -29,7 +29,11 @@ EditorWindow::~EditorWindow() {
 }
 
 void EditorWindow::Init() {
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    
     menuBar = new GUI::HorizontalLayout(this);
+    menuBar->SetSize(glm::vec2(static_cast<float>(width), 64.f));
 }
 
 bool EditorWindow::ShouldClose() const {
