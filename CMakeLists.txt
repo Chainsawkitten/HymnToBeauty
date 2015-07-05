@@ -88,6 +88,7 @@ set(CORE_SRCS
         src/Core/Geometry/Rectangle.cpp
         src/Core/GUI/Widget.cpp
         src/Core/GUI/Container.cpp
+        src/Core/GUI/HorizontalLayout.cpp
     )
 
 set(CORE_HEADERS
@@ -101,6 +102,7 @@ set(CORE_HEADERS
         src/Core/Geometry/Rectangle.hpp
         src/Core/GUI/Widget.hpp
         src/Core/GUI/Container.hpp
+        src/Core/GUI/HorizontalLayout.hpp
     )
 
 create_directory_groups(${CORE_SRCS} ${CORE_HEADERS})

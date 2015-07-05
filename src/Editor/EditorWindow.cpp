@@ -3,8 +3,6 @@
 
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/Log.hpp>
-#include "test.vert.hzz"
-#include "test.frag.hzz"
 
 EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -25,21 +23,13 @@ EditorWindow::EditorWindow() : Container(nullptr) {
 }
 
 EditorWindow::~EditorWindow() {
-    delete vertexShader;
-    delete fragmentShader;
-    delete shaderProgram;
-    
-    delete rectangle;
+    delete menuBar;
     
     glfwDestroyWindow(window);
 }
 
 void EditorWindow::Init() {
-    rectangle = new Geometry::Rectangle();
-    
-    vertexShader = new Shader(TEST_VERT, TEST_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = new Shader(TEST_FRAG, TEST_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    menuBar = new GUI::HorizontalLayout(this);
 }
 
 bool EditorWindow::ShouldClose() const {
@@ -72,13 +62,9 @@ void EditorWindow::Render(int width, int height) {
 
     glfwMakeContextCurrent(window);
     
-    shaderProgram->Use();
-    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glBindVertexArray(rectangle->VertexArray());
-    
-    glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    menuBar->Render(width, height);
     
     glfwSwapBuffers(window);
 }

@@ -3,9 +3,8 @@
 
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
-#include <Core/Shader/ShaderProgram.hpp>
-#include <Core/Geometry/Rectangle.hpp>
 #include <Core/GUI/Container.hpp>
+#include <Core/GUI/HorizontalLayout.hpp>
 
 /** @ingroup Editor
  * @{
@@ -46,12 +45,7 @@ class EditorWindow : public GUI::Container {
         GLFWwindow* window;
         GameWindow* gameWindow;
         
-        Geometry::Rectangle* rectangle;
-        
-        // Shaders
-        Shader* vertexShader;
-        Shader* fragmentShader;
-        ShaderProgram* shaderProgram;
+        GUI::HorizontalLayout* menuBar;
 };
 
 /** @} */
