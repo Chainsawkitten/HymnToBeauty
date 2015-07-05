@@ -40,8 +40,8 @@ endfunction()
 
 # Setup embedded source
 set(EMBEDDED_INPUT
-    shaders/test.vert
-    shaders/test.frag
+    shaders/SingleColor2D.vert
+    shaders/SingleColor2D.frag
 )
 
 # Headerize
