@@ -49,8 +49,6 @@ find_program(HEADERIZE_EXE Headerize
     DOC "Location of the Headerize executable"
 )
 
-MESSAGE("${HEADERIZE_EXE}")
-
 macro(ProcessWithHeaderize outvar inputfile outdir)
     get_filename_component(basefile ${inputfile} NAME)
     set(outputfile ${outdir}/${basefile}.hzz)
@@ -68,7 +66,6 @@ macro(ProcessWithHeaderize outvar inputfile outdir)
 endmacro()
 
 foreach(item ${EMBEDDED_INPUT})
-    MESSAGE("${item}")
     ProcessWithHeaderize(EMBEDDED_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
 endforeach()
 
