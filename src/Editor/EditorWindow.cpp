@@ -3,6 +3,8 @@
 
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/Log.hpp>
+#include "test.vert.hzz"
+#include "test.frag.hzz"
 
 EditorWindow::EditorWindow() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -35,8 +37,8 @@ EditorWindow::~EditorWindow() {
 void EditorWindow::Init() {
     rectangle = new Geometry::Rectangle();
     
-    vertexShader = new Shader("#version 400\nlayout(location = 0) in vec2 vertex_position;\nvoid main () {\ngl_Position = vec4(vertex_position, 0.0, 1.0);\n}", 126, GL_VERTEX_SHADER);
-    fragmentShader = new Shader("#version 400\nvoid main () {\ngl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n}", 73, GL_FRAGMENT_SHADER);
+    vertexShader = new Shader(TEST_VERT, TEST_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = new Shader(TEST_FRAG, TEST_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
 }
 
