@@ -23,6 +23,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
 }
 
 EditorWindow::~EditorWindow() {
+    delete fileButton;
     delete menuBar;
     
     glfwDestroyWindow(window);
@@ -32,8 +33,13 @@ void EditorWindow::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
+    // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);
     menuBar->SetSize(glm::vec2(static_cast<float>(width), 64.f));
+    AddWidget(menuBar);
+    
+    fileButton = new GUI::Button(menuBar);
+    menuBar->AddWidget(fileButton);
 }
 
 bool EditorWindow::ShouldClose() const {
@@ -55,7 +61,7 @@ void EditorWindow::Update(GLFWwindow* window) {
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         gameWindow = new GameWindow();
     } else {
-        menuBar->Update(window);
+        UpdateWidgets(window);
     }
 }
 
@@ -74,7 +80,7 @@ void EditorWindow::Render(int width, int height) {
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    menuBar->Render(width, height);
+    RenderWidgets(width, height);
     
     glfwSwapBuffers(window);
 }

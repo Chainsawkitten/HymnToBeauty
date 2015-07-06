@@ -35,7 +35,7 @@ namespace GUI {
         // Set color.
         glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
         if (mouseHover)
-            color = glm::vec3(0.21960784313f, 0.25098039215f, 0.27058823529f);
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
         glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
         
         // Set location and size.

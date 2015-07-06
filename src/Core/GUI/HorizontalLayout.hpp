@@ -4,7 +4,6 @@
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "Container.hpp"
-#include "Button.hpp"
 
 /** @ingroup Core
  * @{
@@ -22,12 +21,6 @@ namespace GUI {
             
             /// Destructor.
             ~HorizontalLayout();
-            
-            /// Update the widget.
-            /**
-             * @param window Window to get input for.
-             */
-            void Update(GLFWwindow* window);
             
             /// Render the widget.
             /**
@@ -57,8 +50,6 @@ namespace GUI {
             ShaderProgram* shaderProgram;
             
             glm::vec2 size;
-            
-            Button* testButton;
     };
 }
 

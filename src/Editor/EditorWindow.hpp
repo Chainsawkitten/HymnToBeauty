@@ -5,6 +5,7 @@
 #include <Core/GameWindow.hpp>
 #include <Core/GUI/Container.hpp>
 #include <Core/GUI/HorizontalLayout.hpp>
+#include <Core/GUI/Button.hpp>
 
 /** @ingroup Editor
  * @{
@@ -51,7 +52,9 @@ class EditorWindow : public GUI::Container {
         GLFWwindow* window;
         GameWindow* gameWindow;
         
+        // Menu bar.
         GUI::HorizontalLayout* menuBar;
+        GUI::Button* fileButton;
 };
 
 /** @} */
