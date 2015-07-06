@@ -79,6 +79,7 @@ include_directories(src)
 ## Core ##
 set(CORE_SRCS
         src/Core/GameWindow.cpp
+        src/Core/Resources.cpp
         src/Core/Util/FileSystem.cpp
         src/Core/Util/Settings.cpp
         src/Core/Util/Log.cpp
@@ -94,6 +95,7 @@ set(CORE_SRCS
 
 set(CORE_HEADERS
         src/Core/GameWindow.hpp
+        src/Core/Resources.hpp
         src/Core/Util/FileSystem.hpp
         src/Core/Util/Settings.hpp
         src/Core/Util/Log.hpp

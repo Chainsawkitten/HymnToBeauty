@@ -1,13 +1,14 @@
 #include "Button.hpp"
 #include "SingleColor2D.vert.hzz"
 #include "SingleColor2D.frag.hzz"
+#include "../Resources.hpp"
 
 namespace GUI {
     Button::Button(Widget* parent) : Widget(parent) {
         rectangle = new Geometry::Rectangle();
         
-        vertexShader = new Shader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
-        fragmentShader = new Shader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+        vertexShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
+        fragmentShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
         shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
         
         mouseHover = false;
@@ -15,8 +16,8 @@ namespace GUI {
     }
     
     Button::~Button() {
-        delete vertexShader;
-        delete fragmentShader;
+        Resources::GetInstance().FreeShader(SINGLECOLOR2D_VERT);
+        Resources::GetInstance().FreeShader(SINGLECOLOR2D_FRAG);
         delete shaderProgram;
         
         delete rectangle;
