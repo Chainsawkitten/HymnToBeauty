@@ -52,6 +52,12 @@ namespace GUI {
              */
             void SetPosition(const glm::vec2& position);
             
+            /// Get the size of the widget.
+            /**
+             * @return The size
+             */
+            virtual glm::vec2 Size() const = 0;
+            
         private:
             Widget* parent;
             

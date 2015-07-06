@@ -24,6 +24,8 @@ EditorWindow::EditorWindow() : Container(nullptr) {
 
 EditorWindow::~EditorWindow() {
     delete fileButton;
+    delete compileButton;
+    delete playButton;
     delete menuBar;
     
     glfwDestroyWindow(window);
@@ -40,6 +42,12 @@ void EditorWindow::Init() {
     
     fileButton = new GUI::Button(menuBar);
     menuBar->AddWidget(fileButton);
+    
+    compileButton = new GUI::Button(menuBar);
+    menuBar->AddWidget(compileButton);
+    
+    playButton = new GUI::Button(menuBar);
+    menuBar->AddWidget(playButton);
 }
 
 bool EditorWindow::ShouldClose() const {
@@ -83,4 +91,11 @@ void EditorWindow::Render(int width, int height) {
     RenderWidgets(width, height);
     
     glfwSwapBuffers(window);
+}
+
+glm::vec2 EditorWindow::Size() const {
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    
+    return glm::vec2(static_cast<float>(width), static_cast<float>(height));
 }

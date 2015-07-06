@@ -47,6 +47,12 @@ class EditorWindow : public GUI::Container {
          * @param screenHeight Height of the screen in pixels.
          */
         void Render(int screenWidth, int screenHeight);
+        
+        /// Get the size of the widget.
+        /**
+         * @return The size
+         */
+        glm::vec2 Size() const;
 
     private:
         GLFWwindow* window;
@@ -55,6 +61,8 @@ class EditorWindow : public GUI::Container {
         // Menu bar.
         GUI::HorizontalLayout* menuBar;
         GUI::Button* fileButton;
+        GUI::Button* compileButton;
+        GUI::Button* playButton;
 };
 
 /** @} */

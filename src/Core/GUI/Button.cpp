@@ -26,7 +26,7 @@ namespace GUI {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
         
-        mouseHover = xpos >= Position().x && xpos <= Position().x + size.x && ypos >= Position().y && ypos <= Position().y + size.y;
+        mouseHover = xpos >= Position().x && xpos < Position().x + size.x && ypos >= Position().y && ypos < Position().y + size.y;
     }
     
     void Button::Render(int screenWidth, int screenHeight) {
@@ -49,5 +49,9 @@ namespace GUI {
         glBindVertexArray(rectangle->VertexArray());
         
         glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    }
+    
+    glm::vec2 Button::Size() const {
+        return size;
     }
 }

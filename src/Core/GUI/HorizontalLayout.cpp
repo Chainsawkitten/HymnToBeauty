@@ -9,6 +9,8 @@ namespace GUI {
         vertexShader = new Shader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
         fragmentShader = new Shader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
         shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+        
+        nextPosition = glm::vec2(0.f, 0.f);
     }
     
     HorizontalLayout::~HorizontalLayout() {
@@ -41,7 +43,13 @@ namespace GUI {
         RenderWidgets(screenWidth, screenHeight);
     }
     
-    const glm::vec2& HorizontalLayout::Size() const {
+    void HorizontalLayout::AddWidget(Widget* widget) {
+        Container::AddWidget(widget);
+        widget->SetPosition(nextPosition);
+        nextPosition.x += widget->Size().x;
+    }
+    
+    glm::vec2 HorizontalLayout::Size() const {
         return this->size;
     }
     

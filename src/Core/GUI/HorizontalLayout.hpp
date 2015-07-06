@@ -29,13 +29,19 @@ namespace GUI {
              */
             void Render(int screenWidth, int screenHeight);
             
-            /// Get the size of the horizontal layout.
+            /// Add a widget to the container.
+            /**
+             * @param widget Widget to add to the container.
+             */
+            void AddWidget(Widget* widget);
+            
+            /// Get the size of the widget.
             /**
              * @return The size
              */
-            const glm::vec2& Size() const;
+            glm::vec2 Size() const;
             
-            /// Set the size of the horizontal layout.
+            /// Set the size of the widget.
             /**
              * @param size The new size.
              */
@@ -50,6 +56,8 @@ namespace GUI {
             ShaderProgram* shaderProgram;
             
             glm::vec2 size;
+            
+            glm::vec2 nextPosition;
     };
 }
 

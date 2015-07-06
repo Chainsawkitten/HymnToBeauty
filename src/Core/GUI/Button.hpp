@@ -34,6 +34,12 @@ namespace GUI {
              */
             void Render(int screenWidth, int screenHeight);
             
+            /// Get the size of the widget.
+            /**
+             * @return The size
+             */
+            glm::vec2 Size() const;
+            
         private:
             Geometry::Rectangle* rectangle;
             

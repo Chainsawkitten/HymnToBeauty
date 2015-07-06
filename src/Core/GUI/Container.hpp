@@ -31,7 +31,7 @@ namespace GUI {
             /**
              * @param widget Widget to add to the container.
              */
-            void AddWidget(Widget* widget);
+            virtual void AddWidget(Widget* widget);
             
         protected:
             /// Update widgets.
