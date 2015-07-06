@@ -31,6 +31,12 @@ class EditorWindow : public GUI::Container {
         /// Update the editor.
         void Update();
 
+        /// Update the widget.
+        /**
+         * @param window Window to get input for.
+         */
+        void Update(GLFWwindow* window);
+        
         /// Render the editor.
         void Render();
         

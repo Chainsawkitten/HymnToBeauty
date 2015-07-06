@@ -1,9 +1,9 @@
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
-#include "Widget.hpp"
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
+#include "Widget.hpp"
 
 /** @ingroup Core
  * @{
@@ -21,6 +21,12 @@ namespace GUI {
             /// Destructor.
             virtual ~Button();
             
+            /// Update the widget.
+            /**
+             * @param window Window to get input for.
+             */
+            void Update(GLFWwindow* window);
+            
             /// Render the widget.
             /**
              * @param screenWidth Width of the screen in pixels.
@@ -35,6 +41,10 @@ namespace GUI {
             Shader* vertexShader;
             Shader* fragmentShader;
             ShaderProgram* shaderProgram;
+            
+            glm::vec2 size;
+            
+            bool mouseHover;
     };
 }
 

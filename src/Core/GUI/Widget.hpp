@@ -2,6 +2,7 @@
 #define WIDGET_HPP
 
 #include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
 
 /** @ingroup Core
  * @{
@@ -25,6 +26,12 @@ namespace GUI {
              * @return The parent widget
              */
             Widget* Parent() const;
+            
+            /// Update the widget.
+            /**
+             * @param window Window to get input for.
+             */
+            virtual void Update(GLFWwindow* window) = 0;
             
             /// Render the widget.
             /**

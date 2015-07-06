@@ -41,6 +41,10 @@ bool EditorWindow::ShouldClose() const {
 }
 
 void EditorWindow::Update() {
+    Update(window);
+}
+
+void EditorWindow::Update(GLFWwindow* window) {
     // Handle running game.
     if (gameWindow != nullptr) {
         gameWindow->Update();
@@ -50,6 +54,8 @@ void EditorWindow::Update() {
         }
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         gameWindow = new GameWindow();
+    } else {
+        menuBar->Update(window);
     }
 }
 
