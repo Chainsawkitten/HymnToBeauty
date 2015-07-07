@@ -1,7 +1,7 @@
 #ifndef RESOURCES_HPP
 #define RESOURCES_HPP
 
-#include "Shader/Shader.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include <map>
 #include "Geometry/Rectangle.hpp"
 
@@ -33,6 +33,30 @@ class Resources {
          */
         void FreeShader(const char* source);
         
+        /// Create shader program if it doesn't already exist.
+		/**
+		 * Link together shaders into a shader program that can be run on the GPU.
+		 *
+		 * Sample:
+		 * \code{.cpp}
+		 * Shader* vertexShader = new Shader(vertexSource, vertexSourceLength, GL_VERTEX_SHADER);
+		 * Shader* geometryShader = new Shader(geometrySource, geometrySourceLength, GL_GEOMETRY_SHADER);
+		 * Shader* fragmentShader = new Shader(fragmentSource, fragmentSourceLength, GL_FRAGMENT_SHADER);
+		 * ShaderProgram* shaderProgram = new Resources::GetInstance().CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
+		 * \endcode
+		 *
+		 * @param shaders List of shaders to link together.
+		 * @return The %ShaderProgram instance
+		 */
+		ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders);
+        
+        /// Free the reference to a shader program.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param shaderProgram %Shader program to dereference.
+         */
+        void FreeShaderProgram(ShaderProgram* shaderProgram);
+        
         /// Create a rectangle for rendering if it doesn't already exist.
         /**
          * @return The rectangle instance
@@ -55,10 +79,30 @@ class Resources {
         };
         std::map<const char*, ShaderInstance> shaders;
         
+        // ShaderPrograms
+        struct ShaderProgramInstance {
+            ShaderProgram* shaderProgram;
+            int count;
+        };
+        struct ShaderProgramKey {
+            const Shader* computeShader;
+            const Shader* vertexShader;
+            const Shader* tessControlShader;
+            const Shader* tessEvaluationShader;
+            const Shader* geometryShader;
+            const Shader* fragmentShader;
+            
+            bool operator<(const ShaderProgramKey& other) const;
+        };
+        std::map<ShaderProgramKey, ShaderProgramInstance> shaderPrograms;
+        std::map<ShaderProgram*, ShaderProgramKey> shaderProgramsInverse;
+        
         // Rectangle
         Geometry::Rectangle* rectangle;
         int rectangleCount;
 };
+
+
 
 /** @} */
 

@@ -9,7 +9,7 @@ namespace GUI {
         
         vertexShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
         fragmentShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-        shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+        shaderProgram = Resources::GetInstance().CreateShaderProgram({ vertexShader, fragmentShader });
         
         nextPosition = glm::vec2(0.f, 0.f);
     }
@@ -17,7 +17,7 @@ namespace GUI {
     HorizontalLayout::~HorizontalLayout() {
         Resources::GetInstance().FreeShader(SINGLECOLOR2D_VERT);
         Resources::GetInstance().FreeShader(SINGLECOLOR2D_FRAG);
-        delete shaderProgram;
+        Resources::GetInstance().FreeShaderProgram(shaderProgram);
         
         Resources::GetInstance().FreeRectangle();
     }
