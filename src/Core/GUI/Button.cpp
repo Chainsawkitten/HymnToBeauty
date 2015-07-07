@@ -16,8 +16,8 @@ namespace GUI {
     }
     
     Button::~Button() {
-        Resources::GetInstance().FreeShader(SINGLECOLOR2D_VERT);
-        Resources::GetInstance().FreeShader(SINGLECOLOR2D_FRAG);
+        Resources::GetInstance().FreeShader(vertexShader);
+        Resources::GetInstance().FreeShader(fragmentShader);
         Resources::GetInstance().FreeShaderProgram(shaderProgram);
         
         Resources::GetInstance().FreeRectangle();

@@ -29,9 +29,9 @@ class Resources {
         /// Free the reference to the shader.
         /**
          * Deletes the instance if no more references exist.
-         * @param source GLSL code for the shader.
+         * @param shader %Shader to dereference.
          */
-        void FreeShader(const char* source);
+        void FreeShader(Shader* shader);
         
         /// Create shader program if it doesn't already exist.
 		/**
@@ -46,7 +46,7 @@ class Resources {
 		 * \endcode
 		 *
 		 * @param shaders List of shaders to link together.
-		 * @return The %ShaderProgram instance
+		 * @return The shader program instance
 		 */
 		ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders);
         
@@ -78,6 +78,7 @@ class Resources {
             int count;
         };
         std::map<const char*, ShaderInstance> shaders;
+        std::map<Shader*, const char*> shadersInverse;
         
         // ShaderPrograms
         struct ShaderProgramInstance {

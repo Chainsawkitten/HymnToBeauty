@@ -13,6 +13,7 @@ Resources& Resources::GetInstance() {
 Shader* Resources::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
     if (shaders.find(source) == shaders.end()) {
         shaders[source].shader = new Shader(source, sourceLength, shaderType);
+        shadersInverse[shaders[source].shader] = source;
         shaders[source].count = 1;
     } else {
         shaders[source].count++;
@@ -21,10 +22,13 @@ Shader* Resources::CreateShader(const char* source, int sourceLength, GLenum sha
     return shaders[source].shader;
 }
 
-void Resources::FreeShader(const char* source) {
+void Resources::FreeShader(Shader* shader) {
+    const char* source = shadersInverse[shader];
+    
     shaders[source].count--;
     if (shaders[source].count <= 0) {
-        delete shaders[source].shader;
+        shadersInverse.erase(shader);
+        delete shader;
         shaders.erase(source);
     }
 }
