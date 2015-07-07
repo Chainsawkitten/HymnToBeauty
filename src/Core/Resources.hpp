@@ -3,6 +3,7 @@
 
 #include "Shader/Shader.hpp"
 #include <map>
+#include "Geometry/Rectangle.hpp"
 
 /** @ingroup Core
  * @{
@@ -32,6 +33,18 @@ class Resources {
          */
         void FreeShader(const char* source);
         
+        /// Create a rectangle for rendering if it doesn't already exist.
+        /**
+         * @return The rectangle instance
+         */
+        Geometry::Rectangle* CreateRectangle();
+        
+        /// Free the reference to the rectangle.
+        /**
+         * Deletes the instance if no more references exist.
+         */
+        void FreeRectangle();
+        
     private:
         Resources();
         
@@ -41,6 +54,10 @@ class Resources {
             int count;
         };
         std::map<const char*, ShaderInstance> shaders;
+        
+        // Rectangle
+        Geometry::Rectangle* rectangle;
+        int rectangleCount;
 };
 
 /** @} */

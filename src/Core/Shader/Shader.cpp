@@ -1,5 +1,4 @@
 #include "Shader.hpp"
-#include "../Util/Log.hpp"
 
 Shader::Shader(const char* source, int sourceLength, GLenum shaderType) {
 	this->shaderType = shaderType;

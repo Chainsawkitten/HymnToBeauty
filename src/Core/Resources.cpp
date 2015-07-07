@@ -28,3 +28,18 @@ void Resources::FreeShader(const char* source) {
         shaders.erase(source);
     }
 }
+
+Geometry::Rectangle* Resources::CreateRectangle() {
+    if (rectangleCount == 0)
+        rectangle = new Geometry::Rectangle();
+    
+    rectangleCount++;
+    return rectangle;
+}
+
+void Resources::FreeRectangle() {
+    rectangleCount--;
+    
+    if (rectangleCount <= 0)
+        delete rectangle;
+}

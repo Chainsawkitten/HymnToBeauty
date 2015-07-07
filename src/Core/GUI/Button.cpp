@@ -5,7 +5,7 @@
 
 namespace GUI {
     Button::Button(Widget* parent) : Widget(parent) {
-        rectangle = new Geometry::Rectangle();
+        rectangle = Resources::GetInstance().CreateRectangle();
         
         vertexShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
         fragmentShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
@@ -20,7 +20,7 @@ namespace GUI {
         Resources::GetInstance().FreeShader(SINGLECOLOR2D_FRAG);
         delete shaderProgram;
         
-        delete rectangle;
+        Resources::GetInstance().FreeRectangle();
     }
     
     void Button::Update(GLFWwindow* window) {
