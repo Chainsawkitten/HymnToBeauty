@@ -1,6 +1,6 @@
 #include "HorizontalLayout.hpp"
-#include "SingleColor2D.vert.hzz"
-#include "SingleColor2D.frag.hzz"
+#include "SingleColor2D.vert.hpp"
+#include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
 
 namespace GUI {

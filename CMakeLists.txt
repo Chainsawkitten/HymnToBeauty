@@ -49,27 +49,24 @@ find_program(HEADERIZE_EXE Headerize
     DOC "Location of the Headerize executable"
 )
 
-macro(ProcessWithHeaderize outvar inputfile outdir)
+macro(ProcessWithHeaderize headervar sourcevar inputfile outdir)
     get_filename_component(basefile ${inputfile} NAME)
-    set(outputfile ${outdir}/${basefile}.hzz)
+    set(outputfile ${outdir}/${basefile})
     set_source_files_properties(${outputfile} PROPERTIES HEADER_ONLY TRUE)
     add_custom_command(
-        OUTPUT ${outputfile}
+        OUTPUT ${outputfile}.hpp ${outputfile}.cpp
         COMMAND ${HEADERIZE_EXE} ${inputfile} ${outputfile}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS ${inputfile}
         COMMENT "Generating headers for ${inputfile}"
     )
-    list(APPEND ${outvar}
-        ${outputfile}
-)
+    list(APPEND ${headervar} ${outputfile}.hpp)
+    list(APPEND ${sourcevar} ${outputfile}.cpp)
 endmacro()
 
 foreach(item ${EMBEDDED_INPUT})
-    ProcessWithHeaderize(EMBEDDED_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
+    ProcessWithHeaderize(EMBEDDED_HEADER EMBEDDED_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
 endforeach()
-
-source_group("Embedded Source" FILES ${EMBEDDED_INPUT} ${EMBEDDED_SOURCE})
 
 include_directories(src)
 
@@ -111,9 +108,9 @@ set(CORE_HEADERS
 
 create_directory_groups(${CORE_SRCS} ${CORE_HEADERS})
 
-set_property(SOURCE ${CORE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_SOURCE})
+set_property(SOURCE ${CORE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
 
-add_library(Core STATIC ${CORE_SRCS} ${CORE_HEADERS})
+add_library(Core STATIC ${CORE_SRCS} ${CORE_HEADERS} ${EMBEDDED_SOURCE})
 target_compile_features(Core PRIVATE cxx_nullptr)
 
 
