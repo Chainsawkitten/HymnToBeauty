@@ -9,13 +9,13 @@
  * @{
  */
 
-class Resources {
+class ResourceManager {
     public:
         /// Get the instance of the class.
         /**
-         * @return The %Resources instance
+         * @return The %ResourceManager instance
          */
-        static Resources& GetInstance();
+        static ResourceManager& GetInstance();
         
         /// Create a shader if it doesn't already exist.
         /**
@@ -42,7 +42,7 @@ class Resources {
 		 * Shader* vertexShader = new Shader(vertexSource, vertexSourceLength, GL_VERTEX_SHADER);
 		 * Shader* geometryShader = new Shader(geometrySource, geometrySourceLength, GL_GEOMETRY_SHADER);
 		 * Shader* fragmentShader = new Shader(fragmentSource, fragmentSourceLength, GL_FRAGMENT_SHADER);
-		 * ShaderProgram* shaderProgram = new Resources::GetInstance().CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
+		 * ShaderProgram* shaderProgram = new ResourceManager::GetInstance().CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
 		 * \endcode
 		 *
 		 * @param shaders List of shaders to link together.
@@ -70,7 +70,9 @@ class Resources {
         void FreeRectangle();
         
     private:
-        Resources();
+        ResourceManager();
+        ResourceManager(ResourceManager const&) = delete;
+        void operator=(ResourceManager const&) = delete;
         
         // Shaders
         struct ShaderInstance {
@@ -103,7 +105,7 @@ class Resources {
         int rectangleCount;
 };
 
-
+ResourceManager& Resources();
 
 /** @} */
 

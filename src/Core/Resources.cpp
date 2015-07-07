@@ -1,16 +1,16 @@
 #include "Resources.hpp"
 
-Resources::Resources() {
+ResourceManager::ResourceManager() {
     rectangleCount = 0;
 }
 
-Resources& Resources::GetInstance() {
-    static Resources resources;
+ResourceManager& ResourceManager::GetInstance() {
+    static ResourceManager ResourceManager;
     
-    return resources;
+    return ResourceManager;
 }
 
-Shader* Resources::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
+Shader* ResourceManager::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
     if (shaders.find(source) == shaders.end()) {
         shaders[source].shader = new Shader(source, sourceLength, shaderType);
         shadersInverse[shaders[source].shader] = source;
@@ -22,7 +22,7 @@ Shader* Resources::CreateShader(const char* source, int sourceLength, GLenum sha
     return shaders[source].shader;
 }
 
-void Resources::FreeShader(Shader* shader) {
+void ResourceManager::FreeShader(Shader* shader) {
     const char* source = shadersInverse[shader];
     
     shaders[source].count--;
@@ -33,7 +33,7 @@ void Resources::FreeShader(Shader* shader) {
     }
 }
 
-ShaderProgram* Resources::CreateShaderProgram(std::initializer_list<const Shader*> shaders) {
+ShaderProgram* ResourceManager::CreateShaderProgram(std::initializer_list<const Shader*> shaders) {
     ShaderProgramKey key;
     
     for (auto shader : shaders) {
@@ -72,7 +72,7 @@ ShaderProgram* Resources::CreateShaderProgram(std::initializer_list<const Shader
     return shaderPrograms[key].shaderProgram;
 }
 
-void Resources::FreeShaderProgram(ShaderProgram* shaderProgram) {
+void ResourceManager::FreeShaderProgram(ShaderProgram* shaderProgram) {
     ShaderProgramKey key = shaderProgramsInverse[shaderProgram];
     shaderPrograms[key].count--;
     
@@ -83,7 +83,7 @@ void Resources::FreeShaderProgram(ShaderProgram* shaderProgram) {
     }
 }
 
-Geometry::Rectangle* Resources::CreateRectangle() {
+Geometry::Rectangle* ResourceManager::CreateRectangle() {
     if (rectangleCount == 0)
         rectangle = new Geometry::Rectangle();
     
@@ -91,14 +91,14 @@ Geometry::Rectangle* Resources::CreateRectangle() {
     return rectangle;
 }
 
-void Resources::FreeRectangle() {
+void ResourceManager::FreeRectangle() {
     rectangleCount--;
     
     if (rectangleCount <= 0)
         delete rectangle;
 }
 
-bool Resources::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
+bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
     if (computeShader < other.computeShader) return true;
     if (computeShader > other.computeShader) return false;
     
@@ -118,4 +118,8 @@ bool Resources::ShaderProgramKey::operator<(const ShaderProgramKey& other) const
     if (fragmentShader > other.fragmentShader) return false;
     
     return false;
+}
+
+ResourceManager& Resources() {
+    return ResourceManager::GetInstance();
 }

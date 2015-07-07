@@ -5,22 +5,22 @@
 
 namespace GUI {
     Button::Button(Widget* parent) : Widget(parent) {
-        rectangle = Resources::GetInstance().CreateRectangle();
+        rectangle = Resources().CreateRectangle();
         
-        vertexShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
-        fragmentShader = Resources::GetInstance().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-        shaderProgram = Resources::GetInstance().CreateShaderProgram({ vertexShader, fragmentShader });
+        vertexShader = Resources().CreateShader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
+        fragmentShader = Resources().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+        shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
         
         mouseHover = false;
         size = glm::vec2(64.f, 64.f);
     }
     
     Button::~Button() {
-        Resources::GetInstance().FreeShader(vertexShader);
-        Resources::GetInstance().FreeShader(fragmentShader);
-        Resources::GetInstance().FreeShaderProgram(shaderProgram);
+        Resources().FreeShader(vertexShader);
+        Resources().FreeShader(fragmentShader);
+        Resources().FreeShaderProgram(shaderProgram);
         
-        Resources::GetInstance().FreeRectangle();
+        Resources().FreeRectangle();
     }
     
     void Button::Update(GLFWwindow* window) {
