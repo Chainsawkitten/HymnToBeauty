@@ -46,6 +46,7 @@ set(EMBEDDED_INPUT
     shaders/Default2D.vert
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
+    assets/File.png
 )
 
 # Headerize

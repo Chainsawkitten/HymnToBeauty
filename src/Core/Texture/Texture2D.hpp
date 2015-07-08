@@ -19,6 +19,13 @@ class Texture2D : public Texture {
 	 	 * @param filename Filename (relative or absolute) of the image file.
 		 */
 		Texture2D(const char* filename);
+        
+        /// Create new texture from given source string.
+        /**
+         * @param source Source string containing the image file.
+         * @param sourceLength Length of the source string.
+         */
+        Texture2D(const char* source, int sourceLength);
 
 		/// Destructor
 		~Texture2D();
