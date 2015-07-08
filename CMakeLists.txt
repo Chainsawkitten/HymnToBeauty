@@ -22,6 +22,9 @@ include_directories(externals/simpleini)
 # GLM
 include_directories(externals/glm)
 
+# STB
+include_directories(externals/stb)
+
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
 # one in the filesystem.
@@ -88,6 +91,8 @@ set(CORE_SRCS
         src/Core/GUI/Container.cpp
         src/Core/GUI/HorizontalLayout.cpp
         src/Core/GUI/Button.cpp
+        src/Core/Texture/Texture.cpp
+        src/Core/Texture/Texture2D.cpp
     )
 
 set(CORE_HEADERS
@@ -104,6 +109,8 @@ set(CORE_HEADERS
         src/Core/GUI/Container.hpp
         src/Core/GUI/HorizontalLayout.hpp
         src/Core/GUI/Button.hpp
+        src/Core/Texture/Texture.hpp
+        src/Core/Texture/Texture2D.hpp
     )
 
 create_directory_groups(${CORE_SRCS} ${CORE_HEADERS})
