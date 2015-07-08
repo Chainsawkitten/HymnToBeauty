@@ -1,5 +1,5 @@
 #include "HorizontalLayout.hpp"
-#include "SingleColor2D.vert.hpp"
+#include "Default2D.vert.hpp"
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
 
@@ -7,7 +7,7 @@ namespace GUI {
     HorizontalLayout::HorizontalLayout(Widget* parent) : Container(parent) {
         rectangle = Resources().CreateRectangle();
         
-        vertexShader = Resources().CreateShader(SINGLECOLOR2D_VERT, SINGLECOLOR2D_VERT_LENGTH, GL_VERTEX_SHADER);
+        vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
         fragmentShader = Resources().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
         shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
         
@@ -23,6 +23,10 @@ namespace GUI {
     }
     
     void HorizontalLayout::Render(int screenWidth, int screenHeight) {
+        // Disable depth testing
+        GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+        
         shaderProgram->Use();
         
         // Set color.
@@ -30,16 +34,16 @@ namespace GUI {
         glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
         
         // Set location and size.
-        glUniform2fv(shaderProgram->UniformLocation("position"), 1, &Position()[0]);
-        glUniform2fv(shaderProgram->UniformLocation("size"), 1, &size[0]);
-        
-        // Set screen size.
         glm::vec2 screenSize(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
-        glUniform2fv(shaderProgram->UniformLocation("screenSize"), 1, &screenSize[0]);
+        glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(Position() / screenSize)[0]);
+        glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
         
         glBindVertexArray(rectangle->VertexArray());
         
         glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+        
+        if (depthTest)
+            glEnable(GL_DEPTH_TEST);
         
         RenderWidgets(screenWidth, screenHeight);
     }

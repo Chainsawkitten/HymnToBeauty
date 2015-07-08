@@ -3,6 +3,7 @@
 
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
+#include "../Texture/Texture.hpp"
 #include "Widget.hpp"
 
 /** @ingroup Core
@@ -45,12 +46,16 @@ namespace GUI {
             
             // Shaders
             Shader* vertexShader;
-            Shader* fragmentShader;
-            ShaderProgram* shaderProgram;
+            Shader* colorFragmentShader;
+            Shader* textureFragmentShader;
+            ShaderProgram* colorShaderProgram;
+            ShaderProgram* textureShaderProgram;
             
             glm::vec2 size;
             
             bool mouseHover;
+            
+            Texture* texture;
     };
 }
 

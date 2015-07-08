@@ -48,6 +48,8 @@ void EditorWindow::Init() {
     
     playButton = new GUI::Button(menuBar);
     menuBar->AddWidget(playButton);
+    
+    glEnable(GL_DEPTH_TEST);
 }
 
 bool EditorWindow::ShouldClose() const {
