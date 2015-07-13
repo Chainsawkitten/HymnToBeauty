@@ -85,6 +85,20 @@ class ResourceManager {
          */
         void FreeTexture2D(Texture2D* texture);
         
+        /// Create a 2D texture if it doesn't already exist.
+        /**
+		 * @param filename Filename of image file.
+		 * @return The %Texture2D instance
+		 */
+        Texture2D* CreateTexture2DFromFile(std::string filename);
+        
+        /// Free the reference to the 2D texture.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param texture %Texture to dereference.
+         */
+        void FreeTexture2DFromFile(Texture2D* texture);
+        
     private:
         ResourceManager();
         ResourceManager(ResourceManager const&) = delete;
@@ -127,6 +141,14 @@ class ResourceManager {
         };
         std::map<const char*, Texture2DInstance> textures;
         std::map<Texture2D*, const char*> texturesInverse;
+        
+        // Texture2D from file
+        struct Texture2DFromFileInstance {
+            Texture2D* texture;
+            int count;
+        };
+        std::map<std::string, Texture2DFromFileInstance> texturesFromFile;
+        std::map<Texture2D*, std::string> texturesFromFileInverse;
 };
 
 ResourceManager& Resources();

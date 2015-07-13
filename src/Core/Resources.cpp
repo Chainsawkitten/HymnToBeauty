@@ -1,5 +1,7 @@
 #include "Resources.hpp"
 
+using namespace std;
+
 ResourceManager::ResourceManager() {
     rectangleCount = 0;
 }
@@ -140,6 +142,29 @@ void ResourceManager::FreeTexture2D(Texture2D* texture) {
         texturesInverse.erase(texture);
         delete texture;
         textures.erase(data);
+    }
+}
+
+Texture2D* ResourceManager::CreateTexture2DFromFile(std::string filename) {
+    if (texturesFromFile.find(filename) == texturesFromFile.end()) {
+        texturesFromFile[filename].texture = new Texture2D(filename.c_str());
+        texturesFromFileInverse[texturesFromFile[filename].texture] = filename;
+        texturesFromFile[filename].count = 1;
+    } else {
+        texturesFromFile[filename].count++;
+    }
+    
+    return texturesFromFile[filename].texture;
+}
+
+void ResourceManager::FreeTexture2DFromFile(Texture2D* texture) {
+    string filename = texturesFromFileInverse[texture];
+    
+    texturesFromFile[filename].count--;
+    if (texturesFromFile[filename].count <= 0) {
+        texturesFromFileInverse.erase(texture);
+        delete texture;
+        texturesFromFile.erase(filename);
     }
 }
 

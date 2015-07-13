@@ -34,8 +34,6 @@ Texture2D::Texture2D(const char* filename) {
 
 	// Generate mipmaps, by the way.
 	glGenerateMipmap(GL_TEXTURE_2D);
-    
-    Log() << "Texture created.\n";
 }
 
 Texture2D::Texture2D(const char *source, int sourceLength) {
@@ -66,14 +64,10 @@ Texture2D::Texture2D(const char *source, int sourceLength) {
 
 	// Generate mipmaps, by the way.
 	glGenerateMipmap(GL_TEXTURE_2D);
-    
-    Log() << "Texture created.\n";
 }
 
 Texture2D::~Texture2D() {
 	glDeleteTextures(1, &texID);
-    
-    Log() << "Texture destroyed.\n";
 }
 
 GLuint Texture2D::TextureID() const {
