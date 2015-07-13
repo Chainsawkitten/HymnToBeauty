@@ -4,6 +4,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include <map>
 #include "Geometry/Rectangle.hpp"
+#include "Texture/Texture2D.hpp"
 
 /** @ingroup Core
  * @{
@@ -69,6 +70,21 @@ class ResourceManager {
          */
         void FreeRectangle();
         
+        /// Create a 2D texture if it doesn't already exist.
+        /**
+		 * @param data Image file data.
+		 * @param dataLength Length of the image file data.
+		 * @return The %Texture2D instance
+		 */
+        Texture2D* CreateTexture2D(const char* data, int dataLength);
+        
+        /// Free the reference to the 2D texture.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param texture %Texture to dereference.
+         */
+        void FreeTexture2D(Texture2D* texture);
+        
     private:
         ResourceManager();
         ResourceManager(ResourceManager const&) = delete;
@@ -103,6 +119,14 @@ class ResourceManager {
         // Rectangle
         Geometry::Rectangle* rectangle;
         int rectangleCount;
+        
+        // Texture2D
+        struct Texture2DInstance {
+            Texture2D* texture;
+            int count;
+        };
+        std::map<const char*, Texture2DInstance> textures;
+        std::map<Texture2D*, const char*> texturesInverse;
 };
 
 ResourceManager& Resources();

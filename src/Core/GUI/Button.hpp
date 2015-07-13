@@ -3,7 +3,7 @@
 
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
-#include "../Texture/Texture.hpp"
+#include "../Texture/Texture2D.hpp"
 #include "Widget.hpp"
 
 /** @ingroup Core
@@ -55,7 +55,7 @@ namespace GUI {
             
             bool mouseHover;
             
-            Texture* texture;
+            Texture2D* texture;
     };
 }
 

@@ -3,7 +3,6 @@
 #include "Texture2D.frag.hpp"
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
-#include "../Texture/Texture2D.hpp"
 #include "File.png.hpp"
 
 namespace GUI {
@@ -16,7 +15,7 @@ namespace GUI {
         colorShaderProgram = Resources().CreateShaderProgram({ vertexShader, colorFragmentShader });
         textureShaderProgram = Resources().CreateShaderProgram({ vertexShader, textureFragmentShader });
         
-        texture = new Texture2D(FILE_PNG, FILE_PNG_LENGTH);
+        texture =  Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
         
         mouseHover = false;
         size = glm::vec2(64.f, 64.f);
@@ -31,7 +30,7 @@ namespace GUI {
         
         Resources().FreeRectangle();
         
-        delete texture;
+        Resources().FreeTexture2D(texture);
     }
     
     void Button::Update(GLFWwindow* window) {

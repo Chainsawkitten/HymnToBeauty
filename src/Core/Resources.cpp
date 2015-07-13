@@ -120,6 +120,29 @@ bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other)
     return false;
 }
 
+Texture2D* ResourceManager::CreateTexture2D(const char* data, int dataLength) {
+    if (textures.find(data) == textures.end()) {
+        textures[data].texture = new Texture2D(data, dataLength);
+        texturesInverse[textures[data].texture] = data;
+        textures[data].count = 1;
+    } else {
+        textures[data].count++;
+    }
+    
+    return textures[data].texture;
+}
+
+void ResourceManager::FreeTexture2D(Texture2D* texture) {
+    const char* data = texturesInverse[texture];
+    
+    textures[data].count--;
+    if (textures[data].count <= 0) {
+        texturesInverse.erase(texture);
+        delete texture;
+        textures.erase(data);
+    }
+}
+
 ResourceManager& Resources() {
     return ResourceManager::GetInstance();
 }
