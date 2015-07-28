@@ -6,6 +6,7 @@
 #include <Core/GUI/Container.hpp>
 #include <Core/GUI/HorizontalLayout.hpp>
 #include <Core/GUI/Button.hpp>
+#include <Core/Util/Input.hpp>
 
 /** @ingroup Editor
  * @{
@@ -31,12 +32,6 @@ class EditorWindow : public GUI::Container {
 
         /// Update the editor.
         void Update();
-
-        /// Update the widget.
-        /**
-         * @param window Window to get input for.
-         */
-        void Update(GLFWwindow* window);
         
         /// Render the editor.
         void Render();
@@ -66,6 +61,9 @@ class EditorWindow : public GUI::Container {
         GUI::Button* fileButton;
         GUI::Button* compileButton;
         GUI::Button* playButton;
+        
+        // Input
+        InputHandler* input;
 };
 
 /** @} */

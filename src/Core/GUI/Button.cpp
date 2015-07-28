@@ -4,6 +4,7 @@
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
 #include "File.png.hpp"
+#include "../Util/Input.hpp"
 
 namespace GUI {
     Button::Button(Widget* parent) : Widget(parent) {
@@ -34,13 +35,13 @@ namespace GUI {
         Resources().FreeTexture2D(texture);
     }
     
-    void Button::Update(GLFWwindow* window) {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
+    void Button::Update() {
+        double xpos = Input()->CursorX();
+        double ypos = Input()->CursorY();
         
         mouseHover = xpos >= Position().x && xpos < Position().x + size.x && ypos >= Position().y && ypos < Position().y + size.y;
         
-        if (mouseHover && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && hasClickedMethod) {
+        if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT) && hasClickedMethod) {
             (Parent()->*clickedMethod)();
         }
     }

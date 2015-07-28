@@ -20,6 +20,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     glfwMakeContextCurrent(window);
 
     gameWindow = nullptr;
+    input = new InputHandler(window);
 }
 
 EditorWindow::~EditorWindow() {
@@ -27,6 +28,8 @@ EditorWindow::~EditorWindow() {
     delete compileButton;
     delete playButton;
     delete menuBar;
+    
+    delete input;
     
     glfwDestroyWindow(window);
 }
@@ -61,10 +64,6 @@ bool EditorWindow::ShouldClose() const {
 }
 
 void EditorWindow::Update() {
-    Update(window);
-}
-
-void EditorWindow::Update(GLFWwindow* window) {
     // Handle running game.
     if (gameWindow != nullptr) {
         gameWindow->Update();
@@ -75,7 +74,9 @@ void EditorWindow::Update(GLFWwindow* window) {
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         gameWindow = new GameWindow();
     } else {
-        UpdateWidgets(window);
+        input->Update();
+        input->SetActive();
+        UpdateWidgets();
     }
 }
 

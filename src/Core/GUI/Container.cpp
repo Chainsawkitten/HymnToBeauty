@@ -9,17 +9,17 @@ namespace GUI {
         
     }
     
-    void Container::Update(GLFWwindow* window) {
-        UpdateWidgets(window);
+    void Container::Update() {
+        UpdateWidgets();
     }
     
     void Container::AddWidget(Widget* widget) {
         widgets.push_back(widget);
     }
     
-    void Container::UpdateWidgets(GLFWwindow* window) {
+    void Container::UpdateWidgets() {
         for (Widget* widget : widgets) {
-            widget->Update(window);
+            widget->Update();
         }
     }
     

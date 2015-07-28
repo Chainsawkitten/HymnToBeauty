@@ -25,10 +25,7 @@ namespace GUI {
             virtual ~Button();
             
             /// Update the widget.
-            /**
-             * @param window Window to get input for.
-             */
-            void Update(GLFWwindow* window);
+            void Update();
             
             /// Render the widget.
             /**
