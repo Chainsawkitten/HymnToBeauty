@@ -47,6 +47,8 @@ set(EMBEDDED_INPUT
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
     assets/File.png
+    assets/Options.png
+    assets/Play.png
 )
 
 # Headerize

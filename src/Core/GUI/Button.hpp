@@ -18,8 +18,9 @@ namespace GUI {
             /// Create new button.
             /**
              * @param parent Parent widget.
+             * @param texture %Button texture.
              */
-            Button(Widget* parent);
+            Button(Widget* parent, Texture2D* texture);
             
             /// Destructor.
             virtual ~Button();

@@ -4,6 +4,11 @@
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/Log.hpp>
 
+#include <Core/Resources.hpp>
+#include <File.png.hpp>
+#include <Options.png.hpp>
+#include <Play.png.hpp>
+
 EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -25,9 +30,13 @@ EditorWindow::EditorWindow() : Container(nullptr) {
 
 EditorWindow::~EditorWindow() {
     delete fileButton;
-    delete compileButton;
+    delete optionsButton;
     delete playButton;
     delete menuBar;
+    
+    Resources().FreeTexture2D(fileTexture);
+    Resources().FreeTexture2D(optionsTexture);
+    Resources().FreeTexture2D(playTexture);
     
     delete input;
     
@@ -43,16 +52,19 @@ void EditorWindow::Init() {
     menuBar->SetSize(glm::vec2(static_cast<float>(width), 64.f));
     AddWidget(menuBar);
     
-    fileButton = new GUI::Button(menuBar);
+    fileTexture = Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
+    fileButton = new GUI::Button(menuBar, fileTexture);
     GUI::ClickedMethod method = static_cast<GUI::ClickedMethod>(&ClickTest);
     fileButton->SetClickedCallback(method);
     menuBar->AddWidget(fileButton);
     
-    compileButton = new GUI::Button(menuBar);
-    compileButton->SetClickedCallback(method);
-    menuBar->AddWidget(compileButton);
+    optionsTexture = Resources().CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
+    optionsButton = new GUI::Button(menuBar, optionsTexture);
+    optionsButton->SetClickedCallback(method);
+    menuBar->AddWidget(optionsButton);
     
-    playButton = new GUI::Button(menuBar);
+    playTexture = Resources().CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
+    playButton = new GUI::Button(menuBar, playTexture);
     playButton->SetClickedCallback(method);
     menuBar->AddWidget(playButton);
     

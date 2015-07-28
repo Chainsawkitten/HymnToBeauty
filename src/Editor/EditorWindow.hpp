@@ -59,8 +59,13 @@ class EditorWindow : public GUI::Container {
         // Menu bar.
         GUI::HorizontalLayout* menuBar;
         GUI::Button* fileButton;
-        GUI::Button* compileButton;
+        Texture2D* fileTexture;
+        
+        GUI::Button* optionsButton;
+        Texture2D* optionsTexture;
+        
         GUI::Button* playButton;
+        Texture2D* playTexture;
         
         // Input
         InputHandler* input;

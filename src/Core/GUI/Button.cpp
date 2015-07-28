@@ -3,11 +3,10 @@
 #include "Texture2D.frag.hpp"
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
-#include "File.png.hpp"
 #include "../Util/Input.hpp"
 
 namespace GUI {
-    Button::Button(Widget* parent) : Widget(parent) {
+    Button::Button(Widget* parent, Texture2D* texture) : Widget(parent) {
         rectangle = Resources().CreateRectangle();
         
         vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
@@ -16,7 +15,7 @@ namespace GUI {
         colorShaderProgram = Resources().CreateShaderProgram({ vertexShader, colorFragmentShader });
         textureShaderProgram = Resources().CreateShaderProgram({ vertexShader, textureFragmentShader });
         
-        texture =  Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
+        this->texture = texture;
         
         mouseHover = false;
         hasClickedMethod = false;
@@ -31,8 +30,6 @@ namespace GUI {
         Resources().FreeShaderProgram(textureShaderProgram);
         
         Resources().FreeRectangle();
-        
-        Resources().FreeTexture2D(texture);
     }
     
     void Button::Update() {
