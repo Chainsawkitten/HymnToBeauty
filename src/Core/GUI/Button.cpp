@@ -18,6 +18,7 @@ namespace GUI {
         texture =  Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
         
         mouseHover = false;
+        hasClickedMethod = false;
         size = glm::vec2(64.f, 64.f);
     }
     
@@ -38,6 +39,10 @@ namespace GUI {
         glfwGetCursorPos(window, &xpos, &ypos);
         
         mouseHover = xpos >= Position().x && xpos < Position().x + size.x && ypos >= Position().y && ypos < Position().y + size.y;
+        
+        if (mouseHover && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && hasClickedMethod) {
+            (Parent()->*clickedMethod)();
+        }
     }
     
     void Button::Render(int screenWidth, int screenHeight) {
@@ -94,5 +99,10 @@ namespace GUI {
     
     glm::vec2 Button::Size() const {
         return size;
+    }
+    
+    void Button::SetClickedCallback(ClickedMethod method) {
+        clickedMethod = method;
+        hasClickedMethod = true;
     }
 }

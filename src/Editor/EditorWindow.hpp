@@ -53,6 +53,9 @@ class EditorWindow : public GUI::Container {
          * @return The size
          */
         glm::vec2 Size() const;
+        
+        /// Test button clicking.
+        void ClickTest();
 
     private:
         GLFWwindow* window;

@@ -41,12 +41,16 @@ void EditorWindow::Init() {
     AddWidget(menuBar);
     
     fileButton = new GUI::Button(menuBar);
+    GUI::ClickedMethod method = static_cast<GUI::ClickedMethod>(&ClickTest);
+    fileButton->SetClickedCallback(method);
     menuBar->AddWidget(fileButton);
     
     compileButton = new GUI::Button(menuBar);
+    compileButton->SetClickedCallback(method);
     menuBar->AddWidget(compileButton);
     
     playButton = new GUI::Button(menuBar);
+    playButton->SetClickedCallback(method);
     menuBar->AddWidget(playButton);
     
     glEnable(GL_DEPTH_TEST);
@@ -100,4 +104,8 @@ glm::vec2 EditorWindow::Size() const {
     glfwGetWindowSize(window, &width, &height);
     
     return glm::vec2(static_cast<float>(width), static_cast<float>(height));
+}
+
+void EditorWindow::ClickTest() {
+    Log() << "Click test!\n";
 }

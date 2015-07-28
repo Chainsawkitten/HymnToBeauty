@@ -11,6 +11,8 @@
  */
 
 namespace GUI {
+    typedef void(Widget::*ClickedMethod)(void);
+    
     class Button : public Widget {
         public:
             /// Create new button.
@@ -41,6 +43,12 @@ namespace GUI {
              */
             glm::vec2 Size() const;
             
+            /// Set method in parent to call when clicked.
+            /**
+             * @param method Method to call when button is clicked.
+             */
+            void SetClickedCallback(ClickedMethod method);
+            
         private:
             Geometry::Rectangle* rectangle;
             
@@ -53,7 +61,10 @@ namespace GUI {
             
             glm::vec2 size;
             
+            // Interaction
             bool mouseHover;
+            bool hasClickedMethod;
+            ClickedMethod clickedMethod;
             
             Texture2D* texture;
     };
