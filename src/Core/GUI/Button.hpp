@@ -5,14 +5,13 @@
 #include "../Shader/ShaderProgram.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "Widget.hpp"
+#include <functional>
 
 /** @ingroup Core
  * @{
  */
 
 namespace GUI {
-    typedef void(Widget::*ClickedMethod)(void);
-    
     class Button : public Widget {
         public:
             /// Create new button.
@@ -41,11 +40,11 @@ namespace GUI {
              */
             glm::vec2 Size() const;
             
-            /// Set method in parent to call when clicked.
+            /// Set function to call when clicked.
             /**
-             * @param method Method to call when button is clicked.
+             * @param callback Function to call when button is clicked.
              */
-            void SetClickedCallback(ClickedMethod method);
+            void SetClickedCallback(std::function<void()> callback);
             
         private:
             Geometry::Rectangle* rectangle;
@@ -61,8 +60,8 @@ namespace GUI {
             
             // Interaction
             bool mouseHover;
-            bool hasClickedMethod;
-            ClickedMethod clickedMethod;
+            bool hasClickedCallback;
+            std::function<void()> clickedCallback;
             
             Texture2D* texture;
     };

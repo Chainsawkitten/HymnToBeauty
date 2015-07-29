@@ -52,7 +52,10 @@ class EditorWindow : public GUI::Container {
         /// Test button clicking.
         void ClickTest();
 
+        /// Play game.
+        void Play();
     private:
+        
         GLFWwindow* window;
         GameWindow* gameWindow;
         

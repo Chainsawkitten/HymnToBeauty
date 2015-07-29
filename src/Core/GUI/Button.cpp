@@ -18,7 +18,7 @@ namespace GUI {
         this->texture = texture;
         
         mouseHover = false;
-        hasClickedMethod = false;
+        hasClickedCallback = false;
         size = glm::vec2(64.f, 64.f);
     }
     
@@ -38,8 +38,8 @@ namespace GUI {
         
         mouseHover = xpos >= Position().x && xpos < Position().x + size.x && ypos >= Position().y && ypos < Position().y + size.y;
         
-        if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT) && hasClickedMethod) {
-            (Parent()->*clickedMethod)();
+        if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT) && hasClickedCallback) {
+            clickedCallback();
         }
     }
     
@@ -99,8 +99,8 @@ namespace GUI {
         return size;
     }
     
-    void Button::SetClickedCallback(ClickedMethod method) {
-        clickedMethod = method;
-        hasClickedMethod = true;
+    void Button::SetClickedCallback(std::function<void()> callback) {
+        clickedCallback = callback;
+        hasClickedCallback = true;
     }
 }

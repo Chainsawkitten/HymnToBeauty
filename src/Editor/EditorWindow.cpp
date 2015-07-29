@@ -54,18 +54,17 @@ void EditorWindow::Init() {
     
     fileTexture = Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
     fileButton = new GUI::Button(menuBar, fileTexture);
-    GUI::ClickedMethod method = static_cast<GUI::ClickedMethod>(&ClickTest);
-    fileButton->SetClickedCallback(method);
+    fileButton->SetClickedCallback(std::bind(&ClickTest, this));
     menuBar->AddWidget(fileButton);
     
     optionsTexture = Resources().CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
     optionsButton = new GUI::Button(menuBar, optionsTexture);
-    optionsButton->SetClickedCallback(method);
+    optionsButton->SetClickedCallback(std::bind(&ClickTest, this));
     menuBar->AddWidget(optionsButton);
     
     playTexture = Resources().CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
     playButton = new GUI::Button(menuBar, playTexture);
-    playButton->SetClickedCallback(method);
+    playButton->SetClickedCallback(std::bind(&Play, this));
     menuBar->AddWidget(playButton);
     
     glEnable(GL_DEPTH_TEST);
@@ -84,7 +83,7 @@ void EditorWindow::Update() {
             gameWindow = nullptr;
         }
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
-        gameWindow = new GameWindow();
+        Play();
     } else {
         input->Update();
         input->SetActive();
@@ -100,16 +99,17 @@ void EditorWindow::Render() {
 }
 
 void EditorWindow::Render(int width, int height) {
-    if (gameWindow != nullptr)
+    if (gameWindow != nullptr) {
         gameWindow->Render();
-
-    glfwMakeContextCurrent(window);
-    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    RenderWidgets(width, height);
-    
-    glfwSwapBuffers(window);
+    } else {
+        glfwMakeContextCurrent(window);
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        RenderWidgets(width, height);
+        
+        glfwSwapBuffers(window);
+    }
 }
 
 glm::vec2 EditorWindow::Size() const {
@@ -121,4 +121,8 @@ glm::vec2 EditorWindow::Size() const {
 
 void EditorWindow::ClickTest() {
     Log() << "Click test!\n";
+}
+
+void EditorWindow::Play() {
+    gameWindow = new GameWindow();
 }
