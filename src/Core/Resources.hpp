@@ -125,6 +125,8 @@ class ResourceManager {
             const Shader* geometryShader;
             const Shader* fragmentShader;
             
+            ShaderProgramKey();
+            
             bool operator<(const ShaderProgramKey& other) const;
         };
         std::map<ShaderProgramKey, ShaderProgramInstance> shaderPrograms;

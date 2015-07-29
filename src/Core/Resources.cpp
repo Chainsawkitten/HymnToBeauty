@@ -100,6 +100,15 @@ void ResourceManager::FreeRectangle() {
         delete rectangle;
 }
 
+ResourceManager::ShaderProgramKey::ShaderProgramKey() {
+    computeShader = nullptr;
+    vertexShader = nullptr;
+    tessControlShader = nullptr;
+    tessEvaluationShader = nullptr;
+    geometryShader = nullptr;
+    fragmentShader = nullptr;
+}
+
 bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
     if (computeShader < other.computeShader) return true;
     if (computeShader > other.computeShader) return false;
