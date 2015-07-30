@@ -1,10 +1,10 @@
-#include "HorizontalLayout.hpp"
+#include "VerticalLayout.hpp"
 #include "Default2D.vert.hpp"
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
 
 namespace GUI {
-    HorizontalLayout::HorizontalLayout(Widget* parent) : Container(parent) {
+    VerticalLayout::VerticalLayout(Widget* parent) : Container(parent) {
         rectangle = Resources().CreateRectangle();
         
         vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
@@ -14,7 +14,7 @@ namespace GUI {
         nextPosition = glm::vec2(0.f, 0.f);
     }
     
-    HorizontalLayout::~HorizontalLayout() {
+    VerticalLayout::~VerticalLayout() {
         Resources().FreeShader(vertexShader);
         Resources().FreeShader(fragmentShader);
         Resources().FreeShaderProgram(shaderProgram);
@@ -22,7 +22,7 @@ namespace GUI {
         Resources().FreeRectangle();
     }
     
-    void HorizontalLayout::Render(int screenWidth, int screenHeight) {
+    void VerticalLayout::Render(int screenWidth, int screenHeight) {
         // Disable depth testing
         GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
         glDisable(GL_DEPTH_TEST);
@@ -48,17 +48,17 @@ namespace GUI {
         RenderWidgets(screenWidth, screenHeight);
     }
     
-    void HorizontalLayout::AddWidget(Widget* widget) {
+    void VerticalLayout::AddWidget(Widget* widget) {
         Container::AddWidget(widget);
         widget->SetPosition(Position() + nextPosition);
-        nextPosition.x += widget->Size().x;
+        nextPosition.y += widget->Size().y;
     }
     
-    glm::vec2 HorizontalLayout::Size() const {
+    glm::vec2 VerticalLayout::Size() const {
         return this->size;
     }
     
-    void HorizontalLayout::SetSize(const glm::vec2& size) {
+    void VerticalLayout::SetSize(const glm::vec2& size) {
         this->size = size;
     }
 }

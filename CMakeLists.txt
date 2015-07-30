@@ -95,6 +95,7 @@ set(CORE_SRCS
         src/Core/GUI/Widget.cpp
         src/Core/GUI/Container.cpp
         src/Core/GUI/HorizontalLayout.cpp
+        src/Core/GUI/VerticalLayout.cpp
         src/Core/GUI/Button.cpp
         src/Core/Texture/Texture.cpp
         src/Core/Texture/Texture2D.cpp
@@ -114,6 +115,7 @@ set(CORE_HEADERS
         src/Core/GUI/Widget.hpp
         src/Core/GUI/Container.hpp
         src/Core/GUI/HorizontalLayout.hpp
+        src/Core/GUI/VerticalLayout.hpp
         src/Core/GUI/Button.hpp
         src/Core/Texture/Texture.hpp
         src/Core/Texture/Texture2D.hpp

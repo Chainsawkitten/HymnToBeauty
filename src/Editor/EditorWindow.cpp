@@ -34,6 +34,11 @@ EditorWindow::~EditorWindow() {
     delete playButton;
     delete menuBar;
     
+    delete newHymnButton;
+    delete openHymnButton;
+    delete saveHymnButton;
+    delete fileMenu;
+    
     Resources().FreeTexture2D(fileTexture);
     Resources().FreeTexture2D(optionsTexture);
     Resources().FreeTexture2D(playTexture);
@@ -66,6 +71,21 @@ void EditorWindow::Init() {
     playButton = new GUI::Button(menuBar, playTexture);
     playButton->SetClickedCallback(std::bind(&Play, this));
     menuBar->AddWidget(playButton);
+    
+    // File menu.
+    fileMenu = new GUI::VerticalLayout(this);
+    fileMenu->SetSize(glm::vec2(256.f, 96.f));
+    fileMenu->SetPosition(glm::vec2(0.f, 64.f));
+    AddWidget(fileMenu);
+    
+    newHymnButton = new GUI::Button(fileMenu, fileTexture);
+    fileMenu->AddWidget(newHymnButton);
+    
+    openHymnButton = new GUI::Button(fileMenu, fileTexture);
+    fileMenu->AddWidget(openHymnButton);
+    
+    saveHymnButton = new GUI::Button(fileMenu, fileTexture);
+    fileMenu->AddWidget(saveHymnButton);
     
     glEnable(GL_DEPTH_TEST);
 }

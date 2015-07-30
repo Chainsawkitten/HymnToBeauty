@@ -5,6 +5,7 @@
 #include <Core/GameWindow.hpp>
 #include <Core/GUI/Container.hpp>
 #include <Core/GUI/HorizontalLayout.hpp>
+#include <Core/GUI/VerticalLayout.hpp>
 #include <Core/GUI/Button.hpp>
 #include <Core/Util/Input.hpp>
 
@@ -69,6 +70,12 @@ class EditorWindow : public GUI::Container {
         
         GUI::Button* playButton;
         Texture2D* playTexture;
+        
+        // File menu
+        GUI::VerticalLayout* fileMenu;
+        GUI::Button* newHymnButton;
+        GUI::Button* openHymnButton;
+        GUI::Button* saveHymnButton;
         
         // Input
         InputHandler* input;
