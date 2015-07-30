@@ -19,13 +19,15 @@ namespace GUI {
     
     void Container::UpdateWidgets() {
         for (Widget* widget : widgets) {
-            widget->Update();
+            if (widget->Visible())
+                widget->Update();
         }
     }
     
     void Container::RenderWidgets(int screenWidth, int screenHeight) {
         for (Widget* widget : widgets) {
-            widget->Render(screenWidth, screenHeight);
+            if (widget->Visible())
+                widget->Render(screenWidth, screenHeight);
         }
     }
 }

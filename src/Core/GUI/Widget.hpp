@@ -54,10 +54,23 @@ namespace GUI {
              */
             virtual glm::vec2 Size() const = 0;
             
+            /// Get whether the widget is visible.
+            /**
+             * @return Whether the widget should be rendered
+             */
+            bool Visible() const;
+            
+            /// Set whether the widget is visible.
+            /**
+             * @param visible Whether the widget should be rendered.
+             */
+            void SetVisible(bool visible);
+            
         private:
             Widget* parent;
             
             glm::vec2 position;
+            bool visible;
     };
 }
 

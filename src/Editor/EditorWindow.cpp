@@ -59,12 +59,12 @@ void EditorWindow::Init() {
     
     fileTexture = Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
     fileButton = new GUI::Button(menuBar, fileTexture);
-    fileButton->SetClickedCallback(std::bind(&ClickTest, this));
+    fileButton->SetClickedCallback(std::bind(&OpenFileMenu, this));
     menuBar->AddWidget(fileButton);
     
     optionsTexture = Resources().CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
     optionsButton = new GUI::Button(menuBar, optionsTexture);
-    optionsButton->SetClickedCallback(std::bind(&ClickTest, this));
+    optionsButton->SetClickedCallback(std::bind(&OpenProjectOptions, this));
     menuBar->AddWidget(optionsButton);
     
     playTexture = Resources().CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
@@ -76,6 +76,7 @@ void EditorWindow::Init() {
     fileMenu = new GUI::VerticalLayout(this);
     fileMenu->SetSize(glm::vec2(256.f, 96.f));
     fileMenu->SetPosition(glm::vec2(0.f, 64.f));
+    fileMenu->SetVisible(false);
     AddWidget(fileMenu);
     
     newHymnButton = new GUI::Button(fileMenu, fileTexture);
@@ -139,7 +140,12 @@ glm::vec2 EditorWindow::Size() const {
     return glm::vec2(static_cast<float>(width), static_cast<float>(height));
 }
 
-void EditorWindow::ClickTest() {
+void EditorWindow::OpenFileMenu() {
+    fileMenu->SetVisible(!fileMenu->Visible());
+}
+
+void EditorWindow::OpenProjectOptions() {
+    ///@todo: Project options
     Log() << "Click test!\n";
 }
 

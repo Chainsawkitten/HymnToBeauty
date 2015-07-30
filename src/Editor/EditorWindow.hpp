@@ -50,8 +50,11 @@ class EditorWindow : public GUI::Container {
          */
         glm::vec2 Size() const;
         
-        /// Test button clicking.
-        void ClickTest();
+        /// Open the file menu.
+        void OpenFileMenu();
+        
+        /// Open the project options window.
+        void OpenProjectOptions();
 
         /// Play game.
         void Play();

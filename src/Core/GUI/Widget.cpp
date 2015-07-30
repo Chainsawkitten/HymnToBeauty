@@ -5,6 +5,7 @@ namespace GUI {
         this->parent = parent;
         
         position = glm::vec2(0.f, 0.f);
+        visible = true;
     }
     
     Widget::~Widget() {
@@ -21,5 +22,13 @@ namespace GUI {
     
     void Widget::SetPosition(const glm::vec2& position) {
         this->position = position;
+    }
+    
+    bool Widget::Visible() const {
+        return visible;
+    }
+    
+    void Widget::SetVisible(bool visible) {
+        this->visible = visible;
     }
 }
