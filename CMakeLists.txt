@@ -44,6 +44,7 @@ endfunction()
 # Setup embedded source
 set(EMBEDDED_INPUT
     shaders/Default2D.vert
+    shaders/Font.vert
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
     assets/File.png
@@ -92,6 +93,7 @@ set(CORE_SRCS
         src/Core/Shader/ShaderProgram.cpp
         src/Core/Geometry/Geometry2D.cpp
         src/Core/Geometry/Rectangle.cpp
+        src/Core/GUI/Font.cpp
         src/Core/GUI/Widget.cpp
         src/Core/GUI/Container.cpp
         src/Core/GUI/HorizontalLayout.cpp
@@ -112,6 +114,7 @@ set(CORE_HEADERS
         src/Core/Shader/ShaderProgram.hpp
         src/Core/Geometry/Geometry2D.hpp
         src/Core/Geometry/Rectangle.hpp
+        src/Core/GUI/Font.hpp
         src/Core/GUI/Widget.hpp
         src/Core/GUI/Container.hpp
         src/Core/GUI/HorizontalLayout.hpp

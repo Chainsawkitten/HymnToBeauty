@@ -45,12 +45,16 @@ EditorWindow::~EditorWindow() {
     
     delete input;
     
+    delete font;
+    
     glfwDestroyWindow(window);
 }
 
 void EditorWindow::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
+    
+    font = new GUI::Font("TestFont.ttf", 16.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);
@@ -128,6 +132,8 @@ void EditorWindow::Render(int width, int height) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         RenderWidgets(width, height);
+        
+        font->RenderText("TEST TEXT RENDERING", glm::vec2(20.f, 20.f), 640.f, width, height);
         
         glfwSwapBuffers(window);
     }

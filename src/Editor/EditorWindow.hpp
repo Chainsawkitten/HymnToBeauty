@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
+#include <Core/GUI/Font.hpp>
 #include <Core/GUI/Container.hpp>
 #include <Core/GUI/HorizontalLayout.hpp>
 #include <Core/GUI/VerticalLayout.hpp>
@@ -82,6 +83,8 @@ class EditorWindow : public GUI::Container {
         
         // Input
         InputHandler* input;
+        
+        GUI::Font* font;
 };
 
 /** @} */
