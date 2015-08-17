@@ -45,7 +45,7 @@ EditorWindow::~EditorWindow() {
     
     delete input;
     
-    delete font;
+    Resources().FreeFontFromFile(font);
     
     glfwDestroyWindow(window);
 }
@@ -54,7 +54,7 @@ void EditorWindow::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
-    font = new GUI::Font("TestFont.ttf", 16.f);
+    font = Resources().CreateFontFromFile("TestFont.ttf", 16.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);

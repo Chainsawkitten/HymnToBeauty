@@ -5,11 +5,13 @@
 #include <map>
 #include "Geometry/Rectangle.hpp"
 #include "Texture/Texture2D.hpp"
+#include "GUI/Font.hpp"
 
 /** @ingroup Core
  * @{
  */
 
+/// Handles all resources.
 class ResourceManager {
     public:
         /// Get the instance of the class.
@@ -99,6 +101,21 @@ class ResourceManager {
          */
         void FreeTexture2DFromFile(Texture2D* texture);
         
+        /// Create a font if it doesn't already exist.
+        /**
+         * @param filename Filename of the TTF file.
+         * @param height Character height.
+         * @return The %Font instance
+         */
+        GUI::Font* CreateFontFromFile(std::string filename, float height);
+        
+        /// Free the reference to the font.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param font %Font to dereference.
+         */
+        void FreeFontFromFile(GUI::Font* font);
+        
     private:
         ResourceManager();
         ResourceManager(ResourceManager const&) = delete;
@@ -151,8 +168,29 @@ class ResourceManager {
         };
         std::map<std::string, Texture2DFromFileInstance> texturesFromFile;
         std::map<Texture2D*, std::string> texturesFromFileInverse;
+        
+        // Font from file
+        struct FontFromFileInstance {
+            GUI::Font* font;
+            int count;
+        };
+        struct FontFromFileKey {
+            std::string filename;
+            float height;
+            
+            FontFromFileKey();
+            
+            bool operator<(const FontFromFileKey& other) const;
+        };
+
+        std::map<FontFromFileKey, FontFromFileInstance> fontsFromFile;
+        std::map<GUI::Font*, FontFromFileKey> fontsFromFileInverse;
 };
 
+/// Get the resource manager.
+/**
+ * @return The %ResourceManager instance
+ */
 ResourceManager& Resources();
 
 /** @} */
