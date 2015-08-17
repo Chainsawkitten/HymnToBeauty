@@ -48,6 +48,7 @@ set(EMBEDDED_INPUT
     shaders/Font.frag
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
+    assets/ABeeZee.ttf
     assets/File.png
     assets/Options.png
     assets/Play.png

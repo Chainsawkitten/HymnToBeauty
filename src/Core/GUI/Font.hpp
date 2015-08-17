@@ -20,6 +20,14 @@ namespace GUI {
              * @param height Character height.
              */
             Font(const char* filename, float height);
+            
+            /// Create new font.
+            /**
+             * @param source TTF source.
+             * @param sourceLength Length of source.
+             * @param height Character height.
+             */
+            Font(const char* source, int sourceLength, float height);
     
             /// Free allocated resources.
             ~Font();

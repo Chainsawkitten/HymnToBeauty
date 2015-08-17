@@ -8,6 +8,7 @@
 #include <File.png.hpp>
 #include <Options.png.hpp>
 #include <Play.png.hpp>
+#include <ABeeZee.ttf.hpp>
 
 EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -45,7 +46,7 @@ EditorWindow::~EditorWindow() {
     
     delete input;
     
-    Resources().FreeFontFromFile(font);
+    Resources().FreeFont(font);
     
     glfwDestroyWindow(window);
 }
@@ -54,7 +55,7 @@ void EditorWindow::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
-    font = Resources().CreateFontFromFile("TestFont.ttf", 24.f);
+    font = Resources().CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);

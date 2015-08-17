@@ -49,6 +49,30 @@ namespace GUI {
         color = glm::vec3(0.f, 0.f, 0.f);
     }
     
+    Font::Font(const char* source, int sourceLength, float height) {
+        this->height = height;
+    
+        unsigned char* tempBitmap = new unsigned char[512 * 512];
+    
+        stbtt_BakeFontBitmap(reinterpret_cast<const unsigned char*>(source), 0, height, tempBitmap, 512, 512, 32, 96, cdata);
+    
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, 512, 512, 0, GL_ALPHA, GL_UNSIGNED_BYTE, tempBitmap);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+        delete[] tempBitmap;
+        
+        // Resources.
+        rectangle = Resources().CreateRectangle();
+        
+        vertexShader = Resources().CreateShader(FONT_VERT, FONT_VERT_LENGTH, GL_VERTEX_SHADER);
+        fragmentShader = Resources().CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+        shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+        
+        color = glm::vec3(0.f, 0.f, 0.f);
+    }
+    
     Font::~Font() {
         glDeleteTextures(1, &texture);
         

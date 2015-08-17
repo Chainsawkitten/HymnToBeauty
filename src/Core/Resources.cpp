@@ -177,6 +177,48 @@ void ResourceManager::FreeTexture2DFromFile(Texture2D* texture) {
     }
 }
 
+ResourceManager::FontKey::FontKey() {
+    source = nullptr;
+    height = 0.f;
+}
+
+bool ResourceManager::FontKey::operator<(const FontKey& other) const {
+    if (source < other.source) return true;
+    if (source > other.source) return false;
+    
+    if (height < other.height) return true;
+    if (height > other.height) return false;
+    
+    return false;
+}
+
+GUI::Font* ResourceManager::CreateFontEmbedded(const char* source, int sourceLength, float height) {
+    FontKey key;
+    key.source = source;
+    key.height = height;
+    
+    if (fonts.find(key) == fonts.end()) {
+        fonts[key].font = new GUI::Font(source, sourceLength, height);
+        fontsInverse[fonts[key].font] = key;
+        fonts[key].count = 1;
+    } else {
+        fonts[key].count++;
+    }
+    
+    return fonts[key].font;
+}
+
+void ResourceManager::FreeFont(GUI::Font* font) {
+    FontKey key = fontsInverse[font];
+    
+    fonts[key].count--;
+    if (fonts[key].count <= 0) {
+        fontsInverse.erase(font);
+        delete font;
+        fonts.erase(key);
+    }
+}
+
 ResourceManager::FontFromFileKey::FontFromFileKey() {
     filename = "";
     height = 0.f;

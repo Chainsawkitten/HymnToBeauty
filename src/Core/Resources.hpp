@@ -103,6 +103,22 @@ class ResourceManager {
         
         /// Create a font if it doesn't already exist.
         /**
+         * @param source TTF source.
+         * @param sourceLength Length of the source.
+         * @param height Character height.
+         * @return The %Font instance
+         */
+        GUI::Font* CreateFontEmbedded(const char* source, int sourceLength, float height);
+        
+        /// Free the reference to the font.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param font %Font to dereference.
+         */
+        void FreeFont(GUI::Font* font);
+        
+        /// Create a font if it doesn't already exist.
+        /**
          * @param filename Filename of the TTF file.
          * @param height Character height.
          * @return The %Font instance
@@ -162,18 +178,26 @@ class ResourceManager {
         std::map<Texture2D*, const char*> texturesInverse;
         
         // Texture2D from file
-        struct Texture2DFromFileInstance {
-            Texture2D* texture;
-            int count;
-        };
-        std::map<std::string, Texture2DFromFileInstance> texturesFromFile;
+        std::map<std::string, Texture2DInstance> texturesFromFile;
         std::map<Texture2D*, std::string> texturesFromFileInverse;
         
-        // Font from file
-        struct FontFromFileInstance {
+        // Font
+        struct FontInstance {
             GUI::Font* font;
             int count;
         };
+        struct FontKey {
+            const char* source;
+            float height;
+            
+            FontKey();
+            
+            bool operator<(const FontKey& other) const;
+        };
+        std::map<FontKey, FontInstance> fonts;
+        std::map<GUI::Font*, FontKey> fontsInverse;
+        
+        // Font from file
         struct FontFromFileKey {
             std::string filename;
             float height;
@@ -182,8 +206,7 @@ class ResourceManager {
             
             bool operator<(const FontFromFileKey& other) const;
         };
-
-        std::map<FontFromFileKey, FontFromFileInstance> fontsFromFile;
+        std::map<FontFromFileKey, FontInstance> fontsFromFile;
         std::map<GUI::Font*, FontFromFileKey> fontsFromFileInverse;
 };
 
