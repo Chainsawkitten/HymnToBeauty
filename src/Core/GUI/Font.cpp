@@ -8,7 +8,7 @@
 #include "../Util/Log.hpp"
 #include "../Resources.hpp"
 #include "Font.vert.hpp"
-#include "Texture2D.frag.hpp"
+#include "Font.frag.hpp"
 
 namespace GUI {
     Font::Font(const char* filename, float height) {
@@ -43,8 +43,10 @@ namespace GUI {
         rectangle = Resources().CreateRectangle();
         
         vertexShader = Resources().CreateShader(FONT_VERT, FONT_VERT_LENGTH, GL_VERTEX_SHADER);
-        fragmentShader = Resources().CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+        fragmentShader = Resources().CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
         shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+        
+        color = glm::vec3(0.f, 0.f, 0.f);
     }
     
     Font::~Font() {
@@ -104,6 +106,14 @@ namespace GUI {
             glDisable(GL_BLEND);
     }
     
+    void Font::SetColor(const glm::vec3& color) {
+        this->color = color;
+    }
+    
+    glm::vec3 Font::Color() const {
+        return color;
+    }
+    
     float Font::RenderCharacter(char character, const glm::vec2& position, int screenWidth, int screenHeight) {
         glm::vec2 screenSize = glm::vec2(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
     
@@ -116,14 +126,14 @@ namespace GUI {
         glm::vec2 siz = glm::vec2(q.x1, q.y1) - glm::vec2(q.x0, q.y0);
     
         glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(pos / screenSize)[0]);
-    
-        glm::vec2 size = glm::vec2(height, height);
         glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(siz / screenSize)[0]);
     
         glm::vec2 uv1 = glm::vec2(q.s0, q.t0);
         glm::vec2 uv2 = glm::vec2(q.s1, q.t1);
         glUniform2fv(shaderProgram->UniformLocation("uv1"), 1, &uv1[0]);
         glUniform2fv(shaderProgram->UniformLocation("uv2"), 1, &uv2[0]);
+        
+        glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
     
         glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
     

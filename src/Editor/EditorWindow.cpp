@@ -54,7 +54,7 @@ void EditorWindow::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
-    font = Resources().CreateFontFromFile("TestFont.ttf", 16.f);
+    font = Resources().CreateFontFromFile("TestFont.ttf", 24.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);
@@ -133,7 +133,8 @@ void EditorWindow::Render(int width, int height) {
         
         RenderWidgets(width, height);
         
-        font->RenderText("TEST TEXT RENDERING", glm::vec2(20.f, 20.f), 640.f, width, height);
+        font->SetColor(glm::vec3(1.f, 1.f, 1.f));
+        font->RenderText("Test Text Rendering", glm::vec2(20.f, 20.f), 640.f, width, height);
         
         glfwSwapBuffers(window);
     }

@@ -43,6 +43,18 @@ namespace GUI {
              * @param height Height of the context.
              */
             void RenderText(const char* text, const glm::vec2& position, float wrap, int width, int height);
+            
+            /// Set rendering color.
+            /**
+             * @param color Color to render text as.
+             */
+            void SetColor(const glm::vec3& color);
+            
+            /// Get rendering color.
+            /**
+             * @return  Color to render text as.
+             */
+            glm::vec3 Color() const;
     
         private:
             float RenderCharacter(char character, const glm::vec2& position, int width, int height);
@@ -51,6 +63,7 @@ namespace GUI {
             stbtt_bakedchar cdata[96]; // ASCII 32..126 is 95 glyphs
     
             float height;
+            glm::vec3 color;
             
             Geometry::Rectangle* rectangle;
             

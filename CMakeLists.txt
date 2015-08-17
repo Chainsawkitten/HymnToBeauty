@@ -45,6 +45,7 @@ endfunction()
 set(EMBEDDED_INPUT
     shaders/Default2D.vert
     shaders/Font.vert
+    shaders/Font.frag
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
     assets/File.png
