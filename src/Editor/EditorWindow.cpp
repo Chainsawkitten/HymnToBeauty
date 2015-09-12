@@ -5,6 +5,7 @@
 #include <Core/Util/Log.hpp>
 
 #include <Core/GUI/ImageButton.hpp>
+#include <Core/GUI/ImageTextButton.hpp>
 #include <Core/Resources.hpp>
 #include <File.png.hpp>
 #include <Options.png.hpp>
@@ -80,18 +81,21 @@ void EditorWindow::Init() {
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
-    fileMenu->SetSize(glm::vec2(256.f, 96.f));
+    fileMenu->SetSize(glm::vec2(256.f, 3.f * 64.f));
     fileMenu->SetPosition(glm::vec2(0.f, 64.f));
     fileMenu->SetVisible(false);
     AddWidget(fileMenu);
     
-    newHymnButton = new GUI::ImageButton(fileMenu, fileTexture);
+    newHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "New Hymn");
+    newHymnButton->SetSize(glm::vec2(256.f, 64.f));
     fileMenu->AddWidget(newHymnButton);
     
-    openHymnButton = new GUI::ImageButton(fileMenu, fileTexture);
+    openHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Open Hymn");
+    openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     fileMenu->AddWidget(openHymnButton);
     
-    saveHymnButton = new GUI::ImageButton(fileMenu, fileTexture);
+    saveHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Save Hymn");
+    saveHymnButton->SetSize(glm::vec2(256.f, 64.f));
     fileMenu->AddWidget(saveHymnButton);
     
     glEnable(GL_DEPTH_TEST);
@@ -134,9 +138,6 @@ void EditorWindow::Render(int width, int height) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         RenderWidgets(width, height);
-        
-        font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-        font->RenderText("Test Text Rendering", glm::vec2(20.f, 20.f), 640.f, width, height);
         
         glfwSwapBuffers(window);
     }

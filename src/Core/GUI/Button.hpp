@@ -39,6 +39,12 @@ namespace GUI {
              */
             glm::vec2 Size() const;
             
+            /// Set the size of the widget.
+            /**
+             * @param size New widget size.
+             */
+            void SetSize(const glm::vec2& size);
+            
             /// Set function to call when clicked.
             /**
              * @param callback Function to call when button is clicked.

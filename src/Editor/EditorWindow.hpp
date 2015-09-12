@@ -60,8 +60,8 @@ class EditorWindow : public GUI::Container {
 
         /// Play game.
         void Play();
-    private:
         
+    private:
         GLFWwindow* window;
         GameWindow* gameWindow;
         

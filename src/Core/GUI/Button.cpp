@@ -27,6 +27,10 @@ namespace GUI {
         return size;
     }
     
+    void Button::SetSize(const glm::vec2& size) {
+        this->size = size;
+    }
+    
     void Button::SetClickedCallback(std::function<void()> callback) {
         clickedCallback = callback;
         hasClickedCallback = true;
