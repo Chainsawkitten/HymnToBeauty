@@ -130,12 +130,16 @@ namespace GUI {
             glDisable(GL_BLEND);
     }
     
+    glm::vec3 Font::Color() const {
+        return color;
+    }
+    
     void Font::SetColor(const glm::vec3& color) {
         this->color = color;
     }
     
-    glm::vec3 Font::Color() const {
-        return color;
+    float Font::Height() const {
+        return height;
     }
     
     float Font::RenderCharacter(char character, const glm::vec2& position, int screenWidth, int screenHeight) {

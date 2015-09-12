@@ -52,17 +52,23 @@ namespace GUI {
              */
             void RenderText(const char* text, const glm::vec2& position, float wrap, int width, int height);
             
+            /// Get rendering color.
+            /**
+             * @return  Color to render text as.
+             */
+            glm::vec3 Color() const;
+            
             /// Set rendering color.
             /**
              * @param color Color to render text as.
              */
             void SetColor(const glm::vec3& color);
             
-            /// Get rendering color.
+            /// Get character height.
             /**
-             * @return  Color to render text as.
+             * @return The character height.
              */
-            glm::vec3 Color() const;
+            float Height() const;
     
         private:
             float RenderCharacter(char character, const glm::vec2& position, int width, int height);

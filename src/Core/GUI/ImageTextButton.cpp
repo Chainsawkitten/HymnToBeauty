@@ -84,7 +84,7 @@ namespace GUI {
             glDisable(GL_BLEND);
         
         font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-        font->RenderText(text.c_str(), Position(), Size().x - imageSize.x, screenWidth, screenHeight);
+        font->RenderText(text.c_str(), Position() + glm::vec2(imageSize.x, 0.5f * (Size().y - font->Height())), Size().x - imageSize.x, screenWidth, screenHeight);
     }
     
     glm::vec2 ImageTextButton::ImageSize() const {
