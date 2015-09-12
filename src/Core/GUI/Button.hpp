@@ -3,7 +3,6 @@
 
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
-#include "../Texture/Texture2D.hpp"
 #include "Widget.hpp"
 #include <functional>
 
@@ -12,27 +11,27 @@
  */
 
 namespace GUI {
+    /// %Button widget.
     class Button : public Widget {
         public:
             /// Create new button.
             /**
              * @param parent Parent widget.
-             * @param texture %Button texture.
              */
-            Button(Widget* parent, Texture2D* texture);
+            Button(Widget* parent);
             
             /// Destructor.
             virtual ~Button();
             
             /// Update the widget.
-            void Update();
+            virtual void Update();
             
             /// Render the widget.
             /**
              * @param screenWidth Width of the screen in pixels.
              * @param screenHeight Height of the screen in pixels.
              */
-            void Render(int screenWidth, int screenHeight);
+            virtual void Render(int screenWidth, int screenHeight) = 0;
             
             /// Get the size of the widget.
             /**
@@ -46,15 +45,14 @@ namespace GUI {
              */
             void SetClickedCallback(std::function<void()> callback);
             
+            /// Get whether the mouse is over the button.
+            /**
+             * @return Whether the mouse is over the button
+             */
+            bool MouseHover() const;
+            
         private:
             Geometry::Rectangle* rectangle;
-            
-            // Shaders
-            Shader* vertexShader;
-            Shader* colorFragmentShader;
-            Shader* textureFragmentShader;
-            ShaderProgram* colorShaderProgram;
-            ShaderProgram* textureShaderProgram;
             
             glm::vec2 size;
             
@@ -62,8 +60,6 @@ namespace GUI {
             bool mouseHover;
             bool hasClickedCallback;
             std::function<void()> clickedCallback;
-            
-            Texture2D* texture;
     };
 }
 

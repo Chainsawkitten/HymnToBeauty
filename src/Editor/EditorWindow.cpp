@@ -4,6 +4,7 @@
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/Log.hpp>
 
+#include <Core/GUI/ImageButton.hpp>
 #include <Core/Resources.hpp>
 #include <File.png.hpp>
 #include <Options.png.hpp>
@@ -63,17 +64,17 @@ void EditorWindow::Init() {
     AddWidget(menuBar);
     
     fileTexture = Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
-    fileButton = new GUI::Button(menuBar, fileTexture);
+    fileButton = new GUI::ImageButton(menuBar, fileTexture);
     fileButton->SetClickedCallback(std::bind(&OpenFileMenu, this));
     menuBar->AddWidget(fileButton);
     
     optionsTexture = Resources().CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
-    optionsButton = new GUI::Button(menuBar, optionsTexture);
+    optionsButton = new GUI::ImageButton(menuBar, optionsTexture);
     optionsButton->SetClickedCallback(std::bind(&OpenProjectOptions, this));
     menuBar->AddWidget(optionsButton);
     
     playTexture = Resources().CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
-    playButton = new GUI::Button(menuBar, playTexture);
+    playButton = new GUI::ImageButton(menuBar, playTexture);
     playButton->SetClickedCallback(std::bind(&Play, this));
     menuBar->AddWidget(playButton);
     
@@ -84,13 +85,13 @@ void EditorWindow::Init() {
     fileMenu->SetVisible(false);
     AddWidget(fileMenu);
     
-    newHymnButton = new GUI::Button(fileMenu, fileTexture);
+    newHymnButton = new GUI::ImageButton(fileMenu, fileTexture);
     fileMenu->AddWidget(newHymnButton);
     
-    openHymnButton = new GUI::Button(fileMenu, fileTexture);
+    openHymnButton = new GUI::ImageButton(fileMenu, fileTexture);
     fileMenu->AddWidget(openHymnButton);
     
-    saveHymnButton = new GUI::Button(fileMenu, fileTexture);
+    saveHymnButton = new GUI::ImageButton(fileMenu, fileTexture);
     fileMenu->AddWidget(saveHymnButton);
     
     glEnable(GL_DEPTH_TEST);

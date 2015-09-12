@@ -9,6 +9,7 @@
 #include <Core/GUI/VerticalLayout.hpp>
 #include <Core/GUI/Button.hpp>
 #include <Core/Util/Input.hpp>
+#include <Core/Texture/Texture2D.hpp>
 
 /** @ingroup Editor
  * @{

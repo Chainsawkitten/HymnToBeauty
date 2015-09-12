@@ -101,6 +101,7 @@ set(CORE_SRCS
         src/Core/GUI/HorizontalLayout.cpp
         src/Core/GUI/VerticalLayout.cpp
         src/Core/GUI/Button.cpp
+        src/Core/GUI/ImageButton.cpp
         src/Core/Texture/Texture.cpp
         src/Core/Texture/Texture2D.cpp
     )
@@ -122,6 +123,7 @@ set(CORE_HEADERS
         src/Core/GUI/HorizontalLayout.hpp
         src/Core/GUI/VerticalLayout.hpp
         src/Core/GUI/Button.hpp
+        src/Core/GUI/ImageButton.hpp
         src/Core/Texture/Texture.hpp
         src/Core/Texture/Texture2D.hpp
     )
