@@ -44,9 +44,14 @@ endfunction()
 # Setup embedded source
 set(EMBEDDED_INPUT
     shaders/Default2D.vert
+    shaders/Font.vert
+    shaders/Font.frag
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
+    assets/ABeeZee.ttf
     assets/File.png
+    assets/Options.png
+    assets/Play.png
 )
 
 # Headerize
@@ -83,16 +88,21 @@ set(CORE_SRCS
         src/Core/GameWindow.cpp
         src/Core/Resources.cpp
         src/Core/Util/FileSystem.cpp
+        src/Core/Util/Input.cpp
         src/Core/Util/Settings.cpp
         src/Core/Util/Log.cpp
         src/Core/Shader/Shader.cpp
         src/Core/Shader/ShaderProgram.cpp
         src/Core/Geometry/Geometry2D.cpp
         src/Core/Geometry/Rectangle.cpp
+        src/Core/GUI/Font.cpp
         src/Core/GUI/Widget.cpp
         src/Core/GUI/Container.cpp
         src/Core/GUI/HorizontalLayout.cpp
+        src/Core/GUI/VerticalLayout.cpp
         src/Core/GUI/Button.cpp
+        src/Core/GUI/ImageButton.cpp
+        src/Core/GUI/ImageTextButton.cpp
         src/Core/Texture/Texture.cpp
         src/Core/Texture/Texture2D.cpp
     )
@@ -101,16 +111,21 @@ set(CORE_HEADERS
         src/Core/GameWindow.hpp
         src/Core/Resources.hpp
         src/Core/Util/FileSystem.hpp
+        src/Core/Util/Input.hpp
         src/Core/Util/Settings.hpp
         src/Core/Util/Log.hpp
         src/Core/Shader/Shader.hpp
         src/Core/Shader/ShaderProgram.hpp
         src/Core/Geometry/Geometry2D.hpp
         src/Core/Geometry/Rectangle.hpp
+        src/Core/GUI/Font.hpp
         src/Core/GUI/Widget.hpp
         src/Core/GUI/Container.hpp
         src/Core/GUI/HorizontalLayout.hpp
+        src/Core/GUI/VerticalLayout.hpp
         src/Core/GUI/Button.hpp
+        src/Core/GUI/ImageButton.hpp
+        src/Core/GUI/ImageTextButton.hpp
         src/Core/Texture/Texture.hpp
         src/Core/Texture/Texture2D.hpp
     )

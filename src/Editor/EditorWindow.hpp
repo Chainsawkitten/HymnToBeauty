@@ -3,9 +3,13 @@
 
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
+#include <Core/GUI/Font.hpp>
 #include <Core/GUI/Container.hpp>
 #include <Core/GUI/HorizontalLayout.hpp>
+#include <Core/GUI/VerticalLayout.hpp>
 #include <Core/GUI/Button.hpp>
+#include <Core/Util/Input.hpp>
+#include <Core/Texture/Texture2D.hpp>
 
 /** @ingroup Editor
  * @{
@@ -31,12 +35,6 @@ class EditorWindow : public GUI::Container {
 
         /// Update the editor.
         void Update();
-
-        /// Update the widget.
-        /**
-         * @param window Window to get input for.
-         */
-        void Update(GLFWwindow* window);
         
         /// Render the editor.
         void Render();
@@ -53,7 +51,16 @@ class EditorWindow : public GUI::Container {
          * @return The size
          */
         glm::vec2 Size() const;
+        
+        /// Open the file menu.
+        void OpenFileMenu();
+        
+        /// Open the project options window.
+        void OpenProjectOptions();
 
+        /// Play game.
+        void Play();
+        
     private:
         GLFWwindow* window;
         GameWindow* gameWindow;
@@ -61,8 +68,24 @@ class EditorWindow : public GUI::Container {
         // Menu bar.
         GUI::HorizontalLayout* menuBar;
         GUI::Button* fileButton;
-        GUI::Button* compileButton;
+        Texture2D* fileTexture;
+        
+        GUI::Button* optionsButton;
+        Texture2D* optionsTexture;
+        
         GUI::Button* playButton;
+        Texture2D* playTexture;
+        
+        // File menu
+        GUI::VerticalLayout* fileMenu;
+        GUI::Button* newHymnButton;
+        GUI::Button* openHymnButton;
+        GUI::Button* saveHymnButton;
+        
+        // Input
+        InputHandler* input;
+        
+        GUI::Font* font;
 };
 
 /** @} */

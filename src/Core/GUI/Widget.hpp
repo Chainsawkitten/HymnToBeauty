@@ -2,7 +2,6 @@
 #define WIDGET_HPP
 
 #include <glm/glm.hpp>
-#include <GLFW/glfw3.h>
 
 /** @ingroup Core
  * @{
@@ -28,10 +27,7 @@ namespace GUI {
             Widget* Parent() const;
             
             /// Update the widget.
-            /**
-             * @param window Window to get input for.
-             */
-            virtual void Update(GLFWwindow* window) = 0;
+            virtual void Update() = 0;
             
             /// Render the widget.
             /**
@@ -58,10 +54,23 @@ namespace GUI {
              */
             virtual glm::vec2 Size() const = 0;
             
+            /// Get whether the widget is visible.
+            /**
+             * @return Whether the widget should be rendered
+             */
+            bool Visible() const;
+            
+            /// Set whether the widget is visible.
+            /**
+             * @param visible Whether the widget should be rendered.
+             */
+            void SetVisible(bool visible);
+            
         private:
             Widget* parent;
             
             glm::vec2 position;
+            bool visible;
     };
 }
 

@@ -9,23 +9,25 @@ namespace GUI {
         
     }
     
-    void Container::Update(GLFWwindow* window) {
-        UpdateWidgets(window);
+    void Container::Update() {
+        UpdateWidgets();
     }
     
     void Container::AddWidget(Widget* widget) {
         widgets.push_back(widget);
     }
     
-    void Container::UpdateWidgets(GLFWwindow* window) {
+    void Container::UpdateWidgets() {
         for (Widget* widget : widgets) {
-            widget->Update(window);
+            if (widget->Visible())
+                widget->Update();
         }
     }
     
     void Container::RenderWidgets(int screenWidth, int screenHeight) {
         for (Widget* widget : widgets) {
-            widget->Render(screenWidth, screenHeight);
+            if (widget->Visible())
+                widget->Render(screenWidth, screenHeight);
         }
     }
 }

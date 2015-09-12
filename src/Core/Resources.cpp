@@ -1,5 +1,7 @@
 #include "Resources.hpp"
 
+using namespace std;
+
 ResourceManager::ResourceManager() {
     rectangleCount = 0;
 }
@@ -98,6 +100,15 @@ void ResourceManager::FreeRectangle() {
         delete rectangle;
 }
 
+ResourceManager::ShaderProgramKey::ShaderProgramKey() {
+    computeShader = nullptr;
+    vertexShader = nullptr;
+    tessControlShader = nullptr;
+    tessEvaluationShader = nullptr;
+    geometryShader = nullptr;
+    fragmentShader = nullptr;
+}
+
 bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
     if (computeShader < other.computeShader) return true;
     if (computeShader > other.computeShader) return false;
@@ -118,6 +129,136 @@ bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other)
     if (fragmentShader > other.fragmentShader) return false;
     
     return false;
+}
+
+Texture2D* ResourceManager::CreateTexture2D(const char* data, int dataLength) {
+    if (textures.find(data) == textures.end()) {
+        textures[data].texture = new Texture2D(data, dataLength);
+        texturesInverse[textures[data].texture] = data;
+        textures[data].count = 1;
+    } else {
+        textures[data].count++;
+    }
+    
+    return textures[data].texture;
+}
+
+void ResourceManager::FreeTexture2D(Texture2D* texture) {
+    const char* data = texturesInverse[texture];
+    
+    textures[data].count--;
+    if (textures[data].count <= 0) {
+        texturesInverse.erase(texture);
+        delete texture;
+        textures.erase(data);
+    }
+}
+
+Texture2D* ResourceManager::CreateTexture2DFromFile(std::string filename) {
+    if (texturesFromFile.find(filename) == texturesFromFile.end()) {
+        texturesFromFile[filename].texture = new Texture2D(filename.c_str());
+        texturesFromFileInverse[texturesFromFile[filename].texture] = filename;
+        texturesFromFile[filename].count = 1;
+    } else {
+        texturesFromFile[filename].count++;
+    }
+    
+    return texturesFromFile[filename].texture;
+}
+
+void ResourceManager::FreeTexture2DFromFile(Texture2D* texture) {
+    string filename = texturesFromFileInverse[texture];
+    
+    texturesFromFile[filename].count--;
+    if (texturesFromFile[filename].count <= 0) {
+        texturesFromFileInverse.erase(texture);
+        delete texture;
+        texturesFromFile.erase(filename);
+    }
+}
+
+ResourceManager::FontKey::FontKey() {
+    source = nullptr;
+    height = 0.f;
+}
+
+bool ResourceManager::FontKey::operator<(const FontKey& other) const {
+    if (source < other.source) return true;
+    if (source > other.source) return false;
+    
+    if (height < other.height) return true;
+    if (height > other.height) return false;
+    
+    return false;
+}
+
+GUI::Font* ResourceManager::CreateFontEmbedded(const char* source, int sourceLength, float height) {
+    FontKey key;
+    key.source = source;
+    key.height = height;
+    
+    if (fonts.find(key) == fonts.end()) {
+        fonts[key].font = new GUI::Font(source, sourceLength, height);
+        fontsInverse[fonts[key].font] = key;
+        fonts[key].count = 1;
+    } else {
+        fonts[key].count++;
+    }
+    
+    return fonts[key].font;
+}
+
+void ResourceManager::FreeFont(GUI::Font* font) {
+    FontKey key = fontsInverse[font];
+    
+    fonts[key].count--;
+    if (fonts[key].count <= 0) {
+        fontsInverse.erase(font);
+        delete font;
+        fonts.erase(key);
+    }
+}
+
+ResourceManager::FontFromFileKey::FontFromFileKey() {
+    filename = "";
+    height = 0.f;
+}
+
+bool ResourceManager::FontFromFileKey::operator<(const FontFromFileKey& other) const {
+    if (filename < other.filename) return true;
+    if (filename > other.filename) return false;
+    
+    if (height < other.height) return true;
+    if (height > other.height) return false;
+    
+    return false;
+}
+
+GUI::Font* ResourceManager::CreateFontFromFile(std::string filename, float height) {
+    FontFromFileKey key;
+    key.filename = filename;
+    key.height = height;
+    
+    if (fontsFromFile.find(key) == fontsFromFile.end()) {
+        fontsFromFile[key].font = new GUI::Font(filename.c_str(), height);
+        fontsFromFileInverse[fontsFromFile[key].font] = key;
+        fontsFromFile[key].count = 1;
+    } else {
+        fontsFromFile[key].count++;
+    }
+    
+    return fontsFromFile[key].font;
+}
+
+void ResourceManager::FreeFontFromFile(GUI::Font* font) {
+    FontFromFileKey key = fontsFromFileInverse[font];
+    
+    fontsFromFile[key].count--;
+    if (fontsFromFile[key].count <= 0) {
+        fontsFromFileInverse.erase(font);
+        delete font;
+        fontsFromFile.erase(key);
+    }
 }
 
 ResourceManager& Resources() {

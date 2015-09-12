@@ -22,10 +22,7 @@ namespace GUI {
             virtual ~Container();
             
             /// Update the widget.
-            /**
-             * @param window Window to get input for.
-             */
-            void Update(GLFWwindow* window);
+            void Update();
             
             /// Add a widget to the container.
             /**
@@ -35,10 +32,7 @@ namespace GUI {
             
         protected:
             /// Update widgets.
-            /**
-             * @param window Window to get input from.
-             */
-            void UpdateWidgets(GLFWwindow* window);
+            void UpdateWidgets();
             
             /// Render the widgets.
             /**
