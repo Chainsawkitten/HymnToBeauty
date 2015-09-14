@@ -2,6 +2,8 @@
 #define TEXTURE2D_HPP
 
 #include "Texture.hpp"
+#include "../Geometry/Rectangle.hpp"
+#include "../Shader/ShaderProgram.hpp"
 
 /** @ingroup Core
  * @{
@@ -55,10 +57,26 @@ class Texture2D : public Texture {
 		 * @param wrapMode One of GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE or GL_CLAMP_TO_BORDER.
 		 */
 		void SetWrapping(GLint wrapMode);
+        
+        /// Render the texture to the screen.
+        /**
+         * @param position Position on the screen, in pixels.
+         * @param size Size in pixels.
+         * @param screenWidth Width of the screen in pixels.
+         * @param screenHeight Height of the screen in pixels.
+         */
+        void Render(const glm::vec2& position, const glm::vec2& size, int screenWidth, int screenHeight) const;
 
 	private:
 		GLuint texID;
 		int width, height;
+        
+        Geometry::Rectangle* rectangle;
+        
+        // Shaders
+        Shader* vertexShader;
+        Shader* fragmentShader;
+        ShaderProgram* shaderProgram;
 };
 
 /** @} */

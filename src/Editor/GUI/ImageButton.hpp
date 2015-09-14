@@ -34,10 +34,8 @@ namespace GUI {
             
             // Shaders
             Shader* vertexShader;
-            Shader* colorFragmentShader;
-            Shader* textureFragmentShader;
-            ShaderProgram* colorShaderProgram;
-            ShaderProgram* textureShaderProgram;
+            Shader* fragmentShader;
+            ShaderProgram* shaderProgram;
             
             Texture2D* texture;
     };
