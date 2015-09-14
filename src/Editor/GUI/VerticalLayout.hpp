@@ -2,7 +2,6 @@
 #define VERTICALLAYOUT_HPP
 
 #include <Core/Geometry/Rectangle.hpp>
-#include <Core/Shader/ShaderProgram.hpp>
 #include "Container.hpp"
 
 /** @ingroup Core
@@ -50,13 +49,7 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             
-            // Shaders
-            Shader* vertexShader;
-            Shader* fragmentShader;
-            ShaderProgram* shaderProgram;
-            
             glm::vec2 size;
-            
             glm::vec2 nextPosition;
     };
 }

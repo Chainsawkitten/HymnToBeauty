@@ -49,11 +49,6 @@ namespace GUI {
             
             glm::vec2 imageSize;
             
-            // Shaders
-            Shader* vertexShader;
-            Shader* fragmentShader;
-            ShaderProgram* shaderProgram;
-            
             Texture2D* texture;
             Font* font;
             std::string text;

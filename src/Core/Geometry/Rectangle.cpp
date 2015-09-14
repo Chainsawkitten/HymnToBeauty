@@ -1,8 +1,11 @@
 #include "Rectangle.hpp"
+#include "Default2D.vert.hpp"
+#include "SingleColor2D.frag.hpp"
+#include <Core/Resources.hpp>
 
 namespace Geometry {
     Rectangle::Rectangle() {
-        // Vertices
+        // Vertices.
         vertexNr = 4;
         vertexData = new Vertex[vertexNr];
         
@@ -23,7 +26,7 @@ namespace Geometry {
             glm::vec2(1.f, 0.f)
         };
         
-        // Vertexindices
+        // Vertex indices.
         indexNr = 6;
         indexData = new unsigned int[indexNr];
         
@@ -36,6 +39,10 @@ namespace Geometry {
         
         GenerateBuffers();
         GenerateVertexArray();
+        
+        vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+        fragmentShader = Resources().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+        shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
     }
     
     Rectangle::~Rectangle() {
@@ -57,5 +64,30 @@ namespace Geometry {
     
     unsigned int Rectangle::IndexCount() const {
         return indexNr;
+    }
+    
+    void Rectangle::Render(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color, int screenWidth, int screenHeight) const {
+        // Disable depth testing.
+        GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+        
+        // Draw background.
+        shaderProgram->Use();
+        
+        // Set color.
+        glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
+        
+        // Set location and size.
+        glm::vec2 screenSize(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
+        glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(position / screenSize)[0]);
+        glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
+        
+        glBindVertexArray(VertexArray());
+        
+        glDrawElements(GL_TRIANGLES, IndexCount(), GL_UNSIGNED_INT, (void*)0);
+        
+        // Reset depth testing.
+        if (depthTest)
+            glEnable(GL_DEPTH_TEST);
     }
 }

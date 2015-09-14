@@ -31,12 +31,6 @@ namespace GUI {
             
         private:
             Geometry::Rectangle* rectangle;
-            
-            // Shaders
-            Shader* vertexShader;
-            Shader* fragmentShader;
-            ShaderProgram* shaderProgram;
-            
             Texture2D* texture;
     };
 }
