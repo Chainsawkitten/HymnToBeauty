@@ -112,7 +112,7 @@ void Texture2D::SetWrapping(GLint wrapMode) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
 }
 
-void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, int screenWidth, int screenHeight) const {
+void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, const glm::vec2& screenSize) const {
     // Disable depth testing.
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
@@ -132,7 +132,6 @@ void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, int scr
     glBindTexture(GL_TEXTURE_2D, texID);
     
     // Set location and size.
-    glm::vec2 screenSize(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
     glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(position / screenSize)[0]);
     glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
     

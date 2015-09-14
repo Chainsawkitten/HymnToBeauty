@@ -88,7 +88,7 @@ stbtt_aligned_quad Font::BakedQuad(char character, float& x, float& y) {
     return q;
 }
 
-void Font::RenderText(const char* text, const glm::vec2& position, float wrap, int screenWidth, int screenHeight) {
+void Font::RenderText(const char* text, const glm::vec2& position, float wrap, const glm::vec2& screenSize) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
@@ -113,7 +113,7 @@ void Font::RenderText(const char* text, const glm::vec2& position, float wrap, i
     pos.y += height;
     while (*text) {
         if (*text >= 32 && *text < 128) {
-            pos.x = RenderCharacter(*text, pos, screenWidth, screenHeight);
+            pos.x = RenderCharacter(*text, pos, screenSize);
         }
         
         if (pos.x > position.x + wrap || *text == '\n') {
@@ -141,9 +141,7 @@ float Font::Height() const {
     return height;
 }
 
-float Font::RenderCharacter(char character, const glm::vec2& position, int screenWidth, int screenHeight) {
-    glm::vec2 screenSize = glm::vec2(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
-    
+float Font::RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize) {
     stbtt_aligned_quad q;
     float x = position.x;
     float y = position.y;

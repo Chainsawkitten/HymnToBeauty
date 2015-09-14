@@ -66,7 +66,7 @@ namespace Geometry {
         return indexNr;
     }
     
-    void Rectangle::Render(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color, int screenWidth, int screenHeight) const {
+    void Rectangle::Render(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color, const glm::vec2& screenSize) const {
         // Disable depth testing.
         GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
         glDisable(GL_DEPTH_TEST);
@@ -78,7 +78,6 @@ namespace Geometry {
         glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
         
         // Set location and size.
-        glm::vec2 screenSize(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
         glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(position / screenSize)[0]);
         glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
         

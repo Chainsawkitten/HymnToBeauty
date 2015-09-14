@@ -28,10 +28,9 @@ namespace GUI {
             
             /// Render the widget.
             /**
-             * @param screenWidth Width of the screen in pixels.
-             * @param screenHeight Height of the screen in pixels.
+             * @param screenSize Size of the screen in pixels.
              */
-            virtual void Render(int screenWidth, int screenHeight) = 0;
+            virtual void Render(const glm::vec2& screenSize) = 0;
             
             /// Get the size of the widget.
             /**

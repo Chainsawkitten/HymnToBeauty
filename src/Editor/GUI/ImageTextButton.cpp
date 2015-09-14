@@ -17,20 +17,20 @@ namespace GUI {
         Resources().FreeRectangle();
     }
     
-    void ImageTextButton::Render(int screenWidth, int screenHeight) {
+    void ImageTextButton::Render(const glm::vec2& screenSize) {
         // Draw background.
         glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
         if (MouseHover())
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
         
-        rectangle->Render(Position(), Size(), color, screenWidth, screenHeight);
+        rectangle->Render(Position(), Size(), color, screenSize);
         
         // Draw texture
-        texture->Render(Position(), imageSize, screenWidth, screenHeight);
+        texture->Render(Position(), imageSize, screenSize);
         
         // Draw text
         font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-        font->RenderText(text.c_str(), Position() + glm::vec2(imageSize.x, 0.5f * (Size().y - font->Height())), Size().x - imageSize.x, screenWidth, screenHeight);
+        font->RenderText(text.c_str(), Position() + glm::vec2(imageSize.x, 0.5f * (Size().y - font->Height())), Size().x - imageSize.x, screenSize);
     }
     
     glm::vec2 ImageTextButton::ImageSize() const {

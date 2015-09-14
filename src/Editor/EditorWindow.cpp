@@ -126,10 +126,10 @@ void EditorWindow::Render() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
-    Render(width, height);
+    Render(glm::vec2(static_cast<float>(width), static_cast<float>(height)));
 }
 
-void EditorWindow::Render(int width, int height) {
+void EditorWindow::Render(const glm::vec2& screenSize) {
     if (gameWindow != nullptr) {
         gameWindow->Render();
     } else {
@@ -137,7 +137,7 @@ void EditorWindow::Render(int width, int height) {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        RenderWidgets(width, height);
+        RenderWidgets(screenSize);
         
         glfwSwapBuffers(window);
     }

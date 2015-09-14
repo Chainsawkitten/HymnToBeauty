@@ -12,12 +12,12 @@ namespace GUI {
         Resources().FreeRectangle();
     }
     
-    void VerticalLayout::Render(int screenWidth, int screenHeight) {
+    void VerticalLayout::Render(const glm::vec2& screenSize) {
         // Set color.
         glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-        rectangle->Render(Position(), size, color, screenWidth, screenHeight);
+        rectangle->Render(Position(), size, color, screenSize);
         
-        RenderWidgets(screenWidth, screenHeight);
+        RenderWidgets(screenSize);
     }
     
     void VerticalLayout::AddWidget(Widget* widget) {

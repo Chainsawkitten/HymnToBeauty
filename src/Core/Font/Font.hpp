@@ -46,10 +46,9 @@ class Font {
          * @param text Text to render.
          * @param position Position to render the text at (in pixels).
          * @param wrap Width of text before wrapping.
-         * @param width Width of the context.
-         * @param height Height of the context.
+         * @param screenSize Size of the screen in pixels.
          */
-        void RenderText(const char* text, const glm::vec2& position, float wrap, int width, int height);
+        void RenderText(const char* text, const glm::vec2& position, float wrap, const glm::vec2& screenSize);
         
         /// Get rendering color.
         /**
@@ -70,7 +69,7 @@ class Font {
         float Height() const;
         
     private:
-        float RenderCharacter(char character, const glm::vec2& position, int width, int height);
+        float RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize);
         
         GLuint texture;
         stbtt_bakedchar cdata[96]; // ASCII 32..126 is 95 glyphs
