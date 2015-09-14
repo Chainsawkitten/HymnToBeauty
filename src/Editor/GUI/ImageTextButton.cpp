@@ -1,12 +1,12 @@
-#include "ImageButton.hpp"
+#include "ImageTextButton.hpp"
 #include "Default2D.vert.hpp"
 #include "Texture2D.frag.hpp"
 #include "SingleColor2D.frag.hpp"
-#include "../Resources.hpp"
-#include "../Util/Input.hpp"
+#include <Core/Resources.hpp>
+#include <Core/Util/Input.hpp>
 
 namespace GUI {
-    ImageButton::ImageButton(Widget* parent, Texture2D* texture) : Button(parent) {
+    ImageTextButton::ImageTextButton(Widget* parent, Texture2D* texture, Font* font, const std::string& text) : Button(parent) {
         rectangle = Resources().CreateRectangle();
         
         vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
@@ -16,9 +16,13 @@ namespace GUI {
         textureShaderProgram = Resources().CreateShaderProgram({ vertexShader, textureFragmentShader });
         
         this->texture = texture;
+        this->font = font;
+        this->text = text;
+        
+        imageSize = glm::vec2(64.f, 64.f);
     }
     
-    ImageButton::~ImageButton() {
+    ImageTextButton::~ImageTextButton() {
         Resources().FreeShader(vertexShader);
         Resources().FreeShader(colorFragmentShader);
         Resources().FreeShader(textureFragmentShader);
@@ -28,7 +32,7 @@ namespace GUI {
         Resources().FreeRectangle();
     }
     
-    void ImageButton::Render(int screenWidth, int screenHeight) {
+    void ImageTextButton::Render(int screenWidth, int screenHeight) {
         // Disable depth testing
         GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
         glDisable(GL_DEPTH_TEST);
@@ -68,7 +72,7 @@ namespace GUI {
         
         // Set location and size.
         glUniform2fv(textureShaderProgram->UniformLocation("position"), 1, &(Position() / screenSize)[0]);
-        glUniform2fv(textureShaderProgram->UniformLocation("size"), 1, &(Size() / screenSize)[0]);
+        glUniform2fv(textureShaderProgram->UniformLocation("size"), 1, &(imageSize / screenSize)[0]);
         
         glBindVertexArray(rectangle->VertexArray());
         
@@ -78,5 +82,16 @@ namespace GUI {
             glEnable(GL_DEPTH_TEST);
         if (!blend)
             glDisable(GL_BLEND);
+        
+        font->SetColor(glm::vec3(1.f, 1.f, 1.f));
+        font->RenderText(text.c_str(), Position() + glm::vec2(imageSize.x, 0.5f * (Size().y - font->Height())), Size().x - imageSize.x, screenWidth, screenHeight);
+    }
+    
+    glm::vec2 ImageTextButton::ImageSize() const {
+        return imageSize;
+    }
+    
+    void ImageTextButton::SetImageSize(const glm::vec2 &size) {
+        imageSize = size;
     }
 }

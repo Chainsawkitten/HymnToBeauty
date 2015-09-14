@@ -1,8 +1,8 @@
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
-#include "../Geometry/Rectangle.hpp"
-#include "../Shader/ShaderProgram.hpp"
+#include <Core/Geometry/Rectangle.hpp>
+#include <Core/Shader/ShaderProgram.hpp>
 #include "Widget.hpp"
 #include <functional>
 

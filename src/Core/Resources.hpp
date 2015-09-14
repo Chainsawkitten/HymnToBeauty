@@ -5,7 +5,7 @@
 #include <map>
 #include "Geometry/Rectangle.hpp"
 #include "Texture/Texture2D.hpp"
-#include "GUI/Font.hpp"
+#include "Font/Font.hpp"
 
 /** @ingroup Core
  * @{
@@ -108,14 +108,14 @@ class ResourceManager {
          * @param height Character height.
          * @return The %Font instance
          */
-        GUI::Font* CreateFontEmbedded(const char* source, int sourceLength, float height);
+        Font* CreateFontEmbedded(const char* source, int sourceLength, float height);
         
         /// Free the reference to the font.
         /**
          * Deletes the instance if no more references exist.
          * @param font %Font to dereference.
          */
-        void FreeFont(GUI::Font* font);
+        void FreeFont(Font* font);
         
         /// Create a font if it doesn't already exist.
         /**
@@ -123,14 +123,14 @@ class ResourceManager {
          * @param height Character height.
          * @return The %Font instance
          */
-        GUI::Font* CreateFontFromFile(std::string filename, float height);
+        Font* CreateFontFromFile(std::string filename, float height);
         
         /// Free the reference to the font.
         /**
          * Deletes the instance if no more references exist.
          * @param font %Font to dereference.
          */
-        void FreeFontFromFile(GUI::Font* font);
+        void FreeFontFromFile(Font* font);
         
     private:
         ResourceManager();
@@ -183,7 +183,7 @@ class ResourceManager {
         
         // Font
         struct FontInstance {
-            GUI::Font* font;
+            Font* font;
             int count;
         };
         struct FontKey {
@@ -195,7 +195,7 @@ class ResourceManager {
             bool operator<(const FontKey& other) const;
         };
         std::map<FontKey, FontInstance> fonts;
-        std::map<GUI::Font*, FontKey> fontsInverse;
+        std::map<Font*, FontKey> fontsInverse;
         
         // Font from file
         struct FontFromFileKey {
@@ -207,7 +207,7 @@ class ResourceManager {
             bool operator<(const FontFromFileKey& other) const;
         };
         std::map<FontFromFileKey, FontInstance> fontsFromFile;
-        std::map<GUI::Font*, FontFromFileKey> fontsFromFileInverse;
+        std::map<Font*, FontFromFileKey> fontsFromFileInverse;
 };
 
 /// Get the resource manager.

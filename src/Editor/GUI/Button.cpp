@@ -1,5 +1,5 @@
 #include "Button.hpp"
-#include "../Util/Input.hpp"
+#include <Core/Util/Input.hpp>
 
 namespace GUI {
     Button::Button(Widget* parent) : Widget(parent) {

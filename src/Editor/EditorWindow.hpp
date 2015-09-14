@@ -3,11 +3,11 @@
 
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
-#include <Core/GUI/Font.hpp>
-#include <Core/GUI/Container.hpp>
-#include <Core/GUI/HorizontalLayout.hpp>
-#include <Core/GUI/VerticalLayout.hpp>
-#include <Core/GUI/Button.hpp>
+#include <Core/Font/Font.hpp>
+#include "GUI/Container.hpp"
+#include "GUI/HorizontalLayout.hpp"
+#include "GUI/VerticalLayout.hpp"
+#include "GUI/Button.hpp"
 #include <Core/Util/Input.hpp>
 #include <Core/Texture/Texture2D.hpp>
 
@@ -85,7 +85,7 @@ class EditorWindow : public GUI::Container {
         // Input
         InputHandler* input;
         
-        GUI::Font* font;
+        Font* font;
 };
 
 /** @} */

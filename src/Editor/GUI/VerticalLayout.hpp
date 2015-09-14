@@ -1,8 +1,8 @@
 #ifndef VERTICALLAYOUT_HPP
 #define VERTICALLAYOUT_HPP
 
-#include "../Geometry/Rectangle.hpp"
-#include "../Shader/ShaderProgram.hpp"
+#include <Core/Geometry/Rectangle.hpp>
+#include <Core/Shader/ShaderProgram.hpp>
 #include "Container.hpp"
 
 /** @ingroup Core

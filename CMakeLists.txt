@@ -87,6 +87,7 @@ include_directories(src)
 set(CORE_SRCS
         src/Core/GameWindow.cpp
         src/Core/Resources.cpp
+        src/Core/Font/Font.cpp
         src/Core/Util/FileSystem.cpp
         src/Core/Util/Input.cpp
         src/Core/Util/Settings.cpp
@@ -95,14 +96,6 @@ set(CORE_SRCS
         src/Core/Shader/ShaderProgram.cpp
         src/Core/Geometry/Geometry2D.cpp
         src/Core/Geometry/Rectangle.cpp
-        src/Core/GUI/Font.cpp
-        src/Core/GUI/Widget.cpp
-        src/Core/GUI/Container.cpp
-        src/Core/GUI/HorizontalLayout.cpp
-        src/Core/GUI/VerticalLayout.cpp
-        src/Core/GUI/Button.cpp
-        src/Core/GUI/ImageButton.cpp
-        src/Core/GUI/ImageTextButton.cpp
         src/Core/Texture/Texture.cpp
         src/Core/Texture/Texture2D.cpp
     )
@@ -110,6 +103,7 @@ set(CORE_SRCS
 set(CORE_HEADERS
         src/Core/GameWindow.hpp
         src/Core/Resources.hpp
+        src/Core/Font/Font.hpp
         src/Core/Util/FileSystem.hpp
         src/Core/Util/Input.hpp
         src/Core/Util/Settings.hpp
@@ -118,14 +112,6 @@ set(CORE_HEADERS
         src/Core/Shader/ShaderProgram.hpp
         src/Core/Geometry/Geometry2D.hpp
         src/Core/Geometry/Rectangle.hpp
-        src/Core/GUI/Font.hpp
-        src/Core/GUI/Widget.hpp
-        src/Core/GUI/Container.hpp
-        src/Core/GUI/HorizontalLayout.hpp
-        src/Core/GUI/VerticalLayout.hpp
-        src/Core/GUI/Button.hpp
-        src/Core/GUI/ImageButton.hpp
-        src/Core/GUI/ImageTextButton.hpp
         src/Core/Texture/Texture.hpp
         src/Core/Texture/Texture2D.hpp
     )
@@ -143,12 +129,26 @@ target_compile_features(Core PRIVATE cxx_nullptr)
 set(EDITOR_SRCS
         src/Editor/editor.cpp
         src/Editor/EditorWindow.cpp
+        src/Editor/GUI/Widget.cpp
+        src/Editor/GUI/Container.cpp
+        src/Editor/GUI/HorizontalLayout.cpp
+        src/Editor/GUI/VerticalLayout.cpp
+        src/Editor/GUI/Button.cpp
+        src/Editor/GUI/ImageButton.cpp
+        src/Editor/GUI/ImageTextButton.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
 set(EDITOR_HEADERS
         src/Editor/editor.hpp
         src/Editor/EditorWindow.hpp
+        src/Editor/GUI/Widget.hpp
+        src/Editor/GUI/Container.hpp
+        src/Editor/GUI/HorizontalLayout.hpp
+        src/Editor/GUI/VerticalLayout.hpp
+        src/Editor/GUI/Button.hpp
+        src/Editor/GUI/ImageButton.hpp
+        src/Editor/GUI/ImageTextButton.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

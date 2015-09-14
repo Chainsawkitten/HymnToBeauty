@@ -4,8 +4,8 @@
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/Log.hpp>
 
-#include <Core/GUI/ImageButton.hpp>
-#include <Core/GUI/ImageTextButton.hpp>
+#include "GUI/ImageButton.hpp"
+#include "GUI/ImageTextButton.hpp"
 #include <Core/Resources.hpp>
 #include <File.png.hpp>
 #include <Options.png.hpp>
