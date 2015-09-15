@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 

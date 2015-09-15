@@ -6,7 +6,7 @@
 #include "Widget.hpp"
 #include <functional>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 

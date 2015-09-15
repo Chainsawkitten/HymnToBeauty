@@ -4,7 +4,7 @@
 #include <Core/Geometry/Rectangle.hpp>
 #include "Container.hpp"
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 

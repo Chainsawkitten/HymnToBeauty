@@ -4,12 +4,12 @@
 #include "Button.hpp"
 #include <Core/Texture/Texture2D.hpp>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 
 namespace GUI {
-    /// Button displaying an image.
+    /// %Button displaying an image.
     class ImageButton : public Button {
         public:
             /// Create new button.

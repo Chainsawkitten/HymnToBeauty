@@ -5,12 +5,12 @@
 #include <Core/Texture/Texture2D.hpp>
 #include <Core/Font/Font.hpp>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 
 namespace GUI {
-    /// Button displaying both an image and text.
+    /// %Button displaying both an image and text.
     class ImageTextButton : public Button {
         public:
             /// Create new button.

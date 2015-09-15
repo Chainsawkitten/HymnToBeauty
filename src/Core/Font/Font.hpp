@@ -10,7 +10,7 @@
  * @{
  */
 
-/// Font used for drawing text.
+/// %Font used for drawing text.
 class Font {
     public:
         /// Create new font.

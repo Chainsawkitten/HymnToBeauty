@@ -4,7 +4,7 @@
 #include "Widget.hpp"
 #include <vector>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 
