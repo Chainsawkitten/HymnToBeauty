@@ -10,6 +10,7 @@
 #include "GUI/Button.hpp"
 #include <Core/Util/Input.hpp>
 #include <Core/Texture/Texture2D.hpp>
+#include "GUI/SelectHymnWindow.hpp"
 
 /** @ingroup Editor
  * @{
@@ -60,9 +61,25 @@ class EditorWindow : public GUI::Container {
         /// Play game.
         void Play();
         
+        /// Create new hymn.
+        void NewHymn();
+        
+        /// Callback for when New Hymn window is closed.
+        void NewHymnClosed();
+        
+        /// Open an existing hymn.
+        void OpenHymn();
+        
+        /// Callback for when Open Hymn window is closed.
+        void OpenHymnClosed();
+        
+        /// Save the currently open hymn.
+        void SaveHymn();
+        
     private:
         GLFWwindow* window;
         GameWindow* gameWindow;
+        GUI::SelectHymnWindow* childWindow;
         
         // Menu bar.
         GUI::HorizontalLayout* menuBar;
