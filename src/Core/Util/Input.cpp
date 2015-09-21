@@ -1,4 +1,12 @@
+#include "Log.hpp"
 #include "Input.hpp"
+#include <map>
+
+std::map<GLFWwindow*, InputHandler*> inputMap;
+
+void characterCallback(GLFWwindow* window, unsigned int codePoint) {
+    inputMap[window]->CharacterCallback(codePoint);
+}
 
 InputHandler* InputHandler::activeInstance = nullptr;
 
@@ -10,6 +18,11 @@ InputHandler::InputHandler(GLFWwindow *window) {
         mouseState[i] = false;
         mouseStateLast[i] = false;
     }
+    
+    glfwSetCharCallback(window, characterCallback);
+    inputMap[window] = this;
+    text = "";
+    tempText = "";
 }
 
 InputHandler* InputHandler::GetActiveInstance() {
@@ -28,6 +41,9 @@ void InputHandler::Update() {
     }
     
     glfwGetCursorPos(window, &cursorX, &cursorY);
+    
+    text = tempText;
+    tempText = "";
 }
 
 bool InputHandler::MousePressed(int button) const {
@@ -48,6 +64,14 @@ double InputHandler::CursorX() const {
 
 double InputHandler::CursorY() const {
     return cursorY;
+}
+
+const std::string& InputHandler::Text() const {
+    return text;
+}
+
+void InputHandler::CharacterCallback(unsigned int codePoint) {
+    tempText += static_cast<char>(codePoint);
 }
 
 InputHandler* Input() {
