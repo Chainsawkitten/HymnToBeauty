@@ -3,6 +3,7 @@
 
 #include "Container.hpp"
 #include "ImageButton.hpp"
+#include "TextField.hpp"
 #include <Core/Geometry/Rectangle.hpp>
 
 /** @ingroup Editor
@@ -21,6 +22,9 @@ namespace GUI {
             
             /// Destructor.
             virtual ~SelectHymnWindow();
+            
+            /// Update the widget.
+            void Update();
             
             /// Render the widget.
             /**
@@ -51,15 +55,19 @@ namespace GUI {
             
         private:
             Geometry::Rectangle* rectangle;
+            Font* font;
             
             glm::vec2 size;
             
             // Interaction
             bool hasClosedCallback;
             std::function<void()> closedCallback;
+            bool shouldClose;
             
             ImageButton* closeButton;
             Texture2D* closeTexture;
+            
+            TextField* nameTextField;
     };
 }
 

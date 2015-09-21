@@ -137,6 +137,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/ImageButton.cpp
         src/Editor/GUI/ImageTextButton.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
+        src/Editor/GUI/TextField.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -151,6 +152,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/ImageButton.hpp
         src/Editor/GUI/ImageTextButton.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
+        src/Editor/GUI/TextField.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

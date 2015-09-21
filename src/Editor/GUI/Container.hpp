@@ -22,7 +22,7 @@ namespace GUI {
             virtual ~Container();
             
             /// Update the widget.
-            void Update();
+            virtual void Update();
             
             /// Add a widget to the container.
             /**
