@@ -3,13 +3,14 @@
 
 #include <GLFW/glfw3.h>
 #include <Core/GameWindow.hpp>
-#include <Core/GUI/Font.hpp>
-#include <Core/GUI/Container.hpp>
-#include <Core/GUI/HorizontalLayout.hpp>
-#include <Core/GUI/VerticalLayout.hpp>
-#include <Core/GUI/Button.hpp>
+#include <Core/Font/Font.hpp>
+#include "GUI/Container.hpp"
+#include "GUI/HorizontalLayout.hpp"
+#include "GUI/VerticalLayout.hpp"
+#include "GUI/Button.hpp"
 #include <Core/Util/Input.hpp>
 #include <Core/Texture/Texture2D.hpp>
+#include "GUI/SelectHymnWindow.hpp"
 
 /** @ingroup Editor
  * @{
@@ -41,10 +42,9 @@ class EditorWindow : public GUI::Container {
         
         /// Render the editor.
         /**
-         * @param screenWidth Width of the screen in pixels.
-         * @param screenHeight Height of the screen in pixels.
+         * @param screenSize Size of the screen in pixels.
          */
-        void Render(int screenWidth, int screenHeight);
+        void Render(const glm::vec2& screenSize);
         
         /// Get the size of the widget.
         /**
@@ -61,9 +61,25 @@ class EditorWindow : public GUI::Container {
         /// Play game.
         void Play();
         
+        /// Create new hymn.
+        void NewHymn();
+        
+        /// Callback for when New Hymn window is closed.
+        void NewHymnClosed();
+        
+        /// Open an existing hymn.
+        void OpenHymn();
+        
+        /// Callback for when Open Hymn window is closed.
+        void OpenHymnClosed();
+        
+        /// Save the currently open hymn.
+        void SaveHymn();
+        
     private:
         GLFWwindow* window;
         GameWindow* gameWindow;
+        GUI::SelectHymnWindow* childWindow;
         
         // Menu bar.
         GUI::HorizontalLayout* menuBar;
@@ -85,7 +101,7 @@ class EditorWindow : public GUI::Container {
         // Input
         InputHandler* input;
         
-        GUI::Font* font;
+        Font* font;
 };
 
 /** @} */

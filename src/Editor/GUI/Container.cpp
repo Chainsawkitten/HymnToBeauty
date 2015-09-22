@@ -24,10 +24,10 @@ namespace GUI {
         }
     }
     
-    void Container::RenderWidgets(int screenWidth, int screenHeight) {
+    void Container::RenderWidgets(const glm::vec2& screenSize) {
         for (Widget* widget : widgets) {
             if (widget->Visible())
-                widget->Render(screenWidth, screenHeight);
+                widget->Render(screenSize);
         }
     }
 }

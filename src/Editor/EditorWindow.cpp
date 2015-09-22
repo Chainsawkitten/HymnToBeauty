@@ -4,8 +4,8 @@
 #include "Util/EditorSettings.hpp"
 #include <Core/Util/Log.hpp>
 
-#include <Core/GUI/ImageButton.hpp>
-#include <Core/GUI/ImageTextButton.hpp>
+#include "GUI/ImageButton.hpp"
+#include "GUI/ImageTextButton.hpp"
 #include <Core/Resources.hpp>
 #include <File.png.hpp>
 #include <Options.png.hpp>
@@ -28,6 +28,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     glfwMakeContextCurrent(window);
 
     gameWindow = nullptr;
+    childWindow = nullptr;
     input = new InputHandler(window);
 }
 
@@ -88,14 +89,17 @@ void EditorWindow::Init() {
     
     newHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "New Hymn");
     newHymnButton->SetSize(glm::vec2(256.f, 64.f));
+    newHymnButton->SetClickedCallback(std::bind(&NewHymn, this));
     fileMenu->AddWidget(newHymnButton);
     
     openHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Open Hymn");
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
+    openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
     
     saveHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Save Hymn");
     saveHymnButton->SetSize(glm::vec2(256.f, 64.f));
+    saveHymnButton->SetClickedCallback(std::bind(&SaveHymn, this));
     fileMenu->AddWidget(saveHymnButton);
     
     glEnable(GL_DEPTH_TEST);
@@ -113,6 +117,10 @@ void EditorWindow::Update() {
             delete gameWindow;
             gameWindow = nullptr;
         }
+    } else if (childWindow != nullptr) {
+        input->Update();
+        input->SetActive();
+        childWindow->Update();
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         Play();
     } else {
@@ -126,10 +134,10 @@ void EditorWindow::Render() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
-    Render(width, height);
+    Render(glm::vec2(static_cast<float>(width), static_cast<float>(height)));
 }
 
-void EditorWindow::Render(int width, int height) {
+void EditorWindow::Render(const glm::vec2& screenSize) {
     if (gameWindow != nullptr) {
         gameWindow->Render();
     } else {
@@ -137,7 +145,10 @@ void EditorWindow::Render(int width, int height) {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        RenderWidgets(width, height);
+        RenderWidgets(screenSize);
+        
+        if (childWindow != nullptr)
+            childWindow->Render(screenSize);
         
         glfwSwapBuffers(window);
     }
@@ -155,10 +166,42 @@ void EditorWindow::OpenFileMenu() {
 }
 
 void EditorWindow::OpenProjectOptions() {
-    ///@todo: Project options
+    ///@todo Project options
     Log() << "Click test!\n";
 }
 
 void EditorWindow::Play() {
     gameWindow = new GameWindow();
+}
+
+void EditorWindow::NewHymn() {
+    childWindow = new GUI::SelectHymnWindow(this);
+    childWindow->SetPosition(glm::vec2(0.f, 0.f));
+    childWindow->SetSize(Size());
+    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this));
+}
+
+void EditorWindow::NewHymnClosed() {
+    delete childWindow;
+    childWindow = nullptr;
+    
+    ///@todo Create new hymn
+}
+
+void EditorWindow::OpenHymn() {
+    childWindow = new GUI::SelectHymnWindow(this);
+    childWindow->SetPosition(glm::vec2(0.f, 0.f));
+    childWindow->SetSize(Size());
+    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this));
+}
+
+void EditorWindow::OpenHymnClosed() {
+    delete childWindow;
+    childWindow = nullptr;
+    
+    ///@todo Open hymn
+}
+
+void EditorWindow::SaveHymn() {
+    ///@todo Save hymn.
 }

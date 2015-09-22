@@ -192,13 +192,13 @@ bool ResourceManager::FontKey::operator<(const FontKey& other) const {
     return false;
 }
 
-GUI::Font* ResourceManager::CreateFontEmbedded(const char* source, int sourceLength, float height) {
+Font* ResourceManager::CreateFontEmbedded(const char* source, int sourceLength, float height) {
     FontKey key;
     key.source = source;
     key.height = height;
     
     if (fonts.find(key) == fonts.end()) {
-        fonts[key].font = new GUI::Font(source, sourceLength, height);
+        fonts[key].font = new Font(source, sourceLength, height);
         fontsInverse[fonts[key].font] = key;
         fonts[key].count = 1;
     } else {
@@ -208,7 +208,7 @@ GUI::Font* ResourceManager::CreateFontEmbedded(const char* source, int sourceLen
     return fonts[key].font;
 }
 
-void ResourceManager::FreeFont(GUI::Font* font) {
+void ResourceManager::FreeFont(Font* font) {
     FontKey key = fontsInverse[font];
     
     fonts[key].count--;
@@ -234,13 +234,13 @@ bool ResourceManager::FontFromFileKey::operator<(const FontFromFileKey& other) c
     return false;
 }
 
-GUI::Font* ResourceManager::CreateFontFromFile(std::string filename, float height) {
+Font* ResourceManager::CreateFontFromFile(std::string filename, float height) {
     FontFromFileKey key;
     key.filename = filename;
     key.height = height;
     
     if (fontsFromFile.find(key) == fontsFromFile.end()) {
-        fontsFromFile[key].font = new GUI::Font(filename.c_str(), height);
+        fontsFromFile[key].font = new Font(filename.c_str(), height);
         fontsFromFileInverse[fontsFromFile[key].font] = key;
         fontsFromFile[key].count = 1;
     } else {
@@ -250,7 +250,7 @@ GUI::Font* ResourceManager::CreateFontFromFile(std::string filename, float heigh
     return fontsFromFile[key].font;
 }
 
-void ResourceManager::FreeFontFromFile(GUI::Font* font) {
+void ResourceManager::FreeFontFromFile(Font* font) {
     FontFromFileKey key = fontsFromFileInverse[font];
     
     fontsFromFile[key].count--;

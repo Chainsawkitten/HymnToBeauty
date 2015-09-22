@@ -1,33 +1,31 @@
-#ifndef HORIZONTALLAYOUT_HPP
-#define HORIZONTALLAYOUT_HPP
+#ifndef VERTICALLAYOUT_HPP
+#define VERTICALLAYOUT_HPP
 
-#include "../Geometry/Rectangle.hpp"
-#include "../Shader/ShaderProgram.hpp"
+#include <Core/Geometry/Rectangle.hpp>
 #include "Container.hpp"
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 
 namespace GUI {
-    /// Horizontal container.
-    class HorizontalLayout : public Container {
+    /// Vertical container.
+    class VerticalLayout : public Container {
         public:
-            /// Create new horizontal layout.
+            /// Create new vertical layout.
             /**
              * @param parent Parent widget.
              */
-            HorizontalLayout(Widget* parent);
+            VerticalLayout(Widget* parent);
             
             /// Destructor.
-            ~HorizontalLayout();
+            ~VerticalLayout();
             
             /// Render the widget.
             /**
-             * @param screenWidth Width of the screen in pixels.
-             * @param screenHeight Height of the screen in pixels.
+             * @param screenSize Size of the screen in pixels.
              */
-            void Render(int screenWidth, int screenHeight);
+            void Render(const glm::vec2& screenSize);
             
             /// Add a widget to the container.
             /**
@@ -50,13 +48,7 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             
-            // Shaders
-            Shader* vertexShader;
-            Shader* fragmentShader;
-            ShaderProgram* shaderProgram;
-            
             glm::vec2 size;
-            
             glm::vec2 nextPosition;
     };
 }

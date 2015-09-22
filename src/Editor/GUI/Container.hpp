@@ -4,7 +4,7 @@
 #include "Widget.hpp"
 #include <vector>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 
@@ -22,7 +22,7 @@ namespace GUI {
             virtual ~Container();
             
             /// Update the widget.
-            void Update();
+            virtual void Update();
             
             /// Add a widget to the container.
             /**
@@ -36,10 +36,9 @@ namespace GUI {
             
             /// Render the widgets.
             /**
-             * @param screenWidth Width of the screen in pixels.
-             * @param screenHeight Height of the screen in pixels.
+             * @param screenSize Size of the screen in pixels.
              */
-            void RenderWidgets(int screenWidth, int screenHeight);
+            void RenderWidgets(const glm::vec2& screenSize);
             
         private:
             std::vector<Widget*> widgets;

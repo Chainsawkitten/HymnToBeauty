@@ -2,6 +2,7 @@
 #define INPUT_HPP
 
 #include <GLFW/glfw3.h>
+#include <string>
 
 /** @ingroup Core
  * @{
@@ -61,6 +62,18 @@ class InputHandler {
          */
         double CursorY() const;
         
+        /// Get text input since last frame.
+        /**
+         * @return Text input since last frame.
+         */
+        const std::string& Text() const;
+        
+        /// GLFW character callback.
+        /**
+         * @param codePoint Unicode code point.
+         */
+        void CharacterCallback(unsigned int codePoint);
+        
     private:
         static InputHandler* activeInstance;
         
@@ -71,6 +84,8 @@ class InputHandler {
         bool mouseStateLast[3];
         
         double cursorX, cursorY;
+        
+        std::string text, tempText;
 };
 
 /// Get currently active input handler.

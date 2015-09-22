@@ -2,15 +2,15 @@
 #define IMAGETEXTBUTTON_HPP
 
 #include "Button.hpp"
-#include "../Texture/Texture2D.hpp"
-#include "Font.hpp"
+#include <Core/Texture/Texture2D.hpp>
+#include <Core/Font/Font.hpp>
 
-/** @ingroup Core
+/** @ingroup Editor
  * @{
  */
 
 namespace GUI {
-    /// Button displaying both an image and text.
+    /// %Button displaying both an image and text.
     class ImageTextButton : public Button {
         public:
             /// Create new button.
@@ -27,10 +27,9 @@ namespace GUI {
             
             /// Render the widget.
             /**
-             * @param screenWidth Width of the screen in pixels.
-             * @param screenHeight Height of the screen in pixels.
+             * @param screenSize Size of the screen in pixels.
              */
-            void Render(int screenWidth, int screenHeight);
+            void Render(const glm::vec2& screenSize);
             
             /// Get the image size.
             /**
@@ -48,13 +47,6 @@ namespace GUI {
             Geometry::Rectangle* rectangle;
             
             glm::vec2 imageSize;
-            
-            // Shaders
-            Shader* vertexShader;
-            Shader* colorFragmentShader;
-            Shader* textureFragmentShader;
-            ShaderProgram* colorShaderProgram;
-            ShaderProgram* textureShaderProgram;
             
             Texture2D* texture;
             Font* font;
