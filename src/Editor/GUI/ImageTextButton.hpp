@@ -2,8 +2,8 @@
 #define IMAGETEXTBUTTON_HPP
 
 #include "Button.hpp"
-#include <Core/Texture/Texture2D.hpp>
-#include <Core/Font/Font.hpp>
+#include <Engine/Texture/Texture2D.hpp>
+#include <Engine/Font/Font.hpp>
 
 /** @ingroup Editor
  * @{

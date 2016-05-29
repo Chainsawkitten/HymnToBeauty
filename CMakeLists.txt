@@ -84,45 +84,45 @@ include_directories(src)
 
 ## TARGETS ##
 
-## Core ##
-set(CORE_SRCS
-        src/Core/GameWindow.cpp
-        src/Core/Resources.cpp
-        src/Core/Font/Font.cpp
-        src/Core/Util/FileSystem.cpp
-        src/Core/Util/Input.cpp
-        src/Core/Util/Settings.cpp
-        src/Core/Util/Log.cpp
-        src/Core/Shader/Shader.cpp
-        src/Core/Shader/ShaderProgram.cpp
-        src/Core/Geometry/Geometry2D.cpp
-        src/Core/Geometry/Rectangle.cpp
-        src/Core/Texture/Texture.cpp
-        src/Core/Texture/Texture2D.cpp
+## Engine ##
+set(ENGINE_SRCS
+        src/Engine/GameWindow.cpp
+        src/Engine/Resources.cpp
+        src/Engine/Font/Font.cpp
+        src/Engine/Util/FileSystem.cpp
+        src/Engine/Util/Input.cpp
+        src/Engine/Util/Settings.cpp
+        src/Engine/Util/Log.cpp
+        src/Engine/Shader/Shader.cpp
+        src/Engine/Shader/ShaderProgram.cpp
+        src/Engine/Geometry/Geometry2D.cpp
+        src/Engine/Geometry/Rectangle.cpp
+        src/Engine/Texture/Texture.cpp
+        src/Engine/Texture/Texture2D.cpp
     )
 
-set(CORE_HEADERS
-        src/Core/GameWindow.hpp
-        src/Core/Resources.hpp
-        src/Core/Font/Font.hpp
-        src/Core/Util/FileSystem.hpp
-        src/Core/Util/Input.hpp
-        src/Core/Util/Settings.hpp
-        src/Core/Util/Log.hpp
-        src/Core/Shader/Shader.hpp
-        src/Core/Shader/ShaderProgram.hpp
-        src/Core/Geometry/Geometry2D.hpp
-        src/Core/Geometry/Rectangle.hpp
-        src/Core/Texture/Texture.hpp
-        src/Core/Texture/Texture2D.hpp
+set(ENGINE_HEADERS
+        src/Engine/GameWindow.hpp
+        src/Engine/Resources.hpp
+        src/Engine/Font/Font.hpp
+        src/Engine/Util/FileSystem.hpp
+        src/Engine/Util/Input.hpp
+        src/Engine/Util/Settings.hpp
+        src/Engine/Util/Log.hpp
+        src/Engine/Shader/Shader.hpp
+        src/Engine/Shader/ShaderProgram.hpp
+        src/Engine/Geometry/Geometry2D.hpp
+        src/Engine/Geometry/Rectangle.hpp
+        src/Engine/Texture/Texture.hpp
+        src/Engine/Texture/Texture2D.hpp
     )
 
-create_directory_groups(${CORE_SRCS} ${CORE_HEADERS})
+create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
 
-set_property(SOURCE ${CORE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
+set_property(SOURCE ${ENGINE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
 
-add_library(Core STATIC ${CORE_SRCS} ${CORE_HEADERS} ${EMBEDDED_SOURCE})
-target_compile_features(Core PRIVATE cxx_nullptr)
+add_library(Engine STATIC ${ENGINE_SRCS} ${ENGINE_HEADERS} ${EMBEDDED_SOURCE})
+target_compile_features(Engine PRIVATE cxx_nullptr)
 
 
 
@@ -160,7 +160,7 @@ set(EDITOR_HEADERS
 create_directory_groups(${EDITOR_SRCS} ${EDITOR_HEADERS})
 
 add_executable(HymnToBeauty ${EDITOR_SRCS} ${EDITOR_HEADERS})
-target_link_libraries(HymnToBeauty Core)
+target_link_libraries(HymnToBeauty Engine)
 target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES})
 target_compile_features(HymnToBeauty PRIVATE cxx_nullptr cxx_deleted_functions)
 
@@ -178,5 +178,5 @@ set(GAME_HEADERS
 create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
 
 add_executable(Game ${GAME_SRCS} ${GAME_HEADERS})
-target_link_libraries(Game Core)
+target_link_libraries(Game Engine)
 target_link_libraries(Game glew glfw ${GLFW_LIBRARIES})

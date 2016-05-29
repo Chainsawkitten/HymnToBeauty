@@ -3,8 +3,8 @@
 #include <GLFW/glfw3.h>
 #include "EditorWindow.hpp"
 #include "Util/EditorSettings.hpp"
-#include <Core/Util/FileSystem.hpp>
-#include <Core/Util/Log.hpp>
+#include <Engine/Util/FileSystem.hpp>
+#include <Engine/Util/Log.hpp>
 
 int main() {
     // Enable logging if requested.

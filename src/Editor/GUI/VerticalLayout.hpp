@@ -1,7 +1,7 @@
 #ifndef VERTICALLAYOUT_HPP
 #define VERTICALLAYOUT_HPP
 
-#include <Core/Geometry/Rectangle.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
 #include "Container.hpp"
 
 /** @ingroup Editor

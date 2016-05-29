@@ -2,14 +2,14 @@
 #define EDITORWINDOW_HPP
 
 #include <GLFW/glfw3.h>
-#include <Core/GameWindow.hpp>
-#include <Core/Font/Font.hpp>
+#include <Engine/GameWindow.hpp>
+#include <Engine/Font/Font.hpp>
 #include "GUI/Container.hpp"
 #include "GUI/HorizontalLayout.hpp"
 #include "GUI/VerticalLayout.hpp"
 #include "GUI/Button.hpp"
-#include <Core/Util/Input.hpp>
-#include <Core/Texture/Texture2D.hpp>
+#include <Engine/Util/Input.hpp>
+#include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
 
 /** @ingroup Editor

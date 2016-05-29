@@ -4,7 +4,7 @@
 #include "Container.hpp"
 #include "ImageButton.hpp"
 #include "TextField.hpp"
-#include <Core/Geometry/Rectangle.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
 
 /** @ingroup Editor
  * @{

@@ -1,7 +1,7 @@
 #ifndef EDITORSETTINGS_HPP
 #define EDITORSETTINGS_HPP
 
-#include <Core/Util/Settings.hpp>
+#include <Engine/Util/Settings.hpp>
 
 /// %Settings for the editor.
 /**

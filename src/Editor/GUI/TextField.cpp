@@ -1,6 +1,6 @@
 #include "TextField.hpp"
-#include <Core/Resources.hpp>
-#include <Core/Util/Input.hpp>
+#include <Engine/Resources.hpp>
+#include <Engine/Util/Input.hpp>
 
 namespace GUI {
     TextField::TextField(Widget *parent, Font* font) : Widget(parent) {

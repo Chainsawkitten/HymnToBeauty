@@ -2,7 +2,7 @@
 #define IMAGEBUTTON_HPP
 
 #include "Button.hpp"
-#include <Core/Texture/Texture2D.hpp>
+#include <Engine/Texture/Texture2D.hpp>
 
 /** @ingroup Editor
  * @{

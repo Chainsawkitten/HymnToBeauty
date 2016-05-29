@@ -2,9 +2,9 @@
 #define TEXTFIELD_HPP
 
 #include "Widget.hpp"
-#include <Core/Geometry/Rectangle.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
 #include <string>
-#include <Core/Font/Font.hpp>
+#include <Engine/Font/Font.hpp>
 
 /** @ingroup Editor
  * @{

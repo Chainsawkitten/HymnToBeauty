@@ -2,11 +2,11 @@
 #include "EditorWindow.hpp"
 
 #include "Util/EditorSettings.hpp"
-#include <Core/Util/Log.hpp>
+#include <Engine/Util/Log.hpp>
 
 #include "GUI/ImageButton.hpp"
 #include "GUI/ImageTextButton.hpp"
-#include <Core/Resources.hpp>
+#include <Engine/Resources.hpp>
 #include <File.png.hpp>
 #include <Options.png.hpp>
 #include <Play.png.hpp>
