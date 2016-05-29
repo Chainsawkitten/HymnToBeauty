@@ -90,6 +90,7 @@ class EditorWindow : public GUI::Container {
         Texture2D* newHymnTexture;
         
         GUI::Button* openHymnButton;
+        Texture2D* openHymnTexture;
         
         // Input
         InputHandler* input;
