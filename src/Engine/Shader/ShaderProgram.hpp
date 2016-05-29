@@ -1,13 +1,8 @@
-#ifndef SHADERPROGRAM_HPP
-#define SHADERPROGRAM_HPP
+#pragma once
 
 #include <gl/glew.h>
 #include <initializer_list>
 #include "Shader.hpp"
-
-/** @ingroup Core
- * @{
- */
 
 /// A GLSL shader program.
 class ShaderProgram {
@@ -55,7 +50,3 @@ class ShaderProgram {
 	private:
 		GLuint shaderProgram;
 };
-
-/** @} */
-
-#endif

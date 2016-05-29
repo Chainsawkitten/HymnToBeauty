@@ -1,11 +1,6 @@
-#ifndef TEXTURE_HPP
-#define TEXTURE_HPP
+#pragma once
 
 #include <gl/glew.h>
-
-/** @ingroup Core
- * @{
- */
 
 /// Interface for textures.
 /**
@@ -45,7 +40,3 @@ class Texture {
 		 */
 		static GLenum Format(int components);
 };
-
-/** @} */
-
-#endif

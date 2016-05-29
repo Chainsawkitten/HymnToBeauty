@@ -1,5 +1,5 @@
 #include "SelectHymnWindow.hpp"
-#include <Core/Resources.hpp>
+#include <Engine/Resources.hpp>
 #include <File.png.hpp>
 #include <ABeeZee.ttf.hpp>
 

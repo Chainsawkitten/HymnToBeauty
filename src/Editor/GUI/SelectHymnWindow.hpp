@@ -1,14 +1,9 @@
-#ifndef SELECTHYMNWINDOW_HPP
-#define SELECTHYMNWINDOW_HPP
+#pragma once
 
 #include "Container.hpp"
 #include "ImageButton.hpp"
 #include "TextField.hpp"
-#include <Core/Geometry/Rectangle.hpp>
-
-/** @ingroup Editor
- * @{
- */
+#include <Engine/Geometry/Rectangle.hpp>
 
 namespace GUI {
     /// A window where a hymn can be selected.
@@ -70,7 +65,3 @@ namespace GUI {
             TextField* nameTextField;
     };
 }
-
-/** @} */
-
-#endif

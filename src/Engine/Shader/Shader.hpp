@@ -1,12 +1,7 @@
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#pragma once
 
 #include <gl/glew.h>
 #include <string>
-
-/** @ingroup Core
- * @{
- */
 
 /// A GLSL shader.
 /**
@@ -42,7 +37,3 @@ class Shader {
 		GLuint shader;
 		GLenum shaderType;
 };
-
-/** @} */
-
-#endif

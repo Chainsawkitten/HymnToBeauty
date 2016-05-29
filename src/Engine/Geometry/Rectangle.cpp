@@ -1,7 +1,7 @@
 #include "Rectangle.hpp"
 #include "Default2D.vert.hpp"
 #include "SingleColor2D.frag.hpp"
-#include <Core/Resources.hpp>
+#include "../Resources.hpp"
 
 namespace Geometry {
     Rectangle::Rectangle() {

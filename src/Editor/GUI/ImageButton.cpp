@@ -1,6 +1,6 @@
 #include "ImageButton.hpp"
-#include <Core/Resources.hpp>
-#include <Core/Util/Input.hpp>
+#include <Engine/Resources.hpp>
+#include <Engine/Util/Input.hpp>
 
 namespace GUI {
     ImageButton::ImageButton(Widget* parent, Texture2D* texture) : Button(parent) {

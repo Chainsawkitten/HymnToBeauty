@@ -1,12 +1,7 @@
-#ifndef GEOMETRY2D_HPP
-#define GEOMETRY2D_HPP
+#pragma once
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-
-/** @ingroup Core
- * @{
- */
 
 namespace Geometry {
     /// Interface for renderable 2D geometry.
@@ -66,7 +61,3 @@ namespace Geometry {
             GLuint vertexArray;
     };
 }
-
-/** @} */
-
-#endif

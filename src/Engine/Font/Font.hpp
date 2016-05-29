@@ -1,14 +1,9 @@
-#ifndef FONT_HPP
-#define FONT_HPP
+#pragma once
 
 #include <GL/glew.h>
 #include <stb_truetype.h>
 #include "../Shader/ShaderProgram.hpp"
 #include "../Geometry/Rectangle.hpp"
-
-/** @ingroup Core
- * @{
- */
 
 /// %Font used for drawing text.
 class Font {
@@ -84,7 +79,3 @@ class Font {
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
 };
-
-/** @} */
-
-#endif

@@ -1,12 +1,7 @@
-#ifndef HORIZONTALLAYOUT_HPP
-#define HORIZONTALLAYOUT_HPP
+#pragma once
 
-#include <Core/Geometry/Rectangle.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
 #include "Container.hpp"
-
-/** @ingroup Editor
- * @{
- */
 
 namespace GUI {
     /// Horizontal container.
@@ -52,7 +47,3 @@ namespace GUI {
             glm::vec2 nextPosition;
     };
 }
-
-/** @} */
-
-#endif

@@ -1,5 +1,5 @@
 #include "VerticalLayout.hpp"
-#include <Core/Resources.hpp>
+#include <Engine/Resources.hpp>
 
 namespace GUI {
     VerticalLayout::VerticalLayout(Widget* parent) : Container(parent) {

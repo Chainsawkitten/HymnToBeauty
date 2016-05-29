@@ -1,12 +1,7 @@
-#ifndef CONTAINER_HPP
-#define CONTAINER_HPP
+#pragma once
 
 #include "Widget.hpp"
 #include <vector>
-
-/** @ingroup Editor
- * @{
- */
 
 namespace GUI {
     /// A container that contains Widgets.
@@ -44,7 +39,3 @@ namespace GUI {
             std::vector<Widget*> widgets;
     };
 }
-
-/** @} */
-
-#endif

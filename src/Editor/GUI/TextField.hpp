@@ -1,14 +1,9 @@
-#ifndef TEXTFIELD_HPP
-#define TEXTFIELD_HPP
+#pragma once
 
 #include "Widget.hpp"
-#include <Core/Geometry/Rectangle.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
 #include <string>
-#include <Core/Font/Font.hpp>
-
-/** @ingroup Editor
- * @{
- */
+#include <Engine/Font/Font.hpp>
 
 namespace GUI {
     /// A field where the user can input text.
@@ -66,7 +61,3 @@ namespace GUI {
             Font* font;
     };
 }
-
-/** @} */
-
-#endif

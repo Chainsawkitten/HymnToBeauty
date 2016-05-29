@@ -1,7 +1,6 @@
-#ifndef EDITORSETTINGS_HPP
-#define EDITORSETTINGS_HPP
+#pragma once
 
-#include <Core/Util/Settings.hpp>
+#include <Engine/Util/Settings.hpp>
 
 /// %Settings for the editor.
 /**
@@ -28,5 +27,3 @@ class EditorSettings : public Settings {
         EditorSettings(EditorSettings const&) = delete;
         void operator=(EditorSettings const&) = delete;
 };
-
-#endif

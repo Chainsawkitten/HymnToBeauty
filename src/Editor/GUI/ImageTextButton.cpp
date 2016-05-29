@@ -1,6 +1,6 @@
 #include "ImageTextButton.hpp"
-#include <Core/Resources.hpp>
-#include <Core/Util/Input.hpp>
+#include <Engine/Resources.hpp>
+#include <Engine/Util/Input.hpp>
 
 namespace GUI {
     ImageTextButton::ImageTextButton(Widget* parent, Texture2D* texture, Font* font, const std::string& text) : Button(parent) {

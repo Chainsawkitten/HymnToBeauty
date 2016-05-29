@@ -1,15 +1,10 @@
-#ifndef RESOURCES_HPP
-#define RESOURCES_HPP
+#pragma once
 
 #include "Shader/ShaderProgram.hpp"
 #include <map>
 #include "Geometry/Rectangle.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Font/Font.hpp"
-
-/** @ingroup Core
- * @{
- */
 
 /// Handles all resources.
 class ResourceManager {
@@ -215,7 +210,3 @@ class ResourceManager {
  * @return The %ResourceManager instance
  */
 ResourceManager& Resources();
-
-/** @} */
-
-#endif

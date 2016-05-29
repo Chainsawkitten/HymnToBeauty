@@ -1,11 +1,6 @@
-#ifndef GAMEWINDOW_HPP
-#define GAMEWINDOW_HPP
+#pragma once
 
 #include <GLFW/glfw3.h>
-
-/** @ingroup Core
- * @{
- */
 
 /// Handles the game window.
 class GameWindow {
@@ -31,7 +26,3 @@ class GameWindow {
     private:
         GLFWwindow* window;
 };
-
-/** @} */
-
-#endif

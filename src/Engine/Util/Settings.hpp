@@ -1,13 +1,8 @@
-#ifndef SETTINGS_HPP
-#define SETTINGS_HPP
+#pragma once
 
 #include <SimpleIni.h>
 #include <string>
 #include <map>
-
-/** @ingroup Core
- * @{
- */
 
 /// Handles settings.
 class Settings {
@@ -141,7 +136,3 @@ class Settings {
         std::map<std::string, DoubleSetting> doubleSettings;
         std::map<std::string, StringSetting> stringSettings;
 };
-
-/** @} */
-
-#endif

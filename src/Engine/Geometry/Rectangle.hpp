@@ -1,12 +1,7 @@
-#ifndef RECTANGLE_HPP
-#define RECTANGLE_HPP
+#pragma once
 
 #include "Geometry2D.hpp"
 #include "../Shader/ShaderProgram.hpp"
-
-/** @ingroup Core
- * @{
- */
 
 namespace Geometry {
     /// A renderable 2D rectangle.
@@ -65,7 +60,3 @@ namespace Geometry {
             
     };
 }
-
-/** @} */
-
-#endif

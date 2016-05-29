@@ -1,20 +1,15 @@
-#ifndef EDITORWINDOW_HPP
-#define EDITORWINDOW_HPP
+#pragma once
 
 #include <GLFW/glfw3.h>
-#include <Core/GameWindow.hpp>
-#include <Core/Font/Font.hpp>
+#include <Engine/GameWindow.hpp>
+#include <Engine/Font/Font.hpp>
 #include "GUI/Container.hpp"
 #include "GUI/HorizontalLayout.hpp"
 #include "GUI/VerticalLayout.hpp"
 #include "GUI/Button.hpp"
-#include <Core/Util/Input.hpp>
-#include <Core/Texture/Texture2D.hpp>
+#include <Engine/Util/Input.hpp>
+#include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
-
-/** @ingroup Editor
- * @{
- */
 
 /// Handles the main editor window.
 class EditorWindow : public GUI::Container {
@@ -103,7 +98,3 @@ class EditorWindow : public GUI::Container {
         
         Font* font;
 };
-
-/** @} */
-
-#endif

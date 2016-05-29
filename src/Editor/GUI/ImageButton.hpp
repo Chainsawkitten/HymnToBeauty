@@ -1,12 +1,7 @@
-#ifndef IMAGEBUTTON_HPP
-#define IMAGEBUTTON_HPP
+#pragma once
 
 #include "Button.hpp"
-#include <Core/Texture/Texture2D.hpp>
-
-/** @ingroup Editor
- * @{
- */
+#include <Engine/Texture/Texture2D.hpp>
 
 namespace GUI {
     /// %Button displaying an image.
@@ -33,7 +28,3 @@ namespace GUI {
             Texture2D* texture;
     };
 }
-
-/** @} */
-
-#endif

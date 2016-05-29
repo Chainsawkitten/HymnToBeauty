@@ -1,5 +1,5 @@
 #include "HorizontalLayout.hpp"
-#include <Core/Resources.hpp>
+#include <Engine/Resources.hpp>
 
 namespace GUI {
     HorizontalLayout::HorizontalLayout(Widget* parent) : Container(parent) {

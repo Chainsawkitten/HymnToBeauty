@@ -1,13 +1,8 @@
-#ifndef IMAGETEXTBUTTON_HPP
-#define IMAGETEXTBUTTON_HPP
+#pragma once
 
 #include "Button.hpp"
-#include <Core/Texture/Texture2D.hpp>
-#include <Core/Font/Font.hpp>
-
-/** @ingroup Editor
- * @{
- */
+#include <Engine/Texture/Texture2D.hpp>
+#include <Engine/Font/Font.hpp>
 
 namespace GUI {
     /// %Button displaying both an image and text.
@@ -53,7 +48,3 @@ namespace GUI {
             std::string text;
     };
 }
-
-/** @} */
-
-#endif

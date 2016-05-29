@@ -1,13 +1,8 @@
-#ifndef TEXTURE2D_HPP
-#define TEXTURE2D_HPP
+#pragma once
 
 #include "Texture.hpp"
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
-
-/** @ingroup Core
- * @{
- */
 
 /// A two-dimensional texture.
 /**
@@ -77,7 +72,3 @@ class Texture2D : public Texture {
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
 };
-
-/** @} */
-
-#endif

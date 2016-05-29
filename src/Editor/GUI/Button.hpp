@@ -1,14 +1,9 @@
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#pragma once
 
-#include <Core/Geometry/Rectangle.hpp>
-#include <Core/Shader/ShaderProgram.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
+#include <Engine/Shader/ShaderProgram.hpp>
 #include "Widget.hpp"
 #include <functional>
-
-/** @ingroup Editor
- * @{
- */
 
 namespace GUI {
     /// %Button widget.
@@ -67,7 +62,3 @@ namespace GUI {
             std::function<void()> clickedCallback;
     };
 }
-
-/** @} */
-
-#endif

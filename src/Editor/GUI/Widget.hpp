@@ -1,11 +1,6 @@
-#ifndef WIDGET_HPP
-#define WIDGET_HPP
+#pragma once
 
 #include <glm/glm.hpp>
-
-/** @ingroup Editor
- * @{
- */
 
 namespace GUI {
     /// A %GUI widget.
@@ -72,7 +67,3 @@ namespace GUI {
             bool visible;
     };
 }
-
-/** @} */
-
-#endif

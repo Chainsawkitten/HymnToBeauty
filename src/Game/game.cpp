@@ -1,7 +1,7 @@
 #include "game.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <Core/GameWindow.hpp>
+#include <Engine/GameWindow.hpp>
 
 int main() {
     if (!glfwInit())
