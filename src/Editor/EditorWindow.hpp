@@ -68,9 +68,6 @@ class EditorWindow : public GUI::Container {
         /// Callback for when Open Hymn window is closed.
         void OpenHymnClosed();
         
-        /// Save the currently open hymn.
-        void SaveHymn();
-        
     private:
         GLFWwindow* window;
         GameWindow* gameWindow;
@@ -90,8 +87,10 @@ class EditorWindow : public GUI::Container {
         // File menu
         GUI::VerticalLayout* fileMenu;
         GUI::Button* newHymnButton;
+        Texture2D* newHymnTexture;
+        
         GUI::Button* openHymnButton;
-        GUI::Button* saveHymnButton;
+        Texture2D* openHymnTexture;
         
         // Input
         InputHandler* input;

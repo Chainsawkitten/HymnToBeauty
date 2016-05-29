@@ -10,6 +10,8 @@
 #include <File.png.hpp>
 #include <Options.png.hpp>
 #include <Play.png.hpp>
+#include <NewHymn.png.hpp>
+#include <OpenHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
 
 EditorWindow::EditorWindow() : Container(nullptr) {
@@ -40,12 +42,14 @@ EditorWindow::~EditorWindow() {
     
     delete newHymnButton;
     delete openHymnButton;
-    delete saveHymnButton;
     delete fileMenu;
     
     Resources().FreeTexture2D(fileTexture);
     Resources().FreeTexture2D(optionsTexture);
     Resources().FreeTexture2D(playTexture);
+    
+    Resources().FreeTexture2D(newHymnTexture);
+    Resources().FreeTexture2D(openHymnTexture);
     
     delete input;
     
@@ -82,25 +86,22 @@ void EditorWindow::Init() {
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
-    fileMenu->SetSize(glm::vec2(256.f, 3.f * 64.f));
+    fileMenu->SetSize(glm::vec2(256.f, 2.f * 64.f));
     fileMenu->SetPosition(glm::vec2(0.f, 64.f));
     fileMenu->SetVisible(false);
     AddWidget(fileMenu);
     
-    newHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "New Hymn");
+    newHymnTexture = Resources().CreateTexture2D(NEWHYMN_PNG, NEWHYMN_PNG_LENGTH);
+    newHymnButton = new GUI::ImageTextButton(fileMenu, newHymnTexture, font, "New Hymn");
     newHymnButton->SetSize(glm::vec2(256.f, 64.f));
     newHymnButton->SetClickedCallback(std::bind(&NewHymn, this));
     fileMenu->AddWidget(newHymnButton);
     
-    openHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Open Hymn");
+    openHymnTexture = Resources().CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
+    openHymnButton = new GUI::ImageTextButton(fileMenu, openHymnTexture, font, "Open Hymn");
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
-    
-    saveHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Save Hymn");
-    saveHymnButton->SetSize(glm::vec2(256.f, 64.f));
-    saveHymnButton->SetClickedCallback(std::bind(&SaveHymn, this));
-    fileMenu->AddWidget(saveHymnButton);
     
     glEnable(GL_DEPTH_TEST);
 }
@@ -200,8 +201,4 @@ void EditorWindow::OpenHymnClosed() {
     childWindow = nullptr;
     
     ///@todo Open hymn
-}
-
-void EditorWindow::SaveHymn() {
-    ///@todo Save hymn.
 }

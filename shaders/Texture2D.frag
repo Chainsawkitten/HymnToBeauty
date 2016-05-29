@@ -1,3 +1,6 @@
+/*
+Render a texture to the screen.
+*/
 #version 400
 
 in VertexData {
@@ -6,6 +9,8 @@ in VertexData {
 
 uniform sampler2D baseImage;
 
+out vec4 fragmentColor;
+
 void main () {
-    gl_FragColor = texture(baseImage, vertexIn.texCoords);
+    fragmentColor = texture(baseImage, vertexIn.texCoords);
 }

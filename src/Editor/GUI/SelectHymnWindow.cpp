@@ -1,6 +1,6 @@
 #include "SelectHymnWindow.hpp"
 #include <Engine/Resources.hpp>
-#include <File.png.hpp>
+#include <Close.png.hpp>
 #include <ABeeZee.ttf.hpp>
 
 namespace GUI {
@@ -10,7 +10,7 @@ namespace GUI {
         hasClosedCallback = false;
         shouldClose = false;
         
-        closeTexture = Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
+        closeTexture = Resources().CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
         closeButton = new ImageButton(this, closeTexture);
         closeButton->SetClickedCallback(std::bind(&Close, this));
         AddWidget(closeButton);
