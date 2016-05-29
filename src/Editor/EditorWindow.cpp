@@ -40,7 +40,6 @@ EditorWindow::~EditorWindow() {
     
     delete newHymnButton;
     delete openHymnButton;
-    delete saveHymnButton;
     delete fileMenu;
     
     Resources().FreeTexture2D(fileTexture);
@@ -82,7 +81,7 @@ void EditorWindow::Init() {
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
-    fileMenu->SetSize(glm::vec2(256.f, 3.f * 64.f));
+    fileMenu->SetSize(glm::vec2(256.f, 2.f * 64.f));
     fileMenu->SetPosition(glm::vec2(0.f, 64.f));
     fileMenu->SetVisible(false);
     AddWidget(fileMenu);
@@ -96,11 +95,6 @@ void EditorWindow::Init() {
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
-    
-    saveHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "Save Hymn");
-    saveHymnButton->SetSize(glm::vec2(256.f, 64.f));
-    saveHymnButton->SetClickedCallback(std::bind(&SaveHymn, this));
-    fileMenu->AddWidget(saveHymnButton);
     
     glEnable(GL_DEPTH_TEST);
 }
@@ -200,8 +194,4 @@ void EditorWindow::OpenHymnClosed() {
     childWindow = nullptr;
     
     ///@todo Open hymn
-}
-
-void EditorWindow::SaveHymn() {
-    ///@todo Save hymn.
 }
