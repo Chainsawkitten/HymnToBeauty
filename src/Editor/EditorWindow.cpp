@@ -10,6 +10,7 @@
 #include <File.png.hpp>
 #include <Options.png.hpp>
 #include <Play.png.hpp>
+#include <NewHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
 
 EditorWindow::EditorWindow() : Container(nullptr) {
@@ -45,6 +46,8 @@ EditorWindow::~EditorWindow() {
     Resources().FreeTexture2D(fileTexture);
     Resources().FreeTexture2D(optionsTexture);
     Resources().FreeTexture2D(playTexture);
+    
+    Resources().FreeTexture2D(newHymnTexture);
     
     delete input;
     
@@ -86,7 +89,8 @@ void EditorWindow::Init() {
     fileMenu->SetVisible(false);
     AddWidget(fileMenu);
     
-    newHymnButton = new GUI::ImageTextButton(fileMenu, fileTexture, font, "New Hymn");
+    newHymnTexture = Resources().CreateTexture2D(NEWHYMN_PNG, NEWHYMN_PNG_LENGTH);
+    newHymnButton = new GUI::ImageTextButton(fileMenu, newHymnTexture, font, "New Hymn");
     newHymnButton->SetSize(glm::vec2(256.f, 64.f));
     newHymnButton->SetClickedCallback(std::bind(&NewHymn, this));
     fileMenu->AddWidget(newHymnButton);

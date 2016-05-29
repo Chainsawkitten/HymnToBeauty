@@ -87,6 +87,8 @@ class EditorWindow : public GUI::Container {
         // File menu
         GUI::VerticalLayout* fileMenu;
         GUI::Button* newHymnButton;
+        Texture2D* newHymnTexture;
+        
         GUI::Button* openHymnButton;
         
         // Input
