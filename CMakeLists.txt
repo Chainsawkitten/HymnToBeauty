@@ -55,17 +55,14 @@ set(EMBEDDED_INPUT
 )
 
 # Headerize
-find_program(HEADERIZE_EXE Headerize
-    DOC "Location of the Headerize executable"
-)
-
+add_subdirectory(externals/Headerize)
 macro(ProcessWithHeaderize headervar sourcevar inputfile outdir)
     get_filename_component(basefile ${inputfile} NAME)
     set(outputfile ${outdir}/${basefile})
     set_source_files_properties(${outputfile} PROPERTIES HEADER_ONLY TRUE)
     add_custom_command(
         OUTPUT ${outputfile}.hpp ${outputfile}.cpp
-        COMMAND ${HEADERIZE_EXE} ${inputfile} ${outputfile}
+        COMMAND Headerize ${inputfile} ${outputfile}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS ${inputfile}
         COMMENT "Generating headers for ${inputfile}"
