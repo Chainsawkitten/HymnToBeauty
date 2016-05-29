@@ -1,3 +1,6 @@
+/*
+Render a texture to the screen.
+*/
 #version 400
 
 in VertexData {
