@@ -4,10 +4,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-/** @ingroup Core
- * @{
- */
-
 namespace Geometry {
     /// Interface for renderable 2D geometry.
     class Geometry2D {
@@ -66,7 +62,5 @@ namespace Geometry {
             GLuint vertexArray;
     };
 }
-
-/** @} */
 
 #endif

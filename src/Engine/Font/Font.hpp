@@ -6,10 +6,6 @@
 #include "../Shader/ShaderProgram.hpp"
 #include "../Geometry/Rectangle.hpp"
 
-/** @ingroup Core
- * @{
- */
-
 /// %Font used for drawing text.
 class Font {
     public:
@@ -84,7 +80,5 @@ class Font {
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
 };
-
-/** @} */
 
 #endif

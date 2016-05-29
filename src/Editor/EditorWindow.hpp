@@ -12,10 +12,6 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
 
-/** @ingroup Editor
- * @{
- */
-
 /// Handles the main editor window.
 class EditorWindow : public GUI::Container {
     public:
@@ -103,7 +99,5 @@ class EditorWindow : public GUI::Container {
         
         Font* font;
 };
-
-/** @} */
 
 #endif

@@ -4,10 +4,6 @@
 #include <Engine/Geometry/Rectangle.hpp>
 #include "Container.hpp"
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// Horizontal container.
     class HorizontalLayout : public Container {
@@ -52,7 +48,5 @@ namespace GUI {
             glm::vec2 nextPosition;
     };
 }
-
-/** @} */
 
 #endif

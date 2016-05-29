@@ -6,10 +6,6 @@
 #include "TextField.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// A window where a hymn can be selected.
     class SelectHymnWindow : public Container {
@@ -70,7 +66,5 @@ namespace GUI {
             TextField* nameTextField;
     };
 }
-
-/** @} */
 
 #endif

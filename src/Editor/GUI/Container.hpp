@@ -4,10 +4,6 @@
 #include "Widget.hpp"
 #include <vector>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// A container that contains Widgets.
     class Container : public Widget {
@@ -44,7 +40,5 @@ namespace GUI {
             std::vector<Widget*> widgets;
     };
 }
-
-/** @} */
 
 #endif

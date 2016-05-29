@@ -5,10 +5,6 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Font/Font.hpp>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// %Button displaying both an image and text.
     class ImageTextButton : public Button {
@@ -53,7 +49,5 @@ namespace GUI {
             std::string text;
     };
 }
-
-/** @} */
 
 #endif

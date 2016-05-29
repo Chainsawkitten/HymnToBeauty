@@ -3,10 +3,6 @@
 
 #include <GLFW/glfw3.h>
 
-/** @ingroup Core
- * @{
- */
-
 /// Handles the game window.
 class GameWindow {
     public:
@@ -31,7 +27,5 @@ class GameWindow {
     private:
         GLFWwindow* window;
 };
-
-/** @} */
 
 #endif

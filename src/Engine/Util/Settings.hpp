@@ -5,10 +5,6 @@
 #include <string>
 #include <map>
 
-/** @ingroup Core
- * @{
- */
-
 /// Handles settings.
 class Settings {
     public:
@@ -141,7 +137,5 @@ class Settings {
         std::map<std::string, DoubleSetting> doubleSettings;
         std::map<std::string, StringSetting> stringSettings;
 };
-
-/** @} */
 
 #endif

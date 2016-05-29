@@ -3,10 +3,6 @@
 
 #include <string>
 
-/** @ingroup Core
- * @{
- */
-
 /// Functionality to interact with the file system.
 namespace FileSystem {
     /// Delimiter, '\' on Windows, '/' elsewhere.
@@ -50,7 +46,5 @@ namespace FileSystem {
      */
     std::string SavePath(const char* appName, const char* filename);
 }
-
-/** @} */
 
 #endif

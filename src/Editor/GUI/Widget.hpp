@@ -3,10 +3,6 @@
 
 #include <glm/glm.hpp>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// A %GUI widget.
     class Widget {
@@ -72,7 +68,5 @@ namespace GUI {
             bool visible;
     };
 }
-
-/** @} */
 
 #endif

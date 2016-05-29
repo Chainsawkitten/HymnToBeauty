@@ -4,10 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-/** @ingroup Core
- * @{
- */
-
 /// Class that handles input.
 class InputHandler {
     public:
@@ -93,7 +89,5 @@ class InputHandler {
  * @return The currently active input handler or nullptr.
  */
 InputHandler* Input();
-
-/** @} */
 
 #endif

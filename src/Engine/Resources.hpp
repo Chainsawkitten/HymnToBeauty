@@ -7,10 +7,6 @@
 #include "Texture/Texture2D.hpp"
 #include "Font/Font.hpp"
 
-/** @ingroup Core
- * @{
- */
-
 /// Handles all resources.
 class ResourceManager {
     public:
@@ -215,7 +211,5 @@ class ResourceManager {
  * @return The %ResourceManager instance
  */
 ResourceManager& Resources();
-
-/** @} */
 
 #endif

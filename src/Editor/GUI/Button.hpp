@@ -6,10 +6,6 @@
 #include "Widget.hpp"
 #include <functional>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// %Button widget.
     class Button : public Widget {
@@ -67,7 +63,5 @@ namespace GUI {
             std::function<void()> clickedCallback;
     };
 }
-
-/** @} */
 
 #endif

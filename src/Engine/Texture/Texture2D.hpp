@@ -5,10 +5,6 @@
 #include "../Geometry/Rectangle.hpp"
 #include "../Shader/ShaderProgram.hpp"
 
-/** @ingroup Core
- * @{
- */
-
 /// A two-dimensional texture.
 /**
  * Used to load a 2D texture from an image file.
@@ -77,7 +73,5 @@ class Texture2D : public Texture {
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
 };
-
-/** @} */
 
 #endif

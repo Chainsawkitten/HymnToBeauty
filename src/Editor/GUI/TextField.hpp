@@ -6,10 +6,6 @@
 #include <string>
 #include <Engine/Font/Font.hpp>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// A field where the user can input text.
     class TextField : public Widget {
@@ -66,7 +62,5 @@ namespace GUI {
             Font* font;
     };
 }
-
-/** @} */
 
 #endif

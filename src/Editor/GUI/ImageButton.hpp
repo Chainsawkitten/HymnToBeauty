@@ -4,10 +4,6 @@
 #include "Button.hpp"
 #include <Engine/Texture/Texture2D.hpp>
 
-/** @ingroup Editor
- * @{
- */
-
 namespace GUI {
     /// %Button displaying an image.
     class ImageButton : public Button {
@@ -33,7 +29,5 @@ namespace GUI {
             Texture2D* texture;
     };
 }
-
-/** @} */
 
 #endif

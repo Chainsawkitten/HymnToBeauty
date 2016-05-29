@@ -3,10 +3,6 @@
 
 #include <gl/glew.h>
 
-/** @ingroup Core
- * @{
- */
-
 /// Interface for textures.
 /**
  * Used to load textures from image files.
@@ -45,7 +41,5 @@ class Texture {
 		 */
 		static GLenum Format(int components);
 };
-
-/** @} */
 
 #endif
