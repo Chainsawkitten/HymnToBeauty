@@ -1,5 +1,4 @@
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#pragma once
 
 #include <gl/glew.h>
 #include <string>
@@ -38,5 +37,3 @@ class Shader {
 		GLuint shader;
 		GLenum shaderType;
 };
-
-#endif

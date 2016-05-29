@@ -1,5 +1,4 @@
-#ifndef FILESYSTEM_HPP
-#define FILESYSTEM_HPP
+#pragma once
 
 #include <string>
 
@@ -46,5 +45,3 @@ namespace FileSystem {
      */
     std::string SavePath(const char* appName, const char* filename);
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef FONT_HPP
-#define FONT_HPP
+#pragma once
 
 #include <GL/glew.h>
 #include <stb_truetype.h>
@@ -80,5 +79,3 @@ class Font {
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
 };
-
-#endif

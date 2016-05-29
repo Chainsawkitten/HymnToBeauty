@@ -1,5 +1,4 @@
-#ifndef HORIZONTALLAYOUT_HPP
-#define HORIZONTALLAYOUT_HPP
+#pragma once
 
 #include <Engine/Geometry/Rectangle.hpp>
 #include "Container.hpp"
@@ -48,5 +47,3 @@ namespace GUI {
             glm::vec2 nextPosition;
     };
 }
-
-#endif

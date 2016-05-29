@@ -1,5 +1,4 @@
-#ifndef SELECTHYMNWINDOW_HPP
-#define SELECTHYMNWINDOW_HPP
+#pragma once
 
 #include "Container.hpp"
 #include "ImageButton.hpp"
@@ -66,5 +65,3 @@ namespace GUI {
             TextField* nameTextField;
     };
 }
-
-#endif

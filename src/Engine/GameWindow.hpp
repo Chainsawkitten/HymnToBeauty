@@ -1,5 +1,4 @@
-#ifndef GAMEWINDOW_HPP
-#define GAMEWINDOW_HPP
+#pragma once
 
 #include <GLFW/glfw3.h>
 
@@ -27,5 +26,3 @@ class GameWindow {
     private:
         GLFWwindow* window;
 };
-
-#endif

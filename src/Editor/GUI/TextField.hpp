@@ -1,5 +1,4 @@
-#ifndef TEXTFIELD_HPP
-#define TEXTFIELD_HPP
+#pragma once
 
 #include "Widget.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
@@ -62,5 +61,3 @@ namespace GUI {
             Font* font;
     };
 }
-
-#endif

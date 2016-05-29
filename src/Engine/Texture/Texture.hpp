@@ -1,5 +1,4 @@
-#ifndef TEXTURE_HPP
-#define TEXTURE_HPP
+#pragma once
 
 #include <gl/glew.h>
 
@@ -41,5 +40,3 @@ class Texture {
 		 */
 		static GLenum Format(int components);
 };
-
-#endif

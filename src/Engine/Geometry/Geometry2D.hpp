@@ -1,5 +1,4 @@
-#ifndef GEOMETRY2D_HPP
-#define GEOMETRY2D_HPP
+#pragma once
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -62,5 +61,3 @@ namespace Geometry {
             GLuint vertexArray;
     };
 }
-
-#endif

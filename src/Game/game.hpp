@@ -1,7 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 /// Main game function. Contains the main loop.
 int main();
-
-#endif

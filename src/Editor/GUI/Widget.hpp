@@ -1,5 +1,4 @@
-#ifndef WIDGET_HPP
-#define WIDGET_HPP
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -68,5 +67,3 @@ namespace GUI {
             bool visible;
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RECTANGLE_HPP
-#define RECTANGLE_HPP
+#pragma once
 
 #include "Geometry2D.hpp"
 #include "../Shader/ShaderProgram.hpp"
@@ -61,5 +60,3 @@ namespace Geometry {
             
     };
 }
-
-#endif

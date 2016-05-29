@@ -1,5 +1,4 @@
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#pragma once
 
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Shader/ShaderProgram.hpp>
@@ -63,5 +62,3 @@ namespace GUI {
             std::function<void()> clickedCallback;
     };
 }
-
-#endif

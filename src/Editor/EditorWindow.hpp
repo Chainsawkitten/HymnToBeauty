@@ -1,5 +1,4 @@
-#ifndef EDITORWINDOW_HPP
-#define EDITORWINDOW_HPP
+#pragma once
 
 #include <GLFW/glfw3.h>
 #include <Engine/GameWindow.hpp>
@@ -99,5 +98,3 @@ class EditorWindow : public GUI::Container {
         
         Font* font;
 };
-
-#endif

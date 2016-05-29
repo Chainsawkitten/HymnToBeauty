@@ -1,5 +1,4 @@
-#ifndef LOG_HPP
-#define LOG_HPP
+#pragma once
 
 #include <string>
 #include <ctime>
@@ -70,5 +69,3 @@ void ErrorCallback(int error, const char* description);
  * @see <a href="https://www.opengl.org/wiki/Debug_Output">OpenGL Debug Output</a>
  */
 void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
-
-#endif
