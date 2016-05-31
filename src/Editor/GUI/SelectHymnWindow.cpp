@@ -25,6 +25,9 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     nameTextField = new TextField(this, font);
     nameTextField->SetSize(glm::vec2(256.f, 32.f));
     AddWidget(nameTextField);
+    
+    pathLabel = new Label(this, font, "Test");
+    AddWidget(pathLabel);
 }
 
 SelectHymnWindow::~SelectHymnWindow() {
@@ -33,8 +36,11 @@ SelectHymnWindow::~SelectHymnWindow() {
     
     delete closeButton;
     Resources().FreeTexture2D(closeTexture);
+    delete selectButton;
     
     delete nameTextField;
+    
+    delete pathLabel;
 }
 
 void SelectHymnWindow::Update() {
@@ -62,6 +68,7 @@ void SelectHymnWindow::SetSize(const glm::vec2& size) {
     closeButton->SetPosition(Position() + glm::vec2(size.x - closeButton->Size().x, 0.f));
     nameTextField->SetPosition(Position() + glm::vec2(64.f, size.y - nameTextField->Size().y - 64.f));
     selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 64.f, size.y - selectButton->Size().y - 64.f));
+    pathLabel->SetPosition(Position());
 }
 
 void SelectHymnWindow::SetClosedCallback(std::function<void ()> callback) {

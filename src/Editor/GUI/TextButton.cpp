@@ -4,7 +4,7 @@
 
 using namespace GUI;
 
-TextButton::TextButton(Widget* parent,Font* font, const std::string& text) : Button(parent) {
+TextButton::TextButton(Widget* parent, Font* font, const std::string& text) : Button(parent) {
     rectangle = Resources().CreateRectangle();
     
     this->font = font;
