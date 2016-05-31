@@ -17,6 +17,10 @@ namespace GUI {
         
         font = Resources().CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
         
+        selectButton = new TextButton(this, font, "Select");
+        selectButton->SetClickedCallback(std::bind(&Select, this));
+        AddWidget(selectButton);
+        
         nameTextField = new TextField(this, font);
         nameTextField->SetSize(glm::vec2(256.f, 32.f));
         AddWidget(nameTextField);
@@ -56,6 +60,7 @@ namespace GUI {
         
         closeButton->SetPosition(Position() + glm::vec2(size.x - closeButton->Size().x, 0.f));
         nameTextField->SetPosition(Position() + glm::vec2(64.f, size.y - nameTextField->Size().y - 64.f));
+        selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 64.f, size.y - selectButton->Size().y - 64.f));
     }
     
     void SelectHymnWindow::SetClosedCallback(std::function<void ()> callback) {
@@ -64,6 +69,10 @@ namespace GUI {
     }
     
     void SelectHymnWindow::Close() {
+        shouldClose = true;
+    }
+    
+    void SelectHymnWindow::Select() {
         shouldClose = true;
     }
 }

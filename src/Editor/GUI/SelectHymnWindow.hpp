@@ -2,6 +2,7 @@
 
 #include "Container.hpp"
 #include "ImageButton.hpp"
+#include "TextButton.hpp"
 #include "TextField.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 
@@ -48,6 +49,9 @@ namespace GUI {
             /// Close the window.
             void Close();
             
+            /// Select hymn.
+            void Select();
+            
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -61,6 +65,8 @@ namespace GUI {
             
             ImageButton* closeButton;
             Texture2D* closeTexture;
+            
+            TextButton* selectButton;
             
             TextField* nameTextField;
     };
