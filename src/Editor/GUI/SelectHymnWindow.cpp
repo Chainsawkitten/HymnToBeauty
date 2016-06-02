@@ -67,6 +67,7 @@ void SelectHymnWindow::SetSize(const glm::vec2& size) {
     
     closeButton->SetPosition(Position() + glm::vec2(size.x - closeButton->Size().x, 0.f));
     nameTextField->SetPosition(Position() + glm::vec2(32.f, size.y - nameTextField->Size().y - 32.f));
+    nameTextField->SetSize(glm::vec2(size.x - 96.f - selectButton->Size().x, 32.f));
     selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 32.f, size.y - selectButton->Size().y - 32.f));
     hymnList->SetPosition(Position() + glm::vec2(0.f, closeButton->Size().y + 32.f));
     hymnList->SetSize(glm::vec2(size.x, nameTextField->Position().y - closeButton->Size().y - 64.f));
