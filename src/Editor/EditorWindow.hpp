@@ -60,13 +60,19 @@ class EditorWindow : public GUI::Container {
         void NewHymn();
         
         /// Callback for when New Hymn window is closed.
-        void NewHymnClosed();
+        /**
+         * @param path Path to the hymn to create.
+         */
+        void NewHymnClosed(const std::string& path);
         
         /// Open an existing hymn.
         void OpenHymn();
         
         /// Callback for when Open Hymn window is closed.
-        void OpenHymnClosed();
+        /**
+         * @param path Path to the hymn to open.
+         */
+        void OpenHymnClosed(const std::string& path);
         
     private:
         GLFWwindow* window;

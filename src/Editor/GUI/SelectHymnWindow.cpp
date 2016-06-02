@@ -43,8 +43,7 @@ void SelectHymnWindow::Update() {
     UpdateWidgets();
     
     if (shouldClose && hasClosedCallback)
-        closedCallback();
-    
+        closedCallback(nameTextField->Text());
 }
 
 void SelectHymnWindow::Render(const glm::vec2& screenSize) {
@@ -66,17 +65,14 @@ void SelectHymnWindow::SetSize(const glm::vec2& size) {
     selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 64.f, size.y - selectButton->Size().y - 64.f));
 }
 
-void SelectHymnWindow::SetClosedCallback(std::function<void ()> callback) {
+void SelectHymnWindow::SetClosedCallback(std::function<void(const std::string&)> callback) {
     closedCallback = callback;
     hasClosedCallback = true;
 }
 
-string SelectHymnWindow::GetHymn() const {
-    return nameTextField->Text();
-}
-
 void SelectHymnWindow::Close() {
     shouldClose = true;
+    nameTextField->SetText("");
 }
 
 void SelectHymnWindow::Select() {

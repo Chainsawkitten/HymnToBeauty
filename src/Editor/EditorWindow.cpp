@@ -180,13 +180,15 @@ void EditorWindow::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(Size());
-    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this));
+    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::NewHymnClosed() {
+void EditorWindow::NewHymnClosed(const std::string& path) {
     // Create new hymn
-    Hymn().Clear();
-    Hymn().SetPath(childWindow->GetHymn());
+    if (!path.empty()) {
+        Hymn().Clear();
+        Hymn().SetPath(path);
+    }
     
     delete childWindow;
     childWindow = nullptr;
@@ -196,12 +198,13 @@ void EditorWindow::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(Size());
-    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this));
+    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::OpenHymnClosed() {
+void EditorWindow::OpenHymnClosed(const std::string& path) {
     // Open hymn.
-    Hymn().Load(childWindow->GetHymn());
+    if (!path.empty())
+        Hymn().Load(path);
     
     delete childWindow;
     childWindow = nullptr;

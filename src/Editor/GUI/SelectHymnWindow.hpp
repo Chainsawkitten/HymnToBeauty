@@ -44,13 +44,7 @@ namespace GUI {
             /**
              * @param callback Function to call when window is closed.
              */
-            void SetClosedCallback(std::function<void()> callback);
-            
-            /// Get the selected hymn.
-            /**
-             * @return The name of the selected hymn.
-             */
-            std::string GetHymn() const;
+            void SetClosedCallback(std::function<void(const std::string&)> callback);
             
             /// Close the window.
             void Close();
@@ -66,7 +60,7 @@ namespace GUI {
             
             // Interaction
             bool hasClosedCallback;
-            std::function<void()> closedCallback;
+            std::function<void(const std::string&)> closedCallback;
             bool shouldClose;
             
             ImageButton* closeButton;
