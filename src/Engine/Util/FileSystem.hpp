@@ -31,7 +31,7 @@ namespace FileSystem {
      * @param appName The name of the app/game.
      * @return The path
      */
-    std::string SavePath(const char* appName);
+    std::string DataPath(const char* appName);
     
     /// Get save path for application data.
     /**
@@ -43,5 +43,5 @@ namespace FileSystem {
      * @param filename Filename, eg. "settings.ini".
      * @return The path
      */
-    std::string SavePath(const char* appName, const char* filename);
+    std::string DataPath(const char* appName, const char* filename);
 }

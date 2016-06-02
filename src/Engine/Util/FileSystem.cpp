@@ -39,7 +39,7 @@ namespace FileSystem {
 #endif
     }
     
-    std::string SavePath(const char* appName) {
+    std::string DataPath(const char* appName) {
         std::string path;
         
 #if defined(_WIN32) || defined(WIN32)
@@ -61,8 +61,8 @@ namespace FileSystem {
         return path;
     }
     
-    std::string SavePath(const char* appName, const char* filename) {
-        std::string path = SavePath(appName);
+    std::string DataPath(const char* appName, const char* filename) {
+        std::string path = DataPath(appName);
         path += DELIMITER;
         path += filename;
         
