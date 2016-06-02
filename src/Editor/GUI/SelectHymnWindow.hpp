@@ -4,7 +4,6 @@
 #include "ImageButton.hpp"
 #include "TextButton.hpp"
 #include "TextField.hpp"
-#include "Label.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 
 namespace GUI {
@@ -47,6 +46,12 @@ namespace GUI {
              */
             void SetClosedCallback(std::function<void()> callback);
             
+            /// Get the selected hymn.
+            /**
+             * @return The name of the selected hymn.
+             */
+            std::string GetHymn() const;
+            
             /// Close the window.
             void Close();
             
@@ -70,7 +75,5 @@ namespace GUI {
             TextButton* selectButton;
             
             TextField* nameTextField;
-            
-            Label* pathLabel;
     };
 }
