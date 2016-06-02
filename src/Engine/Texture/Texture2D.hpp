@@ -25,26 +25,26 @@ class Texture2D : public Texture {
         Texture2D(const char* source, int sourceLength);
 
 		/// Destructor
-		~Texture2D();
+		~Texture2D() override;
 
 		/// Get OpenGL texture ID.
 		/**
 		 * Used when binding a texture before draw calls.
 		 * @return The OpenGL texture identifier
 		 */
-		GLuint TextureID() const;
+		GLuint TextureID() const override;
 
 		/// Get the width of the texture.
 		/**
 		 * @return The width of the texture in texels
 		 */
-		int Width() const;
+		int Width() const override;
 
 		/// Get the height of the texture.
 		/**
 		 * @return The height of the texture in texels
 		 */
-		int Height() const;
+		int Height() const override;
 
 		/// Set how coordinates outside 0..1 are handled.
 		/**

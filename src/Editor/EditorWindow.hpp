@@ -18,7 +18,7 @@ class EditorWindow : public GUI::Container {
         EditorWindow();
 
         /// Destructor.
-        ~EditorWindow();
+        ~EditorWindow() override;
         
         /// Initialize components.
         void Init();
@@ -30,7 +30,7 @@ class EditorWindow : public GUI::Container {
         bool ShouldClose() const;
 
         /// Update the editor.
-        void Update();
+        void Update() override;
         
         /// Render the editor.
         void Render();
@@ -39,13 +39,13 @@ class EditorWindow : public GUI::Container {
         /**
          * @param screenSize Size of the screen in pixels.
          */
-        void Render(const glm::vec2& screenSize);
+        void Render(const glm::vec2& screenSize) override;
         
         /// Get the size of the widget.
         /**
          * @return The size
          */
-        glm::vec2 Size() const;
+        glm::vec2 Size() const override;
         
         /// Open the file menu.
         void OpenFileMenu();

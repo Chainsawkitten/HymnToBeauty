@@ -14,25 +14,25 @@ namespace GUI {
             HorizontalLayout(Widget* parent);
             
             /// Destructor.
-            ~HorizontalLayout();
+            ~HorizontalLayout() override;
             
             /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
-            void Render(const glm::vec2& screenSize);
+            void Render(const glm::vec2& screenSize) override;
             
             /// Add a widget to the container.
             /**
              * @param widget Widget to add to the container.
              */
-            void AddWidget(Widget* widget);
+            void AddWidget(Widget* widget) override;
             
             /// Get the size of the widget.
             /**
              * @return The size
              */
-            glm::vec2 Size() const;
+            glm::vec2 Size() const override;
             
             /// Set the size of the widget.
             /**

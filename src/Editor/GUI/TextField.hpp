@@ -17,22 +17,22 @@ namespace GUI {
             TextField(Widget* parent, Font* font);
             
             /// Destructor.
-            ~TextField();
+            ~TextField() override;
             
             /// Update the widget.
-            void Update();
+            void Update() override;
             
             /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
-            void Render(const glm::vec2& screenSize);
+            void Render(const glm::vec2& screenSize) override;
             
             /// Get the size of the widget.
             /**
              * @return The size
              */
-            glm::vec2 Size() const;
+            glm::vec2 Size() const override;
             
             /// Set the size of the widget.
             /**

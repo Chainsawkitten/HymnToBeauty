@@ -16,13 +16,13 @@ namespace GUI {
             TextButton(Widget* parent, Font* font, const std::string& text);
             
             /// Destructor.
-            virtual ~TextButton();
+            ~TextButton() override;
             
             /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
-            void Render(const glm::vec2& screenSize);
+            void Render(const glm::vec2& screenSize) override;
             
         private:
             Geometry::Rectangle* rectangle;

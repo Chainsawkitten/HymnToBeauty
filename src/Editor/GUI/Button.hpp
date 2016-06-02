@@ -16,22 +16,16 @@ namespace GUI {
             Button(Widget* parent);
             
             /// Destructor.
-            virtual ~Button();
+            ~Button() override;
             
             /// Update the widget.
-            virtual void Update();
-            
-            /// Render the widget.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
-            virtual void Render(const glm::vec2& screenSize) = 0;
+            void Update() override;
             
             /// Get the size of the widget.
             /**
              * @return The size
              */
-            glm::vec2 Size() const;
+            glm::vec2 Size() const override;
             
             /// Set the size of the widget.
             /**
