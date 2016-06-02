@@ -1,9 +1,19 @@
 #include "Hymn.hpp"
 
-Hymn::Hymn() {
+ActiveHymn::ActiveHymn() {
     Clear();
 }
 
-void Hymn::Clear() {
+ActiveHymn& ActiveHymn::GetInstance() {
+    static ActiveHymn ActiveHymn;
     
+    return ActiveHymn;
+}
+
+void ActiveHymn::Clear() {
+    
+}
+
+ActiveHymn& Hymn() {
+    return ActiveHymn::GetInstance();
 }

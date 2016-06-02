@@ -13,6 +13,7 @@
 #include <NewHymn.png.hpp>
 #include <OpenHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
+#include <Engine/Hymn.hpp>
 
 EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -183,10 +184,12 @@ void EditorWindow::NewHymn() {
 }
 
 void EditorWindow::NewHymnClosed() {
+    // Create new hymn
+    Hymn().Clear();
+    /// @todo Set path.
+    
     delete childWindow;
     childWindow = nullptr;
-    
-    ///@todo Create new hymn
 }
 
 void EditorWindow::OpenHymn() {
@@ -197,8 +200,8 @@ void EditorWindow::OpenHymn() {
 }
 
 void EditorWindow::OpenHymnClosed() {
+    /// @todo Open hymn.
+    
     delete childWindow;
     childWindow = nullptr;
-    
-    ///@todo Open hymn
 }
