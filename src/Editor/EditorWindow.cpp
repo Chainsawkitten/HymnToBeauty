@@ -186,7 +186,7 @@ void EditorWindow::NewHymn() {
 void EditorWindow::NewHymnClosed() {
     // Create new hymn
     Hymn().Clear();
-    /// @todo Set path.
+    Hymn().SetPath(childWindow->GetHymn());
     
     delete childWindow;
     childWindow = nullptr;
