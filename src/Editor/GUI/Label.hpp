@@ -30,6 +30,12 @@ namespace GUI {
              */
             glm::vec2 Size() const;
             
+            /// Set the text to display.
+            /**
+             * @param text The text to display.
+             */
+            void SetText(const std::string& text);
+            
         private:
             std::string text;
             
