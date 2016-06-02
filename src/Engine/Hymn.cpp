@@ -1,5 +1,7 @@
 #include "Hymn.hpp"
 
+using namespace std;
+
 ActiveHymn::ActiveHymn() {
     Clear();
 }
@@ -11,7 +13,15 @@ ActiveHymn& ActiveHymn::GetInstance() {
 }
 
 void ActiveHymn::Clear() {
-    
+    path = "";
+}
+
+const string& ActiveHymn::Path() const {
+    return path;
+}
+
+void ActiveHymn::SetPath(const string& path) {
+    this->path = path;
 }
 
 ActiveHymn& Hymn() {
