@@ -21,11 +21,15 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     
     selectButton = new TextButton(this, font, "Select");
     selectButton->SetClickedCallback(std::bind(&Select, this));
+    selectButton->SetSize(glm::vec2(64.f, 32.f));
     AddWidget(selectButton);
     
     nameTextField = new TextField(this, font);
     nameTextField->SetSize(glm::vec2(256.f, 32.f));
     AddWidget(nameTextField);
+    
+    hymnList = new VerticalLayout(this);
+    AddWidget(hymnList);
 }
 
 SelectHymnWindow::~SelectHymnWindow() {
@@ -37,6 +41,7 @@ SelectHymnWindow::~SelectHymnWindow() {
     delete selectButton;
     
     delete nameTextField;
+    delete hymnList;
 }
 
 void SelectHymnWindow::Update() {
@@ -61,8 +66,10 @@ void SelectHymnWindow::SetSize(const glm::vec2& size) {
     this->size = size;
     
     closeButton->SetPosition(Position() + glm::vec2(size.x - closeButton->Size().x, 0.f));
-    nameTextField->SetPosition(Position() + glm::vec2(64.f, size.y - nameTextField->Size().y - 64.f));
-    selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 64.f, size.y - selectButton->Size().y - 64.f));
+    nameTextField->SetPosition(Position() + glm::vec2(32.f, size.y - nameTextField->Size().y - 32.f));
+    selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 32.f, size.y - selectButton->Size().y - 32.f));
+    hymnList->SetPosition(Position() + glm::vec2(0.f, closeButton->Size().y + 32.f));
+    hymnList->SetSize(glm::vec2(size.x, nameTextField->Position().y - closeButton->Size().y - 64.f));
 }
 
 void SelectHymnWindow::SetClosedCallback(std::function<void(const std::string&)> callback) {

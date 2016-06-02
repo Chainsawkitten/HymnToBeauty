@@ -4,6 +4,7 @@
 #include "ImageButton.hpp"
 #include "TextButton.hpp"
 #include "TextField.hpp"
+#include "VerticalLayout.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 
 namespace GUI {
@@ -69,5 +70,7 @@ namespace GUI {
             TextButton* selectButton;
             
             TextField* nameTextField;
+            
+            VerticalLayout* hymnList;
     };
 }
