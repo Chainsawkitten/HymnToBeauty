@@ -24,6 +24,11 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
 }
 
+void ActiveHymn::Load(const string& path) {
+    Clear();
+    this->path = path;
+}
+
 ActiveHymn& Hymn() {
     return ActiveHymn::GetInstance();
 }

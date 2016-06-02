@@ -200,7 +200,8 @@ void EditorWindow::OpenHymn() {
 }
 
 void EditorWindow::OpenHymnClosed() {
-    /// @todo Open hymn.
+    // Open hymn.
+    Hymn().Load(childWindow->GetHymn());
     
     delete childWindow;
     childWindow = nullptr;

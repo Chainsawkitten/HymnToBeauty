@@ -26,6 +26,12 @@ class ActiveHymn {
          */
         void SetPath(const std::string& path);
         
+        /// Load a hymn.
+        /**
+         * @param path Path to the saved hymn.
+         */
+        void Load(const std::string& path);
+        
     private:
         ActiveHymn();
         ActiveHymn(ActiveHymn const&) = delete;
