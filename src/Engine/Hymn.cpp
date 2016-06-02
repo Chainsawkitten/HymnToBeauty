@@ -1,5 +1,7 @@
 #include "Hymn.hpp"
 
+#include "Util/FileSystem.hpp"
+
 using namespace std;
 
 ActiveHymn::ActiveHymn() {
@@ -22,6 +24,7 @@ const string& ActiveHymn::Path() const {
 
 void ActiveHymn::SetPath(const string& path) {
     this->path = path;
+    FileSystem::CreateDirectory(path.c_str());
 }
 
 void ActiveHymn::Load(const string& path) {

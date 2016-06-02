@@ -186,9 +186,9 @@ void EditorWindow::NewHymn() {
 
 void EditorWindow::NewHymnClosed(const std::string& hymn) {
     // Create new hymn
-    if (!path.empty()) {
+    if (!hymn.empty()) {
         Hymn().Clear();
-        Hymn().SetPath(FileSystem::DataPath(hymn));
+        Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
     }
     
     delete childWindow;
@@ -204,8 +204,8 @@ void EditorWindow::OpenHymn() {
 
 void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
-    if (!path.empty())
-        Hymn().Load(FileSystem::DataPath(hymn));
+    if (!hymn.empty())
+        Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
     
     delete childWindow;
     childWindow = nullptr;
