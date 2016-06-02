@@ -14,6 +14,7 @@
 #include <OpenHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
 #include <Engine/Hymn.hpp>
+#include <Engine/Util/FileSystem.hpp>
 
 EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -183,11 +184,11 @@ void EditorWindow::NewHymn() {
     childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::NewHymnClosed(const std::string& path) {
+void EditorWindow::NewHymnClosed(const std::string& hymn) {
     // Create new hymn
     if (!path.empty()) {
         Hymn().Clear();
-        Hymn().SetPath(path);
+        Hymn().SetPath(FileSystem::DataPath(hymn));
     }
     
     delete childWindow;
@@ -201,10 +202,10 @@ void EditorWindow::OpenHymn() {
     childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::OpenHymnClosed(const std::string& path) {
+void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!path.empty())
-        Hymn().Load(path);
+        Hymn().Load(FileSystem::DataPath(hymn));
     
     delete childWindow;
     childWindow = nullptr;
