@@ -3,8 +3,14 @@
 #include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+// Platform-dependent includes.
 #if defined(_WIN32) || defined(WIN32)
 #include <direct.h>
+#include <windows.h>
+#undef CreateDirectory
+#else
+#include <dirent.h>
 #endif
 
 namespace FileSystem {
@@ -67,5 +73,32 @@ namespace FileSystem {
         path += filename;
         
         return path;
+    }
+    
+    std::vector<std::string> DirectoryContents(const std::string& directoryName) {
+        std::vector<std::string> contents;
+        
+#if defined(_WIN32) || defined(WIN32)
+        // Windows
+        WIN32_FIND_DATA findFileData;
+        HANDLE hFind = FindFirstFile((directoryName + DELIMITER + "*").c_str(), &findFileData);
+        bool find = hFind != INVALID_HANDLE_VALUE;
+        
+        while (find) {
+            contents.push_back(findFileData.cFileName);
+            find = FindNextFile(hFind, &findFileData);
+        }
+        
+        FindClose(hFind);
+#else
+        // MacOS and Linux
+        DIR* directory = opendir(directoryName.c_str());
+        dirent* entry;
+        while ((entry = readdir(directory)) != NULL)
+            contents.push_back(entry->d_name);
+        closedir(directory);
+#endif
+        
+        return contents;
     }
 }
