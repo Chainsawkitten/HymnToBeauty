@@ -22,6 +22,9 @@ namespace FileSystem {
 	const char DELIMITER = '/';
 #endif
     
+    const unsigned int FILE = 1;
+    const unsigned int DIRECTORY = 2;
+    
     bool FileExists(const char* filename) {
 #if defined(_WIN32) || defined(WIN32)
         // Windows
@@ -43,6 +46,41 @@ namespace FileSystem {
         // MacOS and Linux
         mkdir(filename, ACCESSPERMS);
 #endif
+    }
+    
+    std::vector<std::string> DirectoryContents(const std::string& directoryName, unsigned int type) {
+        std::vector<std::string> contents;
+        
+#if defined(_WIN32) || defined(WIN32)
+        // Windows
+        WIN32_FIND_DATA findFileData;
+        HANDLE hFind = FindFirstFile((directoryName + DELIMITER + "*").c_str(), &findFileData);
+        bool find = hFind != INVALID_HANDLE_VALUE;
+        
+        while (find) {
+            if ((type & DIRECTORY && findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
+                (type & FILE && !(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))) {
+                contents.push_back(findFileData.cFileName);
+            }
+            
+            find = FindNextFile(hFind, &findFileData);
+        }
+        
+        FindClose(hFind);
+#else
+        // MacOS and Linux
+        DIR* directory = opendir(directoryName.c_str());
+        dirent* entry;
+        while ((entry = readdir(directory)) != NULL) {
+            if ((type & DIRECTORY && entry->d_type == DT_DIR) ||
+                (type & FILE && entry->d_type != DT_DIR)) {
+                contents.push_back(entry->d_name);
+            }
+        }
+        closedir(directory);
+#endif
+        
+        return contents;
     }
     
     std::string DataPath(const char* appName) {
@@ -73,32 +111,5 @@ namespace FileSystem {
         path += filename;
         
         return path;
-    }
-    
-    std::vector<std::string> DirectoryContents(const std::string& directoryName) {
-        std::vector<std::string> contents;
-        
-#if defined(_WIN32) || defined(WIN32)
-        // Windows
-        WIN32_FIND_DATA findFileData;
-        HANDLE hFind = FindFirstFile((directoryName + DELIMITER + "*").c_str(), &findFileData);
-        bool find = hFind != INVALID_HANDLE_VALUE;
-        
-        while (find) {
-            contents.push_back(findFileData.cFileName);
-            find = FindNextFile(hFind, &findFileData);
-        }
-        
-        FindClose(hFind);
-#else
-        // MacOS and Linux
-        DIR* directory = opendir(directoryName.c_str());
-        dirent* entry;
-        while ((entry = readdir(directory)) != NULL)
-            contents.push_back(entry->d_name);
-        closedir(directory);
-#endif
-        
-        return contents;
     }
 }

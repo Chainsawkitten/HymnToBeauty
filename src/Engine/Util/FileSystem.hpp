@@ -8,6 +8,12 @@ namespace FileSystem {
     /// Delimiter, '\' on Windows, '/' elsewhere.
     extern const char DELIMITER;
     
+    /// A file.
+    extern const unsigned int FILE;
+    
+    /// A directory.
+    extern const unsigned int DIRECTORY;
+    
     /// Check if a file exists.
     /**
      * Works for directories as well.
@@ -22,6 +28,14 @@ namespace FileSystem {
      * @param filename Filename (either absolute or relative) for the directory to create.
      */
     void CreateDirectory(const char* filename);
+    
+    /// Get all the contents of a directory.
+    /**
+     * @param directoryName Path to the directory to scan.
+     * @param type Type of content to get, FILE, DIRECTORY or both (use | to combine).
+     * @return A list of all the files/directories in the directory.
+     */
+    std::vector<std::string> DirectoryContents(const std::string& directoryName, unsigned int type = FILE | DIRECTORY);
     
     /// Get save path for application data folder.
     /**
@@ -45,11 +59,4 @@ namespace FileSystem {
      * @return The path
      */
     std::string DataPath(const char* appName, const char* filename);
-    
-    /// Get all the contents of a directory.
-    /**
-     * @param directoryName Path to the directory to scan.
-     * @return A list of all the files/directories in the directory.
-     */
-    std::vector<std::string> DirectoryContents(const std::string& directoryName);
 }
