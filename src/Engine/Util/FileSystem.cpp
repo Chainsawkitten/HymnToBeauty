@@ -58,8 +58,10 @@ namespace FileSystem {
         bool find = hFind != INVALID_HANDLE_VALUE;
         
         while (find) {
-            if ((type & DIRECTORY && findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
-                (type & FILE && !(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))) {
+            if (((type & DIRECTORY && findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
+                 (type & FILE && !(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))) &&
+                 strcmp(findFileData.cFileName, ".") &&
+                 strcmp(findFileData.cFileName, "..")) {
                 contents.push_back(findFileData.cFileName);
             }
             
@@ -72,8 +74,10 @@ namespace FileSystem {
         DIR* directory = opendir(directoryName.c_str());
         dirent* entry;
         while ((entry = readdir(directory)) != NULL) {
-            if ((type & DIRECTORY && entry->d_type == DT_DIR) ||
-                (type & FILE && entry->d_type != DT_DIR)) {
+            if (((type & DIRECTORY && entry->d_type == DT_DIR) ||
+                 (type & FILE && entry->d_type != DT_DIR)) &&
+                 strcmp(entry->d_name, ".") &&
+                 strcmp(entry->d_name, "..")) {
                 contents.push_back(entry->d_name);
             }
         }
