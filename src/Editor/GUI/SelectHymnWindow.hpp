@@ -1,13 +1,20 @@
 #pragma once
 
 #include "Container.hpp"
-#include "ImageButton.hpp"
-#include "TextButton.hpp"
-#include "TextField.hpp"
-#include "VerticalLayout.hpp"
-#include <Engine/Geometry/Rectangle.hpp>
+#include <functional>
+
+class Texture2D;
+class Font;
+namespace Geometry {
+    class Rectangle;
+}
 
 namespace GUI {
+    class ImageButton;
+    class TextButton;
+    class VerticalLayout;
+    class TextField;
+    
     /// A window where a hymn can be selected.
     class SelectHymnWindow : public Container {
         public:

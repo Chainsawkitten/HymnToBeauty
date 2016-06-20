@@ -1,7 +1,10 @@
 #pragma once
 
-#include <Engine/Geometry/Rectangle.hpp>
 #include "Container.hpp"
+
+namespace Geometry {
+    class Rectangle;
+}
 
 namespace GUI {
     /// Vertical container.

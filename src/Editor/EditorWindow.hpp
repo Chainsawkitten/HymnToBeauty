@@ -1,15 +1,19 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include <Engine/GameWindow.hpp>
-#include <Engine/Font/Font.hpp>
 #include "GUI/Container.hpp"
-#include "GUI/HorizontalLayout.hpp"
-#include "GUI/VerticalLayout.hpp"
-#include "GUI/Button.hpp"
-#include <Engine/Util/Input.hpp>
-#include <Engine/Texture/Texture2D.hpp>
-#include "GUI/SelectHymnWindow.hpp"
+#include <string>
+
+class GameWindow;
+class Texture2D;
+class Font;
+class InputHandler;
+namespace GUI {
+    class SelectHymnWindow;
+    class HorizontalLayout;
+    class VerticalLayout;
+    class Button;
+}
 
 /// Handles the main editor window.
 class EditorWindow : public GUI::Container {

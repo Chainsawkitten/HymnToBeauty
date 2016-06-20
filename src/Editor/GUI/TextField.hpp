@@ -1,9 +1,12 @@
 #pragma once
 
 #include "Widget.hpp"
-#include <Engine/Geometry/Rectangle.hpp>
 #include <string>
-#include <Engine/Font/Font.hpp>
+
+class Font;
+namespace Geometry {
+    class Rectangle;
+}
 
 namespace GUI {
     /// A field where the user can input text.

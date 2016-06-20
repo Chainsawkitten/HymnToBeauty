@@ -1,4 +1,7 @@
 #include "TextButton.hpp"
+
+#include <Engine/Geometry/Rectangle.hpp>
+#include <Engine/Font/Font.hpp>
 #include <Engine/Resources.hpp>
 #include <Engine/Util/Input.hpp>
 

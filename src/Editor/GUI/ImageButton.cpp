@@ -1,4 +1,7 @@
 #include "ImageButton.hpp"
+
+#include <Engine/Texture/Texture2D.hpp>
+#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Resources.hpp>
 #include <Engine/Util/Input.hpp>
 

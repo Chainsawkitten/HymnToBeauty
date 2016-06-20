@@ -1,5 +1,11 @@
 #include "Resources.hpp"
 
+#include "Shader/Shader.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Geometry/Rectangle.hpp"
+#include "Texture/Texture2D.hpp"
+#include "Font/Font.hpp"
+
 using namespace std;
 
 ResourceManager::ResourceManager() {

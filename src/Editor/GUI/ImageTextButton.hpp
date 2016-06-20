@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Button.hpp"
-#include <Engine/Texture/Texture2D.hpp>
-#include <Engine/Font/Font.hpp>
+
+class Texture2D;
+class Font;
 
 namespace GUI {
     /// %Button displaying both an image and text.

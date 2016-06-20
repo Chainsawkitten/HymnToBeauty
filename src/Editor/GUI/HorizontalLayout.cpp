@@ -1,4 +1,6 @@
 #include "HorizontalLayout.hpp"
+
+#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Resources.hpp>
 
 using namespace GUI;

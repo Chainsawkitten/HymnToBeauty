@@ -2,8 +2,13 @@
 
 #include <GL/glew.h>
 #include <stb_truetype.h>
-#include "../Shader/ShaderProgram.hpp"
-#include "../Geometry/Rectangle.hpp"
+#include <glm/glm.hpp>
+
+class Shader;
+class ShaderProgram;
+namespace Geometry {
+    class Rectangle;
+}
 
 /// %Font used for drawing text.
 class Font {

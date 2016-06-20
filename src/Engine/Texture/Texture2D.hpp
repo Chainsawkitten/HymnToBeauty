@@ -1,8 +1,13 @@
 #pragma once
 
 #include "Texture.hpp"
-#include "../Geometry/Rectangle.hpp"
-#include "../Shader/ShaderProgram.hpp"
+#include <glm/glm.hpp>
+
+class Shader;
+class ShaderProgram;
+namespace Geometry {
+    class Rectangle;
+}
 
 /// A two-dimensional texture.
 /**

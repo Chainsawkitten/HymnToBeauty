@@ -1,4 +1,10 @@
 #include "SelectHymnWindow.hpp"
+
+#include "ImageButton.hpp"
+#include "TextButton.hpp"
+#include "TextField.hpp"
+#include "VerticalLayout.hpp"
+#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Resources.hpp>
 #include <Close.png.hpp>
 #include <OpenHymn.png.hpp>

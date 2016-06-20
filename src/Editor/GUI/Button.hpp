@@ -1,8 +1,11 @@
 #pragma once
 
-#include <Engine/Geometry/Rectangle.hpp>
 #include "Widget.hpp"
 #include <functional>
+
+namespace Geometry {
+    class Rectangle;
+}
 
 namespace GUI {
     /// %Button widget.

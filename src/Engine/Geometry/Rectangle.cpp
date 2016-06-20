@@ -1,4 +1,6 @@
 #include "Rectangle.hpp"
+
+#include "../Shader/ShaderProgram.hpp"
 #include "Default2D.vert.hpp"
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"

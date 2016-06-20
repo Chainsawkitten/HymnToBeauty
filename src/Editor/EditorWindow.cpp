@@ -1,6 +1,15 @@
 #include <GL/glew.h>
 #include "EditorWindow.hpp"
 
+#include <Engine/GameWindow.hpp>
+#include <Engine/Font/Font.hpp>
+#include "GUI/HorizontalLayout.hpp"
+#include "GUI/VerticalLayout.hpp"
+#include "GUI/Button.hpp"
+#include <Engine/Util/Input.hpp>
+#include <Engine/Texture/Texture2D.hpp>
+#include "GUI/SelectHymnWindow.hpp"
+
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
 

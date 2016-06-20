@@ -1,10 +1,15 @@
 #pragma once
 
-#include "Shader/ShaderProgram.hpp"
 #include <map>
-#include "Geometry/Rectangle.hpp"
-#include "Texture/Texture2D.hpp"
-#include "Font/Font.hpp"
+#include <GL/glew.h>
+
+class Shader;
+class ShaderProgram;
+class Texture2D;
+class Font;
+namespace Geometry {
+    class Rectangle;
+}
 
 /// Handles all resources.
 class ResourceManager {

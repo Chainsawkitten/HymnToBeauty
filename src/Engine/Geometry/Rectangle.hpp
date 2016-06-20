@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Geometry2D.hpp"
-#include "../Shader/ShaderProgram.hpp"
+
+class Shader;
+class ShaderProgram;
 
 namespace Geometry {
     /// A renderable 2D rectangle.

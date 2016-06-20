@@ -2,7 +2,8 @@
 
 #include <gl/glew.h>
 #include <initializer_list>
-#include "Shader.hpp"
+
+class Shader;
 
 /// A GLSL shader program.
 class ShaderProgram {

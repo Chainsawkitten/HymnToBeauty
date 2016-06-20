@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Button.hpp"
-#include <Engine/Font/Font.hpp>
+
+class Font;
 
 namespace GUI {
     /// %Button displaying text.

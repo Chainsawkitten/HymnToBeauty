@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Widget.hpp"
-#include <Engine/Font/Font.hpp>
+#include <string>
+
+class Font;
 
 namespace GUI {
     /// Label that displays a text message.
