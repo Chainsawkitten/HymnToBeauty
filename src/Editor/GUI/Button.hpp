@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Shader/ShaderProgram.hpp>
 #include "Widget.hpp"
 #include <functional>
 
