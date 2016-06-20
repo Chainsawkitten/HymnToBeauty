@@ -40,7 +40,7 @@ namespace GUI {
             /**
              * @param position New position.
              */
-            void SetPosition(const glm::vec2& position);
+            virtual void SetPosition(const glm::vec2& position);
             
             /// Get the size of the widget.
             /**

@@ -31,6 +31,12 @@ namespace GUI {
              */
             virtual void AddWidget(Widget* widget);
             
+            /// Set widget's position.
+            /**
+             * @param position New position.
+             */
+            void SetPosition(const glm::vec2& position) override;
+            
         protected:
             /// Update widgets.
             void UpdateWidgets();

@@ -15,12 +15,21 @@ void Container::Update() {
     UpdateWidgets();
 }
 
+const vector<Widget*>& Container::Widgets() const {
+    return widgets;
+}
+
 void Container::AddWidget(Widget* widget) {
     widgets.push_back(widget);
 }
 
-const vector<Widget*>& Container::Widgets() const {
-    return widgets;
+void Container::SetPosition(const glm::vec2& position) {
+    glm::vec2 offset = position - Position();
+    
+    Widget::SetPosition(position);
+    
+    for (Widget* widget : Widgets())
+        widget->SetPosition(widget->Position() + offset);
 }
 
 void Container::UpdateWidgets() {
