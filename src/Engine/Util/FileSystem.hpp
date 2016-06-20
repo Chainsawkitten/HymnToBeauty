@@ -1,11 +1,18 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 /// Functionality to interact with the file system.
 namespace FileSystem {
     /// Delimiter, '\' on Windows, '/' elsewhere.
     extern const char DELIMITER;
+    
+    /// A file.
+    extern const unsigned int FILE;
+    
+    /// A directory.
+    extern const unsigned int DIRECTORY;
     
     /// Check if a file exists.
     /**
@@ -22,6 +29,14 @@ namespace FileSystem {
      */
     void CreateDirectory(const char* filename);
     
+    /// Get all the contents of a directory.
+    /**
+     * @param directoryName Path to the directory to scan.
+     * @param type Type of content to get, FILE, DIRECTORY or both (use | to combine).
+     * @return A list of all the files/directories in the directory.
+     */
+    std::vector<std::string> DirectoryContents(const std::string& directoryName, unsigned int type = FILE | DIRECTORY);
+    
     /// Get save path for application data folder.
     /**
      * The application data folder is created if it does not already exist.
@@ -31,7 +46,7 @@ namespace FileSystem {
      * @param appName The name of the app/game.
      * @return The path
      */
-    std::string SavePath(const char* appName);
+    std::string DataPath(const char* appName);
     
     /// Get save path for application data.
     /**
@@ -43,5 +58,5 @@ namespace FileSystem {
      * @param filename Filename, eg. "settings.ini".
      * @return The path
      */
-    std::string SavePath(const char* appName, const char* filename);
+    std::string DataPath(const char* appName, const char* filename);
 }

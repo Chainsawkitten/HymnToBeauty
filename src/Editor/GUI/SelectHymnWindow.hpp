@@ -2,7 +2,9 @@
 
 #include "Container.hpp"
 #include "ImageButton.hpp"
+#include "TextButton.hpp"
 #include "TextField.hpp"
+#include "VerticalLayout.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 
 namespace GUI {
@@ -16,22 +18,22 @@ namespace GUI {
             SelectHymnWindow(Widget* parent);
             
             /// Destructor.
-            virtual ~SelectHymnWindow();
+            ~SelectHymnWindow() override;
             
             /// Update the widget.
-            void Update();
+            void Update() override;
             
             /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
-            virtual void Render(const glm::vec2& screenSize);
+            void Render(const glm::vec2& screenSize) override;
             
             /// Get the size of the widget.
             /**
              * @return The size
              */
-            glm::vec2 Size() const;
+            glm::vec2 Size() const override;
             
             /// Set the size of the widget.
             /**
@@ -43,12 +45,13 @@ namespace GUI {
             /**
              * @param callback Function to call when window is closed.
              */
-            void SetClosedCallback(std::function<void()> callback);
-            
-            /// Close the window.
-            void Close();
+            void SetClosedCallback(std::function<void(const std::string&)> callback);
             
         private:
+            void Close();
+            void Select();
+            void SetHymn(const std::string& name);
+            
             Geometry::Rectangle* rectangle;
             Font* font;
             
@@ -56,12 +59,17 @@ namespace GUI {
             
             // Interaction
             bool hasClosedCallback;
-            std::function<void()> closedCallback;
+            std::function<void(const std::string&)> closedCallback;
             bool shouldClose;
             
             ImageButton* closeButton;
             Texture2D* closeTexture;
             
+            TextButton* selectButton;
+            
             TextField* nameTextField;
+            
+            VerticalLayout* hymnList;
+            Texture2D* hymnTexture;
     };
 }

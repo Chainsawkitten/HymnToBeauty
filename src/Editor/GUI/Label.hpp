@@ -1,32 +1,28 @@
 #pragma once
 
-#include <Engine/Geometry/Rectangle.hpp>
-#include "Container.hpp"
+#include "Widget.hpp"
+#include <Engine/Font/Font.hpp>
 
 namespace GUI {
-    /// Horizontal container.
-    class HorizontalLayout : public Container {
+    /// Label that displays a text message.
+    class Label : public Widget {
         public:
-            /// Create new horizontal layout.
+            /// Create new label.
             /**
              * @param parent Parent widget.
+             * @param font %Font to display text with.
+             * @param text Text to display.
              */
-            HorizontalLayout(Widget* parent);
+            Label(Widget* parent, Font* font, const std::string& text);
             
-            /// Destructor.
-            ~HorizontalLayout() override;
+            /// Update the widget.
+            void Update() override;
             
             /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
             void Render(const glm::vec2& screenSize) override;
-            
-            /// Add a widget to the container.
-            /**
-             * @param widget Widget to add to the container.
-             */
-            void AddWidget(Widget* widget) override;
             
             /// Get the size of the widget.
             /**
@@ -36,14 +32,19 @@ namespace GUI {
             
             /// Set the size of the widget.
             /**
-             * @param size The new size.
+             * @param size New widget size.
              */
             void SetSize(const glm::vec2& size) override;
             
-        private:
-            Geometry::Rectangle* rectangle;
+            /// Set the text to display.
+            /**
+             * @param text The text to display.
+             */
+            void SetText(const std::string& text);
             
-            glm::vec2 size;
-            glm::vec2 nextPosition;
+        private:
+            std::string text;
+            
+            Font* font;
     };
 }

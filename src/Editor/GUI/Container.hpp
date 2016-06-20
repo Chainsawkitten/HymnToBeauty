@@ -19,11 +19,23 @@ namespace GUI {
             /// Update the widget.
             virtual void Update();
             
+            /// Get all the container's widgets.
+            /**
+             * @return All widgets in the container.
+             */
+            const std::vector<Widget*>& Widgets() const;
+            
             /// Add a widget to the container.
             /**
              * @param widget Widget to add to the container.
              */
             virtual void AddWidget(Widget* widget);
+            
+            /// Set widget's position.
+            /**
+             * @param position New position.
+             */
+            void SetPosition(const glm::vec2& position) override;
             
         protected:
             /// Update widgets.

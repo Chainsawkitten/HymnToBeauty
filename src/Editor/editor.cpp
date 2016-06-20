@@ -9,7 +9,7 @@
 int main() {
     // Enable logging if requested.
     if (EditorSettings::GetInstance().GetBool("Logging"))
-        freopen(FileSystem::SavePath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
+        freopen(FileSystem::DataPath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
     
     Log() << "Editor started - " << time(nullptr) << "\n";
     

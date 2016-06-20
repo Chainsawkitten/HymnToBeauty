@@ -13,6 +13,8 @@
 #include <NewHymn.png.hpp>
 #include <OpenHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
+#include <Engine/Hymn.hpp>
+#include <Engine/Util/FileSystem.hpp>
 
 EditorWindow::EditorWindow() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -162,6 +164,10 @@ glm::vec2 EditorWindow::Size() const {
     return glm::vec2(static_cast<float>(width), static_cast<float>(height));
 }
 
+void EditorWindow::SetSize(const glm::vec2& size) {
+    /// @todo Resize window.
+}
+
 void EditorWindow::OpenFileMenu() {
     fileMenu->SetVisible(!fileMenu->Visible());
 }
@@ -179,26 +185,36 @@ void EditorWindow::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(Size());
-    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this));
+    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::NewHymnClosed() {
+void EditorWindow::NewHymnClosed(const std::string& hymn) {
+    // Create new hymn
+    if (!hymn.empty()) {
+        Hymn().Clear();
+        Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+    }
+    
     delete childWindow;
     childWindow = nullptr;
     
-    ///@todo Create new hymn
+    fileMenu->SetVisible(false);
 }
 
 void EditorWindow::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(Size());
-    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this));
+    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::OpenHymnClosed() {
+void EditorWindow::OpenHymnClosed(const std::string& hymn) {
+    // Open hymn.
+    if (!hymn.empty())
+        Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+    
     delete childWindow;
     childWindow = nullptr;
     
-    ///@todo Open hymn
+    fileMenu->SetVisible(false);
 }

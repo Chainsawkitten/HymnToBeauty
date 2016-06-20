@@ -112,6 +112,7 @@ include_directories(src)
 set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
         src/Engine/Resources.cpp
+        src/Engine/Hymn.cpp
         src/Engine/Font/Font.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
@@ -128,6 +129,7 @@ set(ENGINE_SRCS
 set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
         src/Engine/Resources.hpp
+        src/Engine/Hymn.hpp
         src/Engine/Font/Font.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
@@ -162,8 +164,10 @@ set(EDITOR_SRCS
         src/Editor/GUI/Button.cpp
         src/Editor/GUI/ImageButton.cpp
         src/Editor/GUI/ImageTextButton.cpp
+        src/Editor/GUI/TextButton.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/TextField.cpp
+        src/Editor/GUI/Label.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -177,8 +181,10 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Button.hpp
         src/Editor/GUI/ImageButton.hpp
         src/Editor/GUI/ImageTextButton.hpp
+        src/Editor/GUI/TextButton.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/TextField.hpp
+        src/Editor/GUI/Label.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

@@ -40,13 +40,19 @@ namespace GUI {
             /**
              * @param position New position.
              */
-            void SetPosition(const glm::vec2& position);
+            virtual void SetPosition(const glm::vec2& position);
             
             /// Get the size of the widget.
             /**
              * @return The size
              */
             virtual glm::vec2 Size() const = 0;
+            
+            /// Set the size of the widget.
+            /**
+             * @param size New widget size.
+             */
+            virtual void SetSize(const glm::vec2& size) = 0;
             
             /// Get whether the widget is visible.
             /**

@@ -18,7 +18,7 @@ class EditorWindow : public GUI::Container {
         EditorWindow();
 
         /// Destructor.
-        ~EditorWindow();
+        ~EditorWindow() override;
         
         /// Initialize components.
         void Init();
@@ -30,7 +30,7 @@ class EditorWindow : public GUI::Container {
         bool ShouldClose() const;
 
         /// Update the editor.
-        void Update();
+        void Update() override;
         
         /// Render the editor.
         void Render();
@@ -39,36 +39,29 @@ class EditorWindow : public GUI::Container {
         /**
          * @param screenSize Size of the screen in pixels.
          */
-        void Render(const glm::vec2& screenSize);
+        void Render(const glm::vec2& screenSize) override;
         
         /// Get the size of the widget.
         /**
          * @return The size
          */
-        glm::vec2 Size() const;
+        glm::vec2 Size() const override;
         
-        /// Open the file menu.
-        void OpenFileMenu();
-        
-        /// Open the project options window.
-        void OpenProjectOptions();
-
-        /// Play game.
-        void Play();
-        
-        /// Create new hymn.
-        void NewHymn();
-        
-        /// Callback for when New Hymn window is closed.
-        void NewHymnClosed();
-        
-        /// Open an existing hymn.
-        void OpenHymn();
-        
-        /// Callback for when Open Hymn window is closed.
-        void OpenHymnClosed();
+        /// Set the size of the widget.
+        /**
+         * @param size The new size.
+         */
+        void SetSize(const glm::vec2& size) override;
         
     private:
+        void OpenFileMenu();
+        void OpenProjectOptions();
+        void Play();
+        void NewHymn();
+        void NewHymnClosed(const std::string& hymn);
+        void OpenHymn();
+        void OpenHymnClosed(const std::string& hymn);
+        
         GLFWwindow* window;
         GameWindow* gameWindow;
         GUI::SelectHymnWindow* childWindow;
