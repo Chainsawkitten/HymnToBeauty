@@ -16,11 +16,11 @@ ImageButton::~ImageButton() {
 void ImageButton::Render(const glm::vec2& screenSize) {
     // Draw background.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-    if (MouseHover())
+    if (GetMouseHover())
         color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
     
-    rectangle->Render(Position(), Size(), color, screenSize);
+    rectangle->Render(GetPosition(), GetSize(), color, screenSize);
     
     // Draw image.
-    texture->Render(Position(), Size(), screenSize);
+    texture->Render(GetPosition(), GetSize(), screenSize);
 }

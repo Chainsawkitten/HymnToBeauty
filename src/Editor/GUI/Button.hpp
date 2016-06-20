@@ -25,7 +25,7 @@ namespace GUI {
             /**
              * @return The size
              */
-            glm::vec2 Size() const override;
+            glm::vec2 GetSize() const override;
             
             /// Set the size of the widget.
             /**
@@ -43,7 +43,7 @@ namespace GUI {
             /**
              * @return Whether the mouse is over the button
              */
-            bool MouseHover() const;
+            bool GetMouseHover() const;
             
         private:
             Geometry::Rectangle* rectangle;

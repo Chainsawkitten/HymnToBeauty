@@ -53,7 +53,7 @@ SelectHymnWindow::~SelectHymnWindow() {
     
     delete nameTextField;
     
-    for (Widget* hymn : hymnList->Widgets())
+    for (Widget* hymn : hymnList->GetWidgets())
         delete hymn;
     
     delete hymnList;
@@ -65,33 +65,33 @@ void SelectHymnWindow::Update() {
     UpdateWidgets();
     
     if (shouldClose && hasClosedCallback)
-        closedCallback(nameTextField->Text());
+        closedCallback(nameTextField->GetText());
 }
 
 void SelectHymnWindow::Render(const glm::vec2& screenSize) {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-    rectangle->Render(Position(), Size(), color, screenSize);
+    rectangle->Render(GetPosition(), GetSize(), color, screenSize);
     
     RenderWidgets(screenSize);
 }
 
-glm::vec2 SelectHymnWindow::Size() const {
-    return this->size;
+glm::vec2 SelectHymnWindow::GetSize() const {
+    return size;
 }
 
 void SelectHymnWindow::SetSize(const glm::vec2& size) {
     this->size = size;
     
-    closeButton->SetPosition(Position() + glm::vec2(size.x - closeButton->Size().x, 0.f));
-    nameTextField->SetPosition(Position() + glm::vec2(32.f, size.y - nameTextField->Size().y - 32.f));
-    nameTextField->SetSize(glm::vec2(size.x - 96.f - selectButton->Size().x, 32.f));
-    selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 32.f, size.y - selectButton->Size().y - 32.f));
+    closeButton->SetPosition(GetPosition() + glm::vec2(size.x - closeButton->GetSize().x, 0.f));
+    nameTextField->SetPosition(GetPosition() + glm::vec2(32.f, size.y - nameTextField->GetSize().y - 32.f));
+    nameTextField->SetSize(glm::vec2(size.x - 96.f - selectButton->GetSize().x, 32.f));
+    selectButton->SetPosition(GetPosition() + glm::vec2(size.x - selectButton->GetSize().x - 32.f, size.y - selectButton->GetSize().y - 32.f));
     
-    for (Widget* hymn : hymnList->Widgets())
+    for (Widget* hymn : hymnList->GetWidgets())
         hymn->SetSize(glm::vec2(size.x, 64.f));
     
-    hymnList->SetPosition(Position() + glm::vec2(0.f, closeButton->Size().y));
-    hymnList->SetSize(glm::vec2(size.x, nameTextField->Position().y - closeButton->Size().y - 64.f));
+    hymnList->SetPosition(GetPosition() + glm::vec2(0.f, closeButton->GetSize().y));
+    hymnList->SetSize(glm::vec2(size.x, nameTextField->GetPosition().y - closeButton->GetSize().y - 64.f));
 }
 
 void SelectHymnWindow::SetClosedCallback(std::function<void(const std::string&)> callback) {

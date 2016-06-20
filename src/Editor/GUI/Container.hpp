@@ -23,7 +23,7 @@ namespace GUI {
             /**
              * @return All widgets in the container.
              */
-            const std::vector<Widget*>& Widgets() const;
+            const std::vector<Widget*>& GetWidgets() const;
             
             /// Add a widget to the container.
             /**

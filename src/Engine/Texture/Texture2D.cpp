@@ -93,15 +93,15 @@ Texture2D::~Texture2D() {
     Resources().FreeRectangle();
 }
 
-GLuint Texture2D::TextureID() const {
+GLuint Texture2D::GetTextureID() const {
 	return texID;
 }
 
-int Texture2D::Width() const {
+int Texture2D::GetWidth() const {
 	return width;
 }
 
-int Texture2D::Height() const {
+int Texture2D::GetHeight() const {
 	return height;
 }
 
@@ -125,19 +125,19 @@ void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, const g
     shaderProgram->Use();
     
     // Texture unit 0 is for base images.
-    glUniform1i(shaderProgram->UniformLocation("baseImage"), 0);
+    glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
     
     // Base image texture
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D, texID);
     
     // Set location and size.
-    glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(position / screenSize)[0]);
-    glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("position"), 1, &(position / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("size"), 1, &(size / screenSize)[0]);
     
-    glBindVertexArray(rectangle->VertexArray());
+    glBindVertexArray(rectangle->GetVertexArray());
     
-    glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
     // Reset depth testing and blending.
     if (depthTest)

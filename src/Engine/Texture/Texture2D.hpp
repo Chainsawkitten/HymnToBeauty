@@ -32,19 +32,19 @@ class Texture2D : public Texture {
 		 * Used when binding a texture before draw calls.
 		 * @return The OpenGL texture identifier
 		 */
-		GLuint TextureID() const override;
+		GLuint GetTextureID() const override;
 
 		/// Get the width of the texture.
 		/**
 		 * @return The width of the texture in texels
 		 */
-		int Width() const override;
+		int GetWidth() const override;
 
 		/// Get the height of the texture.
 		/**
 		 * @return The height of the texture in texels
 		 */
-		int Height() const override;
+		int GetHeight() const override;
 
 		/// Set how coordinates outside 0..1 are handled.
 		/**

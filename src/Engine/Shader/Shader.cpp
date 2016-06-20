@@ -13,10 +13,10 @@ Shader::~Shader() {
 	glDeleteShader(shader);
 }
 
-GLuint Shader::ShaderID() const {
+GLuint Shader::GetShaderID() const {
 	return shader;
 }
 
-GLenum Shader::ShaderType() const {
+GLenum Shader::GetShaderType() const {
 	return shaderType;
 }

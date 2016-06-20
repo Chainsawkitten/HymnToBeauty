@@ -15,7 +15,7 @@ void Container::Update() {
     UpdateWidgets();
 }
 
-const vector<Widget*>& Container::Widgets() const {
+const vector<Widget*>& Container::GetWidgets() const {
     return widgets;
 }
 
@@ -24,24 +24,24 @@ void Container::AddWidget(Widget* widget) {
 }
 
 void Container::SetPosition(const glm::vec2& position) {
-    glm::vec2 offset = position - Position();
+    glm::vec2 offset = position - GetPosition();
     
     Widget::SetPosition(position);
     
-    for (Widget* widget : Widgets())
-        widget->SetPosition(widget->Position() + offset);
+    for (Widget* widget : widgets)
+        widget->SetPosition(widget->GetPosition() + offset);
 }
 
 void Container::UpdateWidgets() {
     for (Widget* widget : widgets) {
-        if (widget->Visible())
+        if (widget->IsVisible())
             widget->Update();
     }
 }
 
 void Container::RenderWidgets(const glm::vec2& screenSize) {
     for (Widget* widget : widgets) {
-        if (widget->Visible())
+        if (widget->IsVisible())
             widget->Render(screenSize);
     }
 }

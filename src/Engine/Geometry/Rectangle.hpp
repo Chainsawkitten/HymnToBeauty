@@ -17,25 +17,25 @@ namespace Geometry {
             /**
              * @return Array of vertices
              */
-            Vertex* Vertices() const override;
+            Vertex* GetVertices() const override;
             
             /// Get the number of vertices.
             /**
              * @return The number of vertices
              */
-            unsigned int VertexCount() const override;
+            unsigned int GetVertexCount() const override;
             
             /// Get all the vertex indices.
             /**
              * @return Array of vertex indices
              */
-            unsigned int* Indices() const override;
+            unsigned int* GetIndices() const override;
             
             /// Get the number of indicies.
             /**
              * @return The number of vertex indices.
              */
-            unsigned int IndexCount() const override;
+            unsigned int GetIndexCount() const override;
             
             /// Render the rectangle with a solid color.
             /**

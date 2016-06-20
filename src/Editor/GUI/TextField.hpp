@@ -32,7 +32,7 @@ namespace GUI {
             /**
              * @return The size
              */
-            glm::vec2 Size() const override;
+            glm::vec2 GetSize() const override;
             
             /// Set the size of the widget.
             /**
@@ -44,7 +44,7 @@ namespace GUI {
             /**
              * @return The text in the text field.
              */
-            std::string Text() const;
+            std::string GetText() const;
             
             /// Set the text field's text.
             /**

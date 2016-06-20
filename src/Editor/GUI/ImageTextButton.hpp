@@ -30,7 +30,7 @@ namespace GUI {
             /**
              * @return How large the displayed image should be.
              */
-            glm::vec2 ImageSize() const;
+            glm::vec2 GetImageSize() const;
             
             /// Set the image size.
             /**

@@ -18,7 +18,7 @@ void ActiveHymn::Clear() {
     path = "";
 }
 
-const string& ActiveHymn::Path() const {
+const string& ActiveHymn::GetPath() const {
     return path;
 }
 

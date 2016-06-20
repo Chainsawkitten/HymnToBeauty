@@ -28,7 +28,7 @@ namespace GUI {
             /**
              * @return The size
              */
-            glm::vec2 Size() const override;
+            glm::vec2 GetSize() const override;
             
             /// Set the size of the widget.
             /**

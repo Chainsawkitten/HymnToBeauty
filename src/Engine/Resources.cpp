@@ -39,7 +39,7 @@ ShaderProgram* ResourceManager::CreateShaderProgram(std::initializer_list<const 
     ShaderProgramKey key;
     
     for (auto shader : shaders) {
-        switch (shader->ShaderType()) {
+        switch (shader->GetShaderType()) {
         case GL_COMPUTE_SHADER:
             key.computeShader = shader;
             break;

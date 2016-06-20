@@ -157,7 +157,7 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
     }
 }
 
-glm::vec2 EditorWindow::Size() const {
+glm::vec2 EditorWindow::GetSize() const {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
@@ -169,7 +169,7 @@ void EditorWindow::SetSize(const glm::vec2& size) {
 }
 
 void EditorWindow::OpenFileMenu() {
-    fileMenu->SetVisible(!fileMenu->Visible());
+    fileMenu->SetVisible(!fileMenu->IsVisible());
 }
 
 void EditorWindow::OpenProjectOptions() {
@@ -184,7 +184,7 @@ void EditorWindow::Play() {
 void EditorWindow::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
-    childWindow->SetSize(Size());
+    childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
@@ -204,7 +204,7 @@ void EditorWindow::NewHymnClosed(const std::string& hymn) {
 void EditorWindow::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
-    childWindow->SetSize(Size());
+    childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 

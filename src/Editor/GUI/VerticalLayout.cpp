@@ -16,18 +16,18 @@ VerticalLayout::~VerticalLayout() {
 void VerticalLayout::Render(const glm::vec2& screenSize) {
     // Set color.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-    rectangle->Render(Position(), size, color, screenSize);
+    rectangle->Render(GetPosition(), size, color, screenSize);
     
     RenderWidgets(screenSize);
 }
 
 void VerticalLayout::AddWidget(Widget* widget) {
     Container::AddWidget(widget);
-    widget->SetPosition(Position() + nextPosition);
-    nextPosition.y += widget->Size().y;
+    widget->SetPosition(GetPosition() + nextPosition);
+    nextPosition.y += widget->GetSize().y;
 }
 
-glm::vec2 VerticalLayout::Size() const {
+glm::vec2 VerticalLayout::GetSize() const {
     return this->size;
 }
 
