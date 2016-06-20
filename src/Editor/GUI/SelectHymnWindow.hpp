@@ -47,13 +47,9 @@ namespace GUI {
              */
             void SetClosedCallback(std::function<void(const std::string&)> callback);
             
-            /// Close the window.
-            void Close();
-            
-            /// Select hymn.
-            void Select();
-            
         private:
+            void Close();
+            void Select();
             void SetHymn(const std::string& name);
             
             Geometry::Rectangle* rectangle;
