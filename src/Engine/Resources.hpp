@@ -81,13 +81,6 @@ class ResourceManager {
 		 */
         Texture2D* CreateTexture2D(const char* data, int dataLength, bool srgb = false);
         
-        /// Free the reference to the 2D texture.
-        /**
-         * Deletes the instance if no more references exist.
-         * @param texture %Texture to dereference.
-         */
-        void FreeTexture2D(Texture2D* texture);
-        
         /// Create a 2D texture if it doesn't already exist.
         /**
 		 * @param filename Filename of image file.
@@ -101,7 +94,7 @@ class ResourceManager {
          * Deletes the instance if no more references exist.
          * @param texture %Texture to dereference.
          */
-        void FreeTexture2DFromFile(Texture2D* texture);
+        void FreeTexture2D(Texture2D* texture);
         
         /// Create a font if it doesn't already exist.
         /**
