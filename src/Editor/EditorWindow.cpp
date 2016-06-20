@@ -164,6 +164,10 @@ glm::vec2 EditorWindow::Size() const {
     return glm::vec2(static_cast<float>(width), static_cast<float>(height));
 }
 
+void EditorWindow::SetSize(const glm::vec2& size) {
+    /// @todo Resize window.
+}
+
 void EditorWindow::OpenFileMenu() {
     fileMenu->SetVisible(!fileMenu->Visible());
 }

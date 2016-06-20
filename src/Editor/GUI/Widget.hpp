@@ -48,6 +48,12 @@ namespace GUI {
              */
             virtual glm::vec2 Size() const = 0;
             
+            /// Set the size of the widget.
+            /**
+             * @param size New widget size.
+             */
+            virtual void SetSize(const glm::vec2& size) = 0;
+            
             /// Get whether the widget is visible.
             /**
              * @return Whether the widget should be rendered

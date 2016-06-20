@@ -31,7 +31,7 @@ namespace GUI {
             /**
              * @param size New widget size.
              */
-            void SetSize(const glm::vec2& size);
+            void SetSize(const glm::vec2& size) override;
             
             /// Set function to call when clicked.
             /**

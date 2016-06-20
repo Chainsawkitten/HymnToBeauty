@@ -30,6 +30,12 @@ namespace GUI {
              */
             glm::vec2 Size() const override;
             
+            /// Set the size of the widget.
+            /**
+             * @param size New widget size.
+             */
+            void SetSize(const glm::vec2& size) override;
+            
             /// Set the text to display.
             /**
              * @param text The text to display.

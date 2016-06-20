@@ -47,6 +47,12 @@ class EditorWindow : public GUI::Container {
          */
         glm::vec2 Size() const override;
         
+        /// Set the size of the widget.
+        /**
+         * @param size The new size.
+         */
+        void SetSize(const glm::vec2& size) override;
+        
         /// Open the file menu.
         void OpenFileMenu();
         

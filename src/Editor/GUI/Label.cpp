@@ -20,7 +20,12 @@ void Label::Render(const glm::vec2& screenSize) {
 }
 
 glm::vec2 Label::Size() const {
+    /// @todo Get text size.
     return glm::vec2(0.f, 0.f);
+}
+
+void Label::SetSize(const glm::vec2& size) {
+    // Do nothing.
 }
 
 void Label::SetText(const std::string& text) {

@@ -38,7 +38,7 @@ namespace GUI {
             /**
              * @param size The new size.
              */
-            void SetSize(const glm::vec2& size);
+            void SetSize(const glm::vec2& size) override;
             
         private:
             Geometry::Rectangle* rectangle;
