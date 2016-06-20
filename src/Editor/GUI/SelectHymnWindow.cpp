@@ -36,6 +36,7 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     vector<string> files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty"), FileSystem::DIRECTORY);
     for (string file : files) {
         ImageTextButton* hymn = new ImageTextButton(this, closeTexture, font, file);
+        hymn->SetClickedCallback(std::bind(&SetHymn, this, file));
         hymnList->AddWidget(hymn);
     }
 }
@@ -101,4 +102,8 @@ void SelectHymnWindow::Close() {
 
 void SelectHymnWindow::Select() {
     shouldClose = true;
+}
+
+void SelectHymnWindow::SetHymn(const string& name) {
+    nameTextField->SetText(name);
 }

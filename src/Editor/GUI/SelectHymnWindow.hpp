@@ -54,6 +54,8 @@ namespace GUI {
             void Select();
             
         private:
+            void SetHymn(const std::string& name);
+            
             Geometry::Rectangle* rectangle;
             Font* font;
             
