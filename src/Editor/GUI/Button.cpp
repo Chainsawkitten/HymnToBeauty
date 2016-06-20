@@ -1,4 +1,6 @@
 #include "Button.hpp"
+
+#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Util/Input.hpp>
 
 using namespace GUI;
