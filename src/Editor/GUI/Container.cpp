@@ -1,6 +1,7 @@
 #include "Container.hpp"
 
 using namespace GUI;
+using namespace std;
 
 Container::Container(Widget* parent) : Widget(parent) {
     
@@ -16,6 +17,10 @@ void Container::Update() {
 
 void Container::AddWidget(Widget* widget) {
     widgets.push_back(widget);
+}
+
+const vector<Widget*>& Container::Widgets() const {
+    return widgets;
 }
 
 void Container::UpdateWidgets() {
