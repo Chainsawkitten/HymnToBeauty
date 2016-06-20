@@ -23,7 +23,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     if (EditorSettings::GetInstance().GetBool("Debug Context"))
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     
-    window = glfwCreateWindow(640, 480, "Hymn to Beauty", nullptr, nullptr);
+    window = glfwCreateWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), "Hymn to Beauty", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         /// @todo Print error to log.
