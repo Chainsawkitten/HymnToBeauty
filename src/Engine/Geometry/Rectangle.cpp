@@ -1,4 +1,6 @@
 #include "Rectangle.hpp"
+
+#include "../Shader/ShaderProgram.hpp"
 #include "Default2D.vert.hpp"
 #include "SingleColor2D.frag.hpp"
 #include "../Resources.hpp"
@@ -51,19 +53,19 @@ Rectangle::~Rectangle() {
     delete[] indexData;
 }
 
-Geometry2D::Vertex* Rectangle::Vertices() const {
+Geometry2D::Vertex* Rectangle::GetVertices() const {
     return vertexData;
 }
 
-unsigned int Rectangle::VertexCount() const {
+unsigned int Rectangle::GetVertexCount() const {
     return vertexNr;
 }
 
-unsigned int* Rectangle::Indices() const {
+unsigned int* Rectangle::GetIndices() const {
     return indexData;
 }
 
-unsigned int Rectangle::IndexCount() const {
+unsigned int Rectangle::GetIndexCount() const {
     return indexNr;
 }
 
@@ -76,15 +78,15 @@ void Rectangle::Render(const glm::vec2 &position, const glm::vec2 &size, const g
     shaderProgram->Use();
     
     // Set color.
-    glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
+    glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &color[0]);
     
     // Set location and size.
-    glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(position / screenSize)[0]);
-    glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("position"), 1, &(position / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("size"), 1, &(size / screenSize)[0]);
     
-    glBindVertexArray(VertexArray());
+    glBindVertexArray(GetVertexArray());
     
-    glDrawElements(GL_TRIANGLES, IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
     // Reset depth testing.
     if (depthTest)

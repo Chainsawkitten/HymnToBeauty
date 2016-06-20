@@ -2,8 +2,13 @@
 
 #include <GL/glew.h>
 #include <stb_truetype.h>
-#include "../Shader/ShaderProgram.hpp"
-#include "../Geometry/Rectangle.hpp"
+#include <glm/glm.hpp>
+
+class Shader;
+class ShaderProgram;
+namespace Geometry {
+    class Rectangle;
+}
 
 /// %Font used for drawing text.
 class Font {
@@ -49,7 +54,7 @@ class Font {
         /**
          * @return  Color to render text as.
          */
-        glm::vec3 Color() const;
+        glm::vec3 GetColor() const;
         
         /// Set rendering color.
         /**
@@ -61,7 +66,7 @@ class Font {
         /**
          * @return The character height.
          */
-        float Height() const;
+        float GetHeight() const;
         
     private:
         float RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize);

@@ -1,5 +1,6 @@
 #include "Label.hpp"
 
+#include <Engine/Font/Font.hpp>
 #include <Engine/Resources.hpp>
 #include <limits>
 
@@ -16,10 +17,10 @@ void Label::Update() {
 
 void Label::Render(const glm::vec2& screenSize) {
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText(text.c_str(), Position(), std::numeric_limits<float>::max(), screenSize);
+    font->RenderText(text.c_str(), GetPosition(), std::numeric_limits<float>::max(), screenSize);
 }
 
-glm::vec2 Label::Size() const {
+glm::vec2 Label::GetSize() const {
     /// @todo Get text size.
     return glm::vec2(0.f, 0.f);
 }

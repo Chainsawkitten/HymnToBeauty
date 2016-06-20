@@ -13,11 +13,11 @@ Widget::~Widget() {
     
 }
 
-Widget* Widget::Parent() const {
+Widget* Widget::GetParent() const {
     return parent;
 }
 
-const glm::vec2& Widget::Position() const {
+const glm::vec2& Widget::GetPosition() const {
     return position;
 }
 
@@ -25,7 +25,7 @@ void Widget::SetPosition(const glm::vec2& position) {
     this->position = position;
 }
 
-bool Widget::Visible() const {
+bool Widget::IsVisible() const {
     return visible;
 }
 

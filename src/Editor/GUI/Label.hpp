@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Widget.hpp"
-#include <Engine/Font/Font.hpp>
+#include <string>
+
+class Font;
 
 namespace GUI {
     /// Label that displays a text message.
@@ -28,7 +30,7 @@ namespace GUI {
             /**
              * @return The size
              */
-            glm::vec2 Size() const override;
+            glm::vec2 GetSize() const override;
             
             /// Set the size of the widget.
             /**

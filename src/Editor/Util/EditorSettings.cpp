@@ -8,6 +8,9 @@ EditorSettings::EditorSettings() {
     
     AddBoolSetting("Logging", "Debug", "Logging", false);
     AddBoolSetting("Debug Context", "Debug", "Debug Context", false);
+    
+    AddLongSetting("Width", "Graphics", "Width", 800);
+    AddLongSetting("Height", "Graphics", "Height", 600);
 }
 
 EditorSettings& EditorSettings::GetInstance() {

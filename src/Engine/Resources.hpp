@@ -1,10 +1,15 @@
 #pragma once
 
-#include "Shader/ShaderProgram.hpp"
 #include <map>
-#include "Geometry/Rectangle.hpp"
-#include "Texture/Texture2D.hpp"
-#include "Font/Font.hpp"
+#include <GL/glew.h>
+
+class Shader;
+class ShaderProgram;
+class Texture2D;
+class Font;
+namespace Geometry {
+    class Rectangle;
+}
 
 /// Handles all resources.
 class ResourceManager {
@@ -71,9 +76,18 @@ class ResourceManager {
         /**
 		 * @param data Image file data.
 		 * @param dataLength Length of the image file data.
+		 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
 		 * @return The %Texture2D instance
 		 */
-        Texture2D* CreateTexture2D(const char* data, int dataLength);
+        Texture2D* CreateTexture2D(const char* data, int dataLength, bool srgb = false);
+        
+        /// Create a 2D texture if it doesn't already exist.
+        /**
+		 * @param filename Filename of image file.
+		 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
+		 * @return The %Texture2D instance
+		 */
+        Texture2D* CreateTexture2DFromFile(std::string filename, bool srgb = false);
         
         /// Free the reference to the 2D texture.
         /**
@@ -81,20 +95,6 @@ class ResourceManager {
          * @param texture %Texture to dereference.
          */
         void FreeTexture2D(Texture2D* texture);
-        
-        /// Create a 2D texture if it doesn't already exist.
-        /**
-		 * @param filename Filename of image file.
-		 * @return The %Texture2D instance
-		 */
-        Texture2D* CreateTexture2DFromFile(std::string filename);
-        
-        /// Free the reference to the 2D texture.
-        /**
-         * Deletes the instance if no more references exist.
-         * @param texture %Texture to dereference.
-         */
-        void FreeTexture2DFromFile(Texture2D* texture);
         
         /// Create a font if it doesn't already exist.
         /**

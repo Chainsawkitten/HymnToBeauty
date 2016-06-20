@@ -1,5 +1,8 @@
 #include "Font.hpp"
 
+#include "../Shader/ShaderProgram.hpp"
+#include "../Geometry/Rectangle.hpp"
+
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
 
@@ -100,10 +103,10 @@ void Font::RenderText(const char* text, const glm::vec2& position, float wrap, c
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    glBindVertexArray(rectangle->VertexArray());
+    glBindVertexArray(rectangle->GetVertexArray());
     
     // Texture unit 0 is for base images.
-    glUniform1i(shaderProgram->UniformLocation("baseImage"), 0);
+    glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
     
     // Base image texture
     glActiveTexture(GL_TEXTURE0);
@@ -129,7 +132,7 @@ void Font::RenderText(const char* text, const glm::vec2& position, float wrap, c
         glDisable(GL_BLEND);
 }
 
-glm::vec3 Font::Color() const {
+glm::vec3 Font::GetColor() const {
     return color;
 }
 
@@ -137,7 +140,7 @@ void Font::SetColor(const glm::vec3& color) {
     this->color = color;
 }
 
-float Font::Height() const {
+float Font::GetHeight() const {
     return height;
 }
 
@@ -150,17 +153,17 @@ float Font::RenderCharacter(char character, const glm::vec2& position, const glm
     glm::vec2 pos = glm::vec2(q.x0, q.y0);
     glm::vec2 siz = glm::vec2(q.x1, q.y1) - glm::vec2(q.x0, q.y0);
     
-    glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(pos / screenSize)[0]);
-    glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(siz / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("position"), 1, &(pos / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("size"), 1, &(siz / screenSize)[0]);
     
     glm::vec2 uv1 = glm::vec2(q.s0, q.t0);
     glm::vec2 uv2 = glm::vec2(q.s1, q.t1);
-    glUniform2fv(shaderProgram->UniformLocation("uv1"), 1, &uv1[0]);
-    glUniform2fv(shaderProgram->UniformLocation("uv2"), 1, &uv2[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("uv1"), 1, &uv1[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("uv2"), 1, &uv2[0]);
     
-    glUniform3fv(shaderProgram->UniformLocation("color"), 1, &color[0]);
+    glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &color[0]);
     
-    glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
     return x;
 }

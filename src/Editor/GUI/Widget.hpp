@@ -19,7 +19,7 @@ namespace GUI {
             /**
              * @return The parent widget
              */
-            Widget* Parent() const;
+            Widget* GetParent() const;
             
             /// Update the widget.
             virtual void Update() = 0;
@@ -34,7 +34,7 @@ namespace GUI {
             /**
              * @return The widget's position
              */
-            const glm::vec2& Position() const;
+            const glm::vec2& GetPosition() const;
             
             /// Set widget's position.
             /**
@@ -46,7 +46,7 @@ namespace GUI {
             /**
              * @return The size
              */
-            virtual glm::vec2 Size() const = 0;
+            virtual glm::vec2 GetSize() const = 0;
             
             /// Set the size of the widget.
             /**
@@ -58,7 +58,7 @@ namespace GUI {
             /**
              * @return Whether the widget should be rendered
              */
-            bool Visible() const;
+            bool IsVisible() const;
             
             /// Set whether the widget is visible.
             /**

@@ -1,4 +1,6 @@
 #include "Button.hpp"
+
+#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Util/Input.hpp>
 
 using namespace GUI;
@@ -17,14 +19,14 @@ void Button::Update() {
     double xpos = Input()->CursorX();
     double ypos = Input()->CursorY();
     
-    mouseHover = xpos >= Position().x && xpos < Position().x + size.x && ypos >= Position().y && ypos < Position().y + size.y;
+    mouseHover = xpos >= GetPosition().x && xpos < GetPosition().x + size.x && ypos >= GetPosition().y && ypos < GetPosition().y + size.y;
     
     if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT) && hasClickedCallback) {
         clickedCallback();
     }
 }
 
-glm::vec2 Button::Size() const {
+glm::vec2 Button::GetSize() const {
     return size;
 }
 
@@ -37,6 +39,6 @@ void Button::SetClickedCallback(std::function<void()> callback) {
     hasClickedCallback = true;
 }
 
-bool Button::MouseHover() const {
+bool Button::GetMouseHover() const {
     return mouseHover;
 }

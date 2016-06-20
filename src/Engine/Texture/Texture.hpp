@@ -19,19 +19,19 @@ class Texture {
 		 * Used when binding a texture before draw calls.
 		 * @return The OpenGL texture identifier
 		 */
-		virtual GLuint TextureID() const = 0;
+		virtual GLuint GetTextureID() const = 0;
 
 		/// Get the width of the texture.
 		/**
 		 * @return The width of the texture in texels
 		 */
-		virtual int Width() const = 0;
+		virtual int GetWidth() const = 0;
 
 		/// Get the height of the texture.
 		/**
 		 * @return The height of the texture in texels
 		 */
-		virtual int Height() const = 0;
+		virtual int GetHeight() const = 0;
 
 		/// Get image GL format based on color components.
 		/**

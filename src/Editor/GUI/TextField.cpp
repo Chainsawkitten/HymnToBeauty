@@ -1,4 +1,7 @@
 #include "TextField.hpp"
+
+#include <Engine/Geometry/Rectangle.hpp>
+#include <Engine/Font/Font.hpp>
 #include <Engine/Resources.hpp>
 #include <Engine/Util/Input.hpp>
 
@@ -20,13 +23,13 @@ void TextField::Update() {
 
 void TextField::Render(const glm::vec2& screenSize) {
     glm::vec3 color(0.16078431372f, 0.15686274509f, 0.17647058823f);
-    rectangle->Render(Position(), size, color, screenSize);
+    rectangle->Render(GetPosition(), size, color, screenSize);
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText(text.c_str(), Position(), size.x, screenSize);
+    font->RenderText(text.c_str(), GetPosition(), size.x, screenSize);
 }
 
-glm::vec2 TextField::Size() const {
+glm::vec2 TextField::GetSize() const {
     return size;
 }
 
@@ -34,7 +37,7 @@ void TextField::SetSize(const glm::vec2 &size) {
     this->size = size;
 }
 
-std::string TextField::Text() const {
+std::string TextField::GetText() const {
     return text;
 }
 

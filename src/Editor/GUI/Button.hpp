@@ -1,9 +1,11 @@
 #pragma once
 
-#include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Shader/ShaderProgram.hpp>
 #include "Widget.hpp"
 #include <functional>
+
+namespace Geometry {
+    class Rectangle;
+}
 
 namespace GUI {
     /// %Button widget.
@@ -25,7 +27,7 @@ namespace GUI {
             /**
              * @return The size
              */
-            glm::vec2 Size() const override;
+            glm::vec2 GetSize() const override;
             
             /// Set the size of the widget.
             /**
@@ -43,7 +45,7 @@ namespace GUI {
             /**
              * @return Whether the mouse is over the button
              */
-            bool MouseHover() const;
+            bool GetMouseHover() const;
             
         private:
             Geometry::Rectangle* rectangle;

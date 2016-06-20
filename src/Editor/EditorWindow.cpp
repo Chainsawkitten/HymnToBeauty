@@ -1,6 +1,15 @@
 #include <GL/glew.h>
 #include "EditorWindow.hpp"
 
+#include <Engine/GameWindow.hpp>
+#include <Engine/Font/Font.hpp>
+#include "GUI/HorizontalLayout.hpp"
+#include "GUI/VerticalLayout.hpp"
+#include "GUI/Button.hpp"
+#include <Engine/Util/Input.hpp>
+#include <Engine/Texture/Texture2D.hpp>
+#include "GUI/SelectHymnWindow.hpp"
+
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
 
@@ -23,7 +32,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     if (EditorSettings::GetInstance().GetBool("Debug Context"))
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     
-    window = glfwCreateWindow(640, 480, "Hymn to Beauty", nullptr, nullptr);
+    window = glfwCreateWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), "Hymn to Beauty", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         /// @todo Print error to log.
@@ -157,7 +166,7 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
     }
 }
 
-glm::vec2 EditorWindow::Size() const {
+glm::vec2 EditorWindow::GetSize() const {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
@@ -169,7 +178,7 @@ void EditorWindow::SetSize(const glm::vec2& size) {
 }
 
 void EditorWindow::OpenFileMenu() {
-    fileMenu->SetVisible(!fileMenu->Visible());
+    fileMenu->SetVisible(!fileMenu->IsVisible());
 }
 
 void EditorWindow::OpenProjectOptions() {
@@ -184,7 +193,7 @@ void EditorWindow::Play() {
 void EditorWindow::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
-    childWindow->SetSize(Size());
+    childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
@@ -204,7 +213,7 @@ void EditorWindow::NewHymnClosed(const std::string& hymn) {
 void EditorWindow::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
-    childWindow->SetSize(Size());
+    childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 

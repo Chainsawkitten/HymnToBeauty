@@ -1,15 +1,20 @@
 #include "Texture2D.hpp"
+
+#include "../Geometry/Rectangle.hpp"
+#include "../Shader/ShaderProgram.hpp"
+
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_JPEG
 #define STBI_ONLY_PNG
 #define STBI_ONLY_TGA
 #include <stb_image.h>
+
 #include "../Util/Log.hpp"
 #include "Default2D.vert.hpp"
 #include "Texture2D.frag.hpp"
 #include "../Resources.hpp"
 
-Texture2D::Texture2D(const char* filename) {
+Texture2D::Texture2D(const char* filename, bool srgb) {
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
@@ -21,7 +26,7 @@ Texture2D::Texture2D(const char* filename) {
         Log() << "Couldn't load image " << filename << "\n";
 
 	// Give the image to OpenGL.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB_ALPHA : GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
 
@@ -35,7 +40,7 @@ Texture2D::Texture2D(const char* filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// Generate mipmaps, by the way.
+	// Generate mipmaps.
 	glGenerateMipmap(GL_TEXTURE_2D);
     
     // For rendering.
@@ -44,9 +49,11 @@ Texture2D::Texture2D(const char* filename) {
     vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = Resources().CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    
+    isFromFile = true;
 }
 
-Texture2D::Texture2D(const char *source, int sourceLength) {
+Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
     glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
@@ -58,7 +65,7 @@ Texture2D::Texture2D(const char *source, int sourceLength) {
         Log() << "Couldn't load headerized image.\n";
 
 	// Give the image to OpenGL.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB_ALPHA : GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
 
@@ -81,6 +88,8 @@ Texture2D::Texture2D(const char *source, int sourceLength) {
     vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = Resources().CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    
+    isFromFile = false;
 }
 
 Texture2D::~Texture2D() {
@@ -93,15 +102,15 @@ Texture2D::~Texture2D() {
     Resources().FreeRectangle();
 }
 
-GLuint Texture2D::TextureID() const {
+GLuint Texture2D::GetTextureID() const {
 	return texID;
 }
 
-int Texture2D::Width() const {
+int Texture2D::GetWidth() const {
 	return width;
 }
 
-int Texture2D::Height() const {
+int Texture2D::GetHeight() const {
 	return height;
 }
 
@@ -125,23 +134,27 @@ void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, const g
     shaderProgram->Use();
     
     // Texture unit 0 is for base images.
-    glUniform1i(shaderProgram->UniformLocation("baseImage"), 0);
+    glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
     
     // Base image texture
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D, texID);
     
     // Set location and size.
-    glUniform2fv(shaderProgram->UniformLocation("position"), 1, &(position / screenSize)[0]);
-    glUniform2fv(shaderProgram->UniformLocation("size"), 1, &(size / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("position"), 1, &(position / screenSize)[0]);
+    glUniform2fv(shaderProgram->GetUniformLocation("size"), 1, &(size / screenSize)[0]);
     
-    glBindVertexArray(rectangle->VertexArray());
+    glBindVertexArray(rectangle->GetVertexArray());
     
-    glDrawElements(GL_TRIANGLES, rectangle->IndexCount(), GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
     // Reset depth testing and blending.
     if (depthTest)
         glEnable(GL_DEPTH_TEST);
     if (!blend)
         glDisable(GL_BLEND);
+}
+
+bool Texture2D::IsFromFile() const {
+    return isFromFile;
 }

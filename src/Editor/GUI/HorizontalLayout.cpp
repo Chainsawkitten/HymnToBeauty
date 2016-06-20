@@ -1,4 +1,6 @@
 #include "HorizontalLayout.hpp"
+
+#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Resources.hpp>
 
 using namespace GUI;
@@ -16,18 +18,18 @@ HorizontalLayout::~HorizontalLayout() {
 void HorizontalLayout::Render(const glm::vec2& screenSize) {
     // Set color.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-    rectangle->Render(Position(), size, color, screenSize);
+    rectangle->Render(GetPosition(), size, color, screenSize);
     
     RenderWidgets(screenSize);
 }
 
 void HorizontalLayout::AddWidget(Widget* widget) {
     Container::AddWidget(widget);
-    widget->SetPosition(Position() + nextPosition);
-    nextPosition.x += widget->Size().x;
+    widget->SetPosition(GetPosition() + nextPosition);
+    nextPosition.x += widget->GetSize().x;
 }
 
-glm::vec2 HorizontalLayout::Size() const {
+glm::vec2 HorizontalLayout::GetSize() const {
     return this->size;
 }
 

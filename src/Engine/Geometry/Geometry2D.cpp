@@ -10,7 +10,7 @@ Geometry2D::~Geometry2D() {
     glDeleteVertexArrays(1, &vertexArray);
 }
 
-GLuint Geometry2D::VertexArray() const {
+GLuint Geometry2D::GetVertexArray() const {
     return vertexArray;
 }
 
@@ -18,12 +18,12 @@ void Geometry2D::GenerateBuffers() {
     // Vertex buffer
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, VertexCount() * sizeof(Vertex), Vertices(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GetVertexCount() * sizeof(Vertex), GetVertices(), GL_STATIC_DRAW);
     
     // Index buffer
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndexCount() * sizeof(unsigned int), Indices(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetIndexCount() * sizeof(unsigned int), GetIndices(), GL_STATIC_DRAW);
 }
 
 void Geometry2D::GenerateVertexArray() {

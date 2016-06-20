@@ -18,7 +18,7 @@ class ActiveHymn {
         /**
          * @return The hymn's path.
          */
-        const std::string& Path() const;
+        const std::string& GetPath() const;
         
         /// Set the path where the hymn is saved.
         /**
