@@ -137,9 +137,9 @@ bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other)
     return false;
 }
 
-Texture2D* ResourceManager::CreateTexture2D(const char* data, int dataLength) {
+Texture2D* ResourceManager::CreateTexture2D(const char* data, int dataLength, bool srgb) {
     if (textures.find(data) == textures.end()) {
-        textures[data].texture = new Texture2D(data, dataLength);
+        textures[data].texture = new Texture2D(data, dataLength, srgb);
         texturesInverse[textures[data].texture] = data;
         textures[data].count = 1;
     } else {
@@ -160,9 +160,9 @@ void ResourceManager::FreeTexture2D(Texture2D* texture) {
     }
 }
 
-Texture2D* ResourceManager::CreateTexture2DFromFile(std::string filename) {
+Texture2D* ResourceManager::CreateTexture2DFromFile(std::string filename, bool srgb) {
     if (texturesFromFile.find(filename) == texturesFromFile.end()) {
-        texturesFromFile[filename].texture = new Texture2D(filename.c_str());
+        texturesFromFile[filename].texture = new Texture2D(filename.c_str(), srgb);
         texturesFromFileInverse[texturesFromFile[filename].texture] = filename;
         texturesFromFile[filename].count = 1;
     } else {
