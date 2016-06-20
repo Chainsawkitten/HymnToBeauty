@@ -67,10 +67,17 @@ class Texture2D : public Texture {
          * @param screenSize Size of the screen in pixels.
          */
         void Render(const glm::vec2& position, const glm::vec2& size, const glm::vec2& screenSize) const;
+        
+        /// Get whether the texture was created from file.
+        /**
+         * @return true if the texture was loaded from a file, false otherwise.
+         */
+        bool IsFromFile() const;
 
 	private:
 		GLuint texID;
 		int width, height;
+        bool isFromFile;
         
         Geometry::Rectangle* rectangle;
         
