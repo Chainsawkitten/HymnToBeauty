@@ -1,6 +1,7 @@
 #include "SelectHymnWindow.hpp"
 #include <Engine/Resources.hpp>
 #include <Close.png.hpp>
+#include <OpenHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include "ImageTextButton.hpp"
@@ -33,9 +34,10 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     hymnList = new VerticalLayout(this);
     AddWidget(hymnList);
     
+    hymnTexture = Resources().CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
     vector<string> files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty"), FileSystem::DIRECTORY);
     for (string file : files) {
-        ImageTextButton* hymn = new ImageTextButton(this, closeTexture, font, file);
+        ImageTextButton* hymn = new ImageTextButton(this, hymnTexture, font, file);
         hymn->SetClickedCallback(std::bind(&SetHymn, this, file));
         hymnList->AddWidget(hymn);
     }
@@ -55,6 +57,8 @@ SelectHymnWindow::~SelectHymnWindow() {
         delete hymn;
     
     delete hymnList;
+    
+    Resources().FreeTexture2D(hymnTexture);
 }
 
 void SelectHymnWindow::Update() {

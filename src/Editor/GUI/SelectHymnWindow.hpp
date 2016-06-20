@@ -70,5 +70,6 @@ namespace GUI {
             TextField* nameTextField;
             
             VerticalLayout* hymnList;
+            Texture2D* hymnTexture;
     };
 }
