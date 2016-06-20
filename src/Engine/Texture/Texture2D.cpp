@@ -14,7 +14,7 @@
 #include "Texture2D.frag.hpp"
 #include "../Resources.hpp"
 
-Texture2D::Texture2D(const char* filename) {
+Texture2D::Texture2D(const char* filename, bool srgb) {
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
@@ -26,7 +26,7 @@ Texture2D::Texture2D(const char* filename) {
         Log() << "Couldn't load image " << filename << "\n";
 
 	// Give the image to OpenGL.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB_ALPHA : GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
 
@@ -40,7 +40,7 @@ Texture2D::Texture2D(const char* filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// Generate mipmaps, by the way.
+	// Generate mipmaps.
 	glGenerateMipmap(GL_TEXTURE_2D);
     
     // For rendering.
@@ -51,7 +51,7 @@ Texture2D::Texture2D(const char* filename) {
     shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
 }
 
-Texture2D::Texture2D(const char *source, int sourceLength) {
+Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
     glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
@@ -63,7 +63,7 @@ Texture2D::Texture2D(const char *source, int sourceLength) {
         Log() << "Couldn't load headerized image.\n";
 
 	// Give the image to OpenGL.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB_ALPHA : GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
 

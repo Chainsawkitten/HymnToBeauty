@@ -19,15 +19,17 @@ class Texture2D : public Texture {
 		/**
 		 * Supported image formats: TGA.
 	 	 * @param filename Filename (relative or absolute) of the image file.
+	 	 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
 		 */
-		Texture2D(const char* filename);
+		Texture2D(const char* filename, bool srgb = false);
         
         /// Create new texture from given source string.
         /**
          * @param source Source string containing the image file.
          * @param sourceLength Length of the source string.
+         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
          */
-        Texture2D(const char* source, int sourceLength);
+        Texture2D(const char* source, int sourceLength, bool srgb = false);
 
 		/// Destructor
 		~Texture2D() override;
