@@ -197,6 +197,8 @@ void EditorWindow::NewHymnClosed(const std::string& hymn) {
     
     delete childWindow;
     childWindow = nullptr;
+    
+    fileMenu->SetVisible(false);
 }
 
 void EditorWindow::OpenHymn() {
@@ -213,4 +215,6 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     
     delete childWindow;
     childWindow = nullptr;
+    
+    fileMenu->SetVisible(false);
 }
