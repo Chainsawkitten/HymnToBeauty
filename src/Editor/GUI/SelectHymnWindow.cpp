@@ -2,6 +2,8 @@
 #include <Engine/Resources.hpp>
 #include <Close.png.hpp>
 #include <ABeeZee.ttf.hpp>
+#include <Engine/Util/FileSystem.hpp>
+#include "ImageTextButton.hpp"
 
 using namespace GUI;
 using namespace std;
@@ -30,6 +32,12 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     
     hymnList = new VerticalLayout(this);
     AddWidget(hymnList);
+    
+    vector<string> files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty"), FileSystem::DIRECTORY);
+    for (string file : files) {
+        ImageTextButton* hymn = new ImageTextButton(this, closeTexture, font, file);
+        hymnList->AddWidget(hymn);
+    }
 }
 
 SelectHymnWindow::~SelectHymnWindow() {
@@ -41,6 +49,10 @@ SelectHymnWindow::~SelectHymnWindow() {
     delete selectButton;
     
     delete nameTextField;
+    
+    for (Widget* hymn : hymnList->Widgets())
+        delete hymn;
+    
     delete hymnList;
 }
 
@@ -69,7 +81,11 @@ void SelectHymnWindow::SetSize(const glm::vec2& size) {
     nameTextField->SetPosition(Position() + glm::vec2(32.f, size.y - nameTextField->Size().y - 32.f));
     nameTextField->SetSize(glm::vec2(size.x - 96.f - selectButton->Size().x, 32.f));
     selectButton->SetPosition(Position() + glm::vec2(size.x - selectButton->Size().x - 32.f, size.y - selectButton->Size().y - 32.f));
-    hymnList->SetPosition(Position() + glm::vec2(0.f, closeButton->Size().y + 32.f));
+    
+    for (Widget* hymn : hymnList->Widgets())
+        hymn->SetSize(glm::vec2(size.x, 64.f));
+    
+    hymnList->SetPosition(Position() + glm::vec2(0.f, closeButton->Size().y));
     hymnList->SetSize(glm::vec2(size.x, nameTextField->Position().y - closeButton->Size().y - 64.f));
 }
 
