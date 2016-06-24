@@ -52,6 +52,10 @@ Rectangle::Rectangle() {
 Rectangle::~Rectangle() {
     delete[] vertexData;
     delete[] indexData;
+    
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
+    Managers().resourceManager->FreeShaderProgram(shaderProgram);
 }
 
 Geometry2D::Vertex* Rectangle::GetVertices() const {
