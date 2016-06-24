@@ -5,13 +5,9 @@
 
 /// A hymn to beauty.
 class ActiveHymn {
+    friend ActiveHymn& Hymn();
+    
     public:
-        /// Get the instance of the class.
-        /**
-         * @return The %ActiveHymn instance
-         */
-        static ActiveHymn& GetInstance();
-        
         /// Clear the hymn of all properties.
         void Clear();
         
@@ -37,6 +33,8 @@ class ActiveHymn {
         void Render();
         
     private:
+        static ActiveHymn& GetInstance();
+        
         ActiveHymn();
         ActiveHymn(ActiveHymn const&) = delete;
         void operator=(ActiveHymn const&) = delete;
