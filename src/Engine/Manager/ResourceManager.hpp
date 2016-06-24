@@ -3,6 +3,7 @@
 #include <map>
 #include <GL/glew.h>
 
+class Hub;
 class Shader;
 class ShaderProgram;
 class Texture2D;
@@ -13,13 +14,9 @@ namespace Geometry {
 
 /// Handles all resources.
 class ResourceManager {
+    friend class Hub;
+    
     public:
-        /// Get the instance of the class.
-        /**
-         * @return The %ResourceManager instance
-         */
-        static ResourceManager& GetInstance();
-        
         /// Create a shader if it doesn't already exist.
         /**
 		 * @param source GLSL code for the shader.
@@ -204,9 +201,3 @@ class ResourceManager {
         std::map<FontFromFileKey, FontInstance> fontsFromFile;
         std::map<Font*, FontFromFileKey> fontsFromFileInverse;
 };
-
-/// Get the resource manager.
-/**
- * @return The %ResourceManager instance
- */
-ResourceManager& Resources();

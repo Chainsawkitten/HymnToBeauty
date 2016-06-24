@@ -15,7 +15,8 @@
 
 #include "GUI/ImageButton.hpp"
 #include "GUI/ImageTextButton.hpp"
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 #include <File.png.hpp>
 #include <Options.png.hpp>
 #include <Play.png.hpp>
@@ -55,16 +56,16 @@ EditorWindow::~EditorWindow() {
     delete openHymnButton;
     delete fileMenu;
     
-    Resources().FreeTexture2D(fileTexture);
-    Resources().FreeTexture2D(optionsTexture);
-    Resources().FreeTexture2D(playTexture);
+    Managers().resourceManager->FreeTexture2D(fileTexture);
+    Managers().resourceManager->FreeTexture2D(optionsTexture);
+    Managers().resourceManager->FreeTexture2D(playTexture);
     
-    Resources().FreeTexture2D(newHymnTexture);
-    Resources().FreeTexture2D(openHymnTexture);
+    Managers().resourceManager->FreeTexture2D(newHymnTexture);
+    Managers().resourceManager->FreeTexture2D(openHymnTexture);
     
     delete input;
     
-    Resources().FreeFont(font);
+    Managers().resourceManager->FreeFont(font);
     
     glfwDestroyWindow(window);
 }
@@ -73,24 +74,24 @@ void EditorWindow::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
-    font = Resources().CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
+    font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);
     menuBar->SetSize(glm::vec2(static_cast<float>(width), 64.f));
     AddWidget(menuBar);
     
-    fileTexture = Resources().CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
+    fileTexture = Managers().resourceManager->CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
     fileButton = new GUI::ImageButton(menuBar, fileTexture);
     fileButton->SetClickedCallback(std::bind(&OpenFileMenu, this));
     menuBar->AddWidget(fileButton);
     
-    optionsTexture = Resources().CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
+    optionsTexture = Managers().resourceManager->CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
     optionsButton = new GUI::ImageButton(menuBar, optionsTexture);
     optionsButton->SetClickedCallback(std::bind(&OpenProjectOptions, this));
     menuBar->AddWidget(optionsButton);
     
-    playTexture = Resources().CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
+    playTexture = Managers().resourceManager->CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
     playButton = new GUI::ImageButton(menuBar, playTexture);
     playButton->SetClickedCallback(std::bind(&Play, this));
     menuBar->AddWidget(playButton);
@@ -102,13 +103,13 @@ void EditorWindow::Init() {
     fileMenu->SetVisible(false);
     AddWidget(fileMenu);
     
-    newHymnTexture = Resources().CreateTexture2D(NEWHYMN_PNG, NEWHYMN_PNG_LENGTH);
+    newHymnTexture = Managers().resourceManager->CreateTexture2D(NEWHYMN_PNG, NEWHYMN_PNG_LENGTH);
     newHymnButton = new GUI::ImageTextButton(fileMenu, newHymnTexture, font, "New Hymn");
     newHymnButton->SetSize(glm::vec2(256.f, 64.f));
     newHymnButton->SetClickedCallback(std::bind(&NewHymn, this));
     fileMenu->AddWidget(newHymnButton);
     
-    openHymnTexture = Resources().CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
+    openHymnTexture = Managers().resourceManager->CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
     openHymnButton = new GUI::ImageTextButton(fileMenu, openHymnTexture, font, "Open Hymn");
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));

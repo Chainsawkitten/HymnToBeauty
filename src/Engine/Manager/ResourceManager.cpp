@@ -1,21 +1,15 @@
-#include "Resources.hpp"
+#include "ResourceManager.hpp"
 
-#include "Shader/Shader.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Geometry/Rectangle.hpp"
-#include "Texture/Texture2D.hpp"
-#include "Font/Font.hpp"
+#include "../Shader/Shader.hpp"
+#include "../Shader/ShaderProgram.hpp"
+#include "../Geometry/Rectangle.hpp"
+#include "../Texture/Texture2D.hpp"
+#include "../Font/Font.hpp"
 
 using namespace std;
 
 ResourceManager::ResourceManager() {
     rectangleCount = 0;
-}
-
-ResourceManager& ResourceManager::GetInstance() {
-    static ResourceManager ResourceManager;
-    
-    return ResourceManager;
 }
 
 Shader* ResourceManager::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
@@ -263,8 +257,4 @@ void ResourceManager::FreeFontFromFile(Font* font) {
         delete font;
         fontsFromFile.erase(key);
     }
-}
-
-ResourceManager& Resources() {
-    return ResourceManager::GetInstance();
 }

@@ -111,9 +111,10 @@ include_directories(src)
 ## Engine ##
 set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
-        src/Engine/Resources.cpp
         src/Engine/Hymn.cpp
         src/Engine/Font/Font.cpp
+        src/Engine/Manager/Managers.cpp
+        src/Engine/Manager/ResourceManager.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Settings.cpp
@@ -128,9 +129,10 @@ set(ENGINE_SRCS
 
 set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
-        src/Engine/Resources.hpp
         src/Engine/Hymn.hpp
         src/Engine/Font/Font.hpp
+        src/Engine/Manager/Managers.hpp
+        src/Engine/Manager/ResourceManager.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Settings.hpp

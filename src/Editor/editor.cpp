@@ -1,10 +1,12 @@
 #include "editor.hpp"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "EditorWindow.hpp"
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
+#include <Engine/Manager/Managers.hpp>
 
 int main() {
     // Enable logging if requested.
@@ -23,6 +25,8 @@ int main() {
     glfwSetErrorCallback(ErrorCallback);
     if (EditorSettings::GetInstance().GetBool("Debug Context"))
         glDebugMessageCallback(DebugMessageCallback, nullptr);
+    
+    Managers().StartUp();
 
     editorWindow->Init();
     
@@ -33,6 +37,8 @@ int main() {
     }
 
     delete editorWindow;
+    
+    Managers().ShutDown();
 
     glfwTerminate();
     

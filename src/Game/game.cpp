@@ -1,7 +1,9 @@
 #include "game.hpp"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <Engine/GameWindow.hpp>
+#include <Engine/Manager/Managers.hpp>
 
 int main() {
     if (!glfwInit())
@@ -9,6 +11,8 @@ int main() {
 
     GameWindow* gameWindow = new GameWindow();
     glewInit();
+    
+    Managers().StartUp();
 
     while (!gameWindow->ShouldClose()) {
         gameWindow->Update();
@@ -17,6 +21,8 @@ int main() {
     }
 
     delete gameWindow;
+    
+    Managers().ShutDown();
 
     glfwTerminate();
 

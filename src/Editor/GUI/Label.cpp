@@ -1,7 +1,6 @@
 #include "Label.hpp"
 
 #include <Engine/Font/Font.hpp>
-#include <Engine/Resources.hpp>
 #include <limits>
 
 using namespace GUI;

@@ -3,7 +3,8 @@
 #include "../Shader/ShaderProgram.hpp"
 #include "Default2D.vert.hpp"
 #include "SingleColor2D.frag.hpp"
-#include "../Resources.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/ResourceManager.hpp"
 
 using namespace Geometry;
 
@@ -43,9 +44,9 @@ Rectangle::Rectangle() {
     GenerateBuffers();
     GenerateVertexArray();
     
-    vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Resources().CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(SINGLECOLOR2D_FRAG, SINGLECOLOR2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
 }
 
 Rectangle::~Rectangle() {
