@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Scene/Scene.hpp"
 
 /// A hymn to beauty.
 class ActiveHymn {
@@ -32,12 +33,17 @@ class ActiveHymn {
          */
         void Load(const std::string& path);
         
+        /// Render the active scene.
+        void Render();
+        
     private:
         ActiveHymn();
         ActiveHymn(ActiveHymn const&) = delete;
         void operator=(ActiveHymn const&) = delete;
         
         std::string path;
+        
+        Scene activeScene;
 };
 
 /// Get the active hymn.

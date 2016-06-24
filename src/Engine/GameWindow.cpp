@@ -1,5 +1,7 @@
 #include "GameWindow.hpp"
 
+#include "Hymn.hpp"
+
 GameWindow::GameWindow() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -26,5 +28,8 @@ void GameWindow::Update() {
 
 void GameWindow::Render() {
     glfwMakeContextCurrent(window);
+    
+    Hymn().Render();
+    
     glfwSwapBuffers(window);
 }

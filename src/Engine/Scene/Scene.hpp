@@ -8,4 +8,7 @@ class Scene {
         
         /// Destructor.
         ~Scene();
+        
+        /// Clear the scene of all entities.
+        void Clear();
 };

@@ -16,6 +16,7 @@ ActiveHymn& ActiveHymn::GetInstance() {
 
 void ActiveHymn::Clear() {
     path = "";
+    activeScene.Clear();
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -30,6 +31,10 @@ void ActiveHymn::SetPath(const string& path) {
 void ActiveHymn::Load(const string& path) {
     Clear();
     this->path = path;
+}
+
+void ActiveHymn::Render() {
+    
 }
 
 ActiveHymn& Hymn() {
