@@ -114,6 +114,7 @@ set(ENGINE_SRCS
         src/Engine/Hymn.cpp
         src/Engine/Font/Font.cpp
         src/Engine/Manager/Managers.cpp
+        src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
@@ -133,6 +134,7 @@ set(ENGINE_HEADERS
         src/Engine/Hymn.hpp
         src/Engine/Font/Font.hpp
         src/Engine/Manager/Managers.hpp
+        src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp

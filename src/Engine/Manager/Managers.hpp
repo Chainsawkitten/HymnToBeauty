@@ -1,6 +1,7 @@
 #pragma once
 
 class ResourceManager;
+class RenderManager;
 
 /// Singleton class that holds all subsystems.
 class Hub {
@@ -9,6 +10,9 @@ class Hub {
     public:
         /// The resource manager instance.
         ResourceManager* resourceManager;
+        
+        /// The render manager instance.
+        RenderManager* renderManager;
         
         /// Initialize all subsystems.
         void StartUp();

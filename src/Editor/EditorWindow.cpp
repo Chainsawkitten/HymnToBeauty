@@ -156,8 +156,6 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
     } else {
         glfwMakeContextCurrent(window);
         
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
         Hymn().Render();
         
         RenderWidgets(screenSize);

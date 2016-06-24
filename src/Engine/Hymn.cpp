@@ -1,6 +1,8 @@
 #include "Hymn.hpp"
 
 #include "Util/FileSystem.hpp"
+#include "Manager/Managers.hpp"
+#include "Manager/RenderManager.hpp"
 
 using namespace std;
 
@@ -34,7 +36,7 @@ void ActiveHymn::Load(const string& path) {
 }
 
 void ActiveHymn::Render() {
-    
+    Managers().renderManager->Render(activeScene);
 }
 
 ActiveHymn& Hymn() {
