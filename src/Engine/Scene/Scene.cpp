@@ -17,5 +17,7 @@ Entity* Scene::CreateEntity() {
 }
 
 void Scene::Clear() {
-    
+    for (Entity* entity : entities)
+        delete entity;
+    entities.clear();
 }
