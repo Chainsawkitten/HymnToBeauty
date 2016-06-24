@@ -123,6 +123,7 @@ set(ENGINE_SRCS
         src/Engine/Shader/ShaderProgram.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Rectangle.cpp
+        src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
     )
@@ -141,6 +142,7 @@ set(ENGINE_HEADERS
         src/Engine/Shader/ShaderProgram.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Rectangle.hpp
+        src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
     )
