@@ -1,8 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <map>
 
 class Entity;
+namespace Component {
+    class SuperComponent;
+}
 
 /// A scene containing entities.
 class Scene {
@@ -23,6 +27,12 @@ class Scene {
         void Clear();
         
     private:
+        // Add component.
+        void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
+        
         // List of all entities in this scene.
         std::vector<Entity*> entities;
+        
+        // Map containing list of components.
+        std::map<const std::type_info*, std::vector<Component::SuperComponent*>> components;
 };

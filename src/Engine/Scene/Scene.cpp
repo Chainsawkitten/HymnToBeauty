@@ -1,6 +1,7 @@
 #include "Scene.hpp"
 
 #include "../Entity/Entity.hpp"
+#include "../Component/SuperComponent.hpp"
 
 Scene::Scene() {
     
@@ -20,4 +21,14 @@ void Scene::Clear() {
     for (Entity* entity : entities)
         delete entity;
     entities.clear();
+    
+    for (auto& it : components) {
+        for (Component::SuperComponent* component : it.second)
+            delete component;
+    }
+    components.clear();
+}
+
+void Scene::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {
+    components[componentType].push_back(component);
 }
