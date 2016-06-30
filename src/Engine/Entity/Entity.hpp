@@ -26,13 +26,19 @@ class Entity {
          */
         template<typename T> T* AddComponent();
         
+        /// Gets component with type T.
+        /**
+         * @return The requested component (or nullptr).
+         */
+        template<typename T> T* GetComponent();
+        
     private:
         Scene* scene;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
 };
 
-template <typename T> T* Entity::AddComponent() {
+template<typename T> T* Entity::AddComponent() {
     const std::type_info* componentType = &typeid(T*);
     if (components.find(componentType) != components.end())
         return nullptr;
@@ -40,4 +46,12 @@ template <typename T> T* Entity::AddComponent() {
     components[componentType] = component;
     scene->AddComponent(component, componentType);
     return component;
+}
+
+template<typename T> T* Entity::GetComponent() {
+    if (components.count(&typeid(T*)) != 0) {
+        return static_cast<T*>(components[&typeid(T*)]);
+    } else {
+        return nullptr;
+    }
 }
