@@ -10,6 +10,8 @@ namespace Component {
 
 /// A scene containing entities.
 class Scene {
+    friend class Entity;
+    
     public:
         /// Create a new scene.
         Scene();
