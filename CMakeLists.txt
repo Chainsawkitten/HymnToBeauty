@@ -129,6 +129,7 @@ set(ENGINE_SRCS
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
         src/Engine/Shader/ShaderProgram.cpp
+        src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Geometry3D.cpp
         src/Engine/Geometry/Rectangle.cpp
@@ -155,6 +156,7 @@ set(ENGINE_HEADERS
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
         src/Engine/Shader/ShaderProgram.hpp
+        src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Geometry3D.hpp
         src/Engine/Geometry/Rectangle.hpp
