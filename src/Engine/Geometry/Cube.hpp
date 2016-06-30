@@ -11,7 +11,7 @@ namespace Geometry {
             Cube();
             
             /// Destructor
-            ~Cube();
+            ~Cube() final;
             
             /// Get all the vertices.
             /**
