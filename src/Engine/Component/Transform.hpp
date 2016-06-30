@@ -1,9 +1,6 @@
 #pragma once
 
 #include "SuperComponent.hpp"
-
-class Entity;
-
 #include <glm/glm.hpp>
 
 namespace Component {

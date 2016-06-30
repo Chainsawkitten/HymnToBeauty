@@ -115,6 +115,7 @@ set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
         src/Engine/Hymn.cpp
         src/Engine/RenderTarget.cpp
+        src/Engine/Component/Lens.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Component/Transform.cpp
         src/Engine/Entity/Entity.cpp
@@ -139,6 +140,7 @@ set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
         src/Engine/Hymn.hpp
         src/Engine/RenderTarget.hpp
+        src/Engine/Component/Lens.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Component/Transform.hpp
         src/Engine/Entity/Entity.hpp
