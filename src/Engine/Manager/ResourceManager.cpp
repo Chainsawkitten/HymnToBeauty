@@ -3,6 +3,7 @@
 #include "../Shader/Shader.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../Geometry/Rectangle.hpp"
+#include "../Geometry/Cube.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Font/Font.hpp"
 
@@ -97,6 +98,18 @@ void ResourceManager::FreeRectangle() {
     rectangleCount--;
     
     if (rectangleCount <= 0)
+        delete rectangle;
+}
+
+Geometry::Cube* ResourceManager::CreateCube() {
+    if (cubeCount++ == 0)
+        cube = new Geometry::Cube();
+    
+    return cube;
+}
+
+void ResourceManager::FreeCube() {
+    if (--cubeCount <= 0)
         delete rectangle;
 }
 
