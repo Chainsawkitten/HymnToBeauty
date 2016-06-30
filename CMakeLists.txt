@@ -115,6 +115,7 @@ set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
         src/Engine/Hymn.cpp
         src/Engine/RenderTarget.cpp
+        src/Engine/Component/SuperComponent.cpp
         src/Engine/Entity/Entity.cpp
         src/Engine/Font/Font.cpp
         src/Engine/Manager/Managers.cpp
@@ -137,6 +138,7 @@ set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
         src/Engine/Hymn.hpp
         src/Engine/RenderTarget.hpp
+        src/Engine/Component/SuperComponent.hpp
         src/Engine/Entity/Entity.hpp
         src/Engine/Font/Font.hpp
         src/Engine/Manager/Managers.hpp
