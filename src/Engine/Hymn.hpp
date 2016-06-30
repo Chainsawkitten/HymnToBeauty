@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <string>
 #include "Scene/Scene.hpp"
 
@@ -30,7 +31,10 @@ class ActiveHymn {
         void Load(const std::string& path);
         
         /// Render the active scene.
-        void Render();
+        /**
+         * @param screenSize The size of the screen in pixels.
+         */
+        void Render(const glm::vec2& screenSize);
         
     private:
         static ActiveHymn& GetInstance();

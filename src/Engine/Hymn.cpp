@@ -35,8 +35,8 @@ void ActiveHymn::Load(const string& path) {
     this->path = path;
 }
 
-void ActiveHymn::Render() {
-    Managers().renderManager->Render(activeScene);
+void ActiveHymn::Render(const glm::vec2& screenSize) {
+    Managers().renderManager->Render(activeScene, screenSize);
 }
 
 ActiveHymn& Hymn() {

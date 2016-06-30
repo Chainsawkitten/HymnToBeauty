@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 class Hub;
 class Scene;
 
@@ -11,8 +13,9 @@ class RenderManager {
         /// Render Scene containing entities.
         /**
          * @param scene Contains a bunch of entities.
+         * @param screenSize Size of the render target in pixels.
          */
-        void Render(Scene& scene);
+        void Render(Scene& scene, const glm::vec2& screenSize);
     
     private:
         RenderManager();

@@ -144,10 +144,7 @@ void EditorWindow::Update() {
 }
 
 void EditorWindow::Render() {
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    
-    Render(glm::vec2(static_cast<float>(width), static_cast<float>(height)));
+    Render(GetSize());
 }
 
 void EditorWindow::Render(const glm::vec2& screenSize) {
@@ -156,7 +153,7 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
     } else {
         glfwMakeContextCurrent(window);
         
-        Hymn().Render();
+        Hymn().Render(screenSize);
         
         RenderWidgets(screenSize);
         
