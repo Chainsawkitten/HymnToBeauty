@@ -14,7 +14,7 @@ namespace Component {
             Transform(Entity* entity);
             
             /// Destructor.
-            virtual ~Transform();
+            ~Transform() final;
             
             /// Position in the world.
             /**

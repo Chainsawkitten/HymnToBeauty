@@ -14,7 +14,7 @@ namespace Component {
             Lens(Entity* entity);
             
             /// Destructor.
-            ~Lens();
+            ~Lens() final;
 
             /// Get the projection matrix.
             /**
