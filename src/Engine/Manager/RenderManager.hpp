@@ -4,6 +4,8 @@
 
 class Hub;
 class Scene;
+class Shader;
+class ShaderProgram;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -22,4 +24,8 @@ class RenderManager {
         ~RenderManager();
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;
+        
+        Shader* vertexShader;
+        Shader* fragmentShader;
+        ShaderProgram* shaderProgram;
 };

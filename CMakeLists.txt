@@ -48,6 +48,8 @@ endfunction()
 # Setup embedded source
 set(EMBEDDED_INPUT
     shaders/Default2D.vert
+    shaders/Default3D.vert
+    shaders/Default3D.frag
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag
