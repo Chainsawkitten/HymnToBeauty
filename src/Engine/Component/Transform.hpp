@@ -16,6 +16,12 @@ namespace Component {
             /// Destructor.
             ~Transform() final;
             
+            /// Get the model matrix.
+            /**
+             * @return The model matrix.
+             */
+            glm::mat4 GetModelMatrix() const;
+            
             /// Position in the world.
             /**
              * Default: 0.f, 0.f, 0.f
