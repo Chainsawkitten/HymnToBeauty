@@ -11,6 +11,7 @@ using namespace std;
 
 ResourceManager::ResourceManager() {
     rectangleCount = 0;
+    cubeCount = 0;
 }
 
 Shader* ResourceManager::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
