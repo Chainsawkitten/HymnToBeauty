@@ -1,18 +1,19 @@
 #include "VerticalLayout.hpp"
 
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 
 using namespace GUI;
 
 VerticalLayout::VerticalLayout(Widget* parent) : Container(parent) {
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
     nextPosition = glm::vec2(0.f, 0.f);
 }
 
 VerticalLayout::~VerticalLayout() {
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 void VerticalLayout::Render(const glm::vec2& screenSize) {

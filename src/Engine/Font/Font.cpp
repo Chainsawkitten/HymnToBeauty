@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <fstream>
 #include "../Util/Log.hpp"
-#include "../Resources.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/ResourceManager.hpp"
 #include "Font.vert.hpp"
 #include "Font.frag.hpp"
 
@@ -42,11 +43,11 @@ Font::Font(const char* filename, float height) {
     delete[] tempBitmap;
     
     // Resources.
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
-    vertexShader = Resources().CreateShader(FONT_VERT, FONT_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Resources().CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    vertexShader = Managers().resourceManager->CreateShader(FONT_VERT, FONT_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     color = glm::vec3(0.f, 0.f, 0.f);
 }
@@ -66,11 +67,11 @@ Font::Font(const char* source, int sourceLength, float height) {
     delete[] tempBitmap;
     
     // Resources.
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
-    vertexShader = Resources().CreateShader(FONT_VERT, FONT_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Resources().CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    vertexShader = Managers().resourceManager->CreateShader(FONT_VERT, FONT_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     color = glm::vec3(0.f, 0.f, 0.f);
 }
@@ -78,11 +79,11 @@ Font::Font(const char* source, int sourceLength, float height) {
 Font::~Font() {
     glDeleteTextures(1, &texture);
     
-    Resources().FreeShader(vertexShader);
-    Resources().FreeShader(fragmentShader);
-    Resources().FreeShaderProgram(shaderProgram);
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
+    Managers().resourceManager->FreeShaderProgram(shaderProgram);
     
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 stbtt_aligned_quad Font::BakedQuad(char character, float& x, float& y) {

@@ -13,31 +13,31 @@ namespace Geometry {
             Rectangle();
             
             /// Destructor.
-            ~Rectangle() override;
+            ~Rectangle() final;
             
             /// Get all the vertices.
             /**
              * @return Array of vertices
              */
-            Vertex* GetVertices() const override;
+            Vertex* GetVertices() const final;
             
             /// Get the number of vertices.
             /**
              * @return The number of vertices
              */
-            unsigned int GetVertexCount() const override;
+            unsigned int GetVertexCount() const final;
             
             /// Get all the vertex indices.
             /**
              * @return Array of vertex indices
              */
-            unsigned int* GetIndices() const override;
+            unsigned int* GetIndices() const final;
             
             /// Get the number of indicies.
             /**
              * @return The number of vertex indices.
              */
-            unsigned int GetIndexCount() const override;
+            unsigned int GetIndexCount() const final;
             
             /// Render the rectangle with a solid color.
             /**

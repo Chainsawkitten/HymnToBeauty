@@ -2,19 +2,20 @@
 
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Font/Font.hpp>
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Util/Input.hpp>
 
 using namespace GUI;
 
 TextField::TextField(Widget *parent, Font* font) : Widget(parent) {
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     this->font = font;
     text = "";
 }
 
 TextField::~TextField() {
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 void TextField::Update() {

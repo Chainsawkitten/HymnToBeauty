@@ -12,7 +12,8 @@
 #include "../Util/Log.hpp"
 #include "Default2D.vert.hpp"
 #include "Texture2D.frag.hpp"
-#include "../Resources.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/ResourceManager.hpp"
 
 Texture2D::Texture2D(const char* filename, bool srgb) {
 	glGenTextures(1, &texID);
@@ -44,11 +45,11 @@ Texture2D::Texture2D(const char* filename, bool srgb) {
 	glGenerateMipmap(GL_TEXTURE_2D);
     
     // For rendering.
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
-    vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Resources().CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     isFromFile = true;
 }
@@ -83,11 +84,11 @@ Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
 	glGenerateMipmap(GL_TEXTURE_2D);
     
     // For rendering.
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
-    vertexShader = Resources().CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Resources().CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Resources().CreateShaderProgram({ vertexShader, fragmentShader });
+    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     isFromFile = false;
 }
@@ -95,11 +96,11 @@ Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
 Texture2D::~Texture2D() {
 	glDeleteTextures(1, &texID);
     
-    Resources().FreeShader(vertexShader);
-    Resources().FreeShader(fragmentShader);
-    Resources().FreeShaderProgram(shaderProgram);
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
+    Managers().resourceManager->FreeShaderProgram(shaderProgram);
     
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 GLuint Texture2D::GetTextureID() const {

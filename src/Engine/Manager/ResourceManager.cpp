@@ -1,21 +1,17 @@
-#include "Resources.hpp"
+#include "ResourceManager.hpp"
 
-#include "Shader/Shader.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Geometry/Rectangle.hpp"
-#include "Texture/Texture2D.hpp"
-#include "Font/Font.hpp"
+#include "../Shader/Shader.hpp"
+#include "../Shader/ShaderProgram.hpp"
+#include "../Geometry/Rectangle.hpp"
+#include "../Geometry/Cube.hpp"
+#include "../Texture/Texture2D.hpp"
+#include "../Font/Font.hpp"
 
 using namespace std;
 
 ResourceManager::ResourceManager() {
     rectangleCount = 0;
-}
-
-ResourceManager& ResourceManager::GetInstance() {
-    static ResourceManager ResourceManager;
-    
-    return ResourceManager;
+    cubeCount = 0;
 }
 
 Shader* ResourceManager::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
@@ -103,6 +99,18 @@ void ResourceManager::FreeRectangle() {
     rectangleCount--;
     
     if (rectangleCount <= 0)
+        delete rectangle;
+}
+
+Geometry::Cube* ResourceManager::CreateCube() {
+    if (cubeCount++ == 0)
+        cube = new Geometry::Cube();
+    
+    return cube;
+}
+
+void ResourceManager::FreeCube() {
+    if (--cubeCount <= 0)
         delete rectangle;
 }
 
@@ -263,8 +271,4 @@ void ResourceManager::FreeFontFromFile(Font* font) {
         delete font;
         fontsFromFile.erase(key);
     }
-}
-
-ResourceManager& Resources() {
-    return ResourceManager::GetInstance();
 }

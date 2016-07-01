@@ -48,10 +48,14 @@ endfunction()
 # Setup embedded source
 set(EMBEDDED_INPUT
     shaders/Default2D.vert
+    shaders/Default3D.vert
+    shaders/Default3D.frag
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
+    shaders/Post.vert
+    shaders/PostCopy.frag
     assets/ABeeZee.ttf
     assets/File.png
     assets/Options.png
@@ -111,34 +115,56 @@ include_directories(src)
 ## Engine ##
 set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
-        src/Engine/Resources.cpp
         src/Engine/Hymn.cpp
+        src/Engine/RenderTarget.cpp
+        src/Engine/Component/Lens.cpp
+        src/Engine/Component/Mesh.cpp
+        src/Engine/Component/SuperComponent.cpp
+        src/Engine/Component/Transform.cpp
+        src/Engine/Entity/Entity.cpp
         src/Engine/Font/Font.cpp
+        src/Engine/Manager/Managers.cpp
+        src/Engine/Manager/RenderManager.cpp
+        src/Engine/Manager/ResourceManager.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Settings.cpp
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
         src/Engine/Shader/ShaderProgram.cpp
+        src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
+        src/Engine/Geometry/Geometry3D.cpp
         src/Engine/Geometry/Rectangle.cpp
+        src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
     )
 
 set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
-        src/Engine/Resources.hpp
         src/Engine/Hymn.hpp
+        src/Engine/RenderTarget.hpp
+        src/Engine/Component/Lens.hpp
+        src/Engine/Component/Mesh.hpp
+        src/Engine/Component/SuperComponent.hpp
+        src/Engine/Component/Transform.hpp
+        src/Engine/Entity/Entity.hpp
         src/Engine/Font/Font.hpp
+        src/Engine/Manager/Managers.hpp
+        src/Engine/Manager/RenderManager.hpp
+        src/Engine/Manager/ResourceManager.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Settings.hpp
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
         src/Engine/Shader/ShaderProgram.hpp
+        src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
+        src/Engine/Geometry/Geometry3D.hpp
         src/Engine/Geometry/Rectangle.hpp
+        src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
     )

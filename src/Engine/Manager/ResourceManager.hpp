@@ -3,23 +3,21 @@
 #include <map>
 #include <GL/glew.h>
 
+class Hub;
 class Shader;
 class ShaderProgram;
 class Texture2D;
 class Font;
 namespace Geometry {
     class Rectangle;
+    class Cube;
 }
 
 /// Handles all resources.
 class ResourceManager {
+    friend class Hub;
+    
     public:
-        /// Get the instance of the class.
-        /**
-         * @return The %ResourceManager instance
-         */
-        static ResourceManager& GetInstance();
-        
         /// Create a shader if it doesn't already exist.
         /**
 		 * @param source GLSL code for the shader.
@@ -71,6 +69,18 @@ class ResourceManager {
          * Deletes the instance if no more references exist.
          */
         void FreeRectangle();
+        
+        /// Create a cube for rendering if it doesn't already exist.
+        /**
+         * @return The cube instance
+         */
+        Geometry::Cube* CreateCube();
+        
+        /// Free the reference to the cube.
+        /**
+         * Deletes the instance if no more references exist.
+         */
+        void FreeCube();
         
         /// Create a 2D texture if it doesn't already exist.
         /**
@@ -164,6 +174,10 @@ class ResourceManager {
         Geometry::Rectangle* rectangle;
         int rectangleCount;
         
+        // Cube
+        Geometry::Cube* cube;
+        int cubeCount;
+        
         // Texture2D
         struct Texture2DInstance {
             Texture2D* texture;
@@ -204,9 +218,3 @@ class ResourceManager {
         std::map<FontFromFileKey, FontInstance> fontsFromFile;
         std::map<Font*, FontFromFileKey> fontsFromFileInverse;
 };
-
-/// Get the resource manager.
-/**
- * @return The %ResourceManager instance
- */
-ResourceManager& Resources();

@@ -1,18 +1,19 @@
 #include "HorizontalLayout.hpp"
 
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 
 using namespace GUI;
 
 HorizontalLayout::HorizontalLayout(Widget* parent) : Container(parent) {
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
     nextPosition = glm::vec2(0.f, 0.f);
 }
 
 HorizontalLayout::~HorizontalLayout() {
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 void HorizontalLayout::Render(const glm::vec2& screenSize) {

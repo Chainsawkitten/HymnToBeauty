@@ -5,7 +5,8 @@
 #include "TextField.hpp"
 #include "VerticalLayout.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 #include <Close.png.hpp>
 #include <OpenHymn.png.hpp>
 #include <ABeeZee.ttf.hpp>
@@ -16,17 +17,17 @@ using namespace GUI;
 using namespace std;
 
 SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
     hasClosedCallback = false;
     shouldClose = false;
     
-    closeTexture = Resources().CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
+    closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
     closeButton->SetClickedCallback(std::bind(&Close, this));
     AddWidget(closeButton);
     
-    font = Resources().CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
+    font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
     selectButton = new TextButton(this, font, "Select");
     selectButton->SetClickedCallback(std::bind(&Select, this));
@@ -40,7 +41,7 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     hymnList = new VerticalLayout(this);
     AddWidget(hymnList);
     
-    hymnTexture = Resources().CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
+    hymnTexture = Managers().resourceManager->CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
     vector<string> files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty"), FileSystem::DIRECTORY);
     for (string file : files) {
         ImageTextButton* hymn = new ImageTextButton(this, hymnTexture, font, file);
@@ -50,11 +51,11 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
 }
 
 SelectHymnWindow::~SelectHymnWindow() {
-    Resources().FreeRectangle();
-    Resources().FreeFont(font);
+    Managers().resourceManager->FreeRectangle();
+    Managers().resourceManager->FreeFont(font);
     
     delete closeButton;
-    Resources().FreeTexture2D(closeTexture);
+    Managers().resourceManager->FreeTexture2D(closeTexture);
     delete selectButton;
     
     delete nameTextField;
@@ -64,7 +65,7 @@ SelectHymnWindow::~SelectHymnWindow() {
     
     delete hymnList;
     
-    Resources().FreeTexture2D(hymnTexture);
+    Managers().resourceManager->FreeTexture2D(hymnTexture);
 }
 
 void SelectHymnWindow::Update() {

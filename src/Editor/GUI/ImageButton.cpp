@@ -2,18 +2,19 @@
 
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Util/Input.hpp>
 
 using namespace GUI;
 
 ImageButton::ImageButton(Widget* parent, Texture2D* texture) : Button(parent) {
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     this->texture = texture;
 }
 
 ImageButton::~ImageButton() {
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 void ImageButton::Render(const glm::vec2& screenSize) {

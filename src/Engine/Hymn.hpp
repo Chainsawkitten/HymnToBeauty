@@ -1,16 +1,14 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <string>
+#include "Scene/Scene.hpp"
 
 /// A hymn to beauty.
 class ActiveHymn {
+    friend ActiveHymn& Hymn();
+    
     public:
-        /// Get the instance of the class.
-        /**
-         * @return The %ActiveHymn instance
-         */
-        static ActiveHymn& GetInstance();
-        
         /// Clear the hymn of all properties.
         void Clear();
         
@@ -32,12 +30,22 @@ class ActiveHymn {
          */
         void Load(const std::string& path);
         
+        /// Render the active scene.
+        /**
+         * @param screenSize The size of the screen in pixels.
+         */
+        void Render(const glm::vec2& screenSize);
+        
     private:
+        static ActiveHymn& GetInstance();
+        
         ActiveHymn();
         ActiveHymn(ActiveHymn const&) = delete;
         void operator=(ActiveHymn const&) = delete;
         
         std::string path;
+        
+        Scene activeScene;
 };
 
 /// Get the active hymn.

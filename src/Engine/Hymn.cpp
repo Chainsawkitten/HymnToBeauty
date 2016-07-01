@@ -1,6 +1,8 @@
 #include "Hymn.hpp"
 
 #include "Util/FileSystem.hpp"
+#include "Manager/Managers.hpp"
+#include "Manager/RenderManager.hpp"
 
 using namespace std;
 
@@ -16,6 +18,7 @@ ActiveHymn& ActiveHymn::GetInstance() {
 
 void ActiveHymn::Clear() {
     path = "";
+    activeScene.Clear();
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -30,6 +33,10 @@ void ActiveHymn::SetPath(const string& path) {
 void ActiveHymn::Load(const string& path) {
     Clear();
     this->path = path;
+}
+
+void ActiveHymn::Render(const glm::vec2& screenSize) {
+    Managers().renderManager->Render(activeScene, screenSize);
 }
 
 ActiveHymn& Hymn() {

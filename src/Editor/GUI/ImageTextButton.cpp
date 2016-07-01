@@ -3,13 +3,14 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Font/Font.hpp>
-#include <Engine/Resources.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Util/Input.hpp>
 
 using namespace GUI;
 
 ImageTextButton::ImageTextButton(Widget* parent, Texture2D* texture, Font* font, const std::string& text) : Button(parent) {
-    rectangle = Resources().CreateRectangle();
+    rectangle = Managers().resourceManager->CreateRectangle();
     
     this->texture = texture;
     this->font = font;
@@ -19,7 +20,7 @@ ImageTextButton::ImageTextButton(Widget* parent, Texture2D* texture, Font* font,
 }
 
 ImageTextButton::~ImageTextButton() {
-    Resources().FreeRectangle();
+    Managers().resourceManager->FreeRectangle();
 }
 
 void ImageTextButton::Render(const glm::vec2& screenSize) {
