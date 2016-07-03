@@ -11,6 +11,7 @@
 #include "../Component/Transform.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Geometry/Geometry3D.hpp"
+#include "../Lighting/DeferredLighting.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace Component;
@@ -19,15 +20,21 @@ RenderManager::RenderManager(const glm::vec2& screenSize) {
     vertexShader = Managers().resourceManager->CreateShader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = Managers().resourceManager->CreateShader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
+    
+    deferredLighting = new DeferredLighting(screenSize);
 }
 
 RenderManager::~RenderManager() {
     Managers().resourceManager->FreeShader(vertexShader);
     Managers().resourceManager->FreeShader(fragmentShader);
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
+    
+    delete deferredLighting;
 }
 
 void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
+    deferredLighting->SetTarget();
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
     
@@ -70,4 +77,8 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
         
         glBindVertexArray(0);
     }
+    
+    // Light the scene.
+    deferredLighting->ResetTarget();
+    deferredLighting->Render(scene, camera, screenSize);
 }

@@ -6,6 +6,7 @@ class Hub;
 class Scene;
 class Shader;
 class ShaderProgram;
+class DeferredLighting;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -28,4 +29,6 @@ class RenderManager {
         Shader* vertexShader;
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
+        
+        DeferredLighting* deferredLighting;
 };
