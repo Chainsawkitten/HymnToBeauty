@@ -20,7 +20,7 @@ class RenderManager {
         void Render(Scene& scene, const glm::vec2& screenSize);
     
     private:
-        RenderManager();
+        RenderManager(const glm::vec2& screenSize);
         ~RenderManager();
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;
