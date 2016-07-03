@@ -50,6 +50,7 @@ set(EMBEDDED_INPUT
     shaders/Default2D.vert
     shaders/Default3D.vert
     shaders/Default3D.frag
+    shaders/Deferred.frag
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag
@@ -123,6 +124,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Transform.cpp
         src/Engine/Entity/Entity.cpp
         src/Engine/Font/Font.cpp
+        src/Engine/Lighting/DeferredLighting.cpp
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
@@ -151,6 +153,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Transform.hpp
         src/Engine/Entity/Entity.hpp
         src/Engine/Font/Font.hpp
+        src/Engine/Lighting/DeferredLighting.hpp
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
