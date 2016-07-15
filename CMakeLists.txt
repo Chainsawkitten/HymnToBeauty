@@ -197,6 +197,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
+        src/Editor/GUI/ResourceList.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -214,6 +215,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
+        src/Editor/GUI/ResourceList.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

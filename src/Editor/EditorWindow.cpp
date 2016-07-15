@@ -9,6 +9,7 @@
 #include <Engine/Util/Input.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
+#include "GUI/ResourceList.hpp"
 
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
@@ -56,6 +57,8 @@ EditorWindow::~EditorWindow() {
     delete openHymnButton;
     delete fileMenu;
     
+    delete resourceList;
+    
     Managers().resourceManager->FreeTexture2D(fileTexture);
     Managers().resourceManager->FreeTexture2D(optionsTexture);
     Managers().resourceManager->FreeTexture2D(playTexture);
@@ -95,6 +98,12 @@ void EditorWindow::Init() {
     playButton = new GUI::ImageButton(menuBar, playTexture);
     playButton->SetClickedCallback(std::bind(&Play, this));
     menuBar->AddWidget(playButton);
+    
+    // Resource list.
+    resourceList = new GUI::ResourceList(this);
+    resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    resourceList->SetPosition(glm::vec2(0.f, 64.f));
+    AddWidget(resourceList);
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
