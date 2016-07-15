@@ -2,6 +2,7 @@
 
 #include "Widget.hpp"
 
+class Font;
 namespace Geometry {
     class Rectangle;
 }
@@ -42,6 +43,7 @@ namespace GUI {
             
         private:
             Geometry::Rectangle* rectangle;
+            Font* font;
             
             glm::vec2 size;
     };
