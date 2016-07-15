@@ -3,11 +3,16 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
+#include <Engine/Geometry/Cube.hpp>
 #include <Engine/Font/Font.hpp>
 #include "ABeeZee.ttf.hpp"
 
 #include <Engine/Hymn.hpp>
 #include <Engine/Scene/Scene.hpp>
+#include <Engine/Util/Input.hpp>
+#include <Engine/Entity/Entity.hpp>
+#include <Engine/Component/Transform.hpp>
+#include <Engine/Component/Mesh.hpp>
 
 using namespace GUI;
 
@@ -22,7 +27,17 @@ ResourceList::~ResourceList() {
 }
 
 void ResourceList::Update() {
+    double xpos = Input()->CursorX();
+    double ypos = Input()->CursorY();
     
+    bool mouseHover = xpos >= GetPosition().x && xpos < GetPosition().x + size.x && ypos >= GetPosition().y && ypos < GetPosition().y + size.y;
+    
+    if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
+        Entity* cube = Hymn().activeScene.CreateEntity();
+        cube->AddComponent<Component::Transform>();
+        Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
+        cubeMesh->geometry = Managers().resourceManager->CreateCube();
+    }
 }
 
 void ResourceList::Render(const glm::vec2& screenSize) {
