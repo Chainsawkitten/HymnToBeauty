@@ -62,6 +62,13 @@ class Font {
          */
         void SetColor(const glm::vec3& color);
         
+        /// Get text width.
+        /**
+         * @param text Text to get the rendered width of.
+         * @return The width of the rendered text.
+         */
+        float GetWidth(const char* text);
+        
         /// Get character height.
         /**
          * @return The character height.
