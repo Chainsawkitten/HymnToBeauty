@@ -1,6 +1,5 @@
 #include "Button.hpp"
 
-#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Util/Input.hpp>
 #include <Engine/Physics/Rectangle.hpp>
 
