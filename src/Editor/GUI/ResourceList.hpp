@@ -47,6 +47,7 @@ namespace GUI {
             Font* font;
             
             Texture2D* addTexture;
+            bool addHover;
             
             glm::vec2 size;
     };

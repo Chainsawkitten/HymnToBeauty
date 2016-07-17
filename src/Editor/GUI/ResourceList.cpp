@@ -23,6 +23,7 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     addTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
+    addHover = false;
 }
 
 ResourceList::~ResourceList() {
@@ -33,17 +34,16 @@ ResourceList::~ResourceList() {
 
 void ResourceList::Update() {
     glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
+    glm::vec2 position = GetPosition();
+    Physics::Rectangle rect(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+    addHover = rect.Collide(mousePosition);
     
-    if (Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
-        // Check if add entity button pressed.
-        glm::vec2 position = GetPosition();
-        Physics::Rectangle rect(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(10.f, 10.f));
-        if (rect.Collide(mousePosition)) {
-            Entity* cube = Hymn().activeScene.CreateEntity();
-            cube->AddComponent<Component::Transform>();
-            Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
-            cubeMesh->geometry = Managers().resourceManager->CreateCube();
-        }
+    // Check if add entity button pressed.
+    if (addHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
+        Entity* cube = Hymn().activeScene.CreateEntity();
+        cube->AddComponent<Component::Transform>();
+        Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
+        cubeMesh->geometry = Managers().resourceManager->CreateCube();
     }
 }
 
@@ -54,7 +54,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
     font->RenderText("Entities", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     unsigned int id = 0;
