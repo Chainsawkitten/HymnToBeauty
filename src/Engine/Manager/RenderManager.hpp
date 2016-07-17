@@ -6,6 +6,7 @@ class Hub;
 class Scene;
 class Shader;
 class ShaderProgram;
+class DeferredLighting;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -20,7 +21,7 @@ class RenderManager {
         void Render(Scene& scene, const glm::vec2& screenSize);
     
     private:
-        RenderManager();
+        RenderManager(const glm::vec2& screenSize);
         ~RenderManager();
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;
@@ -28,4 +29,6 @@ class RenderManager {
         Shader* vertexShader;
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
+        
+        DeferredLighting* deferredLighting;
 };

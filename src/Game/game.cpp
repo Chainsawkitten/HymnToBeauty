@@ -12,7 +12,7 @@ int main() {
     GameWindow* gameWindow = new GameWindow();
     glewInit();
     
-    Managers().StartUp();
+    Managers().StartUp(gameWindow->GetSize());
 
     while (!gameWindow->ShouldClose()) {
         gameWindow->Update();

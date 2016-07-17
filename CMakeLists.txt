@@ -50,6 +50,7 @@ set(EMBEDDED_INPUT
     shaders/Default2D.vert
     shaders/Default3D.vert
     shaders/Default3D.frag
+    shaders/Deferred.frag
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag
@@ -63,6 +64,7 @@ set(EMBEDDED_INPUT
     assets/Close.png
     assets/NewHymn.png
     assets/OpenHymn.png
+    assets/Add.png
 )
 
 # Headerize
@@ -123,9 +125,11 @@ set(ENGINE_SRCS
         src/Engine/Component/Transform.cpp
         src/Engine/Entity/Entity.cpp
         src/Engine/Font/Font.cpp
+        src/Engine/Lighting/DeferredLighting.cpp
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
+        src/Engine/Physics/Rectangle.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Settings.cpp
@@ -151,9 +155,11 @@ set(ENGINE_HEADERS
         src/Engine/Component/Transform.hpp
         src/Engine/Entity/Entity.hpp
         src/Engine/Font/Font.hpp
+        src/Engine/Lighting/DeferredLighting.hpp
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
+        src/Engine/Physics/Rectangle.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Settings.hpp
@@ -194,6 +200,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
+        src/Editor/GUI/ResourceList.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -211,6 +218,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
+        src/Editor/GUI/ResourceList.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

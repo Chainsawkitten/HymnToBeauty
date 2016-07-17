@@ -26,6 +26,12 @@ class Scene {
          */
         Entity* CreateEntity();
         
+        /// Get all the entities in the scene.
+        /**
+         * @return The entities in the scene.
+         */
+        const std::vector<Entity*>& GetEntities() const;
+        
         /// Gets all components of a specific type.
         /**
          * @return A list of pointers to all components of the specified scene.

@@ -17,6 +17,10 @@ Entity* Scene::CreateEntity() {
     return entity;
 }
 
+const std::vector<Entity*>& Scene::GetEntities() const {
+    return entities;
+}
+
 void Scene::Clear() {
     for (Entity* entity : entities)
         delete entity;

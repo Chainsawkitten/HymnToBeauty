@@ -36,6 +36,9 @@ class ActiveHymn {
          */
         void Render(const glm::vec2& screenSize);
         
+        /// The active scene.
+        Scene activeScene;
+        
     private:
         static ActiveHymn& GetInstance();
         
@@ -44,8 +47,6 @@ class ActiveHymn {
         void operator=(ActiveHymn const&) = delete;
         
         std::string path;
-        
-        Scene activeScene;
 };
 
 /// Get the active hymn.

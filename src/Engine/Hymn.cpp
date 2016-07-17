@@ -3,6 +3,12 @@
 #include "Util/FileSystem.hpp"
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"
+#include "Manager/ResourceManager.hpp"
+#include "Entity/Entity.hpp"
+#include "Component/Transform.hpp"
+#include "Component/Mesh.hpp"
+#include "Component/Lens.hpp"
+#include "Geometry/Cube.hpp"
 
 using namespace std;
 
@@ -19,6 +25,11 @@ ActiveHymn& ActiveHymn::GetInstance() {
 void ActiveHymn::Clear() {
     path = "";
     activeScene.Clear();
+    
+    Entity* camera = activeScene.CreateEntity();
+    Component::Transform* cameraTransform = camera->AddComponent<Component::Transform>();
+    cameraTransform->position = glm::vec3(0.f, 0.f, 10.f);
+    camera->AddComponent<Component::Lens>();
 }
 
 const string& ActiveHymn::GetPath() const {

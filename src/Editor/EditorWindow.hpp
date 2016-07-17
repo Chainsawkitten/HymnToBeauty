@@ -13,6 +13,7 @@ namespace GUI {
     class HorizontalLayout;
     class VerticalLayout;
     class Button;
+    class ResourceList;
 }
 
 /// Handles the main editor window.
@@ -88,6 +89,9 @@ class EditorWindow : public GUI::Container {
         
         GUI::Button* openHymnButton;
         Texture2D* openHymnTexture;
+        
+        // Resource list.
+        GUI::ResourceList* resourceList;
         
         // Input
         InputHandler* input;

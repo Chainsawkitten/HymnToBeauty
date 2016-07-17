@@ -29,7 +29,11 @@ void GameWindow::Update() {
 void GameWindow::Render() {
     glfwMakeContextCurrent(window);
     
-    Hymn().Render(glm::vec2(640.f, 480.f));
+    Hymn().Render(GetSize());
     
     glfwSwapBuffers(window);
+}
+
+glm::vec2 GameWindow::GetSize() const {
+    return glm::vec2(640.f, 480.f);
 }
