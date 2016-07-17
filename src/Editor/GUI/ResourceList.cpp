@@ -15,6 +15,7 @@
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Transform.hpp>
 #include <Engine/Component/Mesh.hpp>
+#include <Engine/Physics/Rectangle.hpp>
 
 using namespace GUI;
 
@@ -31,10 +32,10 @@ ResourceList::~ResourceList() {
 }
 
 void ResourceList::Update() {
-    double xpos = Input()->CursorX();
-    double ypos = Input()->CursorY();
+    glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
     
-    bool mouseHover = xpos >= GetPosition().x && xpos < GetPosition().x + size.x && ypos >= GetPosition().y && ypos < GetPosition().y + size.y;
+    Physics::Rectangle rect(GetPosition(), size);
+    bool mouseHover = rect.Collide(mousePosition);
     
     if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
         Entity* cube = Hymn().activeScene.CreateEntity();

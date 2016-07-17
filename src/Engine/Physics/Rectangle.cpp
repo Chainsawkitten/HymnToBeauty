@@ -2,7 +2,7 @@
 
 using namespace Physics;
 
-Rectangle::Rectangle(const glm::vec3& position, const glm::vec3& size) {
+Rectangle::Rectangle(const glm::vec2& position, const glm::vec2& size) {
     this->position = position;
     this->size = size;
 }

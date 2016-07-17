@@ -11,7 +11,7 @@ namespace Physics {
              * @param position The rectangle's position.
              * @param size The rectangle's size.
              */
-            Rectangle(const glm::vec3& position, const glm::vec3& size);
+            Rectangle(const glm::vec2& position, const glm::vec2& size);
             
             /// Check collision between the rectangle and a point.
             /**
@@ -21,7 +21,7 @@ namespace Physics {
             bool Collide(const glm::vec2& point);
             
         private:
-            glm::vec3 position;
-            glm::vec3 size;
+            glm::vec2 position;
+            glm::vec2 size;
     };
 }
