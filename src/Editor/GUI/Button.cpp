@@ -2,6 +2,7 @@
 
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Util/Input.hpp>
+#include <Engine/Physics/Rectangle.hpp>
 
 using namespace GUI;
 
@@ -16,10 +17,9 @@ Button::~Button() {
 }
 
 void Button::Update() {
-    double xpos = Input()->CursorX();
-    double ypos = Input()->CursorY();
-    
-    mouseHover = xpos >= GetPosition().x && xpos < GetPosition().x + size.x && ypos >= GetPosition().y && ypos < GetPosition().y + size.y;
+    glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
+    Physics::Rectangle rect(GetPosition(), size);
+    mouseHover = rect.Collide(mousePosition);
     
     if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT) && hasClickedCallback) {
         clickedCallback();
