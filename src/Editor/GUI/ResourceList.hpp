@@ -2,6 +2,7 @@
 
 #include "Widget.hpp"
 
+class Texture2D;
 class Font;
 namespace Geometry {
     class Rectangle;
@@ -44,6 +45,8 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
+            
+            Texture2D* addTexture;
             
             glm::vec2 size;
     };
