@@ -34,14 +34,16 @@ ResourceList::~ResourceList() {
 void ResourceList::Update() {
     glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
     
-    Physics::Rectangle rect(GetPosition(), size);
-    bool mouseHover = rect.Collide(mousePosition);
-    
-    if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
-        Entity* cube = Hymn().activeScene.CreateEntity();
-        cube->AddComponent<Component::Transform>();
-        Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
-        cubeMesh->geometry = Managers().resourceManager->CreateCube();
+    if (Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
+        // Check if add entity button pressed.
+        glm::vec2 position = GetPosition();
+        Physics::Rectangle rect(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+        if (rect.Collide(mousePosition)) {
+            Entity* cube = Hymn().activeScene.CreateEntity();
+            cube->AddComponent<Component::Transform>();
+            Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
+            cubeMesh->geometry = Managers().resourceManager->CreateCube();
+        }
     }
 }
 
