@@ -14,6 +14,7 @@ namespace GUI {
     class VerticalLayout;
     class Button;
     class ResourceList;
+    class EntityEditor;
 }
 
 /// Handles the main editor window.
@@ -92,6 +93,9 @@ class EditorWindow : public GUI::Container {
         
         // Resource list.
         GUI::ResourceList* resourceList;
+        
+        // Editors.
+        GUI::EntityEditor* entityEditor;
         
         // Input
         InputHandler* input;
