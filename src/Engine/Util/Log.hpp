@@ -31,6 +31,13 @@ class Log {
          */
         Log& operator<<(int value);
         
+        /// Output an unsigned integer to stderr.
+        /**
+         * @param value Value to output.
+         * @return The %Log instance.
+         */
+        Log& operator<<(unsigned int value);
+        
         /// Output a float to stderr.
         /**
          * @param value Value to output.
