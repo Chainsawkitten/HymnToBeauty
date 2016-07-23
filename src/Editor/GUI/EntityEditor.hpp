@@ -2,6 +2,7 @@
 
 #include "Widget.hpp"
 
+class Entity;
 namespace Geometry {
     class Rectangle;
 }
@@ -39,9 +40,17 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
+            /// Set the entity to edit.
+            /**
+             * @param entity The entity to edit.
+             */
+            void SetEntity(Entity* entity);
+            
         private:
             Geometry::Rectangle* rectangle;
             
             glm::vec2 size;
+            
+            Entity* entity;
     };
 }

@@ -8,6 +8,7 @@ using namespace GUI;
 
 EntityEditor::EntityEditor(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
+    entity = nullptr;
 }
 
 EntityEditor::~EntityEditor() {
@@ -29,4 +30,8 @@ glm::vec2 EntityEditor::GetSize() const {
 
 void EntityEditor::SetSize(const glm::vec2& size) {
     this->size = size;
+}
+
+void EntityEditor::SetEntity(Entity* entity) {
+    this->entity = entity;
 }

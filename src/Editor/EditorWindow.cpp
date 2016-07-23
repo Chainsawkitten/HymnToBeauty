@@ -245,5 +245,5 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
 }
 
 void EditorWindow::EntitySelected(Entity* entity) {
-    Log() << "Entity selected!\n";
+    entityEditor->SetEntity(entity);
 }
