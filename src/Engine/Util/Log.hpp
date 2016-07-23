@@ -4,6 +4,7 @@
 #include <ctime>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 /// Logging class.
 /**
@@ -59,6 +60,13 @@ class Log {
          * @return The %Log instance
          */
         Log& operator<<(time_t value);
+        
+        /// Output a vec2 to stderr.
+        /**
+         * @param value Value to output.
+         * @return The %Log instance.
+         */
+        Log& operator<<(const glm::vec2& value);
 };
 
 /// Handles errors by printing them to the standard error stream.
