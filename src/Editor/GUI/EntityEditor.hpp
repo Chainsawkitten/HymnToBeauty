@@ -8,6 +8,7 @@ namespace Geometry {
 }
 
 namespace GUI {
+    /// Used to edit an entity.
     class EntityEditor : public Widget {
         public:
             /// Create new entity editor.
