@@ -45,6 +45,13 @@ class Log {
          */
         Log& operator<<(float value);
         
+        /// Output a double to stderr.
+        /**
+         * @param value Value to output.
+         * @return The %Log instance.
+         */
+        Log& operator<<(double value);
+        
         /// Output a time to stderr.
         /**
          * Formatted Y-m-d H:M:S.

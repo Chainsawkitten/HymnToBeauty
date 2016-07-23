@@ -28,6 +28,11 @@ Log& Log::operator <<(float value) {
     return *this;
 }
 
+Log& Log::operator <<(double value) {
+    fprintf(stderr, "%f", value);
+    return *this;
+}
+
 Log& Log::operator <<(time_t value) {
     struct tm * timeinfo = localtime(&value);
     
