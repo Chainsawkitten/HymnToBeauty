@@ -74,6 +74,13 @@ class Log {
          * @return The %Log instance.
          */
         Log& operator<<(const glm::vec3& value);
+        
+        /// Output a vec4 to stderr.
+        /**
+        * @param value Value to output.
+        * @return The %Log instance.
+        */
+        Log& operator<<(const glm::vec4& value);
 };
 
 /// Handles errors by printing them to the standard error stream.

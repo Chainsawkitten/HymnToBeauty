@@ -53,6 +53,11 @@ Log& Log::operator <<(const glm::vec3& value) {
     return *this;
 }
 
+Log & Log::operator<<(const glm::vec4 & value) {
+    fprintf(stderr, "(%f, %f, %f, %f)", value.x, value.y, value.z, value.w);
+    return *this;
+}
+
 void ErrorCallback(int error, const char* description) {
 	fputs(description, stderr);
 }
