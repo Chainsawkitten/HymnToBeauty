@@ -4,6 +4,7 @@
 
 class Texture2D;
 class Font;
+class Entity;
 namespace Geometry {
     class Rectangle;
 }
@@ -50,5 +51,7 @@ namespace GUI {
             bool addHover;
             
             glm::vec2 size;
+            
+            Entity* selectedEntity;
     };
 }

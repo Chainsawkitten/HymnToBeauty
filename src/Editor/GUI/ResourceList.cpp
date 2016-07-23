@@ -24,6 +24,7 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     addTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
     addHover = false;
+    selectedEntity = nullptr;
 }
 
 ResourceList::~ResourceList() {
@@ -38,12 +39,26 @@ void ResourceList::Update() {
     Physics::Rectangle rect(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(10.f, 10.f));
     addHover = rect.Collide(mousePosition);
     
-    // Check if add entity button pressed.
-    if (addHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
-        Entity* cube = Hymn().activeScene.CreateEntity();
-        cube->AddComponent<Component::Transform>();
-        Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
-        cubeMesh->geometry = Managers().resourceManager->CreateCube();
+    if (Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
+        if (addHover) {
+            // Add entity button pressed.
+            Entity* cube = Hymn().activeScene.CreateEntity();
+            cube->AddComponent<Component::Transform>();
+            Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
+            cubeMesh->geometry = Managers().resourceManager->CreateCube();
+        } else {
+            // Check if entity selected.
+            unsigned int id = 0;
+            for (Entity* entity : Hymn().activeScene.GetEntities()) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedEntity = entity;
+                    break;
+                }
+                ++id;
+            }
+        }
     }
 }
 
@@ -59,6 +74,12 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     
     unsigned int id = 0;
     for (Entity* entity : Hymn().activeScene.GetEntities()) {
+        // Render background if selected.
+        if (selectedEntity == entity) {
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+        }
+        
         font->RenderText(("Entity #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
         ++id;
