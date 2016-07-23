@@ -8,6 +8,7 @@ class GameWindow;
 class Texture2D;
 class Font;
 class InputHandler;
+class Entity;
 namespace GUI {
     class SelectHymnWindow;
     class HorizontalLayout;
@@ -67,6 +68,7 @@ class EditorWindow : public GUI::Container {
         void NewHymnClosed(const std::string& hymn);
         void OpenHymn();
         void OpenHymnClosed(const std::string& hymn);
+        void EntitySelected(Entity* entity);
         
         GLFWwindow* window;
         GameWindow* gameWindow;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Widget.hpp"
+#include <functional>
 
 class Texture2D;
 class Font;
@@ -43,6 +44,12 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
+            /// Set function to call when an entity has been selected.
+            /**
+             * @param callback Function to call.
+             */
+            void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
+            
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -53,5 +60,7 @@ namespace GUI {
             glm::vec2 size;
             
             Entity* selectedEntity;
+            bool hasEntitySelectedCallback;
+            std::function<void(Entity*)> entitySelectedCallback;
     };
 }

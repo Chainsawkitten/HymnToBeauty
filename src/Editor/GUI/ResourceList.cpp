@@ -25,6 +25,7 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     addTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
     addHover = false;
     selectedEntity = nullptr;
+    hasEntitySelectedCallback = false;
 }
 
 ResourceList::~ResourceList() {
@@ -48,15 +49,15 @@ void ResourceList::Update() {
             cubeMesh->geometry = Managers().resourceManager->CreateCube();
         } else {
             // Check if entity selected.
-            unsigned int id = 0;
             for (Entity* entity : Hymn().activeScene.GetEntities()) {
                 position.y += font->GetHeight();
                 rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = entity;
+                    if (hasEntitySelectedCallback)
+                        entitySelectedCallback(entity);
                     break;
                 }
-                ++id;
             }
         }
     }
@@ -92,4 +93,9 @@ glm::vec2 ResourceList::GetSize() const {
 
 void ResourceList::SetSize(const glm::vec2& size) {
     this->size = size;
+}
+
+void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {
+    hasEntitySelectedCallback = true;
+    entitySelectedCallback = callback;
 }
