@@ -31,6 +31,12 @@ namespace GUI {
              */
             void Render(const glm::vec2& screenSize) override;
             
+            /// Set widget's position.
+            /**
+             * @param position New position.
+             */
+            void SetPosition(const glm::vec2& position) override;
+            
             /// Get the size of the widget.
             /**
              * @return The size

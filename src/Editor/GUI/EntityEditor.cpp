@@ -29,6 +29,12 @@ void EntityEditor::Render(const glm::vec2& screenSize) {
     transformEditor->Render(screenSize);
 }
 
+void EntityEditor::SetPosition(const glm::vec2& position) {
+    Widget::SetPosition(position);
+    
+    transformEditor->SetPosition(position);
+}
+
 glm::vec2 EntityEditor::GetSize() const {
     return size;
 }
