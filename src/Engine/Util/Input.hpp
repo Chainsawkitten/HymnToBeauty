@@ -10,6 +10,7 @@ class InputHandler {
         /// Button codes.
         enum Button {
             CLICK = 0, ///< Clicking in the editor.
+            BACK, ///< Erase previous character.
             BUTTONS, ///< Total number of inputs
         };
         

@@ -20,6 +20,9 @@ TextField::~TextField() {
 
 void TextField::Update() {
     text += Input()->Text();
+    
+    if (Input()->Triggered(InputHandler::BACK) && text.length() > 0)
+        text = text.erase(text.length()-1, 1);
 }
 
 void TextField::Render(const glm::vec2& screenSize) {
