@@ -13,10 +13,11 @@ InputHandler* InputHandler::activeInstance = nullptr;
 InputHandler::InputHandler(GLFWwindow *window) {
     this->window = window;
     
-    // Init mouse state.
-    for (int i=0; i<3; i++) {
-        mouseState[i] = false;
-        mouseStateLast[i] = false;
+    // Init button states.
+    for (int button = 0; button < BUTTONS; ++button) {
+        buttonData[button].released = false;
+        buttonData[button].triggered = false;
+        buttonData[button].down = false;
     }
     
     glfwSetCharCallback(window, characterCallback);
@@ -34,10 +35,32 @@ void InputHandler::SetActive() {
 }
 
 void InputHandler::Update() {
-    // Update mouse.
-    for (int i=0; i<3; i++) {
-        mouseStateLast[i] = mouseState[i];
-        mouseState[i] = (glfwGetMouseButton(window, i) == GLFW_PRESS);
+    // Get button states.
+    bool values[BUTTONS] = {};
+    for (Binding binding : bindings) {
+        bool value = false;
+        switch (binding.device) {
+        case KEYBOARD:
+            if (glfwGetKey(window, binding.index) == GLFW_PRESS)
+                value = true;
+            break;
+        case MOUSE:
+            if (glfwGetMouseButton(window, binding.index) == GLFW_PRESS)
+                value = true;
+            break;
+        default:
+            break;
+        }
+        
+        if (!values[binding.button])
+            values[binding.button] = value;
+    }
+    
+    // Update triggered and released.
+    for (int button=0; button<BUTTONS; button++) {
+        buttonData[button].triggered = !buttonData[button].down && values[button];
+        buttonData[button].released = buttonData[button].down && !values[button];
+        buttonData[button].down = values[button];
     }
     
     glfwGetCursorPos(window, &cursorX, &cursorY);
@@ -46,24 +69,33 @@ void InputHandler::Update() {
     tempText = "";
 }
 
-bool InputHandler::MousePressed(int button) const {
-    return mouseState[button] && !mouseStateLast[button];
-}
-
-bool InputHandler::MouseDown(int button) const {
-    return mouseState[button];
-}
-
-bool InputHandler::MouseReleased(int button) const {
-    return !mouseState[button] && mouseStateLast[button];
-}
-
 double InputHandler::CursorX() const {
     return cursorX;
 }
 
 double InputHandler::CursorY() const {
     return cursorY;
+}
+
+void InputHandler::AssignButton(Button button, Device device, int index) {
+    Binding binding;
+    binding.button = button;
+    binding.device = device;
+    binding.index = index;
+    
+    bindings.push_back(binding);
+}
+
+bool InputHandler::Pressed(Button button) {
+    return buttonData[button].down;
+}
+
+bool InputHandler::Triggered(Button button) {
+    return buttonData[button].triggered;
+}
+
+bool InputHandler::Released(Button button) {
+    return buttonData[button].released;
 }
 
 const std::string& InputHandler::Text() const {

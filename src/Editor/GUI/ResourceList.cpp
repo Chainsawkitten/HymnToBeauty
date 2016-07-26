@@ -40,7 +40,7 @@ void ResourceList::Update() {
     Physics::Rectangle rect(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(10.f, 10.f));
     addHover = rect.Collide(mousePosition);
     
-    if (Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
+    if (Input()->Triggered(InputHandler::CLICK)) {
         if (addHover) {
             // Add entity button pressed.
             Entity* cube = Hymn().activeScene.CreateEntity();

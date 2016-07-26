@@ -20,7 +20,7 @@ void Button::Update() {
     Physics::Rectangle rect(GetPosition(), size);
     mouseHover = rect.Collide(mousePosition);
     
-    if (mouseHover && Input()->MousePressed(GLFW_MOUSE_BUTTON_LEFT) && hasClickedCallback) {
+    if (mouseHover && Input()->Triggered(InputHandler::CLICK) && hasClickedCallback) {
         clickedCallback();
     }
 }

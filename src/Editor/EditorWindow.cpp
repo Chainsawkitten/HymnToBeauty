@@ -46,6 +46,9 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     gameWindow = nullptr;
     childWindow = nullptr;
     input = new InputHandler(window);
+    
+    // Assign controls.
+    input->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
 }
 
 EditorWindow::~EditorWindow() {

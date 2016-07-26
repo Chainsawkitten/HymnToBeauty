@@ -34,7 +34,7 @@ glm::vec2 TextField::GetSize() const {
     return size;
 }
 
-void TextField::SetSize(const glm::vec2 &size) {
+void TextField::SetSize(const glm::vec2& size) {
     this->size = size;
 }
 
