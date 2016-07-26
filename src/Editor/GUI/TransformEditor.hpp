@@ -3,11 +3,14 @@
 #include "Widget.hpp"
 
 class Entity;
+class Font;
 namespace Geometry {
     class Rectangle;
 }
 
 namespace GUI {
+    class FloatEditor;
+    
     /// Used to edit a transform component.
     class TransformEditor : public Widget {
         public:
@@ -53,5 +56,8 @@ namespace GUI {
             Entity* entity;
             
             Geometry::Rectangle* rectangle;
+            
+            Font* font;
+            FloatEditor* xEditor;
     };
 }
