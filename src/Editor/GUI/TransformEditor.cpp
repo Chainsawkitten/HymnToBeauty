@@ -39,6 +39,12 @@ void TransformEditor::Render(const glm::vec2& screenSize) {
     }
 }
 
+void TransformEditor::SetPosition(const glm::vec2& position) {
+    Widget::SetPosition(position);
+    
+    xEditor->SetPosition(position);
+}
+
 glm::vec2 TransformEditor::GetSize() const {
     return size;
 }
