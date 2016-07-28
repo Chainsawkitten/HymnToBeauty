@@ -15,10 +15,7 @@ void FloatEditor::SetFloat(float* variable) {
 }
 
 void FloatEditor::TextUpdated() {
-    float oldValue = *variable;
     try {
         *variable = std::stof(GetText());
-    } catch (std::exception& e) {
-        *variable = oldValue;
-    }
+    } catch (std::exception& e) { }
 }
