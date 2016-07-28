@@ -19,6 +19,10 @@ namespace GUI {
              */
             void SetFloat(float* variable);
             
+        protected:
+            /// Called when text has been updated.
+            void TextUpdated() override;
+            
         private:
             float* variable;
     };

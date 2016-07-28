@@ -55,6 +55,10 @@ namespace GUI {
              */
             void SetText(const std::string& text);
             
+        protected:
+            /// Called when text has been updated.
+            virtual void TextUpdated();
+            
         private:
             std::string text;
             

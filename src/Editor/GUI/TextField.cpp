@@ -19,10 +19,17 @@ TextField::~TextField() {
 }
 
 void TextField::Update() {
+    bool textUpdated = !Input()->Text().empty();
+    
     text += Input()->Text();
     
-    if (Input()->Triggered(InputHandler::BACK) && text.length() > 0)
+    if (Input()->Triggered(InputHandler::BACK) && text.length() > 0) {
         text = text.erase(text.length()-1, 1);
+        textUpdated = true;
+    }
+    
+    if (textUpdated)
+        TextUpdated();
 }
 
 void TextField::Render(const glm::vec2& screenSize) {
@@ -47,4 +54,8 @@ std::string TextField::GetText() const {
 
 void TextField::SetText(const std::string& text) {
     this->text = text;
+}
+
+void TextField::TextUpdated() {
+    
 }
