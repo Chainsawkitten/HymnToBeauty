@@ -41,6 +41,8 @@ glm::vec2 EntityEditor::GetSize() const {
 
 void EntityEditor::SetSize(const glm::vec2& size) {
     this->size = size;
+    
+    transformEditor->SetSize(size);
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
