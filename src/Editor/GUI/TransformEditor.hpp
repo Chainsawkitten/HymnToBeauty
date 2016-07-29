@@ -64,6 +64,10 @@ namespace GUI {
             Geometry::Rectangle* rectangle;
             
             Font* font;
+            
+            // Position.
             FloatEditor* xEditor;
+            FloatEditor* yEditor;
+            FloatEditor* zEditor;
     };
 }

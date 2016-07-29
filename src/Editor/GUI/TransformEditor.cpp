@@ -16,17 +16,31 @@ TransformEditor::TransformEditor(Widget* parent) : Widget(parent) {
     entity = nullptr;
     rectangle = Managers().resourceManager->CreateRectangle();
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    
+    // Position
     xEditor = new FloatEditor(this, font);
     xEditor->SetPosition(GetPosition());
+    
+    yEditor = new FloatEditor(this, font);
+    yEditor->SetPosition(GetPosition());
+    
+    zEditor = new FloatEditor(this, font);
+    zEditor->SetPosition(GetPosition());
 }
 
 TransformEditor::~TransformEditor() {
     Managers().resourceManager->FreeRectangle();
     Managers().resourceManager->FreeFont(font);
+    
+    delete xEditor;
+    delete yEditor;
+    delete zEditor;
 }
 
 void TransformEditor::Update() {
     xEditor->Update();
+    yEditor->Update();
+    zEditor->Update();
 }
 
 void TransformEditor::Render(const glm::vec2& screenSize) {
@@ -36,6 +50,8 @@ void TransformEditor::Render(const glm::vec2& screenSize) {
         rectangle->Render(GetPosition(), glm::vec2(20.f, 20.f), color, screenSize);
         
         xEditor->Render(screenSize);
+        yEditor->Render(screenSize);
+        zEditor->Render(screenSize);
     }
 }
 
@@ -43,6 +59,8 @@ void TransformEditor::SetPosition(const glm::vec2& position) {
     Widget::SetPosition(position);
     
     xEditor->SetPosition(position);
+    yEditor->SetPosition(position + glm::vec2(0.f, 20.f));
+    zEditor->SetPosition(position + glm::vec2(0.f, 40.f));
 }
 
 glm::vec2 TransformEditor::GetSize() const {
@@ -53,6 +71,8 @@ void TransformEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
     xEditor->SetSize(glm::vec2(size.x, 20.f));
+    yEditor->SetSize(glm::vec2(size.x, 20.f));
+    zEditor->SetSize(glm::vec2(size.x, 20.f));
 }
 
 void TransformEditor::SetEntity(Entity* entity) {
@@ -60,4 +80,6 @@ void TransformEditor::SetEntity(Entity* entity) {
     
     Component::Transform* transform = entity->GetComponent<Component::Transform>();
     xEditor->SetFloat(&transform->position.x);
+    yEditor->SetFloat(&transform->position.y);
+    zEditor->SetFloat(&transform->position.z);
 }
