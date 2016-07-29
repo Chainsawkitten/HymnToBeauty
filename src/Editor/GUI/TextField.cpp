@@ -5,6 +5,7 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Util/Input.hpp>
+#include <Engine/Physics/Rectangle.hpp>
 
 using namespace GUI;
 
@@ -12,6 +13,7 @@ TextField::TextField(Widget *parent, Font* font) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     this->font = font;
     text = "";
+    focus = false;
 }
 
 TextField::~TextField() {
@@ -19,17 +21,25 @@ TextField::~TextField() {
 }
 
 void TextField::Update() {
-    bool textUpdated = !Input()->Text().empty();
-    
-    text += Input()->Text();
-    
-    if (Input()->Triggered(InputHandler::BACK) && text.length() > 0) {
-        text = text.erase(text.length()-1, 1);
-        textUpdated = true;
+    if (Input()->Triggered(InputHandler::CLICK)) {
+        glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
+        Physics::Rectangle rect(GetPosition(), size);
+        focus = rect.Collide(mousePosition);
     }
     
-    if (textUpdated)
-        TextUpdated();
+    if (focus) {
+        bool textUpdated = !Input()->Text().empty();
+        
+        text += Input()->Text();
+        
+        if (Input()->Triggered(InputHandler::BACK) && text.length() > 0) {
+            text = text.erase(text.length()-1, 1);
+            textUpdated = true;
+        }
+        
+        if (textUpdated)
+            TextUpdated();
+    }
 }
 
 void TextField::Render(const glm::vec2& screenSize) {

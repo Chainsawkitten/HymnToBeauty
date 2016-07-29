@@ -61,6 +61,7 @@ namespace GUI {
             
         private:
             std::string text;
+            bool focus;
             
             glm::vec2 size;
             
