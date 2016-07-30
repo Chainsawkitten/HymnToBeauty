@@ -6,6 +6,7 @@ class Entity;
 class Font;
 
 namespace GUI {
+    class Label;
     class Vec3Editor;
     
     /// Used to edit a transform component.
@@ -60,6 +61,7 @@ namespace GUI {
             
             Font* font;
             
+            Label* positionLabel;
             Vec3Editor* positionEditor;
     };
 }

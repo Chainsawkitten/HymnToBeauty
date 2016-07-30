@@ -7,6 +7,7 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Transform.hpp>
+#include "Label.hpp"
 #include "Vec3Editor.hpp"
 
 using namespace GUI;
@@ -15,12 +16,14 @@ TransformEditor::TransformEditor(Widget* parent) : Widget(parent) {
     entity = nullptr;
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
+    positionLabel = new Label(this, font, "Position");
     positionEditor = new Vec3Editor(this, font);
 }
 
 TransformEditor::~TransformEditor() {
     Managers().resourceManager->FreeFont(font);
     
+    delete positionLabel;
     delete positionEditor;
 }
 
@@ -30,6 +33,7 @@ void TransformEditor::Update() {
 
 void TransformEditor::Render(const glm::vec2& screenSize) {
     if (entity != nullptr) {
+        positionLabel->Render(screenSize);
         positionEditor->Render(screenSize);
     }
 }
@@ -37,7 +41,8 @@ void TransformEditor::Render(const glm::vec2& screenSize) {
 void TransformEditor::SetPosition(const glm::vec2& position) {
     Widget::SetPosition(position);
     
-    positionEditor->SetPosition(position);
+    positionLabel->SetPosition(position);
+    positionEditor->SetPosition(position + glm::vec2(0.f, 20.f));
 }
 
 glm::vec2 TransformEditor::GetSize() const {
