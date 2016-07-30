@@ -65,18 +65,18 @@ void TransformEditor::SetPosition(const glm::vec2& position) {
     
     positionLabel->SetPosition(pos);
     pos.y += 20.f;
-    positionEditor->SetPosition(pos);
-    pos.y += positionEditor->GetSize().y;
+    positionEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
+    pos.y += positionEditor->GetSize().y + 5.f;
     
     scaleLabel->SetPosition(pos);
     pos.y += 20.f;
-    scaleEditor->SetPosition(pos);
-    pos.y += scaleEditor->GetSize().y;
+    scaleEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
+    pos.y += scaleEditor->GetSize().y + 5.f;
     
     rotationLabel->SetPosition(pos);
     pos.y += 20.f;
-    rotationEditor->SetPosition(pos);
-    pos.y += rotationEditor->GetSize().y;
+    rotationEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
+    pos.y += rotationEditor->GetSize().y + 5.f;
 }
 
 glm::vec2 TransformEditor::GetSize() const {
@@ -86,9 +86,9 @@ glm::vec2 TransformEditor::GetSize() const {
 void TransformEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
-    positionEditor->SetSize(size);
-    scaleEditor->SetSize(size);
-    rotationEditor->SetSize(size);
+    positionEditor->SetSize(size + glm::vec2(-10.f, 0.f));
+    scaleEditor->SetSize(size + glm::vec2(-10.f, 0.f));
+    rotationEditor->SetSize(size + glm::vec2(-10.f, 0.f));
 }
 
 void TransformEditor::SetEntity(Entity* entity) {
