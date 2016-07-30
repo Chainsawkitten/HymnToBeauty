@@ -6,19 +6,21 @@ class Entity;
 class Font;
 
 namespace GUI {
-    class Vec3Editor;
+    class Label;
+    class FloatEditor;
     
-    /// Used to edit a transform component.
-    class TransformEditor : public Widget {
+    /// Used to edit a 3D vector.
+    class Vec3Editor : public Widget {
         public:
-            /// Create new transform editor.
+            /// Create new vector editor.
             /**
              * @param parent Parent widget.
+             * @param font %Font to display text with.
              */
-            TransformEditor(Widget* parent);
+            Vec3Editor(Widget* parent, Font* font);
             
             /// Destructor.
-            ~TransformEditor() override;
+            ~Vec3Editor() override;
             
             /// Update the editor.
             void Update() override;
@@ -47,19 +49,25 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the entity to edit the transform component of.
+            /// Set which vec3 variable to edit.
             /**
-             * @param entity %Entity to edit.
+             * @param variable The variable to edit.
              */
-            void SetEntity(Entity* entity);
+            void SetVec3(glm::vec3* variable);
             
         private:
             glm::vec2 size;
-            
-            Entity* entity;
-            
             Font* font;
             
-            Vec3Editor* positionEditor;
+            glm::vec3* variable;
+            
+            Label* xLabel;
+            FloatEditor* xEditor;
+            
+            Label* yLabel;
+            FloatEditor* yEditor;
+            
+            Label* zLabel;
+            FloatEditor* zEditor;
     };
 }
