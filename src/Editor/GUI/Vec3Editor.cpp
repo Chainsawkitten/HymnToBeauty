@@ -73,6 +73,7 @@ glm::vec2 Vec3Editor::GetSize() const {
 
 void Vec3Editor::SetSize(const glm::vec2& size) {
     this->size = size;
+    this->size.y = 60.f;
     
     xEditor->SetSize(glm::vec2(size.x - xLabel->GetSize().x, 20.f));
     yEditor->SetSize(glm::vec2(size.x - yLabel->GetSize().x, 20.f));

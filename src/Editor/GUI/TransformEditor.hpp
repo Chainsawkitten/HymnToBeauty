@@ -63,5 +63,11 @@ namespace GUI {
             
             Label* positionLabel;
             Vec3Editor* positionEditor;
+            
+            Label* scaleLabel;
+            Vec3Editor* scaleEditor;
+            
+            Label* rotationLabel;
+            Vec3Editor* rotationEditor;
     };
 }
