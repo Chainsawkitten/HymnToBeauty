@@ -9,6 +9,7 @@ namespace Geometry {
 }
 
 namespace GUI {
+    class Label;
     class FloatEditor;
     
     /// Used to edit a transform component.
@@ -66,8 +67,13 @@ namespace GUI {
             Font* font;
             
             // Position.
+            Label* xLabel;
             FloatEditor* xEditor;
+            
+            Label* yLabel;
             FloatEditor* yEditor;
+            
+            Label* zLabel;
             FloatEditor* zEditor;
     };
 }
