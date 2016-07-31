@@ -201,6 +201,10 @@ set(EDITOR_SRCS
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
+        src/Editor/GUI/EntityEditor.cpp
+        src/Editor/GUI/TransformEditor.cpp
+        src/Editor/GUI/FloatEditor.cpp
+        src/Editor/GUI/Vec3Editor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -219,6 +223,10 @@ set(EDITOR_HEADERS
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
+        src/Editor/GUI/EntityEditor.hpp
+        src/Editor/GUI/TransformEditor.hpp
+        src/Editor/GUI/FloatEditor.hpp
+        src/Editor/GUI/Vec3Editor.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

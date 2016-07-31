@@ -2,10 +2,25 @@
 
 #include <GLFW/glfw3.h>
 #include <string>
+#include <vector>
 
 /// Class that handles input.
 class InputHandler {
     public:
+        /// Button codes.
+        enum Button {
+            CLICK = 0, ///< Clicking in the editor.
+            BACK, ///< Erase previous character.
+            BUTTONS, ///< Total number of inputs
+        };
+        
+        /// Input device codes
+        enum Device {
+            KEYBOARD = 0, ///< Keyboard input
+            MOUSE, ///< Mouse buttons
+            INPUT_DEVICES, ///< Number of input devices
+        };
+        
         /// Create new input handler.
         /**
          * @param window %Window to get input for.
@@ -24,27 +39,6 @@ class InputHandler {
         /// Update input state.
         void Update();
         
-        /// Get whether a mouse button was pressed.
-        /**
-         * @param button Mouse button to check. Either GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT or GLFW_MOUSE_BUTTON_MIDDLE.
-         * @return Whether button has been pressed since last frame
-         */
-        bool MousePressed(int button) const;
-        
-        /// Get whether a mouse button is down.
-        /**
-         * @param button Mouse button to check. Either GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT or GLFW_MOUSE_BUTTON_MIDDLE.
-         * @return Whether button is down
-         */
-        bool MouseDown(int button) const;
-        
-        /// Get whether a mouse button was released.
-        /**
-         * @param button Mouse button to check. Either GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT or GLFW_MOUSE_BUTTON_MIDDLE.
-         * @return Whether button has been released since last frame
-         */
-        bool MouseReleased(int button) const;
-        
         /// Get cursor's horizontal position.
         /**
          * @return X-position of the cursor
@@ -56,6 +50,39 @@ class InputHandler {
          * @return Y-position of the cursor
          */
         double CursorY() const;
+        
+        /// Assign a button binding.
+        /**
+         * See <a href="http://www.glfw.org/docs/latest/group__keys.html">GLFW keyboard documentation</a> for indices for keys.
+         * For mouse buttons, either GLFW_MOUSE_BUTTON_LEFT, GLFW_MOUSE_BUTTON_RIGHT or GLFW_MOUSE_BUTTON_MIDDLE.
+         * @param button Which button to bind.
+         * @param device Which device (KEYBOARD or MOUSE).
+         * @param index Index of the key.
+         */
+        void AssignButton(Button button, Device device, int index);
+        
+        /// Gets whether a button is currently down.
+        /**
+         * @param button The button to check.
+         * @return Whether the button is down
+         */
+        bool Pressed(Button button);
+        
+        /// Gets whether a button was just pressed.
+        /**
+         * Checks whether a button was pressed between the last two calls to update().
+         * @param button The button to check.
+         * @return Whether the button was pressed
+         */
+        bool Triggered(Button button);
+        
+        /// Gets whether a button was just released.
+        /**
+         * Checks whether a button was released between the last two calls to update().
+         * @param button The button to check.
+         * @return Whether the button was released
+         */
+        bool Released(Button button);
         
         /// Get text input since last frame.
         /**
@@ -74,9 +101,23 @@ class InputHandler {
         
         GLFWwindow* window;
         
-        // Mouse states
-        bool mouseState[3];
-        bool mouseStateLast[3];
+        // Bindings
+        struct Binding {
+            Button button;
+            Device device;
+            int index;
+        };
+        std::vector<Binding> bindings;
+        
+        // Data
+        struct ButtonData {
+            bool down;
+            bool released;
+            bool triggered;
+        };
+        
+        // Button data.
+        ButtonData buttonData[BUTTONS];
         
         double cursorX, cursorY;
         

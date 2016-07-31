@@ -6,7 +6,7 @@
 class Font;
 
 namespace GUI {
-    /// Label that displays a text message.
+    /// %Label that displays a text message.
     class Label : public Widget {
         public:
             /// Create new label.

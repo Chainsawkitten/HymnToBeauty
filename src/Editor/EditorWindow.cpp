@@ -10,6 +10,7 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/ResourceList.hpp"
+#include "GUI/EntityEditor.hpp"
 
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
@@ -45,6 +46,10 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     gameWindow = nullptr;
     childWindow = nullptr;
     input = new InputHandler(window);
+    
+    // Assign controls.
+    input->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
+    input->AssignButton(InputHandler::BACK, InputHandler::KEYBOARD, GLFW_KEY_BACKSPACE);
 }
 
 EditorWindow::~EditorWindow() {
@@ -58,6 +63,7 @@ EditorWindow::~EditorWindow() {
     delete fileMenu;
     
     delete resourceList;
+    delete entityEditor;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
     Managers().resourceManager->FreeTexture2D(optionsTexture);
@@ -103,7 +109,14 @@ void EditorWindow::Init() {
     resourceList = new GUI::ResourceList(this);
     resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
+    resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
     AddWidget(resourceList);
+    
+    // Editors.
+    entityEditor = new GUI::EntityEditor(this);
+    entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
+    AddWidget(entityEditor);
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
@@ -233,4 +246,8 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     childWindow = nullptr;
     
     fileMenu->SetVisible(false);
+}
+
+void EditorWindow::EntitySelected(Entity* entity) {
+    entityEditor->SetEntity(entity);
 }

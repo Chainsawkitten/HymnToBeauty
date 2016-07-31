@@ -1,27 +1,26 @@
 #pragma once
 
 #include "Widget.hpp"
-#include <functional>
 
-class Texture2D;
-class Font;
 class Entity;
 namespace Geometry {
     class Rectangle;
 }
 
 namespace GUI {
-    /// Displays all the hymn's resources.
-    class ResourceList : public Widget {
+    class TransformEditor;
+    
+    /// Used to edit an entity.
+    class EntityEditor : public Widget {
         public:
-            /// Create new resource list.
+            /// Create new entity editor.
             /**
              * @param parent Parent widget.
              */
-            ResourceList(Widget* parent);
+            EntityEditor(Widget* parent);
             
             /// Destructor.
-            ~ResourceList() override;
+            ~EntityEditor() override;
             
             /// Update the widget.
             void Update() override;
@@ -31,6 +30,12 @@ namespace GUI {
              * @param screenSize Size of the screen in pixels.
              */
             void Render(const glm::vec2& screenSize) override;
+            
+            /// Set widget's position.
+            /**
+             * @param position New position.
+             */
+            void SetPosition(const glm::vec2& position) override;
             
             /// Get the size of the widget.
             /**
@@ -44,23 +49,19 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set function to call when an entity has been selected.
+            /// Set the entity to edit.
             /**
-             * @param callback Function to call.
+             * @param entity The entity to edit.
              */
-            void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
+            void SetEntity(Entity* entity);
             
         private:
             Geometry::Rectangle* rectangle;
-            Font* font;
-            
-            Texture2D* addTexture;
-            bool addHover;
             
             glm::vec2 size;
             
-            Entity* selectedEntity;
-            bool hasEntitySelectedCallback;
-            std::function<void(Entity*)> entitySelectedCallback;
+            Entity* entity;
+            
+            TransformEditor* transformEditor;
     };
 }

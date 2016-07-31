@@ -20,8 +20,7 @@ void Label::Render(const glm::vec2& screenSize) {
 }
 
 glm::vec2 Label::GetSize() const {
-    /// @todo Get text size.
-    return glm::vec2(0.f, 0.f);
+    return glm::vec2(font->GetWidth(text.c_str()), font->GetHeight());
 }
 
 void Label::SetSize(const glm::vec2& size) {
