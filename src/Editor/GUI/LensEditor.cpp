@@ -107,8 +107,6 @@ void LensEditor::SetSize(const glm::vec2& size) {
 }
 
 void LensEditor::SetEntity(Entity* entity) {
-    this->entity = entity;
-    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

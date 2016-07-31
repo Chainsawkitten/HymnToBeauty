@@ -58,8 +58,6 @@ namespace GUI {
             glm::vec2 size;
             Font* font;
             
-            Entity* entity;
-            
             Label* transformLabel;
             
             Label* positionLabel;
