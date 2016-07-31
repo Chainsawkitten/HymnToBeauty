@@ -21,21 +21,6 @@ namespace GUI {
             /// Destructor.
             ~TransformEditor() override;
             
-            /// Update the editor.
-            void Update() override;
-            
-            /// Render the editor.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
-            void Render(const glm::vec2& screenSize) override;
-            
-            /// Set widget's position.
-            /**
-             * @param position New position.
-             */
-            void SetPosition(const glm::vec2& position) override;
-            
             /// Get the size of the widget.
             /**
              * @return The size

@@ -12,20 +12,22 @@
 
 using namespace GUI;
 
-LensEditor::LensEditor(Widget* parent) : ComponentEditor(parent) {
-    entity = nullptr;
+LensEditor::LensEditor(Widget* parent) : ComponentEditor(parent, "Lens") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
     lensLabel = new Label(this, font, "Lens");
     
     fieldOfViewLabel = new Label(this, font, "Field of view");
     fieldOfViewEditor = new FloatEditor(this, font);
+    AddEditor("Field of view", fieldOfViewEditor);
     
     zNearLabel = new Label(this, font, "Z near");
     zNearEditor = new FloatEditor(this, font);
+    AddEditor("Z near", zNearEditor);
     
     zFarLabel = new Label(this, font, "Z far");
     zFarEditor = new FloatEditor(this, font);
+    AddEditor("Z far", zFarEditor);
     
     SetVisible(false);
 }
@@ -43,53 +45,6 @@ LensEditor::~LensEditor() {
     
     delete zFarLabel;
     delete zFarEditor;
-}
-
-void LensEditor::Update() {
-    if (IsVisible()) {
-        fieldOfViewEditor->Update();
-        zNearEditor->Update();
-        zFarEditor->Update();
-    }
-}
-
-void LensEditor::Render(const glm::vec2& screenSize) {
-    if (IsVisible()) {
-        lensLabel->Render(screenSize);
-        
-        fieldOfViewLabel->Render(screenSize);
-        fieldOfViewEditor->Render(screenSize);
-        
-        zNearLabel->Render(screenSize);
-        zNearEditor->Render(screenSize);
-        
-        zFarLabel->Render(screenSize);
-        zFarEditor->Render(screenSize);
-    }
-}
-
-void LensEditor::SetPosition(const glm::vec2& position) {
-    Widget::SetPosition(position);
-    
-    glm::vec2 pos(position);
-    
-    lensLabel->SetPosition(pos);
-    pos += glm::vec2(10.f, 20.f);
-    
-    fieldOfViewLabel->SetPosition(pos);
-    pos.y += 20.f;
-    fieldOfViewEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
-    pos.y += fieldOfViewEditor->GetSize().y + 5.f;
-    
-    zNearLabel->SetPosition(pos);
-    pos.y += 20.f;
-    zNearEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
-    pos.y += zNearEditor->GetSize().y + 5.f;
-    
-    zFarLabel->SetPosition(pos);
-    pos.y += 20.f;
-    zFarEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
-    pos.y += zFarEditor->GetSize().y + 5.f;
 }
 
 glm::vec2 LensEditor::GetSize() const {

@@ -12,20 +12,22 @@
 
 using namespace GUI;
 
-TransformEditor::TransformEditor(Widget* parent) : ComponentEditor(parent) {
-    entity = nullptr;
+TransformEditor::TransformEditor(Widget* parent) : ComponentEditor(parent, "Transform") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
     transformLabel = new Label(this, font, "Transform");
     
     positionLabel = new Label(this, font, "Position");
     positionEditor = new Vec3Editor(this, font);
+    AddEditor("Position", positionEditor);
     
     scaleLabel = new Label(this, font, "Scale");
     scaleEditor = new Vec3Editor(this, font);
+    AddEditor("Scale", scaleEditor);
     
     rotationLabel = new Label(this, font, "Rotation");
     rotationEditor = new Vec3Editor(this, font);
+    AddEditor("Rotation", rotationEditor);
     
     SetVisible(false);
 }
@@ -43,53 +45,6 @@ TransformEditor::~TransformEditor() {
     
     delete rotationLabel;
     delete rotationEditor;
-}
-
-void TransformEditor::Update() {
-    if (IsVisible()) {
-        positionEditor->Update();
-        scaleEditor->Update();
-        rotationEditor->Update();
-    }
-}
-
-void TransformEditor::Render(const glm::vec2& screenSize) {
-    if (IsVisible()) {
-        transformLabel->Render(screenSize);
-        
-        positionLabel->Render(screenSize);
-        positionEditor->Render(screenSize);
-        
-        scaleLabel->Render(screenSize);
-        scaleEditor->Render(screenSize);
-        
-        rotationLabel->Render(screenSize);
-        rotationEditor->Render(screenSize);
-    }
-}
-
-void TransformEditor::SetPosition(const glm::vec2& position) {
-    Widget::SetPosition(position);
-    
-    glm::vec2 pos(position);
-    
-    transformLabel->SetPosition(pos);
-    pos += glm::vec2(10.f, 20.f);
-    
-    positionLabel->SetPosition(pos);
-    pos.y += 20.f;
-    positionEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
-    pos.y += positionEditor->GetSize().y + 5.f;
-    
-    scaleLabel->SetPosition(pos);
-    pos.y += 20.f;
-    scaleEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
-    pos.y += scaleEditor->GetSize().y + 5.f;
-    
-    rotationLabel->SetPosition(pos);
-    pos.y += 20.f;
-    rotationEditor->SetPosition(pos + glm::vec2(10.f, 0.f));
-    pos.y += rotationEditor->GetSize().y + 5.f;
 }
 
 glm::vec2 TransformEditor::GetSize() const {
