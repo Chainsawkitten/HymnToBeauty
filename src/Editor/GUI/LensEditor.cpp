@@ -34,20 +34,6 @@ LensEditor::~LensEditor() {
     delete zFarEditor;
 }
 
-glm::vec2 LensEditor::GetSize() const {
-    return size;
-}
-
-void LensEditor::SetSize(const glm::vec2& size) {
-    this->size = size;
-    
-    fieldOfViewEditor->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    zNearEditor->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    zFarEditor->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    
-    this->size.y = 130.f;
-}
-
 void LensEditor::SetEntity(Entity* entity) {
     if (entity == nullptr) {
         SetVisible(false);

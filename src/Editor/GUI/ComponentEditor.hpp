@@ -38,6 +38,18 @@ namespace GUI {
              */
             void SetPosition(const glm::vec2& position) override;
             
+            /// Get the size of the widget.
+            /**
+             * @return The size
+             */
+            glm::vec2 GetSize() const override;
+            
+            /// Set the size of the widget.
+            /**
+             * @param size The new size.
+             */
+            void SetSize(const glm::vec2& size) override;
+            
             /// Set the entity to edit a component of.
             /**
              * @param entity %Entity to edit.
@@ -53,6 +65,7 @@ namespace GUI {
             void AddEditor(const std::string& name, Widget* editor);
             
         private:
+            glm::vec2 size;
             Font* font;
             
             Label* titleLabel;

@@ -34,20 +34,6 @@ TransformEditor::~TransformEditor() {
     delete rotationEditor;
 }
 
-glm::vec2 TransformEditor::GetSize() const {
-    return size;
-}
-
-void TransformEditor::SetSize(const glm::vec2& size) {
-    this->size = size;
-    
-    positionEditor->SetSize(size + glm::vec2(-20.f, 0.f));
-    scaleEditor->SetSize(size + glm::vec2(-20.f, 0.f));
-    rotationEditor->SetSize(size + glm::vec2(-20.f, 0.f));
-    
-    this->size.y = 85.f + positionEditor->GetSize().y + scaleEditor->GetSize().y + rotationEditor->GetSize().y;
-}
-
 void TransformEditor::SetEntity(Entity* entity) {
     if (entity == nullptr) {
         SetVisible(false);

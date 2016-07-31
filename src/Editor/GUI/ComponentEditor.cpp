@@ -57,6 +57,20 @@ void ComponentEditor::SetPosition(const glm::vec2& position) {
     }
 }
 
+glm::vec2 ComponentEditor::GetSize() const {
+    return size;
+}
+
+void ComponentEditor::SetSize(const glm::vec2& size) {
+    this->size = size;
+    this->size.y = 25.f;
+    
+    for (LabeledEditor& editor : editors) {
+        editor.editor->SetSize(glm::vec2(size.x - 20.f, 20.f));
+        this->size.y += 20.f + editor.editor->GetSize().y;
+    }
+}
+
 void ComponentEditor::AddEditor(const std::string& name, Widget* editor) {
     editors.push_back(LabeledEditor(new Label(this, font, name), editor));
 }
