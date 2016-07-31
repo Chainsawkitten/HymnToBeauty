@@ -56,10 +56,11 @@ namespace GUI {
             
         private:
             glm::vec2 size;
+            Font* font;
             
             Entity* entity;
             
-            Font* font;
+            Label* transformLabel;
             
             Label* positionLabel;
             Vec3Editor* positionEditor;

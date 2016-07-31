@@ -16,6 +16,8 @@ TransformEditor::TransformEditor(Widget* parent) : Widget(parent) {
     entity = nullptr;
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
+    transformLabel = new Label(this, font, "Transform");
+    
     positionLabel = new Label(this, font, "Position");
     positionEditor = new Vec3Editor(this, font);
     
@@ -28,6 +30,8 @@ TransformEditor::TransformEditor(Widget* parent) : Widget(parent) {
 
 TransformEditor::~TransformEditor() {
     Managers().resourceManager->FreeFont(font);
+    
+    delete transformLabel;
     
     delete positionLabel;
     delete positionEditor;
@@ -47,6 +51,8 @@ void TransformEditor::Update() {
 
 void TransformEditor::Render(const glm::vec2& screenSize) {
     if (entity != nullptr) {
+        transformLabel->Render(screenSize);
+        
         positionLabel->Render(screenSize);
         positionEditor->Render(screenSize);
         
@@ -62,6 +68,9 @@ void TransformEditor::SetPosition(const glm::vec2& position) {
     Widget::SetPosition(position);
     
     glm::vec2 pos(position);
+    
+    transformLabel->SetPosition(pos);
+    pos += glm::vec2(10.f, 20.f);
     
     positionLabel->SetPosition(pos);
     pos.y += 20.f;
@@ -86,9 +95,9 @@ glm::vec2 TransformEditor::GetSize() const {
 void TransformEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
-    positionEditor->SetSize(size + glm::vec2(-10.f, 0.f));
-    scaleEditor->SetSize(size + glm::vec2(-10.f, 0.f));
-    rotationEditor->SetSize(size + glm::vec2(-10.f, 0.f));
+    positionEditor->SetSize(size + glm::vec2(-20.f, 0.f));
+    scaleEditor->SetSize(size + glm::vec2(-20.f, 0.f));
+    rotationEditor->SetSize(size + glm::vec2(-20.f, 0.f));
 }
 
 void TransformEditor::SetEntity(Entity* entity) {
