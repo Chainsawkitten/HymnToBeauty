@@ -3,8 +3,8 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
-#include "TransformEditor.hpp"
-#include "LensEditor.hpp"
+#include "ComponentEditor/TransformEditor.hpp"
+#include "ComponentEditor/LensEditor.hpp"
 
 using namespace GUI;
 

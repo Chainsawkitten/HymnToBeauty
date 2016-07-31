@@ -7,7 +7,7 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Lens.hpp>
-#include "FloatEditor.hpp"
+#include "../FloatEditor.hpp"
 
 using namespace GUI;
 

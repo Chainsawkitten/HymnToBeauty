@@ -7,7 +7,7 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Transform.hpp>
-#include "Vec3Editor.hpp"
+#include "../Vec3Editor.hpp"
 
 using namespace GUI;
 
