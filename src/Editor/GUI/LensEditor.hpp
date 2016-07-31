@@ -6,7 +6,6 @@ class Entity;
 class Font;
 
 namespace GUI {
-    class Label;
     class FloatEditor;
     
     /// Used to edit a lens component.
@@ -43,15 +42,8 @@ namespace GUI {
             glm::vec2 size;
             Font* font;
             
-            Label* lensLabel;
-            
-            Label* fieldOfViewLabel;
             FloatEditor* fieldOfViewEditor;
-            
-            Label* zNearLabel;
             FloatEditor* zNearEditor;
-            
-            Label* zFarLabel;
             FloatEditor* zFarEditor;
     };
 }

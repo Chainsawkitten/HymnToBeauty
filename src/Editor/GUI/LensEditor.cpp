@@ -7,7 +7,6 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Lens.hpp>
-#include "Label.hpp"
 #include "FloatEditor.hpp"
 
 using namespace GUI;
@@ -15,17 +14,12 @@ using namespace GUI;
 LensEditor::LensEditor(Widget* parent) : ComponentEditor(parent, "Lens") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
-    lensLabel = new Label(this, font, "Lens");
-    
-    fieldOfViewLabel = new Label(this, font, "Field of view");
     fieldOfViewEditor = new FloatEditor(this, font);
     AddEditor("Field of view", fieldOfViewEditor);
     
-    zNearLabel = new Label(this, font, "Z near");
     zNearEditor = new FloatEditor(this, font);
     AddEditor("Z near", zNearEditor);
     
-    zFarLabel = new Label(this, font, "Z far");
     zFarEditor = new FloatEditor(this, font);
     AddEditor("Z far", zFarEditor);
     
@@ -35,15 +29,8 @@ LensEditor::LensEditor(Widget* parent) : ComponentEditor(parent, "Lens") {
 LensEditor::~LensEditor() {
     Managers().resourceManager->FreeFont(font);
     
-    delete lensLabel;
-    
-    delete fieldOfViewLabel;
     delete fieldOfViewEditor;
-    
-    delete zNearLabel;
     delete zNearEditor;
-    
-    delete zFarLabel;
     delete zFarEditor;
 }
 

@@ -7,7 +7,6 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Transform.hpp>
-#include "Label.hpp"
 #include "Vec3Editor.hpp"
 
 using namespace GUI;
@@ -15,17 +14,12 @@ using namespace GUI;
 TransformEditor::TransformEditor(Widget* parent) : ComponentEditor(parent, "Transform") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
-    transformLabel = new Label(this, font, "Transform");
-    
-    positionLabel = new Label(this, font, "Position");
     positionEditor = new Vec3Editor(this, font);
     AddEditor("Position", positionEditor);
     
-    scaleLabel = new Label(this, font, "Scale");
     scaleEditor = new Vec3Editor(this, font);
     AddEditor("Scale", scaleEditor);
     
-    rotationLabel = new Label(this, font, "Rotation");
     rotationEditor = new Vec3Editor(this, font);
     AddEditor("Rotation", rotationEditor);
     
@@ -35,15 +29,8 @@ TransformEditor::TransformEditor(Widget* parent) : ComponentEditor(parent, "Tran
 TransformEditor::~TransformEditor() {
     Managers().resourceManager->FreeFont(font);
     
-    delete transformLabel;
-    
-    delete positionLabel;
     delete positionEditor;
-    
-    delete scaleLabel;
     delete scaleEditor;
-    
-    delete rotationLabel;
     delete rotationEditor;
 }
 
