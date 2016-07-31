@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Widget.hpp"
+#include "ComponentEditor.hpp"
 
 class Entity;
 class Font;
@@ -10,7 +10,7 @@ namespace GUI {
     class FloatEditor;
     
     /// Used to edit a lens component.
-    class LensEditor : public Widget {
+    class LensEditor : public ComponentEditor {
         public:
             /// Create new transform editor.
             /**
@@ -52,7 +52,7 @@ namespace GUI {
             /**
              * @param entity %Entity to edit.
              */
-            void SetEntity(Entity* entity);
+            void SetEntity(Entity* entity) override;
             
         private:
             glm::vec2 size;

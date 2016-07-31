@@ -8,8 +8,7 @@ namespace Geometry {
 }
 
 namespace GUI {
-    class TransformEditor;
-    class LensEditor;
+    class ComponentEditor;
     
     /// Used to edit an entity.
     class EntityEditor : public Widget {
@@ -63,7 +62,7 @@ namespace GUI {
             
             Entity* entity;
             
-            TransformEditor* transformEditor;
-            LensEditor* lensEditor;
+            ComponentEditor* transformEditor;
+            ComponentEditor* lensEditor;
     };
 }

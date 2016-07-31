@@ -12,7 +12,7 @@
 
 using namespace GUI;
 
-TransformEditor::TransformEditor(Widget* parent) : Widget(parent) {
+TransformEditor::TransformEditor(Widget* parent) : ComponentEditor(parent) {
     entity = nullptr;
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     

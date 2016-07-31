@@ -12,7 +12,7 @@
 
 using namespace GUI;
 
-LensEditor::LensEditor(Widget* parent) : Widget(parent) {
+LensEditor::LensEditor(Widget* parent) : ComponentEditor(parent) {
     entity = nullptr;
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
