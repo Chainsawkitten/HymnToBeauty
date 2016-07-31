@@ -26,6 +26,8 @@ TransformEditor::TransformEditor(Widget* parent) : Widget(parent) {
     
     rotationLabel = new Label(this, font, "Rotation");
     rotationEditor = new Vec3Editor(this, font);
+    
+    SetVisible(false);
 }
 
 TransformEditor::~TransformEditor() {
@@ -44,13 +46,15 @@ TransformEditor::~TransformEditor() {
 }
 
 void TransformEditor::Update() {
-    positionEditor->Update();
-    scaleEditor->Update();
-    rotationEditor->Update();
+    if (IsVisible()) {
+        positionEditor->Update();
+        scaleEditor->Update();
+        rotationEditor->Update();
+    }
 }
 
 void TransformEditor::Render(const glm::vec2& screenSize) {
-    if (entity != nullptr) {
+    if (IsVisible()) {
         transformLabel->Render(screenSize);
         
         positionLabel->Render(screenSize);
@@ -98,13 +102,23 @@ void TransformEditor::SetSize(const glm::vec2& size) {
     positionEditor->SetSize(size + glm::vec2(-20.f, 0.f));
     scaleEditor->SetSize(size + glm::vec2(-20.f, 0.f));
     rotationEditor->SetSize(size + glm::vec2(-20.f, 0.f));
+    
+    this->size.y = 85.f + positionEditor->GetSize().y + scaleEditor->GetSize().y + rotationEditor->GetSize().y;
 }
 
 void TransformEditor::SetEntity(Entity* entity) {
     this->entity = entity;
     
-    Component::Transform* transform = entity->GetComponent<Component::Transform>();
-    positionEditor->SetVec3(&transform->position);
-    scaleEditor->SetVec3(&transform->scale);
-    rotationEditor->SetVec3(&transform->rotation);
+    if (entity == nullptr) {
+        SetVisible(false);
+    } else {
+        Component::Transform* transform = entity->GetComponent<Component::Transform>();
+        SetVisible(transform != nullptr);
+        
+        if (IsVisible()) {
+            positionEditor->SetVec3(&transform->position);
+            scaleEditor->SetVec3(&transform->scale);
+            rotationEditor->SetVec3(&transform->rotation);
+        }
+    }
 }

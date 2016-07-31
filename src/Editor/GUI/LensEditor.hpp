@@ -3,30 +3,28 @@
 #include "Widget.hpp"
 
 class Entity;
-namespace Geometry {
-    class Rectangle;
-}
+class Font;
 
 namespace GUI {
-    class TransformEditor;
-    class LensEditor;
+    class Label;
+    class FloatEditor;
     
-    /// Used to edit an entity.
-    class EntityEditor : public Widget {
+    /// Used to edit a lens component.
+    class LensEditor : public Widget {
         public:
-            /// Create new entity editor.
+            /// Create new transform editor.
             /**
              * @param parent Parent widget.
              */
-            EntityEditor(Widget* parent);
+            LensEditor(Widget* parent);
             
             /// Destructor.
-            ~EntityEditor() override;
+            ~LensEditor() override;
             
-            /// Update the widget.
+            /// Update the editor.
             void Update() override;
             
-            /// Render the widget.
+            /// Render the editor.
             /**
              * @param screenSize Size of the screen in pixels.
              */
@@ -46,24 +44,31 @@ namespace GUI {
             
             /// Set the size of the widget.
             /**
-             * @param size New widget size.
+             * @param size The new size.
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the entity to edit.
+            /// Set the entity to edit the transform component of.
             /**
-             * @param entity The entity to edit.
+             * @param entity %Entity to edit.
              */
             void SetEntity(Entity* entity);
             
         private:
-            Geometry::Rectangle* rectangle;
-            
             glm::vec2 size;
+            Font* font;
             
             Entity* entity;
             
-            TransformEditor* transformEditor;
-            LensEditor* lensEditor;
+            Label* lensLabel;
+            
+            Label* fieldOfViewLabel;
+            FloatEditor* fieldOfViewEditor;
+            
+            Label* zNearLabel;
+            FloatEditor* zNearEditor;
+            
+            Label* zFarLabel;
+            FloatEditor* zFarEditor;
     };
 }
