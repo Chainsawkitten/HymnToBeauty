@@ -53,14 +53,15 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
-            
-            Texture2D* addTexture;
-            bool addHover;
-            
             glm::vec2 size;
             
+            Texture2D* addTexture;
+            
+            bool addEntityHover;
             Entity* selectedEntity;
             bool hasEntitySelectedCallback;
             std::function<void(Entity*)> entitySelectedCallback;
+            
+            bool addMeshHover;
     };
 }
