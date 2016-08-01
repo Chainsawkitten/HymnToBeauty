@@ -11,27 +11,28 @@ using namespace GUI;
 EntityEditor::EntityEditor(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     entity = nullptr;
-    transformEditor = new TransformEditor(this);
-    lensEditor = new LensEditor(this);
+    editors.push_back(new TransformEditor(this));
+    editors.push_back(new LensEditor(this));
 }
 
 EntityEditor::~EntityEditor() {
     Managers().resourceManager->FreeRectangle();
-    delete transformEditor;
-    delete lensEditor;
+    
+    for (ComponentEditor* editor : editors)
+        delete editor;
 }
 
 void EntityEditor::Update() {
-    transformEditor->Update();
-    lensEditor->Update();
+    for (ComponentEditor* editor : editors)
+        editor->Update();
 }
 
 void EntityEditor::Render(const glm::vec2& screenSize) {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     rectangle->Render(GetPosition(), size, color, screenSize);
     
-    transformEditor->Render(screenSize);
-    lensEditor->Render(screenSize);
+    for (ComponentEditor* editor : editors)
+        editor->Render(screenSize);
 }
 
 void EntityEditor::SetPosition(const glm::vec2& position) {
@@ -39,11 +40,12 @@ void EntityEditor::SetPosition(const glm::vec2& position) {
     
     glm::vec2 pos(position);
     
-    transformEditor->SetPosition(pos);
-    if (transformEditor->IsVisible())
-        pos.y += transformEditor->GetSize().y + 10.f;
-    
-    lensEditor->SetPosition(pos);
+    for (ComponentEditor* editor : editors) {
+        editor->SetPosition(pos);
+        
+        if (editor->IsVisible())
+            pos.y += editor->GetSize().y + 10.f;
+    }
 }
 
 glm::vec2 EntityEditor::GetSize() const {
@@ -53,15 +55,15 @@ glm::vec2 EntityEditor::GetSize() const {
 void EntityEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
-    transformEditor->SetSize(size);
-    lensEditor->SetSize(size);
+    for (ComponentEditor* editor : editors)
+        editor->SetSize(size);
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
     
-    transformEditor->SetEntity(entity);
-    lensEditor->SetEntity(entity);
+    for (ComponentEditor* editor : editors)
+        editor->SetEntity(entity);
     
     // Update editor positions.
     SetPosition(GetPosition());
