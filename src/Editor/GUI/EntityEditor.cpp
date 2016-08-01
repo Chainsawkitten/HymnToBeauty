@@ -13,6 +13,7 @@ EntityEditor::EntityEditor(Widget* parent) : Widget(parent) {
     entity = nullptr;
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
+    SetVisible(false);
 }
 
 EntityEditor::~EntityEditor() {

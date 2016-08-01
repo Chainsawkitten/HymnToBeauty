@@ -11,6 +11,7 @@
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/ResourceList.hpp"
 #include "GUI/EntityEditor.hpp"
+#include "GUI/MeshEditor.hpp"
 
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
@@ -118,6 +119,11 @@ void EditorWindow::Init() {
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
+    
+    meshEditor = new GUI::MeshEditor(this);
+    meshEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    meshEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
+    AddWidget(meshEditor);
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
@@ -251,8 +257,14 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
 
 void EditorWindow::EntitySelected(Entity* entity) {
     entityEditor->SetEntity(entity);
+    
+    entityEditor->SetVisible(true);
+    meshEditor->SetVisible(false);
 }
 
 void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
     Log() << "Mesh selected\n";
+    
+    entityEditor->SetVisible(false);
+    meshEditor->SetVisible(true);
 }

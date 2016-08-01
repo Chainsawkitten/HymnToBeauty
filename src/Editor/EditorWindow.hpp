@@ -16,6 +16,7 @@ namespace GUI {
     class Button;
     class ResourceList;
     class EntityEditor;
+    class MeshEditor;
 }
 namespace Geometry {
     class OBJModel;
@@ -102,6 +103,7 @@ class EditorWindow : public GUI::Container {
         
         // Editors.
         GUI::EntityEditor* entityEditor;
+        GUI::MeshEditor* meshEditor;
         
         // Input
         InputHandler* input;
