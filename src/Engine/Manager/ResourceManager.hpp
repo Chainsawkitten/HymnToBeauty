@@ -115,13 +115,6 @@ class ResourceManager {
          */
         Font* CreateFontEmbedded(const char* source, int sourceLength, float height);
         
-        /// Free the reference to the font.
-        /**
-         * Deletes the instance if no more references exist.
-         * @param font %Font to dereference.
-         */
-        void FreeFont(Font* font);
-        
         /// Create a font if it doesn't already exist.
         /**
          * @param filename Filename of the TTF file.
@@ -135,7 +128,7 @@ class ResourceManager {
          * Deletes the instance if no more references exist.
          * @param font %Font to dereference.
          */
-        void FreeFontFromFile(Font* font);
+        void FreeFont(Font* font);
         
     private:
         ResourceManager();
