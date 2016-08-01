@@ -31,16 +31,6 @@ class Font {
         /// Free allocated resources.
         ~Font();
         
-        /// Get quad for rendering a character.
-        /**
-         * The x and y positions will be updated to hold the position for the next character.
-         * @param character Character.
-         * @param x X-position to render at.
-         * @param y Y-position to render at.
-         * @return Baked quad.
-         */
-        stbtt_aligned_quad BakedQuad(char character, float& x, float& y);
-        
         /// Render a string to the screen.
         /**
          * @param text Text to render.
@@ -83,6 +73,7 @@ class Font {
         
     private:
         float RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize);
+        stbtt_aligned_quad BakedQuad(char character, float& x, float& y);
         
         bool isFromFile;
         

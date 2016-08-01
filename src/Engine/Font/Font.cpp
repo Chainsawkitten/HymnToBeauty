@@ -88,12 +88,6 @@ Font::~Font() {
     Managers().resourceManager->FreeRectangle();
 }
 
-stbtt_aligned_quad Font::BakedQuad(char character, float& x, float& y) {
-    stbtt_aligned_quad q;
-    stbtt_GetBakedQuad(cdata, 512, 512, character - 32, &x, &y, &q, 1);
-    return q;
-}
-
 void Font::RenderText(const char* text, const glm::vec2& position, float wrap, const glm::vec2& screenSize) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
@@ -186,4 +180,10 @@ float Font::RenderCharacter(char character, const glm::vec2& position, const glm
     glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
     return x;
+}
+
+stbtt_aligned_quad Font::BakedQuad(char character, float& x, float& y) {
+    stbtt_aligned_quad q;
+    stbtt_GetBakedQuad(cdata, 512, 512, character - 32, &x, &y, &q, 1);
+    return q;
 }
