@@ -31,6 +31,7 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     
     addMeshHover = false;
     selectedMesh = nullptr;
+    hasMeshSelectedCallback = false;
 }
 
 ResourceList::~ResourceList() {
@@ -68,6 +69,7 @@ void ResourceList::Update() {
                 rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = entity;
+                    selectedMesh = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
                     break;
@@ -82,9 +84,10 @@ void ResourceList::Update() {
                 position.y += font->GetHeight();
                 rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
                 if (rect.Collide(mousePosition)) {
+                    selectedEntity = nullptr;
                     selectedMesh = mesh;
-                    /*if (hasEntitySelectedCallback)
-                        entitySelectedCallback(mesh);*/
+                    if (hasMeshSelectedCallback)
+                        meshSelectedCallback(mesh);
                     break;
                 }
             }
@@ -144,4 +147,9 @@ void ResourceList::SetSize(const glm::vec2& size) {
 void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {
     hasEntitySelectedCallback = true;
     entitySelectedCallback = callback;
+}
+
+void ResourceList::SetMeshSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
+    hasMeshSelectedCallback = true;
+    meshSelectedCallback = callback;
 }

@@ -110,6 +110,7 @@ void EditorWindow::Init() {
     resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
     resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
+    resourceList->SetMeshSelectedCallback(std::bind(&MeshSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
     // Editors.
@@ -250,4 +251,8 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
 
 void EditorWindow::EntitySelected(Entity* entity) {
     entityEditor->SetEntity(entity);
+}
+
+void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
+    Log() << "Mesh selected\n";
 }

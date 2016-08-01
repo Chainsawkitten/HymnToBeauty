@@ -17,6 +17,9 @@ namespace GUI {
     class ResourceList;
     class EntityEditor;
 }
+namespace Geometry {
+    class OBJModel;
+}
 
 /// Handles the main editor window.
 class EditorWindow : public GUI::Container {
@@ -69,6 +72,7 @@ class EditorWindow : public GUI::Container {
         void OpenHymn();
         void OpenHymnClosed(const std::string& hymn);
         void EntitySelected(Entity* entity);
+        void MeshSelected(Geometry::OBJModel* mesh);
         
         GLFWwindow* window;
         GameWindow* gameWindow;
