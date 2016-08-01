@@ -4,6 +4,7 @@
 #include "../Shader/ShaderProgram.hpp"
 #include "../Geometry/Rectangle.hpp"
 #include "../Geometry/Cube.hpp"
+#include "../Geometry/OBJModel.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Font/Font.hpp"
 
@@ -35,6 +36,37 @@ void ResourceManager::FreeShader(Shader* shader) {
         delete shader;
         shaders.erase(source);
     }
+}
+
+ResourceManager::ShaderProgramKey::ShaderProgramKey() {
+    computeShader = nullptr;
+    vertexShader = nullptr;
+    tessControlShader = nullptr;
+    tessEvaluationShader = nullptr;
+    geometryShader = nullptr;
+    fragmentShader = nullptr;
+}
+
+bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
+    if (computeShader < other.computeShader) return true;
+    if (computeShader > other.computeShader) return false;
+    
+    if (vertexShader < other.vertexShader) return true;
+    if (vertexShader > other.vertexShader) return false;
+    
+    if (tessControlShader < other.tessControlShader) return true;
+    if (tessControlShader > other.tessControlShader) return false;
+    
+    if (tessEvaluationShader < other.tessEvaluationShader) return true;
+    if (tessEvaluationShader > other.tessEvaluationShader) return false;
+    
+    if (geometryShader < other.geometryShader) return true;
+    if (geometryShader > other.geometryShader) return false;
+    
+    if (fragmentShader < other.fragmentShader) return true;
+    if (fragmentShader > other.fragmentShader) return false;
+    
+    return false;
 }
 
 ShaderProgram* ResourceManager::CreateShaderProgram(std::initializer_list<const Shader*> shaders) {
@@ -114,35 +146,26 @@ void ResourceManager::FreeCube() {
         delete rectangle;
 }
 
-ResourceManager::ShaderProgramKey::ShaderProgramKey() {
-    computeShader = nullptr;
-    vertexShader = nullptr;
-    tessControlShader = nullptr;
-    tessEvaluationShader = nullptr;
-    geometryShader = nullptr;
-    fragmentShader = nullptr;
+Geometry::OBJModel* ResourceManager::CreateOBJModel(std::string filename) {
+    if (objModels.find(filename) == objModels.end()) {
+        objModels[filename].model = new Geometry::OBJModel(filename.c_str());
+        objModelsInverse[objModels[filename].model] = filename;
+        objModels[filename].count = 1;
+    } else {
+        objModels[filename].count++;
+    }
+
+    return objModels[filename].model;
 }
 
-bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
-    if (computeShader < other.computeShader) return true;
-    if (computeShader > other.computeShader) return false;
+void ResourceManager::FreeOBJModel(Geometry::OBJModel* model) {
+    string filename = objModelsInverse[model];
     
-    if (vertexShader < other.vertexShader) return true;
-    if (vertexShader > other.vertexShader) return false;
-    
-    if (tessControlShader < other.tessControlShader) return true;
-    if (tessControlShader > other.tessControlShader) return false;
-    
-    if (tessEvaluationShader < other.tessEvaluationShader) return true;
-    if (tessEvaluationShader > other.tessEvaluationShader) return false;
-    
-    if (geometryShader < other.geometryShader) return true;
-    if (geometryShader > other.geometryShader) return false;
-    
-    if (fragmentShader < other.fragmentShader) return true;
-    if (fragmentShader > other.fragmentShader) return false;
-    
-    return false;
+    if (objModels[filename].count-- <= 1) {
+        objModelsInverse.erase(model);
+        delete model;
+        objModels.erase(filename);
+    }
 }
 
 Texture2D* ResourceManager::CreateTexture2D(const char* data, int dataLength, bool srgb) {

@@ -11,6 +11,7 @@ class Font;
 namespace Geometry {
     class Rectangle;
     class Cube;
+    class OBJModel;
 }
 
 /// Handles all resources.
@@ -81,6 +82,19 @@ class ResourceManager {
          * Deletes the instance if no more references exist.
          */
         void FreeCube();
+        
+        /// Create an OBJ model for rendering if it doesn't already exist.
+        /**
+        * @param filename Filename of model file.
+        * @return The model instance
+        */
+        Geometry::OBJModel* CreateOBJModel(std::string filename);
+
+        /// Free the reference to the model.
+        /**
+        * @param model %Model to dereference.
+        */
+        void FreeOBJModel(Geometry::OBJModel* model);
         
         /// Create a 2D texture if it doesn't already exist.
         /**
@@ -170,6 +184,14 @@ class ResourceManager {
         // Cube
         Geometry::Cube* cube;
         int cubeCount;
+        
+        // OBJ Model
+        struct OBJModelInstance {
+            Geometry::OBJModel* model;
+            int count;
+        };
+        std::map<std::string, OBJModelInstance> objModels;
+        std::map<Geometry::OBJModel*, std::string> objModelsInverse;
         
         // Texture2D
         struct Texture2DInstance {
