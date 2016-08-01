@@ -139,6 +139,7 @@ set(ENGINE_SRCS
         src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Geometry3D.cpp
+        src/Engine/Geometry/OBJModel.cpp
         src/Engine/Geometry/Rectangle.cpp
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
@@ -169,6 +170,7 @@ set(ENGINE_HEADERS
         src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Geometry3D.hpp
+        src/Engine/Geometry/OBJModel.hpp
         src/Engine/Geometry/Rectangle.hpp
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
