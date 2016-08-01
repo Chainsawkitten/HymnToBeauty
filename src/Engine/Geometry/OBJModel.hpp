@@ -8,6 +8,12 @@ namespace Geometry {
     /// A model loaded from an OBJ file.
     class OBJModel : public Geometry3D {
     public:
+        /// Create new empty OBJ model.
+        /**
+         * The created model has to be loaded later using Load.
+         */
+        OBJModel();
+        
         /// Create new model from OBJ file.
         /**
          * @param filename Filename (relative or absolute) to the OBJ model file.
@@ -37,6 +43,12 @@ namespace Geometry {
          * @return The number of vertex indices.
          */
         unsigned int GetIndexCount() const;
+        
+        /// Load model from OBJ file.
+        /**
+         * @param filename Filename (relative or absolute) to the OBJ model file.
+         */
+        void Load(const char* filename);
     
     private:
         struct Face {
@@ -55,7 +67,7 @@ namespace Geometry {
         static Face::Vertex ReadVertex(std::ifstream& modelFile);
         static void CalculateTangents(std::vector<Face>& faces, std::vector<glm::vec3>& positions, std::vector<glm::vec2>& textureCoordinates, std::vector<glm::vec3>& tangents);
 
-        Vertex *vertexData = nullptr;
+        Vertex* vertexData = nullptr;
         unsigned int vertexNr = 0;
 
         unsigned int* indexData = nullptr;

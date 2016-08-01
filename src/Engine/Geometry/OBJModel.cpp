@@ -4,7 +4,31 @@
 
 using namespace Geometry;
 
+OBJModel::OBJModel() {
+    
+}
+
 OBJModel::OBJModel(const char* filename) {
+    Load(filename);
+}
+
+Geometry3D::Vertex* OBJModel::GetVertices() const {
+    return vertexData;
+}
+
+unsigned int OBJModel::GetVertexCount() const {
+    return vertexNr;
+}
+
+unsigned int* OBJModel::GetIndices() const {
+    return indexData;
+}
+
+unsigned int OBJModel::GetIndexCount() const {
+    return indexNr;
+}
+
+void OBJModel::Load(const char* filename) {
     std::ifstream modelFile;
     modelFile.open(filename);
     if (!modelFile.is_open())
@@ -148,20 +172,4 @@ void OBJModel::CalculateTangents(std::vector<Face>& faces, std::vector<glm::vec3
     for (glm::vec3& tangent : tangents) {
         tangent = glm::normalize(tangent);
     }
-}
-
-Geometry3D::Vertex* OBJModel::GetVertices() const {
-    return vertexData;
-}
-
-unsigned int OBJModel::GetVertexCount() const {
-    return vertexNr;
-}
-
-unsigned int* OBJModel::GetIndices() const {
-    return indexData;
-}
-
-unsigned int OBJModel::GetIndexCount() const {
-    return indexNr;
 }
