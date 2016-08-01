@@ -30,6 +30,7 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     hasEntitySelectedCallback = false;
     
     addMeshHover = false;
+    selectedMesh = nullptr;
 }
 
 ResourceList::~ResourceList() {
@@ -72,6 +73,21 @@ void ResourceList::Update() {
                     break;
                 }
             }
+            
+            position  = GetPosition();
+            position.y += (1 + Hymn().activeScene.GetEntities().size()) * font->GetHeight();
+            
+            // Check if mesh selected.
+            for (Geometry::OBJModel* mesh : Hymn().meshes) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedMesh = mesh;
+                    /*if (hasEntitySelectedCallback)
+                        entitySelectedCallback(mesh);*/
+                    break;
+                }
+            }
         }
     }
 }
@@ -106,10 +122,10 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     id = 0U;
     for (Geometry::OBJModel* mesh : Hymn().meshes) {
         // Render background if selected.
-        /*if (selectedEntity == entity) {
+        if (selectedMesh == mesh) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
-        }*/
+        }
         
         font->RenderText(("Mesh #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();

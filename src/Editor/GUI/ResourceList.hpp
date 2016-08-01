@@ -8,6 +8,7 @@ class Font;
 class Entity;
 namespace Geometry {
     class Rectangle;
+    class OBJModel;
 }
 
 namespace GUI {
@@ -63,5 +64,6 @@ namespace GUI {
             std::function<void(Entity*)> entitySelectedCallback;
             
             bool addMeshHover;
+            Geometry::OBJModel* selectedMesh;
     };
 }
