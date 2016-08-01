@@ -49,7 +49,7 @@ namespace Geometry {
             void Render(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color, const glm::vec2& screenSize) const;
             
         private:
-            Vertex *vertexData = nullptr;
+            Vertex* vertexData = nullptr;
             unsigned int vertexNr = 0;
             
             unsigned int* indexData = nullptr;

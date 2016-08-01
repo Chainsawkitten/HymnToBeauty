@@ -4,6 +4,7 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Geometry/Cube.hpp>
+#include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Font/Font.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include "ABeeZee.ttf.hpp"
@@ -56,7 +57,7 @@ void ResourceList::Update() {
             cubeMesh->geometry = Managers().resourceManager->CreateCube();
         } else if (addMeshHover) {
             // Add mesh button pressed.
-            /// @todo Add mesh.
+            Hymn().meshes.push_back(new Geometry::OBJModel());
         } else {
             position  = GetPosition();
             
@@ -85,7 +86,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addEntityHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    unsigned int id = 0;
+    unsigned int id = 0U;
     for (Entity* entity : Hymn().activeScene.GetEntities()) {
         // Render background if selected.
         if (selectedEntity == entity) {
@@ -101,6 +102,19 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     font->RenderText("Meshes", position, GetSize().x, screenSize);
     addTexture->Render(position + glm::vec2(font->GetWidth("Meshes") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addMeshHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
+    
+    id = 0U;
+    for (Geometry::OBJModel* mesh : Hymn().meshes) {
+        // Render background if selected.
+        /*if (selectedEntity == entity) {
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+        }*/
+        
+        font->RenderText(("Mesh #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        position.y += font->GetHeight();
+        ++id;
+    }
 }
 
 glm::vec2 ResourceList::GetSize() const {
