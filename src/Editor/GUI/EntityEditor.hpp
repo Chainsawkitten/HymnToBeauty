@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Widget.hpp"
+#include <vector>
 
 class Entity;
 namespace Geometry {
@@ -8,7 +9,7 @@ namespace Geometry {
 }
 
 namespace GUI {
-    class TransformEditor;
+    class ComponentEditor;
     
     /// Used to edit an entity.
     class EntityEditor : public Widget {
@@ -57,11 +58,9 @@ namespace GUI {
             
         private:
             Geometry::Rectangle* rectangle;
-            
             glm::vec2 size;
             
             Entity* entity;
-            
-            TransformEditor* transformEditor;
+            std::vector<ComponentEditor*> editors;
     };
 }

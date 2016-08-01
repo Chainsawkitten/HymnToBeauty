@@ -1,25 +1,27 @@
 #pragma once
 
-#include "Widget.hpp"
+#include "../Widget.hpp"
+#include <string>
+#include <vector>
 
 class Entity;
 class Font;
 
 namespace GUI {
     class Label;
-    class Vec3Editor;
     
-    /// Used to edit a transform component.
-    class TransformEditor : public Widget {
+    /// Used to edit a component.
+    class ComponentEditor : public Widget {
         public:
-            /// Create new transform editor.
+            /// Create new component editor.
             /**
              * @param parent Parent widget.
+             * @param title Title.
              */
-            TransformEditor(Widget* parent);
+            ComponentEditor(Widget* parent, const std::string& title);
             
             /// Destructor.
-            ~TransformEditor() override;
+            ~ComponentEditor() override;
             
             /// Update the editor.
             void Update() override;
@@ -48,27 +50,32 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the entity to edit the transform component of.
+            /// Set the entity to edit a component of.
             /**
              * @param entity %Entity to edit.
              */
-            void SetEntity(Entity* entity);
+            virtual void SetEntity(Entity* entity) = 0;
+            
+        protected:
+            /// Add an editor.
+            /**
+             * @param name Name of the editor to add.
+             * @param editor The editor to add.
+             */
+            void AddEditor(const std::string& name, Widget* editor);
             
         private:
             glm::vec2 size;
             Font* font;
             
-            Entity* entity;
+            Label* titleLabel;
             
-            Label* transformLabel;
-            
-            Label* positionLabel;
-            Vec3Editor* positionEditor;
-            
-            Label* scaleLabel;
-            Vec3Editor* scaleEditor;
-            
-            Label* rotationLabel;
-            Vec3Editor* rotationEditor;
+            struct LabeledEditor {
+                Label* label;
+                Widget* editor;
+                
+                LabeledEditor(Label* label, Widget* editor);
+            };
+            std::vector<LabeledEditor> editors;
     };
 }
