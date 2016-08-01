@@ -50,6 +50,7 @@ Font::Font(const char* filename, float height) {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     color = glm::vec3(0.f, 0.f, 0.f);
+    isFromFile = true;
 }
 
 Font::Font(const char* source, int sourceLength, float height) {
@@ -74,6 +75,7 @@ Font::Font(const char* source, int sourceLength, float height) {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     color = glm::vec3(0.f, 0.f, 0.f);
+    isFromFile = false;
 }
 
 Font::~Font() {
@@ -156,6 +158,10 @@ float Font::GetWidth(const char* text) {
 
 float Font::GetHeight() const {
     return height;
+}
+
+bool Font::IsFromFile() const {
+    return isFromFile;
 }
 
 float Font::RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize) {

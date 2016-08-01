@@ -75,8 +75,16 @@ class Font {
          */
         float GetHeight() const;
         
+        /// Get whether the font was created from file.
+        /**
+         * @return Whether the font was created from file.
+         */
+        bool IsFromFile() const;
+        
     private:
         float RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize);
+        
+        bool isFromFile;
         
         GLuint texture;
         stbtt_bakedchar cdata[96]; // ASCII 32..126 is 95 glyphs
