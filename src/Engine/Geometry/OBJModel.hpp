@@ -49,6 +49,9 @@ namespace Geometry {
          * @param filename Filename (relative or absolute) to the OBJ model file.
          */
         void Load(const char* filename);
+        
+        /// The name of the model.
+        std::string name;
     
     private:
         struct Face {

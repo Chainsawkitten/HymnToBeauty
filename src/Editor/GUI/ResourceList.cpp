@@ -59,7 +59,9 @@ void ResourceList::Update() {
             cubeMesh->geometry = Managers().resourceManager->CreateCube();
         } else if (addMeshHover) {
             // Add mesh button pressed.
-            Hymn().meshes.push_back(new Geometry::OBJModel());
+            Geometry::OBJModel* mesh = new Geometry::OBJModel();
+            mesh->name = "Mesh #" + std::to_string(Hymn().meshNumber++);
+            Hymn().meshes.push_back(mesh);
         } else {
             position  = GetPosition();
             
@@ -122,7 +124,6 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     addTexture->Render(position + glm::vec2(font->GetWidth("Meshes") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addMeshHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    id = 0U;
     for (Geometry::OBJModel* mesh : Hymn().meshes) {
         // Render background if selected.
         if (selectedMesh == mesh) {
@@ -130,9 +131,8 @@ void ResourceList::Render(const glm::vec2& screenSize) {
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
         }
         
-        font->RenderText(("Mesh #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(mesh->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
-        ++id;
     }
 }
 
