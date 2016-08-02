@@ -10,6 +10,7 @@ namespace Geometry {
 
 namespace GUI {
     class Label;
+    class StringEditor;
     
     /// Used to edit a mesh.
     class MeshEditor : public Widget {
@@ -64,5 +65,6 @@ namespace GUI {
             Geometry::OBJModel* mesh;
             
             Label* nameLabel;
+            StringEditor* nameEditor;
     };
 }

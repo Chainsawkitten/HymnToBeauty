@@ -210,6 +210,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/ComponentEditor/TransformEditor.cpp
         src/Editor/GUI/FloatEditor.cpp
         src/Editor/GUI/Vec3Editor.cpp
+        src/Editor/GUI/StringEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -235,6 +236,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/ComponentEditor/TransformEditor.hpp
         src/Editor/GUI/FloatEditor.hpp
         src/Editor/GUI/Vec3Editor.hpp
+        src/Editor/GUI/StringEditor.cpp
         src/Editor/Util/EditorSettings.hpp
     )
 
