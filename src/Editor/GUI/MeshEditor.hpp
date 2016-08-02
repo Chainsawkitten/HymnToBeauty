@@ -2,12 +2,15 @@
 
 #include "Widget.hpp"
 
+class Font;
 namespace Geometry {
     class Rectangle;
     class OBJModel;
 }
 
 namespace GUI {
+    class Label;
+    
     /// Used to edit a mesh.
     class MeshEditor : public Widget {
         public:
@@ -56,7 +59,10 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
+            Font* font;
             
             Geometry::OBJModel* mesh;
+            
+            Label* nameLabel;
     };
 }
