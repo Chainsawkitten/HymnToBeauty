@@ -4,6 +4,7 @@
 
 namespace Geometry {
     class Rectangle;
+    class OBJModel;
 }
 
 namespace GUI {
@@ -46,8 +47,16 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
+            /// Set the mesh to edit.
+            /**
+             * @param mesh Mesh to edit.
+             */
+            void SetMesh(Geometry::OBJModel* mesh);
+            
         private:
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
+            
+            Geometry::OBJModel* mesh;
     };
 }

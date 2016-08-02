@@ -9,6 +9,7 @@ using namespace GUI;
 MeshEditor::MeshEditor(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     SetVisible(false);
+    mesh = nullptr;
 }
 
 MeshEditor::~MeshEditor() {
@@ -34,4 +35,8 @@ glm::vec2 MeshEditor::GetSize() const {
 
 void MeshEditor::SetSize(const glm::vec2& size) {
     this->size = size;
+}
+
+void MeshEditor::SetMesh(Geometry::OBJModel* mesh) {
+    this->mesh = mesh;
 }

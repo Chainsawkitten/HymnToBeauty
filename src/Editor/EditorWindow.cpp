@@ -263,7 +263,7 @@ void EditorWindow::EntitySelected(Entity* entity) {
 }
 
 void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
-    Log() << "Mesh selected\n";
+    meshEditor->SetMesh(mesh);
     
     entityEditor->SetVisible(false);
     meshEditor->SetVisible(true);
