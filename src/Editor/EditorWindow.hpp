@@ -11,6 +11,7 @@ class InputHandler;
 class Entity;
 namespace GUI {
     class SelectHymnWindow;
+    class FileSelector;
     class HorizontalLayout;
     class VerticalLayout;
     class Button;
@@ -78,6 +79,7 @@ class EditorWindow : public GUI::Container {
         GLFWwindow* window;
         GameWindow* gameWindow;
         GUI::SelectHymnWindow* childWindow;
+        GUI::FileSelector* fileSelector;
         
         // Menu bar.
         GUI::HorizontalLayout* menuBar;

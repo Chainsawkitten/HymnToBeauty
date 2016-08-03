@@ -31,6 +31,9 @@ namespace GUI {
              */
             virtual void AddWidget(Widget* widget);
             
+            /// Clear all widgets.
+            void ClearWidgets();
+            
             /// Set widget's position.
             /**
              * @param position New position.

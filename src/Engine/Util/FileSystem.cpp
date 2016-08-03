@@ -116,4 +116,8 @@ namespace FileSystem {
         
         return path;
     }
+    
+    std::string GetParentDirectory(const std::string& path) {
+        return path;
+    }
 }

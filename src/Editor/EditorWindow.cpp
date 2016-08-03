@@ -12,6 +12,7 @@
 #include "GUI/ResourceList.hpp"
 #include "GUI/EntityEditor.hpp"
 #include "GUI/MeshEditor.hpp"
+#include "GUI/FileSelector.hpp"
 
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
@@ -65,6 +66,9 @@ EditorWindow::~EditorWindow() {
     
     delete resourceList;
     delete entityEditor;
+    delete meshEditor;
+    
+    delete fileSelector;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
     Managers().resourceManager->FreeTexture2D(optionsTexture);
@@ -144,6 +148,10 @@ void EditorWindow::Init() {
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
     
+    // File selector.
+    fileSelector = new GUI::FileSelector(this);
+    fileSelector->SetSize(GetSize());
+    
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -163,6 +171,10 @@ void EditorWindow::Update() {
         input->Update();
         input->SetActive();
         childWindow->Update();
+    } else if (fileSelector->IsVisible()) {
+        input->Update();
+        input->SetActive();
+        fileSelector->Update();
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         Play();
     } else {
@@ -188,6 +200,9 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
         
         if (childWindow != nullptr)
             childWindow->Render(screenSize);
+        
+        if (fileSelector->IsVisible())
+            fileSelector->Render(screenSize);
         
         glfwSwapBuffers(window);
     }

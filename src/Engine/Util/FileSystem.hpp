@@ -59,4 +59,11 @@ namespace FileSystem {
      * @return The path
      */
     std::string DataPath(const char* appName, const char* filename);
+    
+    /// Get the parent directory of a path.
+    /**
+     * @param path Absolute path to get the parent directory of.
+     * @return Path of the parent directory.
+     */
+    std::string GetParentDirectory(const std::string& path);
 }

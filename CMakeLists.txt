@@ -200,6 +200,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/ImageTextButton.cpp
         src/Editor/GUI/TextButton.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
+        src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
@@ -226,6 +227,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/ImageTextButton.hpp
         src/Editor/GUI/TextButton.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
+        src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
