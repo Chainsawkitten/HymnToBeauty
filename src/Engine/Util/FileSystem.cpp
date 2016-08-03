@@ -118,6 +118,11 @@ namespace FileSystem {
     }
     
     std::string GetParentDirectory(const std::string& path) {
+        for (std::size_t i = path.length() - 1; i > 0; --i) {
+            if (path[i] == '\\' || path[i] == '/')
+                return path.substr(0, i);
+        }
+        
         return path;
     }
 }
