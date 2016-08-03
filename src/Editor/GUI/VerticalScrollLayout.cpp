@@ -3,6 +3,7 @@
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
+#include <Engine/Util/Input.hpp>
 
 using namespace GUI;
 
@@ -10,10 +11,23 @@ VerticalScrollLayout::VerticalScrollLayout(Widget* parent) : Container(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
     nextPosition = glm::vec2(0.f, 0.f);
+    scrollPosition = 0U;
 }
 
 VerticalScrollLayout::~VerticalScrollLayout() {
     Managers().resourceManager->FreeRectangle();
+}
+
+void VerticalScrollLayout::Update() {
+    Container::Update();
+    
+    if (Input()->ScrollUp() && scrollPosition > 0U) {
+        --scrollPosition;
+        UpdatePositions();
+    } else if (Input()->ScrollDown() && scrollPosition < GetWidgets().size()) {
+        ++scrollPosition;
+        UpdatePositions();
+    }
 }
 
 void VerticalScrollLayout::Render(const glm::vec2& screenSize) {
@@ -46,6 +60,7 @@ void VerticalScrollLayout::AddWidget(Widget* widget) {
 void VerticalScrollLayout::ClearWidgets() {
     Container::ClearWidgets();
     nextPosition = glm::vec2(0.f, 0.f);
+    scrollPosition = 0U;
 }
 
 glm::vec2 VerticalScrollLayout::GetSize() const {
@@ -54,4 +69,15 @@ glm::vec2 VerticalScrollLayout::GetSize() const {
 
 void VerticalScrollLayout::SetSize(const glm::vec2& size) {
     this->size = size;
+}
+
+void VerticalScrollLayout::UpdatePositions() {
+    glm::vec2 nextPosition(0.f, 0.f);
+    
+    for (std::size_t i=0U; i < GetWidgets().size(); ++i) {
+        if (i >= scrollPosition) {
+            GetWidgets()[i]->SetPosition(GetPosition() + nextPosition);
+            nextPosition.y += GetWidgets()[i]->GetSize().y;
+        }
+    }
 }

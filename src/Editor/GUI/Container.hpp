@@ -17,7 +17,7 @@ namespace GUI {
             virtual ~Container();
             
             /// Update the widget.
-            virtual void Update();
+            void Update() override;
             
             /// Get all the container's widgets.
             /**

@@ -19,6 +19,9 @@ namespace GUI {
             /// Destructor.
             ~VerticalScrollLayout() override;
             
+            /// Update the widget.
+            void Update() override;
+            
             /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
@@ -47,9 +50,13 @@ namespace GUI {
             void SetSize(const glm::vec2& size) override;
             
         private:
+            void UpdatePositions();
+            
             Geometry::Rectangle* rectangle;
             
             glm::vec2 size;
             glm::vec2 nextPosition;
+            
+            std::size_t scrollPosition;
     };
 }
