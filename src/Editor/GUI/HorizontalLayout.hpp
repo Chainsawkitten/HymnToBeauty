@@ -31,6 +31,9 @@ namespace GUI {
              */
             void AddWidget(Widget* widget) override;
             
+            /// Clear all widgets.
+            void ClearWidgets() override;
+            
             /// Get the size of the widget.
             /**
              * @return The size

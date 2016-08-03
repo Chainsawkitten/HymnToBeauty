@@ -32,7 +32,7 @@ namespace GUI {
             virtual void AddWidget(Widget* widget);
             
             /// Clear all widgets.
-            void ClearWidgets();
+            virtual void ClearWidgets();
             
             /// Set widget's position.
             /**
