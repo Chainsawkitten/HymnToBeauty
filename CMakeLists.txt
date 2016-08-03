@@ -195,6 +195,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Container.cpp
         src/Editor/GUI/HorizontalLayout.cpp
         src/Editor/GUI/VerticalLayout.cpp
+        src/Editor/GUI/VerticalScrollLayout.cpp
         src/Editor/GUI/Button.cpp
         src/Editor/GUI/ImageButton.cpp
         src/Editor/GUI/ImageTextButton.cpp
@@ -222,6 +223,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Container.hpp
         src/Editor/GUI/HorizontalLayout.hpp
         src/Editor/GUI/VerticalLayout.hpp
+        src/Editor/GUI/VerticalScrollLayout.hpp
         src/Editor/GUI/Button.hpp
         src/Editor/GUI/ImageButton.hpp
         src/Editor/GUI/ImageTextButton.hpp

@@ -12,7 +12,7 @@ namespace Geometry {
 namespace GUI {
     class ImageButton;
     class TextButton;
-    class VerticalLayout;
+    class VerticalScrollLayout;
     
     /// A window where a file can be selected.
     class FileSelector : public Container {
@@ -78,6 +78,6 @@ namespace GUI {
             
             TextButton* selectButton;
             
-            VerticalLayout* fileList;
+            VerticalScrollLayout* fileList;
     };
 }

@@ -2,7 +2,7 @@
 
 #include "ImageButton.hpp"
 #include "TextButton.hpp"
-#include "VerticalLayout.hpp"
+#include "VerticalScrollLayout.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
@@ -32,7 +32,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     selectButton->SetSize(glm::vec2(64.f, 32.f));
     AddWidget(selectButton);
     
-    fileList = new VerticalLayout(this);
+    fileList = new VerticalScrollLayout(this);
     AddWidget(fileList);
     
     path = FileSystem::DataPath("Hymn to Beauty");
