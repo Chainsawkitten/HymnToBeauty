@@ -11,6 +11,7 @@ namespace Geometry {
 namespace GUI {
     class Label;
     class StringEditor;
+    class Button;
     
     /// Used to edit a mesh.
     class MeshEditor : public Widget {
@@ -66,5 +67,7 @@ namespace GUI {
             
             Label* nameLabel;
             StringEditor* nameEditor;
+            
+            Button* loadButton;
     };
 }

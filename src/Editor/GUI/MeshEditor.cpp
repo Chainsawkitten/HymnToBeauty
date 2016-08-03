@@ -8,6 +8,7 @@
 #include "ABeeZee.ttf.hpp"
 #include "Label.hpp"
 #include "StringEditor.hpp"
+#include "TextButton.hpp"
 
 using namespace GUI;
 
@@ -19,6 +20,8 @@ MeshEditor::MeshEditor(Widget* parent) : Widget(parent) {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     nameLabel = new Label(this, font, "Name");
     nameEditor = new StringEditor(this, font);
+    
+    loadButton = new TextButton(this, font, "Load OBJ model");
 }
 
 MeshEditor::~MeshEditor() {
@@ -27,10 +30,12 @@ MeshEditor::~MeshEditor() {
     
     delete nameLabel;
     delete nameEditor;
+    delete loadButton;
 }
 
 void MeshEditor::Update() {
     nameEditor->Update();
+    loadButton->Update();
 }
 
 void MeshEditor::Render(const glm::vec2& screenSize) {
@@ -39,6 +44,7 @@ void MeshEditor::Render(const glm::vec2& screenSize) {
     
     nameLabel->Render(screenSize);
     nameEditor->Render(screenSize);
+    loadButton->Render(screenSize);
 }
 
 void MeshEditor::SetPosition(const glm::vec2& position) {
@@ -46,6 +52,7 @@ void MeshEditor::SetPosition(const glm::vec2& position) {
     
     nameLabel->SetPosition(position);
     nameEditor->SetPosition(position + glm::vec2(10.f, 20.f));
+    loadButton->SetPosition(position + glm::vec2(0.f, 50.f));
 }
 
 glm::vec2 MeshEditor::GetSize() const {
@@ -56,6 +63,7 @@ void MeshEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
     nameEditor->SetSize(glm::vec2(size.x - 10.f, 20.f));
+    loadButton->SetSize(glm::vec2(size.x, 20.f));
 }
 
 void MeshEditor::SetMesh(Geometry::OBJModel* mesh) {
