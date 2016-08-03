@@ -117,6 +117,7 @@ void FileSelector::ScanDirectory() {
     // ..
     TextButton* parentButton = new TextButton(this, font, "..");
     parentButton->SetClickedCallback(std::bind(&OpenParentDirectory, this));
+    parentButton->SetSize(glm::vec2(size.x, 64.f));
     fileList->AddWidget(parentButton);
     
     // Directories.
@@ -124,6 +125,7 @@ void FileSelector::ScanDirectory() {
     for (string file : files) {
         TextButton* fileButton = new TextButton(this, font, file);
         fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
+        fileButton->SetSize(glm::vec2(size.x, 64.f));
         fileList->AddWidget(fileButton);
     }
     
