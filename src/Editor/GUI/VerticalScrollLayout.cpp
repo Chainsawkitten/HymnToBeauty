@@ -38,14 +38,19 @@ void VerticalScrollLayout::Render(const glm::vec2& screenSize) {
     // Draw scrollbar.
     if (!GetWidgets().empty()) {
         color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+        float yScrolled = 0.f;
         float yCovered = 0.f;
         float yTotal = 0.f;
-        for (Widget* widget : GetWidgets()) {
-            yTotal += widget->GetSize().y;
-            if (yTotal < size.y)
-                yCovered = yTotal;
+        for (std::size_t i=0U; i < GetWidgets().size(); ++i) {
+            yTotal += GetWidgets()[i]->GetSize().y;
+            
+            if (i < scrollPosition) {
+                yScrolled += GetWidgets()[i]->GetSize().y;
+            } else if (yTotal - yScrolled < size.y) {
+                yCovered += GetWidgets()[i]->GetSize().y;
+            }
         }
-        rectangle->Render(GetPosition() + glm::vec2(size.x - 20.f, 0.f), glm::vec2(20.f, size.y * yCovered / yTotal), color, screenSize);
+        rectangle->Render(GetPosition() + glm::vec2(size.x - 20.f, size.y * yScrolled / yTotal), glm::vec2(20.f, size.y * yCovered / yTotal), color, screenSize);
     }
     
     RenderWidgets(screenSize);
