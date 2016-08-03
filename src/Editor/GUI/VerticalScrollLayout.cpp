@@ -53,7 +53,10 @@ void VerticalScrollLayout::Render(const glm::vec2& screenSize) {
         rectangle->Render(GetPosition() + glm::vec2(size.x - 20.f, size.y * yScrolled / yTotal), glm::vec2(20.f, size.y * yCovered / yTotal), color, screenSize);
     }
     
-    RenderWidgets(screenSize);
+    for (Widget* widget : GetWidgets()) {
+        if (widget->IsVisible() && widget->GetPosition().y - GetPosition().y + widget->GetSize().y <= size.y)
+            widget->Render(screenSize);
+    }
 }
 
 void VerticalScrollLayout::AddWidget(Widget* widget) {
