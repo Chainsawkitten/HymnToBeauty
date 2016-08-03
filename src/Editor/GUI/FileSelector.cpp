@@ -82,7 +82,7 @@ void FileSelector::SetSize(const glm::vec2& size) {
     selectButton->SetPosition(GetPosition() + glm::vec2(size.x - selectButton->GetSize().x - 32.f, size.y - selectButton->GetSize().y - 32.f));
     
     for (Widget* file : fileList->GetWidgets())
-        file->SetSize(glm::vec2(size.x, 64.f));
+        file->SetSize(glm::vec2(size.x - 20.f, 64.f));
     
     fileList->SetPosition(GetPosition() + glm::vec2(0.f, closeButton->GetSize().y));
     fileList->SetSize(glm::vec2(size.x, selectButton->GetPosition().y - closeButton->GetSize().y - 64.f));
@@ -117,7 +117,7 @@ void FileSelector::ScanDirectory() {
     // ..
     TextButton* parentButton = new TextButton(this, font, "..");
     parentButton->SetClickedCallback(std::bind(&OpenParentDirectory, this));
-    parentButton->SetSize(glm::vec2(size.x, 64.f));
+    parentButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
     fileList->AddWidget(parentButton);
     
     // Directories.
@@ -125,7 +125,7 @@ void FileSelector::ScanDirectory() {
     for (string file : files) {
         TextButton* fileButton = new TextButton(this, font, file);
         fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
-        fileButton->SetSize(glm::vec2(size.x, 64.f));
+        fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
         fileList->AddWidget(fileButton);
     }
     
