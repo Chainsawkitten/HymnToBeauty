@@ -51,6 +51,18 @@ class InputHandler {
          */
         double CursorY() const;
         
+        /// Get whether user has moved scroll wheel up.
+        /**
+         * @return Whether user has scrolled up
+         */
+        bool ScrollUp() const;
+        
+        /// Get whether user has moved scroll wheel down.
+        /**
+         * @return Whether user has scrolled down
+         */
+        bool ScrollDown() const;
+        
         /// Assign a button binding.
         /**
          * See <a href="http://www.glfw.org/docs/latest/group__keys.html">GLFW keyboard documentation</a> for indices for keys.
@@ -96,6 +108,12 @@ class InputHandler {
          */
         void CharacterCallback(unsigned int codePoint);
         
+        /// GLFW scrolling callback.
+        /**
+         * @param yoffset Offset along the Y-axis.
+         */
+        void ScrollCallback(double yOffset);
+        
     private:
         static InputHandler* activeInstance;
         
@@ -120,6 +138,8 @@ class InputHandler {
         ButtonData buttonData[BUTTONS];
         
         double cursorX, cursorY;
+        double lastScroll;
+        double scroll;
         
         std::string text, tempText;
 };
