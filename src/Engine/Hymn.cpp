@@ -3,12 +3,9 @@
 #include "Util/FileSystem.hpp"
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"
-#include "Manager/ResourceManager.hpp"
 #include "Entity/Entity.hpp"
 #include "Component/Transform.hpp"
-#include "Component/Mesh.hpp"
 #include "Component/Lens.hpp"
-#include "Geometry/Cube.hpp"
 
 using namespace std;
 
@@ -39,6 +36,7 @@ const string& ActiveHymn::GetPath() const {
 void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
 }
 
 void ActiveHymn::Load(const string& path) {
