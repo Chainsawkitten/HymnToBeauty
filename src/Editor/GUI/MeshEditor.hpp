@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Widget.hpp"
+#include <string>
 
 class Font;
 namespace Geometry {
@@ -12,6 +13,7 @@ namespace GUI {
     class Label;
     class StringEditor;
     class Button;
+    class FileSelector;
     
     /// Used to edit a mesh.
     class MeshEditor : public Widget {
@@ -19,8 +21,9 @@ namespace GUI {
             /// Create new mesh editor.
             /**
              * @param parent Parent widget.
+             * @param fileSelector File selector to browse with.
              */
-            MeshEditor(Widget* parent);
+            MeshEditor(Widget* parent, FileSelector* fileSelector);
             
             /// Destructor.
             ~MeshEditor();
@@ -59,6 +62,9 @@ namespace GUI {
             void SetMesh(Geometry::OBJModel* mesh);
             
         private:
+            void LoadPressed();
+            void FileSelected(const std::string& file);
+            
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
             Font* font;
@@ -69,5 +75,6 @@ namespace GUI {
             StringEditor* nameEditor;
             
             Button* loadButton;
+            FileSelector* fileSelector;
     };
 }

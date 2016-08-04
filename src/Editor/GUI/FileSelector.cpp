@@ -34,9 +34,10 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     
     path = FileSystem::DataPath("Hymn to Beauty");
     extension = "";
-    pathChanged = false;
+    pathChanged = true;
     file = "";
-    ScanDirectory();
+    
+    SetVisible(false);
 }
 
 FileSelector::~FileSelector() {

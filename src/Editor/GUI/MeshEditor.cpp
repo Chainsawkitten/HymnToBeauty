@@ -9,10 +9,13 @@
 #include "Label.hpp"
 #include "StringEditor.hpp"
 #include "TextButton.hpp"
+#include "FileSelector.hpp"
+#include <functional>
+#include <Engine/Util/Log.hpp>
 
 using namespace GUI;
 
-MeshEditor::MeshEditor(Widget* parent) : Widget(parent) {
+MeshEditor::MeshEditor(Widget* parent, FileSelector* fileSelector) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     SetVisible(false);
     mesh = nullptr;
@@ -22,6 +25,8 @@ MeshEditor::MeshEditor(Widget* parent) : Widget(parent) {
     nameEditor = new StringEditor(this, font);
     
     loadButton = new TextButton(this, font, "Load OBJ model");
+    loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
+    this->fileSelector = fileSelector;
 }
 
 MeshEditor::~MeshEditor() {
@@ -73,4 +78,14 @@ void MeshEditor::SetMesh(Geometry::OBJModel* mesh) {
     
     // Update editor positions.
     SetPosition(GetPosition());
+}
+
+void MeshEditor::LoadPressed() {
+    fileSelector->SetExtension("obj");
+    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+    fileSelector->SetVisible(true);
+}
+
+void MeshEditor::FileSelected(const std::string& file) {
+    Log() << file << "\n";
 }

@@ -118,13 +118,18 @@ void EditorWindow::Init() {
     resourceList->SetMeshSelectedCallback(std::bind(&MeshSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
+    // File selector.
+    fileSelector = new GUI::FileSelector(this);
+    fileSelector->SetSize(GetSize());
+    fileSelector->SetExtension("obj");
+    
     // Editors.
     entityEditor = new GUI::EntityEditor(this);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
     
-    meshEditor = new GUI::MeshEditor(this);
+    meshEditor = new GUI::MeshEditor(this, fileSelector);
     meshEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     meshEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(meshEditor);
@@ -147,12 +152,6 @@ void EditorWindow::Init() {
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
-    
-    // File selector.
-    fileSelector = new GUI::FileSelector(this);
-    fileSelector->SetSize(GetSize());
-    fileSelector->SetExtension("obj");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
     
     glEnable(GL_DEPTH_TEST);
 }
@@ -284,8 +283,4 @@ void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
     
     entityEditor->SetVisible(false);
     meshEditor->SetVisible(true);
-}
-
-void EditorWindow::FileSelected(const std::string& file) {
-    Log() << file << "\n";
 }

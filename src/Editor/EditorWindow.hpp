@@ -75,7 +75,6 @@ class EditorWindow : public GUI::Container {
         void OpenHymnClosed(const std::string& hymn);
         void EntitySelected(Entity* entity);
         void MeshSelected(Geometry::OBJModel* mesh);
-        void FileSelected(const std::string& file);
         
         GLFWwindow* window;
         GameWindow* gameWindow;
