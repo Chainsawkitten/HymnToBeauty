@@ -152,6 +152,7 @@ void EditorWindow::Init() {
     fileSelector = new GUI::FileSelector(this);
     fileSelector->SetSize(GetSize());
     fileSelector->SetExtension("obj");
+    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
     
     glEnable(GL_DEPTH_TEST);
 }
@@ -283,4 +284,8 @@ void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
     
     entityEditor->SetVisible(false);
     meshEditor->SetVisible(true);
+}
+
+void EditorWindow::FileSelected(const std::string& file) {
+    Log() << file << "\n";
 }

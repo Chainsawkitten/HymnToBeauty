@@ -46,11 +46,11 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size);
             
-            /// Set function to call when closed.
+            /// Set function to call when a file has been selected.
             /**
-             * @param callback Function to call when window is closed.
+             * @param callback Function to call.
              */
-            void SetClosedCallback(std::function<void(const std::string&)> callback);
+            void SetFileSelectedCallback(std::function<void(const std::string&)> callback);
             
             /// Set extension to select files of.
             /**
@@ -62,8 +62,8 @@ namespace GUI {
             void Close();
             void OpenParentDirectory();
             void OpenDirectory(const std::string& name);
-            void ScanDirectory();
             void SelectFile(const std::string& name);
+            void ScanDirectory();
             
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -76,9 +76,8 @@ namespace GUI {
             bool pathChanged;
             std::string file;
             
-            bool hasClosedCallback;
-            std::function<void(const std::string&)> closedCallback;
-            bool shouldClose;
+            bool hasFileSelectedCallback;
+            std::function<void(const std::string&)> fileSelectedCallback;
             
             ImageButton* closeButton;
             Texture2D* closeTexture;

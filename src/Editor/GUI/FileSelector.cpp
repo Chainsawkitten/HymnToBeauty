@@ -18,8 +18,7 @@ using namespace std;
 FileSelector::FileSelector(Widget *parent) : Container(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
-    hasClosedCallback = false;
-    shouldClose = false;
+    hasFileSelectedCallback = false;
     
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
@@ -61,13 +60,6 @@ void FileSelector::Update() {
     }
     
     UpdateWidgets();
-    
-    if (shouldClose) {
-        SetVisible(false);
-        
-        if (hasClosedCallback)
-            closedCallback(path + file);
-    }
 }
 
 void FileSelector::Render(const glm::vec2& screenSize) {
@@ -93,9 +85,9 @@ void FileSelector::SetSize(const glm::vec2& size) {
     fileList->SetSize(glm::vec2(size.x, size.y - closeButton->GetSize().y));
 }
 
-void FileSelector::SetClosedCallback(std::function<void(const std::string&)> callback) {
-    closedCallback = callback;
-    hasClosedCallback = true;
+void FileSelector::SetFileSelectedCallback(std::function<void(const std::string&)> callback) {
+    fileSelectedCallback = callback;
+    hasFileSelectedCallback = true;
 }
 
 void FileSelector::SetExtension(const string& extension) {
@@ -103,7 +95,7 @@ void FileSelector::SetExtension(const string& extension) {
 }
 
 void FileSelector::Close() {
-    shouldClose = true;
+    SetVisible(false);
 }
 
 void FileSelector::OpenParentDirectory() {
@@ -116,6 +108,14 @@ void FileSelector::OpenDirectory(const string& name) {
     path += FileSystem::DELIMITER + name;
     pathChanged = true;
     file = "";
+}
+
+void FileSelector::SelectFile(const string& name) {
+    file = name;
+    SetVisible(false);
+    
+    if (hasFileSelectedCallback)
+        fileSelectedCallback(path + FileSystem::DELIMITER + file);
 }
 
 void FileSelector::ScanDirectory() {
@@ -141,14 +141,9 @@ void FileSelector::ScanDirectory() {
     for (string file : files) {
         if (FileSystem::GetExtension(file) == extension) {
             ImageTextButton* fileButton = new ImageTextButton(this, fileTexture, font, file);
-            //fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
+            fileButton->SetClickedCallback(std::bind(&SelectFile, this, file));
             fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
             fileList->AddWidget(fileButton);
         }
     }
-}
-
-void FileSelector::SelectFile(const string& name) {
-    file = name;
-    shouldClose = true;
 }
