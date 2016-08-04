@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <cctype>
 
 // Platform-dependent includes.
 #if defined(_WIN32) || defined(WIN32)
@@ -15,11 +16,11 @@
 
 namespace FileSystem {
 #if defined(_WIN32) || defined(WIN32)
-	// Windows
-	const char DELIMITER = '\\';
+    // Windows
+    const char DELIMITER = '\\';
 #else
-	// MacOS and Linux
-	const char DELIMITER = '/';
+    // MacOS and Linux
+    const char DELIMITER = '/';
 #endif
     
     const unsigned int FILE = 1;
@@ -60,8 +61,8 @@ namespace FileSystem {
         while (find) {
             if (((type & DIRECTORY && findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
                  (type & FILE && !(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))) &&
-                 strcmp(findFileData.cFileName, ".") &&
-                 strcmp(findFileData.cFileName, "..")) {
+                    strcmp(findFileData.cFileName, ".") &&
+                    strcmp(findFileData.cFileName, "..")) {
                 contents.push_back(findFileData.cFileName);
             }
             
@@ -76,8 +77,8 @@ namespace FileSystem {
         while ((entry = readdir(directory)) != NULL) {
             if (((type & DIRECTORY && entry->d_type == DT_DIR) ||
                  (type & FILE && entry->d_type != DT_DIR)) &&
-                 strcmp(entry->d_name, ".") &&
-                 strcmp(entry->d_name, "..")) {
+                    strcmp(entry->d_name, ".") &&
+                    strcmp(entry->d_name, "..")) {
                 contents.push_back(entry->d_name);
             }
         }
@@ -128,6 +129,13 @@ namespace FileSystem {
     
     std::string GetExtension(const std::string& filename) {
         std::size_t pos = filename.find_last_of('.');
-        return (pos == std::string::npos) ? "" : filename.substr(pos + 1U);
+        if (pos == std::string::npos)
+            return "";
+        
+        std::string extension = filename.substr(pos + 1U);
+        for (std::size_t i = 0U; i < extension.length(); ++i)
+            extension[i] = tolower(extension[i]);
+        
+        return extension;
     }
 }

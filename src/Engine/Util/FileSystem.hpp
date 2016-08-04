@@ -70,7 +70,7 @@ namespace FileSystem {
     /// Get the extension part of a filename.
     /**
      * @param filename The filename to check.
-     * @return The extension part of the filename.
+     * @return The extension part of the filename, converted to lower case.
      */
     std::string GetExtension(const std::string& filename);
 }
