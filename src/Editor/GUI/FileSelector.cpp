@@ -40,6 +40,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     AddWidget(fileList);
     
     path = FileSystem::DataPath("Hymn to Beauty");
+    extension = "";
     pathChanged = false;
     ScanDirectory();
 }
@@ -100,6 +101,10 @@ void FileSelector::SetClosedCallback(std::function<void(const std::string&)> cal
     hasClosedCallback = true;
 }
 
+void FileSelector::SetExtension(const string& extension) {
+    this->extension = extension;
+}
+
 void FileSelector::Close() {
     shouldClose = true;
 }
@@ -139,9 +144,11 @@ void FileSelector::ScanDirectory() {
     // Files.
     files = FileSystem::DirectoryContents(path, FileSystem::FILE);
     for (string file : files) {
-        ImageTextButton* fileButton = new ImageTextButton(this, fileTexture, font, file);
-        //fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
-        fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
-        fileList->AddWidget(fileButton);
+        if (FileSystem::GetExtension(file) == extension) {
+            ImageTextButton* fileButton = new ImageTextButton(this, fileTexture, font, file);
+            //fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
+            fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
+            fileList->AddWidget(fileButton);
+        }
     }
 }

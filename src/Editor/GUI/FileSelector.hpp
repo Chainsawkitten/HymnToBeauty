@@ -53,6 +53,12 @@ namespace GUI {
              */
             void SetClosedCallback(std::function<void(const std::string&)> callback);
             
+            /// Set extension to select files of.
+            /**
+             * @param extension Set the extension of which files to show.
+             */
+            void SetExtension(const std::string& extension);
+            
         private:
             void Close();
             void Select();
@@ -67,6 +73,7 @@ namespace GUI {
             
             // Interaction
             std::string path;
+            std::string extension;
             bool pathChanged;
             
             bool hasClosedCallback;

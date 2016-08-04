@@ -151,6 +151,7 @@ void EditorWindow::Init() {
     // File selector.
     fileSelector = new GUI::FileSelector(this);
     fileSelector->SetSize(GetSize());
+    fileSelector->SetExtension("obj");
     
     glEnable(GL_DEPTH_TEST);
 }
