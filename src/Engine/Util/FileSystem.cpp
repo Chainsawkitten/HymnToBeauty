@@ -125,4 +125,9 @@ namespace FileSystem {
         
         return path;
     }
+    
+    std::string GetExtension(const std::string& filename) {
+        std::size_t pos = filename.find_last_of('.');
+        return (pos == std::string::npos) ? "" : filename.substr(pos + 1U);
+    }
 }

@@ -66,4 +66,11 @@ namespace FileSystem {
      * @return Path of the parent directory.
      */
     std::string GetParentDirectory(const std::string& path);
+    
+    /// Get the extension part of a filename.
+    /**
+     * @param filename The filename to check.
+     * @return The extension part of the filename.
+     */
+    std::string GetExtension(const std::string& filename);
 }
