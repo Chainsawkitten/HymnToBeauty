@@ -11,7 +11,6 @@ namespace Geometry {
 
 namespace GUI {
     class ImageButton;
-    class TextButton;
     class VerticalScrollLayout;
     
     /// A window where a file can be selected.
@@ -61,10 +60,10 @@ namespace GUI {
             
         private:
             void Close();
-            void Select();
             void OpenParentDirectory();
             void OpenDirectory(const std::string& name);
             void ScanDirectory();
+            void SelectFile(const std::string& name);
             
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -75,6 +74,7 @@ namespace GUI {
             std::string path;
             std::string extension;
             bool pathChanged;
+            std::string file;
             
             bool hasClosedCallback;
             std::function<void(const std::string&)> closedCallback;
@@ -82,8 +82,6 @@ namespace GUI {
             
             ImageButton* closeButton;
             Texture2D* closeTexture;
-            
-            TextButton* selectButton;
             
             VerticalScrollLayout* fileList;
             Texture2D* directoryTexture;

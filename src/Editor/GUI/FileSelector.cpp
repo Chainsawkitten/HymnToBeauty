@@ -1,7 +1,6 @@
 #include "FileSelector.hpp"
 
 #include "ImageButton.hpp"
-#include "TextButton.hpp"
 #include "ImageTextButton.hpp"
 #include "VerticalScrollLayout.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
@@ -29,11 +28,6 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
-    selectButton = new TextButton(this, font, "Select");
-    selectButton->SetClickedCallback(std::bind(&Select, this));
-    selectButton->SetSize(glm::vec2(64.f, 32.f));
-    AddWidget(selectButton);
-    
     directoryTexture = Managers().resourceManager->CreateTexture2D(DIRECTORY_PNG, DIRECTORY_PNG_LENGTH);
     fileTexture = Managers().resourceManager->CreateTexture2D(BASICFILE_PNG, BASICFILE_PNG_LENGTH);
     fileList = new VerticalScrollLayout(this);
@@ -42,6 +36,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     path = FileSystem::DataPath("Hymn to Beauty");
     extension = "";
     pathChanged = false;
+    file = "";
     ScanDirectory();
 }
 
@@ -51,7 +46,6 @@ FileSelector::~FileSelector() {
     
     delete closeButton;
     Managers().resourceManager->FreeTexture2D(closeTexture);
-    delete selectButton;
     
     fileList->ClearWidgets();
     delete fileList;
@@ -68,8 +62,12 @@ void FileSelector::Update() {
     
     UpdateWidgets();
     
-    if (shouldClose && hasClosedCallback)
-        closedCallback("");
+    if (shouldClose) {
+        SetVisible(false);
+        
+        if (hasClosedCallback)
+            closedCallback(path + file);
+    }
 }
 
 void FileSelector::Render(const glm::vec2& screenSize) {
@@ -87,13 +85,12 @@ void FileSelector::SetSize(const glm::vec2& size) {
     this->size = size;
     
     closeButton->SetPosition(GetPosition() + glm::vec2(size.x - closeButton->GetSize().x, 0.f));
-    selectButton->SetPosition(GetPosition() + glm::vec2(size.x - selectButton->GetSize().x - 32.f, size.y - selectButton->GetSize().y - 32.f));
     
     for (Widget* file : fileList->GetWidgets())
         file->SetSize(glm::vec2(size.x - 20.f, 64.f));
     
     fileList->SetPosition(GetPosition() + glm::vec2(0.f, closeButton->GetSize().y));
-    fileList->SetSize(glm::vec2(size.x, selectButton->GetPosition().y - closeButton->GetSize().y - 64.f));
+    fileList->SetSize(glm::vec2(size.x, size.y - closeButton->GetSize().y));
 }
 
 void FileSelector::SetClosedCallback(std::function<void(const std::string&)> callback) {
@@ -109,18 +106,16 @@ void FileSelector::Close() {
     shouldClose = true;
 }
 
-void FileSelector::Select() {
-    shouldClose = true;
-}
-
 void FileSelector::OpenParentDirectory() {
     path = FileSystem::GetParentDirectory(path);
     pathChanged = true;
+    file = "";
 }
 
 void FileSelector::OpenDirectory(const string& name) {
     path += FileSystem::DELIMITER + name;
     pathChanged = true;
+    file = "";
 }
 
 void FileSelector::ScanDirectory() {
@@ -151,4 +146,9 @@ void FileSelector::ScanDirectory() {
             fileList->AddWidget(fileButton);
         }
     }
+}
+
+void FileSelector::SelectFile(const string& name) {
+    file = name;
+    shouldClose = true;
 }
