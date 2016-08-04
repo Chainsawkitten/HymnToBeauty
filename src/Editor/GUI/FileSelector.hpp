@@ -79,5 +79,6 @@ namespace GUI {
             TextButton* selectButton;
             
             VerticalScrollLayout* fileList;
+            Texture2D* directoryTexture;
     };
 }

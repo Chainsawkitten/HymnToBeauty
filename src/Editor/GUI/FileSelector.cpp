@@ -2,12 +2,13 @@
 
 #include "ImageButton.hpp"
 #include "TextButton.hpp"
+#include "ImageTextButton.hpp"
 #include "VerticalScrollLayout.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Close.png.hpp>
-#include <OpenHymn.png.hpp>
+#include <Directory.png.hpp>
 #include <ABeeZee.ttf.hpp>
 #include <Engine/Util/FileSystem.hpp>
 
@@ -32,6 +33,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     selectButton->SetSize(glm::vec2(64.f, 32.f));
     AddWidget(selectButton);
     
+    directoryTexture = Managers().resourceManager->CreateTexture2D(DIRECTORY_PNG, DIRECTORY_PNG_LENGTH);
     fileList = new VerticalScrollLayout(this);
     AddWidget(fileList);
     
@@ -50,6 +52,8 @@ FileSelector::~FileSelector() {
     
     fileList->ClearWidgets();
     delete fileList;
+    
+    Managers().resourceManager->FreeTexture2D(directoryTexture);
 }
 
 void FileSelector::Update() {
@@ -115,7 +119,7 @@ void FileSelector::ScanDirectory() {
     fileList->ClearWidgets();
     
     // ..
-    TextButton* parentButton = new TextButton(this, font, "..");
+    ImageTextButton* parentButton = new ImageTextButton(this, directoryTexture, font, "..");
     parentButton->SetClickedCallback(std::bind(&OpenParentDirectory, this));
     parentButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
     fileList->AddWidget(parentButton);
@@ -123,7 +127,7 @@ void FileSelector::ScanDirectory() {
     // Directories.
     vector<string> files = FileSystem::DirectoryContents(path, FileSystem::DIRECTORY);
     for (string file : files) {
-        TextButton* fileButton = new TextButton(this, font, file);
+        ImageTextButton* fileButton = new ImageTextButton(this, directoryTexture, font, file);
         fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
         fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
         fileList->AddWidget(fileButton);

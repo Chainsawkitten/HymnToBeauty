@@ -65,6 +65,7 @@ set(EMBEDDED_INPUT
     assets/NewHymn.png
     assets/OpenHymn.png
     assets/Add.png
+    assets/Directory.png
 )
 
 # Headerize
