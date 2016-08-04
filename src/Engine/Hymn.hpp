@@ -48,7 +48,7 @@ class ActiveHymn {
         std::vector<Geometry::OBJModel*> meshes;
         
         /// The id of the next mesh to create.
-        unsigned int meshNumber = 0;
+        unsigned int meshNumber = 0U;
         
     private:
         static ActiveHymn& GetInstance();

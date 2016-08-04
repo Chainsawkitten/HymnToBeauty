@@ -6,6 +6,7 @@
 #include "Entity/Entity.hpp"
 #include "Component/Transform.hpp"
 #include "Component/Lens.hpp"
+#include "Geometry/OBJModel.hpp"
 
 using namespace std;
 
@@ -22,6 +23,12 @@ ActiveHymn& ActiveHymn::GetInstance() {
 void ActiveHymn::Clear() {
     path = "";
     activeScene.Clear();
+    
+    for (Geometry::OBJModel* mesh : meshes) {
+        delete mesh;
+    }
+    meshes.clear();
+    meshNumber = 0U;
     
     Entity* camera = activeScene.CreateEntity();
     Component::Transform* cameraTransform = camera->AddComponent<Component::Transform>();
