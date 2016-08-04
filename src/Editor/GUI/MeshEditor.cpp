@@ -88,7 +88,7 @@ void MeshEditor::LoadPressed() {
 }
 
 void MeshEditor::FileSelected(const std::string& file) {
-    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + mesh->name + ".obj";
+    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + mesh->name + ".obj";
     FileSystem::Copy(file.c_str(), destination.c_str());
     mesh->Load(file.c_str());
 }
