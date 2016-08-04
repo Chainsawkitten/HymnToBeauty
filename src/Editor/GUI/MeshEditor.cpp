@@ -11,7 +11,8 @@
 #include "TextButton.hpp"
 #include "FileSelector.hpp"
 #include <functional>
-#include <Engine/Util/Log.hpp>
+#include <Engine/Hymn.hpp>
+#include <Engine/Util/FileSystem.hpp>
 
 using namespace GUI;
 
@@ -87,5 +88,7 @@ void MeshEditor::LoadPressed() {
 }
 
 void MeshEditor::FileSelected(const std::string& file) {
-    Log() << file << "\n";
+    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + mesh->name + ".obj";
+    FileSystem::Copy(file.c_str(), destination.c_str());
+    mesh->Load(file.c_str());
 }
