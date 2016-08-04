@@ -22,6 +22,13 @@ namespace FileSystem {
      */
     bool FileExists(const char* filename);
     
+    /// Copy a file.
+    /**
+     * @param source Source to copy.
+     * @param destination Destination to copy to.
+     */
+    void Copy(const char* source, const char* destination);
+    
     /// Create a directory if it does not already exist.
     /**
      * Permission for new directory is 0777 on Unix.

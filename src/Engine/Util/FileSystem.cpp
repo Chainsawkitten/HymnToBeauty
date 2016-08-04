@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <cctype>
+#include <fstream>
 
 // Platform-dependent includes.
 #if defined(_WIN32) || defined(WIN32)
@@ -37,6 +38,16 @@ namespace FileSystem {
         int result = stat(Name.c_str(), &buf);
 #endif
         return result == 0;
+    }
+    
+    void Copy(const char* source, const char* destination) {
+        std::ifstream sourceFile(source, std::ios::binary);
+        std::ofstream destinationFile(destination, std::ios::binary);
+        
+        destinationFile << sourceFile.rdbuf();
+        
+        sourceFile.close();
+        destinationFile.close();
     }
     
     void CreateDirectory(const char* filename) {
