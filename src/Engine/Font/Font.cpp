@@ -50,6 +50,7 @@ Font::Font(const char* filename, float height) {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     color = glm::vec3(0.f, 0.f, 0.f);
+    isFromFile = true;
 }
 
 Font::Font(const char* source, int sourceLength, float height) {
@@ -74,6 +75,7 @@ Font::Font(const char* source, int sourceLength, float height) {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     color = glm::vec3(0.f, 0.f, 0.f);
+    isFromFile = false;
 }
 
 Font::~Font() {
@@ -84,12 +86,6 @@ Font::~Font() {
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
     
     Managers().resourceManager->FreeRectangle();
-}
-
-stbtt_aligned_quad Font::BakedQuad(char character, float& x, float& y) {
-    stbtt_aligned_quad q;
-    stbtt_GetBakedQuad(cdata, 512, 512, character - 32, &x, &y, &q, 1);
-    return q;
 }
 
 void Font::RenderText(const char* text, const glm::vec2& position, float wrap, const glm::vec2& screenSize) {
@@ -158,6 +154,10 @@ float Font::GetHeight() const {
     return height;
 }
 
+bool Font::IsFromFile() const {
+    return isFromFile;
+}
+
 float Font::RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize) {
     stbtt_aligned_quad q;
     float x = position.x;
@@ -180,4 +180,10 @@ float Font::RenderCharacter(char character, const glm::vec2& position, const glm
     glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
     return x;
+}
+
+stbtt_aligned_quad Font::BakedQuad(char character, float& x, float& y) {
+    stbtt_aligned_quad q;
+    stbtt_GetBakedQuad(cdata, 512, 512, character - 32, &x, &y, &q, 1);
+    return q;
 }

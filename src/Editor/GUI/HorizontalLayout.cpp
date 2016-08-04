@@ -30,6 +30,11 @@ void HorizontalLayout::AddWidget(Widget* widget) {
     nextPosition.x += widget->GetSize().x;
 }
 
+void HorizontalLayout::ClearWidgets() {
+    Container::ClearWidgets();
+    nextPosition = glm::vec2(0.f, 0.f);
+}
+
 glm::vec2 HorizontalLayout::GetSize() const {
     return this->size;
 }

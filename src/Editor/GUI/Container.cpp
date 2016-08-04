@@ -23,6 +23,13 @@ void Container::AddWidget(Widget* widget) {
     widgets.push_back(widget);
 }
 
+void Container::ClearWidgets() {
+    for (Widget* widget : widgets)
+        delete widget;
+    
+    widgets.clear();
+}
+
 void Container::SetPosition(const glm::vec2& position) {
     glm::vec2 offset = position - GetPosition();
     

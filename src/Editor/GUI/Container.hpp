@@ -17,7 +17,7 @@ namespace GUI {
             virtual ~Container();
             
             /// Update the widget.
-            virtual void Update();
+            void Update() override;
             
             /// Get all the container's widgets.
             /**
@@ -30,6 +30,9 @@ namespace GUI {
              * @param widget Widget to add to the container.
              */
             virtual void AddWidget(Widget* widget);
+            
+            /// Clear all widgets.
+            virtual void ClearWidgets();
             
             /// Set widget's position.
             /**

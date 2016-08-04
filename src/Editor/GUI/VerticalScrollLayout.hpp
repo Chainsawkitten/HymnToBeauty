@@ -7,17 +7,20 @@ namespace Geometry {
 }
 
 namespace GUI {
-    /// Horizontal container.
-    class HorizontalLayout : public Container {
+    /// Vertical container.
+    class VerticalScrollLayout : public Container {
         public:
-            /// Create new horizontal layout.
+            /// Create new vertical layout.
             /**
              * @param parent Parent widget.
              */
-            HorizontalLayout(Widget* parent);
+            VerticalScrollLayout(Widget* parent);
             
             /// Destructor.
-            ~HorizontalLayout() override;
+            ~VerticalScrollLayout() override;
+            
+            /// Update the widget.
+            void Update() override;
             
             /// Render the widget.
             /**
@@ -32,7 +35,7 @@ namespace GUI {
             void AddWidget(Widget* widget) override;
             
             /// Clear all widgets.
-            void ClearWidgets() override;
+            virtual void ClearWidgets();
             
             /// Get the size of the widget.
             /**
@@ -47,9 +50,13 @@ namespace GUI {
             void SetSize(const glm::vec2& size) override;
             
         private:
+            void UpdatePositions();
+            
             Geometry::Rectangle* rectangle;
             
             glm::vec2 size;
             glm::vec2 nextPosition;
+            
+            std::size_t scrollPosition;
     };
 }

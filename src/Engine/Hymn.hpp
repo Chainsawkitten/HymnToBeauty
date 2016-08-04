@@ -2,7 +2,12 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
 #include "Scene/Scene.hpp"
+
+namespace Geometry {
+    class OBJModel;
+}
 
 /// A hymn to beauty.
 class ActiveHymn {
@@ -38,6 +43,12 @@ class ActiveHymn {
         
         /// The active scene.
         Scene activeScene;
+        
+        /// Meshes.
+        std::vector<Geometry::OBJModel*> meshes;
+        
+        /// The id of the next mesh to create.
+        unsigned int meshNumber = 0U;
         
     private:
         static ActiveHymn& GetInstance();

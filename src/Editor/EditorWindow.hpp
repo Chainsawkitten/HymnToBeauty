@@ -11,11 +11,16 @@ class InputHandler;
 class Entity;
 namespace GUI {
     class SelectHymnWindow;
+    class FileSelector;
     class HorizontalLayout;
     class VerticalLayout;
     class Button;
     class ResourceList;
     class EntityEditor;
+    class MeshEditor;
+}
+namespace Geometry {
+    class OBJModel;
 }
 
 /// Handles the main editor window.
@@ -69,10 +74,12 @@ class EditorWindow : public GUI::Container {
         void OpenHymn();
         void OpenHymnClosed(const std::string& hymn);
         void EntitySelected(Entity* entity);
+        void MeshSelected(Geometry::OBJModel* mesh);
         
         GLFWwindow* window;
         GameWindow* gameWindow;
         GUI::SelectHymnWindow* childWindow;
+        GUI::FileSelector* fileSelector;
         
         // Menu bar.
         GUI::HorizontalLayout* menuBar;
@@ -98,6 +105,7 @@ class EditorWindow : public GUI::Container {
         
         // Editors.
         GUI::EntityEditor* entityEditor;
+        GUI::MeshEditor* meshEditor;
         
         // Input
         InputHandler* input;

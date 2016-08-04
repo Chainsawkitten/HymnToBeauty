@@ -30,6 +30,11 @@ void VerticalLayout::AddWidget(Widget* widget) {
     nextPosition.y += widget->GetSize().y;
 }
 
+void VerticalLayout::ClearWidgets() {
+    Container::ClearWidgets();
+    nextPosition = glm::vec2(0.f, 0.f);
+}
+
 glm::vec2 VerticalLayout::GetSize() const {
     return this->size;
 }

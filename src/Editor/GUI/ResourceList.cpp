@@ -4,6 +4,7 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Geometry/Cube.hpp>
+#include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Font/Font.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include "ABeeZee.ttf.hpp"
@@ -23,9 +24,14 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     addTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
-    addHover = false;
+    
+    addEntityHover = false;
     selectedEntity = nullptr;
     hasEntitySelectedCallback = false;
+    
+    addMeshHover = false;
+    selectedMesh = nullptr;
+    hasMeshSelectedCallback = false;
 }
 
 ResourceList::~ResourceList() {
@@ -36,26 +42,54 @@ ResourceList::~ResourceList() {
 
 void ResourceList::Update() {
     glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
-    glm::vec2 position = GetPosition();
+    glm::vec2 position(GetPosition());
     Physics::Rectangle rect(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(10.f, 10.f));
-    addHover = rect.Collide(mousePosition);
+    addEntityHover = rect.Collide(mousePosition);
+    
+    position.y += (Hymn().activeScene.GetEntities().size() + 1) * font->GetHeight();
+    rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Meshes") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+    addMeshHover = rect.Collide(mousePosition);
     
     if (Input()->Triggered(InputHandler::CLICK)) {
-        if (addHover) {
+        if (addEntityHover) {
             // Add entity button pressed.
             Entity* cube = Hymn().activeScene.CreateEntity();
             cube->AddComponent<Component::Transform>();
             Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
             cubeMesh->geometry = Managers().resourceManager->CreateCube();
+        } else if (addMeshHover) {
+            // Add mesh button pressed.
+            Geometry::OBJModel* mesh = new Geometry::OBJModel();
+            mesh->name = "Mesh #" + std::to_string(Hymn().meshNumber++);
+            Hymn().meshes.push_back(mesh);
         } else {
+            position  = GetPosition();
+            
             // Check if entity selected.
             for (Entity* entity : Hymn().activeScene.GetEntities()) {
                 position.y += font->GetHeight();
                 rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = entity;
+                    selectedMesh = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
+                    break;
+                }
+            }
+            
+            position  = GetPosition();
+            position.y += (1 + Hymn().activeScene.GetEntities().size()) * font->GetHeight();
+            
+            // Check if mesh selected.
+            for (Geometry::OBJModel* mesh : Hymn().meshes) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedEntity = nullptr;
+                    selectedMesh = mesh;
+                    if (hasMeshSelectedCallback)
+                        meshSelectedCallback(mesh);
                     break;
                 }
             }
@@ -70,10 +104,10 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
     font->RenderText("Entities", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addHover ? 1.f : 0.5f);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addEntityHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    unsigned int id = 0;
+    unsigned int id = 0U;
     for (Entity* entity : Hymn().activeScene.GetEntities()) {
         // Render background if selected.
         if (selectedEntity == entity) {
@@ -84,6 +118,21 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         font->RenderText(("Entity #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
         ++id;
+    }
+    
+    font->RenderText("Meshes", position, GetSize().x, screenSize);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Meshes") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addMeshHover ? 1.f : 0.5f);
+    position.y += font->GetHeight();
+    
+    for (Geometry::OBJModel* mesh : Hymn().meshes) {
+        // Render background if selected.
+        if (selectedMesh == mesh) {
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+        }
+        
+        font->RenderText(mesh->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        position.y += font->GetHeight();
     }
 }
 
@@ -98,4 +147,9 @@ void ResourceList::SetSize(const glm::vec2& size) {
 void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {
     hasEntitySelectedCallback = true;
     entitySelectedCallback = callback;
+}
+
+void ResourceList::SetMeshSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
+    hasMeshSelectedCallback = true;
+    meshSelectedCallback = callback;
 }

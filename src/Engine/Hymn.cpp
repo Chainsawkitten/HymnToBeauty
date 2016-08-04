@@ -3,12 +3,10 @@
 #include "Util/FileSystem.hpp"
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"
-#include "Manager/ResourceManager.hpp"
 #include "Entity/Entity.hpp"
 #include "Component/Transform.hpp"
-#include "Component/Mesh.hpp"
 #include "Component/Lens.hpp"
-#include "Geometry/Cube.hpp"
+#include "Geometry/OBJModel.hpp"
 
 using namespace std;
 
@@ -26,6 +24,12 @@ void ActiveHymn::Clear() {
     path = "";
     activeScene.Clear();
     
+    for (Geometry::OBJModel* mesh : meshes) {
+        delete mesh;
+    }
+    meshes.clear();
+    meshNumber = 0U;
+    
     Entity* camera = activeScene.CreateEntity();
     Component::Transform* cameraTransform = camera->AddComponent<Component::Transform>();
     cameraTransform->position = glm::vec3(0.f, 0.f, 10.f);
@@ -39,6 +43,7 @@ const string& ActiveHymn::GetPath() const {
 void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
 }
 
 void ActiveHymn::Load(const string& path) {

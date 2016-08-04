@@ -8,10 +8,19 @@ void characterCallback(GLFWwindow* window, unsigned int codePoint) {
     inputMap[window]->CharacterCallback(codePoint);
 }
 
+void scrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
+    inputMap[window]->ScrollCallback(yOffset);
+}
+
 InputHandler* InputHandler::activeInstance = nullptr;
 
 InputHandler::InputHandler(GLFWwindow *window) {
     this->window = window;
+    
+    // Init mouse state.
+    glfwSetScrollCallback(window, scrollCallback);
+    lastScroll = 0.0;
+    scroll = 0.0;
     
     // Init button states.
     for (int button = 0; button < BUTTONS; ++button) {
@@ -35,6 +44,9 @@ void InputHandler::SetActive() {
 }
 
 void InputHandler::Update() {
+    lastScroll = scroll;
+    scroll = 0.0;
+    
     // Get button states.
     bool values[BUTTONS] = {};
     for (Binding binding : bindings) {
@@ -77,6 +89,14 @@ double InputHandler::CursorY() const {
     return cursorY;
 }
 
+bool InputHandler::ScrollUp() const {
+    return lastScroll > 0.0;
+}
+
+bool InputHandler::ScrollDown() const {
+    return lastScroll < 0.0;
+}
+
 void InputHandler::AssignButton(Button button, Device device, int index) {
     Binding binding;
     binding.button = button;
@@ -104,6 +124,10 @@ const std::string& InputHandler::Text() const {
 
 void InputHandler::CharacterCallback(unsigned int codePoint) {
     tempText += static_cast<char>(codePoint);
+}
+
+void InputHandler::ScrollCallback(double yOffset) {
+    scroll += yOffset;
 }
 
 InputHandler* Input() {

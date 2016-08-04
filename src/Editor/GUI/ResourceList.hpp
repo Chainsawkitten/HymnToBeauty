@@ -8,6 +8,7 @@ class Font;
 class Entity;
 namespace Geometry {
     class Rectangle;
+    class OBJModel;
 }
 
 namespace GUI {
@@ -50,17 +51,27 @@ namespace GUI {
              */
             void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
             
+            /// Set function to call when a mesh has been selected.
+            /**
+             * @param callback Function to call.
+             */
+            void SetMeshSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
+            
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
-            
-            Texture2D* addTexture;
-            bool addHover;
-            
             glm::vec2 size;
             
+            Texture2D* addTexture;
+            
+            bool addEntityHover;
             Entity* selectedEntity;
             bool hasEntitySelectedCallback;
             std::function<void(Entity*)> entitySelectedCallback;
+            
+            bool addMeshHover;
+            Geometry::OBJModel* selectedMesh;
+            bool hasMeshSelectedCallback;
+            std::function<void(Geometry::OBJModel*)> meshSelectedCallback;
     };
 }

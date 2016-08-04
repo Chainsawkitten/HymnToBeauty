@@ -22,6 +22,13 @@ namespace FileSystem {
      */
     bool FileExists(const char* filename);
     
+    /// Copy a file.
+    /**
+     * @param source Source to copy.
+     * @param destination Destination to copy to.
+     */
+    void Copy(const char* source, const char* destination);
+    
     /// Create a directory if it does not already exist.
     /**
      * Permission for new directory is 0777 on Unix.
@@ -59,4 +66,18 @@ namespace FileSystem {
      * @return The path
      */
     std::string DataPath(const char* appName, const char* filename);
+    
+    /// Get the parent directory of a path.
+    /**
+     * @param path Absolute path to get the parent directory of.
+     * @return Path of the parent directory.
+     */
+    std::string GetParentDirectory(const std::string& path);
+    
+    /// Get the extension part of a filename.
+    /**
+     * @param filename The filename to check.
+     * @return The extension part of the filename, converted to lower case.
+     */
+    std::string GetExtension(const std::string& filename);
 }

@@ -65,6 +65,8 @@ set(EMBEDDED_INPUT
     assets/NewHymn.png
     assets/OpenHymn.png
     assets/Add.png
+    assets/Directory.png
+    assets/BasicFile.png
 )
 
 # Headerize
@@ -139,6 +141,7 @@ set(ENGINE_SRCS
         src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Geometry3D.cpp
+        src/Engine/Geometry/OBJModel.cpp
         src/Engine/Geometry/Rectangle.cpp
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
@@ -169,6 +172,7 @@ set(ENGINE_HEADERS
         src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Geometry3D.hpp
+        src/Engine/Geometry/OBJModel.hpp
         src/Engine/Geometry/Rectangle.hpp
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
@@ -193,20 +197,24 @@ set(EDITOR_SRCS
         src/Editor/GUI/Container.cpp
         src/Editor/GUI/HorizontalLayout.cpp
         src/Editor/GUI/VerticalLayout.cpp
+        src/Editor/GUI/VerticalScrollLayout.cpp
         src/Editor/GUI/Button.cpp
         src/Editor/GUI/ImageButton.cpp
         src/Editor/GUI/ImageTextButton.cpp
         src/Editor/GUI/TextButton.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
+        src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/EntityEditor.cpp
+        src/Editor/GUI/MeshEditor.cpp
         src/Editor/GUI/ComponentEditor/ComponentEditor.cpp
         src/Editor/GUI/ComponentEditor/LensEditor.cpp
         src/Editor/GUI/ComponentEditor/TransformEditor.cpp
         src/Editor/GUI/FloatEditor.cpp
         src/Editor/GUI/Vec3Editor.cpp
+        src/Editor/GUI/StringEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -217,20 +225,24 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Container.hpp
         src/Editor/GUI/HorizontalLayout.hpp
         src/Editor/GUI/VerticalLayout.hpp
+        src/Editor/GUI/VerticalScrollLayout.hpp
         src/Editor/GUI/Button.hpp
         src/Editor/GUI/ImageButton.hpp
         src/Editor/GUI/ImageTextButton.hpp
         src/Editor/GUI/TextButton.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
+        src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/EntityEditor.hpp
+        src/Editor/GUI/MeshEditor.hpp
         src/Editor/GUI/ComponentEditor/ComponentEditor.hpp
         src/Editor/GUI/ComponentEditor/LensEditor.hpp
         src/Editor/GUI/ComponentEditor/TransformEditor.hpp
         src/Editor/GUI/FloatEditor.hpp
         src/Editor/GUI/Vec3Editor.hpp
+        src/Editor/GUI/StringEditor.cpp
         src/Editor/Util/EditorSettings.hpp
     )
 
