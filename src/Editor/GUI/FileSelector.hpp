@@ -80,5 +80,6 @@ namespace GUI {
             
             VerticalScrollLayout* fileList;
             Texture2D* directoryTexture;
+            Texture2D* fileTexture;
     };
 }

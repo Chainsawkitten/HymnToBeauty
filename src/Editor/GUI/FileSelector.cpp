@@ -9,6 +9,7 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Close.png.hpp>
 #include <Directory.png.hpp>
+#include <BasicFile.png.hpp>
 #include <ABeeZee.ttf.hpp>
 #include <Engine/Util/FileSystem.hpp>
 
@@ -34,6 +35,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     AddWidget(selectButton);
     
     directoryTexture = Managers().resourceManager->CreateTexture2D(DIRECTORY_PNG, DIRECTORY_PNG_LENGTH);
+    fileTexture = Managers().resourceManager->CreateTexture2D(BASICFILE_PNG, BASICFILE_PNG_LENGTH);
     fileList = new VerticalScrollLayout(this);
     AddWidget(fileList);
     
@@ -54,6 +56,7 @@ FileSelector::~FileSelector() {
     delete fileList;
     
     Managers().resourceManager->FreeTexture2D(directoryTexture);
+    Managers().resourceManager->FreeTexture2D(fileTexture);
 }
 
 void FileSelector::Update() {
@@ -133,5 +136,12 @@ void FileSelector::ScanDirectory() {
         fileList->AddWidget(fileButton);
     }
     
-    /// @todo Files.
+    // Files.
+    files = FileSystem::DirectoryContents(path, FileSystem::FILE);
+    for (string file : files) {
+        ImageTextButton* fileButton = new ImageTextButton(this, fileTexture, font, file);
+        //fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
+        fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
+        fileList->AddWidget(fileButton);
+    }
 }
