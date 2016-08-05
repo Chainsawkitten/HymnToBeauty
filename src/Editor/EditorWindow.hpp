@@ -17,7 +17,7 @@ namespace GUI {
     class Button;
     class ResourceList;
     class EntityEditor;
-    class MeshEditor;
+    class ModelEditor;
 }
 namespace Geometry {
     class OBJModel;
@@ -74,7 +74,7 @@ class EditorWindow : public GUI::Container {
         void OpenHymn();
         void OpenHymnClosed(const std::string& hymn);
         void EntitySelected(Entity* entity);
-        void MeshSelected(Geometry::OBJModel* mesh);
+        void ModelSelected(Geometry::OBJModel* model);
         
         GLFWwindow* window;
         GameWindow* gameWindow;
@@ -105,7 +105,7 @@ class EditorWindow : public GUI::Container {
         
         // Editors.
         GUI::EntityEditor* entityEditor;
-        GUI::MeshEditor* meshEditor;
+        GUI::ModelEditor* modelEditor;
         
         // Input
         InputHandler* input;

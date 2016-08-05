@@ -15,18 +15,18 @@ namespace GUI {
     class Button;
     class FileSelector;
     
-    /// Used to edit a mesh.
-    class MeshEditor : public Widget {
+    /// Used to edit a model.
+    class ModelEditor : public Widget {
         public:
-            /// Create new mesh editor.
+            /// Create new model editor.
             /**
              * @param parent Parent widget.
              * @param fileSelector File selector to browse with.
              */
-            MeshEditor(Widget* parent, FileSelector* fileSelector);
+            ModelEditor(Widget* parent, FileSelector* fileSelector);
             
             /// Destructor.
-            ~MeshEditor();
+            ~ModelEditor();
             
             /// Update the widget.
             void Update() override;
@@ -55,11 +55,11 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the mesh to edit.
+            /// Set the model to edit.
             /**
-             * @param mesh Mesh to edit.
+             * @param model Model to edit.
              */
-            void SetMesh(Geometry::OBJModel* mesh);
+            void SetModel(Geometry::OBJModel* model);
             
         private:
             void LoadPressed();
@@ -69,7 +69,7 @@ namespace GUI {
             glm::vec2 size;
             Font* font;
             
-            Geometry::OBJModel* mesh;
+            Geometry::OBJModel* model;
             
             Label* nameLabel;
             StringEditor* nameEditor;

@@ -11,7 +11,7 @@
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/ResourceList.hpp"
 #include "GUI/EntityEditor.hpp"
-#include "GUI/MeshEditor.hpp"
+#include "GUI/ModelEditor.hpp"
 #include "GUI/FileSelector.hpp"
 
 #include "Util/EditorSettings.hpp"
@@ -66,7 +66,7 @@ EditorWindow::~EditorWindow() {
     
     delete resourceList;
     delete entityEditor;
-    delete meshEditor;
+    delete modelEditor;
     
     delete fileSelector;
     
@@ -115,7 +115,7 @@ void EditorWindow::Init() {
     resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
     resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    resourceList->SetMeshSelectedCallback(std::bind(&MeshSelected, this, std::placeholders::_1));
+    resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
     // File selector.
@@ -129,10 +129,10 @@ void EditorWindow::Init() {
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
     
-    meshEditor = new GUI::MeshEditor(this, fileSelector);
-    meshEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    meshEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
-    AddWidget(meshEditor);
+    modelEditor = new GUI::ModelEditor(this, fileSelector);
+    modelEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    modelEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
+    AddWidget(modelEditor);
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
@@ -275,12 +275,12 @@ void EditorWindow::EntitySelected(Entity* entity) {
     entityEditor->SetEntity(entity);
     
     entityEditor->SetVisible(true);
-    meshEditor->SetVisible(false);
+    modelEditor->SetVisible(false);
 }
 
-void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
-    meshEditor->SetMesh(mesh);
+void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
+    modelEditor->SetModel(model);
     
     entityEditor->SetVisible(false);
-    meshEditor->SetVisible(true);
+    modelEditor->SetVisible(true);
 }
