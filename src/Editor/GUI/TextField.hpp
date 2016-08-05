@@ -60,8 +60,8 @@ namespace GUI {
             virtual void TextUpdated();
             
         private:
-            std::string text;
-            bool focus;
+            std::string text = "";
+            bool focus = false;
             
             glm::vec2 size;
             

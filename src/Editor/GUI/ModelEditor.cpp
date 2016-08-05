@@ -19,7 +19,6 @@ using namespace GUI;
 ModelEditor::ModelEditor(Widget* parent, FileSelector* fileSelector) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     SetVisible(false);
-    model = nullptr;
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     nameLabel = new Label(this, font, "Name");

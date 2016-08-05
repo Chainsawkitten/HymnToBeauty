@@ -7,7 +7,6 @@ using namespace GUI;
 
 Vec3Editor::Vec3Editor(Widget* parent, Font* font) : Widget(parent) {
     this->font = font;
-    variable = nullptr;
     
     xLabel = new Label(this, font, "X");
     xLabel->SetPosition(GetPosition());

@@ -59,7 +59,7 @@ namespace GUI {
             glm::vec2 size;
             Font* font;
             
-            glm::vec3* variable;
+            glm::vec3* variable = nullptr;
             
             Label* xLabel;
             FloatEditor* xEditor;

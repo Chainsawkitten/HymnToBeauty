@@ -27,18 +27,18 @@ namespace Component {
             /**
              * Default: 45.0
              */
-            float fieldOfView;
+            float fieldOfView = 45.f;
             
             /// Near plane.
             /**
              * Default: 0.5
              */
-            float zNear;
+            float zNear = 0.5f;
             
             /// Far plane.
             /**
              * Default: 100.0
              */
-            float zFar;
+            float zFar = 100.f;
     };
 }

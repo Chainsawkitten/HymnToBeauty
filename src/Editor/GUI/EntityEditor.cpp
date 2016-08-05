@@ -10,7 +10,6 @@ using namespace GUI;
 
 EntityEditor::EntityEditor(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
-    entity = nullptr;
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
     SetVisible(false);

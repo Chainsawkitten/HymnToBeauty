@@ -55,8 +55,8 @@ namespace GUI {
             Geometry::Rectangle* rectangle;
             
             glm::vec2 size;
-            glm::vec2 nextPosition;
+            glm::vec2 nextPosition = glm::vec2(0.f, 0.f);
             
-            std::size_t scrollPosition;
+            std::size_t scrollPosition = 0U;
     };
 }

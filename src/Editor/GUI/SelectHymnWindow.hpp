@@ -65,9 +65,9 @@ namespace GUI {
             glm::vec2 size;
             
             // Interaction
-            bool hasClosedCallback;
+            bool hasClosedCallback = false;
             std::function<void(const std::string&)> closedCallback;
-            bool shouldClose;
+            bool shouldClose = false;
             
             ImageButton* closeButton;
             Texture2D* closeTexture;

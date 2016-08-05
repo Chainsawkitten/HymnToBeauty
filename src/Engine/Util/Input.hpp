@@ -129,19 +129,19 @@ class InputHandler {
         
         // Data
         struct ButtonData {
-            bool down;
-            bool released;
-            bool triggered;
+            bool down = false;
+            bool released = false;
+            bool triggered = false;
         };
         
         // Button data.
         ButtonData buttonData[BUTTONS];
         
         double cursorX, cursorY;
-        double lastScroll;
-        double scroll;
+        double lastScroll = 0.0;
+        double scroll = 0.0;
         
-        std::string text, tempText;
+        std::string text = "", tempText = "";
 };
 
 /// Get currently active input handler.

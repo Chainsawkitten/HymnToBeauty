@@ -69,7 +69,7 @@ namespace GUI {
             glm::vec2 size;
             Font* font;
             
-            Geometry::OBJModel* model;
+            Geometry::OBJModel* model = nullptr;
             
             Label* nameLabel;
             StringEditor* nameEditor;

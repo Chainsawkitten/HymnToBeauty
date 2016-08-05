@@ -49,7 +49,6 @@ Font::Font(const char* filename, float height) {
     fragmentShader = Managers().resourceManager->CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
-    color = glm::vec3(0.f, 0.f, 0.f);
     isFromFile = true;
 }
 
@@ -74,7 +73,6 @@ Font::Font(const char* source, int sourceLength, float height) {
     fragmentShader = Managers().resourceManager->CreateShader(FONT_FRAG, FONT_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
-    color = glm::vec3(0.f, 0.f, 0.f);
     isFromFile = false;
 }
 

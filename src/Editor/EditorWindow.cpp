@@ -44,9 +44,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     }
 
     glfwMakeContextCurrent(window);
-
-    gameWindow = nullptr;
-    childWindow = nullptr;
+    
     input = new InputHandler(window);
     
     // Assign controls.

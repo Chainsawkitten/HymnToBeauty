@@ -6,9 +6,7 @@
 using namespace GUI;
 
 Button::Button(Widget* parent) : Widget(parent) {
-    mouseHover = false;
-    hasClickedCallback = false;
-    size = glm::vec2(64.f, 64.f);
+    
 }
 
 Button::~Button() {

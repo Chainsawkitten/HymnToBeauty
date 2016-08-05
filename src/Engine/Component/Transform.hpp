@@ -33,18 +33,18 @@ namespace Component {
             /**
              * Default: 0.f, 0.f, 0.f
              */
-            glm::vec3 position;
+            glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
             
             /// Scale.
             /**
              * Default: 1.f, 1.f, 1.f
              */
-            glm::vec3 scale;
+            glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f);
             
             /// Rotation (yaw, pitch, roll in degrees).
             /**
              * Default: 0.f, 0.f, 0.f
              */
-            glm::vec3 rotation;
+            glm::vec3 rotation = glm::vec3(0.f, 0.f, 0.f);
     };
 }

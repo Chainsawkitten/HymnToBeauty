@@ -24,14 +24,6 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     addTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
-    
-    addEntityHover = false;
-    selectedEntity = nullptr;
-    hasEntitySelectedCallback = false;
-    
-    addModelHover = false;
-    selectedModel = nullptr;
-    hasModelSelectedCallback = false;
 }
 
 ResourceList::~ResourceList() {

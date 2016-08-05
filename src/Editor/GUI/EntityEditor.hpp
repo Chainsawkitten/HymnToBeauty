@@ -60,7 +60,7 @@ namespace GUI {
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
             
-            Entity* entity;
+            Entity* entity = nullptr;
             std::vector<ComponentEditor*> editors;
     };
 }

@@ -18,8 +18,6 @@ using namespace std;
 FileSelector::FileSelector(Widget *parent) : Container(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
-    hasFileSelectedCallback = false;
-    
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
     closeButton->SetClickedCallback(std::bind(&Close, this));
@@ -33,9 +31,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     AddWidget(fileList);
     
     path = FileSystem::DataPath("Hymn to Beauty");
-    extension = "";
     pathChanged = true;
-    file = "";
     
     SetVisible(false);
 }

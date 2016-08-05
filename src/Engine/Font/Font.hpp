@@ -81,7 +81,7 @@ class Font {
         stbtt_bakedchar cdata[96]; // ASCII 32..126 is 95 glyphs
         
         float height;
-        glm::vec3 color;
+        glm::vec3 color = glm::vec3(0.f, 0.f, 0.f);
         
         Geometry::Rectangle* rectangle;
         

@@ -64,14 +64,14 @@ namespace GUI {
             
             Texture2D* addTexture;
             
-            bool addEntityHover;
-            Entity* selectedEntity;
-            bool hasEntitySelectedCallback;
+            bool addEntityHover = false;
+            Entity* selectedEntity = nullptr;
+            bool hasEntitySelectedCallback = false;
             std::function<void(Entity*)> entitySelectedCallback;
             
-            bool addModelHover;
-            Geometry::OBJModel* selectedModel;
-            bool hasModelSelectedCallback;
+            bool addModelHover = false;
+            Geometry::OBJModel* selectedModel = nullptr;
+            bool hasModelSelectedCallback = false;
             std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
     };
 }

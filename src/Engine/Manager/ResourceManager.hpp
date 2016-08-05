@@ -163,14 +163,12 @@ class ResourceManager {
             int count;
         };
         struct ShaderProgramKey {
-            const Shader* computeShader;
-            const Shader* vertexShader;
-            const Shader* tessControlShader;
-            const Shader* tessEvaluationShader;
-            const Shader* geometryShader;
-            const Shader* fragmentShader;
-            
-            ShaderProgramKey();
+            const Shader* computeShader = nullptr;
+            const Shader* vertexShader = nullptr;
+            const Shader* tessControlShader = nullptr;
+            const Shader* tessEvaluationShader = nullptr;
+            const Shader* geometryShader = nullptr;
+            const Shader* fragmentShader = nullptr;
             
             bool operator<(const ShaderProgramKey& other) const;
         };
@@ -179,11 +177,11 @@ class ResourceManager {
         
         // Rectangle
         Geometry::Rectangle* rectangle;
-        int rectangleCount;
+        int rectangleCount = 0;
         
         // Cube
         Geometry::Cube* cube;
-        int cubeCount;
+        int cubeCount = 0;
         
         // OBJ Model
         struct OBJModelInstance {
@@ -211,10 +209,8 @@ class ResourceManager {
             int count;
         };
         struct FontKey {
-            const char* source;
-            float height;
-            
-            FontKey();
+            const char* source = nullptr;
+            float height = 0.f;
             
             bool operator<(const FontKey& other) const;
         };

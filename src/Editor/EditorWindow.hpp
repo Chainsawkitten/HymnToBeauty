@@ -77,8 +77,8 @@ class EditorWindow : public GUI::Container {
         void ModelSelected(Geometry::OBJModel* model);
         
         GLFWwindow* window;
-        GameWindow* gameWindow;
-        GUI::SelectHymnWindow* childWindow;
+        GameWindow* gameWindow = nullptr;
+        GUI::SelectHymnWindow* childWindow = nullptr;
         GUI::FileSelector* fileSelector;
         
         // Menu bar.

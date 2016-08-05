@@ -4,9 +4,6 @@ using namespace GUI;
 
 Widget::Widget(Widget* parent) {
     this->parent = parent;
-    
-    position = glm::vec2(0.f, 0.f);
-    visible = true;
 }
 
 Widget::~Widget() {

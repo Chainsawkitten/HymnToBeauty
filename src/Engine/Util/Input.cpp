@@ -19,20 +19,9 @@ InputHandler::InputHandler(GLFWwindow *window) {
     
     // Init mouse state.
     glfwSetScrollCallback(window, scrollCallback);
-    lastScroll = 0.0;
-    scroll = 0.0;
-    
-    // Init button states.
-    for (int button = 0; button < BUTTONS; ++button) {
-        buttonData[button].released = false;
-        buttonData[button].triggered = false;
-        buttonData[button].down = false;
-    }
     
     glfwSetCharCallback(window, characterCallback);
     inputMap[window] = this;
-    text = "";
-    tempText = "";
 }
 
 InputHandler* InputHandler::GetActiveInstance() {

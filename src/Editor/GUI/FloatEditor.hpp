@@ -24,6 +24,6 @@ namespace GUI {
             void TextUpdated() override;
             
         private:
-            float* variable;
+            float* variable = nullptr;
     };
 }

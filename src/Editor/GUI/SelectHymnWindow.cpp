@@ -19,9 +19,6 @@ using namespace std;
 SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
-    hasClosedCallback = false;
-    shouldClose = false;
-    
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
     closeButton->SetClickedCallback(std::bind(&Close, this));
