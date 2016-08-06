@@ -1,37 +1,31 @@
 #pragma once
 
-#include "Widget.hpp"
-#include <string>
+#include "../Widget.hpp"
 
+class Entity;
 class Font;
-namespace Geometry {
-    class Rectangle;
-    class OBJModel;
-}
 
 namespace GUI {
     class Label;
-    class StringEditor;
-    class Button;
-    class FileSelector;
+    class FloatEditor;
     
-    /// Used to edit a model.
-    class ModelEditor : public Widget {
+    /// Used to edit a 3D vector.
+    class Vec3Editor : public Widget {
         public:
-            /// Create new model editor.
+            /// Create new vector editor.
             /**
              * @param parent Parent widget.
-             * @param fileSelector File selector to browse with.
+             * @param font %Font to display text with.
              */
-            ModelEditor(Widget* parent, FileSelector* fileSelector);
+            Vec3Editor(Widget* parent, Font* font);
             
             /// Destructor.
-            ~ModelEditor();
+            ~Vec3Editor() override;
             
-            /// Update the widget.
+            /// Update the editor.
             void Update() override;
             
-            /// Render the widget.
+            /// Render the editor.
             /**
              * @param screenSize Size of the screen in pixels.
              */
@@ -51,30 +45,29 @@ namespace GUI {
             
             /// Set the size of the widget.
             /**
-             * @param size New widget size.
+             * @param size The new size.
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the model to edit.
+            /// Set which vec3 variable to edit.
             /**
-             * @param model Model to edit.
+             * @param variable The variable to edit.
              */
-            void SetModel(Geometry::OBJModel* model);
+            void SetVec3(glm::vec3* variable);
             
         private:
-            void LoadPressed();
-            void FileSelected(const std::string& file);
-            
-            Geometry::Rectangle* rectangle;
             glm::vec2 size;
             Font* font;
             
-            Geometry::OBJModel* model = nullptr;
+            glm::vec3* variable = nullptr;
             
-            Label* nameLabel;
-            StringEditor* nameEditor;
+            Label* xLabel;
+            FloatEditor* xEditor;
             
-            Button* loadButton;
-            FileSelector* fileSelector;
+            Label* yLabel;
+            FloatEditor* yEditor;
+            
+            Label* zLabel;
+            FloatEditor* zEditor;
     };
 }

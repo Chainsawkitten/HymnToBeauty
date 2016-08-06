@@ -207,15 +207,15 @@ set(EDITOR_SRCS
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
-        src/Editor/GUI/EntityEditor.cpp
-        src/Editor/GUI/ModelEditor.cpp
-        src/Editor/GUI/ComponentEditor/ComponentEditor.cpp
-        src/Editor/GUI/ComponentEditor/LensEditor.cpp
-        src/Editor/GUI/ComponentEditor/MeshEditor.cpp
-        src/Editor/GUI/ComponentEditor/TransformEditor.cpp
-        src/Editor/GUI/FloatEditor.cpp
-        src/Editor/GUI/Vec3Editor.cpp
-        src/Editor/GUI/StringEditor.cpp
+        src/Editor/GUI/Editors/EntityEditor.cpp
+        src/Editor/GUI/Editors/ModelEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
+        src/Editor/GUI/Editors/FloatEditor.cpp
+        src/Editor/GUI/Editors/Vec3Editor.cpp
+        src/Editor/GUI/Editors/StringEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -236,15 +236,15 @@ set(EDITOR_HEADERS
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
-        src/Editor/GUI/EntityEditor.hpp
-        src/Editor/GUI/ModelEditor.hpp
-        src/Editor/GUI/ComponentEditor/ComponentEditor.hpp
-        src/Editor/GUI/ComponentEditor/LensEditor.hpp
-        src/Editor/GUI/ComponentEditor/MeshEditor.hpp
-        src/Editor/GUI/ComponentEditor/TransformEditor.hpp
-        src/Editor/GUI/FloatEditor.hpp
-        src/Editor/GUI/Vec3Editor.hpp
-        src/Editor/GUI/StringEditor.cpp
+        src/Editor/GUI/Editors/EntityEditor.hpp
+        src/Editor/GUI/Editors/ModelEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
+        src/Editor/GUI/Editors/FloatEditor.hpp
+        src/Editor/GUI/Editors/Vec3Editor.hpp
+        src/Editor/GUI/Editors/StringEditor.cpp
         src/Editor/Util/EditorSettings.hpp
     )
 

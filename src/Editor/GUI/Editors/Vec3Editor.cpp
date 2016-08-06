@@ -1,6 +1,6 @@
 #include "Vec3Editor.hpp"
 
-#include "Label.hpp"
+#include "../Label.hpp"
 #include "FloatEditor.hpp"
 
 using namespace GUI;

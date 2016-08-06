@@ -1,31 +1,32 @@
 #pragma once
 
-#include "Widget.hpp"
+#include "../Widget.hpp"
+#include <vector>
 
 class Entity;
-class Font;
+namespace Geometry {
+    class Rectangle;
+}
 
 namespace GUI {
-    class Label;
-    class FloatEditor;
+    class ComponentEditor;
     
-    /// Used to edit a 3D vector.
-    class Vec3Editor : public Widget {
+    /// Used to edit an entity.
+    class EntityEditor : public Widget {
         public:
-            /// Create new vector editor.
+            /// Create new entity editor.
             /**
              * @param parent Parent widget.
-             * @param font %Font to display text with.
              */
-            Vec3Editor(Widget* parent, Font* font);
+            EntityEditor(Widget* parent);
             
             /// Destructor.
-            ~Vec3Editor() override;
+            ~EntityEditor() override;
             
-            /// Update the editor.
+            /// Update the widget.
             void Update() override;
             
-            /// Render the editor.
+            /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
@@ -45,29 +46,21 @@ namespace GUI {
             
             /// Set the size of the widget.
             /**
-             * @param size The new size.
+             * @param size New widget size.
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set which vec3 variable to edit.
+            /// Set the entity to edit.
             /**
-             * @param variable The variable to edit.
+             * @param entity The entity to edit.
              */
-            void SetVec3(glm::vec3* variable);
+            void SetEntity(Entity* entity);
             
         private:
+            Geometry::Rectangle* rectangle;
             glm::vec2 size;
-            Font* font;
             
-            glm::vec3* variable = nullptr;
-            
-            Label* xLabel;
-            FloatEditor* xEditor;
-            
-            Label* yLabel;
-            FloatEditor* yEditor;
-            
-            Label* zLabel;
-            FloatEditor* zEditor;
+            Entity* entity = nullptr;
+            std::vector<ComponentEditor*> editors;
     };
 }

@@ -7,7 +7,7 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Mesh.hpp>
-#include "../TextButton.hpp"
+#include "../../TextButton.hpp"
 #include <Engine/Util/Log.hpp>
 
 using namespace GUI;

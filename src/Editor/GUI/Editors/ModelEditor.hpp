@@ -1,27 +1,32 @@
 #pragma once
 
-#include "Widget.hpp"
-#include <vector>
+#include "../Widget.hpp"
+#include <string>
 
-class Entity;
+class Font;
 namespace Geometry {
     class Rectangle;
+    class OBJModel;
 }
 
 namespace GUI {
-    class ComponentEditor;
+    class Label;
+    class StringEditor;
+    class Button;
+    class FileSelector;
     
-    /// Used to edit an entity.
-    class EntityEditor : public Widget {
+    /// Used to edit a model.
+    class ModelEditor : public Widget {
         public:
-            /// Create new entity editor.
+            /// Create new model editor.
             /**
              * @param parent Parent widget.
+             * @param fileSelector File selector to browse with.
              */
-            EntityEditor(Widget* parent);
+            ModelEditor(Widget* parent, FileSelector* fileSelector);
             
             /// Destructor.
-            ~EntityEditor() override;
+            ~ModelEditor();
             
             /// Update the widget.
             void Update() override;
@@ -50,17 +55,26 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the entity to edit.
+            /// Set the model to edit.
             /**
-             * @param entity The entity to edit.
+             * @param model Model to edit.
              */
-            void SetEntity(Entity* entity);
+            void SetModel(Geometry::OBJModel* model);
             
         private:
+            void LoadPressed();
+            void FileSelected(const std::string& file);
+            
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
+            Font* font;
             
-            Entity* entity = nullptr;
-            std::vector<ComponentEditor*> editors;
+            Geometry::OBJModel* model = nullptr;
+            
+            Label* nameLabel;
+            StringEditor* nameEditor;
+            
+            Button* loadButton;
+            FileSelector* fileSelector;
     };
 }

@@ -10,8 +10,8 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/ResourceList.hpp"
-#include "GUI/EntityEditor.hpp"
-#include "GUI/ModelEditor.hpp"
+#include "GUI/Editors/EntityEditor.hpp"
+#include "GUI/Editors/ModelEditor.hpp"
 #include "GUI/FileSelector.hpp"
 
 #include "Util/EditorSettings.hpp"

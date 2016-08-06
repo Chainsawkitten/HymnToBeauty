@@ -3,7 +3,7 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include "ABeeZee.ttf.hpp"
-#include "../Label.hpp"
+#include "../../Label.hpp"
 
 using namespace GUI;
 
