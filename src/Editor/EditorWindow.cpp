@@ -126,9 +126,10 @@ void EditorWindow::Init() {
     // Model selector.
     modelSelector = new GUI::ModelSelector(this);
     modelSelector->SetSize(GetSize());
+    modelSelector->SetModels(&Hymn().models);
     
     // Editors.
-    entityEditor = new GUI::EntityEditor(this);
+    entityEditor = new GUI::EntityEditor(this, modelSelector);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);

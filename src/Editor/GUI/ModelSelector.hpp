@@ -7,6 +7,7 @@ class Texture2D;
 class Font;
 namespace Geometry {
     class Rectangle;
+    class OBJModel;
 }
 
 namespace GUI {
@@ -50,10 +51,20 @@ namespace GUI {
             /**
              * @param callback Function to call.
              */
-            void SetModelSelectedCallback(std::function<void(const std::string&)> callback);
+            void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
+            
+            /// Set the models to select from.
+            /**
+             * @param models The models to select from.
+             */
+            void SetModels(const std::vector<Geometry::OBJModel*>* models);
+            
+            /// Update the list of models.
+            void UpdateModels();
             
         private:
             void Close();
+            void ModelSelected(Geometry::OBJModel* model);
             
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -61,11 +72,12 @@ namespace GUI {
             glm::vec2 size;
             
             bool hasModelSelectedCallback = false;
-            std::function<void(const std::string&)> modelSelectedCallback;
+            std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
             
             ImageButton* closeButton;
             Texture2D* closeTexture;
             
+            const std::vector<Geometry::OBJModel*>* models;
             VerticalScrollLayout* modelList;
     };
 }

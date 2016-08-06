@@ -7,16 +7,20 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Mesh.hpp>
+#include <Engine/Geometry/OBJModel.hpp>
 #include "../../TextButton.hpp"
-#include <Engine/Util/Log.hpp>
+#include "../../ModelSelector.hpp"
 
 using namespace GUI;
 
-MeshEditor::MeshEditor(Widget* parent) : ComponentEditor(parent, "Mesh") {
+MeshEditor::MeshEditor(Widget* parent, ModelSelector* modelSelector) : ComponentEditor(parent, "Mesh") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
     selectModelButton = new TextButton(this, font, "Select model");
+    selectModelButton->SetClickedCallback(std::bind(&SelectModelPressed, this));
     AddEditor("Model", selectModelButton);
+    
+    this->modelSelector = modelSelector;
     
     SetVisible(false);
 }
@@ -35,5 +39,11 @@ void MeshEditor::SetEntity(Entity* entity) {
 }
 
 void MeshEditor::SelectModelPressed() {
-    Log() << "Select model pressed.";
+    modelSelector->SetVisible(true);
+    modelSelector->UpdateModels();
+    modelSelector->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
+}
+
+void MeshEditor::ModelSelected(Geometry::OBJModel* model) {
+    mesh->geometry = model;
 }

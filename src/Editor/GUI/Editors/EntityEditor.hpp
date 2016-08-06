@@ -10,6 +10,7 @@ namespace Geometry {
 
 namespace GUI {
     class ComponentEditor;
+    class ModelSelector;
     
     /// Used to edit an entity.
     class EntityEditor : public Widget {
@@ -17,8 +18,9 @@ namespace GUI {
             /// Create new entity editor.
             /**
              * @param parent Parent widget.
+             * @param modelSelector Model selector to use.
              */
-            EntityEditor(Widget* parent);
+            EntityEditor(Widget* parent, ModelSelector* modelSelector);
             
             /// Destructor.
             ~EntityEditor() override;

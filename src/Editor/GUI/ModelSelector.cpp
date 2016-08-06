@@ -8,7 +8,7 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Close.png.hpp>
 #include <ABeeZee.ttf.hpp>
-#include <Engine/Util/FileSystem.hpp>
+#include <Engine/Geometry/OBJModel.hpp>
 
 using namespace GUI;
 using namespace std;
@@ -26,7 +26,7 @@ ModelSelector::ModelSelector(Widget *parent) : Container(parent) {
     modelList = new VerticalScrollLayout(this);
     AddWidget(modelList);
     
-    SetVisible(true);
+    SetVisible(false);
 }
 
 ModelSelector::~ModelSelector() {
@@ -67,11 +67,34 @@ void ModelSelector::SetSize(const glm::vec2& size) {
     modelList->SetSize(glm::vec2(size.x, size.y - closeButton->GetSize().y));
 }
 
-void ModelSelector::SetModelSelectedCallback(std::function<void(const std::string&)> callback) {
+void ModelSelector::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
     modelSelectedCallback = callback;
     hasModelSelectedCallback = true;
 }
 
+void ModelSelector::SetModels(const std::vector<Geometry::OBJModel*>* models) {
+    this->models = models;
+    UpdateModels();
+}
+
+void ModelSelector::UpdateModels() {
+    modelList->ClearWidgets();
+    
+    for (Geometry::OBJModel* model : *models) {
+        TextButton* modelButton = new TextButton(this, font, model->name);
+        modelButton->SetClickedCallback(std::bind(&ModelSelected, this, model));
+        modelButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
+        modelList->AddWidget(modelButton);
+    }
+}
+
 void ModelSelector::Close() {
     SetVisible(false);
+}
+
+void ModelSelector::ModelSelected(Geometry::OBJModel* model) {
+    SetVisible(false);
+    
+    if (hasModelSelectedCallback)
+        modelSelectedCallback(model);
 }

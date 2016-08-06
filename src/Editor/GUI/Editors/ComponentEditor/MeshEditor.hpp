@@ -7,9 +7,13 @@ class Font;
 namespace Component {
     class Mesh;
 }
+namespace Geometry {
+    class OBJModel;
+}
 
 namespace GUI {
     class TextButton;
+    class ModelSelector;
     
     /// Used to edit a mesh component.
     class MeshEditor : public ComponentEditor {
@@ -17,8 +21,9 @@ namespace GUI {
             /// Create new mesh editor.
             /**
              * @param parent Parent widget.
+             * @param modelSelector Model selector to use.
              */
-            MeshEditor(Widget* parent);
+            MeshEditor(Widget* parent, ModelSelector* modelSelector);
             
             /// Destructor.
             ~MeshEditor() override;
@@ -31,10 +36,13 @@ namespace GUI {
             
         private:
             void SelectModelPressed();
+            void ModelSelected(Geometry::OBJModel* model);
             
             Font* font;
             
             Component::Mesh* mesh = nullptr;
             TextButton* selectModelButton;
+            
+            ModelSelector* modelSelector;
     };
 }
