@@ -2,29 +2,46 @@
 
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
+#include <Engine/Font/Font.hpp>
+#include "ABeeZee.ttf.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 #include "ComponentEditor/TransformEditor.hpp"
 #include "ComponentEditor/LensEditor.hpp"
 #include "ComponentEditor/MeshEditor.hpp"
+#include "../Label.hpp"
+#include "StringEditor.hpp"
+#include <Engine/Entity/Entity.hpp>
 
 using namespace GUI;
 
 EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
+    
+    font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    nameLabel = new Label(this, font, "Name");
+    nameEditor = new StringEditor(this, font);
+    
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
+    
     SetVisible(false);
 }
 
 EntityEditor::~EntityEditor() {
     Managers().resourceManager->FreeRectangle();
+    Managers().resourceManager->FreeFont(font);
+    
+    delete nameLabel;
+    delete nameEditor;
     
     for (ComponentEditor* editor : editors)
         delete editor;
 }
 
 void EntityEditor::Update() {
+    nameEditor->Update();
+    
     for (ComponentEditor* editor : editors)
         editor->Update();
 }
@@ -32,6 +49,9 @@ void EntityEditor::Update() {
 void EntityEditor::Render(const glm::vec2& screenSize) {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     rectangle->Render(GetPosition(), size, color, screenSize);
+    
+    nameLabel->Render(screenSize);
+    nameEditor->Render(screenSize);
     
     for (ComponentEditor* editor : editors)
         editor->Render(screenSize);
@@ -41,6 +61,10 @@ void EntityEditor::SetPosition(const glm::vec2& position) {
     Widget::SetPosition(position);
     
     glm::vec2 pos(position);
+    
+    nameLabel->SetPosition(pos);
+    nameEditor->SetPosition(pos + glm::vec2(10.f, 20.f));
+    pos.y += 50.f;
     
     for (ComponentEditor* editor : editors) {
         editor->SetPosition(pos);
@@ -57,12 +81,16 @@ glm::vec2 EntityEditor::GetSize() const {
 void EntityEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
+    nameEditor->SetSize(glm::vec2(size.x - 10.f, 20.f));
+    
     for (ComponentEditor* editor : editors)
         editor->SetSize(size);
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
+    
+    nameEditor->SetString(&entity->name);
     
     for (ComponentEditor* editor : editors)
         editor->SetEntity(entity);
