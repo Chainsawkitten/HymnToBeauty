@@ -12,6 +12,7 @@
 #include "GUI/ResourceList.hpp"
 #include "GUI/Editors/EntityEditor.hpp"
 #include "GUI/Editors/ModelEditor.hpp"
+#include "GUI/ModelSelector.hpp"
 #include "GUI/FileSelector.hpp"
 
 #include "Util/EditorSettings.hpp"
@@ -67,6 +68,7 @@ EditorWindow::~EditorWindow() {
     delete modelEditor;
     
     delete fileSelector;
+    delete modelSelector;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
     Managers().resourceManager->FreeTexture2D(optionsTexture);
@@ -121,6 +123,10 @@ void EditorWindow::Init() {
     fileSelector->SetSize(GetSize());
     fileSelector->SetExtension("obj");
     
+    // Model selector.
+    modelSelector = new GUI::ModelSelector(this);
+    modelSelector->SetSize(GetSize());
+    
     // Editors.
     entityEditor = new GUI::EntityEditor(this);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
@@ -174,6 +180,10 @@ void EditorWindow::Update() {
         input->Update();
         input->SetActive();
         fileSelector->Update();
+    } else if (modelSelector->IsVisible()) {
+        input->Update();
+        input->SetActive();
+        modelSelector->Update();
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         Play();
     } else {
@@ -202,6 +212,9 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
         
         if (fileSelector->IsVisible())
             fileSelector->Render(screenSize);
+        
+        if (modelSelector->IsVisible())
+            modelSelector->Render(screenSize);
         
         glfwSwapBuffers(window);
     }
