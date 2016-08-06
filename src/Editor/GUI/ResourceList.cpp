@@ -45,7 +45,7 @@ void ResourceList::Update() {
     if (Input()->Triggered(InputHandler::CLICK)) {
         if (addEntityHover) {
             // Add entity button pressed.
-            Entity* cube = Hymn().activeScene.CreateEntity();
+            Entity* cube = Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
             cube->AddComponent<Component::Transform>();
             Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
             cubeMesh->geometry = Managers().resourceManager->CreateCube();
@@ -107,7 +107,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
         }
         
-        font->RenderText(("Entity #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
         ++id;
     }
