@@ -22,9 +22,10 @@ class Scene {
         
         /// Create a new entity in the scene.
         /**
+         * @param name Name of the entity to create.
          * @return The new entity.
          */
-        Entity* CreateEntity();
+        Entity* CreateEntity(const std::string& name = "");
         
         /// Get all the entities in the scene.
         /**
