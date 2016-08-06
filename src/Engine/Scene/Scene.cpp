@@ -11,8 +11,8 @@ Scene::~Scene() {
     Clear();
 }
 
-Entity* Scene::CreateEntity() {
-    Entity* entity = new Entity(this);
+Entity* Scene::CreateEntity(const std::string& name) {
+    Entity* entity = new Entity(this, name);
     entities.push_back(entity);
     return entity;
 }

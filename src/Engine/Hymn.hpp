@@ -50,6 +50,9 @@ class ActiveHymn {
         /// The id of the next model to create.
         unsigned int modelNumber = 0U;
         
+        /// The id of the next entity to create.
+        unsigned int entityNumber = 1U;
+        
     private:
         static ActiveHymn& GetInstance();
         

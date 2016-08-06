@@ -29,8 +29,9 @@ void ActiveHymn::Clear() {
     }
     models.clear();
     modelNumber = 0U;
+    entityNumber = 1U;
     
-    Entity* camera = activeScene.CreateEntity();
+    Entity* camera = activeScene.CreateEntity("Camera");
     Component::Transform* cameraTransform = camera->AddComponent<Component::Transform>();
     cameraTransform->position = glm::vec3(0.f, 0.f, 10.f);
     camera->AddComponent<Component::Lens>();

@@ -15,7 +15,7 @@ class Entity {
         /**
          * @param scene The scene in which the entity is contained.
          */
-        Entity(Scene* scene);
+        Entity(Scene* scene, const std::string& name = "");
         
         /// Destructor.
         ~Entity();
@@ -31,6 +31,8 @@ class Entity {
          * @return The requested component (or nullptr).
          */
         template<typename T> T* GetComponent();
+        
+        std::string name;
         
     private:
         Scene* scene;

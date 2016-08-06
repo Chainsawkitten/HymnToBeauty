@@ -4,11 +4,14 @@
 #include <vector>
 
 class Entity;
+class Font;
 namespace Geometry {
     class Rectangle;
 }
 
 namespace GUI {
+    class Label;
+    class StringEditor;
     class ComponentEditor;
     class ModelSelector;
     
@@ -61,8 +64,12 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
+            Font* font;
             
             Entity* entity = nullptr;
             std::vector<ComponentEditor*> editors;
+            
+            Label* nameLabel;
+            StringEditor* nameEditor;
     };
 }
