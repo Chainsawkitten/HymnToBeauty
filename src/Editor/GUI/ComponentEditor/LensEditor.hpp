@@ -11,7 +11,7 @@ namespace GUI {
     /// Used to edit a lens component.
     class LensEditor : public ComponentEditor {
         public:
-            /// Create new transform editor.
+            /// Create new lens editor.
             /**
              * @param parent Parent widget.
              */
@@ -20,7 +20,7 @@ namespace GUI {
             /// Destructor.
             ~LensEditor() override;
             
-            /// Set the entity to edit the transform component of.
+            /// Set the entity to edit the lens component of.
             /**
              * @param entity %Entity to edit.
              */
