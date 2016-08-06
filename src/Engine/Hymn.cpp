@@ -24,11 +24,11 @@ void ActiveHymn::Clear() {
     path = "";
     activeScene.Clear();
     
-    for (Geometry::OBJModel* mesh : meshes) {
-        delete mesh;
+    for (Geometry::OBJModel* model : models) {
+        delete model;
     }
-    meshes.clear();
-    meshNumber = 0U;
+    models.clear();
+    modelNumber = 0U;
     
     Entity* camera = activeScene.CreateEntity();
     Component::Transform* cameraTransform = camera->AddComponent<Component::Transform>();

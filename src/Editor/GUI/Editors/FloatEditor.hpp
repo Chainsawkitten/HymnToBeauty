@@ -1,29 +1,29 @@
 #pragma once
 
-#include "TextField.hpp"
+#include "../TextField.hpp"
 
 namespace GUI {
-    /// Used to edit a string.
-    class StringEditor : public TextField {
+    /// Used to edit a float.
+    class FloatEditor : public TextField {
         public:
-            /// Create new string editor.
+            /// Create new float editor.
             /**
              * @param parent Parent widget.
              * @param font %Font to display text with.
              */
-            StringEditor(Widget* parent, Font* font);
+            FloatEditor(Widget* parent, Font* font);
             
-            /// Set which string variable to edit.
+            /// Set which float variable to edit.
             /**
              * @param variable The variable to edit.
              */
-            void SetString(std::string* variable);
+            void SetFloat(float* variable);
             
         protected:
             /// Called when text has been updated.
             void TextUpdated() override;
             
         private:
-            std::string* variable;
+            float* variable = nullptr;
     };
 }

@@ -5,7 +5,7 @@
 using namespace GUI;
 
 FloatEditor::FloatEditor(Widget* parent, Font* font) : TextField(parent, font) {
-    variable = nullptr;
+    
 }
 
 void FloatEditor::SetFloat(float* variable) {

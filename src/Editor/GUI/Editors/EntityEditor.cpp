@@ -5,14 +5,15 @@
 #include <Engine/Geometry/Rectangle.hpp>
 #include "ComponentEditor/TransformEditor.hpp"
 #include "ComponentEditor/LensEditor.hpp"
+#include "ComponentEditor/MeshEditor.hpp"
 
 using namespace GUI;
 
-EntityEditor::EntityEditor(Widget* parent) : Widget(parent) {
+EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
-    entity = nullptr;
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
+    editors.push_back(new MeshEditor(this, modelSelector));
     SetVisible(false);
 }
 

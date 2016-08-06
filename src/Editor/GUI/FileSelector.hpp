@@ -72,11 +72,10 @@ namespace GUI {
             
             // Interaction
             std::string path;
-            std::string extension;
+            std::string extension = "";
             bool pathChanged;
-            std::string file;
             
-            bool hasFileSelectedCallback;
+            bool hasFileSelectedCallback = false;
             std::function<void(const std::string&)> fileSelectedCallback;
             
             ImageButton* closeButton;

@@ -24,14 +24,6 @@ ResourceList::ResourceList(Widget* parent) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     addTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
-    
-    addEntityHover = false;
-    selectedEntity = nullptr;
-    hasEntitySelectedCallback = false;
-    
-    addMeshHover = false;
-    selectedMesh = nullptr;
-    hasMeshSelectedCallback = false;
 }
 
 ResourceList::~ResourceList() {
@@ -47,8 +39,8 @@ void ResourceList::Update() {
     addEntityHover = rect.Collide(mousePosition);
     
     position.y += (Hymn().activeScene.GetEntities().size() + 1) * font->GetHeight();
-    rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Meshes") + 5.f, 6.f), glm::vec2(10.f, 10.f));
-    addMeshHover = rect.Collide(mousePosition);
+    rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+    addModelHover = rect.Collide(mousePosition);
     
     if (Input()->Triggered(InputHandler::CLICK)) {
         if (addEntityHover) {
@@ -57,11 +49,11 @@ void ResourceList::Update() {
             cube->AddComponent<Component::Transform>();
             Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
             cubeMesh->geometry = Managers().resourceManager->CreateCube();
-        } else if (addMeshHover) {
-            // Add mesh button pressed.
-            Geometry::OBJModel* mesh = new Geometry::OBJModel();
-            mesh->name = "Mesh #" + std::to_string(Hymn().meshNumber++);
-            Hymn().meshes.push_back(mesh);
+        } else if (addModelHover) {
+            // Add model button pressed.
+            Geometry::OBJModel* model = new Geometry::OBJModel();
+            model->name = "Model #" + std::to_string(Hymn().modelNumber++);
+            Hymn().models.push_back(model);
         } else {
             position  = GetPosition();
             
@@ -71,7 +63,7 @@ void ResourceList::Update() {
                 rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = entity;
-                    selectedMesh = nullptr;
+                    selectedModel = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
                     break;
@@ -81,15 +73,15 @@ void ResourceList::Update() {
             position  = GetPosition();
             position.y += (1 + Hymn().activeScene.GetEntities().size()) * font->GetHeight();
             
-            // Check if mesh selected.
-            for (Geometry::OBJModel* mesh : Hymn().meshes) {
+            // Check if model selected.
+            for (Geometry::OBJModel* model : Hymn().models) {
                 position.y += font->GetHeight();
                 rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = nullptr;
-                    selectedMesh = mesh;
-                    if (hasMeshSelectedCallback)
-                        meshSelectedCallback(mesh);
+                    selectedModel = model;
+                    if (hasModelSelectedCallback)
+                        modelSelectedCallback(model);
                     break;
                 }
             }
@@ -120,18 +112,18 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         ++id;
     }
     
-    font->RenderText("Meshes", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Meshes") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addMeshHover ? 1.f : 0.5f);
+    font->RenderText("Models", position, GetSize().x, screenSize);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addModelHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    for (Geometry::OBJModel* mesh : Hymn().meshes) {
+    for (Geometry::OBJModel* model : Hymn().models) {
         // Render background if selected.
-        if (selectedMesh == mesh) {
+        if (selectedModel == model) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
         }
         
-        font->RenderText(mesh->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
     }
 }
@@ -149,7 +141,7 @@ void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callba
     entitySelectedCallback = callback;
 }
 
-void ResourceList::SetMeshSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
-    hasMeshSelectedCallback = true;
-    meshSelectedCallback = callback;
+void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
+    hasModelSelectedCallback = true;
+    modelSelectedCallback = callback;
 }

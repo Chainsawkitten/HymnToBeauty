@@ -44,11 +44,11 @@ class ActiveHymn {
         /// The active scene.
         Scene activeScene;
         
-        /// Meshes.
-        std::vector<Geometry::OBJModel*> meshes;
+        /// Models.
+        std::vector<Geometry::OBJModel*> models;
         
-        /// The id of the next mesh to create.
-        unsigned int meshNumber = 0U;
+        /// The id of the next model to create.
+        unsigned int modelNumber = 0U;
         
     private:
         static ActiveHymn& GetInstance();

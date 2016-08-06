@@ -51,11 +51,11 @@ namespace GUI {
              */
             void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
             
-            /// Set function to call when a mesh has been selected.
+            /// Set function to call when a model has been selected.
             /**
              * @param callback Function to call.
              */
-            void SetMeshSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
+            void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
             
         private:
             Geometry::Rectangle* rectangle;
@@ -64,14 +64,14 @@ namespace GUI {
             
             Texture2D* addTexture;
             
-            bool addEntityHover;
-            Entity* selectedEntity;
-            bool hasEntitySelectedCallback;
+            bool addEntityHover = false;
+            Entity* selectedEntity = nullptr;
+            bool hasEntitySelectedCallback = false;
             std::function<void(Entity*)> entitySelectedCallback;
             
-            bool addMeshHover;
-            Geometry::OBJModel* selectedMesh;
-            bool hasMeshSelectedCallback;
-            std::function<void(Geometry::OBJModel*)> meshSelectedCallback;
+            bool addModelHover = false;
+            Geometry::OBJModel* selectedModel = nullptr;
+            bool hasModelSelectedCallback = false;
+            std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
     };
 }

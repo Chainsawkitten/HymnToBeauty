@@ -9,9 +9,6 @@ using namespace GUI;
 
 VerticalScrollLayout::VerticalScrollLayout(Widget* parent) : Container(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
-    
-    nextPosition = glm::vec2(0.f, 0.f);
-    scrollPosition = 0U;
 }
 
 VerticalScrollLayout::~VerticalScrollLayout() {

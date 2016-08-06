@@ -1,32 +1,29 @@
 #pragma once
 
-#include "Widget.hpp"
-#include <string>
+#include "../Widget.hpp"
+#include <vector>
 
-class Font;
+class Entity;
 namespace Geometry {
     class Rectangle;
-    class OBJModel;
 }
 
 namespace GUI {
-    class Label;
-    class StringEditor;
-    class Button;
-    class FileSelector;
+    class ComponentEditor;
+    class ModelSelector;
     
-    /// Used to edit a mesh.
-    class MeshEditor : public Widget {
+    /// Used to edit an entity.
+    class EntityEditor : public Widget {
         public:
-            /// Create new mesh editor.
+            /// Create new entity editor.
             /**
              * @param parent Parent widget.
-             * @param fileSelector File selector to browse with.
+             * @param modelSelector Model selector to use.
              */
-            MeshEditor(Widget* parent, FileSelector* fileSelector);
+            EntityEditor(Widget* parent, ModelSelector* modelSelector);
             
             /// Destructor.
-            ~MeshEditor();
+            ~EntityEditor() override;
             
             /// Update the widget.
             void Update() override;
@@ -55,26 +52,17 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the mesh to edit.
+            /// Set the entity to edit.
             /**
-             * @param mesh Mesh to edit.
+             * @param entity The entity to edit.
              */
-            void SetMesh(Geometry::OBJModel* mesh);
+            void SetEntity(Entity* entity);
             
         private:
-            void LoadPressed();
-            void FileSelected(const std::string& file);
-            
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
-            Font* font;
             
-            Geometry::OBJModel* mesh;
-            
-            Label* nameLabel;
-            StringEditor* nameEditor;
-            
-            Button* loadButton;
-            FileSelector* fileSelector;
+            Entity* entity = nullptr;
+            std::vector<ComponentEditor*> editors;
     };
 }

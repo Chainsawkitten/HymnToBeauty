@@ -8,8 +8,6 @@ using namespace GUI;
 
 VerticalLayout::VerticalLayout(Widget* parent) : Container(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
-    
-    nextPosition = glm::vec2(0.f, 0.f);
 }
 
 VerticalLayout::~VerticalLayout() {

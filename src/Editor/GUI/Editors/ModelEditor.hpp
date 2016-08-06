@@ -2,31 +2,36 @@
 
 #include "../Widget.hpp"
 #include <string>
-#include <vector>
 
-class Entity;
 class Font;
+namespace Geometry {
+    class Rectangle;
+    class OBJModel;
+}
 
 namespace GUI {
     class Label;
+    class StringEditor;
+    class Button;
+    class FileSelector;
     
-    /// Used to edit a component.
-    class ComponentEditor : public Widget {
+    /// Used to edit a model.
+    class ModelEditor : public Widget {
         public:
-            /// Create new component editor.
+            /// Create new model editor.
             /**
              * @param parent Parent widget.
-             * @param title Title.
+             * @param fileSelector File selector to browse with.
              */
-            ComponentEditor(Widget* parent, const std::string& title);
+            ModelEditor(Widget* parent, FileSelector* fileSelector);
             
             /// Destructor.
-            ~ComponentEditor() override;
+            ~ModelEditor();
             
-            /// Update the editor.
+            /// Update the widget.
             void Update() override;
             
-            /// Render the editor.
+            /// Render the widget.
             /**
              * @param screenSize Size of the screen in pixels.
              */
@@ -46,36 +51,30 @@ namespace GUI {
             
             /// Set the size of the widget.
             /**
-             * @param size The new size.
+             * @param size New widget size.
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the entity to edit a component of.
+            /// Set the model to edit.
             /**
-             * @param entity %Entity to edit.
+             * @param model Model to edit.
              */
-            virtual void SetEntity(Entity* entity) = 0;
-            
-        protected:
-            /// Add an editor.
-            /**
-             * @param name Name of the editor to add.
-             * @param editor The editor to add.
-             */
-            void AddEditor(const std::string& name, Widget* editor);
+            void SetModel(Geometry::OBJModel* model);
             
         private:
+            void LoadPressed();
+            void FileSelected(const std::string& file);
+            
+            Geometry::Rectangle* rectangle;
             glm::vec2 size;
             Font* font;
             
-            Label* titleLabel;
+            Geometry::OBJModel* model = nullptr;
             
-            struct LabeledEditor {
-                Label* label;
-                Widget* editor;
-                
-                LabeledEditor(Label* label, Widget* editor);
-            };
-            std::vector<LabeledEditor> editors;
+            Label* nameLabel;
+            StringEditor* nameEditor;
+            
+            Button* loadButton;
+            FileSelector* fileSelector;
     };
 }

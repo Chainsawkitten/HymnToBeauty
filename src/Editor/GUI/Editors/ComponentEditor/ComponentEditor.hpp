@@ -1,26 +1,27 @@
 #pragma once
 
-#include "Widget.hpp"
+#include "../../Widget.hpp"
+#include <string>
+#include <vector>
 
 class Entity;
 class Font;
 
 namespace GUI {
     class Label;
-    class FloatEditor;
     
-    /// Used to edit a 3D vector.
-    class Vec3Editor : public Widget {
+    /// Used to edit a component.
+    class ComponentEditor : public Widget {
         public:
-            /// Create new vector editor.
+            /// Create new component editor.
             /**
              * @param parent Parent widget.
-             * @param font %Font to display text with.
+             * @param title Title.
              */
-            Vec3Editor(Widget* parent, Font* font);
+            ComponentEditor(Widget* parent, const std::string& title);
             
             /// Destructor.
-            ~Vec3Editor() override;
+            ~ComponentEditor() override;
             
             /// Update the editor.
             void Update() override;
@@ -49,25 +50,32 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set which vec3 variable to edit.
+            /// Set the entity to edit a component of.
             /**
-             * @param variable The variable to edit.
+             * @param entity %Entity to edit.
              */
-            void SetVec3(glm::vec3* variable);
+            virtual void SetEntity(Entity* entity) = 0;
+            
+        protected:
+            /// Add an editor.
+            /**
+             * @param name Name of the editor to add.
+             * @param editor The editor to add.
+             */
+            void AddEditor(const std::string& name, Widget* editor);
             
         private:
             glm::vec2 size;
             Font* font;
             
-            glm::vec3* variable;
+            Label* titleLabel;
             
-            Label* xLabel;
-            FloatEditor* xEditor;
-            
-            Label* yLabel;
-            FloatEditor* yEditor;
-            
-            Label* zLabel;
-            FloatEditor* zEditor;
+            struct LabeledEditor {
+                Label* label;
+                Widget* editor;
+                
+                LabeledEditor(Label* label, Widget* editor);
+            };
+            std::vector<LabeledEditor> editors;
     };
 }

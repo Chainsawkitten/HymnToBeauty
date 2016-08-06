@@ -23,6 +23,6 @@ namespace Component {
             /**
              * Default: nullptr
              */
-            Geometry::Geometry3D* geometry;
+            Geometry::Geometry3D* geometry = nullptr;
     };
 }

@@ -11,8 +11,7 @@
 using namespace std;
 
 ResourceManager::ResourceManager() {
-    rectangleCount = 0;
-    cubeCount = 0;
+    
 }
 
 Shader* ResourceManager::CreateShader(const char* source, int sourceLength, GLenum shaderType) {
@@ -36,15 +35,6 @@ void ResourceManager::FreeShader(Shader* shader) {
         delete shader;
         shaders.erase(source);
     }
-}
-
-ResourceManager::ShaderProgramKey::ShaderProgramKey() {
-    computeShader = nullptr;
-    vertexShader = nullptr;
-    tessControlShader = nullptr;
-    tessEvaluationShader = nullptr;
-    geometryShader = nullptr;
-    fragmentShader = nullptr;
 }
 
 bool ResourceManager::ShaderProgramKey::operator<(const ShaderProgramKey& other) const {
@@ -210,11 +200,6 @@ void ResourceManager::FreeTexture2D(Texture2D* texture) {
             textures.erase(data);
         }
     }
-}
-
-ResourceManager::FontKey::FontKey() {
-    source = nullptr;
-    height = 0.f;
 }
 
 bool ResourceManager::FontKey::operator<(const FontKey& other) const {

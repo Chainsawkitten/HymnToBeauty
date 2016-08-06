@@ -10,8 +10,9 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/ResourceList.hpp"
-#include "GUI/EntityEditor.hpp"
-#include "GUI/MeshEditor.hpp"
+#include "GUI/Editors/EntityEditor.hpp"
+#include "GUI/Editors/ModelEditor.hpp"
+#include "GUI/ModelSelector.hpp"
 #include "GUI/FileSelector.hpp"
 
 #include "Util/EditorSettings.hpp"
@@ -44,9 +45,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     }
 
     glfwMakeContextCurrent(window);
-
-    gameWindow = nullptr;
-    childWindow = nullptr;
+    
     input = new InputHandler(window);
     
     // Assign controls.
@@ -66,9 +65,10 @@ EditorWindow::~EditorWindow() {
     
     delete resourceList;
     delete entityEditor;
-    delete meshEditor;
+    delete modelEditor;
     
     delete fileSelector;
+    delete modelSelector;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
     Managers().resourceManager->FreeTexture2D(optionsTexture);
@@ -115,7 +115,7 @@ void EditorWindow::Init() {
     resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
     resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    resourceList->SetMeshSelectedCallback(std::bind(&MeshSelected, this, std::placeholders::_1));
+    resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
     // File selector.
@@ -123,16 +123,21 @@ void EditorWindow::Init() {
     fileSelector->SetSize(GetSize());
     fileSelector->SetExtension("obj");
     
+    // Model selector.
+    modelSelector = new GUI::ModelSelector(this);
+    modelSelector->SetSize(GetSize());
+    modelSelector->SetModels(&Hymn().models);
+    
     // Editors.
-    entityEditor = new GUI::EntityEditor(this);
+    entityEditor = new GUI::EntityEditor(this, modelSelector);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
     
-    meshEditor = new GUI::MeshEditor(this, fileSelector);
-    meshEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    meshEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
-    AddWidget(meshEditor);
+    modelEditor = new GUI::ModelEditor(this, fileSelector);
+    modelEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    modelEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
+    AddWidget(modelEditor);
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
@@ -176,6 +181,10 @@ void EditorWindow::Update() {
         input->Update();
         input->SetActive();
         fileSelector->Update();
+    } else if (modelSelector->IsVisible()) {
+        input->Update();
+        input->SetActive();
+        modelSelector->Update();
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         Play();
     } else {
@@ -204,6 +213,9 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
         
         if (fileSelector->IsVisible())
             fileSelector->Render(screenSize);
+        
+        if (modelSelector->IsVisible())
+            modelSelector->Render(screenSize);
         
         glfwSwapBuffers(window);
     }
@@ -275,12 +287,12 @@ void EditorWindow::EntitySelected(Entity* entity) {
     entityEditor->SetEntity(entity);
     
     entityEditor->SetVisible(true);
-    meshEditor->SetVisible(false);
+    modelEditor->SetVisible(false);
 }
 
-void EditorWindow::MeshSelected(Geometry::OBJModel* mesh) {
-    meshEditor->SetMesh(mesh);
+void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
+    modelEditor->SetModel(model);
     
     entityEditor->SetVisible(false);
-    meshEditor->SetVisible(true);
+    modelEditor->SetVisible(true);
 }

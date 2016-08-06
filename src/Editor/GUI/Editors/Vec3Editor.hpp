@@ -1,32 +1,31 @@
 #pragma once
 
-#include "Widget.hpp"
-#include <vector>
+#include "../Widget.hpp"
 
 class Entity;
-namespace Geometry {
-    class Rectangle;
-}
+class Font;
 
 namespace GUI {
-    class ComponentEditor;
+    class Label;
+    class FloatEditor;
     
-    /// Used to edit an entity.
-    class EntityEditor : public Widget {
+    /// Used to edit a 3D vector.
+    class Vec3Editor : public Widget {
         public:
-            /// Create new entity editor.
+            /// Create new vector editor.
             /**
              * @param parent Parent widget.
+             * @param font %Font to display text with.
              */
-            EntityEditor(Widget* parent);
+            Vec3Editor(Widget* parent, Font* font);
             
             /// Destructor.
-            ~EntityEditor() override;
+            ~Vec3Editor() override;
             
-            /// Update the widget.
+            /// Update the editor.
             void Update() override;
             
-            /// Render the widget.
+            /// Render the editor.
             /**
              * @param screenSize Size of the screen in pixels.
              */
@@ -46,21 +45,29 @@ namespace GUI {
             
             /// Set the size of the widget.
             /**
-             * @param size New widget size.
+             * @param size The new size.
              */
             void SetSize(const glm::vec2& size) override;
             
-            /// Set the entity to edit.
+            /// Set which vec3 variable to edit.
             /**
-             * @param entity The entity to edit.
+             * @param variable The variable to edit.
              */
-            void SetEntity(Entity* entity);
+            void SetVec3(glm::vec3* variable);
             
         private:
-            Geometry::Rectangle* rectangle;
             glm::vec2 size;
+            Font* font;
             
-            Entity* entity;
-            std::vector<ComponentEditor*> editors;
+            glm::vec3* variable = nullptr;
+            
+            Label* xLabel;
+            FloatEditor* xEditor;
+            
+            Label* yLabel;
+            FloatEditor* yEditor;
+            
+            Label* zLabel;
+            FloatEditor* zEditor;
     };
 }

@@ -69,7 +69,7 @@ namespace GUI {
         private:
             Widget* parent;
             
-            glm::vec2 position;
-            bool visible;
+            glm::vec2 position = glm::vec2(0.f, 0.f);
+            bool visible = true;
     };
 }

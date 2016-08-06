@@ -7,25 +7,24 @@ class Texture2D;
 class Font;
 namespace Geometry {
     class Rectangle;
+    class OBJModel;
 }
 
 namespace GUI {
     class ImageButton;
-    class TextButton;
-    class VerticalLayout;
-    class TextField;
+    class VerticalScrollLayout;
     
-    /// A window where a hymn can be selected.
-    class SelectHymnWindow : public Container {
+    /// A window where a model can be selected.
+    class ModelSelector : public Container {
         public:
             /// Create new window.
             /**
              * @param parent Parent widget.
              */
-            SelectHymnWindow(Widget* parent);
+            ModelSelector(Widget* parent);
             
             /// Destructor.
-            ~SelectHymnWindow() override;
+            ~ModelSelector() override;
             
             /// Update the widget.
             void Update() override;
@@ -48,35 +47,37 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size);
             
-            /// Set function to call when closed.
+            /// Set function to call when a model has been selected.
             /**
-             * @param callback Function to call when window is closed.
+             * @param callback Function to call.
              */
-            void SetClosedCallback(std::function<void(const std::string&)> callback);
+            void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
+            
+            /// Set the models to select from.
+            /**
+             * @param models The models to select from.
+             */
+            void SetModels(const std::vector<Geometry::OBJModel*>* models);
+            
+            /// Update the list of models.
+            void UpdateModels();
             
         private:
             void Close();
-            void Select();
-            void SetHymn(const std::string& name);
+            void ModelSelected(Geometry::OBJModel* model);
             
             Geometry::Rectangle* rectangle;
             Font* font;
             
             glm::vec2 size;
             
-            // Interaction
-            bool hasClosedCallback = false;
-            std::function<void(const std::string&)> closedCallback;
-            bool shouldClose = false;
+            bool hasModelSelectedCallback = false;
+            std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
             
             ImageButton* closeButton;
             Texture2D* closeTexture;
             
-            TextButton* selectButton;
-            
-            TextField* nameTextField;
-            
-            VerticalLayout* hymnList;
-            Texture2D* hymnTexture;
+            const std::vector<Geometry::OBJModel*>* models;
+            VerticalScrollLayout* modelList;
     };
 }

@@ -50,11 +50,11 @@ namespace GUI {
         private:
             Geometry::Rectangle* rectangle;
             
-            glm::vec2 size;
+            glm::vec2 size = glm::vec2(64.f, 64.f);
             
             // Interaction
-            bool mouseHover;
-            bool hasClickedCallback;
+            bool mouseHover = false;
+            bool hasClickedCallback = false;
             std::function<void()> clickedCallback;
     };
 }

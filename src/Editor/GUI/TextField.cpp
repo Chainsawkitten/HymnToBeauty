@@ -12,8 +12,6 @@ using namespace GUI;
 TextField::TextField(Widget *parent, Font* font) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     this->font = font;
-    text = "";
-    focus = false;
 }
 
 TextField::~TextField() {

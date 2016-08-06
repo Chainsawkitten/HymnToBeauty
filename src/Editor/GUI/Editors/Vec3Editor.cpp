@@ -1,13 +1,12 @@
 #include "Vec3Editor.hpp"
 
-#include "Label.hpp"
+#include "../Label.hpp"
 #include "FloatEditor.hpp"
 
 using namespace GUI;
 
 Vec3Editor::Vec3Editor(Widget* parent, Font* font) : Widget(parent) {
     this->font = font;
-    variable = nullptr;
     
     xLabel = new Label(this, font, "X");
     xLabel->SetPosition(GetPosition());
