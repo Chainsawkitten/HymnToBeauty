@@ -74,7 +74,6 @@ namespace GUI {
             std::string path;
             std::string extension = "";
             bool pathChanged;
-            std::string file = "";
             
             bool hasFileSelectedCallback = false;
             std::function<void(const std::string&)> fileSelectedCallback;

@@ -98,21 +98,18 @@ void FileSelector::Close() {
 void FileSelector::OpenParentDirectory() {
     path = FileSystem::GetParentDirectory(path);
     pathChanged = true;
-    file = "";
 }
 
 void FileSelector::OpenDirectory(const string& name) {
     path += FileSystem::DELIMITER + name;
     pathChanged = true;
-    file = "";
 }
 
 void FileSelector::SelectFile(const string& name) {
-    file = name;
     SetVisible(false);
     
     if (hasFileSelectedCallback)
-        fileSelectedCallback(path + FileSystem::DELIMITER + file);
+        fileSelectedCallback(path + FileSystem::DELIMITER + name);
 }
 
 void FileSelector::ScanDirectory() {
