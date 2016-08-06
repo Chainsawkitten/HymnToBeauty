@@ -5,6 +5,7 @@
 
 class Entity;
 class Font;
+class Texture2D;
 namespace Geometry {
     class Rectangle;
 }
@@ -12,6 +13,7 @@ namespace Geometry {
 namespace GUI {
     class Label;
     class StringEditor;
+    class ImageTextButton;
     class ComponentEditor;
     class ModelSelector;
     
@@ -71,5 +73,8 @@ namespace GUI {
             
             Label* nameLabel;
             StringEditor* nameEditor;
+            
+            Texture2D* addComponentTexture;
+            ImageTextButton* addComponentButton;
     };
 }

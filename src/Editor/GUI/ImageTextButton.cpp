@@ -32,7 +32,7 @@ void ImageTextButton::Render(const glm::vec2& screenSize) {
     rectangle->Render(GetPosition(), GetSize(), color, screenSize);
     
     // Draw texture
-    texture->Render(GetPosition(), imageSize, screenSize);
+    texture->Render(GetPosition() + glm::vec2(0.f, (GetSize().y - imageSize.y) * 0.5f), imageSize, screenSize);
     
     // Draw text
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
