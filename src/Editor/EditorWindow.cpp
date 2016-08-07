@@ -14,6 +14,7 @@
 #include "GUI/Editors/ModelEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/FileSelector.hpp"
+#include "GUI/Editors/ComponentEditor/ComponentAdder.hpp"
 
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/Log.hpp>
@@ -69,6 +70,7 @@ EditorWindow::~EditorWindow() {
     
     delete fileSelector;
     delete modelSelector;
+    delete componentAdder;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
     Managers().resourceManager->FreeTexture2D(optionsTexture);
@@ -128,8 +130,12 @@ void EditorWindow::Init() {
     modelSelector->SetSize(GetSize());
     modelSelector->SetModels(&Hymn().models);
     
+    // Component adder.
+    componentAdder = new GUI::ComponentAdder(this);
+    componentAdder->SetSize(GetSize());
+    
     // Editors.
-    entityEditor = new GUI::EntityEditor(this, modelSelector);
+    entityEditor = new GUI::EntityEditor(this, modelSelector, componentAdder);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
@@ -185,6 +191,10 @@ void EditorWindow::Update() {
         input->Update();
         input->SetActive();
         modelSelector->Update();
+    } else if (componentAdder->IsVisible()) {
+        input->Update();
+        input->SetActive();
+        componentAdder->Update();
     } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
         Play();
     } else {
@@ -216,6 +226,9 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
         
         if (modelSelector->IsVisible())
             modelSelector->Render(screenSize);
+        
+        if (componentAdder->IsVisible())
+            componentAdder->Render(screenSize);
         
         glfwSwapBuffers(window);
     }

@@ -7,6 +7,7 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "Add.png.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
+#include "ComponentEditor/ComponentAdder.hpp"
 #include "ComponentEditor/TransformEditor.hpp"
 #include "ComponentEditor/LensEditor.hpp"
 #include "ComponentEditor/MeshEditor.hpp"
@@ -17,7 +18,7 @@
 
 using namespace GUI;
 
-EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector) : Widget(parent) {
+EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, ComponentAdder* componentAdder) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
@@ -27,10 +28,13 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector) : Widge
     addComponentTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
     addComponentButton = new ImageTextButton(this, addComponentTexture, font, "Add component");
     addComponentButton->SetImageSize(glm::vec2(addComponentTexture->GetWidth(), addComponentTexture->GetHeight()));
+    addComponentButton->SetClickedCallback(std::bind(&AddComponentPressed, this));
     
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
+    
+    this->componentAdder = componentAdder;
     
     SetVisible(false);
 }
@@ -112,4 +116,8 @@ void EntityEditor::SetEntity(Entity* entity) {
     
     // Update editor positions.
     SetPosition(GetPosition());
+}
+
+void EntityEditor::AddComponentPressed() {
+    componentAdder->SetVisible(true);
 }

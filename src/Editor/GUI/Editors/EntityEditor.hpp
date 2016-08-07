@@ -16,6 +16,7 @@ namespace GUI {
     class ImageTextButton;
     class ComponentEditor;
     class ModelSelector;
+    class ComponentAdder;
     
     /// Used to edit an entity.
     class EntityEditor : public Widget {
@@ -24,8 +25,9 @@ namespace GUI {
             /**
              * @param parent Parent widget.
              * @param modelSelector Model selector to use.
+             * @param componentAdder %Component adder to use.
              */
-            EntityEditor(Widget* parent, ModelSelector* modelSelector);
+            EntityEditor(Widget* parent, ModelSelector* modelSelector, ComponentAdder* componentAdder);
             
             /// Destructor.
             ~EntityEditor() override;
@@ -64,6 +66,8 @@ namespace GUI {
             void SetEntity(Entity* entity);
             
         private:
+            void AddComponentPressed();
+            
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
             Font* font;
@@ -76,5 +80,7 @@ namespace GUI {
             
             Texture2D* addComponentTexture;
             ImageTextButton* addComponentButton;
+            
+            ComponentAdder* componentAdder;
     };
 }

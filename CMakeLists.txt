@@ -210,6 +210,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.cpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
@@ -240,6 +241,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.hpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
