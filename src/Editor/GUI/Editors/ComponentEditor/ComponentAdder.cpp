@@ -10,6 +10,7 @@
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Transform.hpp>
+#include <Engine/Component/Material.hpp>
 
 using namespace GUI;
 
@@ -75,6 +76,7 @@ void ComponentAdder::SetEntity(Entity* entity) {
     AddComponentButton<Component::Transform>("Transform");
     AddComponentButton<Component::Mesh>("Mesh");
     AddComponentButton<Component::Lens>("Lens");
+    AddComponentButton<Component::Material>("Material");
 }
 
 void ComponentAdder::SetComponentAddedCallback(std::function<void()> callback) {
