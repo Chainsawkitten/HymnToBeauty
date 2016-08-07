@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../Container.hpp"
+#include "../../TextButton.hpp"
+#include "../../VerticalScrollLayout.hpp"
 #include <Engine/Entity/Entity.hpp>
 #include <functional>
 
@@ -55,6 +57,7 @@ namespace GUI {
             
         private:
             void Close();
+            template<typename T> void AddComponentButton(const std::string& name);
             template<typename T> void ComponentPressed();
             
             Geometry::Rectangle* rectangle;
@@ -68,6 +71,15 @@ namespace GUI {
             Entity* entity = nullptr;
             VerticalScrollLayout* componentList;
     };
+}
+
+template<typename T> void GUI::ComponentAdder::AddComponentButton(const std::string& name) {
+    if (entity->GetComponent<T>() == nullptr) {
+        TextButton* component = new TextButton(this, font, name);
+        component->SetClickedCallback(std::bind(&ComponentPressed<T>, this));
+        component->SetSize(glm::vec2(size.x - 20.f, 64.f));
+        componentList->AddWidget(component);
+    }
 }
 
 template<typename T> void GUI::ComponentAdder::ComponentPressed() {
