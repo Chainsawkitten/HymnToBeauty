@@ -3,7 +3,6 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Geometry/Cube.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Font/Font.hpp>
 #include <Engine/Texture/Texture2D.hpp>
@@ -14,8 +13,6 @@
 #include <Engine/Scene/Scene.hpp>
 #include <Engine/Util/Input.hpp>
 #include <Engine/Entity/Entity.hpp>
-#include <Engine/Component/Transform.hpp>
-#include <Engine/Component/Mesh.hpp>
 #include <Engine/Physics/Rectangle.hpp>
 
 using namespace GUI;
@@ -45,10 +42,7 @@ void ResourceList::Update() {
     if (Input()->Triggered(InputHandler::CLICK)) {
         if (addEntityHover) {
             // Add entity button pressed.
-            Entity* cube = Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
-            cube->AddComponent<Component::Transform>();
-            Component::Mesh* cubeMesh = cube->AddComponent<Component::Mesh>();
-            cubeMesh->geometry = Managers().resourceManager->CreateCube();
+            Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
         } else if (addModelHover) {
             // Add model button pressed.
             Geometry::OBJModel* model = new Geometry::OBJModel();

@@ -4,26 +4,37 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Font/Font.hpp>
 #include "ABeeZee.ttf.hpp"
+#include <Engine/Texture/Texture2D.hpp>
+#include "Add.png.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
+#include "ComponentEditor/ComponentAdder.hpp"
 #include "ComponentEditor/TransformEditor.hpp"
 #include "ComponentEditor/LensEditor.hpp"
 #include "ComponentEditor/MeshEditor.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
 #include <Engine/Entity/Entity.hpp>
+#include "../ImageTextButton.hpp"
 
 using namespace GUI;
 
-EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector) : Widget(parent) {
+EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, ComponentAdder* componentAdder) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     nameLabel = new Label(this, font, "Name");
     nameEditor = new StringEditor(this, font);
     
+    addComponentTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
+    addComponentButton = new ImageTextButton(this, addComponentTexture, font, "Add component");
+    addComponentButton->SetImageSize(glm::vec2(addComponentTexture->GetWidth(), addComponentTexture->GetHeight()));
+    addComponentButton->SetClickedCallback(std::bind(&AddComponentPressed, this));
+    
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
+    
+    this->componentAdder = componentAdder;
     
     SetVisible(false);
 }
@@ -35,12 +46,16 @@ EntityEditor::~EntityEditor() {
     delete nameLabel;
     delete nameEditor;
     
+    Managers().resourceManager->FreeTexture2D(addComponentTexture);
+    delete addComponentButton;
+    
     for (ComponentEditor* editor : editors)
         delete editor;
 }
 
 void EntityEditor::Update() {
     nameEditor->Update();
+    addComponentButton->Update();
     
     for (ComponentEditor* editor : editors)
         editor->Update();
@@ -52,6 +67,7 @@ void EntityEditor::Render(const glm::vec2& screenSize) {
     
     nameLabel->Render(screenSize);
     nameEditor->Render(screenSize);
+    addComponentButton->Render(screenSize);
     
     for (ComponentEditor* editor : editors)
         editor->Render(screenSize);
@@ -65,6 +81,8 @@ void EntityEditor::SetPosition(const glm::vec2& position) {
     nameLabel->SetPosition(pos);
     nameEditor->SetPosition(pos + glm::vec2(10.f, 20.f));
     pos.y += 50.f;
+    addComponentButton->SetPosition(pos);
+    pos.y += 30.f;
     
     for (ComponentEditor* editor : editors) {
         editor->SetPosition(pos);
@@ -82,6 +100,7 @@ void EntityEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
     nameEditor->SetSize(glm::vec2(size.x - 10.f, 20.f));
+    addComponentButton->SetSize(glm::vec2(size.x, 20.f));
     
     for (ComponentEditor* editor : editors)
         editor->SetSize(size);
@@ -97,4 +116,10 @@ void EntityEditor::SetEntity(Entity* entity) {
     
     // Update editor positions.
     SetPosition(GetPosition());
+}
+
+void EntityEditor::AddComponentPressed() {
+    componentAdder->SetEntity(entity);
+    componentAdder->SetComponentAddedCallback(std::bind(&SetEntity, this, entity));
+    componentAdder->SetVisible(true);
 }
