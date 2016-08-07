@@ -2,6 +2,7 @@
 
 #include "Texture.hpp"
 #include <glm/glm.hpp>
+#include <string>
 
 class Shader;
 class ShaderProgram;
@@ -83,6 +84,9 @@ class Texture2D : public Texture {
          * @param srgb Whether the image is in SRGB space and should be converted to linear space.
          */
         void Load(const char* filename, bool srgb = false);
+        
+        /// The name of the texture.
+        std::string name;
 
 	private:
 		GLuint texID;
