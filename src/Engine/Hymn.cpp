@@ -53,6 +53,7 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
 }
 
 void ActiveHymn::Load(const string& path) {
