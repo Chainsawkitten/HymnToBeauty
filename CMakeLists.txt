@@ -67,6 +67,10 @@ set(EMBEDDED_INPUT
     assets/Add.png
     assets/Directory.png
     assets/BasicFile.png
+    assets/DefaultDiffuse.png
+    assets/DefaultNormal.png
+    assets/DefaultSpecular.png
+    assets/DefaultGlow.png
 )
 
 # Headerize
@@ -122,6 +126,7 @@ set(ENGINE_SRCS
         src/Engine/Hymn.cpp
         src/Engine/RenderTarget.cpp
         src/Engine/Component/Lens.cpp
+        src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Component/Transform.cpp
@@ -153,6 +158,7 @@ set(ENGINE_HEADERS
         src/Engine/Hymn.hpp
         src/Engine/RenderTarget.hpp
         src/Engine/Component/Lens.hpp
+        src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Component/Transform.hpp
