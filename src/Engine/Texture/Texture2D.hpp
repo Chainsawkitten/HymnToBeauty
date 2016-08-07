@@ -15,9 +15,11 @@ namespace Geometry {
  */
 class Texture2D : public Texture {
 	public:
+        /// Create new unloaded texture.
+        Texture2D();
+        
 		/// Create new texture from the given image file.
 		/**
-		 * Supported image formats: TGA.
 	 	 * @param filename Filename (relative or absolute) of the image file.
 	 	 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
 		 */
@@ -74,6 +76,13 @@ class Texture2D : public Texture {
          * @return true if the texture was loaded from a file, false otherwise.
          */
         bool IsFromFile() const;
+        
+        /// Load texture from file.
+        /**
+         * @param filename Filename (relative or absolute) of the image file.
+         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
+         */
+        void Load(const char* filename, bool srgb = false);
 
 	private:
 		GLuint texID;

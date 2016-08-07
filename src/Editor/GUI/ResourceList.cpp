@@ -54,7 +54,7 @@ void ResourceList::Update() {
             Hymn().models.push_back(model);
         } else if (addTextureHover) {
             // Add texture button pressed.
-            /// @todo Add texture.
+            Hymn().textures.push_back(new Texture2D());
         } else {
             position  = GetPosition();
             
