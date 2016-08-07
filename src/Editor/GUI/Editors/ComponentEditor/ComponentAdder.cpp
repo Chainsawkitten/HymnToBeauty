@@ -10,7 +10,6 @@
 #include <ABeeZee.ttf.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 
-#include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Transform.hpp>
@@ -78,18 +77,21 @@ void ComponentAdder::SetEntity(Entity* entity) {
     
     if (entity->GetComponent<Component::Transform>() == nullptr) {
         TextButton* component = new TextButton(this, font, "Transform");
+        component->SetClickedCallback(std::bind(&ComponentPressed<Component::Transform>, this));
         component->SetSize(glm::vec2(size.x - 20.f, 64.f));
         componentList->AddWidget(component);
     }
     
     if (entity->GetComponent<Component::Mesh>() == nullptr) {
         TextButton* component = new TextButton(this, font, "Mesh");
+        component->SetClickedCallback(std::bind(&ComponentPressed<Component::Mesh>, this));
         component->SetSize(glm::vec2(size.x - 20.f, 64.f));
         componentList->AddWidget(component);
     }
     
     if (entity->GetComponent<Component::Lens>() == nullptr) {
         TextButton* component = new TextButton(this, font, "Lens");
+        component->SetClickedCallback(std::bind(&ComponentPressed<Component::Lens>, this));
         component->SetSize(glm::vec2(size.x - 20.f, 64.f));
         componentList->AddWidget(component);
     }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../../Container.hpp"
+#include <Engine/Entity/Entity.hpp>
 #include <functional>
 
-class Entity;
 class Texture2D;
 class Font;
 namespace Geometry {
@@ -55,6 +55,7 @@ namespace GUI {
             
         private:
             void Close();
+            template<typename T> void ComponentPressed();
             
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -69,3 +70,7 @@ namespace GUI {
     };
 }
 
+template<typename T> void GUI::ComponentAdder::ComponentPressed() {
+    entity->AddComponent<T>();
+    SetVisible(false);
+}
