@@ -73,5 +73,7 @@ namespace GUI {
             Geometry::OBJModel* selectedModel = nullptr;
             bool hasModelSelectedCallback = false;
             std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
+            
+            bool addTextureHover = false;
     };
 }
