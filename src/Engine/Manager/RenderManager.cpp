@@ -61,7 +61,7 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
         for (Mesh* mesh : meshes) {
             Entity* model = mesh->entity;
             Transform* transform = model->GetComponent<Component::Transform>();
-            if (transform != nullptr) {
+            if (transform != nullptr && mesh->geometry != nullptr) {
                 glm::mat4 modelMat = transform->GetModelMatrix();
                 
                 glBindVertexArray(mesh->geometry->GetVertexArray());
