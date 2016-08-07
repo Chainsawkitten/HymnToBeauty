@@ -3,6 +3,7 @@
 #include "../../Container.hpp"
 #include <functional>
 
+class Entity;
 class Texture2D;
 class Font;
 namespace Geometry {
@@ -46,6 +47,12 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size);
             
+            /// Set the entity to add components to.
+            /**
+             * @param entity The entity to add components to.
+             */
+            void SetEntity(Entity* entity);
+            
         private:
             void Close();
             
@@ -57,6 +64,7 @@ namespace GUI {
             ImageButton* closeButton;
             Texture2D* closeTexture;
             
+            Entity* entity = nullptr;
             VerticalScrollLayout* componentList;
     };
 }

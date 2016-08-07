@@ -10,6 +10,11 @@
 #include <ABeeZee.ttf.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 
+#include <Engine/Entity/Entity.hpp>
+#include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Mesh.hpp>
+#include <Engine/Component/Transform.hpp>
+
 using namespace GUI;
 
 ComponentAdder::ComponentAdder(Widget *parent) : Container(parent) {
@@ -64,6 +69,30 @@ void ComponentAdder::SetSize(const glm::vec2& size) {
     
     componentList->SetPosition(GetPosition() + glm::vec2(0.f, closeButton->GetSize().y));
     componentList->SetSize(glm::vec2(size.x, size.y - closeButton->GetSize().y));
+}
+
+void ComponentAdder::SetEntity(Entity* entity) {
+    this->entity = entity;
+    
+    componentList->ClearWidgets();
+    
+    if (entity->GetComponent<Component::Transform>() == nullptr) {
+        TextButton* component = new TextButton(this, font, "Transform");
+        component->SetSize(glm::vec2(size.x - 20.f, 64.f));
+        componentList->AddWidget(component);
+    }
+    
+    if (entity->GetComponent<Component::Mesh>() == nullptr) {
+        TextButton* component = new TextButton(this, font, "Mesh");
+        component->SetSize(glm::vec2(size.x - 20.f, 64.f));
+        componentList->AddWidget(component);
+    }
+    
+    if (entity->GetComponent<Component::Lens>() == nullptr) {
+        TextButton* component = new TextButton(this, font, "Lens");
+        component->SetSize(glm::vec2(size.x - 20.f, 64.f));
+        componentList->AddWidget(component);
+    }
 }
 
 void ComponentAdder::Close() {

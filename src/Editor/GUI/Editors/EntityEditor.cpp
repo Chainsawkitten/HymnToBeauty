@@ -119,5 +119,6 @@ void EntityEditor::SetEntity(Entity* entity) {
 }
 
 void EntityEditor::AddComponentPressed() {
+    componentAdder->SetEntity(entity);
     componentAdder->SetVisible(true);
 }
