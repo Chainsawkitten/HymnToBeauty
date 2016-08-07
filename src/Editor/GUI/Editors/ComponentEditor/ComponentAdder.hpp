@@ -55,6 +55,12 @@ namespace GUI {
              */
             void SetEntity(Entity* entity);
             
+            /// Set function to call when a component has been added.
+            /**
+             * @param callback Function to call.
+             */
+            void SetComponentAddedCallback(std::function<void()> callback);
+            
         private:
             void Close();
             template<typename T> void AddComponentButton(const std::string& name);
@@ -70,6 +76,9 @@ namespace GUI {
             
             Entity* entity = nullptr;
             VerticalScrollLayout* componentList;
+            
+            bool hasComponentAddedCallback = false;
+            std::function<void()> componentAddedCallback;
     };
 }
 
@@ -85,4 +94,6 @@ template<typename T> void GUI::ComponentAdder::AddComponentButton(const std::str
 template<typename T> void GUI::ComponentAdder::ComponentPressed() {
     entity->AddComponent<T>();
     SetVisible(false);
+    if (hasComponentAddedCallback)
+        componentAddedCallback();
 }

@@ -77,6 +77,11 @@ void ComponentAdder::SetEntity(Entity* entity) {
     AddComponentButton<Component::Lens>("Lens");
 }
 
+void ComponentAdder::SetComponentAddedCallback(std::function<void()> callback) {
+    this->componentAddedCallback = callback;
+    hasComponentAddedCallback = true;
+}
+
 void ComponentAdder::Close() {
     SetVisible(false);
 }

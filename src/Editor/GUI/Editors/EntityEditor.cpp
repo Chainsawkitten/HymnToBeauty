@@ -120,5 +120,6 @@ void EntityEditor::SetEntity(Entity* entity) {
 
 void EntityEditor::AddComponentPressed() {
     componentAdder->SetEntity(entity);
+    componentAdder->SetComponentAddedCallback(std::bind(&SetEntity, this, entity));
     componentAdder->SetVisible(true);
 }
