@@ -18,6 +18,7 @@ namespace GUI {
     class ResourceList;
     class EntityEditor;
     class ModelEditor;
+    class TextureEditor;
     class ModelSelector;
     class ComponentAdder;
 }
@@ -77,6 +78,7 @@ class EditorWindow : public GUI::Container {
         void OpenHymnClosed(const std::string& hymn);
         void EntitySelected(Entity* entity);
         void ModelSelected(Geometry::OBJModel* model);
+        void TextureSelected(Texture2D* texture);
         
         GLFWwindow* window;
         GameWindow* gameWindow = nullptr;
@@ -108,6 +110,7 @@ class EditorWindow : public GUI::Container {
         // Editors.
         GUI::EntityEditor* entityEditor;
         GUI::ModelEditor* modelEditor;
+        GUI::TextureEditor* textureEditor;
         GUI::ModelSelector* modelSelector;
         GUI::ComponentAdder* componentAdder;
         

@@ -5,6 +5,7 @@
 #include <vector>
 #include "Scene/Scene.hpp"
 
+class Texture2D;
 namespace Geometry {
     class OBJModel;
 }
@@ -44,14 +45,20 @@ class ActiveHymn {
         /// The active scene.
         Scene activeScene;
         
+        /// The id of the next entity to create.
+        unsigned int entityNumber = 1U;
+        
         /// Models.
         std::vector<Geometry::OBJModel*> models;
         
         /// The id of the next model to create.
         unsigned int modelNumber = 0U;
         
-        /// The id of the next entity to create.
-        unsigned int entityNumber = 1U;
+        /// Textures.
+        std::vector<Texture2D*> textures;
+        
+        /// The id of the next texture to create.
+        unsigned int textureNumber = 0U;
         
     private:
         static ActiveHymn& GetInstance();

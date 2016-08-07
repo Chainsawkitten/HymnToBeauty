@@ -39,6 +39,10 @@ void ResourceList::Update() {
     rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(10.f, 10.f));
     addModelHover = rect.Collide(mousePosition);
     
+    position.y += (Hymn().models.size() + 1) * font->GetHeight();
+    rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+    addTextureHover = rect.Collide(mousePosition);
+    
     if (Input()->Triggered(InputHandler::CLICK)) {
         if (addEntityHover) {
             // Add entity button pressed.
@@ -48,6 +52,11 @@ void ResourceList::Update() {
             Geometry::OBJModel* model = new Geometry::OBJModel();
             model->name = "Model #" + std::to_string(Hymn().modelNumber++);
             Hymn().models.push_back(model);
+        } else if (addTextureHover) {
+            // Add texture button pressed.
+            Texture2D* texture = new Texture2D();
+            texture->name = "Texture #" + std::to_string(Hymn().textureNumber++);
+            Hymn().textures.push_back(texture);
         } else {
             position  = GetPosition();
             
@@ -58,6 +67,7 @@ void ResourceList::Update() {
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = entity;
                     selectedModel = nullptr;
+                    selectedTexture = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
                     break;
@@ -74,8 +84,26 @@ void ResourceList::Update() {
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = nullptr;
                     selectedModel = model;
+                    selectedTexture = nullptr;
                     if (hasModelSelectedCallback)
                         modelSelectedCallback(model);
+                    break;
+                }
+            }
+            
+            position  = GetPosition();
+            position.y += (2 + Hymn().activeScene.GetEntities().size() + Hymn().models.size()) * font->GetHeight();
+            
+            // Check if texture selected.
+            for (Texture2D* texture : Hymn().textures) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedEntity = nullptr;
+                    selectedModel = nullptr;
+                    selectedTexture = texture;
+                    if (hasTextureSelectedCallback)
+                        textureSelectedCallback(texture);
                     break;
                 }
             }
@@ -93,7 +121,6 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addEntityHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    unsigned int id = 0U;
     for (Entity* entity : Hymn().activeScene.GetEntities()) {
         // Render background if selected.
         if (selectedEntity == entity) {
@@ -103,7 +130,6 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         
         font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
-        ++id;
     }
     
     font->RenderText("Models", position, GetSize().x, screenSize);
@@ -119,6 +145,23 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         
         font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
+    }
+    
+    font->RenderText("Textures", position, GetSize().x, screenSize);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addTextureHover ? 1.f : 0.5f);
+    position.y += font->GetHeight();
+    
+    unsigned int id = 0U;
+    for (Texture2D* texture : Hymn().textures) {
+        // Render background if selected.
+        if (selectedTexture == texture) {
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+        }
+        
+        font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        position.y += font->GetHeight();
+        ++id;
     }
 }
 
@@ -138,4 +181,9 @@ void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callba
 void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
     hasModelSelectedCallback = true;
     modelSelectedCallback = callback;
+}
+
+void ResourceList::SetTextureSelectedCallback(std::function<void(Texture2D*)> callback) {
+    hasTextureSelectedCallback = true;
+    textureSelectedCallback = callback;
 }

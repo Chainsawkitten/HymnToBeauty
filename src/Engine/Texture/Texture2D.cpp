@@ -15,43 +15,12 @@
 #include "../Manager/Managers.hpp"
 #include "../Manager/ResourceManager.hpp"
 
+Texture2D::Texture2D() {
+    isFromFile = false;
+}
+
 Texture2D::Texture2D(const char* filename, bool srgb) {
-	glGenTextures(1, &texID);
-	glBindTexture(GL_TEXTURE_2D, texID);
-
-	// Load texture from file.
-	int components;
-	unsigned char* data = stbi_load(filename, &width, &height, &components, 0);
-
-	if (data == NULL)
-        Log() << "Couldn't load image " << filename << "\n";
-
-	// Give the image to OpenGL.
-	glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB_ALPHA : GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
-
-	stbi_image_free(data);
-
-	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-	// Repeat texture when texture coordinates outside 0.0-1.0.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// Generate mipmaps.
-	glGenerateMipmap(GL_TEXTURE_2D);
-    
-    // For rendering.
-    rectangle = Managers().resourceManager->CreateRectangle();
-    
-    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
-    
-    isFromFile = true;
+	Load(filename, srgb);
 }
 
 Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
@@ -159,4 +128,43 @@ void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, const g
 
 bool Texture2D::IsFromFile() const {
     return isFromFile;
+}
+
+void Texture2D::Load(const char* filename, bool srgb) {
+    glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+
+	// Load texture from file.
+	int components;
+	unsigned char* data = stbi_load(filename, &width, &height, &components, 0);
+
+	if (data == NULL)
+        Log() << "Couldn't load image " << filename << "\n";
+
+	// Give the image to OpenGL.
+	glTexImage2D(GL_TEXTURE_2D, 0, srgb ? GL_SRGB_ALPHA : GL_RGBA, width, height, 0, Format(components), GL_UNSIGNED_BYTE, data);
+
+	stbi_image_free(data);
+
+	// When MAGnifying the image (no bigger mipmap available), use LINEAR filtering.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	// Repeat texture when texture coordinates outside 0.0-1.0.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Generate mipmaps.
+	glGenerateMipmap(GL_TEXTURE_2D);
+    
+    // For rendering.
+    rectangle = Managers().resourceManager->CreateRectangle();
+    
+    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
+    
+    isFromFile = true;
 }

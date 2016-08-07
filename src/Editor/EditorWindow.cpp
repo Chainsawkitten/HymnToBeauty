@@ -12,6 +12,7 @@
 #include "GUI/ResourceList.hpp"
 #include "GUI/Editors/EntityEditor.hpp"
 #include "GUI/Editors/ModelEditor.hpp"
+#include "GUI/Editors/TextureEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/FileSelector.hpp"
 #include "GUI/Editors/ComponentEditor/ComponentAdder.hpp"
@@ -67,6 +68,7 @@ EditorWindow::~EditorWindow() {
     delete resourceList;
     delete entityEditor;
     delete modelEditor;
+    delete textureEditor;
     
     delete fileSelector;
     delete modelSelector;
@@ -118,6 +120,7 @@ void EditorWindow::Init() {
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
     resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
     resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
+    resourceList->SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
     // File selector.
@@ -144,6 +147,11 @@ void EditorWindow::Init() {
     modelEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     modelEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(modelEditor);
+    
+    textureEditor = new GUI::TextureEditor(this, fileSelector);
+    textureEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    textureEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
+    AddWidget(textureEditor);
     
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
@@ -301,6 +309,7 @@ void EditorWindow::EntitySelected(Entity* entity) {
     
     entityEditor->SetVisible(true);
     modelEditor->SetVisible(false);
+    textureEditor->SetVisible(false);
 }
 
 void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
@@ -308,4 +317,13 @@ void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
     
     entityEditor->SetVisible(false);
     modelEditor->SetVisible(true);
+    textureEditor->SetVisible(false);
+}
+
+void EditorWindow::TextureSelected(Texture2D* texture) {
+    textureEditor->SetTexture(texture);
+    
+    entityEditor->SetVisible(false);
+    modelEditor->SetVisible(false);
+    textureEditor->SetVisible(true);
 }
