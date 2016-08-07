@@ -54,7 +54,9 @@ void ResourceList::Update() {
             Hymn().models.push_back(model);
         } else if (addTextureHover) {
             // Add texture button pressed.
-            Hymn().textures.push_back(new Texture2D());
+            Texture2D* texture = new Texture2D();
+            texture->name = "Texture #" + std::to_string(Hymn().textureNumber++);
+            Hymn().textures.push_back(texture);
         } else {
             position  = GetPosition();
             
@@ -65,6 +67,7 @@ void ResourceList::Update() {
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = entity;
                     selectedModel = nullptr;
+                    selectedTexture = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
                     break;
@@ -81,8 +84,26 @@ void ResourceList::Update() {
                 if (rect.Collide(mousePosition)) {
                     selectedEntity = nullptr;
                     selectedModel = model;
+                    selectedTexture = nullptr;
                     if (hasModelSelectedCallback)
                         modelSelectedCallback(model);
+                    break;
+                }
+            }
+            
+            position  = GetPosition();
+            position.y += (2 + Hymn().activeScene.GetEntities().size() + Hymn().models.size()) * font->GetHeight();
+            
+            // Check if texture selected.
+            for (Texture2D* texture : Hymn().textures) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedEntity = nullptr;
+                    selectedModel = nullptr;
+                    selectedTexture = texture;
+                    if (hasTextureSelectedCallback)
+                        textureSelectedCallback(texture);
                     break;
                 }
             }
@@ -133,12 +154,12 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     unsigned int id = 0U;
     for (Texture2D* texture : Hymn().textures) {
         // Render background if selected.
-        /*if (selectedTexture == texture) {
+        if (selectedTexture == texture) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
-        }*/
+        }
         
-        font->RenderText(("Texture #" + std::to_string(id)).c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
         position.y += font->GetHeight();
         ++id;
     }
@@ -160,4 +181,9 @@ void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callba
 void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
     hasModelSelectedCallback = true;
     modelSelectedCallback = callback;
+}
+
+void ResourceList::SetTextureSelectedCallback(std::function<void(Texture2D*)> callback) {
+    hasTextureSelectedCallback = true;
+    textureSelectedCallback = callback;
 }

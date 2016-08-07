@@ -57,6 +57,12 @@ namespace GUI {
              */
             void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
             
+            /// Set function to call when a texture has been selected.
+            /**
+             * @param callback Function to call.
+             */
+            void SetTextureSelectedCallback(std::function<void(Texture2D*)> callback);
+            
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -75,5 +81,8 @@ namespace GUI {
             std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
             
             bool addTextureHover = false;
+            Texture2D* selectedTexture = nullptr;
+            bool hasTextureSelectedCallback = false;
+            std::function<void(Texture2D*)> textureSelectedCallback;
     };
 }
