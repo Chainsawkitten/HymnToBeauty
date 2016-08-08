@@ -211,6 +211,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/ModelSelector.cpp
+        src/Editor/GUI/TextureSelector.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
@@ -243,6 +244,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/ModelSelector.hpp
+        src/Editor/GUI/TextureSelector.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
