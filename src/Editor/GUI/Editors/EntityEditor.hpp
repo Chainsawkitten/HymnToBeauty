@@ -16,6 +16,7 @@ namespace GUI {
     class ImageTextButton;
     class ComponentEditor;
     class ModelSelector;
+    class TextureSelector;
     class ComponentAdder;
     
     /// Used to edit an entity.
@@ -25,9 +26,10 @@ namespace GUI {
             /**
              * @param parent Parent widget.
              * @param modelSelector Model selector to use.
+             * @param textureSelector %Texture selector to use.
              * @param componentAdder %Component adder to use.
              */
-            EntityEditor(Widget* parent, ModelSelector* modelSelector, ComponentAdder* componentAdder);
+            EntityEditor(Widget* parent, ModelSelector* modelSelector, TextureSelector* textureSelector, ComponentAdder* componentAdder);
             
             /// Destructor.
             ~EntityEditor() override;

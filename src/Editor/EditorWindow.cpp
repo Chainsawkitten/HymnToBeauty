@@ -14,6 +14,7 @@
 #include "GUI/Editors/ModelEditor.hpp"
 #include "GUI/Editors/TextureEditor.hpp"
 #include "GUI/ModelSelector.hpp"
+#include "GUI/TextureSelector.hpp"
 #include "GUI/FileSelector.hpp"
 #include "GUI/Editors/ComponentEditor/ComponentAdder.hpp"
 
@@ -72,6 +73,7 @@ EditorWindow::~EditorWindow() {
     
     delete fileSelector;
     delete modelSelector;
+    delete textureSelector;
     delete componentAdder;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
@@ -133,12 +135,17 @@ void EditorWindow::Init() {
     modelSelector->SetSize(GetSize());
     modelSelector->SetModels(&Hymn().models);
     
+    // Texture selector.
+    textureSelector = new GUI::TextureSelector(this);
+    textureSelector->SetSize(GetSize());
+    textureSelector->SetTextures(&Hymn().textures);
+    
     // Component adder.
     componentAdder = new GUI::ComponentAdder(this);
     componentAdder->SetSize(GetSize());
     
     // Editors.
-    entityEditor = new GUI::EntityEditor(this, modelSelector, componentAdder);
+    entityEditor = new GUI::EntityEditor(this, modelSelector, textureSelector, componentAdder);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
@@ -199,6 +206,10 @@ void EditorWindow::Update() {
         input->Update();
         input->SetActive();
         modelSelector->Update();
+    } else if (textureSelector->IsVisible()) {
+        input->Update();
+        input->SetActive();
+        textureSelector->Update();
     } else if (componentAdder->IsVisible()) {
         input->Update();
         input->SetActive();
@@ -234,6 +245,9 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
         
         if (modelSelector->IsVisible())
             modelSelector->Render(screenSize);
+        
+        if (textureSelector->IsVisible())
+            textureSelector->Render(screenSize);
         
         if (componentAdder->IsVisible())
             componentAdder->Render(screenSize);

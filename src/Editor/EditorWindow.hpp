@@ -20,6 +20,7 @@ namespace GUI {
     class ModelEditor;
     class TextureEditor;
     class ModelSelector;
+    class TextureSelector;
     class ComponentAdder;
 }
 namespace Geometry {
@@ -112,6 +113,7 @@ class EditorWindow : public GUI::Container {
         GUI::ModelEditor* modelEditor;
         GUI::TextureEditor* textureEditor;
         GUI::ModelSelector* modelSelector;
+        GUI::TextureSelector* textureSelector;
         GUI::ComponentAdder* componentAdder;
         
         // Input
