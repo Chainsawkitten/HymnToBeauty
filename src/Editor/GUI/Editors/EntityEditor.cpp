@@ -12,6 +12,7 @@
 #include "ComponentEditor/LensEditor.hpp"
 #include "ComponentEditor/MeshEditor.hpp"
 #include "ComponentEditor/MaterialEditor.hpp"
+#include "ComponentEditor/DirectionalLightEditor.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
 #include <Engine/Entity/Entity.hpp>
@@ -35,6 +36,7 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
     editors.push_back(new MaterialEditor(this, textureSelector));
+    editors.push_back(new DirectionalLightEditor(this));
     
     this->componentAdder = componentAdder;
     
