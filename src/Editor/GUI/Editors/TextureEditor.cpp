@@ -24,7 +24,7 @@ TextureEditor::TextureEditor(Widget* parent, FileSelector* fileSelector) : Widge
     nameLabel = new Label(this, font, "Name");
     nameEditor = new StringEditor(this, font);
     
-    loadButton = new TextButton(this, font, "Load OBJ model");
+    loadButton = new TextButton(this, font, "Load PNG image");
     loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
     this->fileSelector = fileSelector;
 }
