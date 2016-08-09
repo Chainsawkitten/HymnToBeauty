@@ -125,6 +125,7 @@ set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
         src/Engine/Hymn.cpp
         src/Engine/RenderTarget.cpp
+        src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
@@ -157,6 +158,7 @@ set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
         src/Engine/Hymn.hpp
         src/Engine/RenderTarget.hpp
+        src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
