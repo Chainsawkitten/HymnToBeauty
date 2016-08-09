@@ -17,6 +17,8 @@
 #include "../Component/SpotLight.hpp"
 #include "../Component/PointLight.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Physics/AxisAlignedBoundingBox.hpp"
+#include "../Physics/Frustum.hpp"
 
 DeferredLighting::DeferredLighting(const glm::vec2& size) {
     this->size = size;
@@ -133,8 +135,12 @@ void DeferredLighting::Render(Scene& scene, Entity* camera, const glm::vec2& scr
     // Get the camera matrices.
     glm::mat4 viewMat(camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position));
     glm::mat4 projectionMat(camera->GetComponent<Component::Lens>()->GetProjection(screenSize));
+    glm::mat4 viewProjectionMat(projectionMat * viewMat);
     
     glUniformMatrix4fv(shaderProgram->GetUniformLocation("inverseProjectionMatrix"), 1, GL_FALSE, &glm::inverse(projectionMat)[0][0]);
+    
+    double cutOff;
+    Physics::AxisAlignedBoundingBox aabb(glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f));
     
     unsigned int lightIndex = 0U;
     
@@ -181,23 +187,32 @@ void DeferredLighting::Render(Scene& scene, Entity* camera, const glm::vec2& scr
         }
     }
     
+    // At which point lights should be cut off (no longer contribute).
+    cutOff = 0.0001;
+    
     // Render all point lights.
     std::vector<Component::PointLight*>& pointLights = scene.GetComponents<Component::PointLight>();
     for (Component::PointLight* light : pointLights) {
         Entity* lightEntity = light->entity;
         Component::Transform* transform = lightEntity->GetComponent<Component::Transform>();
         if (transform != nullptr) {
-            glm::mat4 modelMatrix(transform->GetModelMatrix());
-            glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0)))[0]);
-            glUniform3fv(lightUniforms[lightIndex].intensities, 1, &(light->color * light->intensity)[0]);
-            glUniform1f(lightUniforms[lightIndex].attenuation, light->attenuation);
-            glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
-            glUniform1f(lightUniforms[lightIndex].coneAngle, 180.f);
-            glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(1.f, 0.f, 0.f)[0]);
+            float scale = sqrt((1.0 / cutOff - 1.0) / light->attenuation);
+            glm::mat4 modelMat = glm::translate(glm::mat4(), transform->position) * glm::scale(glm::mat4(), glm::vec3(1.f, 1.f, 1.f) * scale);
             
-            if (++lightIndex >= lightCount) {
-                lightIndex = 0U;
-                glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+            Physics::Frustum frustum(viewProjectionMat * modelMat);
+            if (frustum.Collide(aabb)) {
+                glm::mat4 modelMatrix(transform->GetModelMatrix());
+                glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0)))[0]);
+                glUniform3fv(lightUniforms[lightIndex].intensities, 1, &(light->color * light->intensity)[0]);
+                glUniform1f(lightUniforms[lightIndex].attenuation, light->attenuation);
+                glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
+                glUniform1f(lightUniforms[lightIndex].coneAngle, 180.f);
+                glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(1.f, 0.f, 0.f)[0]);
+                
+                if (++lightIndex >= lightCount) {
+                    lightIndex = 0U;
+                    glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+                }
             }
         }
     }
