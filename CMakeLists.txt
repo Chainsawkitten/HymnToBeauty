@@ -130,6 +130,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
         src/Engine/Component/PointLight.cpp
+        src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Component/Transform.cpp
         src/Engine/Entity/Entity.cpp
@@ -164,6 +165,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
         src/Engine/Component/PointLight.hpp
+        src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Component/Transform.hpp
         src/Engine/Entity/Entity.hpp
