@@ -35,6 +35,12 @@ namespace Component {
              */
             glm::mat4 GetCameraOrientation() const;
             
+            /// Get direction of the entity.
+            /**
+             * @return The entity's direction.
+             */
+            glm::vec3 GetDirection() const;
+            
             /// Position in the world.
             /**
              * Default: 0.f, 0.f, 0.f

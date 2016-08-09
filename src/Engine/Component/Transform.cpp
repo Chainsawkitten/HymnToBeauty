@@ -33,3 +33,7 @@ glm::mat4 Transform::GetCameraOrientation() const {
     orientation = glm::rotate(orientation, glm::radians(rotation.y), glm::vec3(1.f, 0.f, 0.f));
     return glm::rotate(orientation, glm::radians(rotation.x), glm::vec3(0.f, 1.f, 0.f));
 }
+
+glm::vec3 Transform::GetDirection() const {
+    return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, 1.f, 0.f)));
+}
