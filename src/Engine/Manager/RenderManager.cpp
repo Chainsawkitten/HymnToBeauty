@@ -10,7 +10,9 @@
 #include "../Component/Lens.hpp"
 #include "../Component/Transform.hpp"
 #include "../Component/Mesh.hpp"
+#include "../Component/Material.hpp"
 #include "../Geometry/Geometry3D.hpp"
+#include "../Texture/Texture2D.hpp"
 #include "../Lighting/DeferredLighting.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -61,10 +63,27 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
         for (Mesh* mesh : meshes) {
             Entity* model = mesh->entity;
             Transform* transform = model->GetComponent<Component::Transform>();
-            if (transform != nullptr && mesh->geometry != nullptr) {
+            Component::Material* material = model->GetComponent<Component::Material>();
+            if (transform != nullptr && mesh->geometry != nullptr && material != nullptr) {
                 glm::mat4 modelMat = transform->GetModelMatrix();
                 
                 glBindVertexArray(mesh->geometry->GetVertexArray());
+                
+                // Set texture locations
+                glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
+                glUniform1i(shaderProgram->GetUniformLocation("normalMap"), 1);
+                glUniform1i(shaderProgram->GetUniformLocation("specularMap"), 2);
+                glUniform1i(shaderProgram->GetUniformLocation("glowMap"), 3);
+                
+                // Textures
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, material->diffuse->GetTextureID());
+                glActiveTexture(GL_TEXTURE1);
+                glBindTexture(GL_TEXTURE_2D, material->normal->GetTextureID());
+                glActiveTexture(GL_TEXTURE2);
+                glBindTexture(GL_TEXTURE_2D, material->specular->GetTextureID());
+                glActiveTexture(GL_TEXTURE3);
+                glBindTexture(GL_TEXTURE_2D, material->glow->GetTextureID());
                 
                 // Render model.
                 glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &modelMat[0][0]);
