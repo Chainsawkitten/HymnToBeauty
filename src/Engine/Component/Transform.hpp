@@ -22,12 +22,24 @@ namespace Component {
              */
             glm::mat4 GetModelMatrix() const;
             
+            /// Get orientation matrix.
+            /**
+             * @return The entity's orientation matrix.
+             */
+            glm::mat4 GetOrientation() const;
+            
             /// Get orientation matrix (for camera).
             /**
              * Calculates the orientation matrix as if the entity was a camera.
              * @return The entity's orientation matrix.
              */
             glm::mat4 GetCameraOrientation() const;
+            
+            /// Get direction of the entity.
+            /**
+             * @return The entity's direction.
+             */
+            glm::vec3 GetDirection() const;
             
             /// Position in the world.
             /**

@@ -68,4 +68,15 @@ class DeferredLighting {
         Shader* vertexShader;
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
+        
+        // Store light uniform locations so we don't have to get them every frame.
+        static const unsigned int lightCount = 32U;
+        struct {
+            GLint position;
+            GLint intensities;
+            GLint attenuation;
+            GLint ambientCoefficient;
+            GLint coneAngle;
+            GLint direction;
+        } lightUniforms[lightCount];
 };

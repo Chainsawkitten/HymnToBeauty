@@ -11,6 +11,10 @@
 #include "ComponentEditor/TransformEditor.hpp"
 #include "ComponentEditor/LensEditor.hpp"
 #include "ComponentEditor/MeshEditor.hpp"
+#include "ComponentEditor/MaterialEditor.hpp"
+#include "ComponentEditor/DirectionalLightEditor.hpp"
+#include "ComponentEditor/PointLightEditor.hpp"
+#include "ComponentEditor/SpotLightEditor.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
 #include <Engine/Entity/Entity.hpp>
@@ -18,7 +22,7 @@
 
 using namespace GUI;
 
-EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, ComponentAdder* componentAdder) : Widget(parent) {
+EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, TextureSelector* textureSelector, ComponentAdder* componentAdder) : Widget(parent) {
     rectangle = Managers().resourceManager->CreateRectangle();
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
@@ -33,6 +37,10 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Compone
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
+    editors.push_back(new MaterialEditor(this, textureSelector));
+    editors.push_back(new DirectionalLightEditor(this));
+    editors.push_back(new PointLightEditor(this));
+    editors.push_back(new SpotLightEditor(this));
     
     this->componentAdder = componentAdder;
     

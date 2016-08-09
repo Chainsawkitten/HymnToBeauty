@@ -67,6 +67,10 @@ set(EMBEDDED_INPUT
     assets/Add.png
     assets/Directory.png
     assets/BasicFile.png
+    assets/DefaultDiffuse.png
+    assets/DefaultNormal.png
+    assets/DefaultSpecular.png
+    assets/DefaultGlow.png
 )
 
 # Headerize
@@ -121,8 +125,12 @@ set(ENGINE_SRCS
         src/Engine/GameWindow.cpp
         src/Engine/Hymn.cpp
         src/Engine/RenderTarget.cpp
+        src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
+        src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
+        src/Engine/Component/PointLight.cpp
+        src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Component/Transform.cpp
         src/Engine/Entity/Entity.cpp
@@ -131,6 +139,8 @@ set(ENGINE_SRCS
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
+        src/Engine/Physics/AxisAlignedBoundingBox.cpp
+        src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
@@ -152,8 +162,12 @@ set(ENGINE_HEADERS
         src/Engine/GameWindow.hpp
         src/Engine/Hymn.hpp
         src/Engine/RenderTarget.hpp
+        src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
+        src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
+        src/Engine/Component/PointLight.hpp
+        src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Component/Transform.hpp
         src/Engine/Entity/Entity.hpp
@@ -162,6 +176,8 @@ set(ENGINE_HEADERS
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
+        src/Engine/Physics/AxisAlignedBoundingBox.hpp
+        src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
@@ -205,6 +221,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/ModelSelector.cpp
+        src/Editor/GUI/TextureSelector.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
@@ -213,8 +230,12 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/TextureEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.cpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
         src/Editor/GUI/Editors/FloatEditor.cpp
         src/Editor/GUI/Editors/Vec3Editor.cpp
@@ -237,6 +258,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/ModelSelector.hpp
+        src/Editor/GUI/TextureSelector.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
@@ -245,8 +267,12 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/TextureEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.hpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
         src/Editor/GUI/Editors/FloatEditor.hpp
         src/Editor/GUI/Editors/Vec3Editor.hpp
