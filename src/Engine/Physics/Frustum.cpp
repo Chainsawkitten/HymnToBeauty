@@ -1,5 +1,6 @@
 #include "Frustum.hpp"
 
+#include "AxisAlignedBoundingBox.hpp"
 #include <glm/gtc/matrix_access.hpp>
 
 using namespace Physics;
@@ -40,6 +41,35 @@ Frustum::Frustum(const glm::mat4& matrix) {
     planes[5].y = glm::row(matrix, 3).y - glm::row(matrix, 2).y;
     planes[5].z = glm::row(matrix, 3).z - glm::row(matrix, 2).z;
     planes[5].w = glm::row(matrix, 3).w - glm::row(matrix, 2).w;
+}
+
+bool Frustum::Collide(const AxisAlignedBoundingBox& aabb) const {
+    // Define the AABB's vertices.
+    glm::vec3 vertices[8];
+    vertices[0] = aabb.minVertex;
+    vertices[1] = aabb.minVertex + glm::vec3(aabb.dimensions.x, 0.f, 0.f);
+    vertices[2] = aabb.minVertex + glm::vec3(0.f, aabb.dimensions.y, 0.f);
+    vertices[3] = aabb.minVertex + glm::vec3(0.f, 0.f, aabb.dimensions.z);
+    vertices[4] = aabb.maxVertex;
+    vertices[5] = aabb.maxVertex - glm::vec3(aabb.dimensions.x, 0.f, 0.f);
+    vertices[6] = aabb.maxVertex - glm::vec3(0.f, aabb.dimensions.y, 0.f);
+    vertices[7] = aabb.maxVertex - glm::vec3(0.f, 0.f, aabb.dimensions.z);
+    
+    // Check if the AABB's vertices lie in the planes or in their positive halfspaces.
+    // Only one vertex has to lie inside the halfspace for each plane.
+    for (int plane = 0; plane < 6; plane++) {
+        bool inside = false;
+        for (int vertex = 0; vertex < 8; vertex++) {
+            if (DistanceToPoint(planes[plane], vertices[vertex]) >= 0.f) {
+                inside = true;
+                break;
+            }
+        }
+        
+        if (!inside)
+            return false;
+    }
+    return true;
 }
 
 float Frustum::DistanceToPoint(const glm::vec4& plane, const glm::vec3& point) {
