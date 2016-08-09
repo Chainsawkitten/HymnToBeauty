@@ -11,6 +11,9 @@
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Transform.hpp>
 #include <Engine/Component/Material.hpp>
+#include <Engine/Component/DirectionalLight.hpp>
+#include <Engine/Component/PointLight.hpp>
+#include <Engine/Component/SpotLight.hpp>
 
 using namespace GUI;
 
@@ -77,6 +80,9 @@ void ComponentAdder::SetEntity(Entity* entity) {
     AddComponentButton<Component::Mesh>("Mesh");
     AddComponentButton<Component::Lens>("Lens");
     AddComponentButton<Component::Material>("Material");
+    AddComponentButton<Component::DirectionalLight>("Directional light");
+    AddComponentButton<Component::PointLight>("Point light");
+    AddComponentButton<Component::SpotLight>("Spot light");
 }
 
 void ComponentAdder::SetComponentAddedCallback(std::function<void()> callback) {
