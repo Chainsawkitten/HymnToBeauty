@@ -89,6 +89,7 @@ void FileSelector::SetFileSelectedCallback(std::function<void(const std::string&
 
 void FileSelector::SetExtension(const string& extension) {
     this->extension = extension;
+    ScanDirectory();
 }
 
 void FileSelector::Close() {
