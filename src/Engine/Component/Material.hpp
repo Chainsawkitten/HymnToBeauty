@@ -18,6 +18,18 @@ namespace Component {
             /// Destructor.
             ~Material();
             
+            /// Save the component.
+            /**
+             * @return JSON value to be stored on disk.
+             */
+            Json::Value Save() const override;
+            
+            /// Load component from JSON node.
+            /**
+             * @param node JSON node to load from.
+             */
+            void Load(const Json::Value& node) override;
+            
             /// Set diffuse texture from file.
             /**
              * @param filename Path to the image file.
@@ -53,5 +65,8 @@ namespace Component {
             
             /// Glow texture.
             Texture2D* glow;
+            
+        private:
+            void LoadTexture(Texture2D*& texture, const std::string& name);
     };
 }
