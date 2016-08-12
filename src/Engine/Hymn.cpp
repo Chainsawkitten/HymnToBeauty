@@ -8,6 +8,8 @@
 #include "Component/Lens.hpp"
 #include "Geometry/OBJModel.hpp"
 #include "Texture/Texture2D.hpp"
+#include <json/json.h>
+#include <fstream>
 
 using namespace std;
 
@@ -57,14 +59,31 @@ void ActiveHymn::SetPath(const string& path) {
 }
 
 void ActiveHymn::Save() const {
-    /// @todo Save entities and components.
+    Json::Value root;
+    
     /// @todo Save textures.
     /// @todo Save models.
+    /// @todo Save entities and components.
+    
+    // Save to file.
+    ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
+    file << root;
+    file.close();
 }
 
 void ActiveHymn::Load(const string& path) {
     Clear();
     this->path = path;
+    
+    // Load Json document from file.
+    Json::Value root;
+    ifstream file(path + FileSystem::DELIMITER + "Hymn.json");
+    file >> root;
+    file.close();
+    
+    /// @todo Load textures.
+    /// @todo Load models.
+    /// @todo Load entities and components.
 }
 
 void ActiveHymn::Render(const glm::vec2& screenSize) {
