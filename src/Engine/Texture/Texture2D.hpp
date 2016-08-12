@@ -81,9 +81,15 @@ class Texture2D : public Texture {
         
         /// Save the texture.
         /**
-         * @return Json value to be stored on disk.
+         * @return JSON value to be stored on disk.
          */
         Json::Value Save() const;
+        
+        /// Load texture from JSON node.
+        /**
+         * @param node JSON node to load from.
+         */
+        void Load(const Json::Value& node);
         
         /// Load texture from file.
         /**

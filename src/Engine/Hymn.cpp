@@ -88,7 +88,14 @@ void ActiveHymn::Load(const string& path) {
     file >> root;
     file.close();
     
-    /// @todo Load textures.
+    // Load textures.
+    const Json::Value texturesNode = root["textures"];
+    for (unsigned int i=0; i < texturesNode.size(); ++i) {
+        Texture2D* texture = new Texture2D();
+        texture->Load(texturesNode[i]);
+        textures.push_back(texture);
+    }
+    
     /// @todo Load models.
     /// @todo Load entities.
     /// @todo Load components.
