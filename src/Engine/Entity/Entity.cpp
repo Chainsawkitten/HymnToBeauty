@@ -8,3 +8,9 @@ Entity::Entity(Scene* scene, const std::string& name) {
 Entity::~Entity() {
     
 }
+
+Json::Value Entity::Save() const {
+    Json::Value entity;
+    entity["name"] = name;
+    return entity;
+}

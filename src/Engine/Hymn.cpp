@@ -75,8 +75,12 @@ void ActiveHymn::Save() const {
     }
     root["models"] = modelsNode;
     
-    /// @todo Save entities.
-    /// @todo Save components.
+    // Save entities.
+    Json::Value entitiesNode;
+    for (Entity* entity : activeScene.GetEntities()) {
+        entitiesNode.append(entity->Save());
+    }
+    root["entities"] = entitiesNode;
     
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");

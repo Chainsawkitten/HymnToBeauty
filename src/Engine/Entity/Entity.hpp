@@ -3,6 +3,7 @@
 #include <map>
 #include <typeinfo>
 #include "../Scene/Scene.hpp"
+#include <json/json.h>
 
 namespace Component {
     class SuperComponent;
@@ -31,6 +32,12 @@ class Entity {
          * @return The requested component (or nullptr).
          */
         template<typename T> T* GetComponent();
+        
+        /// Save the entity.
+        /**
+         * @return JSON value to be stored on disk.
+         */
+        Json::Value Save() const;
         
         std::string name;
         
