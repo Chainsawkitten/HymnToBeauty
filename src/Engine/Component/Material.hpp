@@ -15,32 +15,17 @@ namespace Component {
              */
             Material(Entity* entity);
             
-            /// Destructor.
-            ~Material();
-            
-            /// Set diffuse texture from file.
+            /// Save the component.
             /**
-             * @param filename Path to the image file.
+             * @return JSON value to be stored on disk.
              */
-            void SetDiffuse(const char* filename);
+            Json::Value Save() const override;
             
-            /// Set normal texture from file.
+            /// Load component from JSON node.
             /**
-             * @param filename Path to the image file.
+             * @param node JSON node to load from.
              */
-            void SetNormal(const char* filename);
-            
-            /// Set specular texture from file.
-            /**
-             * @param filename Path to the image file.
-             */
-            void SetSpecular(const char* filename);
-            
-            /// Set glow texture from file.
-            /**
-             * @param filename Path to the image file.
-             */
-            void SetGlow(const char* filename);
+            void Load(const Json::Value& node) override;
             
             /// Diffuse texture.
             Texture2D* diffuse;
@@ -53,5 +38,8 @@ namespace Component {
             
             /// Glow texture.
             Texture2D* glow;
+            
+        private:
+            void LoadTexture(Texture2D*& texture, const std::string& name);
     };
 }

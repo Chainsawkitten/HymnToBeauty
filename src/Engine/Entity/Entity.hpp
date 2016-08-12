@@ -3,10 +3,8 @@
 #include <map>
 #include <typeinfo>
 #include "../Scene/Scene.hpp"
-
-namespace Component {
-    class SuperComponent;
-}
+#include <json/json.h>
+#include "../Component/SuperComponent.hpp"
 
 /// %Entity containing various components.
 class Entity {
@@ -32,9 +30,25 @@ class Entity {
          */
         template<typename T> T* GetComponent();
         
+        /// Save the entity.
+        /**
+         * @return JSON value to be stored on disk.
+         */
+        Json::Value Save() const;
+        
+        /// Load entity from JSON node.
+        /**
+         * @param node JSON node to load from.
+         */
+        void Load(const Json::Value& node);
+        
+        /// Name of the entity.
         std::string name;
         
     private:
+        template<typename T> void Save(Json::Value& node, const std::string& name) const;
+        template<typename T> void Load(const Json::Value& node, const std::string& name);
+        
         Scene* scene;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
@@ -55,5 +69,19 @@ template<typename T> T* Entity::GetComponent() {
         return static_cast<T*>(components[&typeid(T*)]);
     } else {
         return nullptr;
+    }
+}
+
+template<typename T> void Entity::Save(Json::Value& node, const std::string& name) const {
+    auto it = components.find(&typeid(T*));
+    if (it != components.end())
+        node[name] = it->second->Save();
+}
+
+template<typename T> void Entity::Load(const Json::Value& node, const std::string& name) {
+    Json::Value componentNode = node[name];
+    if (!componentNode.isNull()) {
+        T* component = AddComponent<T>();
+        component->Load(componentNode);
     }
 }

@@ -11,3 +11,11 @@ SuperComponent::SuperComponent(Entity* entity) {
 SuperComponent::~SuperComponent() {
     
 }
+
+Json::Value SuperComponent::Save() const {
+    return Json::Value();
+}
+
+void SuperComponent::Load(const Json::Value& node) {
+    
+}

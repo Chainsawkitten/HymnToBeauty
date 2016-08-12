@@ -17,7 +17,7 @@ int main() {
     
     if (!glfwInit())
         return 1;
-
+    
     EditorWindow* editorWindow = new EditorWindow();
     glewInit();
     
@@ -27,7 +27,7 @@ int main() {
         glDebugMessageCallback(DebugMessageCallback, nullptr);
     
     Managers().StartUp(editorWindow->GetSize());
-
+    
     editorWindow->Init();
     
     while (!editorWindow->ShouldClose()) {
@@ -35,16 +35,17 @@ int main() {
         editorWindow->Render();
         glfwPollEvents();
     }
-
+    
+    editorWindow->Save();
     delete editorWindow;
     
     Managers().ShutDown();
-
+    
     glfwTerminate();
     
     EditorSettings::GetInstance().Save();
     
     Log() << "Editor ended - " << time(nullptr) << "\n";
-
+    
     return 0;
 }

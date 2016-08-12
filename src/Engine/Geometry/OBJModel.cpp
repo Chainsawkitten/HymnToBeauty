@@ -1,6 +1,9 @@
 #include "OBJModel.hpp"
+
 #include <fstream>
 #include "../Util/Log.hpp"
+#include "../Hymn.hpp"
+#include "../Util/FileSystem.hpp"
 
 using namespace Geometry;
 
@@ -26,6 +29,17 @@ unsigned int* OBJModel::GetIndices() const {
 
 unsigned int OBJModel::GetIndexCount() const {
     return indexNr;
+}
+
+Json::Value OBJModel::Save() const {
+    Json::Value model;
+    model["name"] = name;
+    return model;
+}
+
+void OBJModel::Load(const Json::Value& node) {
+    name = node.get("name", "").asString();
+    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + name + ".obj").c_str());
 }
 
 void OBJModel::Load(const char* filename) {

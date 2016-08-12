@@ -29,6 +29,13 @@ include_directories(externals/glm)
 # STB
 include_directories(externals/stb)
 
+# JsonCpp
+set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Don't build JsonCpp tests" FORCE)
+set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "Don't build JsonCpp unit tests" FORCE)
+set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "Don't build JsonCpp with pkgconfig support" FORCE)
+add_subdirectory(externals/jsoncpp)
+include_directories(externals/jsoncpp/include)
+
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
 # one in the filesystem.
@@ -144,6 +151,7 @@ set(ENGINE_SRCS
         src/Engine/Physics/Rectangle.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
+        src/Engine/Util/Json.cpp
         src/Engine/Util/Settings.cpp
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
@@ -181,6 +189,7 @@ set(ENGINE_HEADERS
         src/Engine/Physics/Rectangle.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
+        src/Engine/Util/Json.hpp
         src/Engine/Util/Settings.hpp
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
@@ -284,7 +293,7 @@ create_directory_groups(${EDITOR_SRCS} ${EDITOR_HEADERS})
 
 add_executable(HymnToBeauty ${EDITOR_SRCS} ${EDITOR_HEADERS})
 target_link_libraries(HymnToBeauty Engine)
-target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES})
+target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD 11)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -303,6 +312,6 @@ create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
 
 add_executable(Game ${GAME_SRCS} ${GAME_HEADERS})
 target_link_libraries(Game Engine)
-target_link_libraries(Game glew glfw ${GLFW_LIBRARIES})
+target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static)
 set_property(TARGET Game PROPERTY CXX_STANDARD 11)
 set_property(TARGET Game PROPERTY CXX_STANDARD_REQUIRED ON)

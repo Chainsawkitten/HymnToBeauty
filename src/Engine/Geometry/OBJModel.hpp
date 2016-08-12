@@ -3,6 +3,7 @@
 #include "Geometry3D.hpp"
 #include <vector>
 #include <fstream>
+#include <json/json.h>
 
 namespace Geometry {
     /// A model loaded from an OBJ file.
@@ -43,6 +44,18 @@ namespace Geometry {
          * @return The number of vertex indices.
          */
         unsigned int GetIndexCount() const;
+        
+        /// Save the model.
+        /**
+         * @return JSON value to be stored on disk.
+         */
+        Json::Value Save() const;
+        
+        /// Load model from JSON node.
+        /**
+         * @param node JSON node to load from.
+         */
+        void Load(const Json::Value& node);
         
         /// Load model from OBJ file.
         /**

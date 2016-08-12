@@ -12,7 +12,7 @@
 
 using namespace GUI;
 
-SpotLightEditor::SpotLightEditor(Widget* parent) : ComponentEditor(parent, "Point light") {
+SpotLightEditor::SpotLightEditor(Widget* parent) : ComponentEditor(parent, "Spot light") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     
     colorEditor = new Vec3Editor(this, font);

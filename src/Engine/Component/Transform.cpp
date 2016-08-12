@@ -1,6 +1,7 @@
 #include "Transform.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Util/Json.hpp"
 
 using namespace Component;
 
@@ -10,6 +11,20 @@ Transform::Transform(Entity* entity) : SuperComponent(entity) {
 
 Transform::~Transform() {
     
+}
+
+Json::Value Transform::Save() const {
+    Json::Value component;
+    component["position"] = Json::SaveVec3(position);
+    component["scale"] = Json::SaveVec3(scale);
+    component["rotation"] = Json::SaveVec3(rotation);
+    return component;
+}
+
+void Transform::Load(const Json::Value& node) {
+    position = Json::LoadVec3(node["position"]);
+    scale = Json::LoadVec3(node["scale"]);
+    rotation = Json::LoadVec3(node["rotation"]);
 }
 
 glm::mat4 Transform::GetModelMatrix() const {

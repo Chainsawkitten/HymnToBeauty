@@ -30,6 +30,9 @@ class ActiveHymn {
          */
         void SetPath(const std::string& path);
         
+        /// Save the hymn.
+        void Save() const;
+        
         /// Load a hymn.
         /**
          * @param path Path to the saved hymn.
@@ -59,6 +62,18 @@ class ActiveHymn {
         
         /// The id of the next texture to create.
         unsigned int textureNumber = 0U;
+        
+        /// Default diffuse texture.
+        Texture2D* defaultDiffuse;
+        
+        /// Default normal texture.
+        Texture2D* defaultNormal;
+        
+        /// Default specular texture.
+        Texture2D* defaultSpecular;
+        
+        /// Default glow texture.
+        Texture2D* defaultGlow;
         
     private:
         static ActiveHymn& GetInstance();

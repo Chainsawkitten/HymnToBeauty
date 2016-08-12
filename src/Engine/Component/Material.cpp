@@ -7,47 +7,45 @@
 #include "DefaultNormal.png.hpp"
 #include "DefaultSpecular.png.hpp"
 #include "DefaultGlow.png.hpp"
+#include "../Hymn.hpp"
 
 using namespace Component;
 
 Material::Material(Entity* entity) : SuperComponent(entity) {
-    diffuse = Managers().resourceManager->CreateTexture2D(DEFAULTDIFFUSE_PNG, DEFAULTDIFFUSE_PNG_LENGTH, true);
-    normal = Managers().resourceManager->CreateTexture2D(DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
-    specular = Managers().resourceManager->CreateTexture2D(DEFAULTSPECULAR_PNG, DEFAULTSPECULAR_PNG_LENGTH);
-    glow = Managers().resourceManager->CreateTexture2D(DEFAULTGLOW_PNG, DEFAULTGLOW_PNG_LENGTH);
+    diffuse = Hymn().defaultDiffuse;
+    normal = Hymn().defaultNormal;
+    specular = Hymn().defaultSpecular;
+    glow = Hymn().defaultGlow;
 }
 
-Material::~Material() {
-    Managers().resourceManager->FreeTexture2D(diffuse);
-    Managers().resourceManager->FreeTexture2D(normal);
-    Managers().resourceManager->FreeTexture2D(specular);
-    Managers().resourceManager->FreeTexture2D(glow);
-}
-
-void Material::SetDiffuse(const char* filename) {
+Json::Value Material::Save() const {
+    Json::Value component;
+    
     if (diffuse != nullptr)
-        Managers().resourceManager->FreeTexture2D(diffuse);
+        component["diffuse"] = diffuse->name;
     
-    diffuse = Managers().resourceManager->CreateTexture2DFromFile(filename, true);
-}
-
-void Material::SetNormal(const char* filename) {
     if (normal != nullptr)
-        Managers().resourceManager->FreeTexture2D(normal);
+        component["normal"] = normal->name;
     
-    normal = Managers().resourceManager->CreateTexture2DFromFile(filename);
-}
-
-void Material::SetSpecular(const char* filename) {
     if (specular != nullptr)
-        Managers().resourceManager->FreeTexture2D(specular);
+        component["specular"] = specular->name;
     
-    specular = Managers().resourceManager->CreateTexture2DFromFile(filename);
+    if (glow != nullptr)
+        component["glow"] = glow->name;
+    
+    return component;
 }
 
-void Material::SetGlow(const char* filename) {
-    if (glow != nullptr)
-        Managers().resourceManager->FreeTexture2D(glow);
-    
-    glow = Managers().resourceManager->CreateTexture2DFromFile(filename);
+void Material::Load(const Json::Value& node) {
+    LoadTexture(diffuse, node.get("diffuse", "").asString());
+    LoadTexture(normal, node.get("normal", "").asString());
+    LoadTexture(specular, node.get("specular", "").asString());
+    LoadTexture(glow, node.get("glow", "").asString());
+}
+
+void Material::LoadTexture(Texture2D*& texture, const std::string& name) {
+    for (Texture2D* t : Hymn().textures) {
+        if (t->name == name)
+            texture = t;
+    }
 }

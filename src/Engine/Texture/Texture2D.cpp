@@ -14,6 +14,8 @@
 #include "Texture2D.frag.hpp"
 #include "../Manager/Managers.hpp"
 #include "../Manager/ResourceManager.hpp"
+#include "../Hymn.hpp"
+#include "../Util/FileSystem.hpp"
 
 Texture2D::Texture2D() {
     isFromFile = false;
@@ -128,6 +130,17 @@ void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, const g
 
 bool Texture2D::IsFromFile() const {
     return isFromFile;
+}
+
+Json::Value Texture2D::Save() const {
+    Json::Value texture;
+    texture["name"] = name;
+    return texture;
+}
+
+void Texture2D::Load(const Json::Value& node) {
+    name = node.get("name", "").asString();
+    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Textures" + FileSystem::DELIMITER + name + ".png").c_str(), false);
 }
 
 void Texture2D::Load(const char* filename, bool srgb) {
