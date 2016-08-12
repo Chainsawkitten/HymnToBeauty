@@ -3,6 +3,7 @@
 #include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/DirectionalLight.hpp"
+#include "../Component/PointLight.hpp"
 
 Entity::Entity(Scene* scene, const std::string& name) {
     this->scene = scene;
@@ -20,6 +21,7 @@ Json::Value Entity::Save() const {
     Save<Component::Transform>(entity, "Transform");
     Save<Component::Lens>(entity, "Lens");
     Save<Component::DirectionalLight>(entity, "DirectionalLight");
+    Save<Component::PointLight>(entity, "PointLight");
     
     return entity;
 }
@@ -30,4 +32,5 @@ void Entity::Load(const Json::Value& node) {
     Load<Component::Transform>(node, "Transform");
     Load<Component::Lens>(node, "Lens");
     Load<Component::DirectionalLight>(node, "DirectionalLight");
+    Load<Component::PointLight>(node, "PointLight");
 }

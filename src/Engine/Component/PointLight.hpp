@@ -15,6 +15,18 @@ namespace Component {
              */
             PointLight(Entity* entity);
             
+            /// Save the component.
+            /**
+             * @return JSON value to be stored on disk.
+             */
+            Json::Value Save() const override;
+            
+            /// Load component from JSON node.
+            /**
+             * @param node JSON node to load from.
+             */
+            void Load(const Json::Value& node) override;
+            
             /// Color.
             glm::vec3 color = glm::vec3(1.f, 1.f, 1.f);
             
