@@ -14,3 +14,7 @@ Json::Value Entity::Save() const {
     entity["name"] = name;
     return entity;
 }
+
+void Entity::Load(const Json::Value& node) {
+    name = node.get("name", "").asString();
+}

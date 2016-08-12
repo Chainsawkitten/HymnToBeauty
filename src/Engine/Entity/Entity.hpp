@@ -39,6 +39,12 @@ class Entity {
          */
         Json::Value Save() const;
         
+        /// Load entity from JSON node.
+        /**
+         * @param node JSON node to load from.
+         */
+        void Load(const Json::Value& node);
+        
         std::string name;
         
     private:

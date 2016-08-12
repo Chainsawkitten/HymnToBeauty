@@ -4,8 +4,6 @@
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"
 #include "Entity/Entity.hpp"
-#include "Component/Transform.hpp"
-#include "Component/Lens.hpp"
 #include "Geometry/OBJModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include <json/json.h>
@@ -40,11 +38,6 @@ void ActiveHymn::Clear() {
     }
     textures.clear();
     textureNumber = 0U;
-    
-    Entity* camera = activeScene.CreateEntity("Camera");
-    Component::Transform* cameraTransform = camera->AddComponent<Component::Transform>();
-    cameraTransform->position = glm::vec3(0.f, 0.f, 10.f);
-    camera->AddComponent<Component::Lens>();
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -114,8 +107,12 @@ void ActiveHymn::Load(const string& path) {
         models.push_back(model);
     }
     
-    /// @todo Load entities.
-    /// @todo Load components.
+    // Load entities.
+    const Json::Value entitiesNode = root["entities"];
+    for (unsigned int i=0; i < entitiesNode.size(); ++i) {
+        Entity* entity = activeScene.CreateEntity("");
+        entity->Load(entitiesNode[i]);
+    }
 }
 
 void ActiveHymn::Render(const glm::vec2& screenSize) {
