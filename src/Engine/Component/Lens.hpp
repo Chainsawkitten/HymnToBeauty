@@ -15,6 +15,18 @@ namespace Component {
             
             /// Destructor.
             ~Lens() final;
+            
+            /// Save the component.
+            /**
+             * @return JSON value to be stored on disk.
+             */
+            Json::Value Save() const override;
+            
+            /// Load component from JSON node.
+            /**
+             * @param node JSON node to load from.
+             */
+            void Load(const Json::Value& node) override;
 
             /// Get the projection matrix.
             /**
