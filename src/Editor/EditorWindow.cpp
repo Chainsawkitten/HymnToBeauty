@@ -120,6 +120,7 @@ void EditorWindow::Init() {
     resourceList = new GUI::ResourceList(this);
     resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
+    resourceList->SetVisible(false);
     resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
     resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
     resourceList->SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
@@ -296,6 +297,7 @@ void EditorWindow::NewHymnClosed(const std::string& hymn) {
     if (!hymn.empty()) {
         Hymn().Clear();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+        resourceList->SetVisible(true);
     }
     
     delete childWindow;
@@ -313,8 +315,10 @@ void EditorWindow::OpenHymn() {
 
 void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
-    if (!hymn.empty())
+    if (!hymn.empty()) {
         Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+        resourceList->SetVisible(true);
+    }
     
     delete childWindow;
     childWindow = nullptr;
