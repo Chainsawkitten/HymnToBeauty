@@ -130,6 +130,12 @@ bool Texture2D::IsFromFile() const {
     return isFromFile;
 }
 
+Json::Value Texture2D::Save() const {
+    Json::Value texture;
+    texture["name"] = name;
+    return texture;
+}
+
 void Texture2D::Load(const char* filename, bool srgb) {
     glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);

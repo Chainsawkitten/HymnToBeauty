@@ -61,9 +61,16 @@ void ActiveHymn::SetPath(const string& path) {
 void ActiveHymn::Save() const {
     Json::Value root;
     
-    /// @todo Save textures.
+    // Save textures.
+    Json::Value texturesNode;
+    for (Texture2D* texture : textures) {
+        texturesNode.append(texture->Save());
+    }
+    root["textures"] = texturesNode;
+    
     /// @todo Save models.
-    /// @todo Save entities and components.
+    /// @todo Save entities.
+    /// @todo Save components.
     
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
@@ -83,7 +90,8 @@ void ActiveHymn::Load(const string& path) {
     
     /// @todo Load textures.
     /// @todo Load models.
-    /// @todo Load entities and components.
+    /// @todo Load entities.
+    /// @todo Load components.
 }
 
 void ActiveHymn::Render(const glm::vec2& screenSize) {

@@ -3,6 +3,7 @@
 #include "Texture.hpp"
 #include <glm/glm.hpp>
 #include <string>
+#include <json/json.h>
 
 class Shader;
 class ShaderProgram;
@@ -77,6 +78,12 @@ class Texture2D : public Texture {
          * @return true if the texture was loaded from a file, false otherwise.
          */
         bool IsFromFile() const;
+        
+        /// Save the texture.
+        /**
+         * @return Json value to be stored on disk.
+         */
+        Json::Value Save() const;
         
         /// Load texture from file.
         /**
