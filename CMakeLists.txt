@@ -151,6 +151,7 @@ set(ENGINE_SRCS
         src/Engine/Physics/Rectangle.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
+        src/Engine/Util/Json.cpp
         src/Engine/Util/Settings.cpp
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
@@ -188,6 +189,7 @@ set(ENGINE_HEADERS
         src/Engine/Physics/Rectangle.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
+        src/Engine/Util/Json.hpp
         src/Engine/Util/Settings.hpp
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
