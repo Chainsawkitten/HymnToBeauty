@@ -24,4 +24,10 @@ Json::Value Entity::Save() const {
 
 void Entity::Load(const Json::Value& node) {
     name = node.get("name", "").asString();
+    
+    Json::Value componentNode = node["Transform"];
+    if (!componentNode.isNull()) {
+        Component::Transform* component = AddComponent<Component::Transform>();
+        component->Load(componentNode);
+    }
 }
