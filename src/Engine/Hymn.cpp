@@ -3,6 +3,11 @@
 #include "Util/FileSystem.hpp"
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"
+#include "Manager/ResourceManager.hpp"
+#include "DefaultDiffuse.png.hpp"
+#include "DefaultNormal.png.hpp"
+#include "DefaultSpecular.png.hpp"
+#include "DefaultGlow.png.hpp"
 #include "Entity/Entity.hpp"
 #include "Geometry/OBJModel.hpp"
 #include "Texture/Texture2D.hpp"
@@ -12,6 +17,11 @@
 using namespace std;
 
 ActiveHymn::ActiveHymn() {
+    defaultDiffuse = Managers().resourceManager->CreateTexture2D(DEFAULTDIFFUSE_PNG, DEFAULTDIFFUSE_PNG_LENGTH, true);
+    defaultNormal = Managers().resourceManager->CreateTexture2D(DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
+    defaultSpecular = Managers().resourceManager->CreateTexture2D(DEFAULTSPECULAR_PNG, DEFAULTSPECULAR_PNG_LENGTH);
+    defaultGlow = Managers().resourceManager->CreateTexture2D(DEFAULTGLOW_PNG, DEFAULTGLOW_PNG_LENGTH);
+    
     Clear();
 }
 

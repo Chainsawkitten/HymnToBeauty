@@ -12,17 +12,10 @@
 using namespace Component;
 
 Material::Material(Entity* entity) : SuperComponent(entity) {
-    diffuse = Managers().resourceManager->CreateTexture2D(DEFAULTDIFFUSE_PNG, DEFAULTDIFFUSE_PNG_LENGTH, true);
-    normal = Managers().resourceManager->CreateTexture2D(DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
-    specular = Managers().resourceManager->CreateTexture2D(DEFAULTSPECULAR_PNG, DEFAULTSPECULAR_PNG_LENGTH);
-    glow = Managers().resourceManager->CreateTexture2D(DEFAULTGLOW_PNG, DEFAULTGLOW_PNG_LENGTH);
-}
-
-Material::~Material() {
-    Managers().resourceManager->FreeTexture2D(diffuse);
-    Managers().resourceManager->FreeTexture2D(normal);
-    Managers().resourceManager->FreeTexture2D(specular);
-    Managers().resourceManager->FreeTexture2D(glow);
+    diffuse = Hymn().defaultDiffuse;
+    normal = Hymn().defaultNormal;
+    specular = Hymn().defaultSpecular;
+    glow = Hymn().defaultGlow;
 }
 
 Json::Value Material::Save() const {
