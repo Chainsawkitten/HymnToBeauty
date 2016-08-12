@@ -47,6 +47,7 @@ class Entity {
         
     private:
         template<typename T> void Save(Json::Value& node, const std::string& name) const;
+        template<typename T> void Load(const Json::Value& node, const std::string& name);
         
         Scene* scene;
         
@@ -75,4 +76,12 @@ template<typename T> void Entity::Save(Json::Value& node, const std::string& nam
     auto it = components.find(&typeid(T*));
     if (it != components.end())
         node[name] = it->second->Save();
+}
+
+template<typename T> void Entity::Load(const Json::Value& node, const std::string& name) {
+    Json::Value componentNode = node[name];
+    if (!componentNode.isNull()) {
+        T* component = AddComponent<T>();
+        component->Load(componentNode);
+    }
 }
