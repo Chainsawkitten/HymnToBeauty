@@ -51,6 +51,12 @@ namespace Geometry {
          */
         Json::Value Save() const;
         
+        /// Load model from JSON node.
+        /**
+         * @param node JSON node to load from.
+         */
+        void Load(const Json::Value& node);
+        
         /// Load model from OBJ file.
         /**
          * @param filename Filename (relative or absolute) to the OBJ model file.

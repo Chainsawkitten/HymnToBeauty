@@ -102,7 +102,14 @@ void ActiveHymn::Load(const string& path) {
         textures.push_back(texture);
     }
     
-    /// @todo Load models.
+    // Load models.
+    const Json::Value modelsNode = root["models"];
+    for (unsigned int i=0; i < modelsNode.size(); ++i) {
+        Geometry::OBJModel* model = new Geometry::OBJModel();
+        model->Load(modelsNode[i]);
+        models.push_back(model);
+    }
+    
     /// @todo Load entities.
     /// @todo Load components.
 }
