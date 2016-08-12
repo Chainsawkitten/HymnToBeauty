@@ -28,6 +28,12 @@ unsigned int OBJModel::GetIndexCount() const {
     return indexNr;
 }
 
+Json::Value OBJModel::Save() const {
+    Json::Value model;
+    model["name"] = name;
+    return model;
+}
+
 void OBJModel::Load(const char* filename) {
     std::ifstream modelFile;
     modelFile.open(filename);

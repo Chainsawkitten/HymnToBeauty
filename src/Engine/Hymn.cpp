@@ -68,7 +68,13 @@ void ActiveHymn::Save() const {
     }
     root["textures"] = texturesNode;
     
-    /// @todo Save models.
+    // Save models.
+    Json::Value modelsNode;
+    for (Geometry::OBJModel* model : models) {
+        modelsNode.append(model->Save());
+    }
+    root["models"] = modelsNode;
+    
     /// @todo Save entities.
     /// @todo Save components.
     
