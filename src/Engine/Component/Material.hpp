@@ -30,30 +30,6 @@ namespace Component {
              */
             void Load(const Json::Value& node) override;
             
-            /// Set diffuse texture from file.
-            /**
-             * @param filename Path to the image file.
-             */
-            void SetDiffuse(const char* filename);
-            
-            /// Set normal texture from file.
-            /**
-             * @param filename Path to the image file.
-             */
-            void SetNormal(const char* filename);
-            
-            /// Set specular texture from file.
-            /**
-             * @param filename Path to the image file.
-             */
-            void SetSpecular(const char* filename);
-            
-            /// Set glow texture from file.
-            /**
-             * @param filename Path to the image file.
-             */
-            void SetGlow(const char* filename);
-            
             /// Diffuse texture.
             Texture2D* diffuse;
             

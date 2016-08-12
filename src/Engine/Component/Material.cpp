@@ -50,34 +50,6 @@ void Material::Load(const Json::Value& node) {
     LoadTexture(glow, node.get("glow", "").asString());
 }
 
-void Material::SetDiffuse(const char* filename) {
-    if (diffuse != nullptr)
-        Managers().resourceManager->FreeTexture2D(diffuse);
-    
-    diffuse = Managers().resourceManager->CreateTexture2DFromFile(filename, true);
-}
-
-void Material::SetNormal(const char* filename) {
-    if (normal != nullptr)
-        Managers().resourceManager->FreeTexture2D(normal);
-    
-    normal = Managers().resourceManager->CreateTexture2DFromFile(filename);
-}
-
-void Material::SetSpecular(const char* filename) {
-    if (specular != nullptr)
-        Managers().resourceManager->FreeTexture2D(specular);
-    
-    specular = Managers().resourceManager->CreateTexture2DFromFile(filename);
-}
-
-void Material::SetGlow(const char* filename) {
-    if (glow != nullptr)
-        Managers().resourceManager->FreeTexture2D(glow);
-    
-    glow = Managers().resourceManager->CreateTexture2DFromFile(filename);
-}
-
 void Material::LoadTexture(Texture2D*& texture, const std::string& name) {
     for (Texture2D* t : Hymn().textures) {
         if (t->name == name)
