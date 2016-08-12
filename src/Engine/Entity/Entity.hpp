@@ -45,6 +45,7 @@ class Entity {
          */
         void Load(const Json::Value& node);
         
+        /// Name of the entity.
         std::string name;
         
     private:
