@@ -4,10 +4,7 @@
 #include <typeinfo>
 #include "../Scene/Scene.hpp"
 #include <json/json.h>
-
-namespace Component {
-    class SuperComponent;
-}
+#include "../Component/SuperComponent.hpp"
 
 /// %Entity containing various components.
 class Entity {
@@ -49,6 +46,8 @@ class Entity {
         std::string name;
         
     private:
+        template<typename T> void Save(Json::Value& node, const std::string& name) const;
+        
         Scene* scene;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
@@ -70,4 +69,10 @@ template<typename T> T* Entity::GetComponent() {
     } else {
         return nullptr;
     }
+}
+
+template<typename T> void Entity::Save(Json::Value& node, const std::string& name) const {
+    auto it = components.find(&typeid(T*));
+    if (it != components.end())
+        node[name] = it->second->Save();
 }

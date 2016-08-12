@@ -15,9 +15,7 @@ Json::Value Entity::Save() const {
     Json::Value entity;
     entity["name"] = name;
     
-    auto it = components.find(&typeid(Component::Transform*));
-    if (it != components.end())
-        entity["Transform"] = it->second->Save();
+    Save<Component::Transform>(entity, "Transform");
     
     return entity;
 }
