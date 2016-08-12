@@ -35,11 +35,6 @@ RenderManager::~RenderManager() {
 }
 
 void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
-    deferredLighting->SetTarget();
-    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
-    
     // Find camera entity.
     Entity* camera = nullptr;
     std::vector<Lens*> lenses = scene.GetComponents<Lens>();
@@ -50,6 +45,11 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
     
     // Render from camera.
     if (camera != nullptr) {
+        deferredLighting->SetTarget();
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
+        
         shaderProgram->Use();
         
         glm::mat4 viewMat = camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Transform>()->position);
@@ -95,9 +95,9 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
         }
         
         glBindVertexArray(0);
+        
+        // Light the scene.
+        deferredLighting->ResetTarget();
+        deferredLighting->Render(scene, camera, screenSize);
     }
-    
-    // Light the scene.
-    deferredLighting->ResetTarget();
-    deferredLighting->Render(scene, camera, screenSize);
 }
