@@ -1,5 +1,7 @@
 #pragma once
 
+#include <json/json.h>
+
 class Entity;
 
 namespace Component {
@@ -14,6 +16,12 @@ namespace Component {
             
             /// Destructor.
             virtual ~SuperComponent();
+            
+            /// Save the component.
+            /**
+             * @return JSON value to be stored on disk.
+             */
+            virtual Json::Value Save() const;
             
             /// Pointer to which entity this component corresponds.
             Entity* entity;
