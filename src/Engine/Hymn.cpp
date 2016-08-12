@@ -56,6 +56,12 @@ void ActiveHymn::SetPath(const string& path) {
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
 }
 
+void ActiveHymn::Save() const {
+    /// @todo Save entities and components.
+    /// @todo Save textures.
+    /// @todo Save models.
+}
+
 void ActiveHymn::Load(const string& path) {
     Clear();
     this->path = path;

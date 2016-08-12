@@ -267,6 +267,10 @@ void EditorWindow::SetSize(const glm::vec2& size) {
     /// @todo Resize window.
 }
 
+void EditorWindow::Save() const {
+    Hymn().Save();
+}
+
 void EditorWindow::OpenFileMenu() {
     fileMenu->SetVisible(!fileMenu->IsVisible());
 }

@@ -69,6 +69,9 @@ class EditorWindow : public GUI::Container {
          */
         void SetSize(const glm::vec2& size) override;
         
+        /// Save the hymn being edited.
+        void Save() const;
+        
     private:
         void OpenFileMenu();
         void OpenProjectOptions();

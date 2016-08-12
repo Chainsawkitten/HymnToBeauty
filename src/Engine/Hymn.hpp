@@ -30,6 +30,9 @@ class ActiveHymn {
          */
         void SetPath(const std::string& path);
         
+        /// Save the hymn.
+        void Save() const;
+        
         /// Load a hymn.
         /**
          * @param path Path to the saved hymn.
