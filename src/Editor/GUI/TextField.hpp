@@ -61,6 +61,7 @@ namespace GUI {
             
         private:
             std::string text = "";
+            std::size_t markerPosition = 0U;
             bool focus = false;
             
             glm::vec2 size;
