@@ -46,6 +46,9 @@ void TextField::Render(const glm::vec2& screenSize) {
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
     font->RenderText(text.c_str(), GetPosition(), size.x, screenSize);
+    
+    if (focus)
+        rectangle->Render(GetPosition() + glm::vec2(font->GetWidth(text.c_str()), 0.f), glm::vec2(1, size.y), glm::vec3(1.f, 1.f, 1.f), screenSize);
 }
 
 glm::vec2 TextField::GetSize() const {
