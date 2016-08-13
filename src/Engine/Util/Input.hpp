@@ -15,6 +15,7 @@ class InputHandler {
             LEFT, ///< Move text input marker left.
             RIGHT, ///< Move text input marker right.
             HOME, ///< Move text input marker to beginning of text field.
+            END, ///< Move text input marker to end of text field.
             BUTTONS, ///< Total number of inputs
         };
         

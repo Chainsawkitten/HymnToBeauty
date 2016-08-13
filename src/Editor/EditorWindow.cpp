@@ -58,6 +58,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     input->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_LEFT);
     input->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_RIGHT);
     input->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
+    input->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
 }
 
 EditorWindow::~EditorWindow() {

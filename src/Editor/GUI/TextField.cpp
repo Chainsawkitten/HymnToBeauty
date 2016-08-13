@@ -55,6 +55,9 @@ void TextField::Update() {
         if (Input()->Triggered(InputHandler::HOME))
             markerPosition = 0U;
         
+        if (Input()->Triggered(InputHandler::END))
+            markerPosition = text.length();
+        
         if (textUpdated)
             TextUpdated();
     }
