@@ -29,14 +29,20 @@ void TextField::Update() {
     if (focus) {
         bool textUpdated = !Input()->Text().empty();
         
-        text += Input()->Text();
+        text = text.insert(markerPosition, Input()->Text());
         markerPosition += Input()->Text().length();
         
-        if (Input()->Triggered(InputHandler::BACK) && text.length() > 0) {
-            text = text.erase(text.length()-1, 1);
-            markerPosition -= 1U;
+        if (Input()->Triggered(InputHandler::BACK) && markerPosition > 0U) {
+            text = text.erase(markerPosition-1, 1);
+            --markerPosition;
             textUpdated = true;
         }
+        
+        if (Input()->Triggered(InputHandler::LEFT) && markerPosition > 0U)
+            --markerPosition;
+        
+        if (Input()->Triggered(InputHandler::RIGHT) && markerPosition < text.length())
+            ++markerPosition;
         
         if (textUpdated)
             TextUpdated();
