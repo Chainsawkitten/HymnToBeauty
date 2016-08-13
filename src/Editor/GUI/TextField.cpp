@@ -32,12 +32,20 @@ void TextField::Update() {
         text = text.insert(markerPosition, Input()->Text());
         markerPosition += Input()->Text().length();
         
+        // Erase previous character when BACK pressed.
         if (Input()->Triggered(InputHandler::BACK) && markerPosition > 0U) {
             text = text.erase(markerPosition-1, 1);
             --markerPosition;
             textUpdated = true;
         }
         
+        // Erase next character when ERASE pressed.
+        if (Input()->Triggered(InputHandler::ERASE) && markerPosition < text.length()) {
+            text = text.erase(markerPosition, 1);
+            textUpdated = true;
+        }
+        
+        // Move marker.
         if (Input()->Triggered(InputHandler::LEFT) && markerPosition > 0U)
             --markerPosition;
         

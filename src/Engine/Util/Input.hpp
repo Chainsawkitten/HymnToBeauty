@@ -11,6 +11,7 @@ class InputHandler {
         enum Button {
             CLICK = 0, ///< Clicking in the editor.
             BACK, ///< Erase previous character.
+            ERASE, ///< Erase next character.
             LEFT, ///< Move text input marker left.
             RIGHT, ///< Move text input marker right.
             BUTTONS, ///< Total number of inputs
