@@ -17,6 +17,15 @@ namespace Component {
             /// Destructor.
             virtual ~SuperComponent();
             
+            /// Kill the component, will be removed at the end of the frame.
+            void Kill();
+            
+            /// Get whether component has been killed.
+            /**
+             * @return Whether component has been killed.
+             */
+            bool IsKilled() const;
+            
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
@@ -31,5 +40,8 @@ namespace Component {
             
             /// Pointer to which entity this component corresponds.
             Entity* entity;
+            
+        private:
+            bool killed = false;
     };
 }
