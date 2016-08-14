@@ -23,7 +23,14 @@ void TextField::Update() {
         glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
         Physics::Rectangle rect(GetPosition(), size);
         focus = rect.Collide(mousePosition);
-        markerPosition = text.length();
+        
+        if (focus) {
+            markerPosition = text.length();
+            for (std::size_t i = markerPosition; i > 0U; --i) {
+                if (mousePosition.x < GetPosition().x + font->GetWidth(text.substr(0, i).c_str()))
+                    markerPosition = i - 1U;
+            }
+        }
     }
     
     if (focus) {
