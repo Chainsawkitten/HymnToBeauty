@@ -30,6 +30,9 @@ class Entity {
          */
         template<typename T> T* GetComponent();
         
+        /// Kill component of type T.
+        template <typename T> void KillComponent();
+        
         /// Save the entity.
         /**
          * @return JSON value to be stored on disk.
@@ -69,6 +72,14 @@ template<typename T> T* Entity::GetComponent() {
         return static_cast<T*>(components[&typeid(T*)]);
     } else {
         return nullptr;
+    }
+}
+
+template <typename T> void Entity::KillComponent() {
+    const std::type_info* componentType = &typeid(T*);
+    if (components.find(componentType) != components.end()) {
+        components[componentType]->Kill();
+        components.erase(componentType);
     }
 }
 
