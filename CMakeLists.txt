@@ -72,6 +72,7 @@ set(EMBEDDED_INPUT
     assets/NewHymn.png
     assets/OpenHymn.png
     assets/Add.png
+    assets/Subtract.png
     assets/Directory.png
     assets/BasicFile.png
     assets/DefaultDiffuse.png
