@@ -6,6 +6,7 @@
 #include "ABeeZee.ttf.hpp"
 #include <Engine/Texture/Texture2D.hpp>
 #include "Add.png.hpp"
+#include "Subtract.png.hpp"
 #include <Engine/Geometry/Rectangle.hpp>
 #include "ComponentEditor/ComponentAdder.hpp"
 #include "ComponentEditor/TransformEditor.hpp"
@@ -34,6 +35,11 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     addComponentButton->SetImageSize(glm::vec2(addComponentTexture->GetWidth(), addComponentTexture->GetHeight()));
     addComponentButton->SetClickedCallback(std::bind(&AddComponentPressed, this));
     
+    removeEntityTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
+    removeEntityButton = new ImageTextButton(this, removeEntityTexture, font, "Delete entity");
+    removeEntityButton->SetImageSize(glm::vec2(removeEntityTexture->GetWidth(), removeEntityTexture->GetHeight()));
+    removeEntityButton->SetClickedCallback(std::bind(&RemoveEntityPressed, this));
+    
     editors.push_back(new TransformEditor(this));
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
@@ -57,6 +63,9 @@ EntityEditor::~EntityEditor() {
     Managers().resourceManager->FreeTexture2D(addComponentTexture);
     delete addComponentButton;
     
+    Managers().resourceManager->FreeTexture2D(removeEntityTexture);
+    delete removeEntityButton;
+    
     for (ComponentEditor* editor : editors)
         delete editor;
 }
@@ -64,6 +73,7 @@ EntityEditor::~EntityEditor() {
 void EntityEditor::Update() {
     nameEditor->Update();
     addComponentButton->Update();
+    removeEntityButton->Update();
     
     for (ComponentEditor* editor : editors)
         editor->Update();
@@ -76,6 +86,7 @@ void EntityEditor::Render(const glm::vec2& screenSize) {
     nameLabel->Render(screenSize);
     nameEditor->Render(screenSize);
     addComponentButton->Render(screenSize);
+    removeEntityButton->Render(screenSize);
     
     for (ComponentEditor* editor : editors)
         editor->Render(screenSize);
@@ -89,6 +100,8 @@ void EntityEditor::SetPosition(const glm::vec2& position) {
     nameLabel->SetPosition(pos);
     nameEditor->SetPosition(pos + glm::vec2(10.f, 20.f));
     pos.y += 50.f;
+    removeEntityButton->SetPosition(pos);
+    pos.y += 20.f;
     addComponentButton->SetPosition(pos);
     pos.y += 30.f;
     
@@ -109,6 +122,7 @@ void EntityEditor::SetSize(const glm::vec2& size) {
     
     nameEditor->SetSize(glm::vec2(size.x - 10.f, 20.f));
     addComponentButton->SetSize(glm::vec2(size.x, 20.f));
+    removeEntityButton->SetSize(glm::vec2(size.x, 20.f));
     
     for (ComponentEditor* editor : editors)
         editor->SetSize(size);
@@ -130,4 +144,9 @@ void EntityEditor::AddComponentPressed() {
     componentAdder->SetEntity(entity);
     componentAdder->SetComponentAddedCallback(std::bind(&SetEntity, this, entity));
     componentAdder->SetVisible(true);
+}
+
+void EntityEditor::RemoveEntityPressed() {
+    entity->Kill();
+    SetVisible(false);
 }

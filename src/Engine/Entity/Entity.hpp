@@ -30,6 +30,18 @@ class Entity {
          */
         template<typename T> T* GetComponent();
         
+        /// Kill component of type T.
+        template <typename T> void KillComponent();
+        
+        /// Kill the entity, will be removed at the end of the frame.
+        void Kill();
+        
+        /// Get whether entity has been killed.
+        /**
+         * @return Whether the entity has been killed.
+         */
+        bool IsKilled() const;
+        
         /// Save the entity.
         /**
          * @return JSON value to be stored on disk.
@@ -52,6 +64,8 @@ class Entity {
         Scene* scene;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
+        
+        bool killed = false;
 };
 
 template<typename T> T* Entity::AddComponent() {
@@ -69,6 +83,14 @@ template<typename T> T* Entity::GetComponent() {
         return static_cast<T*>(components[&typeid(T*)]);
     } else {
         return nullptr;
+    }
+}
+
+template <typename T> void Entity::KillComponent() {
+    const std::type_info* componentType = &typeid(T*);
+    if (components.find(componentType) != components.end()) {
+        components[componentType]->Kill();
+        components.erase(componentType);
     }
 }
 

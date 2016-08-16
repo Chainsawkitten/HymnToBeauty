@@ -14,6 +14,7 @@ using namespace GUI;
 
 DirectionalLightEditor::DirectionalLightEditor(Widget* parent) : ComponentEditor(parent, "Directional light") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::DirectionalLight>();
     
     colorEditor = new Vec3Editor(this, font);
     AddEditor("Color", colorEditor);
@@ -32,6 +33,8 @@ DirectionalLightEditor::~DirectionalLightEditor() {
 }
 
 void DirectionalLightEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

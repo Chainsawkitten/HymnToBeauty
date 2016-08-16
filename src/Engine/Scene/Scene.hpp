@@ -42,6 +42,9 @@ class Scene {
         /// Clear the scene of all entities.
         void Clear();
         
+        /// Removes all killed game objects, entities and components in the scene.
+        void ClearKilled();
+        
     private:
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);

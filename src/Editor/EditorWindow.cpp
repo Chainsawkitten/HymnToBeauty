@@ -226,6 +226,7 @@ void EditorWindow::Update() {
         input->Update();
         input->SetActive();
         UpdateWidgets();
+        Hymn().activeScene.ClearKilled();
     }
 }
 

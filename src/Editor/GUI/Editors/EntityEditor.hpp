@@ -69,6 +69,7 @@ namespace GUI {
             
         private:
             void AddComponentPressed();
+            void RemoveEntityPressed();
             
             Geometry::Rectangle* rectangle;
             glm::vec2 size;
@@ -82,6 +83,9 @@ namespace GUI {
             
             Texture2D* addComponentTexture;
             ImageTextButton* addComponentButton;
+            
+            Texture2D* removeEntityTexture;
+            ImageTextButton* removeEntityButton;
             
             ComponentAdder* componentAdder;
     };

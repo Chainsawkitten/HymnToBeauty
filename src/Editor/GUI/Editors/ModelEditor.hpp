@@ -4,6 +4,7 @@
 #include <string>
 
 class Font;
+class Texture2D;
 namespace Geometry {
     class Rectangle;
     class OBJModel;
@@ -14,6 +15,7 @@ namespace GUI {
     class StringEditor;
     class Button;
     class FileSelector;
+    class ImageTextButton;
     
     /// Used to edit a model.
     class ModelEditor : public Widget {
@@ -62,6 +64,7 @@ namespace GUI {
             void SetModel(Geometry::OBJModel* model);
             
         private:
+            void DeleteModelPressed();
             void LoadPressed();
             void FileSelected(const std::string& file);
             
@@ -73,6 +76,9 @@ namespace GUI {
             
             Label* nameLabel;
             StringEditor* nameEditor;
+            
+            Texture2D* deleteModelTexture;
+            ImageTextButton* deleteModelButton;
             
             Button* loadButton;
             FileSelector* fileSelector;

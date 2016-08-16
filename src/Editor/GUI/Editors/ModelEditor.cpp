@@ -6,6 +6,8 @@
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Font/Font.hpp>
 #include "ABeeZee.ttf.hpp"
+#include <Engine/Texture/Texture2D.hpp>
+#include "Subtract.png.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
 #include "../TextButton.hpp"
@@ -13,6 +15,7 @@
 #include <functional>
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
+#include "../ImageTextButton.hpp"
 
 using namespace GUI;
 
@@ -24,6 +27,11 @@ ModelEditor::ModelEditor(Widget* parent, FileSelector* fileSelector) : Widget(pa
     nameLabel = new Label(this, font, "Name");
     nameEditor = new StringEditor(this, font);
     
+    deleteModelTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
+    deleteModelButton = new ImageTextButton(this, deleteModelTexture, font, "Delete model");
+    deleteModelButton->SetImageSize(glm::vec2(deleteModelTexture->GetWidth(), deleteModelTexture->GetHeight()));
+    deleteModelButton->SetClickedCallback(std::bind(&DeleteModelPressed, this));
+    
     loadButton = new TextButton(this, font, "Load OBJ model");
     loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
     this->fileSelector = fileSelector;
@@ -33,6 +41,9 @@ ModelEditor::~ModelEditor() {
     Managers().resourceManager->FreeRectangle();
     Managers().resourceManager->FreeFont(font);
     
+    Managers().resourceManager->FreeTexture2D(deleteModelTexture);
+    delete deleteModelButton;
+    
     delete nameLabel;
     delete nameEditor;
     delete loadButton;
@@ -40,6 +51,7 @@ ModelEditor::~ModelEditor() {
 
 void ModelEditor::Update() {
     nameEditor->Update();
+    deleteModelButton->Update();
     loadButton->Update();
 }
 
@@ -49,6 +61,7 @@ void ModelEditor::Render(const glm::vec2& screenSize) {
     
     nameLabel->Render(screenSize);
     nameEditor->Render(screenSize);
+    deleteModelButton->Render(screenSize);
     loadButton->Render(screenSize);
 }
 
@@ -57,7 +70,8 @@ void ModelEditor::SetPosition(const glm::vec2& position) {
     
     nameLabel->SetPosition(position);
     nameEditor->SetPosition(position + glm::vec2(10.f, 20.f));
-    loadButton->SetPosition(position + glm::vec2(0.f, 50.f));
+    deleteModelButton->SetPosition(position + glm::vec2(0.f, 50.f));
+    loadButton->SetPosition(position + glm::vec2(0.f, 70.f));
 }
 
 glm::vec2 ModelEditor::GetSize() const {
@@ -68,6 +82,7 @@ void ModelEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
     nameEditor->SetSize(glm::vec2(size.x - 10.f, 20.f));
+    deleteModelButton->SetSize(glm::vec2(size.x, 20.f));
     loadButton->SetSize(glm::vec2(size.x, 20.f));
 }
 
@@ -78,6 +93,17 @@ void ModelEditor::SetModel(Geometry::OBJModel* model) {
     
     // Update editor positions.
     SetPosition(GetPosition());
+}
+
+void ModelEditor::DeleteModelPressed() {
+    delete model;
+    for (auto it = Hymn().models.begin(); it != Hymn().models.end(); ++it) {
+        if (*it == model) {
+            Hymn().models.erase(it);
+            break;
+        }
+    }
+    SetVisible(false);
 }
 
 void ModelEditor::LoadPressed() {
