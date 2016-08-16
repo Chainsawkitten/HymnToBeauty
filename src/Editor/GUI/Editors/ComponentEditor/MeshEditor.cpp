@@ -15,6 +15,7 @@ using namespace GUI;
 
 MeshEditor::MeshEditor(Widget* parent, ModelSelector* modelSelector) : ComponentEditor(parent, "Mesh") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::Mesh>();
     
     selectModelButton = new TextButton(this, font, "Select model");
     selectModelButton->SetClickedCallback(std::bind(&SelectModelPressed, this));
@@ -30,6 +31,8 @@ MeshEditor::~MeshEditor() {
 }
 
 void MeshEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

@@ -14,6 +14,7 @@ using namespace GUI;
 
 SpotLightEditor::SpotLightEditor(Widget* parent) : ComponentEditor(parent, "Spot light") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::SpotLight>();
     
     colorEditor = new Vec3Editor(this, font);
     AddEditor("Color", colorEditor);
@@ -44,6 +45,8 @@ SpotLightEditor::~SpotLightEditor() {
 }
 
 void SpotLightEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

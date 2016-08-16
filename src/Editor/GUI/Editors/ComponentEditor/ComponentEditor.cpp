@@ -38,6 +38,9 @@ void ComponentEditor::Update() {
         glm::vec2 mousePosition(Input()->CursorX(), Input()->CursorY());
         Physics::Rectangle rect(GetPosition() + glm::vec2(titleLabel->GetSize().x + 5.f, 6.f), glm::vec2(10.f, 10.f));
         removeComponentHover = rect.Collide(mousePosition);
+        
+        if (removeComponentHover && Input()->Triggered(InputHandler::CLICK))
+            removeComponentMethod();
     }
 }
 
@@ -81,6 +84,10 @@ void ComponentEditor::SetSize(const glm::vec2& size) {
         editor.editor->SetSize(glm::vec2(size.x - 20.f, 20.f));
         this->size.y += 20.f + editor.editor->GetSize().y;
     }
+}
+
+void ComponentEditor::SetEntity(Entity* entity) {
+    this->entity = entity;
 }
 
 void ComponentEditor::AddEditor(const std::string& name, Widget* editor) {

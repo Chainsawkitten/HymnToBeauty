@@ -15,6 +15,7 @@ using namespace GUI;
 
 MaterialEditor::MaterialEditor(Widget* parent, TextureSelector* textureSelector) : ComponentEditor(parent, "Material") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::Material>();
     
     selectDiffuseButton = new TextButton(this, font, "Select diffuse texture");
     selectDiffuseButton->SetClickedCallback(std::bind(&SelectDiffusePressed, this));
@@ -42,6 +43,8 @@ MaterialEditor::~MaterialEditor() {
 }
 
 void MaterialEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

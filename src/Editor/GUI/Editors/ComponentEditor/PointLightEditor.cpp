@@ -14,6 +14,7 @@ using namespace GUI;
 
 PointLightEditor::PointLightEditor(Widget* parent) : ComponentEditor(parent, "Point light") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::PointLight>();
     
     colorEditor = new Vec3Editor(this, font);
     AddEditor("Color", colorEditor);
@@ -40,6 +41,8 @@ PointLightEditor::~PointLightEditor() {
 }
 
 void PointLightEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

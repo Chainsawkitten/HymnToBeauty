@@ -13,6 +13,7 @@ using namespace GUI;
 
 LensEditor::LensEditor(Widget* parent) : ComponentEditor(parent, "Lens") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::Lens>();
     
     fieldOfViewEditor = new FloatEditor(this, font);
     AddEditor("Field of view", fieldOfViewEditor);
@@ -35,6 +36,8 @@ LensEditor::~LensEditor() {
 }
 
 void LensEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {

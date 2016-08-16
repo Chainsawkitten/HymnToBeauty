@@ -13,6 +13,7 @@ using namespace GUI;
 
 TransformEditor::TransformEditor(Widget* parent) : ComponentEditor(parent, "Transform") {
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
+    SetComponent<Component::Transform>();
     
     positionEditor = new Vec3Editor(this, font);
     AddEditor("Position", positionEditor);
@@ -35,6 +36,8 @@ TransformEditor::~TransformEditor() {
 }
 
 void TransformEditor::SetEntity(Entity* entity) {
+    ComponentEditor::SetEntity(entity);
+    
     if (entity == nullptr) {
         SetVisible(false);
     } else {
