@@ -33,6 +33,15 @@ class Entity {
         /// Kill component of type T.
         template <typename T> void KillComponent();
         
+        /// Kill the entity, will be removed at the end of the frame.
+        void Kill();
+        
+        /// Get whether entity has been killed.
+        /**
+         * @return Whether the entity has been killed.
+         */
+        bool IsKilled() const;
+        
         /// Save the entity.
         /**
          * @return JSON value to be stored on disk.
@@ -55,6 +64,8 @@ class Entity {
         Scene* scene;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
+        
+        bool killed = false;
 };
 
 template<typename T> T* Entity::AddComponent() {

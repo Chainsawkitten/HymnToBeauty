@@ -17,6 +17,17 @@ Entity::~Entity() {
     
 }
 
+void Entity::Kill() {
+    killed = true;
+    
+    for (auto& it : components)
+        it.second->Kill();
+}
+
+bool Entity::IsKilled() const {
+    return killed;
+}
+
 Json::Value Entity::Save() const {
     Json::Value entity;
     entity["name"] = name;

@@ -48,6 +48,18 @@ void Scene::ClearKilled() {
             }
         }
     }
+    
+    // Clear killed entities.
+    i = 0;
+    while (i < entities.size()) {
+        if (entities[i]->IsKilled()) {
+            delete entities[i];
+            entities[i] = entities[entities.size() - 1];
+            entities.pop_back();
+        } else {
+            ++i;
+        }
+    }
 }
 
 void Scene::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {
