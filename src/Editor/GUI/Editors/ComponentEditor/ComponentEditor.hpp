@@ -6,6 +6,7 @@
 
 class Entity;
 class Font;
+class Texture2D;
 
 namespace GUI {
     class Label;
@@ -77,5 +78,8 @@ namespace GUI {
                 LabeledEditor(Label* label, Widget* editor);
             };
             std::vector<LabeledEditor> editors;
+            
+            Texture2D* removeComponentTexture;
+            bool removeComponentHover = false;
     };
 }
