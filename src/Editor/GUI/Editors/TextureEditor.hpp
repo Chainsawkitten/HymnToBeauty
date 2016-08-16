@@ -14,6 +14,7 @@ namespace GUI {
     class StringEditor;
     class Button;
     class FileSelector;
+    class ImageTextButton;
     
     /// Used to edit a texture.
     class TextureEditor : public Widget {
@@ -62,6 +63,7 @@ namespace GUI {
             void SetTexture(Texture2D* texture);
             
         private:
+            void DeleteTexturePressed();
             void LoadPressed();
             void FileSelected(const std::string& file);
             
@@ -73,6 +75,9 @@ namespace GUI {
             
             Label* nameLabel;
             StringEditor* nameEditor;
+            
+            Texture2D* deleteTextureTexture;
+            ImageTextButton* deleteTextureButton;
             
             Button* loadButton;
             FileSelector* fileSelector;
