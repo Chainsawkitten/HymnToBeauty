@@ -217,6 +217,7 @@ Cube::Cube() {
     
     GenerateBuffers();
     GenerateVertexArray();
+    CreateAxisAlignedBoundingBox();
 }
 
 Cube::~Cube() {
