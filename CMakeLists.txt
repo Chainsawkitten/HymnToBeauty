@@ -254,7 +254,6 @@ set(EDITOR_SRCS
     )
 
 set(EDITOR_HEADERS
-        src/Editor/editor.hpp
         src/Editor/EditorWindow.hpp
         src/Editor/GUI/Widget.hpp
         src/Editor/GUI/Container.hpp
@@ -306,7 +305,7 @@ set(GAME_SRCS
     )
 
 set(GAME_HEADERS
-        src/Game/game.hpp
+        
     )
 
 create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
