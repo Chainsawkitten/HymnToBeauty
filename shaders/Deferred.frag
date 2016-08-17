@@ -24,8 +24,9 @@ struct Light {
     vec3 direction;
 };
 
-const int lightCount = 32;
-uniform Light lights[lightCount];
+const int maxLights = 32;
+uniform int lightCount;
+uniform Light lights[maxLights];
 
 layout(location = 0) out vec4 fragmentColor;
 layout(location = 1) out vec4 extraOut;

@@ -15,6 +15,7 @@
 #include "../Texture/Texture2D.hpp"
 #include "../Lighting/DeferredLighting.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Physics/Frustum.hpp"
 
 using namespace Component;
 
@@ -67,30 +68,33 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
             if (transform != nullptr && mesh->geometry != nullptr && material != nullptr) {
                 glm::mat4 modelMat = transform->GetModelMatrix();
                 
-                glBindVertexArray(mesh->geometry->GetVertexArray());
-                
-                // Set texture locations
-                glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
-                glUniform1i(shaderProgram->GetUniformLocation("normalMap"), 1);
-                glUniform1i(shaderProgram->GetUniformLocation("specularMap"), 2);
-                glUniform1i(shaderProgram->GetUniformLocation("glowMap"), 3);
-                
-                // Textures
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, material->diffuse->GetTextureID());
-                glActiveTexture(GL_TEXTURE1);
-                glBindTexture(GL_TEXTURE_2D, material->normal->GetTextureID());
-                glActiveTexture(GL_TEXTURE2);
-                glBindTexture(GL_TEXTURE_2D, material->specular->GetTextureID());
-                glActiveTexture(GL_TEXTURE3);
-                glBindTexture(GL_TEXTURE_2D, material->glow->GetTextureID());
-                
-                // Render model.
-                glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &modelMat[0][0]);
-                glm::mat4 normalMat = glm::transpose(glm::inverse(viewMat * modelMat));
-                glUniformMatrix3fv(shaderProgram->GetUniformLocation("normalMatrix"), 1, GL_FALSE, &glm::mat3(normalMat)[0][0]);
-                
-                glDrawElements(GL_TRIANGLES, mesh->geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+                Physics::Frustum frustum(viewProjectionMat * modelMat);
+                if (frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox())) {
+                    glBindVertexArray(mesh->geometry->GetVertexArray());
+                    
+                    // Set texture locations
+                    glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
+                    glUniform1i(shaderProgram->GetUniformLocation("normalMap"), 1);
+                    glUniform1i(shaderProgram->GetUniformLocation("specularMap"), 2);
+                    glUniform1i(shaderProgram->GetUniformLocation("glowMap"), 3);
+                    
+                    // Textures
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, material->diffuse->GetTextureID());
+                    glActiveTexture(GL_TEXTURE1);
+                    glBindTexture(GL_TEXTURE_2D, material->normal->GetTextureID());
+                    glActiveTexture(GL_TEXTURE2);
+                    glBindTexture(GL_TEXTURE_2D, material->specular->GetTextureID());
+                    glActiveTexture(GL_TEXTURE3);
+                    glBindTexture(GL_TEXTURE_2D, material->glow->GetTextureID());
+                    
+                    // Render model.
+                    glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &modelMat[0][0]);
+                    glm::mat4 normalMat = glm::transpose(glm::inverse(viewMat * modelMat));
+                    glUniformMatrix3fv(shaderProgram->GetUniformLocation("normalMatrix"), 1, GL_FALSE, &glm::mat3(normalMat)[0][0]);
+                    
+                    glDrawElements(GL_TRIANGLES, mesh->geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+                }
             }
         }
         

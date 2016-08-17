@@ -13,6 +13,10 @@ GLuint Geometry3D::GetVertexArray() const {
     return vertexArray;
 }
 
+const Physics::AxisAlignedBoundingBox& Geometry3D::GetAxisAlignedBoundingBox() const {
+    return axisAlignedBoundingBox;
+}
+
 void Geometry3D::GenerateBuffers() {
     glBindVertexArray(0);
     
@@ -46,4 +50,40 @@ void Geometry3D::GenerateVertexArray() {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Geometry3D::Vertex), BUFFER_OFFSET(sizeof(float) * 8));
     
     glBindVertexArray(0);
+}
+
+void Geometry3D::CreateAxisAlignedBoundingBox() {
+    glm::vec3 minValues, maxValues, origin, dim;
+    Vertex* currVert = GetVertices();
+    minValues = maxValues = origin = glm::vec3(0.f, 0.f, 0.f);
+    unsigned int numVerts = GetVertexCount();
+    
+    // Find minimum/maximum bounding points.
+    for (unsigned int i = 0; i < numVerts; i++) {
+        if (currVert[i].position.x > maxValues.x)
+            maxValues.x = currVert[i].position.x;
+        else if (currVert[i].position.x < minValues.x)
+            minValues.x = currVert[i].position.x;
+        
+        if (currVert[i].position.y > maxValues.y)
+            maxValues.y = currVert[i].position.y;
+        else if (currVert[i].position.y < minValues.y)
+            minValues.y = currVert[i].position.y;
+        
+        if (currVert[i].position.z > maxValues.z)
+            maxValues.z = currVert[i].position.z;
+        else if (currVert[i].position.z < minValues.z)
+            minValues.z = currVert[i].position.z;
+    }
+    
+    // Set origin.
+    origin.x = (minValues.x + maxValues.x) / 2.f;
+    origin.y = (minValues.y + maxValues.y) / 2.f;
+    origin.z = (minValues.z + maxValues.z) / 2.f;
+    
+    // Dimensions.
+    dim.x = maxValues.x - minValues.x;
+    dim.y = maxValues.y - minValues.y;
+    dim.z = maxValues.z - minValues.z;
+    axisAlignedBoundingBox = Physics::AxisAlignedBoundingBox(dim, origin, minValues, maxValues);
 }

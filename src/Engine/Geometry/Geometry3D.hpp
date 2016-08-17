@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include "../Physics/AxisAlignedBoundingBox.hpp"
 
 namespace Geometry {
     /// Interface for renderable 3D geometry.
@@ -55,6 +56,12 @@ namespace Geometry {
              */
             GLuint GetVertexArray() const;
             
+            /// Get the axis-aligned bounding box around the geometry.
+            /**
+             * @return Local space axis-aligned bounding box around the geometry.
+             */
+            const Physics::AxisAlignedBoundingBox& GetAxisAlignedBoundingBox() const;
+            
         protected:
             /// Generate vertex and index buffers.
             void GenerateBuffers();
@@ -62,10 +69,15 @@ namespace Geometry {
             /// Generate vertex array.
             void GenerateVertexArray();
             
+            /// Create local space axis-aligned bounding box around the geometry.
+            void CreateAxisAlignedBoundingBox();
+            
         private:
             GLuint vertexBuffer;
             GLuint indexBuffer;
             GLuint vertexArray;
+            
+            Physics::AxisAlignedBoundingBox axisAlignedBoundingBox;
     };
 }
 
