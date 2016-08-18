@@ -6,6 +6,7 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
 #include <Engine/Manager/Managers.hpp>
+#include <Engine/Hymn.hpp>
 
 int main() {
     // Enable logging if requested.
@@ -27,8 +28,15 @@ int main() {
     
     while (!window->ShouldClose()) {
         window->Update();
-        editor->Update();
-        editor->Render();
+        
+        if (editor->IsVisible()) {
+            editor->Update();
+            editor->Render();
+        } else {
+            Hymn().Render(window->GetSize());
+            window->SwapBuffers();
+        }
+        
         glfwPollEvents();
     }
     

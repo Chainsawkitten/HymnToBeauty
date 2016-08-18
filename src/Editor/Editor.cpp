@@ -226,8 +226,8 @@ void Editor::OpenProjectOptions() {
 }
 
 void Editor::Play() {
-    /// @todo Playtest game.
-    Log() << "Click play\n";
+    Save();
+    SetVisible(false);
 }
 
 void Editor::NewHymn() {
