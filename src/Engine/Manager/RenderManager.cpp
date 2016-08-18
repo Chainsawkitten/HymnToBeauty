@@ -16,10 +16,11 @@
 #include "../Lighting/DeferredLighting.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Physics/Frustum.hpp"
+#include "../MainWindow.hpp"
 
 using namespace Component;
 
-RenderManager::RenderManager(const glm::vec2& screenSize) {
+RenderManager::RenderManager() {
     vertexShader = Managers().resourceManager->CreateShader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = Managers().resourceManager->CreateShader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
@@ -35,7 +36,7 @@ RenderManager::~RenderManager() {
     delete deferredLighting;
 }
 
-void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
+void RenderManager::Render(Scene& scene) {
     // Find camera entity.
     Entity* camera = nullptr;
     std::vector<Lens*> lenses = scene.GetComponents<Lens>();
@@ -49,6 +50,7 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
         deferredLighting->SetTarget();
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
         glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
         
         shaderProgram->Use();

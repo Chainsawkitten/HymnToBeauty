@@ -15,7 +15,7 @@ Hub& Managers() {
 
 void Hub::StartUp(const glm::vec2& screenSize) {
     resourceManager = new ResourceManager();
-    renderManager = new RenderManager(screenSize);
+    renderManager = new RenderManager();
 }
 
 void Hub::ShutDown() {
