@@ -24,7 +24,7 @@ RenderManager::RenderManager(const glm::vec2& screenSize) {
     fragmentShader = Managers().resourceManager->CreateShader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
-    deferredLighting = new DeferredLighting(screenSize);
+    deferredLighting = new DeferredLighting();
 }
 
 RenderManager::~RenderManager() {
@@ -102,6 +102,6 @@ void RenderManager::Render(Scene& scene, const glm::vec2& screenSize) {
         
         // Light the scene.
         deferredLighting->ResetTarget();
-        deferredLighting->Render(scene, camera, screenSize);
+        deferredLighting->Render(scene, camera);
     }
 }

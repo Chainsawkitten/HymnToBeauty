@@ -19,10 +19,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Physics/AxisAlignedBoundingBox.hpp"
 #include "../Physics/Frustum.hpp"
+#include "../MainWindow.hpp"
 
-DeferredLighting::DeferredLighting(const glm::vec2& size) {
-    this->size = size;
-    
+DeferredLighting::DeferredLighting() {
     vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = Managers().resourceManager->CreateShader(DEFERRED_FRAG, DEFERRED_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
@@ -37,8 +36,8 @@ DeferredLighting::DeferredLighting(const glm::vec2& size) {
     glGenTextures(NUM_TEXTURES, textures);
     glGenTextures(1, &depthHandle);
     
-    unsigned int width = static_cast<unsigned int>(size.x);
-    unsigned int height = static_cast<unsigned int>(size.y);
+    unsigned int width = static_cast<unsigned int>(MainWindow::GetInstance()->GetSize().x);
+    unsigned int height = static_cast<unsigned int>(MainWindow::GetInstance()->GetSize().y);
     AttachTexture(textures[DIFFUSE], width, height, GL_COLOR_ATTACHMENT0 + DIFFUSE, GL_RGB16F);
     AttachTexture(textures[NORMAL], width, height, GL_COLOR_ATTACHMENT0 + NORMAL, GL_RGB16F);
     AttachTexture(textures[SPECULAR], width, height, GL_COLOR_ATTACHMENT0 + SPECULAR, GL_RGB);
@@ -103,7 +102,7 @@ void DeferredLighting::ResetTarget() {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
-void DeferredLighting::Render(Scene& scene, Entity* camera, const glm::vec2& screenSize) {
+void DeferredLighting::Render(Scene& scene, Entity* camera) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
@@ -135,7 +134,7 @@ void DeferredLighting::Render(Scene& scene, Entity* camera, const glm::vec2& scr
     
     // Get the camera matrices.
     glm::mat4 viewMat(camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position));
-    glm::mat4 projectionMat(camera->GetComponent<Component::Lens>()->GetProjection(screenSize));
+    glm::mat4 projectionMat(camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize()));
     glm::mat4 viewProjectionMat(projectionMat * viewMat);
     
     glUniformMatrix4fv(shaderProgram->GetUniformLocation("inverseProjectionMatrix"), 1, GL_FALSE, &glm::inverse(projectionMat)[0][0]);
