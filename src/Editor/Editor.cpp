@@ -1,7 +1,6 @@
 #include "Editor.hpp"
 
 #include <Engine/MainWindow.hpp>
-#include <Engine/GameWindow.hpp>
 #include <Engine/Font/Font.hpp>
 #include "GUI/HorizontalLayout.hpp"
 #include "GUI/VerticalLayout.hpp"
@@ -162,14 +161,7 @@ Editor::~Editor() {
 }
 
 void Editor::Update() {
-    // Handle running game.
-    if (gameWindow != nullptr) {
-        gameWindow->Update();
-        if (gameWindow->ShouldClose()) {
-            delete gameWindow;
-            gameWindow = nullptr;
-        }
-    } else if (childWindow != nullptr) {
+    if (childWindow != nullptr) {
         childWindow->Update();
     } else if (fileSelector->IsVisible()) {
         fileSelector->Update();
@@ -190,30 +182,26 @@ void Editor::Render() {
 }
 
 void Editor::Render(const glm::vec2& screenSize) {
-    if (gameWindow != nullptr) {
-        gameWindow->Render();
-    } else {
-        Hymn().Render(screenSize);
-        
-        RenderWidgets(screenSize);
-        
-        if (childWindow != nullptr)
-            childWindow->Render(screenSize);
-        
-        if (fileSelector->IsVisible())
-            fileSelector->Render(screenSize);
-        
-        if (modelSelector->IsVisible())
-            modelSelector->Render(screenSize);
-        
-        if (textureSelector->IsVisible())
-            textureSelector->Render(screenSize);
-        
-        if (componentAdder->IsVisible())
-            componentAdder->Render(screenSize);
-        
-        MainWindow::GetInstance()->SwapBuffers();
-    }
+    Hymn().Render(screenSize);
+    
+    RenderWidgets(screenSize);
+    
+    if (childWindow != nullptr)
+        childWindow->Render(screenSize);
+    
+    if (fileSelector->IsVisible())
+        fileSelector->Render(screenSize);
+    
+    if (modelSelector->IsVisible())
+        modelSelector->Render(screenSize);
+    
+    if (textureSelector->IsVisible())
+        textureSelector->Render(screenSize);
+    
+    if (componentAdder->IsVisible())
+        componentAdder->Render(screenSize);
+    
+    MainWindow::GetInstance()->SwapBuffers();
 }
 
 glm::vec2 Editor::GetSize() const {
@@ -233,12 +221,13 @@ void Editor::OpenFileMenu() {
 }
 
 void Editor::OpenProjectOptions() {
-    ///@todo Project options
+    /// @todo Project options
     Log() << "Click test!\n";
 }
 
 void Editor::Play() {
-    gameWindow = new GameWindow();
+    /// @todo Playtest game.
+    Log() << "Click play\n";
 }
 
 void Editor::NewHymn() {

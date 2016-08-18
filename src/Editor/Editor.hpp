@@ -3,7 +3,6 @@
 #include "GUI/Container.hpp"
 #include <string>
 
-class GameWindow;
 class Texture2D;
 class Font;
 class Entity;
@@ -73,7 +72,6 @@ class Editor : public GUI::Container {
         void ModelSelected(Geometry::OBJModel* model);
         void TextureSelected(Texture2D* texture);
         
-        GameWindow* gameWindow = nullptr;
         GUI::SelectHymnWindow* childWindow = nullptr;
         GUI::FileSelector* fileSelector;
         
