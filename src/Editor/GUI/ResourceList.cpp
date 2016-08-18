@@ -118,7 +118,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
     font->RenderText("Entities", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addEntityHover ? 1.f : 0.5f);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addEntityHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     for (Entity* entity : Hymn().activeScene.GetEntities()) {
@@ -133,7 +133,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     }
     
     font->RenderText("Models", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addModelHover ? 1.f : 0.5f);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addModelHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     for (Geometry::OBJModel* model : Hymn().models) {
@@ -148,7 +148,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     }
     
     font->RenderText("Textures", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addTextureHover ? 1.f : 0.5f);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addTextureHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     unsigned int id = 0U;

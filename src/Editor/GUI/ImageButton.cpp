@@ -26,5 +26,5 @@ void ImageButton::Render(const glm::vec2& screenSize) {
     rectangle->Render(GetPosition(), GetSize(), color);
     
     // Draw image.
-    texture->Render(GetPosition(), GetSize(), screenSize);
+    texture->Render(GetPosition(), GetSize());
 }
