@@ -28,13 +28,13 @@ namespace Geometry {
 }
 
 /// Handles the main editor window.
-class EditorWindow : public GUI::Container {
+class Editor : public GUI::Container {
     public:
         /// Create new editor window.
-        EditorWindow();
+        Editor();
 
         /// Destructor.
-        ~EditorWindow() override;
+        ~Editor() override;
         
         /// Initialize components.
         void Init();

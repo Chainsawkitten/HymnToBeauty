@@ -1,6 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "EditorWindow.hpp"
+#include "Editor.hpp"
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
@@ -16,7 +16,7 @@ int main() {
     if (!glfwInit())
         return 1;
     
-    EditorWindow* editorWindow = new EditorWindow();
+    Editor* editor = new Editor();
     glewInit();
     
     // Setup error callbacks.
@@ -24,18 +24,18 @@ int main() {
     if (EditorSettings::GetInstance().GetBool("Debug Context"))
         glDebugMessageCallback(DebugMessageCallback, nullptr);
     
-    Managers().StartUp(editorWindow->GetSize());
+    Managers().StartUp(editor->GetSize());
     
-    editorWindow->Init();
+    editor->Init();
     
-    while (!editorWindow->ShouldClose()) {
-        editorWindow->Update();
-        editorWindow->Render();
+    while (!editor->ShouldClose()) {
+        editor->Update();
+        editor->Render();
         glfwPollEvents();
     }
     
-    editorWindow->Save();
-    delete editorWindow;
+    editor->Save();
+    delete editor;
     
     Managers().ShutDown();
     

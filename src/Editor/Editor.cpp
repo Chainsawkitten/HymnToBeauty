@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "EditorWindow.hpp"
+#include "Editor.hpp"
 
 #include <Engine/GameWindow.hpp>
 #include <Engine/Font/Font.hpp>
@@ -34,7 +34,7 @@
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
 
-EditorWindow::EditorWindow() : Container(nullptr) {
+Editor::Editor() : Container(nullptr) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Enable debug context and set message callback.
@@ -61,7 +61,7 @@ EditorWindow::EditorWindow() : Container(nullptr) {
     input->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
 }
 
-EditorWindow::~EditorWindow() {
+Editor::~Editor() {
     delete fileButton;
     delete optionsButton;
     delete playButton;
@@ -95,7 +95,7 @@ EditorWindow::~EditorWindow() {
     glfwDestroyWindow(window);
 }
 
-void EditorWindow::Init() {
+void Editor::Init() {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
@@ -188,11 +188,11 @@ void EditorWindow::Init() {
     glEnable(GL_DEPTH_TEST);
 }
 
-bool EditorWindow::ShouldClose() const {
+bool Editor::ShouldClose() const {
     return (glfwWindowShouldClose(window) != 0);
 }
 
-void EditorWindow::Update() {
+void Editor::Update() {
     // Handle running game.
     if (gameWindow != nullptr) {
         gameWindow->Update();
@@ -230,11 +230,11 @@ void EditorWindow::Update() {
     }
 }
 
-void EditorWindow::Render() {
+void Editor::Render() {
     Render(GetSize());
 }
 
-void EditorWindow::Render(const glm::vec2& screenSize) {
+void Editor::Render(const glm::vec2& screenSize) {
     if (gameWindow != nullptr) {
         gameWindow->Render();
     } else {
@@ -263,42 +263,42 @@ void EditorWindow::Render(const glm::vec2& screenSize) {
     }
 }
 
-glm::vec2 EditorWindow::GetSize() const {
+glm::vec2 Editor::GetSize() const {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     
     return glm::vec2(static_cast<float>(width), static_cast<float>(height));
 }
 
-void EditorWindow::SetSize(const glm::vec2& size) {
+void Editor::SetSize(const glm::vec2& size) {
     /// @todo Resize window.
 }
 
-void EditorWindow::Save() const {
+void Editor::Save() const {
     Hymn().Save();
 }
 
-void EditorWindow::OpenFileMenu() {
+void Editor::OpenFileMenu() {
     fileMenu->SetVisible(!fileMenu->IsVisible());
 }
 
-void EditorWindow::OpenProjectOptions() {
+void Editor::OpenProjectOptions() {
     ///@todo Project options
     Log() << "Click test!\n";
 }
 
-void EditorWindow::Play() {
+void Editor::Play() {
     gameWindow = new GameWindow();
 }
 
-void EditorWindow::NewHymn() {
+void Editor::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::NewHymnClosed(const std::string& hymn) {
+void Editor::NewHymnClosed(const std::string& hymn) {
     // Create new hymn
     if (!hymn.empty()) {
         Hymn().Clear();
@@ -312,14 +312,14 @@ void EditorWindow::NewHymnClosed(const std::string& hymn) {
     fileMenu->SetVisible(false);
 }
 
-void EditorWindow::OpenHymn() {
+void Editor::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::OpenHymnClosed(const std::string& hymn) {
+void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
         Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
@@ -332,7 +332,7 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     fileMenu->SetVisible(false);
 }
 
-void EditorWindow::EntitySelected(Entity* entity) {
+void Editor::EntitySelected(Entity* entity) {
     entityEditor->SetEntity(entity);
     
     entityEditor->SetVisible(true);
@@ -340,7 +340,7 @@ void EditorWindow::EntitySelected(Entity* entity) {
     textureEditor->SetVisible(false);
 }
 
-void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
+void Editor::ModelSelected(Geometry::OBJModel* model) {
     modelEditor->SetModel(model);
     
     entityEditor->SetVisible(false);
@@ -348,7 +348,7 @@ void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
     textureEditor->SetVisible(false);
 }
 
-void EditorWindow::TextureSelected(Texture2D* texture) {
+void Editor::TextureSelected(Texture2D* texture) {
     textureEditor->SetTexture(texture);
     
     entityEditor->SetVisible(false);
