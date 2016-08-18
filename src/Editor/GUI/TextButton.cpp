@@ -19,7 +19,7 @@ TextButton::~TextButton() {
     Managers().resourceManager->FreeRectangle();
 }
 
-void TextButton::Render(const glm::vec2& screenSize) {
+void TextButton::Render() {
     // Draw background.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     if (GetMouseHover())

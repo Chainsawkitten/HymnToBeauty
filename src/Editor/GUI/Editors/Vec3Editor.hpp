@@ -26,10 +26,7 @@ namespace GUI {
             void Update() override;
             
             /// Render the editor.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
-            void Render(const glm::vec2& screenSize) override;
+            void Render() override;
             
             /// Set widget's position.
             /**

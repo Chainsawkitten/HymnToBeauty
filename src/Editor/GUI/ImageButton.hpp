@@ -19,10 +19,7 @@ namespace GUI {
             virtual ~ImageButton();
             
             /// Render the widget.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
-            void Render(const glm::vec2& screenSize);
+            void Render();
             
         private:
             Geometry::Rectangle* rectangle;

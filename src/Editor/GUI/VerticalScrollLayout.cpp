@@ -27,7 +27,7 @@ void VerticalScrollLayout::Update() {
     }
 }
 
-void VerticalScrollLayout::Render(const glm::vec2& screenSize) {
+void VerticalScrollLayout::Render() {
     // Set color.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     rectangle->Render(GetPosition(), size, color);
@@ -52,7 +52,7 @@ void VerticalScrollLayout::Render(const glm::vec2& screenSize) {
     
     for (Widget* widget : GetWidgets()) {
         if (widget->IsVisible() && widget->GetPosition().y - GetPosition().y + widget->GetSize().y <= size.y)
-            widget->Render(screenSize);
+            widget->Render();
     }
 }
 

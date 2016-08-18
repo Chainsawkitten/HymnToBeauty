@@ -111,7 +111,7 @@ void ResourceList::Update() {
     }
 }
 
-void ResourceList::Render(const glm::vec2& screenSize) {
+void ResourceList::Render() {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     glm::vec2 position = GetPosition();
     rectangle->Render(position, size, color);

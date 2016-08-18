@@ -46,9 +46,9 @@ void Container::UpdateWidgets() {
     }
 }
 
-void Container::RenderWidgets(const glm::vec2& screenSize) {
+void Container::RenderWidgets() {
     for (Widget* widget : widgets) {
         if (widget->IsVisible())
-            widget->Render(screenSize);
+            widget->Render();
     }
 }

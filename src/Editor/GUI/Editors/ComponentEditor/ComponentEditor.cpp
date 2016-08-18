@@ -44,14 +44,14 @@ void ComponentEditor::Update() {
     }
 }
 
-void ComponentEditor::Render(const glm::vec2& screenSize) {
+void ComponentEditor::Render() {
     if (IsVisible()) {
-        titleLabel->Render(screenSize);
+        titleLabel->Render();
         removeComponentTexture->Render(titleLabel->GetPosition() + glm::vec2(titleLabel->GetSize().x + 5.f, 6.f), glm::vec2(removeComponentTexture->GetWidth(), removeComponentTexture->GetHeight()), removeComponentHover ? 1.f : 0.5f);
         
         for (LabeledEditor& editor : editors) {
-            editor.label->Render(screenSize);
-            editor.editor->Render(screenSize);
+            editor.label->Render();
+            editor.editor->Render();
         }
     }
 }

@@ -25,10 +25,7 @@ namespace GUI {
             virtual void Update() = 0;
             
             /// Render the widget.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
-            virtual void Render(const glm::vec2& screenSize) = 0;
+            virtual void Render() = 0;
             
             /// Get widget's position.
             /**

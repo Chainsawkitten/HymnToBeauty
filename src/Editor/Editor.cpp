@@ -182,28 +182,24 @@ void Editor::Update() {
 }
 
 void Editor::Render() {
-    Render(GetSize());
-}
-
-void Editor::Render(const glm::vec2& screenSize) {
     Hymn().Render();
     
-    RenderWidgets(screenSize);
+    RenderWidgets();
     
     if (childWindow != nullptr)
-        childWindow->Render(screenSize);
+        childWindow->Render();
     
     if (fileSelector->IsVisible())
-        fileSelector->Render(screenSize);
+        fileSelector->Render();
     
     if (modelSelector->IsVisible())
-        modelSelector->Render(screenSize);
+        modelSelector->Render();
     
     if (textureSelector->IsVisible())
-        textureSelector->Render(screenSize);
+        textureSelector->Render();
     
     if (componentAdder->IsVisible())
-        componentAdder->Render(screenSize);
+        componentAdder->Render();
     
     MainWindow::GetInstance()->SwapBuffers();
 }

@@ -45,10 +45,7 @@ namespace GUI {
             void UpdateWidgets();
             
             /// Render the widgets.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
-            void RenderWidgets(const glm::vec2& screenSize);
+            void RenderWidgets();
             
         private:
             std::vector<Widget*> widgets;

@@ -14,12 +14,12 @@ VerticalLayout::~VerticalLayout() {
     Managers().resourceManager->FreeRectangle();
 }
 
-void VerticalLayout::Render(const glm::vec2& screenSize) {
+void VerticalLayout::Render() {
     // Set color.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     rectangle->Render(GetPosition(), size, color);
     
-    RenderWidgets(screenSize);
+    RenderWidgets();
 }
 
 void VerticalLayout::AddWidget(Widget* widget) {

@@ -70,7 +70,7 @@ void TextField::Update() {
     }
 }
 
-void TextField::Render(const glm::vec2& screenSize) {
+void TextField::Render() {
     glm::vec3 color(0.16078431372f, 0.15686274509f, 0.17647058823f);
     rectangle->Render(GetPosition(), size, color);
     
