@@ -114,7 +114,7 @@ void ResourceList::Update() {
 void ResourceList::Render(const glm::vec2& screenSize) {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     glm::vec2 position = GetPosition();
-    rectangle->Render(position, size, color, screenSize);
+    rectangle->Render(position, size, color);
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
     font->RenderText("Entities", position, GetSize().x, screenSize);
@@ -125,7 +125,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         // Render background if selected.
         if (selectedEntity == entity) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
         font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
@@ -140,7 +140,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         // Render background if selected.
         if (selectedModel == model) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
         font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
@@ -156,7 +156,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         // Render background if selected.
         if (selectedTexture == texture) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
         font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);

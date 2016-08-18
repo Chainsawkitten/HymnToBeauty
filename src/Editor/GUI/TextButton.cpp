@@ -25,7 +25,7 @@ void TextButton::Render(const glm::vec2& screenSize) {
     if (GetMouseHover())
         color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
     
-    rectangle->Render(GetPosition(), GetSize(), color, screenSize);
+    rectangle->Render(GetPosition(), GetSize(), color);
     
     // Draw text
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));

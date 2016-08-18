@@ -44,9 +44,8 @@ namespace Geometry {
              * @param position Position on the screen in pixels.
              * @param size Size in pixels.
              * @param color Color.
-             * @param screenSize Size of the screen in pixels.
              */
-            void Render(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color, const glm::vec2& screenSize) const;
+            void Render(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color) const;
             
         private:
             Vertex* vertexData = nullptr;
