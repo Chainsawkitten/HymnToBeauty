@@ -23,20 +23,20 @@ ImageTextButton::~ImageTextButton() {
     Managers().resourceManager->FreeRectangle();
 }
 
-void ImageTextButton::Render(const glm::vec2& screenSize) {
+void ImageTextButton::Render() {
     // Draw background.
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     if (GetMouseHover())
         color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
     
-    rectangle->Render(GetPosition(), GetSize(), color, screenSize);
+    rectangle->Render(GetPosition(), GetSize(), color);
     
     // Draw texture
-    texture->Render(GetPosition() + glm::vec2(0.f, (GetSize().y - imageSize.y) * 0.5f), imageSize, screenSize);
+    texture->Render(GetPosition() + glm::vec2(0.f, (GetSize().y - imageSize.y) * 0.5f), imageSize);
     
     // Draw text
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText(text.c_str(), GetPosition() + glm::vec2(imageSize.x, 0.5f * (GetSize().y - font->GetHeight())), GetSize().x - imageSize.x, screenSize);
+    font->RenderText(text.c_str(), GetPosition() + glm::vec2(imageSize.x, 0.5f * (GetSize().y - font->GetHeight())), GetSize().x - imageSize.x);
 }
 
 glm::vec2 ImageTextButton::GetImageSize() const {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <glm/glm.hpp>
 
 namespace Geometry {
     class Rectangle;
@@ -24,10 +23,7 @@ class DeferredLighting {
 		};
         
 		/// Create new render target.
-		/**
-		 * @param size Size of the context.
-		 */
-		DeferredLighting(const glm::vec2& size);
+		DeferredLighting();
         
 		/// Destructor
 		/**
@@ -48,9 +44,8 @@ class DeferredLighting {
 		/**
          * @param scene Scene to get the lights from.
 		 * @param camera Camera to use.
-		 * @param screenSize Size of the screen in pixels.
 		 */
-		void Render(Scene& scene, Entity* camera, const glm::vec2& screenSize);
+		void Render(Scene& scene, Entity* camera);
         
 	private:
         static void AttachTexture(GLuint texture, unsigned int width, unsigned int height, GLenum attachment, GLint internalFormat);
@@ -60,8 +55,6 @@ class DeferredLighting {
         
 		GLuint frameBufferObject;
 		GLuint depthHandle;
-        
-		glm::vec2 size;
         
         Geometry::Rectangle* rectangle;
         

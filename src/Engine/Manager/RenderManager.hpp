@@ -16,12 +16,11 @@ class RenderManager {
         /// Render Scene containing entities.
         /**
          * @param scene Contains a bunch of entities.
-         * @param screenSize Size of the render target in pixels.
          */
-        void Render(Scene& scene, const glm::vec2& screenSize);
+        void Render(Scene& scene);
     
     private:
-        RenderManager(const glm::vec2& screenSize);
+        RenderManager();
         ~RenderManager();
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;

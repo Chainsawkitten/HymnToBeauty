@@ -111,44 +111,44 @@ void ResourceList::Update() {
     }
 }
 
-void ResourceList::Render(const glm::vec2& screenSize) {
+void ResourceList::Render() {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
     glm::vec2 position = GetPosition();
-    rectangle->Render(position, size, color, screenSize);
+    rectangle->Render(position, size, color);
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText("Entities", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addEntityHover ? 1.f : 0.5f);
+    font->RenderText("Entities", position, GetSize().x);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addEntityHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     for (Entity* entity : Hymn().activeScene.GetEntities()) {
         // Render background if selected.
         if (selectedEntity == entity) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
-        font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
     }
     
-    font->RenderText("Models", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addModelHover ? 1.f : 0.5f);
+    font->RenderText("Models", position, GetSize().x);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addModelHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     for (Geometry::OBJModel* model : Hymn().models) {
         // Render background if selected.
         if (selectedModel == model) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
-        font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
     }
     
-    font->RenderText("Textures", position, GetSize().x, screenSize);
-    addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), screenSize, addTextureHover ? 1.f : 0.5f);
+    font->RenderText("Textures", position, GetSize().x);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addTextureHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
     unsigned int id = 0U;
@@ -156,10 +156,10 @@ void ResourceList::Render(const glm::vec2& screenSize) {
         // Render background if selected.
         if (selectedTexture == texture) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color, screenSize);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
-        font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
         ++id;
     }

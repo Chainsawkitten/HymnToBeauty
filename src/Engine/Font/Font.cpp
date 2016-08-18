@@ -13,6 +13,7 @@
 #include "../Manager/ResourceManager.hpp"
 #include "Font.vert.hpp"
 #include "Font.frag.hpp"
+#include "../MainWindow.hpp"
 
 Font::Font(const char* filename, float height) {
     this->height = height;
@@ -86,7 +87,7 @@ Font::~Font() {
     Managers().resourceManager->FreeRectangle();
 }
 
-void Font::RenderText(const char* text, const glm::vec2& position, float wrap, const glm::vec2& screenSize) {
+void Font::RenderText(const char* text, const glm::vec2& position, float wrap) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
@@ -111,7 +112,7 @@ void Font::RenderText(const char* text, const glm::vec2& position, float wrap, c
     pos.y += height;
     while (*text) {
         if (*text >= 32 && *text < 128) {
-            pos.x = RenderCharacter(*text, pos, screenSize);
+            pos.x = RenderCharacter(*text, pos);
         }
         
         if (pos.x > position.x + wrap || *text == '\n') {
@@ -156,7 +157,7 @@ bool Font::IsFromFile() const {
     return isFromFile;
 }
 
-float Font::RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize) {
+float Font::RenderCharacter(char character, const glm::vec2& position) {
     stbtt_aligned_quad q;
     float x = position.x;
     float y = position.y;
@@ -165,6 +166,7 @@ float Font::RenderCharacter(char character, const glm::vec2& position, const glm
     glm::vec2 pos = glm::vec2(q.x0, q.y0);
     glm::vec2 siz = glm::vec2(q.x1, q.y1) - glm::vec2(q.x0, q.y0);
     
+    glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
     glUniform2fv(shaderProgram->GetUniformLocation("position"), 1, &(pos / screenSize)[0]);
     glUniform2fv(shaderProgram->GetUniformLocation("size"), 1, &(siz / screenSize)[0]);
     

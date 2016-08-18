@@ -15,13 +15,13 @@ int main() {
     glewInit();
     window->Init(false);
     
-    Managers().StartUp(window->GetSize());
+    Managers().StartUp();
     
     Hymn().Load(".");
     
     while (!window->ShouldClose()) {
         window->Update();
-        Hymn().Render(window->GetSize());
+        Hymn().Render();
         window->SwapBuffers();
         glfwPollEvents();
     }

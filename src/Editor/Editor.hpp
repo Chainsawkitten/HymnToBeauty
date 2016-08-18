@@ -37,13 +37,7 @@ class Editor : public GUI::Container {
         void Update() override;
         
         /// Render the editor.
-        void Render();
-        
-        /// Render the editor.
-        /**
-         * @param screenSize Size of the screen in pixels.
-         */
-        void Render(const glm::vec2& screenSize) override;
+        void Render() override;
         
         /// Get the size of the widget.
         /**

@@ -79,17 +79,17 @@ void EntityEditor::Update() {
         editor->Update();
 }
 
-void EntityEditor::Render(const glm::vec2& screenSize) {
+void EntityEditor::Render() {
     glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-    rectangle->Render(GetPosition(), size, color, screenSize);
+    rectangle->Render(GetPosition(), size, color);
     
-    nameLabel->Render(screenSize);
-    nameEditor->Render(screenSize);
-    addComponentButton->Render(screenSize);
-    removeEntityButton->Render(screenSize);
+    nameLabel->Render();
+    nameEditor->Render();
+    addComponentButton->Render();
+    removeEntityButton->Render();
     
     for (ComponentEditor* editor : editors)
-        editor->Render(screenSize);
+        editor->Render();
 }
 
 void EntityEditor::SetPosition(const glm::vec2& position) {

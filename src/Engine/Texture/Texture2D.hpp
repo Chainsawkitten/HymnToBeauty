@@ -68,10 +68,9 @@ class Texture2D : public Texture {
         /**
          * @param position Position on the screen, in pixels.
          * @param size Size in pixels.
-         * @param screenSize Size of the screen in pixels.
          * @param alpha Opacity (0.0 - 1.0).
          */
-        void Render(const glm::vec2& position, const glm::vec2& size, const glm::vec2& screenSize, float alpha = 1.f) const;
+        void Render(const glm::vec2& position, const glm::vec2& size, float alpha = 1.f) const;
         
         /// Get whether the texture was created from file.
         /**

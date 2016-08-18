@@ -125,8 +125,8 @@ void ActiveHymn::Load(const string& path) {
     }
 }
 
-void ActiveHymn::Render(const glm::vec2& screenSize) {
-    Managers().renderManager->Render(activeScene, screenSize);
+void ActiveHymn::Render() {
+    Managers().renderManager->Render(activeScene);
 }
 
 ActiveHymn& Hymn() {

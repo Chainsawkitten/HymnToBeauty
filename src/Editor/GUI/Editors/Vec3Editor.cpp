@@ -42,14 +42,14 @@ void Vec3Editor::Update() {
     zEditor->Update();
 }
 
-void Vec3Editor::Render(const glm::vec2& screenSize) {
+void Vec3Editor::Render() {
     if (variable != nullptr) {
-        xLabel->Render(screenSize);
-        xEditor->Render(screenSize);
-        yLabel->Render(screenSize);
-        yEditor->Render(screenSize);
-        zLabel->Render(screenSize);
-        zEditor->Render(screenSize);
+        xLabel->Render();
+        xEditor->Render();
+        yLabel->Render();
+        yEditor->Render();
+        zLabel->Render();
+        zEditor->Render();
     }
 }
 
