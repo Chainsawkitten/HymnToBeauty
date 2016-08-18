@@ -1,7 +1,6 @@
-#include <GL/glew.h>
-#include "EditorWindow.hpp"
+#include "Editor.hpp"
 
-#include <Engine/GameWindow.hpp>
+#include <Engine/MainWindow.hpp>
 #include <Engine/Font/Font.hpp>
 #include "GUI/HorizontalLayout.hpp"
 #include "GUI/VerticalLayout.hpp"
@@ -34,76 +33,22 @@
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
 
-EditorWindow::EditorWindow() : Container(nullptr) {
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-    // Enable debug context and set message callback.
-    if (EditorSettings::GetInstance().GetBool("Debug Context"))
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-    
-    window = glfwCreateWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), "Hymn to Beauty", nullptr, nullptr);
-    if (!window) {
-        glfwTerminate();
-        /// @todo Print error to log.
-    }
-
-    glfwMakeContextCurrent(window);
-    
-    input = new InputHandler(window);
-    
+Editor::Editor() : Container(nullptr) {
     // Assign controls.
-    input->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
-    input->AssignButton(InputHandler::BACK, InputHandler::KEYBOARD, GLFW_KEY_BACKSPACE);
-    input->AssignButton(InputHandler::ERASE, InputHandler::KEYBOARD, GLFW_KEY_DELETE);
-    input->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_LEFT);
-    input->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_RIGHT);
-    input->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
-    input->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
-}
-
-EditorWindow::~EditorWindow() {
-    delete fileButton;
-    delete optionsButton;
-    delete playButton;
-    delete menuBar;
-    
-    delete newHymnButton;
-    delete openHymnButton;
-    delete fileMenu;
-    
-    delete resourceList;
-    delete entityEditor;
-    delete modelEditor;
-    delete textureEditor;
-    
-    delete fileSelector;
-    delete modelSelector;
-    delete textureSelector;
-    delete componentAdder;
-    
-    Managers().resourceManager->FreeTexture2D(fileTexture);
-    Managers().resourceManager->FreeTexture2D(optionsTexture);
-    Managers().resourceManager->FreeTexture2D(playTexture);
-    
-    Managers().resourceManager->FreeTexture2D(newHymnTexture);
-    Managers().resourceManager->FreeTexture2D(openHymnTexture);
-    
-    delete input;
-    
-    Managers().resourceManager->FreeFont(font);
-    
-    glfwDestroyWindow(window);
-}
-
-void EditorWindow::Init() {
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
+    Input()->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
+    Input()->AssignButton(InputHandler::BACK, InputHandler::KEYBOARD, GLFW_KEY_BACKSPACE);
+    Input()->AssignButton(InputHandler::ERASE, InputHandler::KEYBOARD, GLFW_KEY_DELETE);
+    Input()->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_LEFT);
+    Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_RIGHT);
+    Input()->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
+    Input()->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
+    Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);
-    menuBar->SetSize(glm::vec2(static_cast<float>(width), 64.f));
+    menuBar->SetSize(glm::vec2(GetSize().x, 64.f));
     AddWidget(menuBar);
     
     fileTexture = Managers().resourceManager->CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
@@ -184,121 +129,119 @@ void EditorWindow::Init() {
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
+}
+
+Editor::~Editor() {
+    delete fileButton;
+    delete optionsButton;
+    delete playButton;
+    delete menuBar;
     
-    glEnable(GL_DEPTH_TEST);
+    delete newHymnButton;
+    delete openHymnButton;
+    delete fileMenu;
+    
+    delete resourceList;
+    delete entityEditor;
+    delete modelEditor;
+    delete textureEditor;
+    
+    delete fileSelector;
+    delete modelSelector;
+    delete textureSelector;
+    delete componentAdder;
+    
+    Managers().resourceManager->FreeTexture2D(fileTexture);
+    Managers().resourceManager->FreeTexture2D(optionsTexture);
+    Managers().resourceManager->FreeTexture2D(playTexture);
+    
+    Managers().resourceManager->FreeTexture2D(newHymnTexture);
+    Managers().resourceManager->FreeTexture2D(openHymnTexture);
+    
+    Managers().resourceManager->FreeFont(font);
 }
 
-bool EditorWindow::ShouldClose() const {
-    return (glfwWindowShouldClose(window) != 0);
-}
-
-void EditorWindow::Update() {
-    // Handle running game.
-    if (gameWindow != nullptr) {
-        gameWindow->Update();
-        if (gameWindow->ShouldClose()) {
-            delete gameWindow;
-            gameWindow = nullptr;
-        }
-    } else if (childWindow != nullptr) {
-        input->Update();
-        input->SetActive();
+void Editor::Update() {
+    if (childWindow != nullptr) {
         childWindow->Update();
     } else if (fileSelector->IsVisible()) {
-        input->Update();
-        input->SetActive();
         fileSelector->Update();
     } else if (modelSelector->IsVisible()) {
-        input->Update();
-        input->SetActive();
         modelSelector->Update();
     } else if (textureSelector->IsVisible()) {
-        input->Update();
-        input->SetActive();
         textureSelector->Update();
     } else if (componentAdder->IsVisible()) {
-        input->Update();
-        input->SetActive();
         componentAdder->Update();
-    } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
-        Play();
     } else {
-        input->Update();
-        input->SetActive();
         UpdateWidgets();
         Hymn().activeScene.ClearKilled();
     }
+    
+    if (Input()->Triggered(InputHandler::PLAYTEST))
+        Play();
 }
 
-void EditorWindow::Render() {
+void Editor::Render() {
     Render(GetSize());
 }
 
-void EditorWindow::Render(const glm::vec2& screenSize) {
-    if (gameWindow != nullptr) {
-        gameWindow->Render();
-    } else {
-        glfwMakeContextCurrent(window);
-        
-        Hymn().Render(screenSize);
-        
-        RenderWidgets(screenSize);
-        
-        if (childWindow != nullptr)
-            childWindow->Render(screenSize);
-        
-        if (fileSelector->IsVisible())
-            fileSelector->Render(screenSize);
-        
-        if (modelSelector->IsVisible())
-            modelSelector->Render(screenSize);
-        
-        if (textureSelector->IsVisible())
-            textureSelector->Render(screenSize);
-        
-        if (componentAdder->IsVisible())
-            componentAdder->Render(screenSize);
-        
-        glfwSwapBuffers(window);
-    }
-}
-
-glm::vec2 EditorWindow::GetSize() const {
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
+void Editor::Render(const glm::vec2& screenSize) {
+    Hymn().Render(screenSize);
     
-    return glm::vec2(static_cast<float>(width), static_cast<float>(height));
+    RenderWidgets(screenSize);
+    
+    if (childWindow != nullptr)
+        childWindow->Render(screenSize);
+    
+    if (fileSelector->IsVisible())
+        fileSelector->Render(screenSize);
+    
+    if (modelSelector->IsVisible())
+        modelSelector->Render(screenSize);
+    
+    if (textureSelector->IsVisible())
+        textureSelector->Render(screenSize);
+    
+    if (componentAdder->IsVisible())
+        componentAdder->Render(screenSize);
+    
+    MainWindow::GetInstance()->SwapBuffers();
 }
 
-void EditorWindow::SetSize(const glm::vec2& size) {
+glm::vec2 Editor::GetSize() const {
+    return MainWindow::GetInstance()->GetSize();
+}
+
+void Editor::SetSize(const glm::vec2& size) {
     /// @todo Resize window.
 }
 
-void EditorWindow::Save() const {
+void Editor::Save() const {
     Hymn().Save();
 }
 
-void EditorWindow::OpenFileMenu() {
+void Editor::OpenFileMenu() {
     fileMenu->SetVisible(!fileMenu->IsVisible());
 }
 
-void EditorWindow::OpenProjectOptions() {
-    ///@todo Project options
+void Editor::OpenProjectOptions() {
+    /// @todo Project options
     Log() << "Click test!\n";
 }
 
-void EditorWindow::Play() {
-    gameWindow = new GameWindow();
+void Editor::Play() {
+    Save();
+    SetVisible(false);
 }
 
-void EditorWindow::NewHymn() {
+void Editor::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::NewHymnClosed(const std::string& hymn) {
+void Editor::NewHymnClosed(const std::string& hymn) {
     // Create new hymn
     if (!hymn.empty()) {
         Hymn().Clear();
@@ -312,14 +255,14 @@ void EditorWindow::NewHymnClosed(const std::string& hymn) {
     fileMenu->SetVisible(false);
 }
 
-void EditorWindow::OpenHymn() {
+void Editor::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(GetSize());
     childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
 }
 
-void EditorWindow::OpenHymnClosed(const std::string& hymn) {
+void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
         Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
@@ -332,7 +275,7 @@ void EditorWindow::OpenHymnClosed(const std::string& hymn) {
     fileMenu->SetVisible(false);
 }
 
-void EditorWindow::EntitySelected(Entity* entity) {
+void Editor::EntitySelected(Entity* entity) {
     entityEditor->SetEntity(entity);
     
     entityEditor->SetVisible(true);
@@ -340,7 +283,7 @@ void EditorWindow::EntitySelected(Entity* entity) {
     textureEditor->SetVisible(false);
 }
 
-void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
+void Editor::ModelSelected(Geometry::OBJModel* model) {
     modelEditor->SetModel(model);
     
     entityEditor->SetVisible(false);
@@ -348,7 +291,7 @@ void EditorWindow::ModelSelected(Geometry::OBJModel* model) {
     textureEditor->SetVisible(false);
 }
 
-void EditorWindow::TextureSelected(Texture2D* texture) {
+void Editor::TextureSelected(Texture2D* texture) {
     textureEditor->SetTexture(texture);
     
     entityEditor->SetVisible(false);

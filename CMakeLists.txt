@@ -130,8 +130,8 @@ include_directories(src)
 
 ## Engine ##
 set(ENGINE_SRCS
-        src/Engine/GameWindow.cpp
         src/Engine/Hymn.cpp
+        src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
         src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
@@ -168,8 +168,8 @@ set(ENGINE_SRCS
     )
 
 set(ENGINE_HEADERS
-        src/Engine/GameWindow.hpp
         src/Engine/Hymn.hpp
+        src/Engine/MainWindow.hpp
         src/Engine/RenderTarget.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
@@ -217,8 +217,8 @@ set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
 ## Editor ##
 set(EDITOR_SRCS
-        src/Editor/editor.cpp
-        src/Editor/EditorWindow.cpp
+        src/Editor/main.cpp
+        src/Editor/Editor.cpp
         src/Editor/GUI/Widget.cpp
         src/Editor/GUI/Container.cpp
         src/Editor/GUI/HorizontalLayout.cpp
@@ -254,8 +254,7 @@ set(EDITOR_SRCS
     )
 
 set(EDITOR_HEADERS
-        src/Editor/editor.hpp
-        src/Editor/EditorWindow.hpp
+        src/Editor/Editor.hpp
         src/Editor/GUI/Widget.hpp
         src/Editor/GUI/Container.hpp
         src/Editor/GUI/HorizontalLayout.hpp
@@ -302,11 +301,11 @@ set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD_REQUIRED ON)
 
 ## Game ##
 set(GAME_SRCS
-        src/Game/game.cpp
+        src/Game/main.cpp
     )
 
 set(GAME_HEADERS
-        src/Game/game.hpp
+        
     )
 
 create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})

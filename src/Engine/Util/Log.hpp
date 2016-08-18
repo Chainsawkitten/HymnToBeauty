@@ -105,3 +105,17 @@ void ErrorCallback(int error, const char* description);
  * @see <a href="https://www.opengl.org/wiki/Debug_Output">OpenGL Debug Output</a>
  */
 void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+
+/// Handles OpenGL debug messages.
+/**
+ * OpenGL debug message callback function. Prints debug messages to standard error stream (stderr). Ignores notifications.
+ * @param source The source that produced the message.
+ * @param type The type of message.
+ * @param id The message's identifier.
+ * @param severity The message severity (how important it is).
+ * @param length Length of the message.
+ * @param message A null-terminated string describing the message.
+ * @param userParam User parameters set with glDebugMessageCallback().
+ * @see <a href="https://www.opengl.org/wiki/Debug_Output">OpenGL Debug Output</a>
+ */
+void APIENTRY DebugMessageCallbackIgnoreNotifications(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
