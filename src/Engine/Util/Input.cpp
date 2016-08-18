@@ -1,6 +1,8 @@
-#include "Log.hpp"
 #include "Input.hpp"
+
+#include "Log.hpp"
 #include <map>
+#include <GLFW/glfw3.h>
 
 std::map<GLFWwindow*, InputHandler*> inputMap;
 

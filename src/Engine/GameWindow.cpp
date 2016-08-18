@@ -1,6 +1,7 @@
 #include "GameWindow.hpp"
 
 #include "Hymn.hpp"
+#include <GLFW/glfw3.h>
 
 GameWindow::GameWindow() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);

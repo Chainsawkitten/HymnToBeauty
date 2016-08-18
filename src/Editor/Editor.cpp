@@ -1,6 +1,6 @@
-#include <GL/glew.h>
 #include "Editor.hpp"
 
+#include <Engine/MainWindow.hpp>
 #include <Engine/GameWindow.hpp>
 #include <Engine/Font/Font.hpp>
 #include "GUI/HorizontalLayout.hpp"
@@ -35,75 +35,20 @@
 #include <Engine/Util/FileSystem.hpp>
 
 Editor::Editor() : Container(nullptr) {
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-    // Enable debug context and set message callback.
-    if (EditorSettings::GetInstance().GetBool("Debug Context"))
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-    
-    window = glfwCreateWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), "Hymn to Beauty", nullptr, nullptr);
-    if (!window) {
-        glfwTerminate();
-        /// @todo Print error to log.
-    }
-
-    glfwMakeContextCurrent(window);
-    
-    input = new InputHandler(window);
-    
     // Assign controls.
-    input->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
-    input->AssignButton(InputHandler::BACK, InputHandler::KEYBOARD, GLFW_KEY_BACKSPACE);
-    input->AssignButton(InputHandler::ERASE, InputHandler::KEYBOARD, GLFW_KEY_DELETE);
-    input->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_LEFT);
-    input->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_RIGHT);
-    input->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
-    input->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
-}
-
-Editor::~Editor() {
-    delete fileButton;
-    delete optionsButton;
-    delete playButton;
-    delete menuBar;
-    
-    delete newHymnButton;
-    delete openHymnButton;
-    delete fileMenu;
-    
-    delete resourceList;
-    delete entityEditor;
-    delete modelEditor;
-    delete textureEditor;
-    
-    delete fileSelector;
-    delete modelSelector;
-    delete textureSelector;
-    delete componentAdder;
-    
-    Managers().resourceManager->FreeTexture2D(fileTexture);
-    Managers().resourceManager->FreeTexture2D(optionsTexture);
-    Managers().resourceManager->FreeTexture2D(playTexture);
-    
-    Managers().resourceManager->FreeTexture2D(newHymnTexture);
-    Managers().resourceManager->FreeTexture2D(openHymnTexture);
-    
-    delete input;
-    
-    Managers().resourceManager->FreeFont(font);
-    
-    glfwDestroyWindow(window);
-}
-
-void Editor::Init() {
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
+    Input()->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
+    Input()->AssignButton(InputHandler::BACK, InputHandler::KEYBOARD, GLFW_KEY_BACKSPACE);
+    Input()->AssignButton(InputHandler::ERASE, InputHandler::KEYBOARD, GLFW_KEY_DELETE);
+    Input()->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_LEFT);
+    Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_RIGHT);
+    Input()->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
+    Input()->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
     // Menu bar.
     menuBar = new GUI::HorizontalLayout(this);
-    menuBar->SetSize(glm::vec2(static_cast<float>(width), 64.f));
+    menuBar->SetSize(glm::vec2(GetSize().x, 64.f));
     AddWidget(menuBar);
     
     fileTexture = Managers().resourceManager->CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
@@ -184,12 +129,36 @@ void Editor::Init() {
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
     openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
-    
-    glEnable(GL_DEPTH_TEST);
 }
 
-bool Editor::ShouldClose() const {
-    return (glfwWindowShouldClose(window) != 0);
+Editor::~Editor() {
+    delete fileButton;
+    delete optionsButton;
+    delete playButton;
+    delete menuBar;
+    
+    delete newHymnButton;
+    delete openHymnButton;
+    delete fileMenu;
+    
+    delete resourceList;
+    delete entityEditor;
+    delete modelEditor;
+    delete textureEditor;
+    
+    delete fileSelector;
+    delete modelSelector;
+    delete textureSelector;
+    delete componentAdder;
+    
+    Managers().resourceManager->FreeTexture2D(fileTexture);
+    Managers().resourceManager->FreeTexture2D(optionsTexture);
+    Managers().resourceManager->FreeTexture2D(playTexture);
+    
+    Managers().resourceManager->FreeTexture2D(newHymnTexture);
+    Managers().resourceManager->FreeTexture2D(openHymnTexture);
+    
+    Managers().resourceManager->FreeFont(font);
 }
 
 void Editor::Update() {
@@ -201,30 +170,16 @@ void Editor::Update() {
             gameWindow = nullptr;
         }
     } else if (childWindow != nullptr) {
-        input->Update();
-        input->SetActive();
         childWindow->Update();
     } else if (fileSelector->IsVisible()) {
-        input->Update();
-        input->SetActive();
         fileSelector->Update();
     } else if (modelSelector->IsVisible()) {
-        input->Update();
-        input->SetActive();
         modelSelector->Update();
     } else if (textureSelector->IsVisible()) {
-        input->Update();
-        input->SetActive();
         textureSelector->Update();
     } else if (componentAdder->IsVisible()) {
-        input->Update();
-        input->SetActive();
         componentAdder->Update();
-    } else if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS) {
-        Play();
     } else {
-        input->Update();
-        input->SetActive();
         UpdateWidgets();
         Hymn().activeScene.ClearKilled();
     }
@@ -238,8 +193,6 @@ void Editor::Render(const glm::vec2& screenSize) {
     if (gameWindow != nullptr) {
         gameWindow->Render();
     } else {
-        glfwMakeContextCurrent(window);
-        
         Hymn().Render(screenSize);
         
         RenderWidgets(screenSize);
@@ -259,15 +212,12 @@ void Editor::Render(const glm::vec2& screenSize) {
         if (componentAdder->IsVisible())
             componentAdder->Render(screenSize);
         
-        glfwSwapBuffers(window);
+        MainWindow::GetInstance()->SwapBuffers();
     }
 }
 
 glm::vec2 Editor::GetSize() const {
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    
-    return glm::vec2(static_cast<float>(width), static_cast<float>(height));
+    return MainWindow::GetInstance()->GetSize();
 }
 
 void Editor::SetSize(const glm::vec2& size) {

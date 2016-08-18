@@ -75,5 +75,5 @@ class MainWindow {
         bool debugContext;
         glm::vec2 size;
         
-        bool shouldClose;
+        bool shouldClose = false;
 };

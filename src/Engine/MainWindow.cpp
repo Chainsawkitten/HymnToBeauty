@@ -34,8 +34,6 @@ MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, 
     
     size = glm::vec2(width, height);
     instance = this;
-    
-    shouldClose = false;
 }
 
 MainWindow::~MainWindow() {
@@ -49,8 +47,7 @@ MainWindow* MainWindow::GetInstance() {
 
 void MainWindow::Init(bool showNotifications) {
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_CLIP_DISTANCE0);
+    //glEnable(GL_CULL_FACE);
     
     if (debugContext)
         glDebugMessageCallback(showNotifications ? DebugMessageCallback : DebugMessageCallbackIgnoreNotifications, nullptr);

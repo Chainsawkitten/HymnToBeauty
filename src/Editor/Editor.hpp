@@ -1,13 +1,11 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
 #include "GUI/Container.hpp"
 #include <string>
 
 class GameWindow;
 class Texture2D;
 class Font;
-class InputHandler;
 class Entity;
 namespace GUI {
     class SelectHymnWindow;
@@ -27,23 +25,14 @@ namespace Geometry {
     class OBJModel;
 }
 
-/// Handles the main editor window.
+/// Handles the main editor.
 class Editor : public GUI::Container {
     public:
-        /// Create new editor window.
+        /// Create new editor.
         Editor();
 
         /// Destructor.
         ~Editor() override;
-        
-        /// Initialize components.
-        void Init();
-
-        /// Get whether the editor window should close.
-        /**
-         * @return Whether the editor window should close
-         */
-        bool ShouldClose() const;
 
         /// Update the editor.
         void Update() override;
@@ -84,7 +73,6 @@ class Editor : public GUI::Container {
         void ModelSelected(Geometry::OBJModel* model);
         void TextureSelected(Texture2D* texture);
         
-        GLFWwindow* window;
         GameWindow* gameWindow = nullptr;
         GUI::SelectHymnWindow* childWindow = nullptr;
         GUI::FileSelector* fileSelector;
@@ -118,9 +106,6 @@ class Editor : public GUI::Container {
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;
         GUI::ComponentAdder* componentAdder;
-        
-        // Input
-        InputHandler* input;
         
         Font* font;
 };
