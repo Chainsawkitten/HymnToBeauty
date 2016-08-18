@@ -22,7 +22,7 @@ int main() {
     glewInit();
     window->Init(false);
     
-    Managers().StartUp(window->GetSize());
+    Managers().StartUp();
     
     Editor* editor = new Editor();
     

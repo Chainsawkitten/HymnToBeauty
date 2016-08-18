@@ -15,7 +15,7 @@ int main() {
     glewInit();
     window->Init(false);
     
-    Managers().StartUp(window->GetSize());
+    Managers().StartUp();
     
     Hymn().Load(".");
     

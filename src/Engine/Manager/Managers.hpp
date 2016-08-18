@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 class ResourceManager;
 class RenderManager;
 
@@ -17,10 +15,7 @@ class Hub {
         RenderManager* renderManager;
         
         /// Initialize all subsystems.
-        /**
-         * @param screenSize The size of the screen in pixels.
-         */
-        void StartUp(const glm::vec2& screenSize);
+        void StartUp();
         
         /// Deinitialize all subsystems.
         void ShutDown();
