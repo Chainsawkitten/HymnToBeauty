@@ -29,5 +29,5 @@ void TextButton::Render(const glm::vec2& screenSize) {
     
     // Draw text
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText(text.c_str(), GetPosition() + glm::vec2(0.f, 0.5f * (GetSize().y - font->GetHeight())), GetSize().x, screenSize);
+    font->RenderText(text.c_str(), GetPosition() + glm::vec2(0.f, 0.5f * (GetSize().y - font->GetHeight())), GetSize().x);
 }

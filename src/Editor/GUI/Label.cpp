@@ -16,7 +16,7 @@ void Label::Update() {
 
 void Label::Render(const glm::vec2& screenSize) {
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText(text.c_str(), GetPosition(), std::numeric_limits<float>::max(), screenSize);
+    font->RenderText(text.c_str(), GetPosition(), std::numeric_limits<float>::max());
 }
 
 glm::vec2 Label::GetSize() const {

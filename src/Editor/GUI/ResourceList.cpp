@@ -117,7 +117,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
     rectangle->Render(position, size, color);
     
     font->SetColor(glm::vec3(1.f, 1.f, 1.f));
-    font->RenderText("Entities", position, GetSize().x, screenSize);
+    font->RenderText("Entities", position, GetSize().x);
     addTexture->Render(position + glm::vec2(font->GetWidth("Entities") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addEntityHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
@@ -128,11 +128,11 @@ void ResourceList::Render(const glm::vec2& screenSize) {
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
-        font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(entity->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
     }
     
-    font->RenderText("Models", position, GetSize().x, screenSize);
+    font->RenderText("Models", position, GetSize().x);
     addTexture->Render(position + glm::vec2(font->GetWidth("Models") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addModelHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
@@ -143,11 +143,11 @@ void ResourceList::Render(const glm::vec2& screenSize) {
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
-        font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(model->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
     }
     
-    font->RenderText("Textures", position, GetSize().x, screenSize);
+    font->RenderText("Textures", position, GetSize().x);
     addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addTextureHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
@@ -159,7 +159,7 @@ void ResourceList::Render(const glm::vec2& screenSize) {
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
         }
         
-        font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x, screenSize);
+        font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
         ++id;
     }

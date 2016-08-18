@@ -36,9 +36,8 @@ class Font {
          * @param text Text to render.
          * @param position Position to render the text at (in pixels).
          * @param wrap Width of text before wrapping.
-         * @param screenSize Size of the screen in pixels.
          */
-        void RenderText(const char* text, const glm::vec2& position, float wrap, const glm::vec2& screenSize);
+        void RenderText(const char* text, const glm::vec2& position, float wrap);
         
         /// Get rendering color.
         /**
@@ -72,7 +71,7 @@ class Font {
         bool IsFromFile() const;
         
     private:
-        float RenderCharacter(char character, const glm::vec2& position, const glm::vec2& screenSize);
+        float RenderCharacter(char character, const glm::vec2& position);
         stbtt_aligned_quad BakedQuad(char character, float& x, float& y);
         
         bool isFromFile;
