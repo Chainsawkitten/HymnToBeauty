@@ -42,6 +42,7 @@ Editor::Editor() : Container(nullptr) {
     Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_RIGHT);
     Input()->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
     Input()->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
+    Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
@@ -175,6 +176,9 @@ void Editor::Update() {
         UpdateWidgets();
         Hymn().activeScene.ClearKilled();
     }
+    
+    if (Input()->Triggered(InputHandler::PLAYTEST))
+        Play();
 }
 
 void Editor::Render() {

@@ -17,6 +17,7 @@ class InputHandler {
             RIGHT, ///< Move text input marker right.
             HOME, ///< Move text input marker to beginning of text field.
             END, ///< Move text input marker to end of text field.
+            PLAYTEST, ///< Start/stop playtesting the game.
             BUTTONS, ///< Total number of inputs
         };
         

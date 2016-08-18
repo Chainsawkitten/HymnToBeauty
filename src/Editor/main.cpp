@@ -35,12 +35,23 @@ int main() {
         } else {
             Hymn().Render(window->GetSize());
             window->SwapBuffers();
+            
+            if (Input()->Triggered(InputHandler::PLAYTEST)) {
+                // Reload hymn.
+                std::string path = Hymn().GetPath();
+                Hymn().Load(path);
+                
+                // Turn editor back on.
+                editor->SetVisible(true);
+            }
         }
         
         glfwPollEvents();
     }
     
-    editor->Save();
+    if (editor->IsVisible())
+        editor->Save();
+    
     delete editor;
     
     Managers().ShutDown();
