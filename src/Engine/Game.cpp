@@ -1,9 +1,9 @@
-#include "GameWindow.hpp"
+#include "Game.hpp"
 
 #include "Hymn.hpp"
 #include <GLFW/glfw3.h>
 
-GameWindow::GameWindow() {
+Game::Game() {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     window = glfwCreateWindow(640, 480, "Hymn to Beauty", nullptr, nullptr);
@@ -15,19 +15,19 @@ GameWindow::GameWindow() {
     glfwMakeContextCurrent(window);
 }
 
-GameWindow::~GameWindow() {
+Game::~Game() {
     glfwDestroyWindow(window);
 }
 
-bool GameWindow::ShouldClose() const {
+bool Game::ShouldClose() const {
     return (glfwWindowShouldClose(window) != 0);
 }
 
-void GameWindow::Update() {
+void Game::Update() {
 
 }
 
-void GameWindow::Render() {
+void Game::Render() {
     glfwMakeContextCurrent(window);
     
     Hymn().Render(GetSize());
@@ -35,6 +35,6 @@ void GameWindow::Render() {
     glfwSwapBuffers(window);
 }
 
-glm::vec2 GameWindow::GetSize() const {
+glm::vec2 Game::GetSize() const {
     return glm::vec2(640.f, 480.f);
 }

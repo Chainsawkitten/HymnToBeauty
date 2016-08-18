@@ -5,13 +5,13 @@
 struct GLFWwindow;
 
 /// Handles the game window.
-class GameWindow {
+class Game {
     public:
         /// Create new game window.
-        GameWindow();
+        Game();
 
         /// Destructor.
-        ~GameWindow();
+        ~Game();
 
         /// Get whether the game window should close.
         /**
