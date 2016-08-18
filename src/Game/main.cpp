@@ -1,28 +1,38 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <Engine/Game.hpp>
+#include <Engine/MainWindow.hpp>
 #include <Engine/Manager/Managers.hpp>
+#include <Engine/Hymn.hpp>
+#include <Engine/Util/Log.hpp>
 
 int main() {
     if (!glfwInit())
         return 1;
-
-    Game* game = new Game();
-    glewInit();
     
-    Managers().StartUp(game->GetSize());
-
-    while (!game->ShouldClose()) {
-        game->Update();
-        game->Render();
+    Log() << "Game started - " << time(nullptr) << "\n";
+    
+    MainWindow* window = new MainWindow(640, 480, false, false, "Hymn to Beauty", false);
+    glewInit();
+    window->Init(false);
+    
+    Managers().StartUp(window->GetSize());
+    
+    Hymn().Load(".");
+    
+    while (!window->ShouldClose()) {
+        window->Update();
+        Hymn().Render(window->GetSize());
+        window->SwapBuffers();
         glfwPollEvents();
     }
-
-    delete game;
     
     Managers().ShutDown();
-
+    
+    delete window;
+    
     glfwTerminate();
-
+    
+    Log() << "Game ended - " << time(nullptr) << "\n";
+    
     return 0;
 }

@@ -130,7 +130,6 @@ include_directories(src)
 
 ## Engine ##
 set(ENGINE_SRCS
-        src/Engine/Game.cpp
         src/Engine/Hymn.cpp
         src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
@@ -169,7 +168,6 @@ set(ENGINE_SRCS
     )
 
 set(ENGINE_HEADERS
-        src/Engine/Game.hpp
         src/Engine/Hymn.hpp
         src/Engine/MainWindow.hpp
         src/Engine/RenderTarget.hpp
