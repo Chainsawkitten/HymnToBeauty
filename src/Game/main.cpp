@@ -21,7 +21,7 @@ int main() {
     
     while (!window->ShouldClose()) {
         window->Update();
-        Hymn().Render(window->GetSize());
+        Hymn().Render();
         window->SwapBuffers();
         glfwPollEvents();
     }

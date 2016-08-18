@@ -33,7 +33,7 @@ int main() {
             editor->Update();
             editor->Render();
         } else {
-            Hymn().Render(window->GetSize());
+            Hymn().Render();
             window->SwapBuffers();
             
             if (Input()->Triggered(InputHandler::PLAYTEST)) {

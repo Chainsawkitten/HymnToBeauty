@@ -186,7 +186,7 @@ void Editor::Render() {
 }
 
 void Editor::Render(const glm::vec2& screenSize) {
-    Hymn().Render(screenSize);
+    Hymn().Render();
     
     RenderWidgets(screenSize);
     
