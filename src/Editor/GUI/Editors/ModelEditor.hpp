@@ -34,9 +34,6 @@ namespace GUI {
             void Update() override;
             
             /// Render the widget.
-            /**
-             * @param screenSize Size of the screen in pixels.
-             */
             void Render() override;
             
             /// Set widget's position.
