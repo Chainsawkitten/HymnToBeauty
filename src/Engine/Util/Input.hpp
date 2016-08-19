@@ -117,7 +117,7 @@ class InputHandler {
         
         /// GLFW scrolling callback.
         /**
-         * @param yoffset Offset along the Y-axis.
+         * @param yOffset Offset along the Y-axis.
          */
         void ScrollCallback(double yOffset);
         
