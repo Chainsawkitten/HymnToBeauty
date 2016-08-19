@@ -104,6 +104,7 @@ class Texture2D : public Texture {
 		GLuint texID;
 		int width, height;
         bool isFromFile;
+        bool srgb = false;
         
         Geometry::Rectangle* rectangle;
         
