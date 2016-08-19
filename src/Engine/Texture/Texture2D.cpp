@@ -95,7 +95,7 @@ void Texture2D::SetWrapping(GLint wrapMode) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
 }
 
-void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, float alpha) const {
+void Texture2D::Render(const glm::vec2& position, const glm::vec2& size, float alpha) const {
     // Disable depth testing.
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
