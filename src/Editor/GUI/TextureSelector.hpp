@@ -52,7 +52,7 @@ namespace GUI {
             
             /// Set the textures to select from.
             /**
-             * @param models The textures to select from.
+             * @param textures The textures to select from.
              */
             void SetTextures(const std::vector<Texture2D*>* textures);
             
