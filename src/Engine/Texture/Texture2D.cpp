@@ -63,6 +63,7 @@ Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     isFromFile = false;
+    this->srgb = srgb;
 }
 
 Texture2D::~Texture2D() {
@@ -94,7 +95,7 @@ void Texture2D::SetWrapping(GLint wrapMode) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
 }
 
-void Texture2D::Render(const glm::vec2 &position, const glm::vec2 &size, float alpha) const {
+void Texture2D::Render(const glm::vec2& position, const glm::vec2& size, float alpha) const {
     // Disable depth testing.
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
@@ -137,12 +138,13 @@ bool Texture2D::IsFromFile() const {
 Json::Value Texture2D::Save() const {
     Json::Value texture;
     texture["name"] = name;
+    texture["srgb"] = srgb;
     return texture;
 }
 
 void Texture2D::Load(const Json::Value& node) {
     name = node.get("name", "").asString();
-    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Textures" + FileSystem::DELIMITER + name + ".png").c_str(), false);
+    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Textures" + FileSystem::DELIMITER + name + ".png").c_str(), node.get("srgb", false).asBool());
 }
 
 void Texture2D::Load(const char* filename, bool srgb) {
@@ -182,4 +184,5 @@ void Texture2D::Load(const char* filename, bool srgb) {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     isFromFile = true;
+    this->srgb = srgb;
 }

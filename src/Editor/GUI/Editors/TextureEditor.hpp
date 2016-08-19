@@ -15,6 +15,7 @@ namespace GUI {
     class Button;
     class FileSelector;
     class ImageTextButton;
+    class BoolEditor;
     
     /// Used to edit a texture.
     class TextureEditor : public Widget {
@@ -78,5 +79,8 @@ namespace GUI {
             
             Button* loadButton;
             FileSelector* fileSelector;
+            
+            Label* srgbLabel;
+            BoolEditor* srgbEditor;
     };
 }

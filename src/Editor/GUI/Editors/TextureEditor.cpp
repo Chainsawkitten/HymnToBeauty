@@ -9,6 +9,7 @@
 #include "ABeeZee.ttf.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
+#include "BoolEditor.hpp"
 #include "../TextButton.hpp"
 #include "../FileSelector.hpp"
 #include <functional>
@@ -34,6 +35,9 @@ TextureEditor::TextureEditor(Widget* parent, FileSelector* fileSelector) : Widge
     loadButton = new TextButton(this, font, "Load PNG image");
     loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
     this->fileSelector = fileSelector;
+    
+    srgbLabel = new Label(this, font, "SRGB");
+    srgbEditor = new BoolEditor(this);
 }
 
 TextureEditor::~TextureEditor() {
@@ -46,12 +50,15 @@ TextureEditor::~TextureEditor() {
     delete nameLabel;
     delete nameEditor;
     delete loadButton;
+    delete srgbLabel;
+    delete srgbEditor;
 }
 
 void TextureEditor::Update() {
     nameEditor->Update();
     deleteTextureButton->Update();
     loadButton->Update();
+    srgbEditor->Update();
 }
 
 void TextureEditor::Render() {
@@ -62,6 +69,8 @@ void TextureEditor::Render() {
     nameEditor->Render();
     deleteTextureButton->Render();
     loadButton->Render();
+    srgbLabel->Render();
+    srgbEditor->Render();
 }
 
 void TextureEditor::SetPosition(const glm::vec2& position) {
@@ -71,6 +80,8 @@ void TextureEditor::SetPosition(const glm::vec2& position) {
     nameEditor->SetPosition(position + glm::vec2(10.f, 20.f));
     deleteTextureButton->SetPosition(position + glm::vec2(0.f, 50.f));
     loadButton->SetPosition(position + glm::vec2(0.f, 70.f));
+    srgbLabel->SetPosition(position + glm::vec2(0.f, 100.f));
+    srgbEditor->SetPosition(position + glm::vec2(10.f, 120.f));
 }
 
 glm::vec2 TextureEditor::GetSize() const {
@@ -89,6 +100,7 @@ void TextureEditor::SetTexture(Texture2D* texture) {
     this->texture = texture;
     
     nameEditor->SetString(&texture->name);
+    srgbEditor->SetBool(&texture->srgb);
     
     // Update editor positions.
     SetPosition(GetPosition());
@@ -114,5 +126,5 @@ void TextureEditor::LoadPressed() {
 void TextureEditor::FileSelected(const std::string& file) {
     std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Textures" + FileSystem::DELIMITER + texture->name + ".png";
     FileSystem::Copy(file.c_str(), destination.c_str());
-    texture->Load(file.c_str());
+    texture->Load(file.c_str(), texture->srgb);
 }

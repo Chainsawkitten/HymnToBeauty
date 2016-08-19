@@ -99,7 +99,10 @@ class Texture2D : public Texture {
         
         /// The name of the texture.
         std::string name;
-
+        
+        /// Whether to convert from SRGB space to linear space when loading.
+        bool srgb = false;
+        
 	private:
 		GLuint texID;
 		int width, height;
