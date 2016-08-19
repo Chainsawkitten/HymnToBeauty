@@ -79,6 +79,8 @@ set(EMBEDDED_INPUT
     assets/DefaultNormal.png
     assets/DefaultSpecular.png
     assets/DefaultGlow.png
+    assets/Unchecked.png
+    assets/Checked.png
 )
 
 # Headerize
@@ -250,6 +252,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/FloatEditor.cpp
         src/Editor/GUI/Editors/Vec3Editor.cpp
         src/Editor/GUI/Editors/StringEditor.cpp
+        src/Editor/GUI/Editors/BoolEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -285,7 +288,8 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
         src/Editor/GUI/Editors/FloatEditor.hpp
         src/Editor/GUI/Editors/Vec3Editor.hpp
-        src/Editor/GUI/Editors/StringEditor.cpp
+        src/Editor/GUI/Editors/StringEditor.hpp
+        src/Editor/GUI/Editors/BoolEditor.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 
