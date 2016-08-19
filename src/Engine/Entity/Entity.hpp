@@ -12,6 +12,7 @@ class Entity {
         /// Create new entity.
         /**
          * @param scene The scene in which the entity is contained.
+         * @param name Name of the entity.
          */
         Entity(Scene* scene, const std::string& name = "");
         
