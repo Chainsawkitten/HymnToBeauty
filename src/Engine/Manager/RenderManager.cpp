@@ -20,6 +20,7 @@
 #include "../RenderTarget.hpp"
 #include "../PostProcessing/PostProcessing.hpp"
 #include "../PostProcessing/FXAAFilter.hpp"
+#include "../PostProcessing/GammaCorrectionFilter.hpp"
 
 using namespace Component;
 
@@ -32,6 +33,7 @@ RenderManager::RenderManager() {
     
     postProcessing = new PostProcessing();
     fxaaFilter = new FXAAFilter();
+    gammaCorrectionFilter = new GammaCorrectionFilter();
 }
 
 RenderManager::~RenderManager() {
@@ -43,6 +45,7 @@ RenderManager::~RenderManager() {
     
     delete postProcessing;
     delete fxaaFilter;
+    delete gammaCorrectionFilter;
 }
 
 void RenderManager::Render(Scene& scene) {
@@ -118,6 +121,9 @@ void RenderManager::Render(Scene& scene) {
         // Anti-aliasing.
         fxaaFilter->SetScreenSize(screenSize);
         postProcessing->ApplyFilter(fxaaFilter);
+        
+        // Gamma correction.
+        postProcessing->ApplyFilter(gammaCorrectionFilter);
         
         // Render to back buffer.
         postProcessing->Render(true);

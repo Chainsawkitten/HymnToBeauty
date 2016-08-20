@@ -66,6 +66,7 @@ set(EMBEDDED_INPUT
     shaders/PostCopy.frag
     shaders/PostDither.frag
     shaders/PostFXAA.frag
+    shaders/PostGamma.frag
     assets/ABeeZee.ttf
     assets/File.png
     assets/Options.png
@@ -155,6 +156,7 @@ set(ENGINE_SRCS
         src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
         src/Engine/PostProcessing/FXAAFilter.cpp
+        src/Engine/PostProcessing/GammaCorrectionFilter.cpp
         src/Engine/PostProcessing/PostProcessing.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
@@ -196,6 +198,7 @@ set(ENGINE_HEADERS
         src/Engine/Physics/Rectangle.hpp
         src/Engine/PostProcessing/Filter.hpp
         src/Engine/PostProcessing/FXAAFilter.hpp
+        src/Engine/PostProcessing/GammaCorrectionFilter.hpp
         src/Engine/PostProcessing/PostProcessing.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp

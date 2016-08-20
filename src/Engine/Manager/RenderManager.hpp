@@ -9,6 +9,7 @@ class ShaderProgram;
 class DeferredLighting;
 class PostProcessing;
 class FXAAFilter;
+class GammaCorrectionFilter;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -36,4 +37,5 @@ class RenderManager {
         // Post-processing.
         PostProcessing* postProcessing;
         FXAAFilter* fxaaFilter;
+        GammaCorrectionFilter* gammaCorrectionFilter;
 };
