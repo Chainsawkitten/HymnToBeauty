@@ -21,6 +21,8 @@
 #include "../PostProcessing/PostProcessing.hpp"
 #include "../PostProcessing/FXAAFilter.hpp"
 #include "../PostProcessing/GammaCorrectionFilter.hpp"
+#include "../PostProcessing/GlowFilter.hpp"
+#include "../PostProcessing/GlowBlurFilter.hpp"
 
 using namespace Component;
 
@@ -34,6 +36,9 @@ RenderManager::RenderManager() {
     postProcessing = new PostProcessing();
     fxaaFilter = new FXAAFilter();
     gammaCorrectionFilter = new GammaCorrectionFilter();
+    glowFilter = new GlowFilter();
+    glowBlurFilter = new GlowBlurFilter();
+    
 }
 
 RenderManager::~RenderManager() {
@@ -46,6 +51,8 @@ RenderManager::~RenderManager() {
     delete postProcessing;
     delete fxaaFilter;
     delete gammaCorrectionFilter;
+    delete glowFilter;
+    delete glowBlurFilter;
 }
 
 void RenderManager::Render(Scene& scene) {
@@ -121,6 +128,17 @@ void RenderManager::Render(Scene& scene) {
         // Anti-aliasing.
         fxaaFilter->SetScreenSize(screenSize);
         postProcessing->ApplyFilter(fxaaFilter);
+        
+        // Glow.
+        glowBlurFilter->SetScreenSize(screenSize);
+        int blurAmount = 1;
+        for (int i = 0; i < blurAmount; ++i) {
+            glowBlurFilter->SetHorizontal(true);
+            postProcessing->ApplyFilter(glowBlurFilter);
+            glowBlurFilter->SetHorizontal(false);
+            postProcessing->ApplyFilter(glowBlurFilter);
+        }
+        postProcessing->ApplyFilter(glowFilter);
         
         // Gamma correction.
         postProcessing->ApplyFilter(gammaCorrectionFilter);

@@ -69,6 +69,7 @@ set(EMBEDDED_INPUT
     shaders/PostFog.frag
     shaders/PostFXAA.frag
     shaders/PostGamma.frag
+    shaders/PostGlow.frag
     shaders/PostGlowBlur.frag
     assets/ABeeZee.ttf
     assets/File.png
@@ -162,6 +163,7 @@ set(ENGINE_SRCS
         src/Engine/PostProcessing/FogFilter.cpp
         src/Engine/PostProcessing/FXAAFilter.cpp
         src/Engine/PostProcessing/GammaCorrectionFilter.cpp
+        src/Engine/PostProcessing/GlowFilter.cpp
         src/Engine/PostProcessing/GlowBlurFilter.cpp
         src/Engine/PostProcessing/PostProcessing.cpp
         src/Engine/Util/FileSystem.cpp
@@ -207,6 +209,7 @@ set(ENGINE_HEADERS
         src/Engine/PostProcessing/FogFilter.hpp
         src/Engine/PostProcessing/FXAAFilter.hpp
         src/Engine/PostProcessing/GammaCorrectionFilter.hpp
+        src/Engine/PostProcessing/GlowFilter.hpp
         src/Engine/PostProcessing/GlowBlurFilter.hpp
         src/Engine/PostProcessing/PostProcessing.hpp
         src/Engine/Util/FileSystem.hpp

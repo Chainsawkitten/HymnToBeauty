@@ -10,6 +10,8 @@ class DeferredLighting;
 class PostProcessing;
 class FXAAFilter;
 class GammaCorrectionFilter;
+class GlowFilter;
+class GlowBlurFilter;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -38,4 +40,6 @@ class RenderManager {
         PostProcessing* postProcessing;
         FXAAFilter* fxaaFilter;
         GammaCorrectionFilter* gammaCorrectionFilter;
+        GlowFilter* glowFilter;
+        GlowBlurFilter* glowBlurFilter;
 };
