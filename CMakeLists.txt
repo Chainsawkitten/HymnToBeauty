@@ -63,6 +63,7 @@ set(EMBEDDED_INPUT
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
     shaders/Post.vert
+    shaders/PostColor.frag
     shaders/PostCopy.frag
     shaders/PostDither.frag
     shaders/PostFXAA.frag
@@ -155,6 +156,7 @@ set(ENGINE_SRCS
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
+        src/Engine/PostProcessing/ColorFilter.cpp
         src/Engine/PostProcessing/FXAAFilter.cpp
         src/Engine/PostProcessing/GammaCorrectionFilter.cpp
         src/Engine/PostProcessing/PostProcessing.cpp
@@ -196,6 +198,7 @@ set(ENGINE_HEADERS
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
+        src/Engine/PostProcessing/ColorFilter.hpp
         src/Engine/PostProcessing/Filter.hpp
         src/Engine/PostProcessing/FXAAFilter.hpp
         src/Engine/PostProcessing/GammaCorrectionFilter.hpp
