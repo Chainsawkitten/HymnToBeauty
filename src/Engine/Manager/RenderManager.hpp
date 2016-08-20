@@ -7,6 +7,7 @@ class Scene;
 class Shader;
 class ShaderProgram;
 class DeferredLighting;
+class PostProcessing;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -30,4 +31,7 @@ class RenderManager {
         ShaderProgram* shaderProgram;
         
         DeferredLighting* deferredLighting;
+        
+        // Post-processing.
+        PostProcessing* postProcessing;
 };

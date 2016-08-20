@@ -17,6 +17,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Physics/Frustum.hpp"
 #include "../MainWindow.hpp"
+#include "../PostProcessing/PostProcessing.hpp"
+#include "../RenderTarget.hpp"
 
 using namespace Component;
 
@@ -26,6 +28,8 @@ RenderManager::RenderManager() {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     deferredLighting = new DeferredLighting();
+    
+    postProcessing = new PostProcessing();
 }
 
 RenderManager::~RenderManager() {
@@ -34,6 +38,8 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
     
     delete deferredLighting;
+    
+    delete postProcessing;
 }
 
 void RenderManager::Render(Scene& scene) {
@@ -103,7 +109,10 @@ void RenderManager::Render(Scene& scene) {
         glBindVertexArray(0);
         
         // Light the scene.
-        deferredLighting->ResetTarget();
+        postProcessing->GetRenderTarget()->SetTarget();
         deferredLighting->Render(scene, camera);
+        
+        // Render to back buffer.
+        postProcessing->Render(true);
     }
 }
