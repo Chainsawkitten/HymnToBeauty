@@ -17,8 +17,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Physics/Frustum.hpp"
 #include "../MainWindow.hpp"
-#include "../PostProcessing/PostProcessing.hpp"
 #include "../RenderTarget.hpp"
+#include "../PostProcessing/PostProcessing.hpp"
+#include "../PostProcessing/FXAAFilter.hpp"
 
 using namespace Component;
 
@@ -30,6 +31,7 @@ RenderManager::RenderManager() {
     deferredLighting = new DeferredLighting();
     
     postProcessing = new PostProcessing();
+    fxaaFilter = new FXAAFilter();
 }
 
 RenderManager::~RenderManager() {
@@ -40,6 +42,7 @@ RenderManager::~RenderManager() {
     delete deferredLighting;
     
     delete postProcessing;
+    delete fxaaFilter;
 }
 
 void RenderManager::Render(Scene& scene) {
@@ -111,6 +114,10 @@ void RenderManager::Render(Scene& scene) {
         // Light the scene.
         postProcessing->GetRenderTarget()->SetTarget();
         deferredLighting->Render(scene, camera);
+        
+        // Anti-aliasing.
+        fxaaFilter->SetScreenSize(screenSize);
+        postProcessing->ApplyFilter(fxaaFilter);
         
         // Render to back buffer.
         postProcessing->Render(true);

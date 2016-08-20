@@ -8,6 +8,7 @@ class Shader;
 class ShaderProgram;
 class DeferredLighting;
 class PostProcessing;
+class FXAAFilter;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -34,4 +35,5 @@ class RenderManager {
         
         // Post-processing.
         PostProcessing* postProcessing;
+        FXAAFilter* fxaaFilter;
 };
