@@ -17,6 +17,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Physics/Frustum.hpp"
 #include "../MainWindow.hpp"
+#include "../RenderTarget.hpp"
+#include "../PostProcessing/PostProcessing.hpp"
+#include "../PostProcessing/FXAAFilter.hpp"
+#include "../PostProcessing/GammaCorrectionFilter.hpp"
+#include "../PostProcessing/GlowFilter.hpp"
+#include "../PostProcessing/GlowBlurFilter.hpp"
 
 using namespace Component;
 
@@ -26,6 +32,13 @@ RenderManager::RenderManager() {
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     deferredLighting = new DeferredLighting();
+    
+    postProcessing = new PostProcessing();
+    fxaaFilter = new FXAAFilter();
+    gammaCorrectionFilter = new GammaCorrectionFilter();
+    glowFilter = new GlowFilter();
+    glowBlurFilter = new GlowBlurFilter();
+    
 }
 
 RenderManager::~RenderManager() {
@@ -34,6 +47,12 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
     
     delete deferredLighting;
+    
+    delete postProcessing;
+    delete fxaaFilter;
+    delete gammaCorrectionFilter;
+    delete glowFilter;
+    delete glowBlurFilter;
 }
 
 void RenderManager::Render(Scene& scene) {
@@ -103,7 +122,28 @@ void RenderManager::Render(Scene& scene) {
         glBindVertexArray(0);
         
         // Light the scene.
-        deferredLighting->ResetTarget();
+        postProcessing->GetRenderTarget()->SetTarget();
         deferredLighting->Render(scene, camera);
+        
+        // Anti-aliasing.
+        fxaaFilter->SetScreenSize(screenSize);
+        postProcessing->ApplyFilter(fxaaFilter);
+        
+        // Glow.
+        glowBlurFilter->SetScreenSize(screenSize);
+        int blurAmount = 1;
+        for (int i = 0; i < blurAmount; ++i) {
+            glowBlurFilter->SetHorizontal(true);
+            postProcessing->ApplyFilter(glowBlurFilter);
+            glowBlurFilter->SetHorizontal(false);
+            postProcessing->ApplyFilter(glowBlurFilter);
+        }
+        postProcessing->ApplyFilter(glowFilter);
+        
+        // Gamma correction.
+        postProcessing->ApplyFilter(gammaCorrectionFilter);
+        
+        // Render to back buffer.
+        postProcessing->Render(true);
     }
 }

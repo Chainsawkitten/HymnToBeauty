@@ -63,7 +63,14 @@ set(EMBEDDED_INPUT
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
     shaders/Post.vert
+    shaders/PostColor.frag
     shaders/PostCopy.frag
+    shaders/PostDither.frag
+    shaders/PostFog.frag
+    shaders/PostFXAA.frag
+    shaders/PostGamma.frag
+    shaders/PostGlow.frag
+    shaders/PostGlowBlur.frag
     assets/ABeeZee.ttf
     assets/File.png
     assets/Options.png
@@ -152,6 +159,13 @@ set(ENGINE_SRCS
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
+        src/Engine/PostProcessing/ColorFilter.cpp
+        src/Engine/PostProcessing/FogFilter.cpp
+        src/Engine/PostProcessing/FXAAFilter.cpp
+        src/Engine/PostProcessing/GammaCorrectionFilter.cpp
+        src/Engine/PostProcessing/GlowFilter.cpp
+        src/Engine/PostProcessing/GlowBlurFilter.cpp
+        src/Engine/PostProcessing/PostProcessing.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Json.cpp
@@ -190,6 +204,14 @@ set(ENGINE_HEADERS
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
+        src/Engine/PostProcessing/ColorFilter.hpp
+        src/Engine/PostProcessing/Filter.hpp
+        src/Engine/PostProcessing/FogFilter.hpp
+        src/Engine/PostProcessing/FXAAFilter.hpp
+        src/Engine/PostProcessing/GammaCorrectionFilter.hpp
+        src/Engine/PostProcessing/GlowFilter.hpp
+        src/Engine/PostProcessing/GlowBlurFilter.hpp
+        src/Engine/PostProcessing/PostProcessing.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Json.hpp

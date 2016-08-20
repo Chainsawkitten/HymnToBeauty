@@ -50,7 +50,10 @@ class RenderTarget {
         GLuint GetDepthTexture() const;
         
         /// Render resulting image to screen.
-        void Render();
+        /**
+         * @param dither Whether to use dithering.
+         */
+        void Render(bool dither = false);
         
     private:
         unsigned int width;
@@ -67,4 +70,9 @@ class RenderTarget {
         Shader* vertexShader;
         Shader* fragmentShader;
         ShaderProgram* shaderProgram;
+        
+        Shader* ditherFragmentShader;
+        ShaderProgram* ditherShaderProgram;
+        
+        float ditherTime = 0.f;
 };

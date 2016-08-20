@@ -10,6 +10,7 @@
 #include "Manager/ResourceManager.hpp"
 #include "Post.vert.hpp"
 #include "PostCopy.frag.hpp"
+#include "PostDither.frag.hpp"
 
 RenderTarget::RenderTarget(const glm::vec2& size) {
     width = static_cast<int>(size.x);
@@ -71,6 +72,9 @@ RenderTarget::RenderTarget(const glm::vec2& size) {
     fragmentShader = Managers().resourceManager->CreateShader(POSTCOPY_FRAG, POSTCOPY_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
+    ditherFragmentShader = Managers().resourceManager->CreateShader(POSTDITHER_FRAG, POSTDITHER_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    ditherShaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, ditherFragmentShader });
+    
     rectangle = Managers().resourceManager->CreateRectangle();
 }
 
@@ -80,9 +84,11 @@ RenderTarget::~RenderTarget() {
     glDeleteTextures(1, &colorBuffer);
     glDeleteFramebuffers(1, &frameBuffer);
     
-    Managers().resourceManager->FreeShaderProgram(shaderProgram);
     Managers().resourceManager->FreeShader(vertexShader);
     Managers().resourceManager->FreeShader(fragmentShader);
+    Managers().resourceManager->FreeShader(ditherFragmentShader);
+    Managers().resourceManager->FreeShaderProgram(shaderProgram);
+    Managers().resourceManager->FreeShaderProgram(ditherShaderProgram);
     
     Managers().resourceManager->FreeRectangle();
 }
@@ -107,33 +113,30 @@ GLuint RenderTarget::GetDepthTexture() const {
     return depthBuffer;
 }
 
-void RenderTarget::Render() {
-    // Disable depth testing
-    GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
-    glEnable(GL_DEPTH_TEST);
-    
-    GLint oldDepthFunctionMode;
-    glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFunctionMode);
+void RenderTarget::Render(bool dither) {
+    // Always pass depth test.
     glDepthFunc(GL_ALWAYS);
     
-    shaderProgram->Use();
+    ShaderProgram* shader = dither ? ditherShaderProgram : shaderProgram;
+    shader->Use();
     
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glUniform1i(shaderProgram->GetUniformLocation("tDiffuse"), 0);
+    glUniform1i(shader->GetUniformLocation("tDiffuse"), 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, colorBuffer);
     
-    glUniform1i(shaderProgram->GetUniformLocation("tDepth"), 1);
+    glUniform1i(shader->GetUniformLocation("tDepth"), 1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, depthBuffer);
+    
+    if (dither) {
+        glUniform1f(shader->GetUniformLocation("time"), ditherTime);
+        ditherTime = fmod(ditherTime + 1.f, 255.f);
+    }
     
     glBindVertexArray(rectangle->GetVertexArray());
     
     glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     
-    if (depthTest)
-        glEnable(GL_DEPTH_TEST);
-    
-    glDepthFunc(oldDepthFunctionMode);
+    // Reset depth testing to standard value.
+    glDepthFunc(GL_LESS);
 }

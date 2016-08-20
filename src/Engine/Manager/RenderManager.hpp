@@ -7,6 +7,11 @@ class Scene;
 class Shader;
 class ShaderProgram;
 class DeferredLighting;
+class PostProcessing;
+class FXAAFilter;
+class GammaCorrectionFilter;
+class GlowFilter;
+class GlowBlurFilter;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -30,4 +35,11 @@ class RenderManager {
         ShaderProgram* shaderProgram;
         
         DeferredLighting* deferredLighting;
+        
+        // Post-processing.
+        PostProcessing* postProcessing;
+        FXAAFilter* fxaaFilter;
+        GammaCorrectionFilter* gammaCorrectionFilter;
+        GlowFilter* glowFilter;
+        GlowBlurFilter* glowBlurFilter;
 };
