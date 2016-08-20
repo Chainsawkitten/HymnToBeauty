@@ -8,11 +8,9 @@
 #include "PostFXAA.frag.hpp"
 
 FXAAFilter::FXAAFilter() {
-    Shader* vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
-    Shader* fragmentShader = Managers().resourceManager->CreateShader(POSTFXAA_FRAG, POSTFXAA_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(POSTFXAA_FRAG, POSTFXAA_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
-    Managers().resourceManager->FreeShader(vertexShader);
-    Managers().resourceManager->FreeShader(fragmentShader);
     
     screenSizeLocation = shaderProgram->GetUniformLocation("screenSize");
     brightnessLocation = shaderProgram->GetUniformLocation("brightness");
@@ -20,6 +18,8 @@ FXAAFilter::FXAAFilter() {
 
 FXAAFilter::~FXAAFilter() {
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
 }
 
 ShaderProgram* FXAAFilter::GetShaderProgram() const {

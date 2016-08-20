@@ -3,6 +3,8 @@
 #include "Filter.hpp"
 #include <GL/glew.h>
 
+class Shader;
+
 /// Gamma correction filter.
 class GammaCorrectionFilter : public Filter {
     public:
@@ -28,6 +30,8 @@ class GammaCorrectionFilter : public Filter {
         void SetBrightness(float brightness);
         
     private:
+        Shader* vertexShader;
+        Shader* fragmentShader;
         ShaderProgram* shaderProgram;
         
         float brightness = 2.2f;

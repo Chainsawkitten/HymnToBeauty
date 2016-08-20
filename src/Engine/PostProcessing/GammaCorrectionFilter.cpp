@@ -8,17 +8,17 @@
 #include "PostGamma.frag.hpp"
 
 GammaCorrectionFilter::GammaCorrectionFilter() {
-    Shader* vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
-    Shader* fragmentShader = Managers().resourceManager->CreateShader(POSTGAMMA_FRAG, POSTGAMMA_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(POSTGAMMA_FRAG, POSTGAMMA_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
-    Managers().resourceManager->FreeShader(vertexShader);
-    Managers().resourceManager->FreeShader(fragmentShader);
     
     brightnessLocation = shaderProgram->GetUniformLocation("brightness");
 }
 
 GammaCorrectionFilter::~GammaCorrectionFilter() {
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
 }
 
 ShaderProgram* GammaCorrectionFilter::GetShaderProgram() const {

@@ -68,15 +68,12 @@ RenderTarget::RenderTarget(const glm::vec2& size) {
     // Default framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     
-    Shader* vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
-    Shader* fragmentShader = Managers().resourceManager->CreateShader(POSTCOPY_FRAG, POSTCOPY_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    vertexShader = Managers().resourceManager->CreateShader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(POSTCOPY_FRAG, POSTCOPY_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
-    Managers().resourceManager->FreeShader(fragmentShader);
     
-    fragmentShader = Managers().resourceManager->CreateShader(POSTDITHER_FRAG, POSTDITHER_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    ditherShaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
-    Managers().resourceManager->FreeShader(vertexShader);
-    Managers().resourceManager->FreeShader(fragmentShader);
+    ditherFragmentShader = Managers().resourceManager->CreateShader(POSTDITHER_FRAG, POSTDITHER_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    ditherShaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, ditherFragmentShader });
     
     rectangle = Managers().resourceManager->CreateRectangle();
 }
@@ -87,6 +84,9 @@ RenderTarget::~RenderTarget() {
     glDeleteTextures(1, &colorBuffer);
     glDeleteFramebuffers(1, &frameBuffer);
     
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
+    Managers().resourceManager->FreeShader(ditherFragmentShader);
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
     Managers().resourceManager->FreeShaderProgram(ditherShaderProgram);
     

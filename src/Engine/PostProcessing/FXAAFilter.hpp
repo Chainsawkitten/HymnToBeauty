@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
+class Shader;
+
 /// Fast approximate anti-aliasing filter.
 class FXAAFilter : public Filter {
     public:
@@ -35,6 +37,8 @@ class FXAAFilter : public Filter {
         void SetBrightness(float brightness);
         
     private:
+        Shader* vertexShader;
+        Shader* fragmentShader;
         ShaderProgram* shaderProgram;
         
         glm::vec2 screenSize;

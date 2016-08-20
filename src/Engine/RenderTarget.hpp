@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+class Shader;
 class ShaderProgram;
 namespace Geometry {
     class Rectangle;
@@ -66,8 +67,12 @@ class RenderTarget {
         Geometry::Rectangle* rectangle;
         
         // Shaders
+        Shader* vertexShader;
+        Shader* fragmentShader;
         ShaderProgram* shaderProgram;
+        
+        Shader* ditherFragmentShader;
         ShaderProgram* ditherShaderProgram;
         
-        float ditherTime;
+        float ditherTime = 0.f;
 };
