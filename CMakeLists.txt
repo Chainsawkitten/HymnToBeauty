@@ -191,6 +191,7 @@ set(ENGINE_HEADERS
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
+        src/Engine/PostProcessing/Filter.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Json.hpp
