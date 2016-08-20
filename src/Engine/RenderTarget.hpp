@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-class Shader;
 class ShaderProgram;
 namespace Geometry {
     class Rectangle;
@@ -50,7 +49,10 @@ class RenderTarget {
         GLuint GetDepthTexture() const;
         
         /// Render resulting image to screen.
-        void Render();
+        /**
+         * @param dither Whether to use dithering.
+         */
+        void Render(bool dither = false);
         
     private:
         unsigned int width;
@@ -64,7 +66,8 @@ class RenderTarget {
         Geometry::Rectangle* rectangle;
         
         // Shaders
-        Shader* vertexShader;
-        Shader* fragmentShader;
         ShaderProgram* shaderProgram;
+        ShaderProgram* ditherShaderProgram;
+        
+        float ditherTime;
 };

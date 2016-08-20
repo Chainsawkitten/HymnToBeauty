@@ -64,6 +64,7 @@ set(EMBEDDED_INPUT
     shaders/Texture2D.frag
     shaders/Post.vert
     shaders/PostCopy.frag
+    shaders/PostDither.frag
     assets/ABeeZee.ttf
     assets/File.png
     assets/Options.png
