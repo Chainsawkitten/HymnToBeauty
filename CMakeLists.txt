@@ -153,6 +153,7 @@ set(ENGINE_SRCS
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
+        src/Engine/PostProcessing/PostProcessing.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Json.cpp
@@ -192,6 +193,7 @@ set(ENGINE_HEADERS
         src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
         src/Engine/PostProcessing/Filter.hpp
+        src/Engine/PostProcessing/PostProcessing.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Json.hpp
