@@ -21,6 +21,12 @@ ALuint SoundBuffer::Buffer() const {
     return buffer;
 }
 
+Json::Value SoundBuffer::Save() const {
+    Json::Value sound;
+    sound["name"] = name;
+    return sound;
+}
+
 void SoundBuffer::Load(SoundFile* soundFile) {
     // Create audio buffer.
     alGetError();

@@ -2,6 +2,7 @@
 
 #include <AL/al.h>
 #include <string>
+#include <json/json.h>
 
 namespace Audio {
     class SoundFile;
@@ -26,6 +27,12 @@ namespace Audio {
              * @return The OpenAL buffer ID.
              */
             ALuint Buffer() const;
+            
+            /// Save the sound.
+            /**
+             * @return JSON value to be stored on disk.
+             */
+            Json::Value Save() const;
             
             /// Load sound buffer from a sound file.
             /**

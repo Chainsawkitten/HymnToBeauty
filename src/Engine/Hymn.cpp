@@ -86,6 +86,13 @@ void ActiveHymn::Save() const {
     }
     root["models"] = modelsNode;
     
+    // Save sounds.
+    Json::Value soundsNode;
+    for (Audio::SoundBuffer* sound : sounds) {
+        soundsNode.append(sound->Save());
+    }
+    root["sounds"] = soundsNode;
+    
     // Save entities.
     Json::Value entitiesNode;
     for (Entity* entity : activeScene.GetEntities()) {
