@@ -167,6 +167,7 @@ set(ENGINE_SRCS
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
+        src/Engine/Manager/SoundManager.cpp
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
@@ -214,6 +215,7 @@ set(ENGINE_HEADERS
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
+        src/Engine/Manager/SoundManager.hpp
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
