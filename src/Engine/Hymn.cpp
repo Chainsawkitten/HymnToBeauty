@@ -132,6 +132,14 @@ void ActiveHymn::Load(const string& path) {
         models.push_back(model);
     }
     
+    // Load sounds.
+    const Json::Value soundsNode = root["sounds"];
+    for (unsigned int i=0; i < soundsNode.size(); ++i) {
+        Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+        sound->Load(soundsNode[i]);
+        sounds.push_back(sound);
+    }
+    
     // Load entities.
     const Json::Value entitiesNode = root["entities"];
     for (unsigned int i=0; i < entitiesNode.size(); ++i) {
