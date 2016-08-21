@@ -10,14 +10,7 @@ SoundBuffer::SoundBuffer() {
 }
 
 SoundBuffer::SoundBuffer(SoundFile* soundFile) {
-    // Create audio buffer.
-    alGetError();
-    alGenBuffers((ALuint)1, &buffer);
-    SoundManager::CheckError("Couldn't create buffers.");
-    
-    // Set the buffer data.
-    alBufferData(buffer, soundFile->Format(), soundFile->Data(), soundFile->Size(), soundFile->SampleRate());
-    SoundManager::CheckError("Couldn't set buffer data.");
+    Load(soundFile);
 }
 
 SoundBuffer::~SoundBuffer() {
@@ -26,4 +19,15 @@ SoundBuffer::~SoundBuffer() {
 
 ALuint SoundBuffer::Buffer() const {
     return buffer;
+}
+
+void SoundBuffer::Load(SoundFile* soundFile) {
+    // Create audio buffer.
+    alGetError();
+    alGenBuffers((ALuint)1, &buffer);
+    SoundManager::CheckError("Couldn't create buffers.");
+    
+    // Set the buffer data.
+    alBufferData(buffer, soundFile->Format(), soundFile->Data(), soundFile->Size(), soundFile->SampleRate());
+    SoundManager::CheckError("Couldn't set buffer data.");
 }

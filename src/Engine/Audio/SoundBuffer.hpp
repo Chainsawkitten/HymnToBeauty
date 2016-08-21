@@ -27,6 +27,12 @@ namespace Audio {
              */
             ALuint Buffer() const;
             
+            /// Load sound buffer from a sound file.
+            /**
+             * @param soundFile The sound file containing the sound.
+             */
+            void Load(SoundFile* soundFile);
+            
             /// The name of the sound.
             std::string name;
             

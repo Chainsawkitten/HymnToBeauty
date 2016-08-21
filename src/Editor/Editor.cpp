@@ -12,6 +12,7 @@
 #include "GUI/Editors/EntityEditor.hpp"
 #include "GUI/Editors/ModelEditor.hpp"
 #include "GUI/Editors/TextureEditor.hpp"
+#include "GUI/Editors/SoundEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
 #include "GUI/FileSelector.hpp"
@@ -74,6 +75,7 @@ Editor::Editor() : Container(nullptr) {
     resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
     resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
     resourceList->SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
+    resourceList->SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
     // File selector.
@@ -111,6 +113,11 @@ Editor::Editor() : Container(nullptr) {
     textureEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(textureEditor);
     
+    soundEditor = new GUI::SoundEditor(this, fileSelector);
+    soundEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
+    soundEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
+    AddWidget(soundEditor);
+    
     // File menu.
     fileMenu = new GUI::VerticalLayout(this);
     fileMenu->SetSize(glm::vec2(256.f, 2.f * 64.f));
@@ -145,6 +152,7 @@ Editor::~Editor() {
     delete entityEditor;
     delete modelEditor;
     delete textureEditor;
+    delete soundEditor;
     
     delete fileSelector;
     delete modelSelector;
@@ -277,6 +285,7 @@ void Editor::EntitySelected(Entity* entity) {
     entityEditor->SetVisible(true);
     modelEditor->SetVisible(false);
     textureEditor->SetVisible(false);
+    soundEditor->SetVisible(false);
 }
 
 void Editor::ModelSelected(Geometry::OBJModel* model) {
@@ -285,6 +294,7 @@ void Editor::ModelSelected(Geometry::OBJModel* model) {
     entityEditor->SetVisible(false);
     modelEditor->SetVisible(true);
     textureEditor->SetVisible(false);
+    soundEditor->SetVisible(false);
 }
 
 void Editor::TextureSelected(Texture2D* texture) {
@@ -293,4 +303,14 @@ void Editor::TextureSelected(Texture2D* texture) {
     entityEditor->SetVisible(false);
     modelEditor->SetVisible(false);
     textureEditor->SetVisible(true);
+    soundEditor->SetVisible(false);
+}
+
+void Editor::SoundSelected(Audio::SoundBuffer* sound) {
+    soundEditor->SetSound(sound);
+    
+    entityEditor->SetVisible(false);
+    modelEditor->SetVisible(false);
+    textureEditor->SetVisible(false);
+    soundEditor->SetVisible(true);
 }
