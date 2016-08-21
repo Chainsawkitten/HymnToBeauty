@@ -78,6 +78,7 @@ void ResourceList::Update() {
                     selectedEntity = entity;
                     selectedModel = nullptr;
                     selectedTexture = nullptr;
+                    selectedSound = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
                     break;
@@ -95,6 +96,7 @@ void ResourceList::Update() {
                     selectedEntity = nullptr;
                     selectedModel = model;
                     selectedTexture = nullptr;
+                    selectedSound = nullptr;
                     if (hasModelSelectedCallback)
                         modelSelectedCallback(model);
                     break;
@@ -112,8 +114,27 @@ void ResourceList::Update() {
                     selectedEntity = nullptr;
                     selectedModel = nullptr;
                     selectedTexture = texture;
+                    selectedSound = nullptr;
                     if (hasTextureSelectedCallback)
                         textureSelectedCallback(texture);
+                    break;
+                }
+            }
+            
+            position  = GetPosition();
+            position.y += (3 + Hymn().activeScene.GetEntities().size() + Hymn().models.size() + Hymn().textures.size()) * font->GetHeight();
+            
+            // Check if sound selected.
+            for (Audio::SoundBuffer* sound : Hymn().sounds) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedEntity = nullptr;
+                    selectedModel = nullptr;
+                    selectedTexture = nullptr;
+                    selectedSound = sound;
+                    if (hasSoundSelectedCallback)
+                        soundSelectedCallback(sound);
                     break;
                 }
             }
@@ -178,10 +199,10 @@ void ResourceList::Render() {
     
     for (Audio::SoundBuffer* sound : Hymn().sounds) {
         // Render background if selected.
-        /*if (selectedTexture == texture) {
+        if (selectedSound == sound) {
             color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
             rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
-        }*/
+        }
         
         font->RenderText(sound->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
@@ -209,4 +230,9 @@ void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJMode
 void ResourceList::SetTextureSelectedCallback(std::function<void(Texture2D*)> callback) {
     hasTextureSelectedCallback = true;
     textureSelectedCallback = callback;
+}
+
+void ResourceList::SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback) {
+    hasSoundSelectedCallback = true;
+    soundSelectedCallback = callback;
 }
