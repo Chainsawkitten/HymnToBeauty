@@ -8,6 +8,9 @@ class Texture2D;
 namespace Geometry {
     class OBJModel;
 }
+namespace Audio {
+    class SoundBuffer;
+}
 
 /// A hymn to beauty.
 class ActiveHymn {
@@ -58,6 +61,12 @@ class ActiveHymn {
         
         /// The id of the next texture to create.
         unsigned int textureNumber = 0U;
+        
+        /// Sounds.
+        std::vector<Audio::SoundBuffer*> sounds;
+        
+        /// The id of the next sound to create.
+        unsigned int soundNumber = 0U;
         
         /// Default diffuse texture.
         Texture2D* defaultDiffuse;

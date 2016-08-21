@@ -11,6 +11,7 @@
 #include "Entity/Entity.hpp"
 #include "Geometry/OBJModel.hpp"
 #include "Texture/Texture2D.hpp"
+#include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
 #include <fstream>
 
@@ -48,6 +49,12 @@ void ActiveHymn::Clear() {
     }
     textures.clear();
     textureNumber = 0U;
+    
+    for (Audio::SoundBuffer* sound : sounds) {
+        delete sound;
+    }
+    sounds.clear();
+    soundNumber = 0U;
 }
 
 const string& ActiveHymn::GetPath() const {
