@@ -197,6 +197,7 @@ set(ENGINE_HEADERS
         src/Engine/Hymn.hpp
         src/Engine/MainWindow.hpp
         src/Engine/RenderTarget.hpp
+        src/Engine/Audio/SoundFile.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Material.hpp
