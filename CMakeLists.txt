@@ -29,6 +29,16 @@ include_directories(externals/glm)
 # STB
 include_directories(externals/stb)
 
+# OpenAL Soft
+set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
+add_subdirectory(externals/openal-soft)
+include_directories(externals/openal-soft/include)
+if(WIN32)
+    set(OPENAL_LIB OpenAL32)
+else()
+    set(OPENAL_LIB openal)
+endif()
+
 # JsonCpp
 set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Don't build JsonCpp tests" FORCE)
 set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "Don't build JsonCpp unit tests" FORCE)
@@ -319,7 +329,7 @@ create_directory_groups(${EDITOR_SRCS} ${EDITOR_HEADERS})
 
 add_executable(HymnToBeauty ${EDITOR_SRCS} ${EDITOR_HEADERS})
 target_link_libraries(HymnToBeauty Engine)
-target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static)
+target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB})
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD 11)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -338,6 +348,6 @@ create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
 
 add_executable(Game ${GAME_SRCS} ${GAME_HEADERS})
 target_link_libraries(Game Engine)
-target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static)
+target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB})
 set_property(TARGET Game PROPERTY CXX_STANDARD 11)
 set_property(TARGET Game PROPERTY CXX_STANDARD_REQUIRED ON)
