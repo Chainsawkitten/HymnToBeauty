@@ -13,6 +13,9 @@ namespace Geometry {
     class Cube;
     class OBJModel;
 }
+namespace Audio {
+    class SoundBuffer;
+}
 
 /// Handles all resources.
 class ResourceManager {
@@ -120,6 +123,21 @@ class ResourceManager {
          */
         void FreeTexture2D(Texture2D* texture);
         
+        /// Create a sound if it doesn't already exist.
+        /**
+         * Supported formats: Ogg Vorbis.
+         * @param filename Path to the sound file.
+         * @return The %SoundBuffer instance.
+         */
+        Audio::SoundBuffer* CreateSound(std::string filename);
+        
+        /// Free the reference to the sound.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param soundBuffer %SoundBuffer to dereference.
+         */
+        void FreeSound(Audio::SoundBuffer* soundBuffer);
+        
         /// Create a font if it doesn't already exist.
         /**
          * @param source TTF source.
@@ -202,6 +220,14 @@ class ResourceManager {
         // Texture2D from file
         std::map<std::string, Texture2DInstance> texturesFromFile;
         std::map<Texture2D*, std::string> texturesFromFileInverse;
+        
+        // Sound
+        struct SoundInstance {
+            Audio::SoundBuffer* soundBuffer;
+            int count;
+        };
+        std::map<std::string, SoundInstance> sounds;
+        std::map<Audio::SoundBuffer*, std::string> soundsInverse;
         
         // Font
         struct FontInstance {

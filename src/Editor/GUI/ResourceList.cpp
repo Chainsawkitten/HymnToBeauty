@@ -6,6 +6,7 @@
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Font/Font.hpp>
 #include <Engine/Texture/Texture2D.hpp>
+#include <Engine/Audio/SoundBuffer.hpp>
 #include "ABeeZee.ttf.hpp"
 #include "Add.png.hpp"
 
@@ -43,6 +44,10 @@ void ResourceList::Update() {
     rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(10.f, 10.f));
     addTextureHover = rect.Collide(mousePosition);
     
+    position.y += (Hymn().textures.size() + 1) * font->GetHeight();
+    rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Sounds") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+    addSoundHover = rect.Collide(mousePosition);
+    
     if (Input()->Triggered(InputHandler::CLICK)) {
         if (addEntityHover) {
             // Add entity button pressed.
@@ -57,6 +62,11 @@ void ResourceList::Update() {
             Texture2D* texture = new Texture2D();
             texture->name = "Texture #" + std::to_string(Hymn().textureNumber++);
             Hymn().textures.push_back(texture);
+        } else if (addSoundHover) {
+            // Add sound button pressed.
+            Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+            sound->name = "Sound #" + std::to_string(Hymn().soundNumber++);
+            Hymn().sounds.push_back(sound);
         } else {
             position  = GetPosition();
             
@@ -68,6 +78,7 @@ void ResourceList::Update() {
                     selectedEntity = entity;
                     selectedModel = nullptr;
                     selectedTexture = nullptr;
+                    selectedSound = nullptr;
                     if (hasEntitySelectedCallback)
                         entitySelectedCallback(entity);
                     break;
@@ -85,6 +96,7 @@ void ResourceList::Update() {
                     selectedEntity = nullptr;
                     selectedModel = model;
                     selectedTexture = nullptr;
+                    selectedSound = nullptr;
                     if (hasModelSelectedCallback)
                         modelSelectedCallback(model);
                     break;
@@ -102,8 +114,27 @@ void ResourceList::Update() {
                     selectedEntity = nullptr;
                     selectedModel = nullptr;
                     selectedTexture = texture;
+                    selectedSound = nullptr;
                     if (hasTextureSelectedCallback)
                         textureSelectedCallback(texture);
+                    break;
+                }
+            }
+            
+            position  = GetPosition();
+            position.y += (3 + Hymn().activeScene.GetEntities().size() + Hymn().models.size() + Hymn().textures.size()) * font->GetHeight();
+            
+            // Check if sound selected.
+            for (Audio::SoundBuffer* sound : Hymn().sounds) {
+                position.y += font->GetHeight();
+                rect = Physics::Rectangle(position, glm::vec2(size.x, font->GetHeight()));
+                if (rect.Collide(mousePosition)) {
+                    selectedEntity = nullptr;
+                    selectedModel = nullptr;
+                    selectedTexture = nullptr;
+                    selectedSound = sound;
+                    if (hasSoundSelectedCallback)
+                        soundSelectedCallback(sound);
                     break;
                 }
             }
@@ -151,7 +182,6 @@ void ResourceList::Render() {
     addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addTextureHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    unsigned int id = 0U;
     for (Texture2D* texture : Hymn().textures) {
         // Render background if selected.
         if (selectedTexture == texture) {
@@ -161,7 +191,21 @@ void ResourceList::Render() {
         
         font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
-        ++id;
+    }
+    
+    font->RenderText("Sounds", position, GetSize().x);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Sounds") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addSoundHover ? 1.f : 0.5f);
+    position.y += font->GetHeight();
+    
+    for (Audio::SoundBuffer* sound : Hymn().sounds) {
+        // Render background if selected.
+        if (selectedSound == sound) {
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
+        }
+        
+        font->RenderText(sound->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
+        position.y += font->GetHeight();
     }
 }
 
@@ -186,4 +230,9 @@ void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJMode
 void ResourceList::SetTextureSelectedCallback(std::function<void(Texture2D*)> callback) {
     hasTextureSelectedCallback = true;
     textureSelectedCallback = callback;
+}
+
+void ResourceList::SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback) {
+    hasSoundSelectedCallback = true;
+    soundSelectedCallback = callback;
 }

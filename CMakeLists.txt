@@ -29,6 +29,16 @@ include_directories(externals/glm)
 # STB
 include_directories(externals/stb)
 
+# OpenAL Soft
+set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
+add_subdirectory(externals/openal-soft)
+include_directories(externals/openal-soft/include)
+if(WIN32)
+    set(OPENAL_LIB OpenAL32)
+else()
+    set(OPENAL_LIB openal)
+endif()
+
 # JsonCpp
 set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Don't build JsonCpp tests" FORCE)
 set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "Don't build JsonCpp unit tests" FORCE)
@@ -142,6 +152,8 @@ set(ENGINE_SRCS
         src/Engine/Hymn.cpp
         src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
+        src/Engine/Audio/SoundBuffer.cpp
+        src/Engine/Audio/VorbisFile.cpp
         src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
         src/Engine/Component/Material.cpp
@@ -156,6 +168,7 @@ set(ENGINE_SRCS
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
+        src/Engine/Manager/SoundManager.cpp
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
         src/Engine/Physics/Rectangle.cpp
@@ -187,6 +200,9 @@ set(ENGINE_HEADERS
         src/Engine/Hymn.hpp
         src/Engine/MainWindow.hpp
         src/Engine/RenderTarget.hpp
+        src/Engine/Audio/SoundBuffer.hpp
+        src/Engine/Audio/SoundFile.hpp
+        src/Engine/Audio/VorbisFile.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Material.hpp
@@ -201,6 +217,7 @@ set(ENGINE_HEADERS
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
+        src/Engine/Manager/SoundManager.hpp
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp
         src/Engine/Physics/Rectangle.hpp
@@ -261,6 +278,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
+        src/Editor/GUI/Editors/SoundEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.cpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
@@ -298,6 +316,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
+        src/Editor/GUI/Editors/SoundEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.hpp
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
@@ -319,7 +338,7 @@ create_directory_groups(${EDITOR_SRCS} ${EDITOR_HEADERS})
 
 add_executable(HymnToBeauty ${EDITOR_SRCS} ${EDITOR_HEADERS})
 target_link_libraries(HymnToBeauty Engine)
-target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static)
+target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB})
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD 11)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -338,6 +357,6 @@ create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
 
 add_executable(Game ${GAME_SRCS} ${GAME_HEADERS})
 target_link_libraries(Game Engine)
-target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static)
+target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB})
 set_property(TARGET Game PROPERTY CXX_STANDARD 11)
 set_property(TARGET Game PROPERTY CXX_STANDARD_REQUIRED ON)

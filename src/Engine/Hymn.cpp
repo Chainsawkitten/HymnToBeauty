@@ -11,6 +11,7 @@
 #include "Entity/Entity.hpp"
 #include "Geometry/OBJModel.hpp"
 #include "Texture/Texture2D.hpp"
+#include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
 #include <fstream>
 
@@ -48,6 +49,12 @@ void ActiveHymn::Clear() {
     }
     textures.clear();
     textureNumber = 0U;
+    
+    for (Audio::SoundBuffer* sound : sounds) {
+        delete sound;
+    }
+    sounds.clear();
+    soundNumber = 0U;
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -59,6 +66,7 @@ void ActiveHymn::SetPath(const string& path) {
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Sounds").c_str());
 }
 
 void ActiveHymn::Save() const {
@@ -77,6 +85,13 @@ void ActiveHymn::Save() const {
         modelsNode.append(model->Save());
     }
     root["models"] = modelsNode;
+    
+    // Save sounds.
+    Json::Value soundsNode;
+    for (Audio::SoundBuffer* sound : sounds) {
+        soundsNode.append(sound->Save());
+    }
+    root["sounds"] = soundsNode;
     
     // Save entities.
     Json::Value entitiesNode;
@@ -115,6 +130,14 @@ void ActiveHymn::Load(const string& path) {
         Geometry::OBJModel* model = new Geometry::OBJModel();
         model->Load(modelsNode[i]);
         models.push_back(model);
+    }
+    
+    // Load sounds.
+    const Json::Value soundsNode = root["sounds"];
+    for (unsigned int i=0; i < soundsNode.size(); ++i) {
+        Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+        sound->Load(soundsNode[i]);
+        sounds.push_back(sound);
     }
     
     // Load entities.

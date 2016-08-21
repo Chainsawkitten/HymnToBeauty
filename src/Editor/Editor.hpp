@@ -16,12 +16,16 @@ namespace GUI {
     class EntityEditor;
     class ModelEditor;
     class TextureEditor;
+    class SoundEditor;
     class ModelSelector;
     class TextureSelector;
     class ComponentAdder;
 }
 namespace Geometry {
     class OBJModel;
+}
+namespace Audio {
+    class SoundBuffer;
 }
 
 /// Handles the main editor.
@@ -65,6 +69,7 @@ class Editor : public GUI::Container {
         void EntitySelected(Entity* entity);
         void ModelSelected(Geometry::OBJModel* model);
         void TextureSelected(Texture2D* texture);
+        void SoundSelected(Audio::SoundBuffer* sound);
         
         GUI::SelectHymnWindow* childWindow = nullptr;
         GUI::FileSelector* fileSelector;
@@ -95,6 +100,7 @@ class Editor : public GUI::Container {
         GUI::EntityEditor* entityEditor;
         GUI::ModelEditor* modelEditor;
         GUI::TextureEditor* textureEditor;
+        GUI::SoundEditor* soundEditor;
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;
         GUI::ComponentAdder* componentAdder;

@@ -2,6 +2,7 @@
 
 class ResourceManager;
 class RenderManager;
+class SoundManager;
 
 /// Singleton class that holds all subsystems.
 class Hub {
@@ -13,6 +14,9 @@ class Hub {
         
         /// The render manager instance.
         RenderManager* renderManager;
+        
+        /// The sound manager instance.
+        SoundManager* soundManager;
         
         /// Initialize all subsystems.
         void StartUp();

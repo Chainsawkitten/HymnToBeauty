@@ -10,6 +10,9 @@ namespace Geometry {
     class Rectangle;
     class OBJModel;
 }
+namespace Audio {
+    class SoundBuffer;
+}
 
 namespace GUI {
     /// Displays all the hymn's resources.
@@ -60,6 +63,12 @@ namespace GUI {
              */
             void SetTextureSelectedCallback(std::function<void(Texture2D*)> callback);
             
+            /// Set function to call when a sound has been selected.
+            /**
+             * @param callback Function to call.
+             */
+            void SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback);
+            
         private:
             Geometry::Rectangle* rectangle;
             Font* font;
@@ -81,5 +90,10 @@ namespace GUI {
             Texture2D* selectedTexture = nullptr;
             bool hasTextureSelectedCallback = false;
             std::function<void(Texture2D*)> textureSelectedCallback;
+            
+            bool addSoundHover = false;
+            Audio::SoundBuffer* selectedSound = nullptr;
+            bool hasSoundSelectedCallback = false;
+            std::function<void(Audio::SoundBuffer*)> soundSelectedCallback;
     };
 }
