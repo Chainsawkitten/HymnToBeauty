@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AL/al.h>
+#include <string>
 
 namespace Audio {
     class SoundFile;
@@ -22,6 +23,9 @@ namespace Audio {
              * @return The OpenAL buffer ID.
              */
             ALuint Buffer() const;
+            
+            /// The name of the sound.
+            std::string name;
             
         private:
             ALuint buffer;
