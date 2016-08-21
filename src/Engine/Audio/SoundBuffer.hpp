@@ -9,6 +9,9 @@ namespace Audio {
     /// Wrapper for OpenAL buffers.
     class SoundBuffer {
         public:
+            /// Create new unloaded sound buffer.
+            SoundBuffer();
+            
             /// Create a sound buffer from a sound file.
             /**
              * @param soundFile The sound file containing the sound.

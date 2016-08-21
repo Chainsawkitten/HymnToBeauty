@@ -5,6 +5,10 @@
 
 using namespace Audio;
 
+SoundBuffer::SoundBuffer() {
+    
+}
+
 SoundBuffer::SoundBuffer(SoundFile* soundFile) {
     // Create audio buffer.
     alGetError();

@@ -62,6 +62,11 @@ void ResourceList::Update() {
             Texture2D* texture = new Texture2D();
             texture->name = "Texture #" + std::to_string(Hymn().textureNumber++);
             Hymn().textures.push_back(texture);
+        } else if (addSoundHover) {
+            // Add sound button pressed.
+            Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+            sound->name = "Sound #" + std::to_string(Hymn().soundNumber++);
+            Hymn().sounds.push_back(sound);
         } else {
             position  = GetPosition();
             
