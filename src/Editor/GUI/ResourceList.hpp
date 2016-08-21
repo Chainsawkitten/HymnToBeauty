@@ -81,5 +81,7 @@ namespace GUI {
             Texture2D* selectedTexture = nullptr;
             bool hasTextureSelectedCallback = false;
             std::function<void(Texture2D*)> textureSelectedCallback;
+            
+            bool addSoundHover = false;
     };
 }

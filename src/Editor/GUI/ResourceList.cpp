@@ -6,6 +6,7 @@
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Font/Font.hpp>
 #include <Engine/Texture/Texture2D.hpp>
+#include <Engine/Audio/SoundBuffer.hpp>
 #include "ABeeZee.ttf.hpp"
 #include "Add.png.hpp"
 
@@ -42,6 +43,10 @@ void ResourceList::Update() {
     position.y += (Hymn().models.size() + 1) * font->GetHeight();
     rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(10.f, 10.f));
     addTextureHover = rect.Collide(mousePosition);
+    
+    position.y += (Hymn().textures.size() + 1) * font->GetHeight();
+    rect = Physics::Rectangle(position + glm::vec2(font->GetWidth("Sounds") + 5.f, 6.f), glm::vec2(10.f, 10.f));
+    addSoundHover = rect.Collide(mousePosition);
     
     if (Input()->Triggered(InputHandler::CLICK)) {
         if (addEntityHover) {
@@ -151,7 +156,6 @@ void ResourceList::Render() {
     addTexture->Render(position + glm::vec2(font->GetWidth("Textures") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addTextureHover ? 1.f : 0.5f);
     position.y += font->GetHeight();
     
-    unsigned int id = 0U;
     for (Texture2D* texture : Hymn().textures) {
         // Render background if selected.
         if (selectedTexture == texture) {
@@ -161,7 +165,21 @@ void ResourceList::Render() {
         
         font->RenderText(texture->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
         position.y += font->GetHeight();
-        ++id;
+    }
+    
+    font->RenderText("Sounds", position, GetSize().x);
+    addTexture->Render(position + glm::vec2(font->GetWidth("Sounds") + 5.f, 6.f), glm::vec2(addTexture->GetWidth(), addTexture->GetHeight()), addSoundHover ? 1.f : 0.5f);
+    position.y += font->GetHeight();
+    
+    for (Audio::SoundBuffer* sound : Hymn().sounds) {
+        // Render background if selected.
+        /*if (selectedTexture == texture) {
+            color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+            rectangle->Render(position, glm::vec2(size.x, font->GetHeight()), color);
+        }*/
+        
+        font->RenderText(sound->name.c_str(), position + glm::vec2(20.f, 0.f), GetSize().x);
+        position.y += font->GetHeight();
     }
 }
 
