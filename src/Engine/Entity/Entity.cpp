@@ -7,6 +7,7 @@
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
+#include "../Component/Physics.hpp"
 
 Entity::Entity(Scene* scene, const std::string& name) {
     this->scene = scene;
@@ -39,6 +40,7 @@ Json::Value Entity::Save() const {
     Save<Component::DirectionalLight>(entity, "DirectionalLight");
     Save<Component::PointLight>(entity, "PointLight");
     Save<Component::SpotLight>(entity, "SpotLight");
+    Save<Component::Physics>(entity, "Physics");
     
     return entity;
 }
@@ -53,4 +55,5 @@ void Entity::Load(const Json::Value& node) {
     Load<Component::DirectionalLight>(node, "DirectionalLight");
     Load<Component::PointLight>(node, "PointLight");
     Load<Component::SpotLight>(node, "SpotLight");
+    Load<Component::Physics>(node, "Physics");
 }

@@ -158,6 +158,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Lens.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
+        src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
@@ -207,6 +208,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
+        src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
