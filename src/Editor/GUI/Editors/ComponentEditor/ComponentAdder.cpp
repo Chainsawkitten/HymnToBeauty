@@ -10,6 +10,7 @@
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Transform.hpp>
+#include <Engine/Component/Physics.hpp>
 #include <Engine/Component/Material.hpp>
 #include <Engine/Component/DirectionalLight.hpp>
 #include <Engine/Component/PointLight.hpp>
@@ -77,6 +78,7 @@ void ComponentAdder::SetEntity(Entity* entity) {
     componentList->ClearWidgets();
     
     AddComponentButton<Component::Transform>("Transform");
+    AddComponentButton<Component::Physics>("Physics");
     AddComponentButton<Component::Mesh>("Mesh");
     AddComponentButton<Component::Lens>("Lens");
     AddComponentButton<Component::Material>("Material");
