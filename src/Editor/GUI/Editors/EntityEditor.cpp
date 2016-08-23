@@ -10,6 +10,7 @@
 #include <Engine/Geometry/Rectangle.hpp>
 #include "ComponentEditor/ComponentAdder.hpp"
 #include "ComponentEditor/TransformEditor.hpp"
+#include "ComponentEditor/PhysicsEditor.hpp"
 #include "ComponentEditor/LensEditor.hpp"
 #include "ComponentEditor/MeshEditor.hpp"
 #include "ComponentEditor/MaterialEditor.hpp"
@@ -41,6 +42,7 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     removeEntityButton->SetClickedCallback(std::bind(&RemoveEntityPressed, this));
     
     editors.push_back(new TransformEditor(this));
+    editors.push_back(new PhysicsEditor(this));
     editors.push_back(new LensEditor(this));
     editors.push_back(new MeshEditor(this, modelSelector));
     editors.push_back(new MaterialEditor(this, textureSelector));
