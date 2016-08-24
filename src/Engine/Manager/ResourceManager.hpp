@@ -3,7 +3,6 @@
 #include <map>
 #include <GL/glew.h>
 
-class Hub;
 class Shader;
 class ShaderProgram;
 class Texture2D;
