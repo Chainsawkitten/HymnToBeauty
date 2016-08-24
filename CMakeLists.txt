@@ -156,6 +156,7 @@ set(ENGINE_SRCS
         src/Engine/Audio/VorbisFile.cpp
         src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
+        src/Engine/Component/Listener.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
         src/Engine/Component/Physics.cpp
@@ -207,6 +208,7 @@ set(ENGINE_HEADERS
         src/Engine/Audio/VorbisFile.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
+        src/Engine/Component/Listener.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
         src/Engine/Component/Physics.hpp
