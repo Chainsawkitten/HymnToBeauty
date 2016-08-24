@@ -4,6 +4,7 @@
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"
 #include "Manager/ResourceManager.hpp"
+#include "Manager/PhysicsManager.hpp"
 #include "DefaultDiffuse.png.hpp"
 #include "DefaultNormal.png.hpp"
 #include "DefaultSpecular.png.hpp"
@@ -149,7 +150,8 @@ void ActiveHymn::Load(const string& path) {
 }
 
 void ActiveHymn::Update(float deltaTime) {
-    /// @todo Update physics.
+    Managers().physicsManager->Update(activeScene, deltaTime);
+    activeScene.ClearKilled();
 }
 
 void ActiveHymn::Render() {
