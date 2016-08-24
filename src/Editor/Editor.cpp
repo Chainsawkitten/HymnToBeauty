@@ -208,8 +208,6 @@ void Editor::Render() {
     
     if (componentAdder->IsVisible())
         componentAdder->Render();
-    
-    MainWindow::GetInstance()->SwapBuffers();
 }
 
 glm::vec2 Editor::GetSize() const {

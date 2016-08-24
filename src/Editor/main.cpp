@@ -7,6 +7,7 @@
 #include <Engine/Util/Log.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Hymn.hpp>
+#include <thread>
 
 int main() {
     // Enable logging if requested.
@@ -26,15 +27,22 @@ int main() {
     
     Editor* editor = new Editor();
     
+    // Main loop.
+    double targetFPS = 60.0;
+    double lastTime = glfwGetTime();
+    double lastTimeRender = glfwGetTime();
     while (!window->ShouldClose()) {
+        double deltaTime = glfwGetTime() - lastTime;
+        lastTime = glfwGetTime();
+        
         window->Update();
         
         if (editor->IsVisible()) {
             editor->Update();
             editor->Render();
         } else {
+            Hymn().Update(deltaTime);
             Hymn().Render();
-            window->SwapBuffers();
             
             if (Input()->Triggered(InputHandler::PLAYTEST)) {
                 // Reload hymn.
@@ -45,6 +53,14 @@ int main() {
                 editor->SetVisible(true);
             }
         }
+        
+        // Swap buffers and wait until next frame.
+        window->SwapBuffers();
+        
+        long wait = static_cast<long>((1.0 / targetFPS + lastTimeRender - glfwGetTime()) * 1000000.0);
+        if (wait > 0)
+            std::this_thread::sleep_for(std::chrono::microseconds(wait));
+        lastTimeRender = glfwGetTime();
         
         glfwPollEvents();
     }
