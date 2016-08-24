@@ -2,7 +2,6 @@
 
 #include <glm/glm.hpp>
 
-class Hub;
 class Scene;
 class Shader;
 class ShaderProgram;

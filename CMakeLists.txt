@@ -156,6 +156,7 @@ set(ENGINE_SRCS
         src/Engine/Audio/VorbisFile.cpp
         src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
+        src/Engine/Component/Listener.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
         src/Engine/Component/Physics.cpp
@@ -207,6 +208,7 @@ set(ENGINE_HEADERS
         src/Engine/Audio/VorbisFile.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
+        src/Engine/Component/Listener.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
         src/Engine/Component/Physics.hpp
@@ -288,6 +290,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
@@ -327,6 +330,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp

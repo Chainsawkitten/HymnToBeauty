@@ -17,6 +17,7 @@
 #include "ComponentEditor/DirectionalLightEditor.hpp"
 #include "ComponentEditor/PointLightEditor.hpp"
 #include "ComponentEditor/SpotLightEditor.hpp"
+#include "ComponentEditor/ListenerEditor.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
 #include <Engine/Entity/Entity.hpp>
@@ -49,6 +50,7 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     editors.push_back(new DirectionalLightEditor(this));
     editors.push_back(new PointLightEditor(this));
     editors.push_back(new SpotLightEditor(this));
+    editors.push_back(new ListenerEditor(this));
     
     this->componentAdder = componentAdder;
     

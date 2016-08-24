@@ -13,9 +13,6 @@ namespace Component {
              */
             Lens(Entity* entity);
             
-            /// Destructor.
-            ~Lens() final;
-            
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
