@@ -148,6 +148,10 @@ void ActiveHymn::Load(const string& path) {
     }
 }
 
+void ActiveHymn::Update(float deltaTime) {
+    /// @todo Update physics.
+}
+
 void ActiveHymn::Render() {
     Managers().renderManager->Render(activeScene);
 }

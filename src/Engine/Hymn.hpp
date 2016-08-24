@@ -41,6 +41,12 @@ class ActiveHymn {
          */
         void Load(const std::string& path);
         
+        /// Update the scene.
+        /**
+         * @param deltaTime Time since last frame (in seconds).
+         */
+        void Update(float deltaTime);
+        
         /// Render the active scene.
         void Render();
         
