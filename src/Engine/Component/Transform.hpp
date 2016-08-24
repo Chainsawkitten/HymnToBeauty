@@ -13,9 +13,6 @@ namespace Component {
              */
             Transform(Entity* entity);
             
-            /// Destructor.
-            ~Transform() final;
-            
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.

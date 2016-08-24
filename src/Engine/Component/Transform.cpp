@@ -9,10 +9,6 @@ Transform::Transform(Entity* entity) : SuperComponent(entity) {
     
 }
 
-Transform::~Transform() {
-    
-}
-
 Json::Value Transform::Save() const {
     Json::Value component;
     component["position"] = Json::SaveVec3(position);

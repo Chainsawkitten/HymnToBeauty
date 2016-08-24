@@ -9,9 +9,6 @@ Lens::Lens(Entity* entity) : SuperComponent(entity) {
     
 }
 
-Lens::~Lens() {
-}
-
 Json::Value Lens::Save() const {
     Json::Value component;
     component["fieldOfView"] = fieldOfView;
