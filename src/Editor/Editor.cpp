@@ -234,6 +234,7 @@ void Editor::OpenProjectOptions() {
 void Editor::Play() {
     Save();
     SetVisible(false);
+    HideEditors();
 }
 
 void Editor::NewHymn() {
@@ -277,38 +278,33 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
     fileMenu->SetVisible(false);
 }
 
-void Editor::EntitySelected(Entity* entity) {
-    entityEditor->SetEntity(entity);
-    
-    entityEditor->SetVisible(true);
+void Editor::HideEditors() {
+    entityEditor->SetVisible(false);
     modelEditor->SetVisible(false);
     textureEditor->SetVisible(false);
     soundEditor->SetVisible(false);
+}
+
+void Editor::EntitySelected(Entity* entity) {
+    HideEditors();
+    entityEditor->SetEntity(entity);
+    entityEditor->SetVisible(true);
 }
 
 void Editor::ModelSelected(Geometry::OBJModel* model) {
+    HideEditors();
     modelEditor->SetModel(model);
-    
-    entityEditor->SetVisible(false);
     modelEditor->SetVisible(true);
-    textureEditor->SetVisible(false);
-    soundEditor->SetVisible(false);
 }
 
 void Editor::TextureSelected(Texture2D* texture) {
+    HideEditors();
     textureEditor->SetTexture(texture);
-    
-    entityEditor->SetVisible(false);
-    modelEditor->SetVisible(false);
     textureEditor->SetVisible(true);
-    soundEditor->SetVisible(false);
 }
 
 void Editor::SoundSelected(Audio::SoundBuffer* sound) {
+    HideEditors();
     soundEditor->SetSound(sound);
-    
-    entityEditor->SetVisible(false);
-    modelEditor->SetVisible(false);
-    textureEditor->SetVisible(false);
     soundEditor->SetVisible(true);
 }
