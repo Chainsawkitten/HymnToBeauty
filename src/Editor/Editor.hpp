@@ -66,6 +66,7 @@ class Editor : public GUI::Container {
         void NewHymnClosed(const std::string& hymn);
         void OpenHymn();
         void OpenHymnClosed(const std::string& hymn);
+        void HideEditors();
         void EntitySelected(Entity* entity);
         void ModelSelected(Geometry::OBJModel* model);
         void TextureSelected(Texture2D* texture);

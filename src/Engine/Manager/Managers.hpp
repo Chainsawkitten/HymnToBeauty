@@ -2,6 +2,7 @@
 
 class ResourceManager;
 class RenderManager;
+class PhysicsManager;
 class SoundManager;
 
 /// Singleton class that holds all subsystems.
@@ -14,6 +15,9 @@ class Hub {
         
         /// The render manager instance.
         RenderManager* renderManager;
+        
+        /// The physics manager instance.
+        PhysicsManager* physicsManager;
         
         /// The sound manager instance.
         SoundManager* soundManager;

@@ -158,6 +158,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Lens.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
+        src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
@@ -166,6 +167,7 @@ set(ENGINE_SRCS
         src/Engine/Font/Font.cpp
         src/Engine/Lighting/DeferredLighting.cpp
         src/Engine/Manager/Managers.cpp
+        src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
         src/Engine/Manager/SoundManager.cpp
@@ -207,6 +209,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
+        src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
@@ -215,6 +218,7 @@ set(ENGINE_HEADERS
         src/Engine/Font/Font.hpp
         src/Engine/Lighting/DeferredLighting.hpp
         src/Engine/Manager/Managers.hpp
+        src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
         src/Engine/Manager/SoundManager.hpp
@@ -286,6 +290,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
@@ -324,6 +329,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
