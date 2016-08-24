@@ -7,7 +7,9 @@ Listener::Listener(Entity* entity) : SuperComponent(entity) {
 }
 
 Json::Value Listener::Save() const {
-    return Json::Value();
+    Json::Value component;
+    component["placeholderValue"] = "";
+    return component;
 }
 
 void Listener::Load(const Json::Value& node) {
