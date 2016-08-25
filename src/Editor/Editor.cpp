@@ -15,6 +15,7 @@
 #include "GUI/Editors/SoundEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
+#include "GUI/SoundSelector.hpp"
 #include "GUI/FileSelector.hpp"
 #include "GUI/Editors/ComponentEditor/ComponentAdder.hpp"
 
@@ -93,12 +94,17 @@ Editor::Editor() : Container(nullptr) {
     textureSelector->SetSize(GetSize());
     textureSelector->SetTextures(&Hymn().textures);
     
+    // Sound selector.
+    soundSelector = new GUI::SoundSelector(this);
+    soundSelector->SetSize(GetSize());
+    soundSelector->SetSounds(&Hymn().sounds);
+    
     // Component adder.
     componentAdder = new GUI::ComponentAdder(this);
     componentAdder->SetSize(GetSize());
     
     // Editors.
-    entityEditor = new GUI::EntityEditor(this, modelSelector, textureSelector, componentAdder);
+    entityEditor = new GUI::EntityEditor(this, modelSelector, textureSelector, soundSelector, componentAdder);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
@@ -157,6 +163,7 @@ Editor::~Editor() {
     delete fileSelector;
     delete modelSelector;
     delete textureSelector;
+    delete soundSelector;
     delete componentAdder;
     
     Managers().resourceManager->FreeTexture2D(fileTexture);
@@ -178,6 +185,8 @@ void Editor::Update() {
         modelSelector->Update();
     } else if (textureSelector->IsVisible()) {
         textureSelector->Update();
+    } else if (soundSelector->IsVisible()) {
+        soundSelector->Update();
     } else if (componentAdder->IsVisible()) {
         componentAdder->Update();
     } else {
@@ -205,6 +214,9 @@ void Editor::Render() {
     
     if (textureSelector->IsVisible())
         textureSelector->Render();
+    
+    if (soundSelector->IsVisible())
+        soundSelector->Render();
     
     if (componentAdder->IsVisible())
         componentAdder->Render();

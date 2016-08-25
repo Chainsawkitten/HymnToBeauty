@@ -5,6 +5,7 @@
 #include "Manager/RenderManager.hpp"
 #include "Manager/ResourceManager.hpp"
 #include "Manager/PhysicsManager.hpp"
+#include "Manager/SoundManager.hpp"
 #include "DefaultDiffuse.png.hpp"
 #include "DefaultNormal.png.hpp"
 #include "DefaultSpecular.png.hpp"
@@ -151,6 +152,7 @@ void ActiveHymn::Load(const string& path) {
 
 void ActiveHymn::Update(float deltaTime) {
     Managers().physicsManager->Update(activeScene, deltaTime);
+    Managers().soundManager->Update(activeScene);
     activeScene.ClearKilled();
 }
 

@@ -2,6 +2,8 @@
 
 #include <AL/alc.h>
 
+class Scene;
+
 /// Handles OpenAL sound.
 class SoundManager {
     friend class Hub;
@@ -24,6 +26,12 @@ class SoundManager {
          * @param message Message to print to standard error if an error was encountered.
          */
         static void CheckError(const char* message);
+        
+        /// Update Scene containing entities. Moves sound sources and plays sounds.
+        /**
+         * @param scene The scene to update.
+         */
+        void Update(Scene& scene);
         
     private:
         SoundManager();

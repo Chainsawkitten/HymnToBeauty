@@ -161,6 +161,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Mesh.cpp
         src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
+        src/Engine/Component/SoundSource.cpp
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Component/Transform.cpp
@@ -213,6 +214,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Mesh.hpp
         src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
+        src/Engine/Component/SoundSource.hpp
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Component/Transform.hpp
@@ -279,6 +281,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/ModelSelector.cpp
         src/Editor/GUI/TextureSelector.cpp
+        src/Editor/GUI/SoundSelector.cpp
         src/Editor/GUI/TextField.cpp
         src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
@@ -295,6 +298,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
         src/Editor/GUI/Editors/FloatEditor.cpp
@@ -319,6 +323,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/ModelSelector.hpp
         src/Editor/GUI/TextureSelector.hpp
+        src/Editor/GUI/SoundSelector.hpp
         src/Editor/GUI/TextField.hpp
         src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
@@ -335,6 +340,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
         src/Editor/GUI/Editors/FloatEditor.hpp

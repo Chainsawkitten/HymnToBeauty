@@ -16,6 +16,7 @@
 #include <Engine/Component/PointLight.hpp>
 #include <Engine/Component/SpotLight.hpp>
 #include <Engine/Component/Listener.hpp>
+#include <Engine/Component/SoundSource.hpp>
 
 using namespace GUI;
 
@@ -87,6 +88,7 @@ void ComponentAdder::SetEntity(Entity* entity) {
     AddComponentButton<Component::PointLight>("Point light");
     AddComponentButton<Component::SpotLight>("Spot light");
     AddComponentButton<Component::Listener>("Listener");
+    AddComponentButton<Component::SoundSource>("SoundSource");
 }
 
 void ComponentAdder::SetComponentAddedCallback(std::function<void()> callback) {

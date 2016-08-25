@@ -19,6 +19,7 @@ namespace GUI {
     class SoundEditor;
     class ModelSelector;
     class TextureSelector;
+    class SoundSelector;
     class ComponentAdder;
 }
 namespace Geometry {
@@ -104,6 +105,7 @@ class Editor : public GUI::Container {
         GUI::SoundEditor* soundEditor;
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;
+        GUI::SoundSelector* soundSelector;
         GUI::ComponentAdder* componentAdder;
         
         Font* font;
