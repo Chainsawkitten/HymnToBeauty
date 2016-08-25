@@ -104,7 +104,7 @@ Editor::Editor() : Container(nullptr) {
     componentAdder->SetSize(GetSize());
     
     // Editors.
-    entityEditor = new GUI::EntityEditor(this, modelSelector, textureSelector, componentAdder);
+    entityEditor = new GUI::EntityEditor(this, modelSelector, textureSelector, soundSelector, componentAdder);
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
