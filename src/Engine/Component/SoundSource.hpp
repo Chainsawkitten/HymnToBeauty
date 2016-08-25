@@ -4,6 +4,7 @@
 #include <AL/al.h>
 
 class Entity;
+class SoundManager;
 namespace Audio {
     class SoundBuffer;
 }
@@ -11,7 +12,7 @@ namespace Audio {
 namespace Component {
     /// %Component describing a sound source.
     class SoundSource : public SuperComponent {
-        friend class SoundManager;
+        friend class ::SoundManager;
         
         public:
             /// Create new sound source.
