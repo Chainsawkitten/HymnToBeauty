@@ -161,6 +161,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Mesh.cpp
         src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
+        src/Engine/Component/SoundSource.cpp
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Component/Transform.cpp
@@ -213,6 +214,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Mesh.hpp
         src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
+        src/Engine/Component/SoundSource.hpp
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Component/Transform.hpp

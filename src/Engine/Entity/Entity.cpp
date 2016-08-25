@@ -9,6 +9,7 @@
 #include "../Component/SpotLight.hpp"
 #include "../Component/Physics.hpp"
 #include "../Component/Listener.hpp"
+#include "../Component/SoundSource.hpp"
 
 Entity::Entity(Scene* scene, const std::string& name) {
     this->scene = scene;
@@ -43,6 +44,7 @@ Json::Value Entity::Save() const {
     Save<Component::SpotLight>(entity, "SpotLight");
     Save<Component::Physics>(entity, "Physics");
     Save<Component::Listener>(entity, "Listener");
+    Save<Component::SoundSource>(entity, "SoundSource");
     
     return entity;
 }
@@ -59,4 +61,5 @@ void Entity::Load(const Json::Value& node) {
     Load<Component::SpotLight>(node, "SpotLight");
     Load<Component::Physics>(node, "Physics");
     Load<Component::Listener>(node, "Listener");
+    Load<Component::SoundSource>(node, "SoundSource");
 }
