@@ -47,7 +47,7 @@ MainWindow* MainWindow::GetInstance() {
 
 void MainWindow::Init(bool showNotifications) {
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     
     if (debugContext)
         glDebugMessageCallback(showNotifications ? DebugMessageCallback : DebugMessageCallbackIgnoreNotifications, nullptr);
