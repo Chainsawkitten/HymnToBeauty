@@ -76,6 +76,7 @@ namespace GUI {
             
             Entity* entity = nullptr;
             std::vector<ComponentEditor*> editors;
+            std::size_t scrollPosition;
             
             Label* nameLabel;
             StringEditor* nameEditor;
