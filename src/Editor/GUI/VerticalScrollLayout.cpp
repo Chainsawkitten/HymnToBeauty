@@ -16,14 +16,19 @@ VerticalScrollLayout::~VerticalScrollLayout() {
 }
 
 void VerticalScrollLayout::Update() {
-    Container::Update();
-    
     if (Input()->ScrollUp() && scrollPosition > 0U) {
         --scrollPosition;
         UpdatePositions();
-    } else if (Input()->ScrollDown() && scrollPosition < GetWidgets().size()) {
+    } else if (Input()->ScrollDown() && scrollPosition < GetWidgets().size() - 1) {
         ++scrollPosition;
         UpdatePositions();
+    }
+    
+    std::size_t i = 0U;
+    for (Widget* widget : GetWidgets()) {
+        if (widget->IsVisible() && i++ >= scrollPosition) {
+            widget->Update();
+        }
     }
 }
 
@@ -50,8 +55,9 @@ void VerticalScrollLayout::Render() {
         rectangle->Render(GetPosition() + glm::vec2(size.x - 20.f, size.y * yScrolled / yTotal), glm::vec2(20.f, size.y * yCovered / yTotal), color);
     }
     
+    std::size_t i = 0U;
     for (Widget* widget : GetWidgets()) {
-        if (widget->IsVisible() && widget->GetPosition().y - GetPosition().y + widget->GetSize().y <= size.y)
+        if (widget->IsVisible() && i++ >= scrollPosition && widget->GetPosition().y - GetPosition().y + widget->GetSize().y <= size.y)
             widget->Render();
     }
 }
@@ -79,10 +85,10 @@ void VerticalScrollLayout::SetSize(const glm::vec2& size) {
 void VerticalScrollLayout::UpdatePositions() {
     glm::vec2 nextPosition(0.f, 0.f);
     
-    for (std::size_t i=0U; i < GetWidgets().size(); ++i) {
-        if (i >= scrollPosition) {
-            GetWidgets()[i]->SetPosition(GetPosition() + nextPosition);
-            nextPosition.y += GetWidgets()[i]->GetSize().y;
+    std::size_t i = 0U;
+    for (Widget* widget : GetWidgets()) {
+        if (widget->IsVisible() && i++ >= scrollPosition) {
+            nextPosition.y += widget->GetSize().y + 10.f;
         }
     }
 }
