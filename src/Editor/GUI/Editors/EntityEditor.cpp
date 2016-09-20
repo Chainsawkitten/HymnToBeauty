@@ -24,6 +24,7 @@
 #include "StringEditor.hpp"
 #include <Engine/Entity/Entity.hpp>
 #include "../ImageTextButton.hpp"
+#include <Engine/Util/Input.hpp>
 
 using namespace GUI;
 
@@ -83,8 +84,28 @@ void EntityEditor::Update() {
     addComponentButton->Update();
     removeEntityButton->Update();
     
-    for (ComponentEditor* editor : editors)
-        editor->Update();
+    if (Input()->ScrollUp() && scrollPosition > 0U) {
+        --scrollPosition;
+        SetPosition(GetPosition());
+    } else if (Input()->ScrollDown()) {
+        std::size_t visibleEditors = 0U;
+        for (ComponentEditor* editor : editors) {
+            if (editor->IsVisible())
+                ++visibleEditors;
+        }
+        
+        if (scrollPosition < visibleEditors - 1) {
+            ++scrollPosition;
+            SetPosition(GetPosition());
+        }
+    }
+    
+    std::size_t i = 0U;
+    for (ComponentEditor* editor : editors) {
+        if (editor->IsVisible() && i++ >= scrollPosition) {
+            editor->Update();
+        }
+    }
 }
 
 void EntityEditor::Render() {
@@ -96,8 +117,32 @@ void EntityEditor::Render() {
     addComponentButton->Render();
     removeEntityButton->Render();
     
-    for (ComponentEditor* editor : editors)
-        editor->Render();
+    // Draw scrollbar.
+    if (!editors.empty()) {
+        color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
+        float yScrolled = 0.f;
+        float yCovered = 0.f;
+        float yTotal = 0.f;
+        for (std::size_t i=0U; i < editors.size(); ++i) {
+            if (editors[i]->IsVisible()) {
+                yTotal += editors[i]->GetSize().y;
+                
+                if (i < scrollPosition) {
+                    yScrolled += editors[i]->GetSize().y;
+                } else if (yTotal - yScrolled < size.y) {
+                    yCovered += editors[i]->GetSize().y;
+                }
+            }
+        }
+        rectangle->Render(GetPosition() + glm::vec2(size.x - 20.f, size.y * yScrolled / yTotal), glm::vec2(20.f, size.y * yCovered / yTotal), color);
+    }
+    
+    std::size_t i = 0U;
+    for (ComponentEditor* editor : editors) {
+        if (editor->IsVisible() && i++ >= scrollPosition) {
+            editor->Render();
+        }
+    }
 }
 
 void EntityEditor::SetPosition(const glm::vec2& position) {
@@ -113,11 +158,12 @@ void EntityEditor::SetPosition(const glm::vec2& position) {
     addComponentButton->SetPosition(pos);
     pos.y += 30.f;
     
+    std::size_t i = 0U;
     for (ComponentEditor* editor : editors) {
-        editor->SetPosition(pos);
-        
-        if (editor->IsVisible())
+        if (editor->IsVisible() && i++ >= scrollPosition) {
+            editor->SetPosition(pos);
             pos.y += editor->GetSize().y + 10.f;
+        }
     }
 }
 
@@ -128,12 +174,12 @@ glm::vec2 EntityEditor::GetSize() const {
 void EntityEditor::SetSize(const glm::vec2& size) {
     this->size = size;
     
-    nameEditor->SetSize(glm::vec2(size.x - 10.f, 20.f));
-    addComponentButton->SetSize(glm::vec2(size.x, 20.f));
-    removeEntityButton->SetSize(glm::vec2(size.x, 20.f));
+    nameEditor->SetSize(glm::vec2(size.x - 30.f, 20.f));
+    addComponentButton->SetSize(glm::vec2(size.x - 20.f, 20.f));
+    removeEntityButton->SetSize(glm::vec2(size.x - 20.f, 20.f));
     
     for (ComponentEditor* editor : editors)
-        editor->SetSize(size);
+        editor->SetSize(glm::vec2(size.x - 20.f, size.y));
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
