@@ -300,6 +300,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
@@ -345,6 +346,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
