@@ -2,6 +2,7 @@
 
 class ResourceManager;
 class RenderManager;
+class ParticleManager;
 class PhysicsManager;
 class SoundManager;
 
@@ -15,6 +16,9 @@ class Hub {
         
         /// The render manager instance.
         RenderManager* renderManager;
+        
+        /// The particle manager instance.
+        ParticleManager* particleManager;
         
         /// The physics manager instance.
         PhysicsManager* physicsManager;

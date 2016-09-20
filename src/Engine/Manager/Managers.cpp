@@ -2,6 +2,7 @@
 
 #include "ResourceManager.hpp"
 #include "RenderManager.hpp"
+#include "ParticleManager.hpp"
 #include "PhysicsManager.hpp"
 #include "SoundManager.hpp"
 
@@ -18,6 +19,7 @@ Hub& Managers() {
 void Hub::StartUp() {
     resourceManager = new ResourceManager();
     renderManager = new RenderManager();
+    particleManager = new ParticleManager();
     physicsManager = new PhysicsManager();
     soundManager = new SoundManager();
 }
@@ -25,6 +27,7 @@ void Hub::StartUp() {
 void Hub::ShutDown() {
     delete soundManager;
     delete renderManager;
+    delete particleManager;
     delete physicsManager;
     delete resourceManager;
 }
