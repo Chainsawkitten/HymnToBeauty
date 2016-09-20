@@ -305,6 +305,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
+        src/Editor/GUI/Editors/IntEditor.cpp
         src/Editor/GUI/Editors/FloatEditor.cpp
         src/Editor/GUI/Editors/Vec3Editor.cpp
         src/Editor/GUI/Editors/StringEditor.cpp
@@ -347,6 +348,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
+        src/Editor/GUI/Editors/IntEditor.hpp
         src/Editor/GUI/Editors/FloatEditor.hpp
         src/Editor/GUI/Editors/Vec3Editor.hpp
         src/Editor/GUI/Editors/StringEditor.hpp
