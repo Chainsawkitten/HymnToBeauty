@@ -9,7 +9,7 @@ class ParticleManager {
     friend class Hub;
     
     public:
-        /// A particle in the particle emitter.
+        /// A particle in the particle system.
         struct Particle {
                 /// Position.
                 glm::vec3 worldPos;

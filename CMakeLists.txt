@@ -159,6 +159,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Listener.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
+        src/Engine/Component/ParticleEmitter.cpp
         src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
         src/Engine/Component/SoundSource.cpp
@@ -213,6 +214,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Listener.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
+        src/Engine/Component/ParticleEmitter.hpp
         src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
         src/Engine/Component/SoundSource.hpp
