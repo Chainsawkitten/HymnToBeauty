@@ -34,6 +34,8 @@ void Scene::Clear() {
             delete component;
     }
     components.clear();
+    
+    particleCount = 0;
 }
 
 void Scene::ClearKilled() {
