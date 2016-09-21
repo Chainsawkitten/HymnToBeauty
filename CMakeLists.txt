@@ -72,6 +72,9 @@ set(EMBEDDED_INPUT
     shaders/Font.frag
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
+    shaders/Particle.vert
+    shaders/Particle.geom
+    shaders/Particle.frag
     shaders/Post.vert
     shaders/PostColor.frag
     shaders/PostCopy.frag
@@ -98,6 +101,7 @@ set(EMBEDDED_INPUT
     assets/DefaultGlow.png
     assets/Unchecked.png
     assets/Checked.png
+    assets/ParticleAtlas.png
 )
 
 # Headerize

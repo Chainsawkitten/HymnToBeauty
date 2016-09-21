@@ -85,7 +85,7 @@ namespace Component {
             double maxEmitTime = 0.05;
             
             /// Time to next emit (random value between min and max),
-            double timeToNext = 5.0;
+            double timeToNext = 0.1;
             
             /// Type of emitter.
             EmitterType emitterType = EmitterType::POINT;

@@ -1,9 +1,14 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <GL/glew.h>
 #include <random>
 
+class Entity;
 class Scene;
+class Shader;
+class ShaderProgram;
+class Texture2D;
 namespace Component {
     class ParticleEmitter;
 }
@@ -53,6 +58,20 @@ class ParticleManager {
          */
         void Update(Scene& scene, double time);
         
+        /// Update particle buffer.
+        /**
+         * Needs to be called before rendering (but only once a frame).
+         * @param scene The scene to render.
+         */
+        void UpdateBuffer(Scene& scene);
+
+        /// Render the particles in a scene.
+        /**
+         * @param scene %Scene containing particles to render.
+         * @param camera Camera through which to render.
+         */
+        void Render(Scene& scene, Entity* camera);
+        
     private:
         ParticleManager();
         ~ParticleManager();
@@ -69,4 +88,21 @@ class ParticleManager {
         
         std::random_device randomDevice;
         std::mt19937 randomEngine;
+        
+        // Shaders.
+        Shader* vertexShader;
+        Shader* geometryShader;
+        Shader* fragmentShader;
+        ShaderProgram* shaderProgram;
+
+        // The number of rows in the texture atlas.
+        float textureAtlasRowNumber = 4.f;
+
+        // Texture atlas containing the particle textures.
+        Texture2D* textureAtlas;
+
+        // Vertex buffer.
+        GLuint vertexBuffer = 0;
+        GLuint vertexArray = 0;
+        unsigned int vertexCount = 0;
 };

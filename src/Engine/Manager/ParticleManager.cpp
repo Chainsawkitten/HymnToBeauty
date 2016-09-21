@@ -1,16 +1,73 @@
 #include "ParticleManager.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include "../Scene/Scene.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/ParticleEmitter.hpp"
 #include "../Component/Transform.hpp"
+#include "../Component/Lens.hpp"
+#include "../MainWindow.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/ResourceManager.hpp"
+#include "../Shader/Shader.hpp"
+#include "../Shader/ShaderProgram.hpp"
+#include "../Texture/Texture2D.hpp"
+#include "Particle.vert.hpp"
+#include "Particle.geom.hpp"
+#include "Particle.frag.hpp"
+#include "ParticleAtlas.png.hpp"
+
+#define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
 ParticleManager::ParticleManager() {
     randomEngine.seed(randomDevice());
+    
+    // Load shaders.
+    vertexShader = Managers().resourceManager->CreateShader(PARTICLE_VERT, PARTICLE_VERT_LENGTH, GL_VERTEX_SHADER);
+    geometryShader = Managers().resourceManager->CreateShader(PARTICLE_GEOM, PARTICLE_GEOM_LENGTH, GL_GEOMETRY_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(PARTICLE_FRAG, PARTICLE_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
+    
+    textureAtlas = Managers().resourceManager->CreateTexture2D(PARTICLEATLAS_PNG, PARTICLEATLAS_PNG_LENGTH);
+    
+    // Vertex buffer
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, maxParticleCount * sizeof(Particle), NULL, GL_DYNAMIC_DRAW);
+    
+    // Define vertex data layout.
+    glGenVertexArrays(1, &vertexArray);
+    glBindVertexArray(vertexArray);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+    glEnableVertexAttribArray(4);
+    glEnableVertexAttribArray(5);
+    glEnableVertexAttribArray(6);
+    glEnableVertexAttribArray(7);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(0));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 3));
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 5));
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 6));
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 7));
+    glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 10));
+    glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 13));
+    glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), BUFFER_OFFSET(sizeof(float) * 16));
+    
+    glBindVertexArray(0);
 }
 
 ParticleManager::~ParticleManager() {
+    Managers().resourceManager->FreeShaderProgram(shaderProgram);
+    Managers().resourceManager->FreeShader(vertexShader);
+    Managers().resourceManager->FreeShader(geometryShader);
+    Managers().resourceManager->FreeShader(fragmentShader);
+    Managers().resourceManager->FreeTexture2D(textureAtlas);
     
+    glDeleteBuffers(1, &vertexBuffer);
 }
 
 unsigned int ParticleManager::GetMaxParticleCount() const {
@@ -39,6 +96,59 @@ void ParticleManager::Update(Scene& scene, double time) {
             emitter->timeToNext += emitter->minEmitTime + zeroToOne(randomEngine) * (emitter->maxEmitTime - emitter->minEmitTime);
             EmitParticle(scene, emitter);
         }
+    }
+}
+
+void ParticleManager::UpdateBuffer(Scene& scene) {
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, scene.GetParticleCount() * sizeof(Particle), scene.GetParticles());
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void ParticleManager::Render(Scene& scene, Entity* camera) {
+    if (scene.GetParticleCount() > 0) {
+        // Don't write to depth buffer.
+        GLboolean depthWriting;
+        glGetBooleanv(GL_DEPTH_WRITEMASK, &depthWriting);
+        glDepthMask(GL_FALSE);
+        
+        // Blending
+        glEnablei(GL_BLEND, 0);
+        glEnablei(GL_BLEND, 1);
+        glBlendFunci(0, GL_SRC_ALPHA, GL_ONE);
+        glBlendFunci(1, GL_SRC_ALPHA, GL_ONE);
+        
+        shaderProgram->Use();
+        
+        glBindVertexArray(vertexArray);
+        
+        glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
+        
+        // Base image texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureAtlas->GetTextureID());
+        
+        // Send the matrices to the shader.
+        glm::mat4 viewMat = camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position);
+        glm::mat4 projectionMat = camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize());
+        glm::mat4 viewProjectionMat = projectionMat * viewMat;
+        glm::vec3 up(glm::inverse(camera->GetComponent<Component::Transform>()->GetCameraOrientation())* glm::vec4(0, 1, 0, 1));
+        
+        glUniform3fv(shaderProgram->GetUniformLocation("cameraPosition"), 1, &camera->GetComponent<Component::Transform>()->position[0]);
+        glUniform3fv(shaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
+        glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjectionMatrix"), 1, GL_FALSE, &viewProjectionMat[0][0]);
+        glUniform1fv(shaderProgram->GetUniformLocation("textureAtlasRows"), 1, &textureAtlasRowNumber);
+        
+        // Draw the triangles
+        glDrawArrays(GL_POINTS, 0, scene.GetParticleCount());
+        
+        // Reset state values we've changed.
+        glDepthMask(depthWriting);
+        glDisablei(GL_BLEND, 0);
+        glDisablei(GL_BLEND, 1);
+        
+        glUseProgram(0);
+        glBindVertexArray(0);
     }
 }
 
