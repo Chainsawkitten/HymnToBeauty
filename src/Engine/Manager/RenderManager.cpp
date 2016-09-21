@@ -1,8 +1,9 @@
 #include "RenderManager.hpp"
 
 #include <GL/glew.h>
-#include "../Manager/Managers.hpp"
-#include "../Manager/ResourceManager.hpp"
+#include "Managers.hpp"
+#include "ResourceManager.hpp"
+#include "ParticleManager.hpp"
 #include "Default3D.vert.hpp"
 #include "Default3D.frag.hpp"
 #include "../Shader/ShaderProgram.hpp"
@@ -128,6 +129,10 @@ void RenderManager::Render(Scene& scene) {
         // Anti-aliasing.
         fxaaFilter->SetScreenSize(screenSize);
         postProcessing->ApplyFilter(fxaaFilter);
+        
+        // Render particles.
+        Managers().particleManager->UpdateBuffer(scene);
+        Managers().particleManager->Render(scene, camera);
         
         // Glow.
         glowBlurFilter->SetScreenSize(screenSize);

@@ -19,6 +19,7 @@
 #include "ComponentEditor/SpotLightEditor.hpp"
 #include "ComponentEditor/ListenerEditor.hpp"
 #include "ComponentEditor/SoundSourceEditor.hpp"
+#include "ComponentEditor/ParticleEmitterEditor.hpp"
 #include "../Label.hpp"
 #include "StringEditor.hpp"
 #include <Engine/Entity/Entity.hpp>
@@ -54,6 +55,7 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     editors.push_back(new SpotLightEditor(this));
     editors.push_back(new ListenerEditor(this));
     editors.push_back(new SoundSourceEditor(this, soundSelector));
+    editors.push_back(new ParticleEmitterEditor(this));
     
     this->componentAdder = componentAdder;
     

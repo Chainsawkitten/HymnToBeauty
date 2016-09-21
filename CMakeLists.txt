@@ -72,6 +72,9 @@ set(EMBEDDED_INPUT
     shaders/Font.frag
     shaders/SingleColor2D.frag
     shaders/Texture2D.frag
+    shaders/Particle.vert
+    shaders/Particle.geom
+    shaders/Particle.frag
     shaders/Post.vert
     shaders/PostColor.frag
     shaders/PostCopy.frag
@@ -98,6 +101,7 @@ set(EMBEDDED_INPUT
     assets/DefaultGlow.png
     assets/Unchecked.png
     assets/Checked.png
+    assets/ParticleAtlas.png
 )
 
 # Headerize
@@ -159,6 +163,7 @@ set(ENGINE_SRCS
         src/Engine/Component/Listener.cpp
         src/Engine/Component/Material.cpp
         src/Engine/Component/Mesh.cpp
+        src/Engine/Component/ParticleEmitter.cpp
         src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
         src/Engine/Component/SoundSource.cpp
@@ -169,6 +174,7 @@ set(ENGINE_SRCS
         src/Engine/Font/Font.cpp
         src/Engine/Lighting/DeferredLighting.cpp
         src/Engine/Manager/Managers.cpp
+        src/Engine/Manager/ParticleManager.cpp
         src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
@@ -212,6 +218,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/Listener.hpp
         src/Engine/Component/Material.hpp
         src/Engine/Component/Mesh.hpp
+        src/Engine/Component/ParticleEmitter.hpp
         src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
         src/Engine/Component/SoundSource.hpp
@@ -222,6 +229,7 @@ set(ENGINE_HEADERS
         src/Engine/Font/Font.hpp
         src/Engine/Lighting/DeferredLighting.hpp
         src/Engine/Manager/Managers.hpp
+        src/Engine/Manager/ParticleManager.hpp
         src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
@@ -296,12 +304,16 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
+        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
+        src/Editor/GUI/Editors/IntEditor.cpp
+        src/Editor/GUI/Editors/DoubleEditor.cpp
         src/Editor/GUI/Editors/FloatEditor.cpp
+        src/Editor/GUI/Editors/Vec2Editor.cpp
         src/Editor/GUI/Editors/Vec3Editor.cpp
         src/Editor/GUI/Editors/StringEditor.cpp
         src/Editor/GUI/Editors/BoolEditor.cpp
@@ -338,12 +350,16 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
+        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
         src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
         src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
+        src/Editor/GUI/Editors/IntEditor.hpp
+        src/Editor/GUI/Editors/DoubleEditor.hpp
         src/Editor/GUI/Editors/FloatEditor.hpp
+        src/Editor/GUI/Editors/Vec2Editor.hpp
         src/Editor/GUI/Editors/Vec3Editor.hpp
         src/Editor/GUI/Editors/StringEditor.hpp
         src/Editor/GUI/Editors/BoolEditor.hpp
