@@ -36,6 +36,12 @@ class ParticleManager {
                 float textureIndex;
         };
         
+        /// Get the maximum amount of particles.
+        /**
+         * @return Maximum amount of particles.
+         */
+        unsigned int GetMaxParticleCount() const;
+        
         /// Update all the system's particles, spawn new particles etc.
         /**
          * @param scene Scene to update.
@@ -48,4 +54,6 @@ class ParticleManager {
         ~ParticleManager();
         ParticleManager(Particle const&) = delete;
         void operator=(Particle const&) = delete;
+        
+        unsigned int maxParticleCount = 10000;
 };

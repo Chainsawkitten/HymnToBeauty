@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <typeinfo>
+#include "../Manager/ParticleManager.hpp"
 
 class Entity;
 namespace Component {
@@ -45,6 +46,24 @@ class Scene {
         /// Removes all killed game objects, entities and components in the scene.
         void ClearKilled();
         
+        /// Get all the particles in the scene.
+        /**
+         * @return Array of all the particles in the scene.
+         */
+        ParticleManager::Particle* GetParticles() const;
+        
+        /// Get the number of particles in the scene.
+        /**
+         * @return The number of particles in the scene.
+         */
+        unsigned int GetParticleCount() const;
+        
+        /// Set the number of particles in the scene.
+        /**
+         * @param particleCount The number of particles in the scene.
+         */
+        void SetParticleCount(unsigned int particleCount);
+        
     private:
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
@@ -54,6 +73,10 @@ class Scene {
         
         // Map containing list of components.
         std::map<const std::type_info*, std::vector<Component::SuperComponent*>> components;
+        
+        // All particles in the scene.
+        ParticleManager::Particle* particles;
+        unsigned int particleCount = 0;
 };
 
 template<typename T> inline std::vector<T*>& Scene::GetComponents() {

@@ -2,13 +2,16 @@
 
 #include "../Entity/Entity.hpp"
 #include "../Component/SuperComponent.hpp"
+#include "../Manager/Managers.hpp"
 
 Scene::Scene() {
-    
+    particles = new ParticleManager::Particle[Managers().particleManager->GetMaxParticleCount()];
 }
 
 Scene::~Scene() {
     Clear();
+    
+    delete[] particles;
 }
 
 Entity* Scene::CreateEntity(const std::string& name) {
@@ -60,6 +63,18 @@ void Scene::ClearKilled() {
             ++i;
         }
     }
+}
+
+ParticleManager::Particle* Scene::GetParticles() const {
+    return particles;
+}
+
+unsigned int Scene::GetParticleCount() const {
+    return particleCount;
+}
+
+void Scene::SetParticleCount(unsigned int particleCount) {
+    this->particleCount = particleCount;
 }
 
 void Scene::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {
