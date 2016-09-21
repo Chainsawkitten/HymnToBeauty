@@ -1,8 +1,12 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <random>
 
 class Scene;
+namespace Component {
+    class ParticleEmitter;
+}
 
 /// Handles particles.
 class ParticleManager {
@@ -55,5 +59,14 @@ class ParticleManager {
         ParticleManager(Particle const&) = delete;
         void operator=(Particle const&) = delete;
         
+        // Decide where the emitter should emit before rendering.
+        void EmitParticle(Scene& scene, Component::ParticleEmitter* emitter);
+        
+        // Emit a particle at the given position.
+        void EmitParticle(Scene& scene, const glm::vec3& position, Component::ParticleEmitter* emitter);
+        
         unsigned int maxParticleCount = 10000;
+        
+        std::random_device randomDevice;
+        std::mt19937 randomEngine;
 };
