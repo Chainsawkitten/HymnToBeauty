@@ -67,6 +67,12 @@ class MainWindow {
         /// Swap front- and backbuffers.
         void SwapBuffers();
         
+        /// Get GLFW window.
+        /**
+         * @return The GLFW window struct.
+         */
+        GLFWwindow* GetGLFWWindow() const;
+        
     private:
         static MainWindow* instance;
         

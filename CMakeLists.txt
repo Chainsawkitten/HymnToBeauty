@@ -29,6 +29,9 @@ include_directories(externals/glm)
 # STB
 include_directories(externals/stb)
 
+# Imgui
+include_directories(externals/imgui)
+
 # OpenAL Soft
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
 add_subdirectory(externals/openal-soft)
@@ -274,8 +277,12 @@ set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
 ## Editor ##
 set(EDITOR_SRCS
+        externals/imgui/imgui.cpp
+        externals/imgui/imgui_demo.cpp
+        externals/imgui/imgui_draw.cpp
         src/Editor/main.cpp
         src/Editor/Editor.cpp
+        src/Editor/GUI/ImguiOpenGLImplementation.cpp
         src/Editor/GUI/Widget.cpp
         src/Editor/GUI/Container.cpp
         src/Editor/GUI/HorizontalLayout.cpp
@@ -322,6 +329,7 @@ set(EDITOR_SRCS
 
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
+        src/Editor/GUI/ImguiOpenGLImplementation.hpp
         src/Editor/GUI/Widget.hpp
         src/Editor/GUI/Container.hpp
         src/Editor/GUI/HorizontalLayout.hpp
