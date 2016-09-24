@@ -30,7 +30,7 @@ int main() {
     Editor* editor = new Editor();
     
     // Setup imgui implementation.
-    ImGuiImplementation::Init(window->GetGLFWWindow(), true);
+    ImGuiImplementation::Init(window->GetGLFWWindow());
     
     // Main loop.
     double targetFPS = 60.0;

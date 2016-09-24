@@ -3,11 +3,15 @@
 struct GLFWwindow;
 
 namespace ImGuiImplementation {
-    bool Init(GLFWwindow* window, bool install_callbacks);
-    void Shutdown();
-    void NewFrame();
+    /// Initialize the ImGui implementation.
+    /**
+     * @param window Window to get output for.
+     */
+    void Init(GLFWwindow* window);
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-    void InvalidateDeviceObjects();
-    bool CreateDeviceObjects();
+    /// Shutdown ImGui.
+    void Shutdown();
+    
+    /// Start a new frame.
+    void NewFrame();
 }
