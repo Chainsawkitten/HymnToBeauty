@@ -8,7 +8,7 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
-#include "GUI/ImguiOpenGLImplementation.hpp"
+#include "ImGui/OpenGLImplementation.hpp"
 #include <imgui.h>
 
 int main() {

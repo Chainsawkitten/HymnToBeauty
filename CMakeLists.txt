@@ -282,7 +282,7 @@ set(EDITOR_SRCS
         externals/imgui/imgui_draw.cpp
         src/Editor/main.cpp
         src/Editor/Editor.cpp
-        src/Editor/GUI/ImguiOpenGLImplementation.cpp
+        src/Editor/ImGui/OpenGLImplementation.cpp
         src/Editor/GUI/Widget.cpp
         src/Editor/GUI/Container.cpp
         src/Editor/GUI/HorizontalLayout.cpp
@@ -329,7 +329,7 @@ set(EDITOR_SRCS
 
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
-        src/Editor/GUI/ImguiOpenGLImplementation.hpp
+        src/Editor/ImGui/OpenGLImplementation.hpp
         src/Editor/GUI/Widget.hpp
         src/Editor/GUI/Container.hpp
         src/Editor/GUI/HorizontalLayout.hpp
