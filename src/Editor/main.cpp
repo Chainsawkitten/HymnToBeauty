@@ -30,7 +30,7 @@ int main() {
     Editor* editor = new Editor();
     
     // Setup imgui implementation.
-    ImGui_ImplGlfwGL3_Init(window->GetGLFWWindow(), true);
+    ImGuiImplementation::Init(window->GetGLFWWindow(), true);
     
     // Main loop.
     double targetFPS = 60.0;
@@ -43,7 +43,7 @@ int main() {
         glfwPollEvents();
         
         // Start new frame.
-        ImGui_ImplGlfwGL3_NewFrame();
+        ImGuiImplementation::NewFrame();
         
         window->Update();
         
@@ -82,7 +82,7 @@ int main() {
         editor->Save();
     
     // Shut down and cleanup.
-    ImGui_ImplGlfwGL3_Shutdown();
+    ImGuiImplementation::Shutdown();
     delete editor;
     
     Managers().ShutDown();
