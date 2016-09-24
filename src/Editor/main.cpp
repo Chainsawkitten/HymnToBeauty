@@ -51,7 +51,7 @@ int main() {
             editor->Update();
             editor->Render();
             
-            ImGui::Text("Hello, world!");
+            editor->Show();
             ImGui::Render();
         } else {
             Hymn().Update(deltaTime);

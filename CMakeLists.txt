@@ -88,11 +88,7 @@ set(EMBEDDED_INPUT
     shaders/PostGlow.frag
     shaders/PostGlowBlur.frag
     assets/ABeeZee.ttf
-    assets/File.png
-    assets/Options.png
-    assets/Play.png
     assets/Close.png
-    assets/NewHymn.png
     assets/OpenHymn.png
     assets/Add.png
     assets/Subtract.png
