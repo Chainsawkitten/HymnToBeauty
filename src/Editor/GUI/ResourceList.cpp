@@ -36,9 +36,18 @@ void ResourceList::Show() {
             Hymn().models.push_back(model);
         }
         
-        for (Geometry::OBJModel* model : Hymn().models) {
+        for (auto it = Hymn().models.begin(); it != Hymn().models.end(); ++it) {
+            Geometry::OBJModel* model = *it;
             if (ImGui::Selectable(model->name.c_str())) {
                 modelSelectedCallback(model);
+            }
+            
+            if (ImGui::BeginPopupContextItem(model->name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    delete model;
+                    Hymn().models.erase(it--);
+                }
+                ImGui::EndPopup();
             }
         }
         
