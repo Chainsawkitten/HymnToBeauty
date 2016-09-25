@@ -15,6 +15,7 @@
 #include <Engine/Util/Input.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Physics/Rectangle.hpp>
+#include <imgui.h>
 
 using namespace GUI;
 
@@ -215,6 +216,52 @@ glm::vec2 ResourceList::GetSize() const {
 
 void ResourceList::SetSize(const glm::vec2& size) {
     this->size = size;
+}
+
+void ResourceList::Show() {
+    ImGui::Begin("Resources");
+    
+    if (ImGui::TreeNode("Entities")) {
+        for (Entity* entity : Hymn().activeScene.GetEntities()) {
+            if (ImGui::Button(entity->name.c_str())) {
+                entitySelectedCallback(entity);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    if (ImGui::TreeNode("Models")) {
+        for (Geometry::OBJModel* model : Hymn().models) {
+            if (ImGui::Button(model->name.c_str())) {
+                modelSelectedCallback(model);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    if (ImGui::TreeNode("Textures")) {
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Button(texture->name.c_str())) {
+                textureSelectedCallback(texture);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    if (ImGui::TreeNode("Sounds")) {
+        for (Audio::SoundBuffer* sound : Hymn().sounds) {
+            if (ImGui::Button(sound->name.c_str())) {
+                soundSelectedCallback(sound);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::End();
 }
 
 void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {

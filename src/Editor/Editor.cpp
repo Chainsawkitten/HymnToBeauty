@@ -187,6 +187,10 @@ void Editor::Show() {
     if (selectHymnWindow.IsVisible())
         selectHymnWindow.Show();
     
+    // Show resource list.
+    if (resourceList->IsVisible())
+        resourceList->Show();
+    
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
     

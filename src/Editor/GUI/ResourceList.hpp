@@ -45,6 +45,9 @@ namespace GUI {
              */
             void SetSize(const glm::vec2& size) override;
             
+            /// Show the resource list.
+            void Show();
+            
             /// Set function to call when an entity has been selected.
             /**
              * @param callback Function to call.
