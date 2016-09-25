@@ -4,7 +4,6 @@
 #include <Engine/Font/Font.hpp>
 #include <Engine/Util/Input.hpp>
 #include <Engine/Texture/Texture2D.hpp>
-#include "GUI/SelectHymnWindow.hpp"
 #include "GUI/ResourceList.hpp"
 #include "GUI/Editors/EntityEditor.hpp"
 #include "GUI/Editors/ModelEditor.hpp"
@@ -113,9 +112,7 @@ Editor::~Editor() {
 }
 
 void Editor::Update() {
-    if (childWindow != nullptr) {
-        childWindow->Update();
-    } else if (fileSelector->IsVisible()) {
+    if (fileSelector->IsVisible()) {
         fileSelector->Update();
     } else if (modelSelector->IsVisible()) {
         modelSelector->Update();
@@ -135,9 +132,6 @@ void Editor::Render() {
     Hymn().Render();
     
     RenderWidgets();
-    
-    if (childWindow != nullptr)
-        childWindow->Render();
     
     if (fileSelector->IsVisible())
         fileSelector->Render();
@@ -189,6 +183,10 @@ void Editor::Show() {
         ImGui::EndMainMenuBar();
     }
     
+    // Show hymn selection window.
+    if (selectHymnWindow.IsVisible())
+        selectHymnWindow.Show();
+    
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
     
@@ -207,10 +205,11 @@ void Editor::Play() {
 }
 
 void Editor::NewHymn() {
-    childWindow = new GUI::SelectHymnWindow(this);
-    childWindow->SetPosition(glm::vec2(0.f, 0.f));
-    childWindow->SetSize(GetSize());
-    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
+    selectHymnWindow.Scan();
+    selectHymnWindow.SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
+    selectHymnWindow.SetTitle("New Hymn");
+    selectHymnWindow.SetOpenButtonName("Create");
+    selectHymnWindow.SetVisible(true);
 }
 
 void Editor::NewHymnClosed(const std::string& hymn) {
@@ -221,15 +220,15 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         resourceList->SetVisible(true);
     }
     
-    delete childWindow;
-    childWindow = nullptr;
+    selectHymnWindow.SetVisible(false);
 }
 
 void Editor::OpenHymn() {
-    childWindow = new GUI::SelectHymnWindow(this);
-    childWindow->SetPosition(glm::vec2(0.f, 0.f));
-    childWindow->SetSize(GetSize());
-    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
+    selectHymnWindow.Scan();
+    selectHymnWindow.SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
+    selectHymnWindow.SetTitle("Open Hymn");
+    selectHymnWindow.SetOpenButtonName("Open");
+    selectHymnWindow.SetVisible(true);
 }
 
 void Editor::OpenHymnClosed(const std::string& hymn) {
@@ -239,8 +238,7 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
         resourceList->SetVisible(true);
     }
     
-    delete childWindow;
-    childWindow = nullptr;
+    selectHymnWindow.SetVisible(false);
 }
 
 void Editor::HideEditors() {

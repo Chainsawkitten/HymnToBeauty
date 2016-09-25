@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GUI/Container.hpp"
+#include "GUI/SelectHymnWindow.hpp"
 #include <string>
 
 class Texture2D;
@@ -71,7 +72,7 @@ class Editor : public GUI::Container {
         void TextureSelected(Texture2D* texture);
         void SoundSelected(Audio::SoundBuffer* sound);
         
-        GUI::SelectHymnWindow* childWindow = nullptr;
+        GUI::SelectHymnWindow selectHymnWindow;
         GUI::FileSelector* fileSelector;
         
         // Resource list.
