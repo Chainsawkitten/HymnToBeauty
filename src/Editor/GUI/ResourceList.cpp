@@ -222,6 +222,9 @@ void ResourceList::Show() {
     ImGui::Begin("Resources");
     
     if (ImGui::TreeNode("Entities")) {
+        if (ImGui::Button("Add entity"))
+            Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
+        
         for (Entity* entity : Hymn().activeScene.GetEntities()) {
             if (ImGui::Button(entity->name.c_str())) {
                 entitySelectedCallback(entity);
@@ -232,6 +235,12 @@ void ResourceList::Show() {
     }
     
     if (ImGui::TreeNode("Models")) {
+        if (ImGui::Button("Add model")) {
+            Geometry::OBJModel* model = new Geometry::OBJModel();
+            model->name = "Model #" + std::to_string(Hymn().modelNumber++);
+            Hymn().models.push_back(model);
+        }
+        
         for (Geometry::OBJModel* model : Hymn().models) {
             if (ImGui::Button(model->name.c_str())) {
                 modelSelectedCallback(model);
@@ -242,6 +251,12 @@ void ResourceList::Show() {
     }
     
     if (ImGui::TreeNode("Textures")) {
+        if (ImGui::Button("Add texture")) {
+            Texture2D* texture = new Texture2D();
+            texture->name = "Texture #" + std::to_string(Hymn().textureNumber++);
+            Hymn().textures.push_back(texture);
+        }
+        
         for (Texture2D* texture : Hymn().textures) {
             if (ImGui::Button(texture->name.c_str())) {
                 textureSelectedCallback(texture);
@@ -252,6 +267,12 @@ void ResourceList::Show() {
     }
     
     if (ImGui::TreeNode("Sounds")) {
+        if (ImGui::Button("Add sound")) {
+            Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+            sound->name = "Sound #" + std::to_string(Hymn().soundNumber++);
+            Hymn().sounds.push_back(sound);
+        }
+        
         for (Audio::SoundBuffer* sound : Hymn().sounds) {
             if (ImGui::Button(sound->name.c_str())) {
                 soundSelectedCallback(sound);
