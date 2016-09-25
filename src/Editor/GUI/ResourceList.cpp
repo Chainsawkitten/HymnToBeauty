@@ -14,6 +14,7 @@ using namespace GUI;
 void ResourceList::Show() {
     ImGui::Begin("Resources");
     
+    // Entities.
     if (ImGui::TreeNode("Entities")) {
         if (ImGui::Button("Add entity"))
             Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
@@ -27,6 +28,7 @@ void ResourceList::Show() {
         ImGui::TreePop();
     }
     
+    // Models.
     if (ImGui::TreeNode("Models")) {
         if (ImGui::Button("Add model")) {
             Geometry::OBJModel* model = new Geometry::OBJModel();
@@ -43,6 +45,7 @@ void ResourceList::Show() {
         ImGui::TreePop();
     }
     
+    // Textures.
     if (ImGui::TreeNode("Textures")) {
         if (ImGui::Button("Add texture")) {
             Texture2D* texture = new Texture2D();
@@ -50,15 +53,25 @@ void ResourceList::Show() {
             Hymn().textures.push_back(texture);
         }
         
-        for (Texture2D* texture : Hymn().textures) {
+        for (auto it = Hymn().textures.begin(); it != Hymn().textures.end(); ++it) {
+            Texture2D* texture = *it;
             if (ImGui::Selectable(texture->name.c_str())) {
                 textureSelectedCallback(texture);
+            }
+            
+            if (ImGui::BeginPopupContextItem(texture->name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    delete texture;
+                    Hymn().textures.erase(it--);
+                }
+                ImGui::EndPopup();
             }
         }
         
         ImGui::TreePop();
     }
     
+    // Sounds.
     if (ImGui::TreeNode("Sounds")) {
         if (ImGui::Button("Add sound")) {
             Audio::SoundBuffer* sound = new Audio::SoundBuffer();
