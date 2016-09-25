@@ -38,6 +38,12 @@ Editor::Editor() : Container(nullptr) {
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
+    // Resource list.
+    resourceList.SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
+    resourceList.SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
+    resourceList.SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
+    resourceList.SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
+    
     // File selector.
     fileSelector = new GUI::FileSelector(this);
     fileSelector->SetSize(GetSize());
