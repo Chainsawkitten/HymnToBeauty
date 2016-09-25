@@ -226,7 +226,7 @@ void ResourceList::Show() {
             Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
         
         for (Entity* entity : Hymn().activeScene.GetEntities()) {
-            if (ImGui::Button(entity->name.c_str())) {
+            if (ImGui::Selectable(entity->name.c_str())) {
                 entitySelectedCallback(entity);
             }
         }
@@ -242,7 +242,7 @@ void ResourceList::Show() {
         }
         
         for (Geometry::OBJModel* model : Hymn().models) {
-            if (ImGui::Button(model->name.c_str())) {
+            if (ImGui::Selectable(model->name.c_str())) {
                 modelSelectedCallback(model);
             }
         }
@@ -258,7 +258,7 @@ void ResourceList::Show() {
         }
         
         for (Texture2D* texture : Hymn().textures) {
-            if (ImGui::Button(texture->name.c_str())) {
+            if (ImGui::Selectable(texture->name.c_str())) {
                 textureSelectedCallback(texture);
             }
         }
@@ -274,7 +274,7 @@ void ResourceList::Show() {
         }
         
         for (Audio::SoundBuffer* sound : Hymn().sounds) {
-            if (ImGui::Button(sound->name.c_str())) {
+            if (ImGui::Selectable(sound->name.c_str())) {
                 soundSelectedCallback(sound);
             }
         }
