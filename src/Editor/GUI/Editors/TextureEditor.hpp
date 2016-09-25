@@ -36,6 +36,9 @@ namespace GUI {
             /// Render the widget.
             void Render() override;
             
+            /// Show the editor.
+            void Show();
+            
             /// Set widget's position.
             /**
              * @param position New position.
@@ -82,5 +85,7 @@ namespace GUI {
             
             Label* srgbLabel;
             BoolEditor* srgbEditor;
+            
+            char name[128] = "";
     };
 }

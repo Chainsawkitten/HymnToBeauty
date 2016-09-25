@@ -185,6 +185,10 @@ void Editor::Show() {
     if (resourceList.IsVisible())
         resourceList.Show();
     
+    // Show editors.
+    if (textureEditor->IsVisible())
+        textureEditor->Show();
+    
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
     

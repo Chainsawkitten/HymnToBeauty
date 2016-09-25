@@ -16,6 +16,7 @@
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include "../ImageTextButton.hpp"
+#include <imgui.h>
 
 using namespace GUI;
 
@@ -73,6 +74,20 @@ void TextureEditor::Render() {
     srgbEditor->Render();
 }
 
+void TextureEditor::Show() {
+    if (ImGui::Begin("Texture editor")) {
+        ImGui::InputText("Name", name, 128);
+        texture->name = name;
+        
+        if (ImGui::Button("Load PNG image")) {
+            LoadPressed();
+        }
+        
+        ImGui::Checkbox("SRGB", &texture->srgb);
+    }
+    ImGui::End();
+}
+
 void TextureEditor::SetPosition(const glm::vec2& position) {
     Widget::SetPosition(position);
     
@@ -98,6 +113,8 @@ void TextureEditor::SetSize(const glm::vec2& size) {
 
 void TextureEditor::SetTexture(Texture2D* texture) {
     this->texture = texture;
+    
+    strcpy(name, texture->name.c_str());
     
     nameEditor->SetString(&texture->name);
     srgbEditor->SetBool(&texture->srgb);
