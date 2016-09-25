@@ -38,17 +38,6 @@ Editor::Editor() : Container(nullptr) {
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
-    // Resource list.
-    resourceList = new GUI::ResourceList(this);
-    resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    resourceList->SetPosition(glm::vec2(0.f, 64.f));
-    resourceList->SetVisible(false);
-    resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
-    resourceList->SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
-    resourceList->SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
-    AddWidget(resourceList);
-    
     // File selector.
     fileSelector = new GUI::FileSelector(this);
     fileSelector->SetSize(GetSize());
@@ -96,7 +85,6 @@ Editor::Editor() : Container(nullptr) {
 }
 
 Editor::~Editor() {
-    delete resourceList;
     delete entityEditor;
     delete modelEditor;
     delete textureEditor;
@@ -188,8 +176,8 @@ void Editor::Show() {
         selectHymnWindow.Show();
     
     // Show resource list.
-    if (resourceList->IsVisible())
-        resourceList->Show();
+    if (resourceList.IsVisible())
+        resourceList.Show();
     
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
@@ -221,7 +209,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
     if (!hymn.empty()) {
         Hymn().Clear();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
-        resourceList->SetVisible(true);
+        resourceList.SetVisible(true);
     }
     
     selectHymnWindow.SetVisible(false);
@@ -239,7 +227,7 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
         Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
-        resourceList->SetVisible(true);
+        resourceList.SetVisible(true);
     }
     
     selectHymnWindow.SetVisible(false);

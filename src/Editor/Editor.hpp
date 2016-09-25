@@ -2,15 +2,14 @@
 
 #include "GUI/Container.hpp"
 #include "GUI/SelectHymnWindow.hpp"
+#include "GUI/ResourceList.hpp"
 #include <string>
 
 class Texture2D;
 class Font;
 class Entity;
 namespace GUI {
-    class SelectHymnWindow;
     class FileSelector;
-    class ResourceList;
     class EntityEditor;
     class ModelEditor;
     class TextureEditor;
@@ -76,7 +75,7 @@ class Editor : public GUI::Container {
         GUI::FileSelector* fileSelector;
         
         // Resource list.
-        GUI::ResourceList* resourceList;
+        GUI::ResourceList resourceList;
         
         // Editors.
         GUI::EntityEditor* entityEditor;
