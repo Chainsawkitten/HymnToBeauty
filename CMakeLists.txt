@@ -280,7 +280,6 @@ set(EDITOR_SRCS
         src/Editor/ImGui/OpenGLImplementation.cpp
         src/Editor/GUI/Widget.cpp
         src/Editor/GUI/Container.cpp
-        src/Editor/GUI/HorizontalLayout.cpp
         src/Editor/GUI/VerticalLayout.cpp
         src/Editor/GUI/VerticalScrollLayout.cpp
         src/Editor/GUI/Button.cpp
@@ -327,7 +326,6 @@ set(EDITOR_HEADERS
         src/Editor/ImGui/OpenGLImplementation.hpp
         src/Editor/GUI/Widget.hpp
         src/Editor/GUI/Container.hpp
-        src/Editor/GUI/HorizontalLayout.hpp
         src/Editor/GUI/VerticalLayout.hpp
         src/Editor/GUI/VerticalScrollLayout.hpp
         src/Editor/GUI/Button.hpp
