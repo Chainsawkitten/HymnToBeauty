@@ -79,9 +79,18 @@ void ResourceList::Show() {
             Hymn().sounds.push_back(sound);
         }
         
-        for (Audio::SoundBuffer* sound : Hymn().sounds) {
+        for (auto it = Hymn().sounds.begin(); it != Hymn().sounds.end(); ++it) {
+            Audio::SoundBuffer* sound = *it;
             if (ImGui::Selectable(sound->name.c_str())) {
                 soundSelectedCallback(sound);
+            }
+            
+            if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    delete sound;
+                    Hymn().sounds.erase(it--);
+                }
+                ImGui::EndPopup();
             }
         }
         
