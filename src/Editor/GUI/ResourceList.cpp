@@ -23,6 +23,13 @@ void ResourceList::Show() {
             if (ImGui::Selectable(entity->name.c_str())) {
                 entitySelectedCallback(entity);
             }
+            
+            if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    entity->Kill();
+                }
+                ImGui::EndPopup();
+            }
         }
         
         ImGui::TreePop();
