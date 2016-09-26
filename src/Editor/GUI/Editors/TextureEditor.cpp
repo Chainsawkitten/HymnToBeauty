@@ -14,9 +14,8 @@ void TextureEditor::Show() {
         ImGui::InputText("Name", name, 128);
         texture->name = name;
         
-        if (ImGui::Button("Load PNG image")) {
+        if (ImGui::Button("Load PNG image"))
             LoadPressed();
-        }
         
         ImGui::Checkbox("SRGB", &texture->srgb);
     }

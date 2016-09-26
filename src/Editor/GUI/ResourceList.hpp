@@ -4,6 +4,7 @@
 #include <map>
 #include "Editors/ModelEditor.hpp"
 #include "Editors/TextureEditor.hpp"
+#include "Editors/SoundEditor.hpp"
 
 class Texture2D;
 class Entity;
@@ -39,28 +40,14 @@ namespace GUI {
              */
             void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
             
-            /// Set function to call when a model has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
-            
-            /// Set function to call when a sound has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback);
-            
         private:
             bool visible = false;
             
             std::map<Geometry::OBJModel*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
+            std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
             
             bool hasEntitySelectedCallback = false;
             std::function<void(Entity*)> entitySelectedCallback;
-            
-            bool hasSoundSelectedCallback = false;
-            std::function<void(Audio::SoundBuffer*)> soundSelectedCallback;
     };
 }

@@ -6,7 +6,6 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/ResourceList.hpp"
 #include "GUI/Editors/EntityEditor.hpp"
-#include "GUI/Editors/SoundEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
 #include "GUI/SoundSelector.hpp"
@@ -38,7 +37,6 @@ Editor::Editor() : Container(nullptr) {
     
     // Resource list.
     resourceList.SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    resourceList.SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
     
     // File selector.
     fileSelector = new GUI::FileSelector(this);
@@ -69,16 +67,10 @@ Editor::Editor() : Container(nullptr) {
     entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
-    
-    soundEditor = new GUI::SoundEditor(this, fileSelector);
-    soundEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    soundEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
-    AddWidget(soundEditor);
 }
 
 Editor::~Editor() {
     delete entityEditor;
-    delete soundEditor;
     
     delete fileSelector;
     delete modelSelector;
@@ -225,17 +217,10 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
 
 void Editor::HideEditors() {
     entityEditor->SetVisible(false);
-    soundEditor->SetVisible(false);
 }
 
 void Editor::EntitySelected(Entity* entity) {
     HideEditors();
     entityEditor->SetEntity(entity);
     entityEditor->SetVisible(true);
-}
-
-void Editor::SoundSelected(Audio::SoundBuffer* sound) {
-    HideEditors();
-    soundEditor->SetSound(sound);
-    soundEditor->SetVisible(true);
 }

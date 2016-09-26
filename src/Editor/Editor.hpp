@@ -11,7 +11,6 @@ class Entity;
 namespace GUI {
     class FileSelector;
     class EntityEditor;
-    class SoundEditor;
     class ModelSelector;
     class TextureSelector;
     class SoundSelector;
@@ -75,7 +74,6 @@ class Editor : public GUI::Container {
         
         // Editors.
         GUI::EntityEditor* entityEditor;
-        GUI::SoundEditor* soundEditor;
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;
         GUI::SoundSelector* soundSelector;

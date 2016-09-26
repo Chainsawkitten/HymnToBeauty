@@ -114,7 +114,8 @@ void ResourceList::Show() {
         for (auto it = Hymn().sounds.begin(); it != Hymn().sounds.end(); ++it) {
             Audio::SoundBuffer* sound = *it;
             if (ImGui::Selectable(sound->name.c_str())) {
-                soundSelectedCallback(sound);
+                soundEditors[sound].SetVisible(true);
+                soundEditors[sound].SetSound(sound);
             }
             
             if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
@@ -127,6 +128,13 @@ void ResourceList::Show() {
         }
         
         ImGui::TreePop();
+    }
+    
+    // Sound editors.
+    for (Audio::SoundBuffer* sound : Hymn().sounds) {
+        if (soundEditors[sound].IsVisible()) {
+            soundEditors[sound].Show();
+        }
     }
     
     ImGui::End();
@@ -143,9 +151,4 @@ void ResourceList::SetVisible(bool visible) {
 void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {
     hasEntitySelectedCallback = true;
     entitySelectedCallback = callback;
-}
-
-void ResourceList::SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback) {
-    hasSoundSelectedCallback = true;
-    soundSelectedCallback = callback;
 }

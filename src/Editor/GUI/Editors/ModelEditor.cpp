@@ -14,9 +14,8 @@ void ModelEditor::Show() {
         ImGui::InputText("Name", name, 128);
         model->name = name;
         
-        if (ImGui::Button("Load OBJ model")) {
+        if (ImGui::Button("Load OBJ model"))
             LoadPressed();
-        }
     }
     ImGui::End();
 }
