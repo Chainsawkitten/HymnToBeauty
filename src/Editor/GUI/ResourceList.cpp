@@ -46,7 +46,8 @@ void ResourceList::Show() {
         for (auto it = Hymn().models.begin(); it != Hymn().models.end(); ++it) {
             Geometry::OBJModel* model = *it;
             if (ImGui::Selectable(model->name.c_str())) {
-                modelSelectedCallback(model);
+                modelEditors[model].SetVisible(true);
+                modelEditors[model].SetModel(model);
             }
             
             if (ImGui::BeginPopupContextItem(model->name.c_str())) {
@@ -59,6 +60,13 @@ void ResourceList::Show() {
         }
         
         ImGui::TreePop();
+    }
+    
+    // Model editors.
+    for (Geometry::OBJModel* model : Hymn().models) {
+        if (modelEditors[model].IsVisible()) {
+            modelEditors[model].Show();
+        }
     }
     
     // Textures.
@@ -135,11 +143,6 @@ void ResourceList::SetVisible(bool visible) {
 void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {
     hasEntitySelectedCallback = true;
     entitySelectedCallback = callback;
-}
-
-void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
-    hasModelSelectedCallback = true;
-    modelSelectedCallback = callback;
 }
 
 void ResourceList::SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback) {

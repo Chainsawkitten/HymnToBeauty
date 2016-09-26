@@ -6,7 +6,6 @@
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/ResourceList.hpp"
 #include "GUI/Editors/EntityEditor.hpp"
-#include "GUI/Editors/ModelEditor.hpp"
 #include "GUI/Editors/SoundEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
@@ -39,7 +38,6 @@ Editor::Editor() : Container(nullptr) {
     
     // Resource list.
     resourceList.SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    resourceList.SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
     resourceList.SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
     
     // File selector.
@@ -72,11 +70,6 @@ Editor::Editor() : Container(nullptr) {
     entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(entityEditor);
     
-    modelEditor = new GUI::ModelEditor(this, fileSelector);
-    modelEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    modelEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
-    AddWidget(modelEditor);
-    
     soundEditor = new GUI::SoundEditor(this, fileSelector);
     soundEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     soundEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
@@ -85,7 +78,6 @@ Editor::Editor() : Container(nullptr) {
 
 Editor::~Editor() {
     delete entityEditor;
-    delete modelEditor;
     delete soundEditor;
     
     delete fileSelector;
@@ -233,7 +225,6 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
 
 void Editor::HideEditors() {
     entityEditor->SetVisible(false);
-    modelEditor->SetVisible(false);
     soundEditor->SetVisible(false);
 }
 
@@ -241,12 +232,6 @@ void Editor::EntitySelected(Entity* entity) {
     HideEditors();
     entityEditor->SetEntity(entity);
     entityEditor->SetVisible(true);
-}
-
-void Editor::ModelSelected(Geometry::OBJModel* model) {
-    HideEditors();
-    modelEditor->SetModel(model);
-    modelEditor->SetVisible(true);
 }
 
 void Editor::SoundSelected(Audio::SoundBuffer* sound) {

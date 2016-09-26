@@ -11,7 +11,6 @@ class Entity;
 namespace GUI {
     class FileSelector;
     class EntityEditor;
-    class ModelEditor;
     class SoundEditor;
     class ModelSelector;
     class TextureSelector;
@@ -66,7 +65,6 @@ class Editor : public GUI::Container {
         void OpenHymnClosed(const std::string& hymn);
         void HideEditors();
         void EntitySelected(Entity* entity);
-        void ModelSelected(Geometry::OBJModel* model);
         void SoundSelected(Audio::SoundBuffer* sound);
         
         GUI::SelectHymnWindow selectHymnWindow;
@@ -77,7 +75,6 @@ class Editor : public GUI::Container {
         
         // Editors.
         GUI::EntityEditor* entityEditor;
-        GUI::ModelEditor* modelEditor;
         GUI::SoundEditor* soundEditor;
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;

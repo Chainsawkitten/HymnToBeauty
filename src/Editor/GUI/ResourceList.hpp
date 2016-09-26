@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <map>
+#include "Editors/ModelEditor.hpp"
 #include "Editors/TextureEditor.hpp"
 
 class Texture2D;
@@ -53,13 +54,11 @@ namespace GUI {
         private:
             bool visible = false;
             
+            std::map<Geometry::OBJModel*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
             
             bool hasEntitySelectedCallback = false;
             std::function<void(Entity*)> entitySelectedCallback;
-            
-            bool hasModelSelectedCallback = false;
-            std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
             
             bool hasSoundSelectedCallback = false;
             std::function<void(Audio::SoundBuffer*)> soundSelectedCallback;
