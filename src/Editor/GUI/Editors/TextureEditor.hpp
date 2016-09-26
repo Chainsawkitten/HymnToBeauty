@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Widget.hpp"
 #include <string>
 
 class Font;
@@ -18,44 +17,19 @@ namespace GUI {
     class BoolEditor;
     
     /// Used to edit a texture.
-    class TextureEditor : public Widget {
+    class TextureEditor {
         public:
             /// Create new model editor.
             /**
-             * @param parent Parent widget.
              * @param fileSelector File selector to browse with.
              */
-            TextureEditor(Widget* parent, FileSelector* fileSelector);
+            TextureEditor(FileSelector* fileSelector);
             
             /// Destructor.
             ~TextureEditor();
             
-            /// Update the widget.
-            void Update() override;
-            
-            /// Render the widget.
-            void Render() override;
-            
             /// Show the editor.
             void Show();
-            
-            /// Set widget's position.
-            /**
-             * @param position New position.
-             */
-            void SetPosition(const glm::vec2& position) override;
-            
-            /// Get the size of the widget.
-            /**
-             * @return The size
-             */
-            glm::vec2 GetSize() const override;
-            
-            /// Set the size of the widget.
-            /**
-             * @param size New widget size.
-             */
-            void SetSize(const glm::vec2& size) override;
             
             /// Set the texture to edit.
             /**
@@ -63,28 +37,26 @@ namespace GUI {
              */
             void SetTexture(Texture2D* texture);
             
+            /// Get whether the window is visible.
+            /**
+             * @return Whether the window is visible.
+             */
+            bool IsVisible() const;
+            
+            /// Set whether the window should be visible.
+            /**
+             * @param visible Whether the window should be visible.
+             */
+            void SetVisible(bool visible);
+            
         private:
-            void DeleteTexturePressed();
             void LoadPressed();
             void FileSelected(const std::string& file);
             
-            Geometry::Rectangle* rectangle;
-            glm::vec2 size;
-            Font* font;
-            
             Texture2D* texture = nullptr;
+            bool visible = false;
             
-            Label* nameLabel;
-            StringEditor* nameEditor;
-            
-            Texture2D* deleteTextureTexture;
-            ImageTextButton* deleteTextureButton;
-            
-            Button* loadButton;
             FileSelector* fileSelector;
-            
-            Label* srgbLabel;
-            BoolEditor* srgbEditor;
             
             char name[128] = "";
     };

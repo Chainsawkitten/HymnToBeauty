@@ -79,10 +79,7 @@ Editor::Editor() : Container(nullptr) {
     modelEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(modelEditor);
     
-    textureEditor = new GUI::TextureEditor(this, fileSelector);
-    textureEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    textureEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
-    AddWidget(textureEditor);
+    textureEditor = new GUI::TextureEditor(fileSelector);
     
     soundEditor = new GUI::SoundEditor(this, fileSelector);
     soundEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
