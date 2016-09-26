@@ -1,6 +1,8 @@
 #pragma once
 
 #include <functional>
+#include <map>
+#include "Editors/TextureEditor.hpp"
 
 class Texture2D;
 class Entity;
@@ -42,12 +44,6 @@ namespace GUI {
              */
             void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
             
-            /// Set function to call when a texture has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetTextureSelectedCallback(std::function<void(Texture2D*)> callback);
-            
             /// Set function to call when a sound has been selected.
             /**
              * @param callback Function to call.
@@ -57,14 +53,13 @@ namespace GUI {
         private:
             bool visible = false;
             
+            std::map<Texture2D*, TextureEditor> textureEditors;
+            
             bool hasEntitySelectedCallback = false;
             std::function<void(Entity*)> entitySelectedCallback;
             
             bool hasModelSelectedCallback = false;
             std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
-            
-            bool hasTextureSelectedCallback = false;
-            std::function<void(Texture2D*)> textureSelectedCallback;
             
             bool hasSoundSelectedCallback = false;
             std::function<void(Audio::SoundBuffer*)> soundSelectedCallback;

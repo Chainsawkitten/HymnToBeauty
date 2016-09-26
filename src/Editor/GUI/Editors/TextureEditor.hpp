@@ -19,15 +19,6 @@ namespace GUI {
     /// Used to edit a texture.
     class TextureEditor {
         public:
-            /// Create new model editor.
-            /**
-             * @param fileSelector File selector to browse with.
-             */
-            TextureEditor(FileSelector* fileSelector);
-            
-            /// Destructor.
-            ~TextureEditor();
-            
             /// Show the editor.
             void Show();
             

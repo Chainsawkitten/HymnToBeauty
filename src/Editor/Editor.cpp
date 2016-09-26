@@ -7,7 +7,6 @@
 #include "GUI/ResourceList.hpp"
 #include "GUI/Editors/EntityEditor.hpp"
 #include "GUI/Editors/ModelEditor.hpp"
-#include "GUI/Editors/TextureEditor.hpp"
 #include "GUI/Editors/SoundEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
@@ -41,7 +40,6 @@ Editor::Editor() : Container(nullptr) {
     // Resource list.
     resourceList.SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
     resourceList.SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
-    resourceList.SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
     resourceList.SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
     
     // File selector.
@@ -79,8 +77,6 @@ Editor::Editor() : Container(nullptr) {
     modelEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
     AddWidget(modelEditor);
     
-    textureEditor = new GUI::TextureEditor(fileSelector);
-    
     soundEditor = new GUI::SoundEditor(this, fileSelector);
     soundEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     soundEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
@@ -90,7 +86,6 @@ Editor::Editor() : Container(nullptr) {
 Editor::~Editor() {
     delete entityEditor;
     delete modelEditor;
-    delete textureEditor;
     delete soundEditor;
     
     delete fileSelector;
@@ -182,10 +177,6 @@ void Editor::Show() {
     if (resourceList.IsVisible())
         resourceList.Show();
     
-    // Show editors.
-    if (textureEditor->IsVisible())
-        textureEditor->Show();
-    
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
     
@@ -243,7 +234,6 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
 void Editor::HideEditors() {
     entityEditor->SetVisible(false);
     modelEditor->SetVisible(false);
-    textureEditor->SetVisible(false);
     soundEditor->SetVisible(false);
 }
 
@@ -257,12 +247,6 @@ void Editor::ModelSelected(Geometry::OBJModel* model) {
     HideEditors();
     modelEditor->SetModel(model);
     modelEditor->SetVisible(true);
-}
-
-void Editor::TextureSelected(Texture2D* texture) {
-    HideEditors();
-    textureEditor->SetTexture(texture);
-    textureEditor->SetVisible(true);
 }
 
 void Editor::SoundSelected(Audio::SoundBuffer* sound) {

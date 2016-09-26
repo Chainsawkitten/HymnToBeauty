@@ -12,7 +12,6 @@ namespace GUI {
     class FileSelector;
     class EntityEditor;
     class ModelEditor;
-    class TextureEditor;
     class SoundEditor;
     class ModelSelector;
     class TextureSelector;
@@ -68,7 +67,6 @@ class Editor : public GUI::Container {
         void HideEditors();
         void EntitySelected(Entity* entity);
         void ModelSelected(Geometry::OBJModel* model);
-        void TextureSelected(Texture2D* texture);
         void SoundSelected(Audio::SoundBuffer* sound);
         
         GUI::SelectHymnWindow selectHymnWindow;
@@ -80,7 +78,6 @@ class Editor : public GUI::Container {
         // Editors.
         GUI::EntityEditor* entityEditor;
         GUI::ModelEditor* modelEditor;
-        GUI::TextureEditor* textureEditor;
         GUI::SoundEditor* soundEditor;
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;

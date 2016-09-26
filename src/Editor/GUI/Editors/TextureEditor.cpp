@@ -9,16 +9,8 @@
 
 using namespace GUI;
 
-TextureEditor::TextureEditor(FileSelector* fileSelector) {
-    this->fileSelector = fileSelector;
-}
-
-TextureEditor::~TextureEditor() {
-    
-}
-
 void TextureEditor::Show() {
-    if (ImGui::Begin("Texture editor", &visible)) {
+    if (ImGui::Begin(("Texture: " + texture->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(texture))).c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
         texture->name = name;
         

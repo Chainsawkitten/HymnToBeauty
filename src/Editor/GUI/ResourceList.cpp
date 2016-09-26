@@ -72,7 +72,8 @@ void ResourceList::Show() {
         for (auto it = Hymn().textures.begin(); it != Hymn().textures.end(); ++it) {
             Texture2D* texture = *it;
             if (ImGui::Selectable(texture->name.c_str())) {
-                textureSelectedCallback(texture);
+                textureEditors[texture].SetVisible(true);
+                textureEditors[texture].SetTexture(texture);
             }
             
             if (ImGui::BeginPopupContextItem(texture->name.c_str())) {
@@ -85,6 +86,13 @@ void ResourceList::Show() {
         }
         
         ImGui::TreePop();
+    }
+    
+    // Texture editors.
+    for (Texture2D* texture : Hymn().textures) {
+        if (textureEditors[texture].IsVisible()) {
+            textureEditors[texture].Show();
+        }
     }
     
     // Sounds.
@@ -132,11 +140,6 @@ void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callba
 void ResourceList::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
     hasModelSelectedCallback = true;
     modelSelectedCallback = callback;
-}
-
-void ResourceList::SetTextureSelectedCallback(std::function<void(Texture2D*)> callback) {
-    hasTextureSelectedCallback = true;
-    textureSelectedCallback = callback;
 }
 
 void ResourceList::SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback) {
