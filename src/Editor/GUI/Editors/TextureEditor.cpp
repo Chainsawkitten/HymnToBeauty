@@ -18,7 +18,7 @@ TextureEditor::~TextureEditor() {
 }
 
 void TextureEditor::Show() {
-    if (ImGui::Begin("Texture editor"), &visible) {
+    if (ImGui::Begin("Texture editor", &visible)) {
         ImGui::InputText("Name", name, 128);
         texture->name = name;
         
