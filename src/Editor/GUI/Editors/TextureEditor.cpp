@@ -1,21 +1,10 @@
 #include "TextureEditor.hpp"
 
-#include <Engine/Manager/Managers.hpp>
-#include <Engine/Manager/ResourceManager.hpp>
-#include <Engine/Geometry/Rectangle.hpp>
 #include <Engine/Texture/Texture2D.hpp>
-#include "Subtract.png.hpp"
-#include <Engine/Font/Font.hpp>
-#include "ABeeZee.ttf.hpp"
-#include "../Label.hpp"
-#include "StringEditor.hpp"
-#include "BoolEditor.hpp"
-#include "../TextButton.hpp"
 #include "../FileSelector.hpp"
 #include <functional>
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
-#include "../ImageTextButton.hpp"
 #include <imgui.h>
 
 using namespace GUI;
