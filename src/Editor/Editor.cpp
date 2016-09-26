@@ -9,7 +9,6 @@
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
 #include "GUI/SoundSelector.hpp"
-#include "GUI/FileSelector.hpp"
 #include "GUI/Editors/ComponentEditor/ComponentAdder.hpp"
 
 #include "Util/EditorSettings.hpp"
@@ -37,11 +36,6 @@ Editor::Editor() : Container(nullptr) {
     
     // Resource list.
     resourceList.SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    
-    // File selector.
-    fileSelector = new GUI::FileSelector(this);
-    fileSelector->SetSize(GetSize());
-    fileSelector->SetExtension("obj");
     
     // Model selector.
     modelSelector = new GUI::ModelSelector(this);
@@ -72,7 +66,6 @@ Editor::Editor() : Container(nullptr) {
 Editor::~Editor() {
     delete entityEditor;
     
-    delete fileSelector;
     delete modelSelector;
     delete textureSelector;
     delete soundSelector;
@@ -82,9 +75,7 @@ Editor::~Editor() {
 }
 
 void Editor::Update() {
-    if (fileSelector->IsVisible()) {
-        fileSelector->Update();
-    } else if (modelSelector->IsVisible()) {
+    if (modelSelector->IsVisible()) {
         modelSelector->Update();
     } else if (textureSelector->IsVisible()) {
         textureSelector->Update();
@@ -102,9 +93,6 @@ void Editor::Render() {
     Hymn().Render();
     
     RenderWidgets();
-    
-    if (fileSelector->IsVisible())
-        fileSelector->Render();
     
     if (modelSelector->IsVisible())
         modelSelector->Render();

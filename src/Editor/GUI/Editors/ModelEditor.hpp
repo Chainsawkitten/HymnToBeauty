@@ -1,14 +1,13 @@
 #pragma once
 
 #include <string>
+#include "../FileSelector.hpp"
 
 namespace Geometry {
     class OBJModel;
 }
 
 namespace GUI {
-    class FileSelector;
-    
     /// Used to edit a model.
     class ModelEditor {
         public:
@@ -40,7 +39,7 @@ namespace GUI {
             Geometry::OBJModel* model = nullptr;
             bool visible = false;
             
-            FileSelector* fileSelector;
+            FileSelector fileSelector;
             
             char name[128] = "";
     };

@@ -1,14 +1,13 @@
 #pragma once
 
 #include <string>
+#include "../FileSelector.hpp"
 
 namespace Audio {
     class SoundBuffer;
 }
 
 namespace GUI {
-    class FileSelector;
-    
     /// Used to edit a sound.
     class SoundEditor {
         public:
@@ -40,7 +39,7 @@ namespace GUI {
             Audio::SoundBuffer* sound = nullptr;
             bool visible = false;
             
-            FileSelector* fileSelector;
+            FileSelector fileSelector;
             
             char name[128] = "";
     };

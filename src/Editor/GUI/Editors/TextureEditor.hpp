@@ -1,21 +1,11 @@
 #pragma once
 
 #include <string>
+#include "../FileSelector.hpp"
 
-class Font;
 class Texture2D;
-namespace Geometry {
-    class Rectangle;
-}
 
 namespace GUI {
-    class Label;
-    class StringEditor;
-    class Button;
-    class FileSelector;
-    class ImageTextButton;
-    class BoolEditor;
-    
     /// Used to edit a texture.
     class TextureEditor {
         public:
@@ -41,13 +31,12 @@ namespace GUI {
             void SetVisible(bool visible);
             
         private:
-            void LoadPressed();
             void FileSelected(const std::string& file);
             
             Texture2D* texture = nullptr;
             bool visible = false;
             
-            FileSelector* fileSelector;
+            FileSelector fileSelector;
             
             char name[128] = "";
     };

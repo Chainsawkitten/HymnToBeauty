@@ -15,10 +15,16 @@ void SoundEditor::Show() {
         ImGui::InputText("Name", name, 128);
         sound->name = name;
         
-        if (ImGui::Button("Load Ogg Vorbis"))
-            LoadPressed();
+        if (ImGui::Button("Load Ogg Vorbis")) {
+            fileSelector.SetExtension("ogg");
+            fileSelector.SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+            fileSelector.SetVisible(true);
+        }
     }
     ImGui::End();
+    
+    if (fileSelector.IsVisible())
+        fileSelector.Show();
 }
 
 void SoundEditor::SetSound(Audio::SoundBuffer* sound) {
@@ -33,12 +39,6 @@ bool SoundEditor::IsVisible() const {
 
 void SoundEditor::SetVisible(bool visible) {
     this->visible = visible;
-}
-
-void SoundEditor::LoadPressed() {
-    fileSelector->SetExtension("ogg");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
-    fileSelector->SetVisible(true);
 }
 
 void SoundEditor::FileSelected(const std::string& file) {

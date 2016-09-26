@@ -9,7 +9,6 @@ class Texture2D;
 class Font;
 class Entity;
 namespace GUI {
-    class FileSelector;
     class EntityEditor;
     class ModelSelector;
     class TextureSelector;
@@ -67,7 +66,6 @@ class Editor : public GUI::Container {
         void SoundSelected(Audio::SoundBuffer* sound);
         
         GUI::SelectHymnWindow selectHymnWindow;
-        GUI::FileSelector* fileSelector;
         
         // Resource list.
         GUI::ResourceList resourceList;

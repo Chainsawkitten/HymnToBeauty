@@ -14,12 +14,18 @@ void TextureEditor::Show() {
         ImGui::InputText("Name", name, 128);
         texture->name = name;
         
-        if (ImGui::Button("Load PNG image"))
-            LoadPressed();
+        if (ImGui::Button("Load PNG image")) {
+            fileSelector.SetExtension("png");
+            fileSelector.SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+            fileSelector.SetVisible(true);
+        }
         
         ImGui::Checkbox("SRGB", &texture->srgb);
     }
     ImGui::End();
+    
+    if (fileSelector.IsVisible())
+        fileSelector.Show();
 }
 
 void TextureEditor::SetTexture(Texture2D* texture) {
@@ -34,12 +40,6 @@ bool TextureEditor::IsVisible() const {
 
 void TextureEditor::SetVisible(bool visible) {
     this->visible = visible;
-}
-
-void TextureEditor::LoadPressed() {
-    fileSelector->SetExtension("png");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
-    fileSelector->SetVisible(true);
 }
 
 void TextureEditor::FileSelected(const std::string& file) {

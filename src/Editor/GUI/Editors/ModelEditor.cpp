@@ -14,10 +14,16 @@ void ModelEditor::Show() {
         ImGui::InputText("Name", name, 128);
         model->name = name;
         
-        if (ImGui::Button("Load OBJ model"))
-            LoadPressed();
+        if (ImGui::Button("Load OBJ model")) {
+            fileSelector.SetExtension("obj");
+            fileSelector.SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+            fileSelector.SetVisible(true);
+        }
     }
     ImGui::End();
+    
+    if (fileSelector.IsVisible())
+        fileSelector.Show();
 }
 
 void ModelEditor::SetModel(Geometry::OBJModel* model) {
@@ -32,12 +38,6 @@ bool ModelEditor::IsVisible() const {
 
 void ModelEditor::SetVisible(bool visible) {
     this->visible = visible;
-}
-
-void ModelEditor::LoadPressed() {
-    fileSelector->SetExtension("obj");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
-    fileSelector->SetVisible(true);
 }
 
 void ModelEditor::FileSelected(const std::string& file) {
