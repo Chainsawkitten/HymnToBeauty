@@ -21,7 +21,8 @@ void ResourceList::Show() {
         
         for (Entity* entity : Hymn().activeScene.GetEntities()) {
             if (ImGui::Selectable(entity->name.c_str())) {
-                entitySelectedCallback(entity);
+                entityEditors[entity].SetVisible(true);
+                entityEditors[entity].SetEntity(entity);
             }
             
             if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
@@ -33,6 +34,13 @@ void ResourceList::Show() {
         }
         
         ImGui::TreePop();
+    }
+    
+    // Entity editors.
+    for (Entity* entity : Hymn().activeScene.GetEntities()) {
+        if (entityEditors[entity].IsVisible()) {
+            entityEditors[entity].Show();
+        }
     }
     
     // Models.

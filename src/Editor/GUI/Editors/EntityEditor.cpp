@@ -25,11 +25,12 @@
 #include <Engine/Entity/Entity.hpp>
 #include "../ImageTextButton.hpp"
 #include <Engine/Util/Input.hpp>
+#include <imgui.h>
 
 using namespace GUI;
 
-EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, TextureSelector* textureSelector, SoundSelector* soundSelector, ComponentAdder* componentAdder) : Widget(parent) {
-    rectangle = Managers().resourceManager->CreateRectangle();
+EntityEditor::EntityEditor() {
+    /*rectangle = Managers().resourceManager->CreateRectangle();
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     nameLabel = new Label(this, font, "Name");
@@ -59,11 +60,11 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     
     this->componentAdder = componentAdder;
     
-    SetVisible(false);
+    SetVisible(false);*/
 }
 
 EntityEditor::~EntityEditor() {
-    Managers().resourceManager->FreeRectangle();
+    /*Managers().resourceManager->FreeRectangle();
     Managers().resourceManager->FreeFont(font);
     
     delete nameLabel;
@@ -76,10 +77,10 @@ EntityEditor::~EntityEditor() {
     delete removeEntityButton;
     
     for (ComponentEditor* editor : editors)
-        delete editor;
+        delete editor;*/
 }
 
-void EntityEditor::Update() {
+/*void EntityEditor::Update() {
     nameEditor->Update();
     addComponentButton->Update();
     removeEntityButton->Update();
@@ -143,64 +144,32 @@ void EntityEditor::Render() {
             editor->Render();
         }
     }
-}
+}*/
 
-void EntityEditor::SetPosition(const glm::vec2& position) {
-    Widget::SetPosition(position);
-    
-    glm::vec2 pos(position);
-    
-    nameLabel->SetPosition(pos);
-    nameEditor->SetPosition(pos + glm::vec2(10.f, 20.f));
-    pos.y += 50.f;
-    removeEntityButton->SetPosition(pos);
-    pos.y += 20.f;
-    addComponentButton->SetPosition(pos);
-    pos.y += 30.f;
-    
-    std::size_t i = 0U;
-    for (ComponentEditor* editor : editors) {
-        if (editor->IsVisible() && i++ >= scrollPosition) {
-            editor->SetPosition(pos);
-            pos.y += editor->GetSize().y + 10.f;
-        }
+void EntityEditor::Show() {
+    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
+        ImGui::InputText("Name", name, 128);
+        entity->name = name;
     }
-}
-
-glm::vec2 EntityEditor::GetSize() const {
-    return size;
-}
-
-void EntityEditor::SetSize(const glm::vec2& size) {
-    this->size = size;
-    
-    nameEditor->SetSize(glm::vec2(size.x - 30.f, 20.f));
-    addComponentButton->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    removeEntityButton->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    
-    for (ComponentEditor* editor : editors)
-        editor->SetSize(glm::vec2(size.x - 20.f, size.y));
+    ImGui::End();
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
     
-    nameEditor->SetString(&entity->name);
-    
-    for (ComponentEditor* editor : editors)
-        editor->SetEntity(entity);
-    
-    // Update editor positions.
-    SetPosition(GetPosition());
+    strcpy(name, entity->name.c_str());
+}
+
+bool EntityEditor::IsVisible() const {
+    return visible;
+}
+
+void EntityEditor::SetVisible(bool visible) {
+    this->visible = visible;
 }
 
 void EntityEditor::AddComponentPressed() {
     componentAdder->SetEntity(entity);
     componentAdder->SetComponentAddedCallback(std::bind(&SetEntity, this, entity));
     componentAdder->SetVisible(true);
-}
-
-void EntityEditor::RemoveEntityPressed() {
-    entity->Kill();
-    SetVisible(false);
 }

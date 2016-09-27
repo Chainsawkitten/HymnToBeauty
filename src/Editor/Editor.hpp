@@ -9,7 +9,6 @@ class Texture2D;
 class Font;
 class Entity;
 namespace GUI {
-    class EntityEditor;
     class ModelSelector;
     class TextureSelector;
     class SoundSelector;
@@ -61,9 +60,6 @@ class Editor : public GUI::Container {
         void NewHymnClosed(const std::string& hymn);
         void OpenHymn();
         void OpenHymnClosed(const std::string& hymn);
-        void HideEditors();
-        void EntitySelected(Entity* entity);
-        void SoundSelected(Audio::SoundBuffer* sound);
         
         GUI::SelectHymnWindow selectHymnWindow;
         
@@ -71,7 +67,6 @@ class Editor : public GUI::Container {
         GUI::ResourceList resourceList;
         
         // Editors.
-        GUI::EntityEditor* entityEditor;
         GUI::ModelSelector* modelSelector;
         GUI::TextureSelector* textureSelector;
         GUI::SoundSelector* soundSelector;

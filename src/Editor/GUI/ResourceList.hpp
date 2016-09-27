@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <map>
+#include "Editors/EntityEditor.hpp"
 #include "Editors/ModelEditor.hpp"
 #include "Editors/TextureEditor.hpp"
 #include "Editors/SoundEditor.hpp"
@@ -43,6 +44,7 @@ namespace GUI {
         private:
             bool visible = false;
             
+            std::map<Entity*, EntityEditor> entityEditors;
             std::map<Geometry::OBJModel*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
             std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;

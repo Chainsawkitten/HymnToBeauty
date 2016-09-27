@@ -5,7 +5,6 @@
 #include <Engine/Util/Input.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include "GUI/ResourceList.hpp"
-#include "GUI/Editors/EntityEditor.hpp"
 #include "GUI/ModelSelector.hpp"
 #include "GUI/TextureSelector.hpp"
 #include "GUI/SoundSelector.hpp"
@@ -34,9 +33,6 @@ Editor::Editor() : Container(nullptr) {
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
-    // Resource list.
-    resourceList.SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    
     // Model selector.
     modelSelector = new GUI::ModelSelector(this);
     modelSelector->SetSize(GetSize());
@@ -55,17 +51,9 @@ Editor::Editor() : Container(nullptr) {
     // Component adder.
     componentAdder = new GUI::ComponentAdder(this);
     componentAdder->SetSize(GetSize());
-    
-    // Editors.
-    entityEditor = new GUI::EntityEditor(this, modelSelector, textureSelector, soundSelector, componentAdder);
-    entityEditor->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
-    entityEditor->SetPosition(glm::vec2(GetSize().x - 250.f, 64.f));
-    AddWidget(entityEditor);
 }
 
 Editor::~Editor() {
-    delete entityEditor;
-    
     delete modelSelector;
     delete textureSelector;
     delete soundSelector;
@@ -163,7 +151,6 @@ void Editor::Save() const {
 void Editor::Play() {
     Save();
     SetVisible(false);
-    HideEditors();
 }
 
 void Editor::NewHymn() {
@@ -201,14 +188,4 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
     }
     
     selectHymnWindow.SetVisible(false);
-}
-
-void Editor::HideEditors() {
-    entityEditor->SetVisible(false);
-}
-
-void Editor::EntitySelected(Entity* entity) {
-    HideEditors();
-    entityEditor->SetEntity(entity);
-    entityEditor->SetVisible(true);
 }
