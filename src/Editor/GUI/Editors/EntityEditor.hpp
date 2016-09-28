@@ -12,6 +12,9 @@ namespace Component {
     class Mesh;
     class Lens;
     class Material;
+    class DirectionalLight;
+    class PointLight;
+    class SpotLight;
 }
 
 namespace GUI {
@@ -56,6 +59,9 @@ namespace GUI {
             void MeshEditor(Component::Mesh* mesh);
             void LensEditor(Component::Lens* lens);
             void MaterialEditor(Component::Material* material);
+            void DirectionalLightEditor(Component::DirectionalLight* directionalLight);
+            void PointLightEditor(Component::PointLight* pointLight);
+            void SpotLightEditor(Component::SpotLight* spotLight);
             
             Entity* entity = nullptr;
             bool visible = false;

@@ -5,6 +5,9 @@
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Material.hpp>
+#include <Engine/Component/DirectionalLight.hpp>
+#include <Engine/Component/PointLight.hpp>
+#include <Engine/Component/SpotLight.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
@@ -17,6 +20,9 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Mesh>("Mesh", std::bind(&MeshEditor, this, std::placeholders::_1));
     AddEditor<Component::Lens>("Lens", std::bind(&LensEditor, this, std::placeholders::_1));
     AddEditor<Component::Material>("Material", std::bind(&MaterialEditor, this, std::placeholders::_1));
+    AddEditor<Component::DirectionalLight>("Directional light", std::bind(&DirectionalLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::PointLight>("Point light", std::bind(&PointLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::SpotLight>("Spot light", std::bind(&SpotLightEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -169,4 +175,24 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
+}
+
+void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
+    ImGui::InputFloat3("Color", &directionalLight->color[0]);
+    ImGui::InputFloat("Ambient coefficient", &directionalLight->ambientCoefficient);
+}
+
+void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
+    ImGui::InputFloat3("Color", &pointLight->color[0]);
+    ImGui::InputFloat("Ambient coefficient", &pointLight->ambientCoefficient);
+    ImGui::InputFloat("Attenuation", &pointLight->attenuation);
+    ImGui::InputFloat("Intensity", &pointLight->intensity);
+}
+
+void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
+    ImGui::InputFloat3("Color", &spotLight->color[0]);
+    ImGui::InputFloat("Ambient coefficient", &spotLight->ambientCoefficient);
+    ImGui::InputFloat("Attenuation", &spotLight->attenuation);
+    ImGui::InputFloat("Intensity", &spotLight->intensity);
+    ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
 }
