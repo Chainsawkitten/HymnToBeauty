@@ -298,13 +298,6 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ModelEditor.cpp
         src/Editor/GUI/Editors/SoundEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
-        src/Editor/GUI/Editors/IntEditor.cpp
-        src/Editor/GUI/Editors/DoubleEditor.cpp
-        src/Editor/GUI/Editors/FloatEditor.cpp
-        src/Editor/GUI/Editors/Vec2Editor.cpp
-        src/Editor/GUI/Editors/Vec3Editor.cpp
-        src/Editor/GUI/Editors/StringEditor.cpp
-        src/Editor/GUI/Editors/BoolEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -331,13 +324,6 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ModelEditor.hpp
         src/Editor/GUI/Editors/SoundEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
-        src/Editor/GUI/Editors/IntEditor.hpp
-        src/Editor/GUI/Editors/DoubleEditor.hpp
-        src/Editor/GUI/Editors/FloatEditor.hpp
-        src/Editor/GUI/Editors/Vec2Editor.hpp
-        src/Editor/GUI/Editors/Vec3Editor.hpp
-        src/Editor/GUI/Editors/StringEditor.hpp
-        src/Editor/GUI/Editors/BoolEditor.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 
