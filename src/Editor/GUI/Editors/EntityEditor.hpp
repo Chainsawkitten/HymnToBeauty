@@ -15,6 +15,7 @@ namespace Component {
     class DirectionalLight;
     class PointLight;
     class SpotLight;
+    class Listener;
 }
 
 namespace GUI {
@@ -62,6 +63,7 @@ namespace GUI {
             void DirectionalLightEditor(Component::DirectionalLight* directionalLight);
             void PointLightEditor(Component::PointLight* pointLight);
             void SpotLightEditor(Component::SpotLight* spotLight);
+            void ListenerEditor(Component::Listener* listener);
             
             Entity* entity = nullptr;
             bool visible = false;

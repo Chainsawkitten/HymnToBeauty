@@ -8,6 +8,7 @@
 #include <Engine/Component/DirectionalLight.hpp>
 #include <Engine/Component/PointLight.hpp>
 #include <Engine/Component/SpotLight.hpp>
+#include <Engine/Component/Listener.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
@@ -23,6 +24,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::DirectionalLight>("Directional light", std::bind(&DirectionalLightEditor, this, std::placeholders::_1));
     AddEditor<Component::PointLight>("Point light", std::bind(&PointLightEditor, this, std::placeholders::_1));
     AddEditor<Component::SpotLight>("Spot light", std::bind(&SpotLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::Listener>("Listener", std::bind(&ListenerEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -195,4 +197,8 @@ void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::InputFloat("Attenuation", &spotLight->attenuation);
     ImGui::InputFloat("Intensity", &spotLight->intensity);
     ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
+}
+
+void EntityEditor::ListenerEditor(Component::Listener* listener) {
+    
 }
