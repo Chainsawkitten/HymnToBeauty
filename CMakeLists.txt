@@ -298,19 +298,6 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/ModelEditor.cpp
         src/Editor/GUI/Editors/SoundEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
         src/Editor/GUI/Editors/IntEditor.cpp
         src/Editor/GUI/Editors/DoubleEditor.cpp
         src/Editor/GUI/Editors/FloatEditor.cpp
@@ -344,19 +331,6 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/ModelEditor.hpp
         src/Editor/GUI/Editors/SoundEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
         src/Editor/GUI/Editors/IntEditor.hpp
         src/Editor/GUI/Editors/DoubleEditor.hpp
         src/Editor/GUI/Editors/FloatEditor.hpp
