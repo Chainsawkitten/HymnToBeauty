@@ -9,6 +9,7 @@
 namespace Component {
     class Transform;
     class Physics;
+    class Mesh;
 }
 
 namespace GUI {
@@ -50,6 +51,7 @@ namespace GUI {
             // Editors
             void TransformEditor(Component::Transform* transform);
             void PhysicsEditor(Component::Physics* physics);
+            void MeshEditor(Component::Mesh* mesh);
             
             Entity* entity = nullptr;
             bool visible = false;

@@ -2,12 +2,16 @@
 
 #include <Engine/Component/Transform.hpp>
 #include <Engine/Component/Physics.hpp>
+#include <Engine/Component/Mesh.hpp>
+#include <Engine/Hymn.hpp>
+#include <Engine/Geometry/OBJModel.hpp>
 
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
     AddEditor<Component::Transform>("Transform", std::bind(&TransformEditor, this, std::placeholders::_1));
     AddEditor<Component::Physics>("Physics", std::bind(&PhysicsEditor, this, std::placeholders::_1));
+    AddEditor<Component::Mesh>("Mesh", std::bind(&MeshEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -71,4 +75,21 @@ void EntityEditor::PhysicsEditor(Component::Physics* physics) {
     ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
     ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
     ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+}
+
+void EntityEditor::MeshEditor(Component::Mesh* mesh) {
+    if (ImGui::Button("Select model"))
+        ImGui::OpenPopup("Select model");
+    
+    if (ImGui::BeginPopup("Select model")) {
+        ImGui::Text("Models");
+        ImGui::Separator();
+        
+        for (Geometry::OBJModel* model : Hymn().models) {
+            if (ImGui::Selectable(model->name.c_str()))
+                mesh->geometry = model;
+        }
+        
+        ImGui::EndPopup();
+    }
 }
