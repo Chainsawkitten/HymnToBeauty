@@ -82,5 +82,8 @@ template<typename type> void GUI::EntityEditor::EditComponent(const std::string&
     type* component = entity->GetComponent<type>();
     if (component != nullptr && ImGui::CollapsingHeader(name.c_str())) {
         editorFunction(component);
+        
+        if (ImGui::Button("Remove"))
+            entity->KillComponent<type>();
     }
 }
