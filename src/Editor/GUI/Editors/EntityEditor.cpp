@@ -165,6 +165,13 @@ void EntityEditor::Show() {
             
             ImGui::EndPopup();
         }
+        
+        Component::Transform* component = entity->GetComponent<Component::Transform>();
+        if (component != nullptr && ImGui::CollapsingHeader("Transform")) {
+            ImGui::InputFloat3("Position", &component->position[0]);
+            ImGui::InputFloat3("Rotation", &component->rotation[0]);
+            ImGui::InputFloat3("Scale", &component->scale[0]);
+        }
     }
     ImGui::End();
 }
