@@ -16,6 +16,7 @@ namespace Component {
     class PointLight;
     class SpotLight;
     class Listener;
+    class SoundSource;
 }
 
 namespace GUI {
@@ -64,6 +65,7 @@ namespace GUI {
             void PointLightEditor(Component::PointLight* pointLight);
             void SpotLightEditor(Component::SpotLight* spotLight);
             void ListenerEditor(Component::Listener* listener);
+            void SoundSourceEditor(Component::SoundSource* soundSource);
             
             Entity* entity = nullptr;
             bool visible = false;

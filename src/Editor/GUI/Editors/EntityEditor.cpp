@@ -9,9 +9,11 @@
 #include <Engine/Component/PointLight.hpp>
 #include <Engine/Component/SpotLight.hpp>
 #include <Engine/Component/Listener.hpp>
+#include <Engine/Component/SoundSource.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
+#include <Engine/Audio/SoundBuffer.hpp>
 
 using namespace GUI;
 
@@ -25,6 +27,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::PointLight>("Point light", std::bind(&PointLightEditor, this, std::placeholders::_1));
     AddEditor<Component::SpotLight>("Spot light", std::bind(&SpotLightEditor, this, std::placeholders::_1));
     AddEditor<Component::Listener>("Listener", std::bind(&ListenerEditor, this, std::placeholders::_1));
+    AddEditor<Component::SoundSource>("Sound source", std::bind(&SoundSourceEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -201,4 +204,25 @@ void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
 
 void EntityEditor::ListenerEditor(Component::Listener* listener) {
     
+}
+
+void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
+    if (ImGui::Button("Select sound"))
+        ImGui::OpenPopup("Select sound");
+    
+    if (ImGui::BeginPopup("Select sound")) {
+        ImGui::Text("Sounds");
+        ImGui::Separator();
+        
+        for (Audio::SoundBuffer* sound : Hymn().sounds) {
+            if (ImGui::Selectable(sound->name.c_str()))
+                soundSource->soundBuffer = sound;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    ImGui::InputFloat("Pitch", &soundSource->pitch);
+    ImGui::InputFloat("Gain", &soundSource->gain);
+    ImGui::Checkbox("Loop", &soundSource->loop);
 }
