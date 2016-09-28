@@ -1,13 +1,11 @@
 #include "EntityEditor.hpp"
 
-#include <Engine/Entity/Entity.hpp>
-#include <imgui.h>
 #include <Engine/Component/Transform.hpp>
 
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
-    
+    AddEditor<Component::Transform>("Transform", std::bind(&TransformEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -26,18 +24,15 @@ void EntityEditor::Show() {
             ImGui::Text("Components");
             ImGui::Separator();
             
-            if (entity->GetComponent<Component::Transform>() == nullptr)
-                if (ImGui::Selectable("Transform"))
-                    entity->AddComponent<Component::Transform>();
+            for (Editor& editor : editors) {
+                editor.addFunction();
+            }
             
             ImGui::EndPopup();
         }
         
-        Component::Transform* component = entity->GetComponent<Component::Transform>();
-        if (component != nullptr && ImGui::CollapsingHeader("Transform")) {
-            ImGui::InputFloat3("Position", &component->position[0]);
-            ImGui::InputFloat3("Rotation", &component->rotation[0]);
-            ImGui::InputFloat3("Scale", &component->scale[0]);
+        for (Editor& editor : editors) {
+            editor.editFunction();
         }
     }
     ImGui::End();
@@ -55,4 +50,10 @@ bool EntityEditor::IsVisible() const {
 
 void EntityEditor::SetVisible(bool visible) {
     this->visible = visible;
+}
+
+void EntityEditor::TransformEditor(Component::Transform* transform) {
+    ImGui::InputFloat3("Position", &transform->position[0]);
+    ImGui::InputFloat3("Rotation", &transform->rotation[0]);
+    ImGui::InputFloat3("Scale", &transform->scale[0]);
 }
