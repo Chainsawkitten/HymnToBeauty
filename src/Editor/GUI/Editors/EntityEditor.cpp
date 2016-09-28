@@ -3,6 +3,7 @@
 #include <Engine/Component/Transform.hpp>
 #include <Engine/Component/Physics.hpp>
 #include <Engine/Component/Mesh.hpp>
+#include <Engine/Component/Lens.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 
@@ -12,6 +13,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Transform>("Transform", std::bind(&TransformEditor, this, std::placeholders::_1));
     AddEditor<Component::Physics>("Physics", std::bind(&PhysicsEditor, this, std::placeholders::_1));
     AddEditor<Component::Mesh>("Mesh", std::bind(&MeshEditor, this, std::placeholders::_1));
+    AddEditor<Component::Lens>("Lens", std::bind(&LensEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -92,4 +94,10 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
         
         ImGui::EndPopup();
     }
+}
+
+void EntityEditor::LensEditor(Component::Lens* lens) {
+    ImGui::InputFloat("Field of view", &lens->fieldOfView);
+    ImGui::InputFloat("Z near", &lens->zNear);
+    ImGui::InputFloat("Z far", &lens->zFar);
 }
