@@ -79,13 +79,13 @@ namespace Component {
             glm::vec3 size;
             
             /// Minimum time for emitting particle.
-            double minEmitTime = 0.03;
+            float minEmitTime = 0.03f;
             
             /// Maximum time for emitting particle.
-            double maxEmitTime = 0.05;
+            float maxEmitTime = 0.05f;
             
             /// Time to next emit (random value between min and max),
-            double timeToNext = 0.1;
+            float timeToNext = 0.1f;
             
             /// Type of emitter.
             EmitterType emitterType = EmitterType::POINT;

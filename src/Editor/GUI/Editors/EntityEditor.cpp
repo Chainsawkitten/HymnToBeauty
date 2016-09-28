@@ -10,6 +10,7 @@
 #include <Engine/Component/SpotLight.hpp>
 #include <Engine/Component/Listener.hpp>
 #include <Engine/Component/SoundSource.hpp>
+#include <Engine/Component/ParticleEmitter.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
@@ -28,6 +29,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::SpotLight>("Spot light", std::bind(&SpotLightEditor, this, std::placeholders::_1));
     AddEditor<Component::Listener>("Listener", std::bind(&ListenerEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&SoundSourceEditor, this, std::placeholders::_1));
+    AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&ParticleEmitterEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -225,4 +227,38 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
     ImGui::InputFloat("Pitch", &soundSource->pitch);
     ImGui::InputFloat("Gain", &soundSource->gain);
     ImGui::Checkbox("Loop", &soundSource->loop);
+}
+
+void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
+    ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
+    ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
+    ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
+    ImGui::InputFloat("Min lifetime", &particleEmitter->particleType.minLifetime);
+    ImGui::InputFloat("Max lifetime", &particleEmitter->particleType.maxLifetime);
+    ImGui::InputFloat2("Min size", &particleEmitter->particleType.minSize[0]);
+    ImGui::InputFloat2("Max size", &particleEmitter->particleType.maxSize[0]);
+    ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
+    ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
+    ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
+    ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
+    ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::InputFloat3("Size", &particleEmitter->size[0]);
+    ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
+    ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
+    
+    if (ImGui::Button("Emitter type"))
+        ImGui::OpenPopup("Emitter type");
+    
+    if (ImGui::BeginPopup("Emitter type")) {
+        ImGui::Text("Emitter type");
+        ImGui::Separator();
+        
+        if (ImGui::Selectable("Point"))
+            particleEmitter->emitterType = Component::ParticleEmitter::POINT;
+        
+        if (ImGui::Selectable("Cuboid"))
+            particleEmitter->emitterType = Component::ParticleEmitter::CUBOID;
+        
+        ImGui::EndPopup();
+    }
 }

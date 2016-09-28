@@ -115,8 +115,8 @@ void ParticleEmitterEditor::SetEntity(Entity* entity) {
             endAlphaEditor->SetFloat(&particleEmitter->particleType.endAlpha);
             colorEditor->SetVec3(&particleEmitter->particleType.color);
             sizeEditor->SetVec3(&particleEmitter->size);
-            minEmitTimeEditor->SetDouble(&particleEmitter->minEmitTime);
-            maxEmitTimeEditor->SetDouble(&particleEmitter->maxEmitTime);
+            //minEmitTimeEditor->SetDouble(&particleEmitter->minEmitTime);
+            //maxEmitTimeEditor->SetDouble(&particleEmitter->maxEmitTime);
             //emitterTypeEditor->SetInt(static_cast<int*>(&particleEmitter->emitterType));
         }
     }
