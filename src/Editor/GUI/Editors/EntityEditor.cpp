@@ -4,8 +4,10 @@
 #include <Engine/Component/Physics.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Material.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Texture/Texture2D.hpp>
 
 using namespace GUI;
 
@@ -14,6 +16,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Physics>("Physics", std::bind(&PhysicsEditor, this, std::placeholders::_1));
     AddEditor<Component::Mesh>("Mesh", std::bind(&MeshEditor, this, std::placeholders::_1));
     AddEditor<Component::Lens>("Lens", std::bind(&LensEditor, this, std::placeholders::_1));
+    AddEditor<Component::Material>("Material", std::bind(&MaterialEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
@@ -100,4 +103,70 @@ void EntityEditor::LensEditor(Component::Lens* lens) {
     ImGui::InputFloat("Field of view", &lens->fieldOfView);
     ImGui::InputFloat("Z near", &lens->zNear);
     ImGui::InputFloat("Z far", &lens->zFar);
+}
+
+void EntityEditor::MaterialEditor(Component::Material* material) {
+    // Diffuse
+    if (ImGui::Button("Select diffuse texture"))
+        ImGui::OpenPopup("Select diffuse texture");
+    
+    if (ImGui::BeginPopup("Select diffuse texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->diffuse = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    // Normal
+    if (ImGui::Button("Select normal texture"))
+        ImGui::OpenPopup("Select normal texture");
+    
+    if (ImGui::BeginPopup("Select normal texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->normal = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    // Specular
+    if (ImGui::Button("Select specular texture"))
+        ImGui::OpenPopup("Select specular texture");
+    
+    if (ImGui::BeginPopup("Select specular texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->specular = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    // Glow
+    if (ImGui::Button("Select glow texture"))
+        ImGui::OpenPopup("Select glow texture");
+    
+    if (ImGui::BeginPopup("Select glow texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->glow = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
 }

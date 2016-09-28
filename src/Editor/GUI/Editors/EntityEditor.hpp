@@ -11,6 +11,7 @@ namespace Component {
     class Physics;
     class Mesh;
     class Lens;
+    class Material;
 }
 
 namespace GUI {
@@ -54,6 +55,7 @@ namespace GUI {
             void PhysicsEditor(Component::Physics* physics);
             void MeshEditor(Component::Mesh* mesh);
             void LensEditor(Component::Lens* lens);
+            void MaterialEditor(Component::Material* material);
             
             Entity* entity = nullptr;
             bool visible = false;
