@@ -278,21 +278,8 @@ set(EDITOR_SRCS
         src/Editor/main.cpp
         src/Editor/Editor.cpp
         src/Editor/ImGui/OpenGLImplementation.cpp
-        src/Editor/GUI/Widget.cpp
-        src/Editor/GUI/Container.cpp
-        src/Editor/GUI/VerticalLayout.cpp
-        src/Editor/GUI/VerticalScrollLayout.cpp
-        src/Editor/GUI/Button.cpp
-        src/Editor/GUI/ImageButton.cpp
-        src/Editor/GUI/ImageTextButton.cpp
-        src/Editor/GUI/TextButton.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/FileSelector.cpp
-        src/Editor/GUI/ModelSelector.cpp
-        src/Editor/GUI/TextureSelector.cpp
-        src/Editor/GUI/SoundSelector.cpp
-        src/Editor/GUI/TextField.cpp
-        src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
@@ -304,21 +291,8 @@ set(EDITOR_SRCS
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
         src/Editor/ImGui/OpenGLImplementation.hpp
-        src/Editor/GUI/Widget.hpp
-        src/Editor/GUI/Container.hpp
-        src/Editor/GUI/VerticalLayout.hpp
-        src/Editor/GUI/VerticalScrollLayout.hpp
-        src/Editor/GUI/Button.hpp
-        src/Editor/GUI/ImageButton.hpp
-        src/Editor/GUI/ImageTextButton.hpp
-        src/Editor/GUI/TextButton.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/FileSelector.hpp
-        src/Editor/GUI/ModelSelector.hpp
-        src/Editor/GUI/TextureSelector.hpp
-        src/Editor/GUI/SoundSelector.hpp
-        src/Editor/GUI/TextField.hpp
-        src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
