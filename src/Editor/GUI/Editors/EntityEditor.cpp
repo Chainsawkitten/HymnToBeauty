@@ -26,12 +26,13 @@
 #include "../ImageTextButton.hpp"
 #include <Engine/Util/Input.hpp>
 #include <imgui.h>
+#include <Engine/Component/Transform.hpp>
 
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
     /*rectangle = Managers().resourceManager->CreateRectangle();
-    
+      
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
     nameLabel = new Label(this, font, "Name");
     nameEditor = new StringEditor(this, font);
@@ -150,6 +151,20 @@ void EntityEditor::Show() {
     if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
+        
+        if (ImGui::Button("Add component"))
+            ImGui::OpenPopup("Add component");
+        
+        if (ImGui::BeginPopup("Add component")) {
+            ImGui::Text("Components");
+            ImGui::Separator();
+            
+            if (entity->GetComponent<Component::Transform>() == nullptr)
+                if (ImGui::Selectable("Transform"))
+                    entity->AddComponent<Component::Transform>();
+            
+            ImGui::EndPopup();
+        }
     }
     ImGui::End();
 }
