@@ -48,8 +48,8 @@ int main() {
         window->Update();
         
         if (editor->IsVisible()) {
-            editor->Update();
-            editor->Render();
+            Hymn().activeScene.ClearKilled();
+            Hymn().Render();
             
             editor->Show();
             ImGui::Render();

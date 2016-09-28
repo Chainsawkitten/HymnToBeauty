@@ -1,26 +1,13 @@
 #include "Editor.hpp"
 
-#include <Engine/MainWindow.hpp>
-#include <Engine/Font/Font.hpp>
 #include <Engine/Util/Input.hpp>
-#include <Engine/Texture/Texture2D.hpp>
-#include "GUI/ResourceList.hpp"
-#include "GUI/ModelSelector.hpp"
-#include "GUI/TextureSelector.hpp"
-#include "GUI/SoundSelector.hpp"
-#include "GUI/Editors/ComponentEditor/ComponentAdder.hpp"
-
 #include "Util/EditorSettings.hpp"
-#include <Engine/Util/Log.hpp>
-
-#include <Engine/Manager/Managers.hpp>
-#include <Engine/Manager/ResourceManager.hpp>
-#include <ABeeZee.ttf.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
+#include <GLFW/glfw3.h>
 
-Editor::Editor() : Container(nullptr) {
+Editor::Editor() {
     // Assign controls.
     Input()->AssignButton(InputHandler::CLICK, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
     Input()->AssignButton(InputHandler::BACK, InputHandler::KEYBOARD, GLFW_KEY_BACKSPACE);
@@ -30,77 +17,6 @@ Editor::Editor() : Container(nullptr) {
     Input()->AssignButton(InputHandler::HOME, InputHandler::KEYBOARD, GLFW_KEY_HOME);
     Input()->AssignButton(InputHandler::END, InputHandler::KEYBOARD, GLFW_KEY_END);
     Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
-    
-    font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
-    
-    // Model selector.
-    modelSelector = new GUI::ModelSelector(this);
-    modelSelector->SetSize(GetSize());
-    modelSelector->SetModels(&Hymn().models);
-    
-    // Texture selector.
-    textureSelector = new GUI::TextureSelector(this);
-    textureSelector->SetSize(GetSize());
-    textureSelector->SetTextures(&Hymn().textures);
-    
-    // Sound selector.
-    soundSelector = new GUI::SoundSelector(this);
-    soundSelector->SetSize(GetSize());
-    soundSelector->SetSounds(&Hymn().sounds);
-    
-    // Component adder.
-    componentAdder = new GUI::ComponentAdder(this);
-    componentAdder->SetSize(GetSize());
-}
-
-Editor::~Editor() {
-    delete modelSelector;
-    delete textureSelector;
-    delete soundSelector;
-    delete componentAdder;
-    
-    Managers().resourceManager->FreeFont(font);
-}
-
-void Editor::Update() {
-    if (modelSelector->IsVisible()) {
-        modelSelector->Update();
-    } else if (textureSelector->IsVisible()) {
-        textureSelector->Update();
-    } else if (soundSelector->IsVisible()) {
-        soundSelector->Update();
-    } else if (componentAdder->IsVisible()) {
-        componentAdder->Update();
-    } else {
-        UpdateWidgets();
-        Hymn().activeScene.ClearKilled();
-    }
-}
-
-void Editor::Render() {
-    Hymn().Render();
-    
-    RenderWidgets();
-    
-    if (modelSelector->IsVisible())
-        modelSelector->Render();
-    
-    if (textureSelector->IsVisible())
-        textureSelector->Render();
-    
-    if (soundSelector->IsVisible())
-        soundSelector->Render();
-    
-    if (componentAdder->IsVisible())
-        componentAdder->Render();
-}
-
-glm::vec2 Editor::GetSize() const {
-    return MainWindow::GetInstance()->GetSize();
-}
-
-void Editor::SetSize(const glm::vec2& size) {
-    /// @todo Resize window.
 }
 
 void Editor::Show() {
@@ -146,6 +62,14 @@ void Editor::Show() {
 
 void Editor::Save() const {
     Hymn().Save();
+}
+
+bool Editor::IsVisible() const {
+    return visible;
+}
+
+void Editor::SetVisible(bool visible) {
+    this->visible = visible;
 }
 
 void Editor::Play() {
