@@ -1,58 +1,18 @@
 #pragma once
 
-#include "../Widget.hpp"
 #include <string>
+#include "../FileSelector.hpp"
 
-class Font;
-class Texture2D;
 namespace Geometry {
-    class Rectangle;
     class OBJModel;
 }
 
 namespace GUI {
-    class Label;
-    class StringEditor;
-    class Button;
-    class FileSelector;
-    class ImageTextButton;
-    
     /// Used to edit a model.
-    class ModelEditor : public Widget {
+    class ModelEditor {
         public:
-            /// Create new model editor.
-            /**
-             * @param parent Parent widget.
-             * @param fileSelector File selector to browse with.
-             */
-            ModelEditor(Widget* parent, FileSelector* fileSelector);
-            
-            /// Destructor.
-            ~ModelEditor();
-            
-            /// Update the widget.
-            void Update() override;
-            
-            /// Render the widget.
-            void Render() override;
-            
-            /// Set widget's position.
-            /**
-             * @param position New position.
-             */
-            void SetPosition(const glm::vec2& position) override;
-            
-            /// Get the size of the widget.
-            /**
-             * @return The size
-             */
-            glm::vec2 GetSize() const override;
-            
-            /// Set the size of the widget.
-            /**
-             * @param size New widget size.
-             */
-            void SetSize(const glm::vec2& size) override;
+            /// Show the editor.
+            void Show();
             
             /// Set the model to edit.
             /**
@@ -60,24 +20,27 @@ namespace GUI {
              */
             void SetModel(Geometry::OBJModel* model);
             
+            /// Get whether the window is visible.
+            /**
+             * @return Whether the window is visible.
+             */
+            bool IsVisible() const;
+            
+            /// Set whether the window should be visible.
+            /**
+             * @param visible Whether the window should be visible.
+             */
+            void SetVisible(bool visible);
+            
         private:
-            void DeleteModelPressed();
             void LoadPressed();
             void FileSelected(const std::string& file);
             
-            Geometry::Rectangle* rectangle;
-            glm::vec2 size;
-            Font* font;
-            
             Geometry::OBJModel* model = nullptr;
+            bool visible = false;
             
-            Label* nameLabel;
-            StringEditor* nameEditor;
+            FileSelector fileSelector;
             
-            Texture2D* deleteModelTexture;
-            ImageTextButton* deleteModelButton;
-            
-            Button* loadButton;
-            FileSelector* fileSelector;
+            char name[128] = "";
     };
 }

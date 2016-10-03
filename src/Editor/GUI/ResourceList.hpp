@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Widget.hpp"
 #include <functional>
+#include <map>
+#include "Editors/EntityEditor.hpp"
+#include "Editors/ModelEditor.hpp"
+#include "Editors/TextureEditor.hpp"
+#include "Editors/SoundEditor.hpp"
 
 class Texture2D;
-class Font;
 class Entity;
 namespace Geometry {
-    class Rectangle;
     class OBJModel;
 }
 namespace Audio {
@@ -16,34 +18,22 @@ namespace Audio {
 
 namespace GUI {
     /// Displays all the hymn's resources.
-    class ResourceList : public Widget {
+    class ResourceList {
         public:
-            /// Create new resource list.
+            /// Show the resource list.
+            void Show();
+            
+            /// Get whether the resource list is visible.
             /**
-             * @param parent Parent widget.
+             * @return Whether the resource list is visible.
              */
-            ResourceList(Widget* parent);
+            bool IsVisible() const;
             
-            /// Destructor.
-            ~ResourceList() override;
-            
-            /// Update the widget.
-            void Update() override;
-            
-            /// Render the widget.
-            void Render() override;
-            
-            /// Get the size of the widget.
+            /// Set whether the resource list should be visible.
             /**
-             * @return The size
+             * @param visible Whether the resource list should be visible.
              */
-            glm::vec2 GetSize() const override;
-            
-            /// Set the size of the widget.
-            /**
-             * @param size New widget size.
-             */
-            void SetSize(const glm::vec2& size) override;
+            void SetVisible(bool visible);
             
             /// Set function to call when an entity has been selected.
             /**
@@ -51,49 +41,15 @@ namespace GUI {
              */
             void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
             
-            /// Set function to call when a model has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
-            
-            /// Set function to call when a texture has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetTextureSelectedCallback(std::function<void(Texture2D*)> callback);
-            
-            /// Set function to call when a sound has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetSoundSelectedCallback(std::function<void(Audio::SoundBuffer*)> callback);
-            
         private:
-            Geometry::Rectangle* rectangle;
-            Font* font;
-            glm::vec2 size;
+            bool visible = false;
             
-            Texture2D* addTexture;
+            std::map<Entity*, EntityEditor> entityEditors;
+            std::map<Geometry::OBJModel*, ModelEditor> modelEditors;
+            std::map<Texture2D*, TextureEditor> textureEditors;
+            std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
             
-            bool addEntityHover = false;
-            Entity* selectedEntity = nullptr;
             bool hasEntitySelectedCallback = false;
             std::function<void(Entity*)> entitySelectedCallback;
-            
-            bool addModelHover = false;
-            Geometry::OBJModel* selectedModel = nullptr;
-            bool hasModelSelectedCallback = false;
-            std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
-            
-            bool addTextureHover = false;
-            Texture2D* selectedTexture = nullptr;
-            bool hasTextureSelectedCallback = false;
-            std::function<void(Texture2D*)> textureSelectedCallback;
-            
-            bool addSoundHover = false;
-            Audio::SoundBuffer* selectedSound = nullptr;
-            bool hasSoundSelectedCallback = false;
-            std::function<void(Audio::SoundBuffer*)> soundSelectedCallback;
     };
 }

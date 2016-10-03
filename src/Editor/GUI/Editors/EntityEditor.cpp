@@ -1,206 +1,264 @@
 #include "EntityEditor.hpp"
 
-#include <Engine/Manager/Managers.hpp>
-#include <Engine/Manager/ResourceManager.hpp>
-#include <Engine/Font/Font.hpp>
-#include "ABeeZee.ttf.hpp"
+#include <Engine/Component/Transform.hpp>
+#include <Engine/Component/Physics.hpp>
+#include <Engine/Component/Mesh.hpp>
+#include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Material.hpp>
+#include <Engine/Component/DirectionalLight.hpp>
+#include <Engine/Component/PointLight.hpp>
+#include <Engine/Component/SpotLight.hpp>
+#include <Engine/Component/Listener.hpp>
+#include <Engine/Component/SoundSource.hpp>
+#include <Engine/Component/ParticleEmitter.hpp>
+#include <Engine/Hymn.hpp>
+#include <Engine/Geometry/OBJModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
-#include "Add.png.hpp"
-#include "Subtract.png.hpp"
-#include <Engine/Geometry/Rectangle.hpp>
-#include "ComponentEditor/ComponentAdder.hpp"
-#include "ComponentEditor/TransformEditor.hpp"
-#include "ComponentEditor/PhysicsEditor.hpp"
-#include "ComponentEditor/LensEditor.hpp"
-#include "ComponentEditor/MeshEditor.hpp"
-#include "ComponentEditor/MaterialEditor.hpp"
-#include "ComponentEditor/DirectionalLightEditor.hpp"
-#include "ComponentEditor/PointLightEditor.hpp"
-#include "ComponentEditor/SpotLightEditor.hpp"
-#include "ComponentEditor/ListenerEditor.hpp"
-#include "ComponentEditor/SoundSourceEditor.hpp"
-#include "ComponentEditor/ParticleEmitterEditor.hpp"
-#include "../Label.hpp"
-#include "StringEditor.hpp"
-#include <Engine/Entity/Entity.hpp>
-#include "../ImageTextButton.hpp"
-#include <Engine/Util/Input.hpp>
+#include <Engine/Audio/SoundBuffer.hpp>
 
 using namespace GUI;
 
-EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, TextureSelector* textureSelector, SoundSelector* soundSelector, ComponentAdder* componentAdder) : Widget(parent) {
-    rectangle = Managers().resourceManager->CreateRectangle();
-    
-    font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 16.f);
-    nameLabel = new Label(this, font, "Name");
-    nameEditor = new StringEditor(this, font);
-    
-    addComponentTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
-    addComponentButton = new ImageTextButton(this, addComponentTexture, font, "Add component");
-    addComponentButton->SetImageSize(glm::vec2(addComponentTexture->GetWidth(), addComponentTexture->GetHeight()));
-    addComponentButton->SetClickedCallback(std::bind(&EntityEditor::AddComponentPressed, this));
-    
-    removeEntityTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
-    removeEntityButton = new ImageTextButton(this, removeEntityTexture, font, "Delete entity");
-    removeEntityButton->SetImageSize(glm::vec2(removeEntityTexture->GetWidth(), removeEntityTexture->GetHeight()));
-    removeEntityButton->SetClickedCallback(std::bind(&EntityEditor::RemoveEntityPressed, this));
-    
-    editors.push_back(new TransformEditor(this));
-    editors.push_back(new PhysicsEditor(this));
-    editors.push_back(new LensEditor(this));
-    editors.push_back(new MeshEditor(this, modelSelector));
-    editors.push_back(new MaterialEditor(this, textureSelector));
-    editors.push_back(new DirectionalLightEditor(this));
-    editors.push_back(new PointLightEditor(this));
-    editors.push_back(new SpotLightEditor(this));
-    editors.push_back(new ListenerEditor(this));
-    editors.push_back(new SoundSourceEditor(this, soundSelector));
-    editors.push_back(new ParticleEmitterEditor(this));
-    
-    this->componentAdder = componentAdder;
-    
-    SetVisible(false);
+EntityEditor::EntityEditor() {
+    AddEditor<Component::Transform>("Transform", std::bind(&TransformEditor, this, std::placeholders::_1));
+    AddEditor<Component::Physics>("Physics", std::bind(&PhysicsEditor, this, std::placeholders::_1));
+    AddEditor<Component::Mesh>("Mesh", std::bind(&MeshEditor, this, std::placeholders::_1));
+    AddEditor<Component::Lens>("Lens", std::bind(&LensEditor, this, std::placeholders::_1));
+    AddEditor<Component::Material>("Material", std::bind(&MaterialEditor, this, std::placeholders::_1));
+    AddEditor<Component::DirectionalLight>("Directional light", std::bind(&DirectionalLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::PointLight>("Point light", std::bind(&PointLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::SpotLight>("Spot light", std::bind(&SpotLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::Listener>("Listener", std::bind(&ListenerEditor, this, std::placeholders::_1));
+    AddEditor<Component::SoundSource>("Sound source", std::bind(&SoundSourceEditor, this, std::placeholders::_1));
+    AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&ParticleEmitterEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {
-    Managers().resourceManager->FreeRectangle();
-    Managers().resourceManager->FreeFont(font);
     
-    delete nameLabel;
-    delete nameEditor;
-    
-    Managers().resourceManager->FreeTexture2D(addComponentTexture);
-    delete addComponentButton;
-    
-    Managers().resourceManager->FreeTexture2D(removeEntityTexture);
-    delete removeEntityButton;
-    
-    for (ComponentEditor* editor : editors)
-        delete editor;
 }
 
-void EntityEditor::Update() {
-    nameEditor->Update();
-    addComponentButton->Update();
-    removeEntityButton->Update();
-    
-    if (Input()->ScrollUp() && scrollPosition > 0U) {
-        --scrollPosition;
-        SetPosition(GetPosition());
-    } else if (Input()->ScrollDown()) {
-        std::size_t visibleEditors = 0U;
-        for (ComponentEditor* editor : editors) {
-            if (editor->IsVisible())
-                ++visibleEditors;
+void EntityEditor::Show() {
+    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
+        ImGui::InputText("Name", name, 128);
+        entity->name = name;
+        
+        if (ImGui::Button("Add component"))
+            ImGui::OpenPopup("Add component");
+        
+        if (ImGui::BeginPopup("Add component")) {
+            ImGui::Text("Components");
+            ImGui::Separator();
+            
+            for (Editor& editor : editors) {
+                editor.addFunction();
+            }
+            
+            ImGui::EndPopup();
         }
         
-        if (scrollPosition < visibleEditors - 1) {
-            ++scrollPosition;
-            SetPosition(GetPosition());
+        for (Editor& editor : editors) {
+            editor.editFunction();
         }
     }
-    
-    std::size_t i = 0U;
-    for (ComponentEditor* editor : editors) {
-        if (editor->IsVisible() && i++ >= scrollPosition) {
-            editor->Update();
-        }
-    }
-}
-
-void EntityEditor::Render() {
-    glm::vec3 color(0.06666666666f, 0.06274509803f, 0.08235294117f);
-    rectangle->Render(GetPosition(), size, color);
-    
-    nameLabel->Render();
-    nameEditor->Render();
-    addComponentButton->Render();
-    removeEntityButton->Render();
-    
-    // Draw scrollbar.
-    if (!editors.empty()) {
-        color = glm::vec3(0.16078431372f, 0.15686274509f, 0.17647058823f);
-        float yScrolled = 0.f;
-        float yCovered = 0.f;
-        float yTotal = 0.f;
-        for (std::size_t i=0U; i < editors.size(); ++i) {
-            if (editors[i]->IsVisible()) {
-                yTotal += editors[i]->GetSize().y;
-                
-                if (i < scrollPosition) {
-                    yScrolled += editors[i]->GetSize().y;
-                } else if (yTotal - yScrolled < size.y) {
-                    yCovered += editors[i]->GetSize().y;
-                }
-            }
-        }
-        rectangle->Render(GetPosition() + glm::vec2(size.x - 20.f, size.y * yScrolled / yTotal), glm::vec2(20.f, size.y * yCovered / yTotal), color);
-    }
-    
-    std::size_t i = 0U;
-    for (ComponentEditor* editor : editors) {
-        if (editor->IsVisible() && i++ >= scrollPosition) {
-            editor->Render();
-        }
-    }
-}
-
-void EntityEditor::SetPosition(const glm::vec2& position) {
-    Widget::SetPosition(position);
-    
-    glm::vec2 pos(position);
-    
-    nameLabel->SetPosition(pos);
-    nameEditor->SetPosition(pos + glm::vec2(10.f, 20.f));
-    pos.y += 50.f;
-    removeEntityButton->SetPosition(pos);
-    pos.y += 20.f;
-    addComponentButton->SetPosition(pos);
-    pos.y += 30.f;
-    
-    std::size_t i = 0U;
-    for (ComponentEditor* editor : editors) {
-        if (editor->IsVisible() && i++ >= scrollPosition) {
-            editor->SetPosition(pos);
-            pos.y += editor->GetSize().y + 10.f;
-        }
-    }
-}
-
-glm::vec2 EntityEditor::GetSize() const {
-    return size;
-}
-
-void EntityEditor::SetSize(const glm::vec2& size) {
-    this->size = size;
-    
-    nameEditor->SetSize(glm::vec2(size.x - 30.f, 20.f));
-    addComponentButton->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    removeEntityButton->SetSize(glm::vec2(size.x - 20.f, 20.f));
-    
-    for (ComponentEditor* editor : editors)
-        editor->SetSize(glm::vec2(size.x - 20.f, size.y));
+    ImGui::End();
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
     
-    nameEditor->SetString(&entity->name);
-    
-    for (ComponentEditor* editor : editors)
-        editor->SetEntity(entity);
-    
-    // Update editor positions.
-    SetPosition(GetPosition());
+    strcpy(name, entity->name.c_str());
 }
 
-void EntityEditor::AddComponentPressed() {
-    componentAdder->SetEntity(entity);
-    componentAdder->SetComponentAddedCallback(std::bind(&EntityEditor::SetEntity, this, entity));
-    componentAdder->SetVisible(true);
+bool EntityEditor::IsVisible() const {
+    return visible;
 }
 
-void EntityEditor::RemoveEntityPressed() {
-    entity->Kill();
-    SetVisible(false);
+void EntityEditor::SetVisible(bool visible) {
+    this->visible = visible;
+}
+
+void EntityEditor::TransformEditor(Component::Transform* transform) {
+    ImGui::InputFloat3("Position", &transform->position[0]);
+    ImGui::InputFloat3("Rotation", &transform->rotation[0]);
+    ImGui::InputFloat3("Scale", &transform->scale[0]);
+}
+
+void EntityEditor::PhysicsEditor(Component::Physics* physics) {
+    ImGui::InputFloat3("Velocity", &physics->velocity[0]);
+    ImGui::InputFloat("Max velocity", &physics->maxVelocity);
+    ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
+    ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
+    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
+    ImGui::InputFloat3("Angular acceleration", &physics->angularAcceleration[0]);
+    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
+    ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
+    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
+    ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+}
+
+void EntityEditor::MeshEditor(Component::Mesh* mesh) {
+    if (ImGui::Button("Select model"))
+        ImGui::OpenPopup("Select model");
+    
+    if (ImGui::BeginPopup("Select model")) {
+        ImGui::Text("Models");
+        ImGui::Separator();
+        
+        for (Geometry::OBJModel* model : Hymn().models) {
+            if (ImGui::Selectable(model->name.c_str()))
+                mesh->geometry = model;
+        }
+        
+        ImGui::EndPopup();
+    }
+}
+
+void EntityEditor::LensEditor(Component::Lens* lens) {
+    ImGui::InputFloat("Field of view", &lens->fieldOfView);
+    ImGui::InputFloat("Z near", &lens->zNear);
+    ImGui::InputFloat("Z far", &lens->zFar);
+}
+
+void EntityEditor::MaterialEditor(Component::Material* material) {
+    // Diffuse
+    if (ImGui::Button("Select diffuse texture"))
+        ImGui::OpenPopup("Select diffuse texture");
+    
+    if (ImGui::BeginPopup("Select diffuse texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->diffuse = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    // Normal
+    if (ImGui::Button("Select normal texture"))
+        ImGui::OpenPopup("Select normal texture");
+    
+    if (ImGui::BeginPopup("Select normal texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->normal = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    // Specular
+    if (ImGui::Button("Select specular texture"))
+        ImGui::OpenPopup("Select specular texture");
+    
+    if (ImGui::BeginPopup("Select specular texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->specular = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    // Glow
+    if (ImGui::Button("Select glow texture"))
+        ImGui::OpenPopup("Select glow texture");
+    
+    if (ImGui::BeginPopup("Select glow texture")) {
+        ImGui::Text("Textures");
+        ImGui::Separator();
+        
+        for (Texture2D* texture : Hymn().textures) {
+            if (ImGui::Selectable(texture->name.c_str()))
+                material->glow = texture;
+        }
+        
+        ImGui::EndPopup();
+    }
+}
+
+void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
+    ImGui::InputFloat3("Color", &directionalLight->color[0]);
+    ImGui::InputFloat("Ambient coefficient", &directionalLight->ambientCoefficient);
+}
+
+void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
+    ImGui::InputFloat3("Color", &pointLight->color[0]);
+    ImGui::InputFloat("Ambient coefficient", &pointLight->ambientCoefficient);
+    ImGui::InputFloat("Attenuation", &pointLight->attenuation);
+    ImGui::InputFloat("Intensity", &pointLight->intensity);
+}
+
+void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
+    ImGui::InputFloat3("Color", &spotLight->color[0]);
+    ImGui::InputFloat("Ambient coefficient", &spotLight->ambientCoefficient);
+    ImGui::InputFloat("Attenuation", &spotLight->attenuation);
+    ImGui::InputFloat("Intensity", &spotLight->intensity);
+    ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
+}
+
+void EntityEditor::ListenerEditor(Component::Listener* listener) {
+    
+}
+
+void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
+    if (ImGui::Button("Select sound"))
+        ImGui::OpenPopup("Select sound");
+    
+    if (ImGui::BeginPopup("Select sound")) {
+        ImGui::Text("Sounds");
+        ImGui::Separator();
+        
+        for (Audio::SoundBuffer* sound : Hymn().sounds) {
+            if (ImGui::Selectable(sound->name.c_str()))
+                soundSource->soundBuffer = sound;
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    ImGui::InputFloat("Pitch", &soundSource->pitch);
+    ImGui::InputFloat("Gain", &soundSource->gain);
+    ImGui::Checkbox("Loop", &soundSource->loop);
+}
+
+void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
+    ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
+    ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
+    ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
+    ImGui::InputFloat("Min lifetime", &particleEmitter->particleType.minLifetime);
+    ImGui::InputFloat("Max lifetime", &particleEmitter->particleType.maxLifetime);
+    ImGui::InputFloat2("Min size", &particleEmitter->particleType.minSize[0]);
+    ImGui::InputFloat2("Max size", &particleEmitter->particleType.maxSize[0]);
+    ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
+    ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
+    ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
+    ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
+    ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::InputFloat3("Size", &particleEmitter->size[0]);
+    ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
+    ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
+    
+    if (ImGui::Button("Emitter type"))
+        ImGui::OpenPopup("Emitter type");
+    
+    if (ImGui::BeginPopup("Emitter type")) {
+        ImGui::Text("Emitter type");
+        ImGui::Separator();
+        
+        if (ImGui::Selectable("Point"))
+            particleEmitter->emitterType = Component::ParticleEmitter::POINT;
+        
+        if (ImGui::Selectable("Cuboid"))
+            particleEmitter->emitterType = Component::ParticleEmitter::CUBOID;
+        
+        ImGui::EndPopup();
+    }
 }

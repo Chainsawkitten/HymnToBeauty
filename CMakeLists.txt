@@ -29,6 +29,9 @@ include_directories(externals/glm)
 # STB
 include_directories(externals/stb)
 
+# Imgui
+include_directories(externals/imgui)
+
 # OpenAL Soft
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
 add_subdirectory(externals/openal-soft)
@@ -85,22 +88,10 @@ set(EMBEDDED_INPUT
     shaders/PostGlow.frag
     shaders/PostGlowBlur.frag
     assets/ABeeZee.ttf
-    assets/File.png
-    assets/Options.png
-    assets/Play.png
-    assets/Close.png
-    assets/NewHymn.png
-    assets/OpenHymn.png
-    assets/Add.png
-    assets/Subtract.png
-    assets/Directory.png
-    assets/BasicFile.png
     assets/DefaultDiffuse.png
     assets/DefaultNormal.png
     assets/DefaultSpecular.png
     assets/DefaultGlow.png
-    assets/Unchecked.png
-    assets/Checked.png
     assets/ParticleAtlas.png
 )
 
@@ -274,95 +265,32 @@ set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
 ## Editor ##
 set(EDITOR_SRCS
+        externals/imgui/imgui.cpp
+        externals/imgui/imgui_demo.cpp
+        externals/imgui/imgui_draw.cpp
         src/Editor/main.cpp
         src/Editor/Editor.cpp
-        src/Editor/GUI/Widget.cpp
-        src/Editor/GUI/Container.cpp
-        src/Editor/GUI/HorizontalLayout.cpp
-        src/Editor/GUI/VerticalLayout.cpp
-        src/Editor/GUI/VerticalScrollLayout.cpp
-        src/Editor/GUI/Button.cpp
-        src/Editor/GUI/ImageButton.cpp
-        src/Editor/GUI/ImageTextButton.cpp
-        src/Editor/GUI/TextButton.cpp
+        src/Editor/ImGui/OpenGLImplementation.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/FileSelector.cpp
-        src/Editor/GUI/ModelSelector.cpp
-        src/Editor/GUI/TextureSelector.cpp
-        src/Editor/GUI/SoundSelector.cpp
-        src/Editor/GUI/TextField.cpp
-        src/Editor/GUI/Label.cpp
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
         src/Editor/GUI/Editors/SoundEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/LensEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/MeshEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/TransformEditor.cpp
-        src/Editor/GUI/Editors/IntEditor.cpp
-        src/Editor/GUI/Editors/DoubleEditor.cpp
-        src/Editor/GUI/Editors/FloatEditor.cpp
-        src/Editor/GUI/Editors/Vec2Editor.cpp
-        src/Editor/GUI/Editors/Vec3Editor.cpp
-        src/Editor/GUI/Editors/StringEditor.cpp
-        src/Editor/GUI/Editors/BoolEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
-        src/Editor/GUI/Widget.hpp
-        src/Editor/GUI/Container.hpp
-        src/Editor/GUI/HorizontalLayout.hpp
-        src/Editor/GUI/VerticalLayout.hpp
-        src/Editor/GUI/VerticalScrollLayout.hpp
-        src/Editor/GUI/Button.hpp
-        src/Editor/GUI/ImageButton.hpp
-        src/Editor/GUI/ImageTextButton.hpp
-        src/Editor/GUI/TextButton.hpp
+        src/Editor/ImGui/OpenGLImplementation.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/FileSelector.hpp
-        src/Editor/GUI/ModelSelector.hpp
-        src/Editor/GUI/TextureSelector.hpp
-        src/Editor/GUI/SoundSelector.hpp
-        src/Editor/GUI/TextField.hpp
-        src/Editor/GUI/Label.hpp
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
         src/Editor/GUI/Editors/SoundEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentAdder.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ComponentEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/DirectionalLightEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/LensEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ListenerEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/MaterialEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/MeshEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/ParticleEmitterEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/PhysicsEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/PointLightEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/SoundSourceEditor.cpp
-        src/Editor/GUI/Editors/ComponentEditor/SpotLightEditor.hpp
-        src/Editor/GUI/Editors/ComponentEditor/TransformEditor.hpp
-        src/Editor/GUI/Editors/IntEditor.hpp
-        src/Editor/GUI/Editors/DoubleEditor.hpp
-        src/Editor/GUI/Editors/FloatEditor.hpp
-        src/Editor/GUI/Editors/Vec2Editor.hpp
-        src/Editor/GUI/Editors/Vec3Editor.hpp
-        src/Editor/GUI/Editors/StringEditor.hpp
-        src/Editor/GUI/Editors/BoolEditor.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

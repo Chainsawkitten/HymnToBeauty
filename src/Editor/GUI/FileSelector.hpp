@@ -1,47 +1,17 @@
 #pragma once
 
-#include "Container.hpp"
 #include <functional>
-
-class Texture2D;
-class Font;
-namespace Geometry {
-    class Rectangle;
-}
+#include <vector>
 
 namespace GUI {
-    class ImageButton;
-    class VerticalScrollLayout;
-    
     /// A window where a file can be selected.
-    class FileSelector : public Container {
+    class FileSelector {
         public:
             /// Create new window.
-            /**
-             * @param parent Parent widget.
-             */
-            FileSelector(Widget* parent);
+            FileSelector();
             
-            /// Destructor.
-            ~FileSelector() override;
-            
-            /// Update the widget.
-            void Update() override;
-            
-            /// Render the widget.
-            void Render() override;
-            
-            /// Get the size of the widget.
-            /**
-             * @return The size
-             */
-            glm::vec2 GetSize() const override;
-            
-            /// Set the size of the widget.
-            /**
-             * @param size The new size.
-             */
-            void SetSize(const glm::vec2& size);
+            /// Show the file selector.
+            void Show();
             
             /// Set function to call when a file has been selected.
             /**
@@ -55,31 +25,35 @@ namespace GUI {
              */
             void SetExtension(const std::string& extension);
             
+            /// Get whether the window is visible.
+            /**
+             * @return Whether the window is visible.
+             */
+            bool IsVisible() const;
+            
+            /// Set whether the window should be visible.
+            /**
+             * @param visible Whether the window should be visible.
+             */
+            void SetVisible(bool visible);
+            
         private:
-            void Close();
             void OpenParentDirectory();
             void OpenDirectory(const std::string& name);
             void SelectFile(const std::string& name);
             void ScanDirectory();
             
-            Geometry::Rectangle* rectangle;
-            Font* font;
-            
-            glm::vec2 size;
+            bool visible = false;
             
             // Interaction
             std::string path;
             std::string extension = "";
-            bool pathChanged;
+            bool pathChanged = true;
+            
+            std::vector<std::string> directories;
+            std::vector<std::string> files;
             
             bool hasFileSelectedCallback = false;
             std::function<void(const std::string&)> fileSelectedCallback;
-            
-            ImageButton* closeButton;
-            Texture2D* closeTexture;
-            
-            VerticalScrollLayout* fileList;
-            Texture2D* directoryTexture;
-            Texture2D* fileTexture;
     };
 }
