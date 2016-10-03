@@ -18,7 +18,7 @@ ModelSelector::ModelSelector(Widget *parent) : Container(parent) {
     
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
-    closeButton->SetClickedCallback(std::bind(&Close, this));
+    closeButton->SetClickedCallback(std::bind(&ModelSelector::Close, this));
     AddWidget(closeButton);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
@@ -82,7 +82,7 @@ void ModelSelector::UpdateModels() {
     
     for (Geometry::OBJModel* model : *models) {
         TextButton* modelButton = new TextButton(this, font, model->name);
-        modelButton->SetClickedCallback(std::bind(&ModelSelected, this, model));
+        modelButton->SetClickedCallback(std::bind(&ModelSelector::ModelSelected, this, model));
         modelButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
         modelList->AddWidget(modelButton);
     }

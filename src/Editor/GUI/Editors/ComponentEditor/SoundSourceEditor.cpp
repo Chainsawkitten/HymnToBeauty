@@ -19,7 +19,7 @@ SoundSourceEditor::SoundSourceEditor(Widget* parent, SoundSelector* soundSelecto
     SetComponent<Component::SoundSource>();
     
     selectSoundButton = new TextButton(this, font, "Select sound");
-    selectSoundButton->SetClickedCallback(std::bind(&SelectSoundPressed, this));
+    selectSoundButton->SetClickedCallback(std::bind(&SoundSourceEditor::SelectSoundPressed, this));
     AddEditor("Sound", selectSoundButton);
     
     pitchEditor = new FloatEditor(this, font);
@@ -65,7 +65,7 @@ void SoundSourceEditor::SetEntity(Entity* entity) {
 void SoundSourceEditor::SelectSoundPressed() {
     soundSelector->SetVisible(true);
     soundSelector->UpdateSounds();
-    soundSelector->SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
+    soundSelector->SetSoundSelectedCallback(std::bind(&SoundSourceEditor::SoundSelected, this, std::placeholders::_1));
 }
 
 void SoundSourceEditor::SoundSelected(Audio::SoundBuffer* sound) {

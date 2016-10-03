@@ -31,10 +31,10 @@ SoundEditor::SoundEditor(Widget* parent, FileSelector* fileSelector) : Widget(pa
     deleteSoundTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
     deleteSoundButton = new ImageTextButton(this, deleteSoundTexture, font, "Delete sound");
     deleteSoundButton->SetImageSize(glm::vec2(deleteSoundTexture->GetWidth(), deleteSoundTexture->GetHeight()));
-    deleteSoundButton->SetClickedCallback(std::bind(&DeleteSoundPressed, this));
+    deleteSoundButton->SetClickedCallback(std::bind(&SoundEditor::DeleteSoundPressed, this));
     
     loadButton = new TextButton(this, font, "Load Ogg Vorbis");
-    loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
+    loadButton->SetClickedCallback(std::bind(&SoundEditor::LoadPressed, this));
     this->fileSelector = fileSelector;
 }
 
@@ -109,7 +109,7 @@ void SoundEditor::DeleteSoundPressed() {
 
 void SoundEditor::LoadPressed() {
     fileSelector->SetExtension("ogg");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+    fileSelector->SetFileSelectedCallback(std::bind(&SoundEditor::FileSelected, this, std::placeholders::_1));
     fileSelector->SetVisible(true);
 }
 

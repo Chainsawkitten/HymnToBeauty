@@ -82,7 +82,7 @@ namespace GUI {
 template<typename T> void GUI::ComponentAdder::AddComponentButton(const std::string& name) {
     if (entity->GetComponent<T>() == nullptr) {
         TextButton* component = new TextButton(this, font, name);
-        component->SetClickedCallback(std::bind(&ComponentPressed<T>, this));
+        component->SetClickedCallback(std::bind(&ComponentAdder::ComponentPressed<T>, this));
         component->SetSize(glm::vec2(size.x - 20.f, 64.f));
         componentList->AddWidget(component);
     }

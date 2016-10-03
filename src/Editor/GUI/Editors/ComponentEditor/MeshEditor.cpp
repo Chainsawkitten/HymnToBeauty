@@ -18,7 +18,7 @@ MeshEditor::MeshEditor(Widget* parent, ModelSelector* modelSelector) : Component
     SetComponent<Component::Mesh>();
     
     selectModelButton = new TextButton(this, font, "Select model");
-    selectModelButton->SetClickedCallback(std::bind(&SelectModelPressed, this));
+    selectModelButton->SetClickedCallback(std::bind(&MeshEditor::SelectModelPressed, this));
     AddEditor("Model", selectModelButton);
     
     this->modelSelector = modelSelector;
@@ -44,7 +44,7 @@ void MeshEditor::SetEntity(Entity* entity) {
 void MeshEditor::SelectModelPressed() {
     modelSelector->SetVisible(true);
     modelSelector->UpdateModels();
-    modelSelector->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
+    modelSelector->SetModelSelectedCallback(std::bind(&MeshEditor::ModelSelected, this, std::placeholders::_1));
 }
 
 void MeshEditor::ModelSelected(Geometry::OBJModel* model) {

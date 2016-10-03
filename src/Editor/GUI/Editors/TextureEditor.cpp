@@ -30,10 +30,10 @@ TextureEditor::TextureEditor(Widget* parent, FileSelector* fileSelector) : Widge
     deleteTextureTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
     deleteTextureButton = new ImageTextButton(this, deleteTextureTexture, font, "Delete texture");
     deleteTextureButton->SetImageSize(glm::vec2(deleteTextureTexture->GetWidth(), deleteTextureTexture->GetHeight()));
-    deleteTextureButton->SetClickedCallback(std::bind(&DeleteTexturePressed, this));
+    deleteTextureButton->SetClickedCallback(std::bind(&TextureEditor::DeleteTexturePressed, this));
     
     loadButton = new TextButton(this, font, "Load PNG image");
-    loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
+    loadButton->SetClickedCallback(std::bind(&TextureEditor::LoadPressed, this));
     this->fileSelector = fileSelector;
     
     srgbLabel = new Label(this, font, "SRGB");
@@ -119,7 +119,7 @@ void TextureEditor::DeleteTexturePressed() {
 
 void TextureEditor::LoadPressed() {
     fileSelector->SetExtension("png");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+    fileSelector->SetFileSelectedCallback(std::bind(&TextureEditor::FileSelected, this, std::placeholders::_1));
     fileSelector->SetVisible(true);
 }
 

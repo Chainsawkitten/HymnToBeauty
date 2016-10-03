@@ -91,7 +91,7 @@ namespace GUI {
 }
 
 template<typename T> void GUI::ComponentEditor::SetComponent() {
-    removeComponentMethod = std::bind(&RemoveComponent<T>, this);
+    removeComponentMethod = std::bind(&ComponentEditor::RemoveComponent<T>, this);
 }
 
 template<typename T> void GUI::ComponentEditor::RemoveComponent() {

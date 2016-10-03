@@ -18,19 +18,19 @@ MaterialEditor::MaterialEditor(Widget* parent, TextureSelector* textureSelector)
     SetComponent<Component::Material>();
     
     selectDiffuseButton = new TextButton(this, font, "Select diffuse texture");
-    selectDiffuseButton->SetClickedCallback(std::bind(&SelectDiffusePressed, this));
+    selectDiffuseButton->SetClickedCallback(std::bind(&MaterialEditor::SelectDiffusePressed, this));
     AddEditor("Diffuse", selectDiffuseButton);
     
     selectNormalButton = new TextButton(this, font, "Select normal texture");
-    selectNormalButton->SetClickedCallback(std::bind(&SelectNormalPressed, this));
+    selectNormalButton->SetClickedCallback(std::bind(&MaterialEditor::SelectNormalPressed, this));
     AddEditor("Normal", selectNormalButton);
     
     selectSpecularButton = new TextButton(this, font, "Select specular texture");
-    selectSpecularButton->SetClickedCallback(std::bind(&SelectSpecularPressed, this));
+    selectSpecularButton->SetClickedCallback(std::bind(&MaterialEditor::SelectSpecularPressed, this));
     AddEditor("Specular", selectSpecularButton);
     
     selectGlowButton = new TextButton(this, font, "Select glow texture");
-    selectGlowButton->SetClickedCallback(std::bind(&SelectGlowPressed, this));
+    selectGlowButton->SetClickedCallback(std::bind(&MaterialEditor::SelectGlowPressed, this));
     AddEditor("Glow", selectGlowButton);
     
     this->textureSelector = textureSelector;
@@ -56,7 +56,7 @@ void MaterialEditor::SetEntity(Entity* entity) {
 void MaterialEditor::SelectDiffusePressed() {
     textureSelector->SetVisible(true);
     textureSelector->UpdateTextures();
-    textureSelector->SetTextureSelectedCallback(std::bind(&DiffuseSelected, this, std::placeholders::_1));
+    textureSelector->SetTextureSelectedCallback(std::bind(&MaterialEditor::DiffuseSelected, this, std::placeholders::_1));
 }
 
 void MaterialEditor::DiffuseSelected(Texture2D* texture) {
@@ -66,7 +66,7 @@ void MaterialEditor::DiffuseSelected(Texture2D* texture) {
 void MaterialEditor::SelectNormalPressed() {
     textureSelector->SetVisible(true);
     textureSelector->UpdateTextures();
-    textureSelector->SetTextureSelectedCallback(std::bind(&NormalSelected, this, std::placeholders::_1));
+    textureSelector->SetTextureSelectedCallback(std::bind(&MaterialEditor::NormalSelected, this, std::placeholders::_1));
 }
 
 void MaterialEditor::NormalSelected(Texture2D* texture) {
@@ -76,7 +76,7 @@ void MaterialEditor::NormalSelected(Texture2D* texture) {
 void MaterialEditor::SelectSpecularPressed() {
     textureSelector->SetVisible(true);
     textureSelector->UpdateTextures();
-    textureSelector->SetTextureSelectedCallback(std::bind(&SpecularSelected, this, std::placeholders::_1));
+    textureSelector->SetTextureSelectedCallback(std::bind(&MaterialEditor::SpecularSelected, this, std::placeholders::_1));
 }
 
 void MaterialEditor::SpecularSelected(Texture2D* texture) {
@@ -86,7 +86,7 @@ void MaterialEditor::SpecularSelected(Texture2D* texture) {
 void MaterialEditor::SelectGlowPressed() {
     textureSelector->SetVisible(true);
     textureSelector->UpdateTextures();
-    textureSelector->SetTextureSelectedCallback(std::bind(&GlowSelected, this, std::placeholders::_1));
+    textureSelector->SetTextureSelectedCallback(std::bind(&MaterialEditor::GlowSelected, this, std::placeholders::_1));
 }
 
 void MaterialEditor::GlowSelected(Texture2D* texture) {

@@ -21,13 +21,13 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
-    closeButton->SetClickedCallback(std::bind(&Close, this));
+    closeButton->SetClickedCallback(std::bind(&SelectHymnWindow::Close, this));
     AddWidget(closeButton);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
     
     selectButton = new TextButton(this, font, "Select");
-    selectButton->SetClickedCallback(std::bind(&Select, this));
+    selectButton->SetClickedCallback(std::bind(&SelectHymnWindow::Select, this));
     selectButton->SetSize(glm::vec2(64.f, 32.f));
     AddWidget(selectButton);
     
@@ -42,7 +42,7 @@ SelectHymnWindow::SelectHymnWindow(Widget *parent) : Container(parent) {
     vector<string> files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty"), FileSystem::DIRECTORY);
     for (string file : files) {
         ImageTextButton* hymn = new ImageTextButton(this, hymnTexture, font, file);
-        hymn->SetClickedCallback(std::bind(&SetHymn, this, file));
+        hymn->SetClickedCallback(std::bind(&SelectHymnWindow::SetHymn, this, file));
         hymnList->AddWidget(hymn);
     }
 }

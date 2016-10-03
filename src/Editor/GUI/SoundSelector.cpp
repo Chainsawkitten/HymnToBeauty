@@ -18,7 +18,7 @@ SoundSelector::SoundSelector(Widget *parent) : Container(parent) {
     
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
-    closeButton->SetClickedCallback(std::bind(&Close, this));
+    closeButton->SetClickedCallback(std::bind(&SoundSelector::Close, this));
     AddWidget(closeButton);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
@@ -82,7 +82,7 @@ void SoundSelector::UpdateSounds() {
     
     for (Audio::SoundBuffer* sound : *sounds) {
         TextButton* soundButton = new TextButton(this, font, sound->name);
-        soundButton->SetClickedCallback(std::bind(&SoundSelected, this, sound));
+        soundButton->SetClickedCallback(std::bind(&SoundSelector::SoundSelected, this, sound));
         soundButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
         soundList->AddWidget(soundButton);
     }

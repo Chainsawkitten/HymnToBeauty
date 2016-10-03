@@ -38,12 +38,12 @@ EntityEditor::EntityEditor(Widget* parent, ModelSelector* modelSelector, Texture
     addComponentTexture = Managers().resourceManager->CreateTexture2D(ADD_PNG, ADD_PNG_LENGTH);
     addComponentButton = new ImageTextButton(this, addComponentTexture, font, "Add component");
     addComponentButton->SetImageSize(glm::vec2(addComponentTexture->GetWidth(), addComponentTexture->GetHeight()));
-    addComponentButton->SetClickedCallback(std::bind(&AddComponentPressed, this));
+    addComponentButton->SetClickedCallback(std::bind(&EntityEditor::AddComponentPressed, this));
     
     removeEntityTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
     removeEntityButton = new ImageTextButton(this, removeEntityTexture, font, "Delete entity");
     removeEntityButton->SetImageSize(glm::vec2(removeEntityTexture->GetWidth(), removeEntityTexture->GetHeight()));
-    removeEntityButton->SetClickedCallback(std::bind(&RemoveEntityPressed, this));
+    removeEntityButton->SetClickedCallback(std::bind(&EntityEditor::RemoveEntityPressed, this));
     
     editors.push_back(new TransformEditor(this));
     editors.push_back(new PhysicsEditor(this));
@@ -196,7 +196,7 @@ void EntityEditor::SetEntity(Entity* entity) {
 
 void EntityEditor::AddComponentPressed() {
     componentAdder->SetEntity(entity);
-    componentAdder->SetComponentAddedCallback(std::bind(&SetEntity, this, entity));
+    componentAdder->SetComponentAddedCallback(std::bind(&EntityEditor::SetEntity, this, entity));
     componentAdder->SetVisible(true);
 }
 

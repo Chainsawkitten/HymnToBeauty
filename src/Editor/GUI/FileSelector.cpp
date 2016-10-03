@@ -20,7 +20,7 @@ FileSelector::FileSelector(Widget *parent) : Container(parent) {
     
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
-    closeButton->SetClickedCallback(std::bind(&Close, this));
+    closeButton->SetClickedCallback(std::bind(&FileSelector::Close, this));
     AddWidget(closeButton);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
@@ -118,7 +118,7 @@ void FileSelector::ScanDirectory() {
     
     // ..
     ImageTextButton* parentButton = new ImageTextButton(this, directoryTexture, font, "..");
-    parentButton->SetClickedCallback(std::bind(&OpenParentDirectory, this));
+    parentButton->SetClickedCallback(std::bind(&FileSelector::OpenParentDirectory, this));
     parentButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
     fileList->AddWidget(parentButton);
     
@@ -126,7 +126,7 @@ void FileSelector::ScanDirectory() {
     vector<string> files = FileSystem::DirectoryContents(path, FileSystem::DIRECTORY);
     for (string file : files) {
         ImageTextButton* fileButton = new ImageTextButton(this, directoryTexture, font, file);
-        fileButton->SetClickedCallback(std::bind(&OpenDirectory, this, file));
+        fileButton->SetClickedCallback(std::bind(&FileSelector::OpenDirectory, this, file));
         fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
         fileList->AddWidget(fileButton);
     }
@@ -136,7 +136,7 @@ void FileSelector::ScanDirectory() {
     for (string file : files) {
         if (FileSystem::GetExtension(file) == extension) {
             ImageTextButton* fileButton = new ImageTextButton(this, fileTexture, font, file);
-            fileButton->SetClickedCallback(std::bind(&SelectFile, this, file));
+            fileButton->SetClickedCallback(std::bind(&FileSelector::SelectFile, this, file));
             fileButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
             fileList->AddWidget(fileButton);
         }

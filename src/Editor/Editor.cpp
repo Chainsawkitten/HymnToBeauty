@@ -55,17 +55,17 @@ Editor::Editor() : Container(nullptr) {
     
     fileTexture = Managers().resourceManager->CreateTexture2D(FILE_PNG, FILE_PNG_LENGTH);
     fileButton = new GUI::ImageButton(menuBar, fileTexture);
-    fileButton->SetClickedCallback(std::bind(&OpenFileMenu, this));
+    fileButton->SetClickedCallback(std::bind(&Editor::OpenFileMenu, this));
     menuBar->AddWidget(fileButton);
     
     optionsTexture = Managers().resourceManager->CreateTexture2D(OPTIONS_PNG, OPTIONS_PNG_LENGTH);
     optionsButton = new GUI::ImageButton(menuBar, optionsTexture);
-    optionsButton->SetClickedCallback(std::bind(&OpenProjectOptions, this));
+    optionsButton->SetClickedCallback(std::bind(&Editor::OpenProjectOptions, this));
     menuBar->AddWidget(optionsButton);
     
     playTexture = Managers().resourceManager->CreateTexture2D(PLAY_PNG, PLAY_PNG_LENGTH);
     playButton = new GUI::ImageButton(menuBar, playTexture);
-    playButton->SetClickedCallback(std::bind(&Play, this));
+    playButton->SetClickedCallback(std::bind(&Editor::Play, this));
     menuBar->AddWidget(playButton);
     
     // Resource list.
@@ -73,10 +73,10 @@ Editor::Editor() : Container(nullptr) {
     resourceList->SetSize(glm::vec2(250.f, GetSize().y - 64.f));
     resourceList->SetPosition(glm::vec2(0.f, 64.f));
     resourceList->SetVisible(false);
-    resourceList->SetEntitySelectedCallback(std::bind(&EntitySelected, this, std::placeholders::_1));
-    resourceList->SetModelSelectedCallback(std::bind(&ModelSelected, this, std::placeholders::_1));
-    resourceList->SetTextureSelectedCallback(std::bind(&TextureSelected, this, std::placeholders::_1));
-    resourceList->SetSoundSelectedCallback(std::bind(&SoundSelected, this, std::placeholders::_1));
+    resourceList->SetEntitySelectedCallback(std::bind(&Editor::EntitySelected, this, std::placeholders::_1));
+    resourceList->SetModelSelectedCallback(std::bind(&Editor::ModelSelected, this, std::placeholders::_1));
+    resourceList->SetTextureSelectedCallback(std::bind(&Editor::TextureSelected, this, std::placeholders::_1));
+    resourceList->SetSoundSelectedCallback(std::bind(&Editor::SoundSelected, this, std::placeholders::_1));
     AddWidget(resourceList);
     
     // File selector.
@@ -134,13 +134,13 @@ Editor::Editor() : Container(nullptr) {
     newHymnTexture = Managers().resourceManager->CreateTexture2D(NEWHYMN_PNG, NEWHYMN_PNG_LENGTH);
     newHymnButton = new GUI::ImageTextButton(fileMenu, newHymnTexture, font, "New Hymn");
     newHymnButton->SetSize(glm::vec2(256.f, 64.f));
-    newHymnButton->SetClickedCallback(std::bind(&NewHymn, this));
+    newHymnButton->SetClickedCallback(std::bind(&Editor::NewHymn, this));
     fileMenu->AddWidget(newHymnButton);
     
     openHymnTexture = Managers().resourceManager->CreateTexture2D(OPENHYMN_PNG, OPENHYMN_PNG_LENGTH);
     openHymnButton = new GUI::ImageTextButton(fileMenu, openHymnTexture, font, "Open Hymn");
     openHymnButton->SetSize(glm::vec2(256.f, 64.f));
-    openHymnButton->SetClickedCallback(std::bind(&OpenHymn, this));
+    openHymnButton->SetClickedCallback(std::bind(&Editor::OpenHymn, this));
     fileMenu->AddWidget(openHymnButton);
 }
 
@@ -253,7 +253,7 @@ void Editor::NewHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(GetSize());
-    childWindow->SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
+    childWindow->SetClosedCallback(std::bind(&Editor::NewHymnClosed, this, std::placeholders::_1));
 }
 
 void Editor::NewHymnClosed(const std::string& hymn) {
@@ -274,7 +274,7 @@ void Editor::OpenHymn() {
     childWindow = new GUI::SelectHymnWindow(this);
     childWindow->SetPosition(glm::vec2(0.f, 0.f));
     childWindow->SetSize(GetSize());
-    childWindow->SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
+    childWindow->SetClosedCallback(std::bind(&Editor::OpenHymnClosed, this, std::placeholders::_1));
 }
 
 void Editor::OpenHymnClosed(const std::string& hymn) {

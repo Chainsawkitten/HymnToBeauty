@@ -30,10 +30,10 @@ ModelEditor::ModelEditor(Widget* parent, FileSelector* fileSelector) : Widget(pa
     deleteModelTexture = Managers().resourceManager->CreateTexture2D(SUBTRACT_PNG, SUBTRACT_PNG_LENGTH);
     deleteModelButton = new ImageTextButton(this, deleteModelTexture, font, "Delete model");
     deleteModelButton->SetImageSize(glm::vec2(deleteModelTexture->GetWidth(), deleteModelTexture->GetHeight()));
-    deleteModelButton->SetClickedCallback(std::bind(&DeleteModelPressed, this));
+    deleteModelButton->SetClickedCallback(std::bind(&ModelEditor::DeleteModelPressed, this));
     
     loadButton = new TextButton(this, font, "Load OBJ model");
-    loadButton->SetClickedCallback(std::bind(&LoadPressed, this));
+    loadButton->SetClickedCallback(std::bind(&ModelEditor::LoadPressed, this));
     this->fileSelector = fileSelector;
 }
 
@@ -108,7 +108,7 @@ void ModelEditor::DeleteModelPressed() {
 
 void ModelEditor::LoadPressed() {
     fileSelector->SetExtension("obj");
-    fileSelector->SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+    fileSelector->SetFileSelectedCallback(std::bind(&ModelEditor::FileSelected, this, std::placeholders::_1));
     fileSelector->SetVisible(true);
 }
 

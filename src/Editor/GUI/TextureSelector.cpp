@@ -18,7 +18,7 @@ TextureSelector::TextureSelector(Widget *parent) : Container(parent) {
     
     closeTexture = Managers().resourceManager->CreateTexture2D(CLOSE_PNG, CLOSE_PNG_LENGTH);
     closeButton = new ImageButton(this, closeTexture);
-    closeButton->SetClickedCallback(std::bind(&Close, this));
+    closeButton->SetClickedCallback(std::bind(&TextureSelector::Close, this));
     AddWidget(closeButton);
     
     font = Managers().resourceManager->CreateFontEmbedded(ABEEZEE_TTF, ABEEZEE_TTF_LENGTH, 24.f);
@@ -82,7 +82,7 @@ void TextureSelector::UpdateTextures() {
     
     for (Texture2D* texture : *textures) {
         TextButton* textureButton = new TextButton(this, font, texture->name);
-        textureButton->SetClickedCallback(std::bind(&TextureSelected, this, texture));
+        textureButton->SetClickedCallback(std::bind(&TextureSelector::TextureSelected, this, texture));
         textureButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
         textureList->AddWidget(textureButton);
     }
