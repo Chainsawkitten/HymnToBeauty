@@ -88,17 +88,10 @@ set(EMBEDDED_INPUT
     shaders/PostGlow.frag
     shaders/PostGlowBlur.frag
     assets/ABeeZee.ttf
-    assets/Close.png
-    assets/Add.png
-    assets/Subtract.png
-    assets/Directory.png
-    assets/BasicFile.png
     assets/DefaultDiffuse.png
     assets/DefaultNormal.png
     assets/DefaultSpecular.png
     assets/DefaultGlow.png
-    assets/Unchecked.png
-    assets/Checked.png
     assets/ParticleAtlas.png
 )
 
