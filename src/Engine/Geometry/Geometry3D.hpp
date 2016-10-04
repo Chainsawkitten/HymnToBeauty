@@ -78,6 +78,7 @@ namespace Geometry {
             GLuint vertexArray;
             
             Physics::AxisAlignedBoundingBox axisAlignedBoundingBox;
+
     };
 }
 

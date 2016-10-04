@@ -6,7 +6,7 @@
 
 class Texture2D;
 namespace Geometry {
-    class OBJModel;
+    class Model;
 }
 namespace Audio {
     class SoundBuffer;
@@ -57,7 +57,7 @@ class ActiveHymn {
         unsigned int entityNumber = 1U;
         
         /// Models.
-        std::vector<Geometry::OBJModel*> models;
+        std::vector<Geometry::Model*> models;
         
         /// The id of the next model to create.
         unsigned int modelNumber = 0U;

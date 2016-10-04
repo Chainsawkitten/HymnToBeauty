@@ -8,7 +8,7 @@ class Font;
 class Entity;
 namespace Geometry {
     class Rectangle;
-    class OBJModel;
+    class Model;
 }
 namespace Audio {
     class SoundBuffer;
@@ -55,7 +55,7 @@ namespace GUI {
             /**
              * @param callback Function to call.
              */
-            void SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback);
+            void SetModelSelectedCallback(std::function<void(Geometry::Model*)> callback);
             
             /// Set function to call when a texture has been selected.
             /**
@@ -82,9 +82,9 @@ namespace GUI {
             std::function<void(Entity*)> entitySelectedCallback;
             
             bool addModelHover = false;
-            Geometry::OBJModel* selectedModel = nullptr;
+            Geometry::Model* selectedModel = nullptr;
             bool hasModelSelectedCallback = false;
-            std::function<void(Geometry::OBJModel*)> modelSelectedCallback;
+            std::function<void(Geometry::Model*)> modelSelectedCallback;
             
             bool addTextureHover = false;
             Texture2D* selectedTexture = nullptr;

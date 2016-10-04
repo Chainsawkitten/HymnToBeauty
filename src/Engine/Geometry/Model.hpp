@@ -1,25 +1,26 @@
 #pragma once
 
 #include "Geometry3D.hpp"
-#include <vector>
-#include <fstream>
 #include <json/json.h>
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 
 namespace Geometry {
-    /// A model loaded from an OBJ file.
-    class OBJModel : public Geometry3D {
+    /// A model loaded from an file.
+    class Model : public Geometry3D {
     public:
-        /// Create new empty OBJ model.
+        /// Create new empty model.
         /**
          * The created model has to be loaded later using Load.
          */
-        OBJModel();
+        Model();
         
-        /// Create new model from OBJ file.
+        /// Create new model from file.
         /**
-         * @param filename Filename (relative or absolute) to the OBJ model file.
+         * @param filename Filename (relative or absolute) to the model file.
          */
-        OBJModel(const char* filename);
+        Model(const char* filename);
 
         /// Get all the vertices.
         /**
@@ -57,16 +58,19 @@ namespace Geometry {
          */
         void Load(const Json::Value& node);
         
-        /// Load model from OBJ file.
+        /// Load model from file.
         /**
-         * @param filename Filename (relative or absolute) to the OBJ model file.
+         * @param filename Filename (relative or absolute) to the model file.
          */
         void Load(const char* filename);
         
         /// The name of the model.
         std::string name;
-    
+
     private:
+
+        static Assimp::Importer aiImporter;
+
         struct Face {
             struct Vertex {
                 unsigned int positionIndex;
@@ -76,12 +80,11 @@ namespace Geometry {
 
             Vertex vertices[3];
         };
-        
-        static glm::vec3 ReadVec3(std::ifstream& modelFile);
-        static glm::vec2 ReadVec2(std::ifstream& modelFile);
-        static Face ReadFace(std::ifstream& modelFile);
-        static Face::Vertex ReadVertex(std::ifstream& modelFile);
-        static void CalculateTangents(std::vector<Face>& faces, std::vector<glm::vec3>& positions, std::vector<glm::vec2>& textureCoordinates, std::vector<glm::vec3>& tangents);
+
+        static void CpyVec(const aiVector3D& aiVec, glm::vec3& glmVec);
+        static void CpyVec(const aiVector3D& aiVec, glm::vec2& glmVec);
+        static void CpyVec(const aiVector2D& aiVec, glm::vec2& glmVec);
+        static void CpyMat(const aiMatrix4x4& aiMat, glm::mat4& glmMat);
 
         Vertex* vertexData = nullptr;
         unsigned int vertexNr = 0;

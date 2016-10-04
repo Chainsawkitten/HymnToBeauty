@@ -10,7 +10,7 @@ class Font;
 namespace Geometry {
     class Rectangle;
     class Cube;
-    class OBJModel;
+    class Model;
 }
 namespace Audio {
     class SoundBuffer;
@@ -85,18 +85,18 @@ class ResourceManager {
          */
         void FreeCube();
         
-        /// Create an OBJ model for rendering if it doesn't already exist.
+        /// Create an model for rendering if it doesn't already exist.
         /**
         * @param filename Filename of model file.
         * @return The model instance
         */
-        Geometry::OBJModel* CreateOBJModel(std::string filename);
+        Geometry::Model* CreateModel(std::string filename);
 
         /// Free the reference to the model.
         /**
         * @param model %Model to dereference.
         */
-        void FreeOBJModel(Geometry::OBJModel* model);
+        void FreeModel(Geometry::Model* model);
         
         /// Create a 2D texture if it doesn't already exist.
         /**
@@ -200,13 +200,13 @@ class ResourceManager {
         Geometry::Cube* cube;
         int cubeCount = 0;
         
-        // OBJ Model
-        struct OBJModelInstance {
-            Geometry::OBJModel* model;
+        // Model
+        struct ModelInstance {
+            Geometry::Model* model;
             int count;
         };
-        std::map<std::string, OBJModelInstance> objModels;
-        std::map<Geometry::OBJModel*, std::string> objModelsInverse;
+        std::map<std::string, ModelInstance> models;
+        std::map<Geometry::Model*, std::string> modelsInverse;
         
         // Texture2D
         struct Texture2DInstance {

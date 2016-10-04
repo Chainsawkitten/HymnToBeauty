@@ -8,7 +8,7 @@ namespace Component {
     class Mesh;
 }
 namespace Geometry {
-    class OBJModel;
+    class Model;
 }
 
 namespace GUI {
@@ -36,7 +36,7 @@ namespace GUI {
             
         private:
             void SelectModelPressed();
-            void ModelSelected(Geometry::OBJModel* model);
+            void ModelSelected(Geometry::Model* model);
             
             Font* font;
             

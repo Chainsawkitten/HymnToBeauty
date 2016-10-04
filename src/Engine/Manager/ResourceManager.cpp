@@ -4,7 +4,7 @@
 #include "../Shader/ShaderProgram.hpp"
 #include "../Geometry/Rectangle.hpp"
 #include "../Geometry/Cube.hpp"
-#include "../Geometry/OBJModel.hpp"
+#include "../Geometry/Model.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Font/Font.hpp"
 #include "../Audio/SoundBuffer.hpp"
@@ -138,25 +138,25 @@ void ResourceManager::FreeCube() {
         delete rectangle;
 }
 
-Geometry::OBJModel* ResourceManager::CreateOBJModel(std::string filename) {
-    if (objModels.find(filename) == objModels.end()) {
-        objModels[filename].model = new Geometry::OBJModel(filename.c_str());
-        objModelsInverse[objModels[filename].model] = filename;
-        objModels[filename].count = 1;
+Geometry::Model* ResourceManager::CreateModel(std::string filename) {
+    if (models.find(filename) == models.end()) {
+        models[filename].model = new Geometry::Model(filename.c_str());
+        modelsInverse[models[filename].model] = filename;
+        models[filename].count = 1;
     } else {
-        objModels[filename].count++;
+        models[filename].count++;
     }
 
-    return objModels[filename].model;
+    return models[filename].model;
 }
 
-void ResourceManager::FreeOBJModel(Geometry::OBJModel* model) {
-    string filename = objModelsInverse[model];
+void ResourceManager::FreeModel(Geometry::Model* model) {
+    string filename = modelsInverse[model];
     
-    if (objModels[filename].count-- <= 1) {
-        objModelsInverse.erase(model);
+    if (models[filename].count-- <= 1) {
+        modelsInverse.erase(model);
         delete model;
-        objModels.erase(filename);
+        models.erase(filename);
     }
 }
 

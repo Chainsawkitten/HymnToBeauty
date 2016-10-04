@@ -12,7 +12,7 @@
 #include "DefaultSpecular.png.hpp"
 #include "DefaultGlow.png.hpp"
 #include "Entity/Entity.hpp"
-#include "Geometry/OBJModel.hpp"
+#include "Geometry/Model.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
@@ -41,7 +41,7 @@ void ActiveHymn::Clear() {
     
     entityNumber = 1U;
     
-    for (Geometry::OBJModel* model : models) {
+    for (Geometry::Model* model : models) {
         delete model;
     }
     models.clear();
@@ -84,7 +84,7 @@ void ActiveHymn::Save() const {
     
     // Save models.
     Json::Value modelsNode;
-    for (Geometry::OBJModel* model : models) {
+    for (Geometry::Model* model : models) {
         modelsNode.append(model->Save());
     }
     root["models"] = modelsNode;
@@ -130,7 +130,7 @@ void ActiveHymn::Load(const string& path) {
     // Load models.
     const Json::Value modelsNode = root["models"];
     for (unsigned int i=0; i < modelsNode.size(); ++i) {
-        Geometry::OBJModel* model = new Geometry::OBJModel();
+        Geometry::Model* model = new Geometry::Model();
         model->Load(modelsNode[i]);
         models.push_back(model);
     }

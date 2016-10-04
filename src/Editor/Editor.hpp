@@ -23,7 +23,7 @@ namespace GUI {
     class ComponentAdder;
 }
 namespace Geometry {
-    class OBJModel;
+    class Model;
 }
 namespace Audio {
     class SoundBuffer;
@@ -69,7 +69,7 @@ class Editor : public GUI::Container {
         void OpenHymnClosed(const std::string& hymn);
         void HideEditors();
         void EntitySelected(Entity* entity);
-        void ModelSelected(Geometry::OBJModel* model);
+        void ModelSelected(Geometry::Model* model);
         void TextureSelected(Texture2D* texture);
         void SoundSelected(Audio::SoundBuffer* sound);
         

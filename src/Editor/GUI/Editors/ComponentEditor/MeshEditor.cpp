@@ -7,7 +7,7 @@
 
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Component/Mesh.hpp>
-#include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Geometry/Model.hpp>
 #include "../../TextButton.hpp"
 #include "../../ModelSelector.hpp"
 
@@ -47,6 +47,6 @@ void MeshEditor::SelectModelPressed() {
     modelSelector->SetModelSelectedCallback(std::bind(&MeshEditor::ModelSelected, this, std::placeholders::_1));
 }
 
-void MeshEditor::ModelSelected(Geometry::OBJModel* model) {
+void MeshEditor::ModelSelected(Geometry::Model* model) {
     mesh->geometry = model;
 }

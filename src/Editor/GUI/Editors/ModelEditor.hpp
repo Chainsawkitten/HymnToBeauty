@@ -7,7 +7,7 @@ class Font;
 class Texture2D;
 namespace Geometry {
     class Rectangle;
-    class OBJModel;
+    class Model;
 }
 
 namespace GUI {
@@ -58,7 +58,7 @@ namespace GUI {
             /**
              * @param model Model to edit.
              */
-            void SetModel(Geometry::OBJModel* model);
+            void SetModel(Geometry::Model* model);
             
         private:
             void DeleteModelPressed();
@@ -69,7 +69,7 @@ namespace GUI {
             glm::vec2 size;
             Font* font;
             
-            Geometry::OBJModel* model = nullptr;
+            Geometry::Model* model = nullptr;
             
             Label* nameLabel;
             StringEditor* nameEditor;

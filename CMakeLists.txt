@@ -46,6 +46,10 @@ set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "Don't build JsonCpp with pkgc
 add_subdirectory(externals/jsoncpp)
 include_directories(externals/jsoncpp/include)
 
+# Assimp
+add_subdirectory(externals/assimp)
+include_directories(externals/assimp/include)
+
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
 # one in the filesystem.
@@ -199,7 +203,7 @@ set(ENGINE_SRCS
         src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Geometry3D.cpp
-        src/Engine/Geometry/OBJModel.cpp
+        src/Engine/Geometry/Model.cpp
         src/Engine/Geometry/Rectangle.cpp
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
@@ -255,7 +259,7 @@ set(ENGINE_HEADERS
         src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Geometry3D.hpp
-        src/Engine/Geometry/OBJModel.hpp
+        src/Engine/Geometry/Model.hpp
         src/Engine/Geometry/Rectangle.hpp
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
@@ -370,7 +374,7 @@ create_directory_groups(${EDITOR_SRCS} ${EDITOR_HEADERS})
 
 add_executable(HymnToBeauty ${EDITOR_SRCS} ${EDITOR_HEADERS})
 target_link_libraries(HymnToBeauty Engine)
-target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB})
+target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} assimp)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD 11)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -389,6 +393,6 @@ create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
 
 add_executable(Game ${GAME_SRCS} ${GAME_HEADERS})
 target_link_libraries(Game Engine)
-target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB})
+target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} assimp)
 set_property(TARGET Game PROPERTY CXX_STANDARD 11)
 set_property(TARGET Game PROPERTY CXX_STANDARD_REQUIRED ON)

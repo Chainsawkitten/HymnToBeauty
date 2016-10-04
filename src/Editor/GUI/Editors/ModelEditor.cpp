@@ -3,7 +3,7 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Geometry/Rectangle.hpp>
-#include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Geometry/Model.hpp>
 #include <Engine/Font/Font.hpp>
 #include "ABeeZee.ttf.hpp"
 #include <Engine/Texture/Texture2D.hpp>
@@ -32,7 +32,7 @@ ModelEditor::ModelEditor(Widget* parent, FileSelector* fileSelector) : Widget(pa
     deleteModelButton->SetImageSize(glm::vec2(deleteModelTexture->GetWidth(), deleteModelTexture->GetHeight()));
     deleteModelButton->SetClickedCallback(std::bind(&ModelEditor::DeleteModelPressed, this));
     
-    loadButton = new TextButton(this, font, "Load OBJ model");
+    loadButton = new TextButton(this, font, "Load model");
     loadButton->SetClickedCallback(std::bind(&ModelEditor::LoadPressed, this));
     this->fileSelector = fileSelector;
 }
@@ -86,7 +86,7 @@ void ModelEditor::SetSize(const glm::vec2& size) {
     loadButton->SetSize(glm::vec2(size.x, 20.f));
 }
 
-void ModelEditor::SetModel(Geometry::OBJModel* model) {
+void ModelEditor::SetModel(Geometry::Model* model) {
     this->model = model;
     
     nameEditor->SetString(&model->name);
@@ -107,13 +107,13 @@ void ModelEditor::DeleteModelPressed() {
 }
 
 void ModelEditor::LoadPressed() {
-    fileSelector->SetExtension("obj");
+    fileSelector->SetExtension("fbx");
     fileSelector->SetFileSelectedCallback(std::bind(&ModelEditor::FileSelected, this, std::placeholders::_1));
     fileSelector->SetVisible(true);
 }
 
 void ModelEditor::FileSelected(const std::string& file) {
-    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + model->name + ".obj";
+    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + model->name + ".fbx";
     FileSystem::Copy(file.c_str(), destination.c_str());
     model->Load(file.c_str());
 }

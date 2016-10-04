@@ -8,7 +8,7 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Close.png.hpp>
 #include <ABeeZee.ttf.hpp>
-#include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Geometry/Model.hpp>
 
 using namespace GUI;
 using namespace std;
@@ -67,12 +67,12 @@ void ModelSelector::SetSize(const glm::vec2& size) {
     modelList->SetSize(glm::vec2(size.x, size.y - closeButton->GetSize().y));
 }
 
-void ModelSelector::SetModelSelectedCallback(std::function<void(Geometry::OBJModel*)> callback) {
+void ModelSelector::SetModelSelectedCallback(std::function<void(Geometry::Model*)> callback) {
     modelSelectedCallback = callback;
     hasModelSelectedCallback = true;
 }
 
-void ModelSelector::SetModels(const std::vector<Geometry::OBJModel*>* models) {
+void ModelSelector::SetModels(const std::vector<Geometry::Model*>* models) {
     this->models = models;
     UpdateModels();
 }
@@ -80,7 +80,7 @@ void ModelSelector::SetModels(const std::vector<Geometry::OBJModel*>* models) {
 void ModelSelector::UpdateModels() {
     modelList->ClearWidgets();
     
-    for (Geometry::OBJModel* model : *models) {
+    for (Geometry::Model* model : *models) {
         TextButton* modelButton = new TextButton(this, font, model->name);
         modelButton->SetClickedCallback(std::bind(&ModelSelector::ModelSelected, this, model));
         modelButton->SetSize(glm::vec2(size.x - 20.f, 64.f));
@@ -92,7 +92,7 @@ void ModelSelector::Close() {
     SetVisible(false);
 }
 
-void ModelSelector::ModelSelected(Geometry::OBJModel* model) {
+void ModelSelector::ModelSelected(Geometry::Model* model) {
     SetVisible(false);
     
     if (hasModelSelectedCallback)

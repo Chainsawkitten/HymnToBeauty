@@ -82,7 +82,7 @@ Editor::Editor() : Container(nullptr) {
     // File selector.
     fileSelector = new GUI::FileSelector(this);
     fileSelector->SetSize(GetSize());
-    fileSelector->SetExtension("obj");
+    fileSelector->SetExtension("fbx");
     
     // Model selector.
     modelSelector = new GUI::ModelSelector(this);
@@ -303,7 +303,7 @@ void Editor::EntitySelected(Entity* entity) {
     entityEditor->SetVisible(true);
 }
 
-void Editor::ModelSelected(Geometry::OBJModel* model) {
+void Editor::ModelSelected(Geometry::Model* model) {
     HideEditors();
     modelEditor->SetModel(model);
     modelEditor->SetVisible(true);

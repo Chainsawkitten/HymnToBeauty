@@ -7,7 +7,7 @@ class Texture2D;
 class Font;
 namespace Geometry {
     class Rectangle;
-    class OBJModel;
+    class Model;
 }
 
 namespace GUI {
