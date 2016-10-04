@@ -84,3 +84,7 @@ void MainWindow::Close() {
 void MainWindow::SwapBuffers() {
     glfwSwapBuffers(window);
 }
+
+GLFWwindow* MainWindow::GetGLFWWindow() const {
+    return window;
+}

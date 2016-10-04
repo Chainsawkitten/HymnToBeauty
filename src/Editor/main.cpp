@@ -8,6 +8,8 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
+#include "ImGui/OpenGLImplementation.hpp"
+#include <imgui.h>
 
 int main() {
     // Enable logging if requested.
@@ -27,6 +29,9 @@ int main() {
     
     Editor* editor = new Editor();
     
+    // Setup imgui implementation.
+    ImGuiImplementation::Init(window->GetGLFWWindow());
+    
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
@@ -35,11 +40,19 @@ int main() {
         double deltaTime = glfwGetTime() - lastTime;
         lastTime = glfwGetTime();
         
+        glfwPollEvents();
+        
+        // Start new frame.
+        ImGuiImplementation::NewFrame();
+        
         window->Update();
         
         if (editor->IsVisible()) {
-            editor->Update();
-            editor->Render();
+            Hymn().activeScene.ClearKilled();
+            Hymn().Render();
+            
+            editor->Show();
+            ImGui::Render();
         } else {
             Hymn().Update(deltaTime);
             Hymn().Render();
@@ -61,22 +74,21 @@ int main() {
         if (wait > 0)
             std::this_thread::sleep_for(std::chrono::microseconds(wait));
         lastTimeRender = glfwGetTime();
-        
-        glfwPollEvents();
     }
     
+    // Save.
+    EditorSettings::GetInstance().Save();
     if (editor->IsVisible())
         editor->Save();
     
+    // Shut down and cleanup.
+    ImGuiImplementation::Shutdown();
     delete editor;
     
     Managers().ShutDown();
     
     delete window;
-    
     glfwTerminate();
-    
-    EditorSettings::GetInstance().Save();
     
     Log() << "Editor ended - " << time(nullptr) << "\n";
     

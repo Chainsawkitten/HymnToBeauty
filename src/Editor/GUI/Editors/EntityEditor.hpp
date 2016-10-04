@@ -1,64 +1,37 @@
 #pragma once
 
-#include "../Widget.hpp"
 #include <vector>
+#include <string>
+#include <functional>
+#include <Engine/Entity/Entity.hpp>
+#include <imgui.h>
 
-class Entity;
-class Font;
-class Texture2D;
-namespace Geometry {
-    class Rectangle;
+namespace Component {
+    class Transform;
+    class Physics;
+    class Mesh;
+    class Lens;
+    class Material;
+    class DirectionalLight;
+    class PointLight;
+    class SpotLight;
+    class Listener;
+    class SoundSource;
+    class ParticleEmitter;
 }
 
 namespace GUI {
-    class Label;
-    class StringEditor;
-    class ImageTextButton;
-    class ComponentEditor;
-    class ModelSelector;
-    class TextureSelector;
-    class SoundSelector;
-    class ComponentAdder;
-    
     /// Used to edit an entity.
-    class EntityEditor : public Widget {
+    class EntityEditor {
         public:
             /// Create new entity editor.
-            /**
-             * @param parent Parent widget.
-             * @param modelSelector Model selector to use.
-             * @param textureSelector %Texture selector to use.
-             * @param soundSelector Sound selector to use.
-             * @param componentAdder %Component adder to use.
-             */
-            EntityEditor(Widget* parent, ModelSelector* modelSelector, TextureSelector* textureSelector, SoundSelector* soundSelector, ComponentAdder* componentAdder);
+            EntityEditor();
             
             /// Destructor.
-            ~EntityEditor() override;
+            ~EntityEditor();
             
-            /// Update the widget.
-            void Update() override;
-            
-            /// Render the widget.
-            void Render() override;
-            
-            /// Set widget's position.
-            /**
-             * @param position New position.
-             */
-            void SetPosition(const glm::vec2& position) override;
-            
-            /// Get the size of the widget.
-            /**
-             * @return The size
-             */
-            glm::vec2 GetSize() const override;
-            
-            /// Set the size of the widget.
-            /**
-             * @param size New widget size.
-             */
-            void SetSize(const glm::vec2& size) override;
+            /// Show the editor.
+            void Show();
             
             /// Set the entity to edit.
             /**
@@ -66,27 +39,67 @@ namespace GUI {
              */
             void SetEntity(Entity* entity);
             
-        private:
-            void AddComponentPressed();
-            void RemoveEntityPressed();
+            /// Get whether the window is visible.
+            /**
+             * @return Whether the window is visible.
+             */
+            bool IsVisible() const;
             
-            Geometry::Rectangle* rectangle;
-            glm::vec2 size;
-            Font* font;
+            /// Set whether the window should be visible.
+            /**
+             * @param visible Whether the window should be visible.
+             */
+            void SetVisible(bool visible);
+            
+        private:
+            template<typename type> void AddEditor(const std::string& name, std::function<void(type*)> editorFunction);
+            template<typename type> void AddComponent(const std::string& name);
+            template<typename type> void EditComponent(const std::string& name, std::function<void(type*)> editorFunction);
+            
+            // Editors
+            void TransformEditor(Component::Transform* transform);
+            void PhysicsEditor(Component::Physics* physics);
+            void MeshEditor(Component::Mesh* mesh);
+            void LensEditor(Component::Lens* lens);
+            void MaterialEditor(Component::Material* material);
+            void DirectionalLightEditor(Component::DirectionalLight* directionalLight);
+            void PointLightEditor(Component::PointLight* pointLight);
+            void SpotLightEditor(Component::SpotLight* spotLight);
+            void ListenerEditor(Component::Listener* listener);
+            void SoundSourceEditor(Component::SoundSource* soundSource);
+            void ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter);
             
             Entity* entity = nullptr;
-            std::vector<ComponentEditor*> editors;
-            std::size_t scrollPosition;
+            bool visible = false;
+            char name[128] = "";
             
-            Label* nameLabel;
-            StringEditor* nameEditor;
-            
-            Texture2D* addComponentTexture;
-            ImageTextButton* addComponentButton;
-            
-            Texture2D* removeEntityTexture;
-            ImageTextButton* removeEntityButton;
-            
-            ComponentAdder* componentAdder;
+            struct Editor {
+                std::function<void()> addFunction;
+                std::function<void()> editFunction;
+            };
+            std::vector<Editor> editors;
     };
+}
+
+template<typename type> void GUI::EntityEditor::AddEditor(const std::string& name, std::function<void(type*)> editorFunction) {
+    Editor editor;
+    editor.addFunction = std::bind(&EntityEditor::AddComponent<type>, this, name);
+    editor.editFunction = std::bind(&EntityEditor::EditComponent<type>, this, name, editorFunction);
+    editors.push_back(editor);
+}
+
+template<typename type> void GUI::EntityEditor::AddComponent(const std::string& name) {
+    if (entity->GetComponent<type>() == nullptr)
+        if (ImGui::Selectable(name.c_str()))
+            entity->AddComponent<type>();
+}
+
+template<typename type> void GUI::EntityEditor::EditComponent(const std::string& name, std::function<void(type*)> editorFunction) {
+    type* component = entity->GetComponent<type>();
+    if (component != nullptr && ImGui::CollapsingHeader(name.c_str())) {
+        editorFunction(component);
+        
+        if (ImGui::Button("Remove"))
+            entity->KillComponent<type>();
+    }
 }

@@ -1,49 +1,18 @@
 #pragma once
 
-#include "Container.hpp"
 #include <functional>
-
-class Texture2D;
-class Font;
-namespace Geometry {
-    class Rectangle;
-}
+#include <vector>
+#include <string>
 
 namespace GUI {
-    class ImageButton;
-    class TextButton;
-    class VerticalLayout;
-    class TextField;
-    
     /// A window where a hymn can be selected.
-    class SelectHymnWindow : public Container {
+    class SelectHymnWindow {
         public:
-            /// Create new window.
-            /**
-             * @param parent Parent widget.
-             */
-            SelectHymnWindow(Widget* parent);
+            /// Scan the save directory for hymns.
+            void Scan();
             
-            /// Destructor.
-            ~SelectHymnWindow() override;
-            
-            /// Update the widget.
-            void Update() override;
-            
-            /// Render the widget.
-            void Render() override;
-            
-            /// Get the size of the widget.
-            /**
-             * @return The size
-             */
-            glm::vec2 GetSize() const override;
-            
-            /// Set the size of the widget.
-            /**
-             * @param size The new size.
-             */
-            void SetSize(const glm::vec2& size);
+            /// Show the window and let the user select a hymn.
+            void Show();
             
             /// Set function to call when closed.
             /**
@@ -51,29 +20,41 @@ namespace GUI {
              */
             void SetClosedCallback(std::function<void(const std::string&)> callback);
             
+            /// Get whether the window is visible.
+            /**
+             * @return Whether the window is visible.
+             */
+            bool IsVisible() const;
+            
+            /// Set whether the window should be visible.
+            /**
+             * @param visible Whether the window should be visible.
+             */
+            void SetVisible(bool visible);
+            
+            /// Set window title.
+            /**
+             * @param title Window title.
+             */
+            void SetTitle(const char* title);
+            
+            /// Set the name of the open button.
+            /**
+             * @param openButtonName The name of the open button.
+             */
+            void SetOpenButtonName(const char* openButtonName);
+            
         private:
-            void Close();
-            void Select();
-            void SetHymn(const std::string& name);
-            
-            Geometry::Rectangle* rectangle;
-            Font* font;
-            
-            glm::vec2 size;
-            
             // Interaction
             bool hasClosedCallback = false;
             std::function<void(const std::string&)> closedCallback;
-            bool shouldClose = false;
             
-            ImageButton* closeButton;
-            Texture2D* closeTexture;
+            std::vector<std::string> files;
+            char name[128] = "";
             
-            TextButton* selectButton;
+            bool visible = false;
             
-            TextField* nameTextField;
-            
-            VerticalLayout* hymnList;
-            Texture2D* hymnTexture;
+            const char* title;
+            const char* openButtonName;
     };
 }

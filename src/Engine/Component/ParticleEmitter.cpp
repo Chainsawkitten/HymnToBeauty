@@ -45,7 +45,7 @@ void ParticleEmitter::Load(const Json::Value& node) {
     particleType.endAlpha = node.get("endAlpha", 0.f).asFloat();
     particleType.color = Json::LoadVec3(node["color"]);
     size = Json::LoadVec3(node["size"]);
-    minEmitTime = node.get("minEmitTime", 0.03).asDouble();
-    maxEmitTime = node.get("maxEmitTime", 0.03).asDouble();
+    minEmitTime = node.get("minEmitTime", 0.03).asFloat();
+    maxEmitTime = node.get("maxEmitTime", 0.03).asFloat();
     emitterType = static_cast<EmitterType>(node.get("emitterType", 0).asInt());
 }
