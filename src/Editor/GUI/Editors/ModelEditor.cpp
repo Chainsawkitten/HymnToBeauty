@@ -16,7 +16,7 @@ void ModelEditor::Show() {
         
         if (ImGui::Button("Load OBJ model")) {
             fileSelector.SetExtension("obj");
-            fileSelector.SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+            fileSelector.SetFileSelectedCallback(std::bind(&ModelEditor::FileSelected, this, std::placeholders::_1));
             fileSelector.SetVisible(true);
         }
     }

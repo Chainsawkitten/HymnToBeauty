@@ -19,17 +19,17 @@
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
-    AddEditor<Component::Transform>("Transform", std::bind(&TransformEditor, this, std::placeholders::_1));
-    AddEditor<Component::Physics>("Physics", std::bind(&PhysicsEditor, this, std::placeholders::_1));
-    AddEditor<Component::Mesh>("Mesh", std::bind(&MeshEditor, this, std::placeholders::_1));
-    AddEditor<Component::Lens>("Lens", std::bind(&LensEditor, this, std::placeholders::_1));
-    AddEditor<Component::Material>("Material", std::bind(&MaterialEditor, this, std::placeholders::_1));
-    AddEditor<Component::DirectionalLight>("Directional light", std::bind(&DirectionalLightEditor, this, std::placeholders::_1));
-    AddEditor<Component::PointLight>("Point light", std::bind(&PointLightEditor, this, std::placeholders::_1));
-    AddEditor<Component::SpotLight>("Spot light", std::bind(&SpotLightEditor, this, std::placeholders::_1));
-    AddEditor<Component::Listener>("Listener", std::bind(&ListenerEditor, this, std::placeholders::_1));
-    AddEditor<Component::SoundSource>("Sound source", std::bind(&SoundSourceEditor, this, std::placeholders::_1));
-    AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&ParticleEmitterEditor, this, std::placeholders::_1));
+    AddEditor<Component::Transform>("Transform", std::bind(&EntityEditor::TransformEditor, this, std::placeholders::_1));
+    AddEditor<Component::Physics>("Physics", std::bind(&EntityEditor::PhysicsEditor, this, std::placeholders::_1));
+    AddEditor<Component::Mesh>("Mesh", std::bind(&EntityEditor::MeshEditor, this, std::placeholders::_1));
+    AddEditor<Component::Lens>("Lens", std::bind(&EntityEditor::LensEditor, this, std::placeholders::_1));
+    AddEditor<Component::Material>("Material", std::bind(&EntityEditor::MaterialEditor, this, std::placeholders::_1));
+    AddEditor<Component::DirectionalLight>("Directional light", std::bind(&EntityEditor::DirectionalLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::PointLight>("Point light", std::bind(&EntityEditor::PointLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::SpotLight>("Spot light", std::bind(&EntityEditor::SpotLightEditor, this, std::placeholders::_1));
+    AddEditor<Component::Listener>("Listener", std::bind(&EntityEditor::ListenerEditor, this, std::placeholders::_1));
+    AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
+    AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&EntityEditor::ParticleEmitterEditor, this, std::placeholders::_1));
 }
 
 EntityEditor::~EntityEditor() {

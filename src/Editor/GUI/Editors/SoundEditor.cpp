@@ -17,7 +17,7 @@ void SoundEditor::Show() {
         
         if (ImGui::Button("Load Ogg Vorbis")) {
             fileSelector.SetExtension("ogg");
-            fileSelector.SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+            fileSelector.SetFileSelectedCallback(std::bind(&SoundEditor::FileSelected, this, std::placeholders::_1));
             fileSelector.SetVisible(true);
         }
     }

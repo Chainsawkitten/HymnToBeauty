@@ -79,7 +79,7 @@ void Editor::Play() {
 
 void Editor::NewHymn() {
     selectHymnWindow.Scan();
-    selectHymnWindow.SetClosedCallback(std::bind(&NewHymnClosed, this, std::placeholders::_1));
+    selectHymnWindow.SetClosedCallback(std::bind(&Editor::NewHymnClosed, this, std::placeholders::_1));
     selectHymnWindow.SetTitle("New Hymn");
     selectHymnWindow.SetOpenButtonName("Create");
     selectHymnWindow.SetVisible(true);
@@ -98,7 +98,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
 
 void Editor::OpenHymn() {
     selectHymnWindow.Scan();
-    selectHymnWindow.SetClosedCallback(std::bind(&OpenHymnClosed, this, std::placeholders::_1));
+    selectHymnWindow.SetClosedCallback(std::bind(&Editor::OpenHymnClosed, this, std::placeholders::_1));
     selectHymnWindow.SetTitle("Open Hymn");
     selectHymnWindow.SetOpenButtonName("Open");
     selectHymnWindow.SetVisible(true);
