@@ -16,7 +16,7 @@ void TextureEditor::Show() {
         
         if (ImGui::Button("Load PNG image")) {
             fileSelector.SetExtension("png");
-            fileSelector.SetFileSelectedCallback(std::bind(&FileSelected, this, std::placeholders::_1));
+            fileSelector.SetFileSelectedCallback(std::bind(&TextureEditor::FileSelected, this, std::placeholders::_1));
             fileSelector.SetVisible(true);
         }
         

@@ -83,8 +83,8 @@ namespace GUI {
 
 template<typename type> void GUI::EntityEditor::AddEditor(const std::string& name, std::function<void(type*)> editorFunction) {
     Editor editor;
-    editor.addFunction = std::bind(&AddComponent<type>, this, name);
-    editor.editFunction = std::bind(&EditComponent<type>, this, name, editorFunction);
+    editor.addFunction = std::bind(&EntityEditor::AddComponent<type>, this, name);
+    editor.editFunction = std::bind(&EntityEditor::EditComponent<type>, this, name, editorFunction);
     editors.push_back(editor);
 }
 
