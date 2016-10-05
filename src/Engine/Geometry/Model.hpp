@@ -71,20 +71,49 @@ namespace Geometry {
 
         static Assimp::Importer aiImporter;
 
-        struct Face {
-            struct Vertex {
-                unsigned int positionIndex;
-                unsigned int normalIndex;
-                unsigned int textureIndex;
-            };
-
-            Vertex vertices[3];
+        struct Mesh {
+            aiMesh* assimpMesh = nullptr;
+            aiNode* rootNode = nullptr;
+            unsigned int vertexNr = 0, indexNr = 0;
+            Vertex* vertexData = nullptr;
+            unsigned int* indexData = nullptr;
+            void Clear() {
+                if (vertexData != nullptr) {
+                    delete[] vertexData;
+                    vertexData = nullptr;
+                    vertexNr = 0;
+                }
+                if (indexData != nullptr) {
+                    indexData = nullptr;
+                    indexNr = 0;
+                }
+            }
         };
+
+        static void LoadMesh(const aiMesh* assimpMesh, Mesh& mesh);
+
+        static void TransfromMesh(Mesh& mesh);
+
+        // https://github.com/ccxvii/asstools/blob/master/assview.c
+        // Find a node by name in the hierarchy (for anims and bones).
+        static aiNode* FindNode(aiNode* node, const char* name);
+    
+        // Calculate absolute transform for node to do mesh skinning.
+        static void TransformNode(const aiNode* node, aiMatrix4x4& transformMat);
+
+        // Animate mesh
+        static void AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh);
+
+        static void Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result);
+        static float Dot(const aiQuaternion& q1, const aiQuaternion& q2);
+        static void Normalize(aiQuaternion& q);
+        static void ComposeMatrix(const aiQuaternion& r, aiMatrix4x4& matrix);
 
         static void CpyVec(const aiVector3D& aiVec, glm::vec3& glmVec);
         static void CpyVec(const aiVector3D& aiVec, glm::vec2& glmVec);
         static void CpyVec(const aiVector2D& aiVec, glm::vec2& glmVec);
-        static void CpyMat(const aiMatrix4x4& aiMat, glm::mat4& glmMat);
+        //static void CpyMat(const aiMatrix4x4& aiMat, glm::mat4& glmMat);
+        static void CpyMat(const aiMatrix4x4& aiMat4, aiMatrix3x3& aiMat3);
 
         Vertex* vertexData = nullptr;
         unsigned int vertexNr = 0;
