@@ -22,6 +22,9 @@ namespace Geometry {
          */
         Model(const char* filename);
 
+        /// Remove model
+        ~Model();
+
         /// Get all the vertices.
         /**
          * @return Array of vertices
@@ -72,37 +75,69 @@ namespace Geometry {
         static Assimp::Importer aiImporter;
 
         struct Mesh {
-            aiMesh* assimpMesh = nullptr;
-            aiNode* rootNode = nullptr;
             unsigned int vertexNr = 0, indexNr = 0;
             Vertex* vertexData = nullptr;
             unsigned int* indexData = nullptr;
-            void Clear() {
-                if (vertexData != nullptr) {
-                    delete[] vertexData;
-                    vertexData = nullptr;
-                    vertexNr = 0;
-                }
-                if (indexData != nullptr) {
-                    indexData = nullptr;
-                    indexNr = 0;
-                }
-            }
-        };
+            void Clear();
+        } mesh;
 
-        static void LoadMesh(const aiMesh* assimpMesh, Mesh& mesh);
+        struct Skeleton {
+            struct Node {
+                char* name = "";
+                unsigned int bID;
+                Node* parent = nullptr;
+                glm::mat4 transformation;
+                unsigned int nrChildren = 0;
+                Node** children = nullptr;
+            };
+            Node* rootNode;
+            Node* FindNode(const char* name);
+        private:
+            Node* FindNode(Node* node, const char* name);
 
-        static void TransfromMesh(Mesh& mesh);
+        public:
+            struct Bone {
+                char* name;
+                glm::mat4 offsetMatrix;
+                struct VertexWeight {
+                    unsigned int vID;
+                    float weight;
+                };
+                unsigned int weightNr = 0;
+                VertexWeight* weightData = nullptr;
+                void Clear();
+            };
+            unsigned int boneNr = 0;
+            Bone* boneData = nullptr;
+            int FindBoneID(const char* name);
+            void BuildNodeTree(aiNode* assimpNode, Node* node);
+            void Clear();
+        private:
+            void Clear(Node* node);
+        } skeleton;
+
+        struct Animation {
+            void Clear();
+        } animation;
+
+        static void LoadMesh(aiMesh* assimpMesh, Mesh& mesh);
+        static void LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleton);
+        static void LoadAnimation(aiAnimation* assimpAnimation, Animation& animation);
+
+        // TMP
+        aiMesh* tmpAssimpMesh;
+        void TransfromMesh();
+        void TransformNode(Skeleton::Node* currentNode, glm::mat4 transfromMatrix);
+        aiAnimation* tmpAssimpAnimation;
+        aiNode* tmpRootNode;
+        void AnimateMesh(const float tick);
+        static aiNode* FindNode(aiNode* node, const char* name);
+        
 
         // https://github.com/ccxvii/asstools/blob/master/assview.c
-        // Find a node by name in the hierarchy (for anims and bones).
-        static aiNode* FindNode(aiNode* node, const char* name);
-    
-        // Calculate absolute transform for node to do mesh skinning.
-        static void TransformNode(const aiNode* node, aiMatrix4x4& transformMat);
-
-        // Animate mesh
-        static void AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh);
+        //static void TransfromMesh(aiNode* rootNode, Mesh& mesh);
+        //static void TransformNode(const aiNode* node, aiMatrix4x4& transformMat);
+        //static void AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh);
 
         static void Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result);
         static float Dot(const aiQuaternion& q1, const aiQuaternion& q2);
@@ -112,7 +147,7 @@ namespace Geometry {
         static void CpyVec(const aiVector3D& aiVec, glm::vec3& glmVec);
         static void CpyVec(const aiVector3D& aiVec, glm::vec2& glmVec);
         static void CpyVec(const aiVector2D& aiVec, glm::vec2& glmVec);
-        //static void CpyMat(const aiMatrix4x4& aiMat, glm::mat4& glmMat);
+        static void CpyMat(const aiMatrix4x4& aiMat, glm::mat4& glmMat);
         static void CpyMat(const aiMatrix4x4& aiMat4, aiMatrix3x3& aiMat3);
 
         Vertex* vertexData = nullptr;
