@@ -82,19 +82,18 @@ namespace Geometry {
         } mesh;
 
         struct Skeleton {
-            struct Bone {
-                glm::mat4 offsetMatrix;
-                struct VertexWeight {
-                    unsigned int vID;
-                    float weight;
-                };
-                unsigned int weightNr = 0;
-                VertexWeight* weightData = nullptr;
-                void Clear();
-            };
             struct Joint {
                 char* name = "";
-                Bone bone;
+                struct Bone {
+                    glm::mat4 offsetMatrix;
+                    struct VertexWeight {
+                        unsigned int vID;
+                        float weight;
+                    };
+                    unsigned int weightNr = 0;
+                    VertexWeight* weightData = nullptr;
+                    void Clear();
+                } bone;
                 unsigned int pID = 0;
                 glm::mat4 transformation;
                 unsigned int nrChildren = 0;

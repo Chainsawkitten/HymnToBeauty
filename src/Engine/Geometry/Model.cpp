@@ -22,7 +22,6 @@ Model::Model(const char* filename) {
 Model::~Model() {
     animation.Clear();
     skeleton.Clear();
-    mesh.Clear();
 }
 
 Geometry3D::Vertex* Model::GetVertices() const {
@@ -97,7 +96,8 @@ void Model::Load(const char* filename) {
     GenerateBuffers();
     GenerateVertexArray();
 
-    // TODO CLEAR MESH, SKELETON, ANIMATION?
+    mesh.Clear();
+
     // TODO IMPORTER ISN'T THREAD-SAFE
     aiImporter.FreeScene();
 }
@@ -184,7 +184,7 @@ void Model::TransfromMesh() {
 void Model::TransformNode(Skeleton::Joint* currentJoint, glm::mat4 transfromMatrix) {
     // TODO CHECK ORDER OF MATRIX MULTI.
 
-    const Skeleton::Bone* bone = &currentJoint->bone;
+    const Skeleton::Joint::Bone* bone = &currentJoint->bone;
     glm::mat3 skinMatrix = bone->offsetMatrix * transfromMatrix;
     for (unsigned int i = 0; i < bone->weightNr; ++i) {
         unsigned int vID = bone->weightData[i].vID;
@@ -244,63 +244,86 @@ void Model::AnimateMesh(const float tick) {
     TransfromMesh();
 }
 
-//void Model::TransfromMesh(aiNode* rootNode, Mesh& mesh) {
-//    const aiMesh* assimpMesh = mesh.assimpMesh;
-//    if (!assimpMesh->HasBones())
-//        return;
-//
-//    // Collapse mesh
-//    for (unsigned int i = 0; i < mesh.vertexNr; ++i) {
-//        mesh.vertexData[i].position = glm::vec3(0.f, 0.f, 0.f);
-//        mesh.vertexData[i].normal = glm::vec3(0.f, 0.f, 0.f);
-//    }
-//
-//    aiMatrix4x4 skin4x4Mat;
-//    aiMatrix3x3 skin3x3Mat;
-//
-//    for (unsigned int b = 0; b < assimpMesh->mNumBones; ++b) {
-//        const aiBone* bone = assimpMesh->mBones[b];
-//        const aiNode* node = FindNode(rootNode, bone->mName.data); // Find node corresponding to this bone
-//
-//        TransformNode(node, skin4x4Mat); // Transform bone matrix
-//        aiMultiplyMatrix4(&skin4x4Mat, &bone->mOffsetMatrix);
-//        CpyMat(skin4x4Mat, skin3x3Mat); // Extract 3x3 matrix from 4x4 matrix.
-//
-//        for (unsigned int i = 0; i < bone->mNumWeights; ++i) {
-//            unsigned int vId = bone->mWeights[i].mVertexId;
-//            float weight = bone->mWeights[i].mWeight;
-//
-//            aiVector3D position = assimpMesh->mVertices[vId];
-//            aiTransformVecByMatrix4(&position, &skin4x4Mat);
-//            mesh.vertexData[vId].position.x += position.x * weight;
-//            mesh.vertexData[vId].position.y += position.y * weight;
-//            mesh.vertexData[vId].position.z += position.z * weight;
-//
-//            aiVector3D normal = assimpMesh->mNormals[vId];
-//            aiTransformVecByMatrix3(&normal, &skin3x3Mat);
-//            mesh.vertexData[vId].normal.x += normal.x * weight;
-//            mesh.vertexData[vId].normal.y += normal.y * weight;
-//            mesh.vertexData[vId].normal.z += normal.z * weight;
-//        }
-//    }
-//}
+void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsigned int& index, const std::map<std::string, aiBone*>& boneMap) {
+    auto it = boneMap.find(assimpNode->mName.data);
+    if (it != boneMap.end()) {
+        // Bone found
+        Skeleton::Joint* joint = &jointData[index];
+        // Cpy bone
+        aiBone* assimpBone = it->second;
+        Skeleton::Joint::Bone* bone = &joint->bone;
+        CpyMat(assimpBone->mOffsetMatrix, bone->offsetMatrix);
+        bone->weightNr = assimpBone->mNumWeights;
+        bone->weightData = new Skeleton::Joint::Bone::VertexWeight[bone->weightNr];
+        for (unsigned int w = 0; w < bone->weightNr; ++w) {
+            Skeleton::Joint::Bone::VertexWeight* vertexWeight = &bone->weightData[w];
+            aiVertexWeight* assimpWeight = &assimpBone->mWeights[w];
+            vertexWeight->vID = assimpWeight->mVertexId;
+            vertexWeight->weight = assimpWeight->mWeight;
+        }
+        // Joint
+        joint->name = assimpBone->mName.data;
+        joint->myID = index;
+        joint->pID = pID;
 
-//void Model::AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh) {
-//    const int frame = static_cast<int>(std::floor(tick));
-//    const float t = tick - frame;
-//
-//    aiQuaternion r;
-//    for (unsigned int i = 0; i < animation->mNumChannels; ++i) {
-//        const aiNodeAnim* channel = animation->mChannels[i];
-//        aiNode* node = FindNode(mesh.rootNode, channel->mNodeName.data);
-//        aiQuatKey* r0 = channel->mRotationKeys + (frame + 0) % channel->mNumRotationKeys;
-//        aiQuatKey* r1 = channel->mRotationKeys + (frame + 1) % channel->mNumRotationKeys;
-//        Mix(r0->mValue, r1->mValue, t, r);
-//        ComposeMatrix(r, node->mTransformation);
-//    }
-//
-//    TransfromMesh(mesh);
-//}
+        index++;
+        unsigned int lastIndex = index;
+        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
+            BuildSkeleton(assimpNode->mChildren[i], joint->myID, index, boneMap);
+            if (lastIndex != index) {
+                joint->nrChildren++;
+            }
+        }
+    }
+    else {
+        // Continue searching for joints
+        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
+            BuildSkeleton(assimpNode->mChildren[i], pID, index, boneMap);
+        }
+    }
+}
+
+Model::Skeleton::Joint* Model::Skeleton::FindJoint(const char* name) {
+    for (unsigned int i = 0; i < jointNr; ++i)
+        if (!std::strcmp(jointData[i].name, name))
+            return &jointData[i];
+    return nullptr;
+}
+
+void Model::Mesh::Clear() {
+    if (vertexData != nullptr) {
+        delete[] vertexData;
+        vertexData = nullptr;
+        vertexNr = 0;
+    }
+    if (indexData != nullptr) {
+        indexData = nullptr;
+        indexNr = 0;
+    }
+}
+
+void Model::Skeleton::Clear() {
+    for (unsigned int j = 0; j < jointNr; ++j) {
+        Skeleton::Joint::Bone* bone = &jointData[j].bone;
+        bone->Clear();
+    }
+    delete[] jointData;
+    jointData = nullptr;
+    jointNr = 0;
+}
+
+
+void Model::Skeleton::Joint::Bone::Clear() {
+    if (weightData != nullptr) {
+        delete[] weightData;
+        weightData = nullptr;
+        weightNr = 0;
+    }
+}
+
+void Model::Animation::Clear() {
+
+}
 
 void Model::Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result) {
     aiQuaternion tmp;
@@ -348,7 +371,7 @@ void Model::ComposeMatrix(const aiQuaternion& q, aiMatrix4x4& m) {
     m.c1 = 2 * (q.x * q.z - q.y * q.w);
     m.c2 = 2 * (q.y * q.z + q.x * q.w);
     m.c3 = 1 - 2 * (q.x * q.x + q.y * q.y);
-   
+
     // TODO Scale
 
     // TODO Translation
@@ -430,112 +453,60 @@ void Model::CpyMat(const aiMatrix4x4& aiMat4, aiMatrix3x3& aiMat3) {
     aiMat3.c3 = aiMat4.c3;
 }
 
-void Model::Mesh::Clear() {
-    if (vertexData != nullptr) {
-        delete[] vertexData;
-        vertexData = nullptr;
-        vertexNr = 0;
-    }
-    if (indexData != nullptr) {
-        indexData = nullptr;
-        indexNr = 0;
-    }
-}
-
-void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsigned int& index, const std::map<std::string, aiBone*>& boneMap) {
-    auto it = boneMap.find(assimpNode->mName.data);
-    if (it != boneMap.end()) {
-        // Bone found
-        Skeleton::Joint* joint = &jointData[index];
-        // Cpy bone
-        aiBone* assimpBone = it->second;
-        Skeleton::Bone* bone = &joint->bone;
-        CpyMat(assimpBone->mOffsetMatrix, bone->offsetMatrix);
-        bone->weightNr = assimpBone->mNumWeights;
-        bone->weightData = new Skeleton::Bone::VertexWeight[bone->weightNr];
-        for (unsigned int w = 0; w < bone->weightNr; ++w) {
-            Skeleton::Bone::VertexWeight* vertexWeight = &bone->weightData[w];
-            aiVertexWeight* assimpWeight = &assimpBone->mWeights[w];
-            vertexWeight->vID = assimpWeight->mVertexId;
-            vertexWeight->weight = assimpWeight->mWeight;
-        }
-        // Joint
-        joint->name = assimpBone->mName.data;
-        joint->myID = index;
-        joint->pID = pID;
-
-        index++;
-        unsigned int lastIndex = index;
-        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
-            BuildSkeleton(assimpNode->mChildren[i], pID, index, boneMap);
-            if (lastIndex != index) {
-                joint->nrChildren++;
-            }
-        }
-    }
-    else {
-        // Continue searching for joints
-        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
-            BuildSkeleton(assimpNode->mChildren[i], pID, index, boneMap);
-        }
-    }
-}
-
-void Model::Skeleton::Clear() {
-    for (unsigned int j = 0; j < jointNr; ++j) {
-        Skeleton::Bone* bone = &jointData[j].bone;
-        delete[] bone->weightData;
-        bone = nullptr;
-        bone->weightNr = 0;
-    }
-    delete[] jointData;
-    jointData = nullptr;
-    jointNr = 0;
-}
-
-Model::Skeleton::Joint* Model::Skeleton::FindJoint(const char* name) {
-    for (unsigned int i = 0; i < jointNr; ++i)
-        if (!std::strcmp(jointData[i].name, name))
-            return &jointData[i];
-    return nullptr;
-}
-
-//Model::Skeleton::Joint* Model::Skeleton::FindJoint(const char* name) {
-//    return FindJoint(rootJoint, name);
+//void Model::TransfromMesh(aiNode* rootNode, Mesh& mesh) {
+//    const aiMesh* assimpMesh = mesh.assimpMesh;
+//    if (!assimpMesh->HasBones())
+//        return;
+//
+//    // Collapse mesh
+//    for (unsigned int i = 0; i < mesh.vertexNr; ++i) {
+//        mesh.vertexData[i].position = glm::vec3(0.f, 0.f, 0.f);
+//        mesh.vertexData[i].normal = glm::vec3(0.f, 0.f, 0.f);
+//    }
+//
+//    aiMatrix4x4 skin4x4Mat;
+//    aiMatrix3x3 skin3x3Mat;
+//
+//    for (unsigned int b = 0; b < assimpMesh->mNumBones; ++b) {
+//        const aiBone* bone = assimpMesh->mBones[b];
+//        const aiNode* node = FindNode(rootNode, bone->mName.data); // Find node corresponding to this bone
+//
+//        TransformNode(node, skin4x4Mat); // Transform bone matrix
+//        aiMultiplyMatrix4(&skin4x4Mat, &bone->mOffsetMatrix);
+//        CpyMat(skin4x4Mat, skin3x3Mat); // Extract 3x3 matrix from 4x4 matrix.
+//
+//        for (unsigned int i = 0; i < bone->mNumWeights; ++i) {
+//            unsigned int vId = bone->mWeights[i].mVertexId;
+//            float weight = bone->mWeights[i].mWeight;
+//
+//            aiVector3D position = assimpMesh->mVertices[vId];
+//            aiTransformVecByMatrix4(&position, &skin4x4Mat);
+//            mesh.vertexData[vId].position.x += position.x * weight;
+//            mesh.vertexData[vId].position.y += position.y * weight;
+//            mesh.vertexData[vId].position.z += position.z * weight;
+//
+//            aiVector3D normal = assimpMesh->mNormals[vId];
+//            aiTransformVecByMatrix3(&normal, &skin3x3Mat);
+//            mesh.vertexData[vId].normal.x += normal.x * weight;
+//            mesh.vertexData[vId].normal.y += normal.y * weight;
+//            mesh.vertexData[vId].normal.z += normal.z * weight;
+//        }
+//    }
 //}
 
-//Model::Skeleton::Joint* Model::Skeleton::FindJoint(Joint* joint, const char* name) {
-//    //if (!std::strcmp(name, joint->name))
-//    //    return joint;
-//    //for (unsigned int i = 0; i < joint->nrChildren; i++) {
-//    //    Joint* found = FindJoint(joint->children[i], name);
-//    //    if (found)
-//    //        return found;
-//    //}
-//    return nullptr;
+//void Model::AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh) {
+//    const int frame = static_cast<int>(std::floor(tick));
+//    const float t = tick - frame;
+//
+//    aiQuaternion r;
+//    for (unsigned int i = 0; i < animation->mNumChannels; ++i) {
+//        const aiNodeAnim* channel = animation->mChannels[i];
+//        aiNode* node = FindNode(mesh.rootNode, channel->mNodeName.data);
+//        aiQuatKey* r0 = channel->mRotationKeys + (frame + 0) % channel->mNumRotationKeys;
+//        aiQuatKey* r1 = channel->mRotationKeys + (frame + 1) % channel->mNumRotationKeys;
+//        Mix(r0->mValue, r1->mValue, t, r);
+//        ComposeMatrix(r, node->mTransformation);
+//    }
+//
+//    TransfromMesh(mesh);
 //}
-
-//void Model::Skeleton::Clear(Joint* joint) {
-//    //for (unsigned int i = 0; i < node->nrChildren; ++i) {
-//    //    Clear(joint->children[i]);
-//    //    delete joint->children[i];
-//    //    joint->children = nullptr;
-//    //}
-//    //delete[] joint->children;
-//    //joint->nrChildren = 0;
-//}
-
-void Model::Skeleton::Bone::Clear() {
-    if (weightData != nullptr) {
-        delete[] weightData;
-        weightData = nullptr;
-        weightNr = 0;
-    }
-}
-
-void Model::Animation::Clear() {
-    //if (cpyAiAnimation != nullptr) {
-    //    delete cpyAiAnimation;
-    //    cpyAiAnimation = nullptr;
-    //}
-}
