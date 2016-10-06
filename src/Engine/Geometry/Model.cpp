@@ -61,28 +61,27 @@ void Model::Load(const char* filename) {
 
     // TMP
     tmpAssimpMesh = scene->mMeshes[0];
-    tmpAssimpAnimation = scene->HasAnimations() ? scene->mAnimations[0] : nullptr;
-    tmpRootNode = scene->mRootNode;
+    //tmpAssimpAnimation = scene->HasAnimations() ? scene->mAnimations[0] : nullptr;
+    //tmpRootNode = scene->mRootNode;
 
     aiMesh* assimpMesh = scene->mMeshes[0];
 
     LoadMesh(assimpMesh, mesh);
     if (assimpMesh->HasBones())
         LoadSkeleton(scene->mRootNode, assimpMesh, skeleton);
-    if (scene->HasAnimations())
-        LoadAnimation(scene->mAnimations[0], animation); // TODO
+    if (scene->HasAnimations()) 
+        LoadAnimation(scene->mAnimations[0], animation);
 
-    // TMP
-    //// http://gamedev.stackexchange.com/questions/26382/i-cant-figure-out-how-to-animate-my-loaded-model-with-assimp
-    //// http://www.gamedev.net/topic/648859-assimp-build-the-skeleton-from-the-scene/
     // Importing the Animations
     if (scene->HasAnimations()) {
-        TransfromMesh();
+        //TransfromMesh(skeleton);
         //float animtick = 2;
         //float timestep = 1.f/60.f;
         //float animfps = 1;
         //animtick = animtick + (timestep / 1000.f) * animfps;
-        AnimateMesh(2.4f);
+        BindAnimation(skeleton, animation);
+        AnimateSkeleton(animation, 2.4f);
+        TransfromMesh(skeleton);
         //AninmateMesh(animation.assimpAnimation, 1, mesh);
     }
     // ~TMP
@@ -140,9 +139,33 @@ void Model::LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleto
 }
 
 void Model::LoadAnimation(aiAnimation* assimpAnimation, Animation& animation) {
+    // Load animation
+    animation.animChanelNr = assimpAnimation->mNumChannels;
+    animation.animChanelData = new Animation::AnimChanel[animation.animChanelNr];
+    for (unsigned int a = 0; a < animation.animChanelNr; ++a) {
+        Animation::AnimChanel* animChanel = &animation.animChanelData[a];
+        aiNodeAnim* assimpAnimChanel = assimpAnimation->mChannels[a];
+        animChanel->jointName = assimpAnimChanel->mNodeName.data;
+        animChanel->rotKeyNr = assimpAnimChanel->mNumRotationKeys;
+        animChanel->rotKeyData = new Animation::AnimChanel::QuatKey[animChanel->rotKeyNr];
+        for (unsigned int i = 0; i < animChanel->rotKeyNr; ++i) {
+            Animation::AnimChanel::QuatKey* rotKey = &animChanel->rotKeyData[i];
+            aiQuatKey* assimpRotKey = &assimpAnimChanel->mRotationKeys[i];
+            rotKey->time = assimpRotKey->mTime;
+            CpyQuat(assimpRotKey->mValue, rotKey->quat);
+        }
+    }
 }
 
-void Model::TransfromMesh() {
+void Model::BindAnimation(Skeleton& skeleton, Animation& animation) {
+    // Bind animation
+    for (unsigned int i = 0; i < animation.animChanelNr; ++i) {
+        Animation::AnimChanel* animChanel = &animation.animChanelData[i];
+        animChanel->jointID = skeleton.FindJoint(animChanel->jointName)->myID; // TODO not use FindJoint
+    }
+}
+
+void Model::TransfromMesh(const Skeleton& skeleton) {
     // Collapse mesh
     for (unsigned int i = 0; i < mesh.vertexNr; ++i) {
         mesh.vertexData[i].position = glm::vec3(0.f, 0.f, 0.f);
@@ -150,35 +173,6 @@ void Model::TransfromMesh() {
     }
 
     TransformNode(skeleton.rootJoint, skeleton.rootJoint->transformation);
-
-    //aiMatrix4x4 skin4x4Mat;
-    //aiMatrix4x4 skin3x3Mat;
-
-    //for (unsigned int b = 0; b < skeleton.boneNr; ++b) {
-    //    const aiBone* bone = &skeleton.boneData[b];
-    //    const aiNode* node = FindNode(rootNode, bone->mName.data); // Find node corresponding to this bone
-
-    //    TransformNode(node, skin4x4Mat); // Transform bone matrix
-    //    aiMultiplyMatrix4(&skin4x4Mat, &bone->mOffsetMatrix);
-    //    CpyMat(skin4x4Mat, skin3x3Mat); // Extract 3x3 matrix from 4x4 matrix.
-
-    //    for (unsigned int i = 0; i < bone->mNumWeights; ++i) {
-    //        unsigned int vId = bone->mWeights[i].mVertexId;
-    //        float weight = bone->mWeights[i].mWeight;
-
-    //        aiVector3D position = assimpMesh->mVertices[vId];
-    //        aiTransformVecByMatrix4(&position, &skin4x4Mat);
-    //        mesh.vertexData[vId].position.x += position.x * weight;
-    //        mesh.vertexData[vId].position.y += position.y * weight;
-    //        mesh.vertexData[vId].position.z += position.z * weight;
-
-    //        aiVector3D normal = assimpMesh->mNormals[vId];
-    //        aiTransformVecByMatrix3(&normal, &skin3x3Mat);
-    //        mesh.vertexData[vId].normal.x += normal.x * weight;
-    //        mesh.vertexData[vId].normal.y += normal.y * weight;
-    //        mesh.vertexData[vId].normal.z += normal.z * weight;
-    //    }
-    //}
 }
 
 void Model::TransformNode(Skeleton::Joint* currentJoint, glm::mat4 transfromMatrix) {
@@ -216,32 +210,19 @@ void Model::TransformNode(Skeleton::Joint* currentJoint, glm::mat4 transfromMatr
     }
 }
 
-void Model::AnimateMesh(const float tick) {
+void Model::AnimateSkeleton(const Animation& animation, const float tick) {
     const int frame = static_cast<int>(std::floor(tick));
     const float t = tick - frame;
-    
-    aiQuaternion r;
-    for (unsigned int i = 0; i < tmpAssimpAnimation->mNumChannels; ++i) {
-        const aiNodeAnim* channel = tmpAssimpAnimation->mChannels[i];
-        Skeleton::Joint* joint = skeleton.FindJoint(channel->mNodeName.data);
-        aiNode* assimpNode = FindNode(tmpRootNode, channel->mNodeName.data); // TODO NOT USE STRCMP
-        aiQuatKey* r0 = channel->mRotationKeys + (frame + 0) % channel->mNumRotationKeys;
-        aiQuatKey* r1 = channel->mRotationKeys + (frame + 1) % channel->mNumRotationKeys;
-        Mix(r0->mValue, r1->mValue, t, r);
-        aiMatrix4x4 transformMatix;
-        ComposeMatrix(r, transformMatix);
-        assimpNode->mTransformation = transformMatix;
-        CpyMat(transformMatix, joint->transformation);
 
-        /*const aiNodeAnim* channel = tmpAssimpAnimation->mChannels[i];
-        aiNode* node = FindNode(tmpRootNode, channel->mNodeName.data);
-        aiQuatKey* r0 = channel->mRotationKeys + (frame + 0) % channel->mNumRotationKeys;
-        aiQuatKey* r1 = channel->mRotationKeys + (frame + 1) % channel->mNumRotationKeys;
-        Mix(r0->mValue, r1->mValue, t, r);
-        ComposeMatrix(r, node->mTransformation);*/
+    for (unsigned int i = 0; i < animation.animChanelNr; ++i) {
+        Animation::AnimChanel* animChanel = &animation.animChanelData[i];
+        Skeleton::Joint* joint = &skeleton.jointData[animChanel->jointID];
+        Animation::AnimChanel::QuatKey* r0 = animChanel->rotKeyData + (frame + 0) % animChanel->rotKeyNr;
+        Animation::AnimChanel::QuatKey* r1 = animChanel->rotKeyData + (frame + 1) % animChanel->rotKeyNr;
+        glm::quat r;
+        Mix(r0->quat, r1->quat, t, r);
+        ComposeMatrix(r, joint->transformation);
     }
-    
-    TransfromMesh();
 }
 
 void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsigned int& index, const std::map<std::string, aiBone*>& boneMap) {
@@ -249,7 +230,7 @@ void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsign
     if (it != boneMap.end()) {
         // Bone found
         Skeleton::Joint* joint = &jointData[index];
-        // Cpy bone
+        // Cpy bone to joint
         aiBone* assimpBone = it->second;
         Skeleton::Joint::Bone* bone = &joint->bone;
         CpyMat(assimpBone->mOffsetMatrix, bone->offsetMatrix);
@@ -261,7 +242,7 @@ void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsign
             vertexWeight->vID = assimpWeight->mVertexId;
             vertexWeight->weight = assimpWeight->mWeight;
         }
-        // Joint
+        // Joint info
         joint->name = assimpBone->mName.data;
         joint->myID = index;
         joint->pID = pID;
@@ -276,7 +257,7 @@ void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsign
         }
     }
     else {
-        // Continue searching for joints
+        // Continue searching for bones
         for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
             BuildSkeleton(assimpNode->mChildren[i], pID, index, boneMap);
         }
@@ -325,8 +306,62 @@ void Model::Animation::Clear() {
 
 }
 
-void Model::Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result) {
-    aiQuaternion tmp;
+//void Model::Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result) {
+//    aiQuaternion tmp;
+//    if (Dot(q1, q2) < 0) {
+//        tmp.x = -q1.x;
+//        tmp.y = -q1.y;
+//        tmp.z = -q1.z;
+//        tmp.w = -q1.w;
+//        q1 = tmp;
+//    }
+//    result.x = q1.x + t * (q2.x - q1.x);
+//    result.y = q1.y + t * (q2.y - q1.y);
+//    result.z = q1.z + t * (q2.z - q1.z);
+//    result.w = q1.w + t * (q2.w - q1.w);
+//    Normalize(result);
+//}
+//
+//float Model::Dot(const aiQuaternion& q1, const aiQuaternion& q2) {
+//    return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
+//}
+//
+//void Model::Normalize(aiQuaternion& q) {
+//    float d = sqrt(Dot(q, q));
+//    if (d >= 0.00001) {
+//        d = 1 / d;
+//        q.x *= d;
+//        q.y *= d;
+//        q.z *= d;
+//        q.w *= d;
+//    }
+//    else {
+//        q.x = q.y = q.z = 0;
+//        q.w = 1;
+//    }
+//}
+//
+//void Model::ComposeMatrix(const aiQuaternion& q, aiMatrix4x4& m) {
+//    // Rotation
+//    m.a1 = 1 - 2 * (q.y * q.y + q.z * q.z);
+//    m.a2 = 2 * (q.x * q.y - q.z * q.w);
+//    m.a3 = 2 * (q.x * q.z + q.y * q.w);
+//    m.b1 = 2 * (q.x * q.y + q.z * q.w);
+//    m.b2 = 1 - 2 * (q.x * q.x + q.z * q.z);
+//    m.b3 = 2 * (q.y * q.z - q.x * q.w);
+//    m.c1 = 2 * (q.x * q.z - q.y * q.w);
+//    m.c2 = 2 * (q.y * q.z + q.x * q.w);
+//    m.c3 = 1 - 2 * (q.x * q.x + q.y * q.y);
+//
+//    // TODO Scale
+//
+//    // TODO Translation
+//
+//    m.d1 = 0; m.d2 = 0; m.d3 = 0; m.d4 = 1;
+//}
+
+void Model::Mix(glm::quat& q1, const glm::quat& q2, float t, glm::quat& result) {
+    glm::quat tmp;
     if (Dot(q1, q2) < 0) {
         tmp.x = -q1.x;
         tmp.y = -q1.y;
@@ -341,11 +376,11 @@ void Model::Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion&
     Normalize(result);
 }
 
-float Model::Dot(const aiQuaternion& q1, const aiQuaternion& q2) {
+float Model::Dot(const glm::quat& q1, const glm::quat& q2) {
     return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
 }
 
-void Model::Normalize(aiQuaternion& q) {
+void Model::Normalize(glm::quat& q) {
     float d = sqrt(Dot(q, q));
     if (d >= 0.00001) {
         d = 1 / d;
@@ -360,35 +395,38 @@ void Model::Normalize(aiQuaternion& q) {
     }
 }
 
-void Model::ComposeMatrix(const aiQuaternion& q, aiMatrix4x4& m) {
+void Model::ComposeMatrix(const glm::quat& q, glm::mat4& m) {
     // Rotation
-    m.a1 = 1 - 2 * (q.y * q.y + q.z * q.z);
-    m.a2 = 2 * (q.x * q.y - q.z * q.w);
-    m.a3 = 2 * (q.x * q.z + q.y * q.w);
-    m.b1 = 2 * (q.x * q.y + q.z * q.w);
-    m.b2 = 1 - 2 * (q.x * q.x + q.z * q.z);
-    m.b3 = 2 * (q.y * q.z - q.x * q.w);
-    m.c1 = 2 * (q.x * q.z - q.y * q.w);
-    m.c2 = 2 * (q.y * q.z + q.x * q.w);
-    m.c3 = 1 - 2 * (q.x * q.x + q.y * q.y);
+    m[0][0] = 1.f - 2.f * (q.y * q.y + q.z * q.z);
+    m[0][1] = 2.f * (q.x * q.y - q.z * q.w);
+    m[0][2] = 2.f * (q.x * q.z + q.y * q.w);
+    m[1][0] = 2.f * (q.x * q.y + q.z * q.w);
+    m[1][1] = 1.f - 2.f * (q.x * q.x + q.z * q.z);
+    m[1][2] = 2.f * (q.y * q.z - q.x * q.w);
+    m[2][0] = 2.f * (q.x * q.z - q.y * q.w);
+    m[2][1] = 2.f * (q.y * q.z + q.x * q.w);
+    m[2][2] = 1.f - 2.f * (q.x * q.x + q.y * q.y);
 
     // TODO Scale
 
     // TODO Translation
 
-    m.d1 = 0; m.d2 = 0; m.d3 = 0; m.d4 = 1;
+    m[3][0] = 0;
+    m[3][1] = 0;
+    m[3][2] = 0;
+    m[3][3] = 1;
 }
 
-aiNode* Model::FindNode(aiNode* node, const char* name) {
-    if (!std::strcmp(name, node->mName.data))
-        return node;
-    for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        aiNode* found = FindNode(node->mChildren[i], name);
-        if (found)
-            return found;
-    }
-    return nullptr;
-}
+//aiNode* Model::FindNode(aiNode* node, const char* name) {
+//    if (!std::strcmp(name, node->mName.data))
+//        return node;
+//    for (unsigned int i = 0; i < node->mNumChildren; i++) {
+//        aiNode* found = FindNode(node->mChildren[i], name);
+//        if (found)
+//            return found;
+//    }
+//    return nullptr;
+//}
 //
 //void Model::TransformNode(const aiNode* node, aiMatrix4x4& transformMat) {
 //    if (node->mParent) {
@@ -451,6 +489,13 @@ void Model::CpyMat(const aiMatrix4x4& aiMat4, aiMatrix3x3& aiMat3) {
     aiMat3.c1 = aiMat4.c1;
     aiMat3.c2 = aiMat4.c2;
     aiMat3.c3 = aiMat4.c3;
+}
+
+void Model::CpyQuat(const aiQuaternion& aiQuat, glm::quat &glmQuat) {
+    glmQuat.x = aiQuat.x;
+    glmQuat.y = aiQuat.y;
+    glmQuat.z = aiQuat.z;
+    glmQuat.w = aiQuat.w;
 }
 
 //void Model::TransfromMesh(aiNode* rootNode, Mesh& mesh) {
