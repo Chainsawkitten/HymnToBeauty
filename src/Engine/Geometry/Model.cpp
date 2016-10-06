@@ -5,6 +5,7 @@
 #include "../Util/FileSystem.hpp"
 #include <assimp/cimport.h> // aiMultiplyMatrix4
 #include <glm/gtc/matrix_transform.hpp>
+#include <map>
 
 using namespace Geometry;
 
@@ -122,43 +123,33 @@ void Model::LoadMesh(aiMesh* assimpMesh, Mesh& mesh) {
 }
 
 void Model::LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleton) {
-    // Load bones
-    skeleton.boneNr = assimpMesh->mNumBones;
-    skeleton.boneData = new Skeleton::Bone[skeleton.boneNr];
-    for (unsigned int b = 0; b < skeleton.boneNr; ++b) {
-        Skeleton::Bone* bone = &skeleton.boneData[b];
-        aiBone* assimpBone = assimpMesh->mBones[b];
-        bone->name = assimpBone->mName.data;
-        CpyMat(assimpBone->mOffsetMatrix, bone->offsetMatrix);
-
-        // Load Weights
-        bone->weightNr = assimpBone->mNumWeights;
-        bone->weightData = new Skeleton::Bone::VertexWeight[bone->weightNr];
-        for (unsigned int w = 0; w < bone->weightNr; ++w) {
-            Skeleton::Bone::VertexWeight* vertexWeight = &bone->weightData[w];
-            aiVertexWeight* assimpWeight = &assimpBone->mWeights[w];
-            vertexWeight->vID = assimpWeight->mVertexId;
-            vertexWeight->weight = assimpWeight->mWeight;
-        }
+    // Load bone names
+    std::map<std::string, aiBone*> boneMap;
+    for (unsigned int i = 0; i < assimpMesh->mNumBones; ++i) {
+        boneMap[assimpMesh->mBones[i]->mName.data] = assimpMesh->mBones[i];
     }
 
-    // Load node tree
-    skeleton.rootNode = new Skeleton::Node();
-    skeleton.BuildNodeTree(rootNode, skeleton.rootNode);
+    // Allocate joints
+    skeleton.jointNr = assimpMesh->mNumBones;
+    skeleton.jointData = new Skeleton::Joint[skeleton.jointNr];
+
+    // Build skeleton
+    skeleton.rootJoint = &skeleton.jointData[0];
+    unsigned int index = 0;
+    skeleton.BuildSkeleton(rootNode, 0, index, boneMap);
 }
 
 void Model::LoadAnimation(aiAnimation* assimpAnimation, Animation& animation) {
 }
 
 void Model::TransfromMesh() {
-    // TMP
     // Collapse mesh
     for (unsigned int i = 0; i < mesh.vertexNr; ++i) {
         mesh.vertexData[i].position = glm::vec3(0.f, 0.f, 0.f);
         mesh.vertexData[i].normal = glm::vec3(0.f, 0.f, 0.f);
     }
 
-    TransformNode(skeleton.rootNode, skeleton.rootNode->transformation);
+    TransformNode(skeleton.rootJoint, skeleton.rootJoint->transformation);
 
     //aiMatrix4x4 skin4x4Mat;
     //aiMatrix4x4 skin3x3Mat;
@@ -190,10 +181,10 @@ void Model::TransfromMesh() {
     //}
 }
 
-void Model::TransformNode(Skeleton::Node* currentNode, glm::mat4 transfromMatrix) { 
+void Model::TransformNode(Skeleton::Joint* currentJoint, glm::mat4 transfromMatrix) {
     // TODO CHECK ORDER OF MATRIX MULTI.
 
-    const Skeleton::Bone* bone = &skeleton.boneData[currentNode->bID];
+    const Skeleton::Bone* bone = &currentJoint->bone;
     glm::mat3 skinMatrix = bone->offsetMatrix * transfromMatrix;
     for (unsigned int i = 0; i < bone->weightNr; ++i) {
         unsigned int vID = bone->weightData[i].vID;
@@ -219,8 +210,9 @@ void Model::TransformNode(Skeleton::Node* currentNode, glm::mat4 transfromMatrix
         mesh.vertexData[vID].normal.y += normal.y * weight;
         mesh.vertexData[vID].normal.z += normal.z * weight;
     }
-    for (unsigned int i = 0; i < currentNode->nrChildren; ++i) {
-        TransformNode(currentNode->children[i], transfromMatrix * currentNode->children[i]->transformation);
+    for (unsigned int i = 0; i < currentJoint->nrChildren; ++i) {
+        Skeleton::Joint* childJoint = &skeleton.jointData[currentJoint->myID + 1 + i];
+        TransformNode(childJoint, transfromMatrix * childJoint->transformation);
     }
 }
 
@@ -231,7 +223,7 @@ void Model::AnimateMesh(const float tick) {
     aiQuaternion r;
     for (unsigned int i = 0; i < tmpAssimpAnimation->mNumChannels; ++i) {
         const aiNodeAnim* channel = tmpAssimpAnimation->mChannels[i];
-        Skeleton::Node* node = skeleton.FindNode(channel->mNodeName.data);
+        Skeleton::Joint* joint = skeleton.FindJoint(channel->mNodeName.data);
         aiNode* assimpNode = FindNode(tmpRootNode, channel->mNodeName.data); // TODO NOT USE STRCMP
         aiQuatKey* r0 = channel->mRotationKeys + (frame + 0) % channel->mNumRotationKeys;
         aiQuatKey* r1 = channel->mRotationKeys + (frame + 1) % channel->mNumRotationKeys;
@@ -239,7 +231,7 @@ void Model::AnimateMesh(const float tick) {
         aiMatrix4x4 transformMatix;
         ComposeMatrix(r, transformMatix);
         assimpNode->mTransformation = transformMatix;
-        CpyMat(transformMatix, node->transformation);
+        CpyMat(transformMatix, joint->transformation);
 
         /*const aiNodeAnim* channel = tmpAssimpAnimation->mChannels[i];
         aiNode* node = FindNode(tmpRootNode, channel->mNodeName.data);
@@ -450,79 +442,88 @@ void Model::Mesh::Clear() {
     }
 }
 
-void Model::Skeleton::BuildNodeTree(aiNode* assimpNode, Node* node) {
-    int bID = FindBoneID(assimpNode->mName.data);
-    if (bID < 0) { // Skip nodes that isn't bones.
-        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
-            BuildNodeTree(assimpNode->mChildren[i], node);
+void Model::Skeleton::BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsigned int& index, const std::map<std::string, aiBone*>& boneMap) {
+    auto it = boneMap.find(assimpNode->mName.data);
+    if (it != boneMap.end()) {
+        // Bone found
+        Skeleton::Joint* joint = &jointData[index];
+        // Cpy bone
+        aiBone* assimpBone = it->second;
+        Skeleton::Bone* bone = &joint->bone;
+        CpyMat(assimpBone->mOffsetMatrix, bone->offsetMatrix);
+        bone->weightNr = assimpBone->mNumWeights;
+        bone->weightData = new Skeleton::Bone::VertexWeight[bone->weightNr];
+        for (unsigned int w = 0; w < bone->weightNr; ++w) {
+            Skeleton::Bone::VertexWeight* vertexWeight = &bone->weightData[w];
+            aiVertexWeight* assimpWeight = &assimpBone->mWeights[w];
+            vertexWeight->vID = assimpWeight->mVertexId;
+            vertexWeight->weight = assimpWeight->mWeight;
         }
-    } else { // Store bone nodes in our tree.
-        node->name = assimpNode->mName.data;
-        node->bID = static_cast<unsigned int>(bID);
-        CpyMat(assimpNode->mTransformation, node->transformation);
+        // Joint
+        joint->name = assimpBone->mName.data;
+        joint->myID = index;
+        joint->pID = pID;
 
-        // Counts number of childern who are bones.
-        unsigned int childrenNr = 0;
-        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i)
-            if (FindBoneID(assimpNode->mChildren[i]->mName.data) >= 0)
-                childrenNr++;
-
-        node->nrChildren = childrenNr;
-        node->children = new Node*[node->nrChildren];
+        index++;
+        unsigned int lastIndex = index;
         for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
-            node->children[i] = new Node();
-            node->children[i]->parent = node;
-            BuildNodeTree(assimpNode->mChildren[i], node->children[i]);
+            BuildSkeleton(assimpNode->mChildren[i], pID, index, boneMap);
+            if (lastIndex != index) {
+                joint->nrChildren++;
+            }
+        }
+    }
+    else {
+        // Continue searching for joints
+        for (unsigned int i = 0; i < assimpNode->mNumChildren; ++i) {
+            BuildSkeleton(assimpNode->mChildren[i], pID, index, boneMap);
         }
     }
 }
 
 void Model::Skeleton::Clear() {
-    if (rootNode != nullptr) {
-        Clear(rootNode);
-        rootNode = nullptr;
+    for (unsigned int j = 0; j < jointNr; ++j) {
+        Skeleton::Bone* bone = &jointData[j].bone;
+        delete[] bone->weightData;
+        bone = nullptr;
+        bone->weightNr = 0;
     }
-    if (boneData != nullptr) {
-        for (unsigned int i = 0; i < boneNr; ++i) {
-            boneData[i].Clear();
-        }
-        delete[] boneData;
-        boneData = nullptr;
-        boneNr = 0;
-    }
+    delete[] jointData;
+    jointData = nullptr;
+    jointNr = 0;
 }
 
-int Model::Skeleton::FindBoneID(const char* name) {
-    for (unsigned int i = 0; i < boneNr; ++i)
-        if (!std::strcmp(boneData[i].name, name))
-            return i;
-    return -1;
-}
-
-Model::Skeleton::Node* Model::Skeleton::FindNode(const char* name) {
-    return FindNode(rootNode, name);
-}
-
-Model::Skeleton::Node* Model::Skeleton::FindNode(Node* node, const char* name) {
-    if (!std::strcmp(name, node->name))
-        return node;
-    for (unsigned int i = 0; i < node->nrChildren; i++) {
-        Node* found = FindNode(node->children[i], name);
-        if (found)
-            return found;
-    }
+Model::Skeleton::Joint* Model::Skeleton::FindJoint(const char* name) {
+    for (unsigned int i = 0; i < jointNr; ++i)
+        if (!std::strcmp(jointData[i].name, name))
+            return &jointData[i];
     return nullptr;
 }
 
-void Model::Skeleton::Clear(Node* node) {
-    for (unsigned int i = 0; i < node->nrChildren; ++i) {
-        Clear(node->children[i]);
-        delete node->children[i];
-        node->children = nullptr;
-    }
-    delete[] node->children;
-    node->nrChildren = 0;
-}
+//Model::Skeleton::Joint* Model::Skeleton::FindJoint(const char* name) {
+//    return FindJoint(rootJoint, name);
+//}
+
+//Model::Skeleton::Joint* Model::Skeleton::FindJoint(Joint* joint, const char* name) {
+//    //if (!std::strcmp(name, joint->name))
+//    //    return joint;
+//    //for (unsigned int i = 0; i < joint->nrChildren; i++) {
+//    //    Joint* found = FindJoint(joint->children[i], name);
+//    //    if (found)
+//    //        return found;
+//    //}
+//    return nullptr;
+//}
+
+//void Model::Skeleton::Clear(Joint* joint) {
+//    //for (unsigned int i = 0; i < node->nrChildren; ++i) {
+//    //    Clear(joint->children[i]);
+//    //    delete joint->children[i];
+//    //    joint->children = nullptr;
+//    //}
+//    //delete[] joint->children;
+//    //joint->nrChildren = 0;
+//}
 
 void Model::Skeleton::Bone::Clear() {
     if (weightData != nullptr) {

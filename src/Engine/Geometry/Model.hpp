@@ -82,22 +82,7 @@ namespace Geometry {
         } mesh;
 
         struct Skeleton {
-            struct Node {
-                char* name = "";
-                unsigned int bID;
-                Node* parent = nullptr;
-                glm::mat4 transformation;
-                unsigned int nrChildren = 0;
-                Node** children = nullptr;
-            };
-            Node* rootNode;
-            Node* FindNode(const char* name);
-        private:
-            Node* FindNode(Node* node, const char* name);
-
-        public:
             struct Bone {
-                char* name;
                 glm::mat4 offsetMatrix;
                 struct VertexWeight {
                     unsigned int vID;
@@ -107,13 +92,21 @@ namespace Geometry {
                 VertexWeight* weightData = nullptr;
                 void Clear();
             };
-            unsigned int boneNr = 0;
-            Bone* boneData = nullptr;
-            int FindBoneID(const char* name);
-            void BuildNodeTree(aiNode* assimpNode, Node* node);
+            struct Joint {
+                char* name = "";
+                Bone bone;
+                unsigned int pID = 0;
+                glm::mat4 transformation;
+                unsigned int nrChildren = 0;
+                unsigned int myID = 0;
+            };
+            Joint* rootJoint;
+            unsigned int jointNr = 0;
+            Joint* jointData = nullptr;
+
+            Joint* FindJoint(const char* name);
+            void BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsigned int& index, const std::map<std::string, aiBone*>& boneMap);
             void Clear();
-        private:
-            void Clear(Node* node);
         } skeleton;
 
         struct Animation {
@@ -127,7 +120,7 @@ namespace Geometry {
         // TMP
         aiMesh* tmpAssimpMesh;
         void TransfromMesh();
-        void TransformNode(Skeleton::Node* currentNode, glm::mat4 transfromMatrix);
+        void TransformNode(Skeleton::Joint* currentNode, glm::mat4 transfromMatrix);
         aiAnimation* tmpAssimpAnimation;
         aiNode* tmpRootNode;
         void AnimateMesh(const float tick);
