@@ -83,44 +83,60 @@ namespace Geometry {
         } mesh;
 
         struct Skeleton {
-            struct Joint {
-                char* name = "";
-                struct Bone {
-                    glm::mat4 offsetMatrix;
-                    struct VertexWeight {
-                        unsigned int vID;
-                        float weight;
-                    };
-                    unsigned int weightNr = 0;
-                    VertexWeight* weightData = nullptr;
-                    void Clear();
-                } bone;
-                unsigned int pID = 0;
+            struct Node {
+                std::string name;
                 glm::mat4 transformation;
-                unsigned int nrChildren = 0;
-                unsigned int myID = 0;
+				glm::mat4 inverseTransform;
+                Node* parent;
+                unsigned int childrenNr = 0;
+                Node** childrenData = nullptr;
             };
-            Joint* rootJoint;
-            unsigned int jointNr = 0;
-            Joint* jointData = nullptr;
+            struct Bone {
+                std::string name;
+                glm::mat4 offsetMatrix;
+				glm::mat4 inverseOffsetMatrix;
+                struct VertexWeight {
+                    unsigned int vID;
+                    float weight;
+                };
+                unsigned int weightNr = 0;
+                VertexWeight* weightData = nullptr;
+                void Clear();
+            } bone;
+            Node rootNode;
+            std::map<std::string, Bone> boneMap; // TODOD private
 
-            Joint* FindJoint(const char* name);
-            void BuildSkeleton(aiNode* assimpNode, unsigned int pID, unsigned int& index, const std::map<std::string, aiBone*>& boneMap);
+            Node* FindNode(const char* name);
+            Bone* FindBone(const char* name);
+            void Load(aiNode* assimpRootNode, aiMesh* assimpMesh);
             void Clear();
+        private:
+           // std::map<std::string, Bone> boneMap;
+
+            void BuildSkeleton(aiNode* assimpNode, Node* node, Node* parentNode);
+            Node* FindNode(Node* node, const char* name);
+            void Clear(Node* node);
         } skeleton;
 
         struct Animation {
             double duration;
             double ticksPerSecond;
             struct AnimChanel {
-                unsigned int jointID;
-                char* jointName = "";
+                std::string trgNodeName = "";
                 struct QuatKey {
                     double time;
-                    glm::quat quat;
+                    glm::quat value;
                 };
                 unsigned int rotKeyNr = 0;
                 QuatKey* rotKeyData = nullptr;
+                struct VectorKey {
+                    double time;
+                    glm::vec3 value;
+                };
+                unsigned int posKeyNr = 0;
+                VectorKey* posKeyData = nullptr;
+                unsigned int scaleKeyNr = 0;
+                VectorKey* scaleKeyData = nullptr;
             };
             unsigned int animChanelNr = 0;
             AnimChanel* animChanelData = nullptr;
@@ -131,32 +147,31 @@ namespace Geometry {
         static void LoadMesh(aiMesh* assimpMesh, Mesh& mesh);
         static void LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleton);
         static void LoadAnimation(aiAnimation* assimpAnimation, Animation& animation);
-        static void BindAnimation(Skeleton& skeleton, Animation& animation);
 
         // TMP
         aiMesh* tmpAssimpMesh;
-        void TransfromMesh(const Skeleton& skeleton);
-        void TransformNode(Skeleton::Joint* currentNode, glm::mat4 transfromMatrix);
-        //aiAnimation* tmpAssimpAnimation;
-        //aiNode* tmpRootNode;
+		aiAnimation* tmpAssimpAnimation;
+        void TransfromMesh(Skeleton& skeleton);
+        void TransformNode(const Skeleton::Node* currentNode, glm::mat4& transfromMatrix);
         void AnimateSkeleton(const Animation& animation, const float tick);
-        //static aiNode* FindNode(aiNode* node, const char* name);
         
 
         // https://github.com/ccxvii/asstools/blob/master/assview.c
         //static void TransfromMesh(aiNode* rootNode, Mesh& mesh);
         //static void TransformNode(const aiNode* node, aiMatrix4x4& transformMat);
         //static void AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh);
+		aiNode* Model::FindNode(aiNode* node, const char* name);
 
         //static void Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result);
         //static float Dot(const aiQuaternion& q1, const aiQuaternion& q2);
         //static void Normalize(aiQuaternion& q);
         //static void ComposeMatrix(const aiQuaternion& r, aiMatrix4x4& matrix);
 
-        static void Mix(glm::quat& q1, const glm::quat& q2, float t, glm::quat& result);
-        static float Dot(const glm::quat& q1, const glm::quat& q2);
-        static void Normalize(glm::quat& q);
-        static void ComposeMatrix(const glm::quat& r, glm::mat4& matrix);
+        static void MixVec(const glm::vec3& v1, const glm::vec3& v2, float t, glm::vec3& result);
+        static void MixQuat(const glm::quat& q1, const glm::quat& q2, float t, glm::quat& result);
+        static float DotQuat(const glm::quat& q1, const glm::quat& q2);
+        static void NormalizeQuat(glm::quat& q);
+        static void ComposeMatrix(const glm::vec3& p, glm::quat& r, const glm::vec3& s, glm::mat4& matrix);
 
         static void CpyVec(const aiVector3D& aiVec, glm::vec3& glmVec);
         static void CpyVec(const aiVector3D& aiVec, glm::vec2& glmVec);
