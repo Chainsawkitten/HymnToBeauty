@@ -71,54 +71,98 @@ namespace Geometry {
         /// The name of the model.
         std::string name;
 
-    private:
         /// The extension of the model.
         std::string extension;
 
+    private:
+        #define NUM_BONES_PER_VERTEX 4
+        #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
         static Assimp::Importer aiImporter;
 
-        struct Mesh {
-            unsigned int vertexNr = 0, indexNr = 0;
-            Vertex* vertexData = nullptr;
-            unsigned int* indexData = nullptr;
-            void Clear();
-        } mesh;
+        struct VertexBoneData {
+            unsigned int boneIDs[NUM_BONES_PER_VERTEX];
+            float weights[NUM_BONES_PER_VERTEX];
+            void AddBoneData(unsigned int boneID, float weight) {
+                for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(boneIDs); i++) {
+                    if (weights[i] == 0.0) {
+                        boneIDs[i] = boneID;
+                        weights[i] = weight;
+                        return;
+                    }
+                }
+                // Should never get here - more bones than we have space for.
+                assert(0);
+            }
+        };
 
-        struct Skeleton {
-            struct Node {
-                std::string name;
-                glm::mat4 transformation;
-				glm::mat4 inverseTransform;
-                Node* parent;
-                unsigned int childrenNr = 0;
-                Node** childrenData = nullptr;
-            };
-            struct Bone {
-                std::string name;
-                glm::mat4 offsetMatrix;
-				glm::mat4 inverseOffsetMatrix;
-                struct VertexWeight {
-                    unsigned int vID;
-                    float weight;
-                };
-                unsigned int weightNr = 0;
-                VertexWeight* weightData = nullptr;
-                void Clear();
-            } bone;
-            Node rootNode;
-            std::map<std::string, Bone> boneMap; // TODOD private
+        struct BoneInfo {
+            glm::mat4 boneOffset;
+            glm::mat4 finalTransformation;
+        };
 
-            Node* FindNode(const char* name);
-            Bone* FindBone(const char* name);
-            void Load(aiNode* assimpRootNode, aiMesh* assimpMesh);
-            void Clear();
-        private:
-           // std::map<std::string, Bone> boneMap;
+        struct MeshEntry {
+            unsigned int numIndices = 0;
+            unsigned int baseVertex = 0;
+            unsigned int baseIndex = 0;
+        };
 
-            void BuildSkeleton(aiNode* assimpNode, Node* node, Node* parentNode);
-            Node* FindNode(Node* node, const char* name);
-            void Clear(Node* node);
-        } skeleton;
+        struct Node {
+            std::string name;
+            glm::mat4 transformation;
+            Node* parent;
+            std::vector<Node> children;
+        };
+        Node rootNode;
+        std::vector<MeshEntry> entries;
+        std::map<std::string, unsigned int> boneMap;
+        unsigned int numBones = 0;
+        std::vector<BoneInfo> boneInfos;
+        std::vector<VertexBoneData> boneVertDatas;
+        glm::mat4 globalInverseTransform;
+
+
+        //struct Mesh {
+        //    unsigned int vertexNr = 0, indexNr = 0;
+        //    Vertex* vertexData = nullptr;
+        //    unsigned int* indexData = nullptr;
+        //    //void Clear();
+        //} mesh;
+
+    //    struct Skeleton {
+    //        struct Node {
+    //            std::string name;
+    //            glm::mat4 transformation;
+				//glm::mat4 inverseTransform;
+    //            Node* parent;
+    //            unsigned int childrenNr = 0;
+    //            Node** childrenData = nullptr;
+    //        };
+    //        struct Bone {
+    //            std::string name;
+    //            glm::mat4 offsetMatrix;
+				//glm::mat4 inverseOffsetMatrix;
+    //            struct VertexWeight {
+    //                unsigned int vID;
+    //                float weight;
+    //            };
+    //            unsigned int weightNr = 0;
+    //            VertexWeight* weightData = nullptr;
+    //            //void Clear();
+    //        } bone;
+    //        Node rootNode;
+    //        std::map<std::string, Bone> boneMap;
+
+    //        //Node* FindNode(const char* name);
+    //        //Bone* FindBone(const char* name);
+    //        //void Load(aiNode* assimpRootNode, aiMesh* assimpMesh);
+    //        //void Clear();
+    //    private:
+    //       // std::map<std::string, Bone> boneMap;
+
+    //        //void BuildSkeleton(aiNode* assimpNode, Node* node, Node* parentNode);
+    //        //Node* FindNode(Node* node, const char* name);
+    //        //void Clear(Node* node);
+    //    } skeleton;
 
         struct Animation {
             double duration;
@@ -143,19 +187,26 @@ namespace Geometry {
             unsigned int animChanelNr = 0;
             AnimChanel* animChanelData = nullptr;
 
-            void Clear();
+            //void Clear();
         } animation;
 
-        static void LoadMesh(aiMesh* assimpMesh, Mesh& mesh);
-        static void LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleton);
-        static void LoadAnimation(aiAnimation* assimpAnimation, Animation& animation);
+        void LoadMeshes(const aiScene* aScene);
+        void LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode);
+
+        void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& transforms);
+        void ReadNodeHeirarchy(float animationTime, Node* node, const glm::mat4& parentTransform);
+        void MeshTransform(const std::vector<glm::mat4>& transforms);
+        //static void LoadMesh(aiMesh* assimpMesh, Mesh& mesh);
+        //static void LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleton);
+        //static void LoadAnimation(aiAnimation* assimpAnimation, Animation& animation);
 
         // TMP
+        const aiScene* tmpScene;
         aiMesh* tmpAssimpMesh;
 		aiAnimation* tmpAssimpAnimation;
-        void TransfromMesh(Skeleton& skeleton);
-        void TransformNode(const Skeleton::Node* currentNode, glm::mat4& transfromMatrix);
-        void AnimateSkeleton(const Animation& animation, const float tick);
+        //void TransfromMesh(Skeleton& skeleton);
+        //void TransformNode(const Skeleton::Node* currentNode, glm::mat4& transfromMatrix);
+        //void AnimateSkeleton(const Animation& animation, const float tick);
         
 
         // https://github.com/ccxvii/asstools/blob/master/assview.c
@@ -175,12 +226,12 @@ namespace Geometry {
         static void NormalizeQuat(glm::quat& q);
         static void ComposeMatrix(const glm::vec3& p, glm::quat& r, const glm::vec3& s, glm::mat4& matrix);
 
-        static void CpyVec(const aiVector3D& aiVec, glm::vec3& glmVec);
-        static void CpyVec(const aiVector3D& aiVec, glm::vec2& glmVec);
-        static void CpyVec(const aiVector2D& aiVec, glm::vec2& glmVec);
-        static void CpyMat(const aiMatrix4x4& aiMat, glm::mat4& glmMat);
-        static void CpyMat(const aiMatrix4x4& aiMat4, aiMatrix3x3& aiMat3);
-        static void CpyQuat(const aiQuaternion& aiQuat, glm::quat &glmQuat);
+        static void CpyVec(glm::vec3& glmVec, const aiVector3D& aiVec);
+        static void CpyVec(glm::vec2& glmVec, const aiVector3D& aiVec);
+        static void CpyVec(glm::vec2& glmVec, const aiVector2D& aiVec);
+        static void CpyMat(glm::mat4& glmMat, const aiMatrix4x4& aiMat);
+        static void CpyMat(aiMatrix3x3& aiMat3, const aiMatrix4x4& aiMat4);
+        static void CpyQuat(glm::quat &glmQuat, const aiQuaternion& aiQuat);
 
         Vertex* vertexData = nullptr;
         unsigned int vertexNr = 0;
