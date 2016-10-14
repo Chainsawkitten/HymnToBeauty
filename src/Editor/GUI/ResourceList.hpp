@@ -41,6 +41,12 @@ namespace GUI {
              */
             void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
             
+            /// Hide all editors.
+            /**
+             * Needs to be called before playing the game or old editors with stale pointers could be shown when returning to the editor.
+             */
+            void HideEditors();
+            
         private:
             bool visible = false;
             
