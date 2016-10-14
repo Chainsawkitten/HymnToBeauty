@@ -43,12 +43,14 @@ unsigned int Model::GetIndexCount() const {
 Json::Value Model::Save() const {
     Json::Value model;
     model["name"] = name;
+    model["extension"] = extension;
     return model;
 }
 
 void Model::Load(const Json::Value& node) {
     name = node.get("name", "").asString();
-    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + name + ".fbx").c_str());
+    extension = node.get("extension", "").asString();
+    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + name + "." + extension).c_str());
 }
 
 void Model::Load(const char* filename) {

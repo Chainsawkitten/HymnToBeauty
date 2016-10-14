@@ -15,7 +15,8 @@ void ModelEditor::Show() {
         model->name = name;
         
         if (ImGui::Button("Load model")) {
-            fileSelector.SetExtension("fbx");
+            fileSelector.AddExtensions("fbx");
+            fileSelector.AddExtensions("md5mesh");
             fileSelector.SetFileSelectedCallback(std::bind(&ModelEditor::FileSelected, this, std::placeholders::_1));
             fileSelector.SetVisible(true);
         }
@@ -41,7 +42,8 @@ void ModelEditor::SetVisible(bool visible) {
 }
 
 void ModelEditor::FileSelected(const std::string& file) {
-    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + model->name + ".fbx";
+    model->extension = file.substr(file.find_last_of(".") + 1);
+    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + model->name + "." + model->extension;
     FileSystem::Copy(file.c_str(), destination.c_str());
     model->Load(file.c_str());
 }

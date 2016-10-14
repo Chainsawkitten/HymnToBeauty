@@ -72,6 +72,8 @@ namespace Geometry {
         std::string name;
 
     private:
+        /// The extension of the model.
+        std::string extension;
 
         static Assimp::Importer aiImporter;
 

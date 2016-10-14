@@ -19,11 +19,17 @@ namespace GUI {
              */
             void SetFileSelectedCallback(std::function<void(const std::string&)> callback);
             
-            /// Set extension to select files of.
+            /// Set extensions to select files of.
             /**
-             * @param extension Set the extension of which files to show.
+             * @param extensions Set the extensions of which files to show.
              */
-            void SetExtension(const std::string& extension);
+            void SetExtensions(const std::vector<std::string>& extensions);
+
+            /// Add extension to select files of.
+            /**
+             * @param extension Add an extension of which files to show.
+             */
+            void AddExtensions(const std::string& extension);
             
             /// Get whether the window is visible.
             /**
@@ -47,7 +53,7 @@ namespace GUI {
             
             // Interaction
             std::string path;
-            std::string extension = "";
+            std::vector<std::string> extensions;
             bool pathChanged = true;
             
             std::vector<std::string> directories;
