@@ -166,6 +166,7 @@ set(ENGINE_SRCS
         src/Engine/Font/Font.cpp
         src/Engine/Lighting/DeferredLighting.cpp
         src/Engine/Manager/Managers.cpp
+        src/Engine/Manager/DebugDrawingManager.cpp
         src/Engine/Manager/ParticleManager.cpp
         src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
@@ -221,6 +222,7 @@ set(ENGINE_HEADERS
         src/Engine/Font/Font.hpp
         src/Engine/Lighting/DeferredLighting.hpp
         src/Engine/Manager/Managers.hpp
+        src/Engine/Manager/DebugDrawingManager.hpp
         src/Engine/Manager/ParticleManager.hpp
         src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
