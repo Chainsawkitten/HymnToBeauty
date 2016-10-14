@@ -10,14 +10,7 @@ class InputHandler {
     public:
         /// Button codes.
         enum Button {
-            CLICK = 0, ///< Clicking in the editor.
-            BACK, ///< Erase previous character.
-            ERASE, ///< Erase next character.
-            LEFT, ///< Move text input marker left.
-            RIGHT, ///< Move text input marker right.
-            HOME, ///< Move text input marker to beginning of text field.
-            END, ///< Move text input marker to end of text field.
-            PLAYTEST, ///< Start/stop playtesting the game.
+            PLAYTEST = 0, ///< Start/stop playtesting the game.
             BUTTONS, ///< Total number of inputs
         };
         
