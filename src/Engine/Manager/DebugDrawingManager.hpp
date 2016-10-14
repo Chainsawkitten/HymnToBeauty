@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -32,4 +32,7 @@ class DebugDrawingManager {
             bool depthTesting;
         };
         std::vector<Point> points;
+        
+        GLuint pointVertexBuffer;
+        GLuint pointVertexArray;
 };
