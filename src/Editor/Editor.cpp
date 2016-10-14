@@ -77,6 +77,7 @@ void Editor::SetVisible(bool visible) {
 void Editor::Play() {
     Save();
     SetVisible(false);
+    resourceList.HideEditors();
 }
 
 void Editor::NewHymn() {
