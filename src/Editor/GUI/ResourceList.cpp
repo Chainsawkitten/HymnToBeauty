@@ -156,11 +156,6 @@ void ResourceList::SetVisible(bool visible) {
     this->visible = visible;
 }
 
-void ResourceList::SetEntitySelectedCallback(std::function<void(Entity*)> callback) {
-    hasEntitySelectedCallback = true;
-    entitySelectedCallback = callback;
-}
-
 void ResourceList::HideEditors() {
     for (auto& editor : entityEditors) {
         editor.second.SetVisible(false);

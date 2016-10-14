@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <map>
 #include "Editors/EntityEditor.hpp"
 #include "Editors/ModelEditor.hpp"
@@ -35,12 +34,6 @@ namespace GUI {
              */
             void SetVisible(bool visible);
             
-            /// Set function to call when an entity has been selected.
-            /**
-             * @param callback Function to call.
-             */
-            void SetEntitySelectedCallback(std::function<void(Entity*)> callback);
-            
             /// Hide all editors.
             /**
              * Needs to be called before playing the game or old editors with stale pointers could be shown when returning to the editor.
@@ -54,8 +47,5 @@ namespace GUI {
             std::map<Geometry::OBJModel*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
             std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
-            
-            bool hasEntitySelectedCallback = false;
-            std::function<void(Entity*)> entitySelectedCallback;
     };
 }
