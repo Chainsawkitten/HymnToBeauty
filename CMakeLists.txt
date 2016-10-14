@@ -11,6 +11,7 @@ if(UNIX OR MINGW)
 endif()
 
 # GLFW
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "Don't build GLFW docs" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Don't build GLFW examples" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "Don't build GLFW tests" FORCE)
 add_subdirectory(externals/glfw)
