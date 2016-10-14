@@ -10,6 +10,9 @@
 Editor::Editor() {
     // Assign controls.
     Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
+    Input()->AssignButton(InputHandler::CONTROL, InputHandler::KEYBOARD, GLFW_KEY_LEFT_CONTROL);
+    Input()->AssignButton(InputHandler::NEW, InputHandler::KEYBOARD, GLFW_KEY_N);
+    Input()->AssignButton(InputHandler::OPEN, InputHandler::KEYBOARD, GLFW_KEY_O);
 }
 
 void Editor::Show() {
@@ -48,6 +51,12 @@ void Editor::Show() {
     
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
+    
+    if (Input()->Triggered(InputHandler::NEW) && Input()->Pressed(InputHandler::CONTROL))
+        NewHymn();
+    
+    if (Input()->Triggered(InputHandler::OPEN) && Input()->Pressed(InputHandler::CONTROL))
+        OpenHymn();
     
     if (play)
         Play();

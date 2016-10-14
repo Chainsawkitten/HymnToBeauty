@@ -11,6 +11,9 @@ class InputHandler {
         /// Button codes.
         enum Button {
             PLAYTEST = 0, ///< Start/stop playtesting the game.
+            CONTROL, ///< Control key.
+            NEW, ///< Create new hymn.
+            OPEN, ///< Open existing hymn.
             BUTTONS, ///< Total number of inputs
         };
         
