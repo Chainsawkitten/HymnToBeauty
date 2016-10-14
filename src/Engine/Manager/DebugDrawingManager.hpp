@@ -6,6 +6,7 @@
 
 class Shader;
 class ShaderProgram;
+class Scene;
 
 /// Debug drawing facilities.
 class DebugDrawingManager {
@@ -20,6 +21,13 @@ class DebugDrawingManager {
          * @param depthTesting Whether to enable depth testing.
          */
         void AddPoint(const glm::vec3& position, const glm::vec3& color, float duration = 0.f, bool depthTesting = true);
+        
+        /// Render the debug scene.
+        /**
+         * @param scene Contains a camera through which to render.
+         * @param deltaTime Time since last frame (in seconds).
+         */
+        void Render(Scene& scene, float deltaTime);
         
     private:
         DebugDrawingManager();

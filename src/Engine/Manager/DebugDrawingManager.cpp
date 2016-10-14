@@ -49,3 +49,7 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     point.depthTesting = depthTesting;
     points.push_back(point);
 }
+
+void DebugDrawingManager::Render(Scene& scene, float deltaTime) {
+    /// @todo Render debug entities.
+}
