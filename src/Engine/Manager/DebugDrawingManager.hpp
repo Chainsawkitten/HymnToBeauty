@@ -4,6 +4,9 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+class Shader;
+class ShaderProgram;
+
 /// Debug drawing facilities.
 class DebugDrawingManager {
     friend class Hub;
@@ -23,6 +26,10 @@ class DebugDrawingManager {
         ~DebugDrawingManager();
         DebugDrawingManager(DebugDrawingManager const&) = delete;
         void operator=(DebugDrawingManager const&) = delete;
+        
+        Shader* vertexShader;
+        Shader* fragmentShader;
+        ShaderProgram* shaderProgram;
         
         // Points.
         struct Point {
