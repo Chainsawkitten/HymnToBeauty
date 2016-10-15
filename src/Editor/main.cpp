@@ -6,6 +6,7 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
 #include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
 #include "ImGui/OpenGLImplementation.hpp"
@@ -31,6 +32,9 @@ int main() {
     
     // Setup imgui implementation.
     ImGuiImplementation::Init(window->GetGLFWWindow());
+    
+    // Test debug drawing facilites.
+    Managers().debugDrawingManager->AddPoint(glm::vec3(3.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 1.f), 10.f, 20.f, false);
     
     // Main loop.
     double targetFPS = 60.0;

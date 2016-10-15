@@ -75,8 +75,8 @@ class ParticleManager {
     private:
         ParticleManager();
         ~ParticleManager();
-        ParticleManager(Particle const&) = delete;
-        void operator=(Particle const&) = delete;
+        ParticleManager(ParticleManager const&) = delete;
+        void operator=(ParticleManager const&) = delete;
         
         // Decide where the emitter should emit before rendering.
         void EmitParticle(Scene& scene, Component::ParticleEmitter* emitter);
