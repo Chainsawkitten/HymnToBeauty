@@ -61,6 +61,7 @@ void DebugDrawingManager::Render(Scene& scene) {
     // Points.
     glBindVertexArray(pointVertexArray);
     for (const Point& point : points) {
+        glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
         glDrawArrays(GL_POINTS, 0, 1);
     }
     
