@@ -81,9 +81,9 @@ void DebugDrawingManager::Render(Scene& scene) {
     };
     
     if (camera != nullptr) {
-        glm::mat4 viewMat = camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position);
-        glm::mat4 projectionMat = camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize());
-        glm::mat4 viewProjectionMat = projectionMat * viewMat;
+        glm::mat4 viewMat(camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position));
+        glm::mat4 projectionMat(camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize()));
+        glm::mat4 viewProjectionMat(projectionMat * viewMat);
         
         shaderProgram->Use();
         glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjection"), 1, GL_FALSE, &viewProjectionMat[0][0]);
@@ -91,6 +91,9 @@ void DebugDrawingManager::Render(Scene& scene) {
         // Points.
         glBindVertexArray(pointVertexArray);
         for (const Point& point : points) {
+            glm::mat4 model(glm::translate(glm::mat4(), point.position));
+            
+            glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &model[0][0]);
             point.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
             glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
             glUniform1f(shaderProgram->GetUniformLocation("size"), point.size);
