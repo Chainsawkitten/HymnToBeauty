@@ -12,6 +12,7 @@
 DebugDrawingManager::DebugDrawingManager() {
     vertexShader = Managers().resourceManager->CreateShader(DEBUGDRAWING_VERT, DEBUGDRAWING_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = Managers().resourceManager->CreateShader(DEBUGDRAWING_FRAG, DEBUGDRAWING_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     // Create point vertex array.
     glBindVertexArray(0);
@@ -50,6 +51,18 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     points.push_back(point);
 }
 
-void DebugDrawingManager::Render(Scene& scene, float deltaTime) {
-    /// @todo Render debug entities.
+void DebugDrawingManager::Update(float deltaTime) {
+    /// @todo Update durations and remove old things.
+}
+
+void DebugDrawingManager::Render(Scene& scene) {
+    shaderProgram->Use();
+    
+    // Points.
+    glBindVertexArray(pointVertexArray);
+    for (const Point& point : points) {
+        glDrawArrays(GL_POINTS, 0, 1);
+    }
+    
+    glBindVertexArray(0);
 }

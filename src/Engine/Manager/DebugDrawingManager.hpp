@@ -22,12 +22,17 @@ class DebugDrawingManager {
          */
         void AddPoint(const glm::vec3& position, const glm::vec3& color, float duration = 0.f, bool depthTesting = true);
         
+        /// Update the debug geometry.
+        /**
+         * @param deltaTime Time since last frame (in seconds).
+         */
+        void Update(float deltaTime);
+        
         /// Render the debug scene.
         /**
          * @param scene Contains a camera through which to render.
-         * @param deltaTime Time since last frame (in seconds).
          */
-        void Render(Scene& scene, float deltaTime);
+        void Render(Scene& scene);
         
     private:
         DebugDrawingManager();
