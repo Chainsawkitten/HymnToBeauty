@@ -52,7 +52,16 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
 }
 
 void DebugDrawingManager::Update(float deltaTime) {
-    /// @todo Update durations and remove old things.
+    // Points.
+    for (std::size_t i=0; i<points.size(); ++i) {
+        if (points[i].duration < 0.f) {
+            points[i] = points[points.size() - 1];
+            points.pop_back();
+            --i;
+        } else {
+            points[i].duration -= deltaTime;
+        }
+    }
 }
 
 void DebugDrawingManager::Render(Scene& scene) {
