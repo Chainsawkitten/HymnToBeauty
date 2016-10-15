@@ -48,10 +48,11 @@ DebugDrawingManager::~DebugDrawingManager() {
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
 }
 
-void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& color, float duration, bool depthTesting) {
+void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& color, float size, float duration, bool depthTesting) {
     Point point;
     point.position = position;
     point.color = color;
+    point.size = size;
     point.duration = duration;
     point.depthTesting = depthTesting;
     points.push_back(point);
@@ -92,6 +93,7 @@ void DebugDrawingManager::Render(Scene& scene) {
         for (const Point& point : points) {
             point.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
             glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
+            glUniform1f(shaderProgram->GetUniformLocation("size"), point.size);
             glDrawArrays(GL_POINTS, 0, 1);
         }
         
