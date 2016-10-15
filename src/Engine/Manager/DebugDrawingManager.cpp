@@ -1,5 +1,11 @@
 #include "DebugDrawingManager.hpp"
 
+#include "../Scene/Scene.hpp"
+#include "../Entity/Entity.hpp"
+#include "../Component/Transform.hpp"
+#include "../Component/Lens.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include "../MainWindow.hpp"
 #include "Managers.hpp"
 #include "ResourceManager.hpp"
 #include "../Shader/Shader.hpp"
@@ -65,14 +71,29 @@ void DebugDrawingManager::Update(float deltaTime) {
 }
 
 void DebugDrawingManager::Render(Scene& scene) {
-    shaderProgram->Use();
+    // Find camera entity.
+    Entity* camera = nullptr;
+    std::vector<Component::Lens*> lenses = scene.GetComponents<Component::Lens>();
+    for (Component::Lens* lens : lenses) {
+        if (lens->entity->GetComponent<Component::Transform>() != nullptr)
+            camera = lens->entity;
+    };
     
-    // Points.
-    glBindVertexArray(pointVertexArray);
-    for (const Point& point : points) {
-        glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
-        glDrawArrays(GL_POINTS, 0, 1);
+    if (camera != nullptr) {
+        glm::mat4 viewMat = camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position);
+        glm::mat4 projectionMat = camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize());
+        glm::mat4 viewProjectionMat = projectionMat * viewMat;
+        
+        shaderProgram->Use();
+        glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjection"), 1, GL_FALSE, &viewProjectionMat[0][0]);
+        
+        // Points.
+        glBindVertexArray(pointVertexArray);
+        for (const Point& point : points) {
+            glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
+            glDrawArrays(GL_POINTS, 0, 1);
+        }
+        
+        glBindVertexArray(0);
     }
-    
-    glBindVertexArray(0);
 }
