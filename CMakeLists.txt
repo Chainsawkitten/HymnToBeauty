@@ -51,6 +51,7 @@ add_subdirectory(externals/jsoncpp)
 include_directories(externals/jsoncpp/include)
 
 # Assimp
+set(ENABLE_BOOST_WORKAROUND ON CACHE BOOL "Building Assimp without boost" FORCE)
 add_subdirectory(externals/assimp)
 include_directories(externals/assimp/include)
 
