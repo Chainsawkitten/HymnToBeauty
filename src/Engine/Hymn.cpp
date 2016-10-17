@@ -7,6 +7,7 @@
 #include "Manager/PhysicsManager.hpp"
 #include "Manager/ParticleManager.hpp"
 #include "Manager/SoundManager.hpp"
+#include "Manager/DebugDrawingManager.hpp"
 #include "DefaultDiffuse.png.hpp"
 #include "DefaultNormal.png.hpp"
 #include "DefaultSpecular.png.hpp"
@@ -155,11 +156,13 @@ void ActiveHymn::Update(float deltaTime) {
     Managers().physicsManager->Update(activeScene, deltaTime);
     Managers().particleManager->Update(activeScene, deltaTime);
     Managers().soundManager->Update(activeScene);
+    Managers().debugDrawingManager->Update(deltaTime);
     activeScene.ClearKilled();
 }
 
 void ActiveHymn::Render() {
     Managers().renderManager->Render(activeScene);
+    Managers().debugDrawingManager->Render(activeScene);
 }
 
 ActiveHymn& Hymn() {

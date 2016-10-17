@@ -5,6 +5,7 @@ class RenderManager;
 class ParticleManager;
 class PhysicsManager;
 class SoundManager;
+class DebugDrawingManager;
 
 /// Singleton class that holds all subsystems.
 class Hub {
@@ -25,6 +26,9 @@ class Hub {
         
         /// The sound manager instance.
         SoundManager* soundManager;
+        
+        /// The debug drawing manager instance.
+        DebugDrawingManager* debugDrawingManager;
         
         /// Initialize all subsystems.
         void StartUp();
