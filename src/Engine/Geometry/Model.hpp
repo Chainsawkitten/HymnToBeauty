@@ -4,7 +4,6 @@
 #include <json/json.h>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
 #include <glm/gtc/quaternion.hpp>
 
 namespace Geometry {
@@ -78,6 +77,7 @@ namespace Geometry {
         #define NUM_BONES_PER_VERTEX 4
         #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
         static Assimp::Importer aiImporter;
+        const aiScene* aScene;
 
         struct VertexBoneData {
             unsigned int boneIDs[NUM_BONES_PER_VERTEX];
@@ -165,13 +165,14 @@ namespace Geometry {
     //    } skeleton;
 
         struct Animation {
+            std::string name;
             double duration;
             double ticksPerSecond;
             struct AnimChanel {
                 std::string trgNodeName = "";
                 struct QuatKey {
                     double time;
-                    glm::quat value;
+                    aiQuaternion value;
                 };
                 unsigned int rotKeyNr = 0;
                 QuatKey* rotKeyData = nullptr;
@@ -183,27 +184,69 @@ namespace Geometry {
                 VectorKey* posKeyData = nullptr;
                 unsigned int scaleKeyNr = 0;
                 VectorKey* scaleKeyData = nullptr;
+
+                unsigned int FindScaling(float animationTime) const {
+                    assert(scaleKeyNr > 0);
+                    for (unsigned int i = 0; i < scaleKeyNr - 1; ++i)
+                        if (animationTime < (float)scaleKeyData[i + 1].time)
+                            return i;
+                    assert(0);
+                    return 0;
+                }
+                unsigned int FindRotation(float animationTime) const {
+                    assert(rotKeyNr > 0);
+                    for (unsigned int i = 0; i < rotKeyNr - 1; ++i)
+                        if (animationTime < (float)rotKeyData[i + 1].time)
+                            return i;
+                    assert(0);
+                    return 0;
+                }
+                unsigned int FindPosition(float animationTime) const {
+                    assert(posKeyNr > 0);
+                    for (unsigned int i = 0; i < posKeyNr - 1; ++i)
+                        if (animationTime < (float)posKeyData[i + 1].time)
+                            return i;
+                    assert(0);
+                    return 0;
+                }
             };
             unsigned int animChanelNr = 0;
             AnimChanel* animChanelData = nullptr;
 
+            const AnimChanel* FindAnimChanel(const std::string& nodeName) const {
+                for (unsigned int i = 0; i < this->animChanelNr; ++i) {
+                    const AnimChanel* animChanel = &this->animChanelData[i];
+                    if (animChanel->trgNodeName == nodeName) {
+                        return animChanel;
+                    }
+                }
+                return nullptr;
+            }
             //void Clear();
-        } animation;
+        };
+        std::vector<Animation> animations;
 
         void LoadMeshes(const aiScene* aScene);
+        void LoadAnimations(const aiScene* aScene);
         void LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode);
+        void DebugDrawSkeleton();
+        Node* FindNodeInNodeTree(Node* node, const std::string& name);
+        void NodeTransform(const Node* node, glm::mat4& transform);
 
-        void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& transforms);
+        void BoneTransform(float timeInSeconds, const Animation& animation);
         void ReadNodeHeirarchy(float animationTime, Node* node, const glm::mat4& parentTransform);
+        void CalcInterpolatedScaling(glm::vec3& scaling, float animationTime, const Animation::AnimChanel* animChanel);
+        void CalcInterpolatedRotation(aiQuaternion& rotation, float animationTime, const Animation::AnimChanel* animChanel);
+        void CalcInterpolatedPosition(glm::vec3& translation, float animationTime, const Animation::AnimChanel* animChanel);
         void MeshTransform(const std::vector<glm::mat4>& transforms);
         //static void LoadMesh(aiMesh* assimpMesh, Mesh& mesh);
         //static void LoadSkeleton(aiNode* rootNode, aiMesh* assimpMesh, Skeleton& skeleton);
         //static void LoadAnimation(aiAnimation* assimpAnimation, Animation& animation);
 
         // TMP
-        const aiScene* tmpScene;
-        aiMesh* tmpAssimpMesh;
-		aiAnimation* tmpAssimpAnimation;
+        //const aiScene* tmpScene;
+        //aiMesh* tmpAssimpMesh;
+		//aiAnimation* tmpAssimpAnimation;
         //void TransfromMesh(Skeleton& skeleton);
         //void TransformNode(const Skeleton::Node* currentNode, glm::mat4& transfromMatrix);
         //void AnimateSkeleton(const Animation& animation, const float tick);
@@ -213,7 +256,7 @@ namespace Geometry {
         //static void TransfromMesh(aiNode* rootNode, Mesh& mesh);
         //static void TransformNode(const aiNode* node, aiMatrix4x4& transformMat);
         //static void AninmateMesh(const aiAnimation* animation, const float tick, Mesh& mesh);
-		aiNode* Model::FindNode(aiNode* node, const char* name);
+		//aiNode* Model::FindNode(aiNode* node, const char* name);
 
         //static void Mix(aiQuaternion& q1, const aiQuaternion& q2, float t, aiQuaternion& result);
         //static float Dot(const aiQuaternion& q1, const aiQuaternion& q2);
@@ -226,6 +269,7 @@ namespace Geometry {
         static void NormalizeQuat(glm::quat& q);
         static void ComposeMatrix(const glm::vec3& p, glm::quat& r, const glm::vec3& s, glm::mat4& matrix);
 
+        static void QuatToMat(glm::mat4& m, const glm::quat& q);
         static void CpyVec(glm::vec3& glmVec, const aiVector3D& aiVec);
         static void CpyVec(glm::vec2& glmVec, const aiVector3D& aiVec);
         static void CpyVec(glm::vec2& glmVec, const aiVector2D& aiVec);
