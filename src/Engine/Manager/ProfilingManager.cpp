@@ -46,6 +46,9 @@ void ProfilingManager::ShowResult(Result& result) {
     std::string resultString = result.name + " " + std::to_string(result.duration * 1000.0) + " ms###" + result.name;
     
     if (ImGui::TreeNode(resultString.c_str())) {
+        if (result.parent != nullptr)
+            ImGui::ProgressBar(result.duration / result.parent->duration, ImVec2(0.0f,0.0f));
+        
         double otherTime = result.duration;
         for (Result& child : result.children) {
             ShowResult(child);
@@ -57,6 +60,8 @@ void ProfilingManager::ShowResult(Result& result) {
             other.duration = otherTime;
             ShowResult(other);
         }
+        
+        ImGui::TreePop();
     }
 }
 
