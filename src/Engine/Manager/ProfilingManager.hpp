@@ -12,6 +12,9 @@ class ProfilingManager {
         /// Begin profiling a frame.
         void BeginFrame();
         
+        /// Show the results of the profiling.
+        void ShowResults();
+        
     private:
         ProfilingManager();
         ~ProfilingManager();
@@ -29,6 +32,7 @@ class ProfilingManager {
         
         Result* StartResult(const std::string& name);
         void FinishResult(Result* result);
+        void ShowResult(Result& result);
         
         Result first = Result("", nullptr);
         Result* current = nullptr;

@@ -85,6 +85,7 @@ int main() {
             }
         }
         
+        Managers().profilingManager->ShowResults();
         ImGui::Render();
         
         // Swap buffers and wait until next frame.

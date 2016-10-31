@@ -147,6 +147,9 @@ include_directories(src)
 
 ## Engine ##
 set(ENGINE_SRCS
+        externals/imgui/imgui.cpp
+        externals/imgui/imgui_demo.cpp
+        externals/imgui/imgui_draw.cpp
         src/Engine/Hymn.cpp
         src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
@@ -274,9 +277,6 @@ set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
 ## Editor ##
 set(EDITOR_SRCS
-        externals/imgui/imgui.cpp
-        externals/imgui/imgui_demo.cpp
-        externals/imgui/imgui_draw.cpp
         src/Editor/main.cpp
         src/Editor/Editor.cpp
         src/Editor/ImGui/OpenGLImplementation.cpp
