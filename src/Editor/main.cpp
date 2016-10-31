@@ -8,6 +8,7 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
+#include <Engine/Util/Profiling.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
 #include "ImGui/OpenGLImplementation.hpp"
@@ -48,32 +49,43 @@ int main() {
         // Begin new profiling frame.
         Managers().profilingManager->BeginFrame();
         
-        glfwPollEvents();
-        
-        // Start new frame.
-        ImGuiImplementation::NewFrame();
-        
-        window->Update();
-        
-        if (editor->IsVisible()) {
-            Hymn().activeScene.ClearKilled();
-            Hymn().Render();
+        { PROFILE("Frame");
+            glfwPollEvents();
             
-            editor->Show();
-            ImGui::Render();
-        } else {
-            Hymn().Update(deltaTime);
-            Hymn().Render();
+            // Start new frame.
+            ImGuiImplementation::NewFrame();
             
-            if (Input()->Triggered(InputHandler::PLAYTEST)) {
-                // Reload hymn.
-                std::string path = Hymn().GetPath();
-                Hymn().Load(path);
+            window->Update();
+            
+            if (editor->IsVisible()) {
+                Hymn().activeScene.ClearKilled();
+                Hymn().Render();
                 
-                // Turn editor back on.
-                editor->SetVisible(true);
+                editor->Show();
+            } else {
+                { PROFILE("Update");
+                    Hymn().Update(deltaTime);
+                }
+                { PROFILE("Render");
+                    Hymn().Render();
+                }
+                
+                if (Input()->Triggered(InputHandler::PLAYTEST)) {
+                    // Reload hymn.
+                    std::string path = Hymn().GetPath();
+                    Hymn().Load(path);
+                    
+                    // Turn editor back on.
+                    editor->SetVisible(true);
+                }
+            }
+            
+            { PROFILE("GPU Finish");
+                glFinish();
             }
         }
+        
+        ImGui::Render();
         
         // Swap buffers and wait until next frame.
         window->SwapBuffers();
