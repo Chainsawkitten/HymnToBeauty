@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <list>
+#include "../Manager/ProfilingManager.hpp"
 
 /// Run profiling.
 class Profiling {
@@ -16,16 +16,7 @@ class Profiling {
         ~Profiling();
         
     private:
-        struct Result {
-            std::string name;
-            double duration;
-            std::list<Result> children;
-            Result* parent;
-            
-            Result(const std::string& name, Result* parent);
-        };
-        
-        Result* result;
+        ProfilingManager::Result* result;
         double start;
 };
 

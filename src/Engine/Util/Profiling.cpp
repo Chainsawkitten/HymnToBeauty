@@ -24,8 +24,3 @@ Profiling::~Profiling() {
     if (current == result)
         current = result->parent;*/
 }
-
-Profiling::Result::Result(const std::string& name, Result* parent) {
-    this->name = name;
-    this->parent = parent;
-}
