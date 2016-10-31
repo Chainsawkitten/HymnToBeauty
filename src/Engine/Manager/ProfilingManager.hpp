@@ -9,7 +9,8 @@ class ProfilingManager {
     friend class Profiling;
     
     public:
-        
+        /// Begin profiling a frame.
+        void BeginFrame();
         
     private:
         ProfilingManager();

@@ -7,6 +7,7 @@
 #include <Engine/Util/Log.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
+#include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
 #include "ImGui/OpenGLImplementation.hpp"
@@ -43,6 +44,9 @@ int main() {
     while (!window->ShouldClose()) {
         double deltaTime = glfwGetTime() - lastTime;
         lastTime = glfwGetTime();
+        
+        // Begin new profiling frame.
+        Managers().profilingManager->BeginFrame();
         
         glfwPollEvents();
         
