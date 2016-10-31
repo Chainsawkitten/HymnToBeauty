@@ -1,26 +1,17 @@
 #include "Profiling.hpp"
 
 #include <GLFW/glfw3.h>
+#include "../Manager/Managers.hpp"
 
 using namespace std;
 
 Profiling::Profiling(const std::string& name) {
-    /*if (Profiling::current == nullptr) {
-        first.name = name;
-        first.parent = nullptr;
-        current = &first;
-        result = &first;
-    } else {
-        current->children.push_back(Result(name, current));
-        result = &current->children.back();
-        current = result;
-    }*/
-    
+    result = Managers().profilingManager->StartResult(name);
     start = glfwGetTime();
 }
 
 Profiling::~Profiling() {
-    /*result->duration = glfwGetTime() - start;
-    if (current == result)
-        current = result->parent;*/
+    result->duration = glfwGetTime() - start;
+    if (Managers().profilingManager->current == result)
+        Managers().profilingManager->current = result->parent;
 }

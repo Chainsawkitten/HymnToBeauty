@@ -27,6 +27,9 @@ class ProfilingManager {
             Result(const std::string& name, Result* parent);
         };
         
+        Result* StartResult(const std::string& name);
+        void FinishResult(Result* result);
+        
         Result first = Result("", nullptr);
         Result* current = nullptr;
 };
