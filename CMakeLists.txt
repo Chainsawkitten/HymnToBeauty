@@ -170,6 +170,7 @@ set(ENGINE_SRCS
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/DebugDrawingManager.cpp
         src/Engine/Manager/ParticleManager.cpp
+        src/Engine/Manager/ProfilingManager.cpp
         src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
@@ -226,6 +227,7 @@ set(ENGINE_HEADERS
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/DebugDrawingManager.hpp
         src/Engine/Manager/ParticleManager.hpp
+        src/Engine/Manager/ProfilingManager.hpp
         src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
