@@ -32,8 +32,15 @@ class ProfilingManager {
         
         Result* StartResult(const std::string& name);
         void FinishResult(Result* result);
+        
+        void ShowFrametimes();
         void ShowResult(Result& result);
         
         Result first = Result("", nullptr);
         Result* current = nullptr;
+        
+        double frameStart;
+        static const unsigned int frames = 100;
+        unsigned int frame = 0;
+        float frameTimes[frames] = {};
 };

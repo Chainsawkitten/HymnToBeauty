@@ -1,6 +1,7 @@
 #include "ProfilingManager.hpp"
 
 #include <imgui.h>
+#include <GLFW/glfw3.h>
 
 ProfilingManager::ProfilingManager() {
     
@@ -16,11 +17,24 @@ void ProfilingManager::BeginFrame() {
     first.name = "";
     first.duration = 0.0;
     current = nullptr;
+    frameStart = glfwGetTime();
 }
 
 void ProfilingManager::ShowResults() {
+    // Calculate the time of this frame.
+    frameTimes[frame++] = static_cast<float>((glfwGetTime() - frameStart) * 1000.0);
+    if (frame >= frames)
+        frame = 0;
+    
+    // Show the results.
     ImGui::Begin("Profiling");
-    ShowResult(first);
+    
+    if (ImGui::CollapsingHeader("Frametimes"))
+        ShowFrametimes();
+    
+    if (ImGui::CollapsingHeader("Breakdown"))
+        ShowResult(first);
+    
     ImGui::End();
 }
 
@@ -40,6 +54,10 @@ ProfilingManager::Result* ProfilingManager::StartResult(const std::string& name)
 
 void ProfilingManager::FinishResult(Result* result) {
     current = result->parent;
+}
+
+void ProfilingManager::ShowFrametimes() {
+    ImGui::PlotLines("Frametimes", frameTimes, frames, 0, nullptr, 0.f, FLT_MAX, ImVec2(0.f, 300.f));
 }
 
 void ProfilingManager::ShowResult(Result& result) {
