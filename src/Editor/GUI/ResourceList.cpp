@@ -1,6 +1,6 @@
 #include "ResourceList.hpp"
 
-#include <Engine/Geometry/Model.hpp>
+#include <Engine/Geometry/StaticModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
 
@@ -46,7 +46,7 @@ void ResourceList::Show() {
     // Models.
     if (ImGui::TreeNode("Models")) {
         if (ImGui::Button("Add model")) {
-            Geometry::Model* model = new Geometry::Model();
+            Geometry::Model* model = new Geometry::StaticModel();
             model->name = "Model #" + std::to_string(Hymn().modelNumber++);
             Hymn().models.push_back(model);
         }

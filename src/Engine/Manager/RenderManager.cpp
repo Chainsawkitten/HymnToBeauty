@@ -6,7 +6,10 @@
 #include "ParticleManager.hpp"
 #include "Default3D.vert.hpp"
 #include "Default3D.frag.hpp"
+#include "Skinning.vert.hpp"
 #include "../Shader/ShaderProgram.hpp"
+#include "../RenderProgram/SkinRenderProgram.hpp"
+#include "../RenderProgram/StaticRenderProgram.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Transform.hpp"
@@ -28,10 +31,14 @@
 using namespace Component;
 
 RenderManager::RenderManager() {
-    vertexShader = Managers().resourceManager->CreateShader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Managers().resourceManager->CreateShader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
-    
+    defaultVertexShader = Managers().resourceManager->CreateShader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
+    skinningVertexShader = Managers().resourceManager->CreateShader(SKINNING_VERT, SKINNING_VERT_LENGTH, GL_VERTEX_SHADER);
+    defaultFragmentShader = Managers().resourceManager->CreateShader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    staticShaderProgram = Managers().resourceManager->CreateShaderProgram({ defaultVertexShader, defaultFragmentShader });
+    skinShaderProgram = Managers().resourceManager->CreateShaderProgram({ skinningVertexShader, defaultFragmentShader });
+    staticRenderProgram = new StaticRenderProgram(staticShaderProgram);
+    skinRenderProgram = new SkinRenderProgram(skinShaderProgram);
+
     deferredLighting = new DeferredLighting();
     
     postProcessing = new PostProcessing();
@@ -43,10 +50,14 @@ RenderManager::RenderManager() {
 }
 
 RenderManager::~RenderManager() {
-    Managers().resourceManager->FreeShader(vertexShader);
-    Managers().resourceManager->FreeShader(fragmentShader);
-    Managers().resourceManager->FreeShaderProgram(shaderProgram);
-    
+    Managers().resourceManager->FreeShader(defaultVertexShader);
+    Managers().resourceManager->FreeShader(skinningVertexShader);
+    Managers().resourceManager->FreeShader(defaultFragmentShader);
+    Managers().resourceManager->FreeShaderProgram(staticShaderProgram);
+    Managers().resourceManager->FreeShaderProgram(skinShaderProgram);
+    delete staticRenderProgram;
+    delete skinRenderProgram;
+
     delete deferredLighting;
     
     delete postProcessing;
@@ -73,54 +84,20 @@ void RenderManager::Render(Scene& scene) {
         glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
         glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
         
-        shaderProgram->Use();
-        
-        glm::mat4 viewMat = camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Transform>()->position);
-        glm::mat4 projectionMat = camera->GetComponent<Component::Lens>()->GetProjection(screenSize);
-        glm::mat4 viewProjectionMat = projectionMat * viewMat;
-        
-        glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjection"), 1, GL_FALSE, &viewProjectionMat[0][0]);
-        
-        // Finds models in scene.
         std::vector<Mesh*> meshes = scene.GetComponents<Mesh>();
-        for (Mesh* mesh : meshes) {
-            Entity* model = mesh->entity;
-            Transform* transform = model->GetComponent<Component::Transform>();
-            Component::Material* material = model->GetComponent<Component::Material>();
-            if (transform != nullptr && mesh->geometry != nullptr && material != nullptr) {
-                glm::mat4 modelMat = transform->GetModelMatrix();
-                
-                Physics::Frustum frustum(viewProjectionMat * modelMat);
-                if (frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox())) {
-                    glBindVertexArray(mesh->geometry->GetVertexArray());
-                    
-                    // Set texture locations
-                    glUniform1i(shaderProgram->GetUniformLocation("baseImage"), 0);
-                    glUniform1i(shaderProgram->GetUniformLocation("normalMap"), 1);
-                    glUniform1i(shaderProgram->GetUniformLocation("specularMap"), 2);
-                    glUniform1i(shaderProgram->GetUniformLocation("glowMap"), 3);
-                    
-                    // Textures
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_2D, material->diffuse->GetTextureID());
-                    glActiveTexture(GL_TEXTURE1);
-                    glBindTexture(GL_TEXTURE_2D, material->normal->GetTextureID());
-                    glActiveTexture(GL_TEXTURE2);
-                    glBindTexture(GL_TEXTURE_2D, material->specular->GetTextureID());
-                    glActiveTexture(GL_TEXTURE3);
-                    glBindTexture(GL_TEXTURE_2D, material->glow->GetTextureID());
-                    
-                    // Render model.
-                    glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &modelMat[0][0]);
-                    glm::mat4 normalMat = glm::transpose(glm::inverse(viewMat * modelMat));
-                    glUniformMatrix3fv(shaderProgram->GetUniformLocation("normalMatrix"), 1, GL_FALSE, &glm::mat3(normalMat)[0][0]);
-                    
-                    glDrawElements(GL_TRIANGLES, mesh->geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-                }
-            }
-        }
-        
-        glBindVertexArray(0);
+        // Static render program.
+        staticRenderProgram->PreRender(camera, screenSize);
+        for (Mesh* mesh : meshes)
+            if (mesh->geometry->GetType() == Geometry::Geometry3D::STATIC)
+                staticRenderProgram->Render(mesh);
+        staticRenderProgram->PostRender();
+
+        // Skin render program.
+        skinRenderProgram->PreRender(camera, screenSize);
+        for (Mesh* mesh : meshes)
+            if (mesh->geometry->GetType() == Geometry::Geometry3D::SKIN)
+                skinRenderProgram->Render(mesh);
+        skinRenderProgram->PostRender();
         
         // Light the scene.
         postProcessing->GetRenderTarget()->SetTarget();
