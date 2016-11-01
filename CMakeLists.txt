@@ -204,6 +204,8 @@ set(ENGINE_SRCS
         src/Engine/Geometry/Geometry3D.cpp
         src/Engine/Geometry/Model.cpp
         src/Engine/Geometry/Rectangle.cpp
+        src/Engine/Geometry/VertexType/SkinVertex.cpp
+        src/Engine/Geometry/VertexType/StaticVertex.cpp
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
@@ -263,6 +265,8 @@ set(ENGINE_HEADERS
         src/Engine/Geometry/Geometry3D.hpp
         src/Engine/Geometry/Model.hpp
         src/Engine/Geometry/Rectangle.hpp
+        src/Engine/Geometry/VertexType/SkinVertex.hpp
+        src/Engine/Geometry/VertexType/StaticVertex.hpp
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
