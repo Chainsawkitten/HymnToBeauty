@@ -82,6 +82,7 @@ set(EMBEDDED_INPUT
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag
+    shaders/Skinning.vert
     shaders/Texture2D.frag
     shaders/Particle.vert
     shaders/Particle.geom
@@ -189,6 +190,8 @@ set(ENGINE_SRCS
         src/Engine/PostProcessing/GlowFilter.cpp
         src/Engine/PostProcessing/GlowBlurFilter.cpp
         src/Engine/PostProcessing/PostProcessing.cpp
+        src/Engine/RenderProgram/SkinRenderProgram.cpp
+        src/Engine/RenderProgram/StaticRenderProgram.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Json.cpp
@@ -246,6 +249,8 @@ set(ENGINE_HEADERS
         src/Engine/PostProcessing/GlowFilter.hpp
         src/Engine/PostProcessing/GlowBlurFilter.hpp
         src/Engine/PostProcessing/PostProcessing.hpp
+        src/Engine/RenderProgram/SkinRenderProgram.hpp
+        src/Engine/RenderProgram/StaticRenderProgram.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Json.hpp
