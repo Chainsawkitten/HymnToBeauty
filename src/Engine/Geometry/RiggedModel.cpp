@@ -4,6 +4,7 @@
 #include <assimp/scene.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <map>
+#include "MathFunctions.hpp"
 #include "../Util/Log.hpp"
 #include "../Util/Log.hpp"
 
@@ -42,12 +43,8 @@ void RiggedModel::Load(const char* filename) {
 
     assert(aScene != nullptr);
 
-    // Calculate global inverse transform.
-    CpyMat(globalInverseTransform, aScene->mRootNode->mTransformation);
-    globalInverseTransform = glm::inverse(globalInverseTransform);
-
-    // Load node tree.
-    LoadNodeTree(aScene->mRootNode, &rootNode, nullptr);
+    // Load skeleton.
+    skeleton.Load(aScene);
         
     // Load meshes.
     LoadMeshes(aScene);
@@ -56,14 +53,16 @@ void RiggedModel::Load(const char* filename) {
     LoadAnimations(aScene);
 
     // TMP
-    if (!animations.empty())
-        BoneTransform(0.0f, animations[0]);
-
-    std::vector<glm::mat4> transforms;
-    transforms.resize(this->numBones);
-    for (unsigned int i = 0; i < this->numBones; i++) {
-        transforms[i] = this->boneInfos[i].finalTransformation;
+    if (!animations.empty()) {
+        skeleton.Animate(&animations[0], 50.f);
+        //BoneTransform(0.0f, animations[0]);
     }
+
+    //for (unsigned int i = 0; i < this->numBones; i++) {
+    //    transforms[i] = this->boneInfos[i].finalTransformation;
+    //}
+
+    this->MeshTransform(skeleton.GetFinalTransformations());
     // ~TMP
 
 
@@ -117,11 +116,10 @@ void RiggedModel::LoadMeshes(const aiScene* aScene) {
     vertices.resize(numVertices);
     verticesPos.resize(numVertices);
     indices.resize(numIndices);
-    boneVertDatas.resize(numVertices);
 
+    std::vector<unsigned int> weightCounter(numVertices, 0);
     numVertices = 0;
     numIndices = 0;
-
     // Initialize the meshes in the scene one by one.
     for (unsigned int m = 0; m < aScene->mNumMeshes; ++m) {
         const aiMesh* aMesh = aScene->mMeshes[m];
@@ -143,224 +141,44 @@ void RiggedModel::LoadMeshes(const aiScene* aScene) {
             indices[numIndices++] = entries[m].baseVertex + aFace.mIndices[1];
             indices[numIndices++] = entries[m].baseVertex + aFace.mIndices[2];
         }
-        // Load bones.
+        // Load Weights.
+        assert(skeleton.GetNumBones() != 0); // Check if skeleton is loaded.
         for (unsigned int b = 0; b < aMesh->mNumBones; ++b) {
             const aiBone* aBone = aMesh->mBones[b];
-            unsigned int boneIndex = 0;
-            std::string boneName(aBone->mName.data);
-
-            // Check in bone map if it's a new bone.
-            const auto& it = this->boneMap.find(boneName);
-            if (it == this->boneMap.end()) {
-                // Allocate an index for a new bone.
-                boneIndex = this->numBones;
-                this->numBones++;
-                BoneInfo boneInfo;
-                CpyMat(boneInfo.boneOffset, aBone->mOffsetMatrix);
-                this->boneInfos.push_back(boneInfo);
-                this->boneMap[boneName] = boneIndex;
-            } else {
-                // Get an index for an old bone.
-                boneIndex = it->second;
-            }
-            // Load Weights.
+            const size_t boneIndex = skeleton.FindBoneIndex(aBone->mName.data);
+            assert(boneIndex != -1);
             for (unsigned int i = 0; i < aBone->mNumWeights; ++i) {
                 unsigned int vertexID = entries[m].baseVertex + aBone->mWeights[i].mVertexId;
                 float weight = aBone->mWeights[i].mWeight;
-                boneVertDatas[vertexID].AddBoneData(boneIndex, weight);
+                unsigned int& count = weightCounter[vertexID];
+                assert(count + 1 <= 4);
+                vertices[vertexID].boneIDs[count] = boneIndex;
+                vertices[vertexID].weights[count] = weight;
+                ++count;
             }
         }
-    }
-}
-
-void RiggedModel::LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode) {
-    node->name = aNode->mName.C_Str();
-    CpyMat(node->transformation, aNode->mTransformation);
-    node->parent = parentNode;
-    node->children.resize(aNode->mNumChildren);
-    for (std::size_t i = 0; i < aNode->mNumChildren; ++i) {
-        LoadNodeTree(aNode->mChildren[i], &node->children[i], node);
     }
 }
 
 void RiggedModel::LoadAnimations(const aiScene* aScene) {
     animations.resize(aScene->mNumAnimations);
 
-    // Initialize the animations in the scene one by one.
-    for (unsigned int a = 0; a < aScene->mNumAnimations; ++a) {
-        const aiAnimation* aAnimation = aScene->mAnimations[a];
-        Animation& animation = animations[a];
-        animation.name = aAnimation->mName.data;
-        animation.duration = aAnimation->mDuration;
-        animation.ticksPerSecond = aAnimation->mTicksPerSecond;
-        animation.animChanelNr = aAnimation->mNumChannels;
-        animation.animChanelData = new Animation::AnimChanel[animation.animChanelNr];
-        for (unsigned int c = 0; c < animation.animChanelNr; ++c) {
-            Animation::AnimChanel* animChanel = &animation.animChanelData[c];
-            const aiNodeAnim* aAnimChanel = aAnimation->mChannels[c];
-            animChanel->trgNodeName = aAnimChanel->mNodeName.data;
-            // Position
-            animChanel->posKeyNr = aAnimChanel->mNumPositionKeys;
-            animChanel->posKeyData = new Animation::AnimChanel::VectorKey[animChanel->posKeyNr];
-            for (unsigned int i = 0; i < animChanel->posKeyNr; ++i) {
-                Animation::AnimChanel::VectorKey* posKey = &animChanel->posKeyData[i];
-                aiVectorKey* aPosKey = &aAnimChanel->mPositionKeys[i];
-                posKey->time = aPosKey->mTime;
-                CpyVec(posKey->value, aPosKey->mValue);
-            }
-            // Rotation
-            animChanel->rotKeyNr = aAnimChanel->mNumRotationKeys;
-            animChanel->rotKeyData = new Animation::AnimChanel::QuatKey[animChanel->rotKeyNr];
-            for (unsigned int i = 0; i < animChanel->rotKeyNr; ++i) {
-                Animation::AnimChanel::QuatKey* rotKey = &animChanel->rotKeyData[i];
-                aiQuatKey* aRotKey = &aAnimChanel->mRotationKeys[i];
-                rotKey->time = aRotKey->mTime;
-                //CpyQuat(rotKey->value, aRotKey->mValue);
-                rotKey->value = aRotKey->mValue;
-            }
-            // Scale
-            animChanel->scaleKeyNr = aAnimChanel->mNumScalingKeys;
-            animChanel->scaleKeyData = new Animation::AnimChanel::VectorKey[animChanel->scaleKeyNr];
-            for (unsigned int i = 0; i < animChanel->scaleKeyNr; ++i) {
-                Animation::AnimChanel::VectorKey* scaleKey = &animChanel->scaleKeyData[i];
-                aiVectorKey* aScaleKey = &aAnimChanel->mScalingKeys[i];
-                scaleKey->time = aScaleKey->mTime;
-                CpyVec(scaleKey->value, aScaleKey->mValue);
-            }
-        }
+    for (std::size_t a = 0; a < animations.size(); ++a) {
+        animations[a].Load(aScene->mAnimations[a]);
     }
-}
-
-void RiggedModel::BoneTransform(float timeInSeconds, const Animation& animation) {
-    float animationTime = 0;
-    float ticksPerSecond = (float)(animation.ticksPerSecond != 0 ? animation.ticksPerSecond : 25.0f);
-    float timeInTicks = timeInSeconds * ticksPerSecond;
-    animationTime = fmod(timeInTicks, static_cast<float>(animation.duration));
-
-    ReadNodeHeirarchy(animationTime, &rootNode, glm::mat4());
-}
-
-void RiggedModel::ReadNodeHeirarchy(float animationTime, Node* node, const glm::mat4& parentTransform) {
-    glm::mat4 nodeTransformation(node->transformation);
-
-    //const aiAnimation* aAnimation = tmpScene->mAnimations[0];
-   // const aiNodeAnim* aNodeAnim = FindNodeAnim(pAnimation, NodeName);
-
-    animationTime = 50;
-    
-    if (!animations.empty()) {
-        const Animation& animation = animations[0];
-        const Animation::AnimChanel* animChanel = animation.FindAnimChanel(node->name);
-
-        if (animChanel != nullptr) {
-            // Interpolate scaling and generate scaling transformation matrix.
-            glm::vec3 scaling;
-            CalcInterpolatedScaling(scaling, animationTime, animChanel);
-            glm::mat4 scalingM(glm::scale(glm::mat4(), scaling));
-            //ScalingM.InitScaleTransform(scaling.x, scaling.y, scaling.z);
-
-            // Interpolate rotation and generate rotation transformation matrix.
-            aiQuaternion rotationQ;
-            CalcInterpolatedRotation(rotationQ, animationTime, animChanel);
-            glm::mat4 rotationM;
-            aiMatrix3x3 aMat = rotationQ.GetMatrix();
-            CpyMat(rotationM, aiMatrix4x4(aMat));
-            //rotationM = glm::transpose(rotationM);
-
-            // Interpolate translation and generate translation transformation matrix.
-            glm::vec3 translation;
-            CalcInterpolatedPosition(translation, animationTime, animChanel);
-            glm::mat4 translationM(glm::translate(glm::mat4(), translation));
-
-            //// Combine the above transformations.
-            //nodeTransformation = /*translationM * rotationM * */scalingM;
-            nodeTransformation = scalingM * rotationM * glm::transpose(translationM); //TODO Check order
-            bool a = true;
-           // nodeTransformation = glm::transpose(nodeTransformation);
-        }
-    }
-
-    glm::mat4 globalTransformation = nodeTransformation * parentTransform; //TODO Check order
-
-    const auto& it = this->boneMap.find(node->name);
-    if (it != this->boneMap.end()) {
-        unsigned int boneIndex = it->second;
-        this->boneInfos[boneIndex].finalTransformation = this->boneInfos[boneIndex].boneOffset * globalTransformation * this->globalInverseTransform;
-    }
-
-    for (std::size_t i = 0; i < node->children.size(); ++i) {
-        ReadNodeHeirarchy(animationTime, &node->children[i], globalTransformation);
-    }
-}
-
-void RiggedModel::CalcInterpolatedScaling(glm::vec3& scaling, float animationTime, const Animation::AnimChanel* animChanel) {
-    // We need two values to interpolate.
-    if (animChanel->scaleKeyNr == 1) {
-        scaling = animChanel->scaleKeyData[0].value;
-        return;
-    }
-
-    unsigned int scalingIndex = animChanel->FindScaling(animationTime);
-    unsigned int nextScalingIndex = (scalingIndex + 1);
-    assert(nextScalingIndex < animChanel->scaleKeyNr);
-    float deltaTime = (float)(animChanel->scaleKeyData[nextScalingIndex].time - animChanel->scaleKeyData[scalingIndex].time);
-    float factor = (animationTime - (float)animChanel->scaleKeyData[scalingIndex].time) / deltaTime;
-    assert(factor >= 0.0f && factor <= 1.0f);
-    const glm::vec3& start = animChanel->scaleKeyData[scalingIndex].value;
-    const glm::vec3& end = animChanel->scaleKeyData[nextScalingIndex].value;
-    const glm::vec3 delta = end - start;
-    scaling = start + factor * delta;
-}
-
-void RiggedModel::CalcInterpolatedRotation(aiQuaternion& rotation, float animationTime, const Animation::AnimChanel* animChanel) {
-    // We need two values to interpolate.
-    if (animChanel->rotKeyNr == 1) {
-        rotation = animChanel->rotKeyData[0].value;
-        return;
-    }
-
-    unsigned int rotationIndex = animChanel->FindRotation(animationTime);
-    unsigned int nextRotationIndex = (rotationIndex + 1);
-    assert(nextRotationIndex < animChanel->rotKeyNr);
-    float deltaTime = (float)(animChanel->rotKeyData[nextRotationIndex].time - animChanel->rotKeyData[rotationIndex].time);
-    float factor = (animationTime - (float)animChanel->rotKeyData[rotationIndex].time) / deltaTime;
-    assert(factor >= 0.0f && factor <= 1.0f);
-    const aiQuaternion& startRotationQ = animChanel->rotKeyData[rotationIndex].value;
-    const aiQuaternion& endRotationQ = animChanel->rotKeyData[nextRotationIndex].value;
-    aiQuaternion::Interpolate(rotation, startRotationQ, endRotationQ, factor);//glm::mix(startRotationQ, endRotationQ, factor);
-    rotation = rotation.Normalize();
-}
-
-void RiggedModel::CalcInterpolatedPosition(glm::vec3& translation, float animationTime, const Animation::AnimChanel* animChanel) {
-    // We need two values to interpolate.
-    if (animChanel->posKeyNr == 1) {
-        translation = animChanel->posKeyData[0].value;
-        return;
-    }
-
-    unsigned int positionIndex = animChanel->FindPosition(animationTime);
-    unsigned int nextPositionIndex = (positionIndex + 1);
-    assert(nextPositionIndex < animChanel->posKeyNr);
-    float deltaTime = (float)(animChanel->posKeyData[nextPositionIndex].time - animChanel->posKeyData[positionIndex].time);
-    float factor = (animationTime - (float)animChanel->posKeyData[positionIndex].time) / deltaTime;
-    assert(factor >= 0.0f && factor <= 1.0f);
-    const glm::vec3& start = animChanel->posKeyData[positionIndex].value;
-    const glm::vec3& end = animChanel->posKeyData[nextPositionIndex].value;
-    const glm::vec3 delta = end - start;
-    translation = start + factor * delta;
 }
 
 void RiggedModel::MeshTransform(const std::vector<glm::mat4>& transforms) {
     // CPU-skinning.
-    unsigned int boneIDs[NUM_BONES_PER_VERTEX];
-    float boneWeights[NUM_BONES_PER_VERTEX];
+    unsigned int boneIDs[4];
+    float boneWeights[4];
 
     // Vertex shader
     for (unsigned int v = 0; v < vertices.size(); ++v) {
         float t = 0;
-        for (unsigned int i = 0; i < NUM_BONES_PER_VERTEX; ++i) {
-            boneIDs[i] = boneVertDatas[v].boneIDs[i];
-            boneWeights[i] = boneVertDatas[v].weights[i];
+        for (unsigned int i = 0; i < 4; ++i) {
+            boneIDs[i] = vertices[v].boneIDs[i];
+            boneWeights[i] = vertices[v].weights[i];
             t += boneWeights[i];
         }
         if (t > 1.05f) {
@@ -376,15 +194,5 @@ void RiggedModel::MeshTransform(const std::vector<glm::mat4>& transforms) {
         VertexType::SkinVertex& vert = vertices[v];
         vert.position = boneTransform * glm::vec4(vert.position, 1.f);
         vert.normal = boneTransform * glm::vec4(vert.normal, 0.f);
-    }
-}
-
-void RiggedModel::NodeTransform(const Node* node, glm::mat4& transform) {
-    if (node->parent) {
-        NodeTransform(node->parent, transform);
-        transform = transform * node->transformation;
-    }
-    else {
-        transform = node->transformation;
     }
 }

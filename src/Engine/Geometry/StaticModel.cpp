@@ -1,6 +1,7 @@
 #include "StaticModel.hpp"
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "MathFunctions.hpp"
 #include "../Util/Log.hpp"
 
 using namespace Geometry;

@@ -199,12 +199,15 @@ set(ENGINE_SRCS
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
         src/Engine/Shader/ShaderProgram.cpp
+        src/Engine/Geometry/Animation.cpp
         src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Geometry3D.cpp
+        src/Engine/Geometry/MathFunctions.cpp
         src/Engine/Geometry/Model.cpp
         src/Engine/Geometry/Rectangle.cpp
         src/Engine/Geometry/RiggedModel.cpp
+        src/Engine/Geometry/Skeleton.cpp
         src/Engine/Geometry/StaticModel.cpp
         src/Engine/Geometry/VertexType/SkinVertex.cpp
         src/Engine/Geometry/VertexType/StaticVertex.cpp
@@ -262,12 +265,15 @@ set(ENGINE_HEADERS
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
         src/Engine/Shader/ShaderProgram.hpp
+        src/Engine/Geometry/Animation.hpp
         src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Geometry3D.hpp
+        src/Engine/Geometry/MathFunctions.hpp
         src/Engine/Geometry/Model.hpp
         src/Engine/Geometry/Rectangle.hpp
         src/Engine/Geometry/RiggedModel.hpp
+        src/Engine/Geometry/Skeleton.hpp
         src/Engine/Geometry/StaticModel.hpp
         src/Engine/Geometry/VertexType/SkinVertex.hpp
         src/Engine/Geometry/VertexType/StaticVertex.hpp

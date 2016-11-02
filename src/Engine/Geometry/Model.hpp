@@ -2,9 +2,10 @@
 
 #include "Geometry3D.hpp"
 #include <assimp/Importer.hpp>
+#include <json/json.h>
 
 namespace Geometry {
-    /// Interface of a model loaded from an file.
+    /// Interface of a model loaded from a file.
     class Model : public Geometry3D {
     public:
         /// Create new empty model.
@@ -52,22 +53,6 @@ namespace Geometry {
 
         /// Generate vertex array.
         virtual void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray) = 0;
-
-        /// Math helper fucntions.
-        static void MixVec(const glm::vec3& v1, const glm::vec3& v2, float t, glm::vec3& result);
-        static void MixQuat(const glm::quat& q1, const glm::quat& q2, float t, glm::quat& result);
-        static float DotQuat(const glm::quat& q1, const glm::quat& q2);
-        static void NormalizeQuat(glm::quat& q);
-        static void ComposeMatrix(const glm::vec3& p, glm::quat& r, const glm::vec3& s, glm::mat4& matrix);
-
-        /// Assimp math to glm math.
-        static void QuatToMat(glm::mat4& m, const glm::quat& q);
-        static void CpyQuat(glm::quat &glmQuat, const aiQuaternion& aiQuat);
-        static void CpyVec(glm::vec3& glmVec, const aiVector3D& aiVec);
-        static void CpyVec(glm::vec2& glmVec, const aiVector3D& aiVec);
-        static void CpyVec(glm::vec2& glmVec, const aiVector2D& aiVec);
-        static void CpyMat(glm::mat4& glmMat, const aiMatrix4x4& aiMat);
-        static void CpyMat(aiMatrix3x3& aiMat3, const aiMatrix4x4& aiMat4);
 
         static Assimp::Importer aImporter;
     };

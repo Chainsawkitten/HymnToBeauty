@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Model.hpp"
-#include <vector>
 #include "VertexType/StaticVertex.hpp"
 
 namespace Geometry {
-    /// A static model loaded from an file.
+    /// A static model loaded from a file.
     class StaticModel : public Model {
     public:
         /// Create new empty static model.

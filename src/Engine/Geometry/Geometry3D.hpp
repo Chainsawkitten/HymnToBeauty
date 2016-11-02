@@ -1,9 +1,8 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <json/json.h>
 #include "../Physics/AxisAlignedBoundingBox.hpp"
+#include <vector>
 
 namespace Geometry {
     /// Renderable 3D geometry.
