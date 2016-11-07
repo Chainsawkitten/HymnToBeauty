@@ -22,6 +22,10 @@ void MessageCallback(const asSMessageInfo* message, void* param) {
     Log() << " : " << message->message << "\n";
 }
 
+void print(const std::string& message) {
+    Log() << message;
+}
+
 ScriptManager::ScriptManager() {
     
 }
@@ -39,6 +43,9 @@ void ScriptManager::TestScripting() {
     
     // Register add-ons.
     RegisterStdString(engine);
+    
+    // Register functions.
+    r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL); assert(r >= 0);
     
     // Clean up.
     engine->ShutDownAndRelease();
