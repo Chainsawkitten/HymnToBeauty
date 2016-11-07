@@ -53,6 +53,7 @@ include_directories(externals/jsoncpp/include)
 # AngelScript
 add_subdirectory(externals/AngelScript/sdk/angelscript/projects/cmake)
 include_directories(externals/AngelScript/sdk/angelscript/include)
+include_directories(externals/AngelScript/sdk/add_on)
 
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
@@ -151,6 +152,8 @@ include_directories(src)
 
 ## Engine ##
 set(ENGINE_SRCS
+        externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
+        externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
         src/Engine/Hymn.cpp
         src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
