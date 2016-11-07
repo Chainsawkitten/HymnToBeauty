@@ -29,3 +29,4 @@
 [submodule "externals/AngelScript"]
 	path = externals/AngelScript
 	url = https://github.com/IngwiePhoenix/AngelScript.git
+	ignore = dirty
