@@ -18,6 +18,7 @@
 #include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
 #include <fstream>
+#include "Util/Profiling.hpp"
 
 using namespace std;
 
@@ -153,16 +154,35 @@ void ActiveHymn::Load(const string& path) {
 }
 
 void ActiveHymn::Update(float deltaTime) {
-    Managers().physicsManager->Update(activeScene, deltaTime);
-    Managers().particleManager->Update(activeScene, deltaTime);
-    Managers().soundManager->Update(activeScene);
-    Managers().debugDrawingManager->Update(deltaTime);
-    activeScene.ClearKilled();
+    { PROFILE("Update physics");
+        Managers().physicsManager->Update(activeScene, deltaTime);
+    }
+    
+    { PROFILE("Update particles");
+        Managers().particleManager->Update(activeScene, deltaTime);
+    }
+    
+    { PROFILE("Update sounds");
+        Managers().soundManager->Update(activeScene);
+    }
+    
+    { PROFILE("Update debug drawing");
+        Managers().debugDrawingManager->Update(deltaTime);
+    }
+    
+    { PROFILE("Clear killed entities/components");
+        activeScene.ClearKilled();
+    }
 }
 
 void ActiveHymn::Render() {
-    Managers().renderManager->Render(activeScene);
-    Managers().debugDrawingManager->Render(activeScene);
+    { PROFILE("Render scene");
+        Managers().renderManager->Render(activeScene);
+    }
+    
+    { PROFILE("Render debug entities");
+        Managers().debugDrawingManager->Render(activeScene);
+    }
 }
 
 ActiveHymn& Hymn() {
