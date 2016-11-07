@@ -7,6 +7,7 @@
 #include <Engine/Util/Log.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
+#include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
 #include "ImGui/OpenGLImplementation.hpp"
@@ -27,6 +28,8 @@ int main() {
     window->Init(false);
     
     Managers().StartUp();
+    
+    Managers().scriptManager->TestScripting();
     
     Editor* editor = new Editor();
     
