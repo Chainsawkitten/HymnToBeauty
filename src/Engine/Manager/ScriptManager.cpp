@@ -57,6 +57,24 @@ void ScriptManager::TestScripting() {
     if (r < 0)
         Log() << "Couldn't build script module.\n";
     
+    // Find function to call.
+    asIScriptFunction* function = module->GetFunctionByDecl("void main()");
+    if (function == nullptr)
+        Log() << "Couldn't find \"void main()\" function.\n";
+    
+    // Create context, prepare it and execute.
+    asIScriptContext* context = engine->CreateContext();
+    context->Prepare(function);
+    r = context->Execute();
+    if (r != asEXECUTION_FINISHED) {
+        // The execution didn't complete as expected. Determine what happened.
+        if (r == asEXECUTION_EXCEPTION) {
+          // An exception occurred, let the script writer know what happened so it can be corrected.
+          Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
+        }
+    }
+    
     // Clean up.
+    context->Release();
     engine->ShutDownAndRelease();
 }
