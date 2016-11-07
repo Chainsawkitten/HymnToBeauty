@@ -47,6 +47,16 @@ void ScriptManager::TestScripting() {
     // Register functions.
     r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL); assert(r >= 0);
     
+    // Define the test script.
+    std::string script = "void main() { print(\"Hello world\\n\"); }";
+    
+    // Create, load and build script module.
+    asIScriptModule* module = engine->GetModule("module", asGM_ALWAYS_CREATE);
+    module->AddScriptSection("script.as", script.c_str());
+    r = module->Build();
+    if (r < 0)
+        Log() << "Couldn't build script module.\n";
+    
     // Clean up.
     engine->ShutDownAndRelease();
 }
