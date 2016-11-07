@@ -38,6 +38,8 @@ int main() {
     // Test debug drawing facilites.
     Managers().debugDrawingManager->AddPoint(glm::vec3(3.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 1.f), 10.f, 20.f, false);
     
+    bool profiling = false;
+    
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
@@ -51,6 +53,9 @@ int main() {
         
         { PROFILE("Frame");
             glfwPollEvents();
+            
+            if (Input()->Triggered(InputHandler::PROFILE))
+                profiling = !profiling;
             
             // Start new frame.
             ImGuiImplementation::NewFrame();
@@ -85,7 +90,9 @@ int main() {
             }
         }
         
-        Managers().profilingManager->ShowResults();
+        if (profiling)
+            Managers().profilingManager->ShowResults();
+        
         ImGui::Render();
         
         // Swap buffers and wait until next frame.
