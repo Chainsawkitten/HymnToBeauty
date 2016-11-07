@@ -29,6 +29,8 @@ void ProfilingManager::ShowResults() {
     // Show the results.
     ImGui::Begin("Profiling");
     
+    ImGui::Checkbox("Sync GPU and CPU", &syncGPU);
+    
     if (ImGui::CollapsingHeader("Frametimes"))
         ShowFrametimes();
     
@@ -52,7 +54,17 @@ ProfilingManager::Result* ProfilingManager::StartResult(const std::string& name)
     return current;
 }
 
-void ProfilingManager::FinishResult(Result* result) {
+void ProfilingManager::FinishResult(Result* result, double start) {
+    // Sync GPU and CPU.
+    if (syncGPU) {
+        ProfilingManager::Result gpuFinish("GPU Finish", current);
+        double gpuFinishStart = glfwGetTime();
+        glFinish();
+        gpuFinish.duration = glfwGetTime() - gpuFinishStart;
+        result->children.push_back(gpuFinish);
+    }
+    
+    result->duration = glfwGetTime() - start;
     current = result->parent;
 }
 

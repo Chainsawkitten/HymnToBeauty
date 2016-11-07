@@ -84,10 +84,6 @@ int main() {
                     editor->SetVisible(true);
                 }
             }
-            
-            { PROFILE("GPU Finish");
-                glFinish();
-            }
         }
         
         if (profiling)

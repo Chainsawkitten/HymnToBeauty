@@ -11,7 +11,5 @@ Profiling::Profiling(const std::string& name) {
 }
 
 Profiling::~Profiling() {
-    result->duration = glfwGetTime() - start;
-    if (Managers().profilingManager->current == result)
-        Managers().profilingManager->current = result->parent;
+    Managers().profilingManager->FinishResult(result, start);
 }

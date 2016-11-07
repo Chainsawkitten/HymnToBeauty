@@ -31,7 +31,7 @@ class ProfilingManager {
         };
         
         Result* StartResult(const std::string& name);
-        void FinishResult(Result* result);
+        void FinishResult(Result* result, double start);
         
         void ShowFrametimes();
         void ShowResult(Result& result);
@@ -43,4 +43,6 @@ class ProfilingManager {
         static const unsigned int frames = 100;
         unsigned int frame = 0;
         float frameTimes[frames] = {};
+        
+        bool syncGPU = false;
 };
