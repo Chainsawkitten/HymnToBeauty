@@ -173,6 +173,7 @@ set(ENGINE_SRCS
         src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
+        src/Engine/Manager/ScriptManager.cpp
         src/Engine/Manager/SoundManager.cpp
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
@@ -229,6 +230,7 @@ set(ENGINE_HEADERS
         src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
+        src/Engine/Manager/ScriptManager.hpp
         src/Engine/Manager/SoundManager.hpp
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp

@@ -5,6 +5,7 @@
 #include "ParticleManager.hpp"
 #include "PhysicsManager.hpp"
 #include "SoundManager.hpp"
+#include "ScriptManager.hpp"
 #include "DebugDrawingManager.hpp"
 
 Hub::Hub() {
@@ -23,11 +24,13 @@ void Hub::StartUp() {
     particleManager = new ParticleManager();
     physicsManager = new PhysicsManager();
     soundManager = new SoundManager();
+    scriptManager = new ScriptManager();
     debugDrawingManager = new DebugDrawingManager();
 }
 
 void Hub::ShutDown() {
     delete debugDrawingManager;
+    delete scriptManager;
     delete soundManager;
     delete renderManager;
     delete particleManager;
