@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 if(UNIX OR MINGW)
-    set(CMAKE_CXX_FLAGS "-g -gdwarf-2 -static-libstdc++ -Wall")
+    set(CMAKE_CXX_FLAGS "-g -gdwarf-2 -O3 -static-libstdc++ -Wall")
 endif()
 
 # GLFW
@@ -147,6 +147,9 @@ include_directories(src)
 
 ## Engine ##
 set(ENGINE_SRCS
+        externals/imgui/imgui.cpp
+        externals/imgui/imgui_demo.cpp
+        externals/imgui/imgui_draw.cpp
         src/Engine/Hymn.cpp
         src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
@@ -170,6 +173,7 @@ set(ENGINE_SRCS
         src/Engine/Manager/Managers.cpp
         src/Engine/Manager/DebugDrawingManager.cpp
         src/Engine/Manager/ParticleManager.cpp
+        src/Engine/Manager/ProfilingManager.cpp
         src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
@@ -187,6 +191,7 @@ set(ENGINE_SRCS
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Json.cpp
+        src/Engine/Util/Profiling.cpp
         src/Engine/Util/Settings.cpp
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
@@ -226,6 +231,7 @@ set(ENGINE_HEADERS
         src/Engine/Manager/Managers.hpp
         src/Engine/Manager/DebugDrawingManager.hpp
         src/Engine/Manager/ParticleManager.hpp
+        src/Engine/Manager/ProfilingManager.hpp
         src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
@@ -244,6 +250,7 @@ set(ENGINE_HEADERS
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Json.hpp
+        src/Engine/Util/Profiling.hpp
         src/Engine/Util/Settings.hpp
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
@@ -270,9 +277,6 @@ set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
 ## Editor ##
 set(EDITOR_SRCS
-        externals/imgui/imgui.cpp
-        externals/imgui/imgui_demo.cpp
-        externals/imgui/imgui_draw.cpp
         src/Editor/main.cpp
         src/Editor/Editor.cpp
         src/Editor/ImGui/OpenGLImplementation.cpp

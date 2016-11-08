@@ -6,6 +6,7 @@
 #include "PhysicsManager.hpp"
 #include "SoundManager.hpp"
 #include "DebugDrawingManager.hpp"
+#include "ProfilingManager.hpp"
 
 Hub::Hub() {
     
@@ -24,9 +25,11 @@ void Hub::StartUp() {
     physicsManager = new PhysicsManager();
     soundManager = new SoundManager();
     debugDrawingManager = new DebugDrawingManager();
+    profilingManager = new ProfilingManager();
 }
 
 void Hub::ShutDown() {
+    delete profilingManager;
     delete debugDrawingManager;
     delete soundManager;
     delete renderManager;
