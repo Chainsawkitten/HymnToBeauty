@@ -6,7 +6,10 @@
 
 struct aiScene;
 struct aiNode;
-class Animation;
+
+namespace Geometry {
+    class Animation;
+}
 
 /// A skeleton loaded from a file.
 class Skeleton {
@@ -51,7 +54,7 @@ class Skeleton {
          * @param animation Animation to animate skeleton.
          * @param timeInSeconds Time to find animation frame.
          */
-        void Animate(const Animation* animation, const float timeInSeconds);
+        void Animate(const Geometry::Animation* animation, const float timeInSeconds);
 
         /// Update skeleton to bind pose.
         /**
@@ -75,7 +78,7 @@ class Skeleton {
         };
 
         static void LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode);
-        void ReadNodeHeirarchy(const Animation* animation, float animationTime, Node* node, const glm::mat4& parentTransform);
+        void ReadNodeHeirarchy(const Geometry::Animation* animation, float animationTime, Node* node, const glm::mat4& parentTransform);
         const glm::mat4* FindBone(const std::string& name) const;
 
         glm::mat4 globalInverseTransform;
