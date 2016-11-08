@@ -1,6 +1,7 @@
 #include "Log.hpp"
 
 #include <cstdio>
+#include <angelscript.h>
 
 using namespace std;
 
@@ -145,4 +146,22 @@ void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum
 
 void APIENTRY DebugMessageCallbackIgnoreNotifications(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     HandleDebugMessage(source, type, id, severity, length, message, userParam, false);
+}
+
+void AngelScriptMessageCallback(const asSMessageInfo* message, void* param) {
+    Log() << message->section << " (" << message->row << ", " << message->col << " : ";
+    
+    switch (message->type) {
+    case asMSGTYPE_ERROR:
+        Log() << "Error";
+        break;
+    case asMSGTYPE_INFORMATION:
+        Log() << "Information";
+        break;
+    case asMSGTYPE_WARNING:
+        Log() << "Warning";
+        break;
+    }
+    
+    Log() << " : " << message->message << "\n";
 }
