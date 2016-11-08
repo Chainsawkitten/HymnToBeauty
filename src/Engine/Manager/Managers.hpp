@@ -6,6 +6,7 @@ class ParticleManager;
 class PhysicsManager;
 class SoundManager;
 class DebugDrawingManager;
+class ProfilingManager;
 
 /// Singleton class that holds all subsystems.
 class Hub {
@@ -29,6 +30,9 @@ class Hub {
         
         /// The debug drawing manager instance.
         DebugDrawingManager* debugDrawingManager;
+        
+        /// The profiling manager instance.
+        ProfilingManager* profilingManager;
         
         /// Initialize all subsystems.
         void StartUp();
