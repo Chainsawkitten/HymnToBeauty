@@ -27,6 +27,7 @@ void Animation::Load(const aiAnimation* aAnimation) {
         Animation::AnimChannel* channel = &channels[c];
         const aiNodeAnim* aChannel = aAnimation->mChannels[c];
         channel->trgNodeName = aChannel->mNodeName.data;
+        channelIndexMap[channel->trgNodeName] = c;
         // Position
         channel->posKeys.resize(aChannel->mNumPositionKeys);
         for (std::size_t i = 0; i < channel->posKeys.size(); ++i) {
@@ -56,12 +57,9 @@ void Animation::Load(const aiAnimation* aAnimation) {
 }
 
 const Animation::AnimChannel* Animation::FindChannel(const std::string& name) const {
-    for (unsigned int i = 0; i < channels.size(); ++i) {
-        const AnimChannel* channel = &channels[i];
-        if (channel->trgNodeName == name) {
-            return channel;
-        }
-    }
+    const auto& it = channelIndexMap.find(name);
+    if (it != channelIndexMap.end())
+        return &channels[it->second];
     return nullptr;
 }
 

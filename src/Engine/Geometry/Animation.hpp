@@ -2,7 +2,7 @@
 
 #include <assimp/quaternion.h>
 #include <glm/glm.hpp>
-//#include <map>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -95,7 +95,7 @@ namespace Geometry {
             double ticksPerSecond;
 
         private:
-            //std::map<std::string, std::size_t> channelIndexMap; TODO
+            std::map<std::string, std::size_t> channelIndexMap;
             std::vector<AnimChannel> channels;
         };
 }
