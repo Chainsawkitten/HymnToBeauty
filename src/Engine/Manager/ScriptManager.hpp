@@ -3,6 +3,7 @@
 #include <string>
 
 class asIScriptEngine;
+class Scene;
 
 /// Handles scripting.
 class ScriptManager {
@@ -14,6 +15,12 @@ class ScriptManager {
          * @param name Name of the script to build.
          */
         void BuildScript(const std::string& name);
+        
+        /// Update all script components in a scene.
+        /**
+         * @param scene The scene to update.
+         */
+        void Update(Scene& scene);
         
         /// Run a test script.
         void TestScripting();

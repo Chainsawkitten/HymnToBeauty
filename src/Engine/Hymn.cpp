@@ -6,6 +6,7 @@
 #include "Manager/ResourceManager.hpp"
 #include "Manager/PhysicsManager.hpp"
 #include "Manager/ParticleManager.hpp"
+#include "Manager/ScriptManager.hpp"
 #include "Manager/SoundManager.hpp"
 #include "Manager/DebugDrawingManager.hpp"
 #include "DefaultDiffuse.png.hpp"
@@ -154,6 +155,7 @@ void ActiveHymn::Load(const string& path) {
 }
 
 void ActiveHymn::Update(float deltaTime) {
+    Managers().scriptManager->Update(activeScene);
     Managers().physicsManager->Update(activeScene, deltaTime);
     Managers().particleManager->Update(activeScene, deltaTime);
     Managers().soundManager->Update(activeScene);

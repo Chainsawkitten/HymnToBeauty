@@ -6,6 +6,8 @@
 #include "../Util/Log.hpp"
 #include "../Util/FileSystem.hpp"
 #include "../Hymn.hpp"
+#include "../Scene/Scene.hpp"
+#include "../Component/Script.hpp"
 
 void print(const std::string& message) {
     Log() << message;
@@ -80,4 +82,13 @@ void ScriptManager::BuildScript(const std::string& name) {
     r = builder.BuildModule();
     if (r < 0)
         Log() << "Compile errors.\n";
+}
+
+void ScriptManager::Update(Scene& scene) {
+    for (Component::Script* script : scene.GetComponents<Component::Script>()) {
+        if (!script->initialized) {
+            Log() << "Initializing script.\n";
+            script->initialized = true;
+        }
+    }
 }

@@ -25,5 +25,8 @@ namespace Component {
              * @param node JSON node to load from.
              */
             void Load(const Json::Value& node) override;
+            
+            /// Whether the script component has been initialized.
+            bool initialized = false;
     };
 }
