@@ -5,7 +5,7 @@
 #include "../Component/Mesh.hpp"
 #include "../Component/Transform.hpp"
 #include "../Entity/Entity.hpp"
-#include "../Geometry/Geometry3D.hpp"
+#include "../Geometry/RiggedModel.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Physics/AxisAlignedBoundingBox.hpp"
@@ -43,6 +43,8 @@ void SkinRenderProgram::Render(Mesh* mesh) const {
 
     Physics::Frustum frustum(viewProjectionMat * modelMat);
     if (frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox())) {
+        Geometry::RiggedModel* model = static_cast<Geometry::RiggedModel*>(mesh->geometry);
+
         glBindVertexArray(mesh->geometry->GetVertexArray());
 
         // Set texture locations
@@ -65,6 +67,9 @@ void SkinRenderProgram::Render(Mesh* mesh) const {
         glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &modelMat[0][0]);
         glm::mat4 normalMat = glm::transpose(glm::inverse(viewMat * modelMat));
         glUniformMatrix3fv(shaderProgram->GetUniformLocation("normalMatrix"), 1, GL_FALSE, &glm::mat3(normalMat)[0][0]);
+        const std::vector<glm::mat4>& bones = model->skeleton.GetFinalTransformations();
+        assert(bones.size() <= 100);
+        glUniformMatrix4fv(shaderProgram->GetUniformLocation("bones"), bones.size(), GL_FALSE, &bones[0][0][0]);
 
         glDrawElements(GL_TRIANGLES, mesh->geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     }

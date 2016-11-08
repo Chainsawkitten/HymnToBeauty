@@ -31,8 +31,8 @@ const GLuint Geometry::VertexType::SkinVertex::GenerateVertexArray(GLuint vertex
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float) * 3));
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float) * 5));
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float) * 8));
-    glVertexAttribPointer(4, 4, GL_UNSIGNED_INT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float) * 11));
-    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float) * 11 + sizeof(unsigned int) * 4));
+    glVertexAttribIPointer(4, 4, GL_INT, stride, BUFFER_OFFSET(sizeof(float) * 11));
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(sizeof(float) * 11 + sizeof(int) * 4));
 
     glBindVertexArray(0);
     return vertexArray;

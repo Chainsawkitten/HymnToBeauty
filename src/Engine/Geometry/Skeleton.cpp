@@ -64,6 +64,10 @@ void Skeleton::Animate(const Animation* animation, const float timeInSeconds) {
     ReadNodeHeirarchy(animation, timeInSeconds, &rootNode, glm::mat4());
 }
 
+void Skeleton::BindPose() {
+    ReadNodeHeirarchy(nullptr, 0, &rootNode, glm::mat4());
+}
+
 void Skeleton::LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode) {
     node->name = aNode->mName.C_Str();
     CpyMat(node->transformation, aNode->mTransformation);
@@ -79,28 +83,29 @@ void Skeleton::ReadNodeHeirarchy(const Animation* animation, float animationTime
 
     animationTime = 50;
 
-    const Animation::AnimChannel* channel = animation->FindChannel(node->name);
+    if (animation != nullptr) {
+        const Animation::AnimChannel* channel = animation->FindChannel(node->name);
+        if (channel != nullptr) {
+            // Interpolate scaling and generate scaling transformation matrix.
+            glm::vec3 scaling;
+            Animation::CalcInterpolatedScaling(scaling, animationTime, channel);
+            glm::mat4 scalingM(glm::scale(glm::mat4(), scaling));
 
-    if (channel != nullptr) {
-        // Interpolate scaling and generate scaling transformation matrix.
-        glm::vec3 scaling;
-        Animation::CalcInterpolatedScaling(scaling, animationTime, channel);
-        glm::mat4 scalingM(glm::scale(glm::mat4(), scaling));
+            // Interpolate rotation and generate rotation transformation matrix.
+            aiQuaternion rotationQ;
+            Animation::CalcInterpolatedRotation(rotationQ, animationTime, channel);
+            glm::mat4 rotationM;
+            aiMatrix3x3 aMat = rotationQ.GetMatrix();
+            CpyMat(rotationM, aiMatrix4x4(aMat));
 
-        // Interpolate rotation and generate rotation transformation matrix.
-        aiQuaternion rotationQ;
-        Animation::CalcInterpolatedRotation(rotationQ, animationTime, channel);
-        glm::mat4 rotationM;
-        aiMatrix3x3 aMat = rotationQ.GetMatrix();
-        CpyMat(rotationM, aiMatrix4x4(aMat));
+            // Interpolate translation and generate translation transformation matrix.
+            glm::vec3 translation;
+            Animation::CalcInterpolatedPosition(translation, animationTime, channel);
+            glm::mat4 translationM(glm::translate(glm::mat4(), translation));
 
-        // Interpolate translation and generate translation transformation matrix.
-        glm::vec3 translation;
-        Animation::CalcInterpolatedPosition(translation, animationTime, channel);
-        glm::mat4 translationM(glm::translate(glm::mat4(), translation));
-
-        //// Combine the above transformations.
-        nodeTransformation = scalingM * rotationM * glm::transpose(translationM);
+            //// Combine the above transformations.
+            nodeTransformation = scalingM * rotationM * glm::transpose(translationM);
+        }
     }
 
     glm::mat4 globalTransformation = nodeTransformation * parentTransform;
@@ -108,7 +113,7 @@ void Skeleton::ReadNodeHeirarchy(const Animation* animation, float animationTime
     const auto& it = boneIndexMap.find(node->name);
     if (it != this->boneIndexMap.end()) {
         size_t boneIndex = it->second;
-        finalTransforms[boneIndex] = bones[boneIndex] * globalTransformation * this->globalInverseTransform;
+        finalTransforms[boneIndex] = glm::transpose(bones[boneIndex] * globalTransformation * this->globalInverseTransform); // TODO TRANSPOSE?
     }
 
     for (std::size_t i = 0; i < node->children.size(); ++i) {

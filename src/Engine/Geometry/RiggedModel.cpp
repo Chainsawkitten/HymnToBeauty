@@ -55,16 +55,8 @@ void RiggedModel::Load(const char* filename) {
     // TMP
     if (!animations.empty()) {
         skeleton.Animate(&animations[0], 50.f);
-        //BoneTransform(0.0f, animations[0]);
     }
-
-    //for (unsigned int i = 0; i < this->numBones; i++) {
-    //    transforms[i] = this->boneInfos[i].finalTransformation;
-    //}
-
-    this->MeshTransform(skeleton.GetFinalTransformations());
     // ~TMP
-
 
     // Generate buffers.
     GenerateVertexBuffer(vertexBuffer);
@@ -131,7 +123,7 @@ void RiggedModel::LoadMeshes(const aiScene* aScene) {
             CpyVec(vert.normal, aMesh->mNormals[i]);
             CpyVec(vert.tangent, aMesh->mTangents[i]);
             verticesPos[numVertices] = &vertices[numVertices].position;
-            numVertices++;
+            ++numVertices;
         }
         // Load indices.
         for (unsigned int i = 0; i < aMesh->mNumFaces; ++i) {
@@ -190,7 +182,7 @@ void RiggedModel::MeshTransform(const std::vector<glm::mat4>& transforms) {
         boneTransform += transforms[boneIDs[2]] * boneWeights[2];
         boneTransform += transforms[boneIDs[3]] * boneWeights[3];
 
-        boneTransform = glm::transpose(boneTransform);
+        //boneTransform = glm::transpose(boneTransform);
         VertexType::SkinVertex& vert = vertices[v];
         vert.position = boneTransform * glm::vec4(vert.position, 1.f);
         vert.normal = boneTransform * glm::vec4(vert.normal, 0.f);

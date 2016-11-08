@@ -13,7 +13,7 @@
 #include "DefaultSpecular.png.hpp"
 #include "DefaultGlow.png.hpp"
 #include "Entity/Entity.hpp"
-#include "Geometry/StaticModel.hpp"
+#include "Geometry/RiggedModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
@@ -131,7 +131,7 @@ void ActiveHymn::Load(const string& path) {
     // Load models.
     const Json::Value modelsNode = root["models"];
     for (unsigned int i=0; i < modelsNode.size(); ++i) {
-        Geometry::Model* model = new Geometry::StaticModel();
+        Geometry::Model* model = new Geometry::RiggedModel();
         model->Load(modelsNode[i]);
         models.push_back(model);
     }

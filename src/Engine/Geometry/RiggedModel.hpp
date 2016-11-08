@@ -30,13 +30,16 @@ namespace Geometry {
             /**
              * @param filename Filename (relative or absolute) to the model file.
              */
-            void RiggedModel::Load(const char* filename);
+            void Load(const char* filename);
 
             /// Get geometry type.
             /**
              * @return Type.
              */
             const Type GetType() const;
+
+            Skeleton skeleton;
+            std::vector<Animation> animations;
 
         protected:
             /// Generate vertex buffer.
@@ -55,14 +58,11 @@ namespace Geometry {
             void LoadMeshes(const aiScene* aScene);
             void LoadAnimations(const aiScene* aScene);
 
-            // TMP
+            // Skin vertices on CPU.
             void MeshTransform(const std::vector<glm::mat4>& transforms);
-            // ~TMP
 
-            Skeleton skeleton;
             std::vector<VertexType::SkinVertex> vertices;
             std::vector<unsigned int> indices;
             std::vector<glm::vec3*> verticesPos;
-            std::vector<Animation> animations;
     };
 }

@@ -27,9 +27,9 @@ void main () {
     boneTransform += bones[vertexBoneIDs[1]] * vertexWeights[1];
     boneTransform += bones[vertexBoneIDs[2]] * vertexWeights[2];
     boneTransform += bones[vertexBoneIDs[3]] * vertexWeights[3];
-
+    
     gl_Position = viewProjection * (model * (boneTransform * vec4(vertexPosition, 1.0)));
-    vertexOut.normal = normalize(normalMatrix * vertexNormal);
+    vertexOut.normal = normalize(normalMatrix * vec3(boneTransform * vec4(vertexNormal, 0.0)));
     vertexOut.tangent = vertexTangent;
     vertexOut.texCoords = vertexTexture;
 }

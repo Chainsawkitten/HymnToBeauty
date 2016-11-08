@@ -47,17 +47,23 @@ class Skeleton {
 
         /// Animate skeleton.
         /**
+         * Use GetFinalTransformations after animation to get matrices.
          * @param animation Animation to animate skeleton.
          * @param timeInSeconds Time to find animation frame.
-         * @param transforms Vector of matrices to store bone transformation after animation.
          */
         void Animate(const Animation* animation, const float timeInSeconds);
 
+        /// Update skeleton to bind pose.
+        /**
+         * Use GetFinalTransformations after animation to get matrices.
+         */
+        void BindPose();
+
         /// Get vector of transformations of skeleton.
         /**
-        * Final transformations are updated when skeleton is animated.
-        * @retrun animation Animation to animate skeleton.
-        */
+         * Final transformations are updated when skeleton is animated.
+         * @return Vector of bone transformations.
+         */
         const std::vector<glm::mat4>& GetFinalTransformations() const;
 
     private:
