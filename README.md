@@ -9,3 +9,17 @@ C++/OpenGL 3D Engine
 
 ## License
 Released under the [MIT license](LICENSE).
+
+Hymn to Beauty uses several third party libraries with their own licenses:
+
+| Library  | License |
+| -- | -- |
+| [Headerize](https://github.com/Chainsawkitten/Headerize) | Public domain |
+| [GLEW](https://github.com/Perlmint/glew-cmake) | Modified BSD, MIT |
+| [GLFW](https://github.com/glfw/glfw) | zlib/libpng |
+| [GLM](https://github.com/g-truc/glm) | Modified MIT / MIT |
+| [dear imgui](https://github.com/ocornut/imgui) | MIT |
+| [JsonCpp](https://github.com/open-source-parsers/jsoncpp) | MIT / Public domain |
+| [OpenAL Soft](https://github.com/kcat/openal-soft) | LPGL |
+| [SimpleIni](https://github.com/brofield/simpleini) | MIT |
+| [stb](https://github.com/nothings/stb) | Public domain |
