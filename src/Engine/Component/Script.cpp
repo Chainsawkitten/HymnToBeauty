@@ -8,6 +8,7 @@ Script::Script(Entity* entity) : SuperComponent(entity) {
 
 Json::Value Script::Save() const {
     Json::Value component;
+    component["placeholderValue"] = "";
     return component;
 }
 
