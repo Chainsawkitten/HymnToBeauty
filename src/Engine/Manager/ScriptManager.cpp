@@ -27,33 +27,31 @@ void print(const std::string& message) {
 }
 
 ScriptManager::ScriptManager() {
-    
-}
-
-ScriptManager::~ScriptManager() {
-    
-}
-
-void ScriptManager::TestScripting() {
     // Create the script engine
-    asIScriptEngine* engine = asCreateScriptEngine();
+    engine = asCreateScriptEngine();
     
     // Set the message callback to receive information on errors in human readable form.
-    int r = engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL); assert(r >= 0);
+    engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
     
     // Register add-ons.
     RegisterStdString(engine);
     
     // Register functions.
-    r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL); assert(r >= 0);
-    
+    engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
+}
+
+ScriptManager::~ScriptManager() {
+    engine->ShutDownAndRelease();
+}
+
+void ScriptManager::TestScripting() {
     // Define the test script.
     std::string script = "void main() { print(\"Hello world\\n\"); }";
     
     // Create, load and build script module.
     asIScriptModule* module = engine->GetModule("module", asGM_ALWAYS_CREATE);
     module->AddScriptSection("script.as", script.c_str());
-    r = module->Build();
+    int r = module->Build();
     if (r < 0)
         Log() << "Couldn't build script module.\n";
     
@@ -76,5 +74,4 @@ void ScriptManager::TestScripting() {
     
     // Clean up.
     context->Release();
-    engine->ShutDownAndRelease();
 }
