@@ -55,10 +55,10 @@ void Animation::Load(const aiAnimation* aAnimation) {
     }
 }
 
-const Animation::AnimChannel* Animation::FindChannel(const std::string& nodeName) const {
+const Animation::AnimChannel* Animation::FindChannel(const std::string& name) const {
     for (unsigned int i = 0; i < channels.size(); ++i) {
         const AnimChannel* channel = &channels[i];
-        if (channel->trgNodeName == nodeName) {
+        if (channel->trgNodeName == name) {
             return channel;
         }
     }

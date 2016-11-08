@@ -54,18 +54,48 @@ namespace Geometry {
              */
             void Load(const aiAnimation* aAnimation);
 
-            //TODO COMMENTS
-            const AnimChannel* FindChannel(const std::string& nodeName) const;
+            /// Load animation.
+            /**
+             * @param name Channel name to find.
+             * @return Pointer to channel. Returns nullptr if channel isn't found.
+             */
+            const AnimChannel* FindChannel(const std::string& name) const;
 
+            /// Interpolate animation channel.
+            /**
+             * @param scaling Target scaling vector.
+             * @param animationTime Time fo animation.
+             * @param channel Animation channel.
+             */
             static void CalcInterpolatedScaling(glm::vec3& scaling, float animationTime, const AnimChannel* channel);
+
+            /// Interpolate animation channel.
+            /**
+             * @param rotation Target rotation quaternion.
+             * @param animationTime Time fo animation.
+             * @param channel Animation channel.
+             */
             static void CalcInterpolatedRotation(aiQuaternion& rotation, float animationTime, const Animation::AnimChannel* channel);
+
+            /// Interpolate animation channel.
+            /**
+             * @param translation Target translation vector.
+             * @param animationTime Time fo animation.
+             * @param channel Animation channel.
+             */
             static void CalcInterpolatedPosition(glm::vec3& translation, float animationTime, const Animation::AnimChannel* channel);
 
+            /// Animation name.
             std::string name;
+            
+            /// Animation duration.
             double duration;
+
+            /// Animation ticks per second.
             double ticksPerSecond;
+
         private:
-            //std::map<std::string, std::size_t> channelIndexMap; 
+            //std::map<std::string, std::size_t> channelIndexMap; TODO
             std::vector<AnimChannel> channels;
         };
 }
