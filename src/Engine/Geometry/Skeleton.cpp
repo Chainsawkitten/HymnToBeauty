@@ -55,13 +55,13 @@ std::size_t Skeleton::GetNumBones() const {
     return bones.size();
 }
 
-void Skeleton::Animate(const Animation* animation, const float timeInSeconds) {
+void Skeleton::Animate(const Geometry::Animation* animation, const float timeInSeconds) {
     float animationTime = 0;
     float ticksPerSecond = (float)(animation->ticksPerSecond != 0 ? animation->ticksPerSecond : 25.0f);
     float timeInTicks = timeInSeconds * ticksPerSecond;
     animationTime = fmod(timeInTicks, static_cast<float>(animation->duration));
 
-    ReadNodeHeirarchy(animation, timeInSeconds, &rootNode, glm::mat4());
+    ReadNodeHeirarchy(animation, animationTime, &rootNode, glm::mat4());
 }
 
 void Skeleton::BindPose() {
@@ -78,10 +78,8 @@ void Skeleton::LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode) {
     }
 }
 
-void Skeleton::ReadNodeHeirarchy(const Animation* animation, float animationTime, Node* node, const glm::mat4& parentTransform) {
+void Skeleton::ReadNodeHeirarchy(const Geometry::Animation* animation, float animationTime, Node* node, const glm::mat4& parentTransform) {
     glm::mat4 nodeTransformation(node->transformation);
-
-    animationTime = 50;
 
     if (animation != nullptr) {
         const Animation::AnimChannel* channel = animation->FindChannel(node->name);
@@ -103,7 +101,7 @@ void Skeleton::ReadNodeHeirarchy(const Animation* animation, float animationTime
             Animation::CalcInterpolatedPosition(translation, animationTime, channel);
             glm::mat4 translationM(glm::translate(glm::mat4(), translation));
 
-            //// Combine the above transformations.
+            // Combine the above transformations.
             nodeTransformation = scalingM * rotationM * glm::transpose(translationM);
         }
     }
@@ -113,7 +111,7 @@ void Skeleton::ReadNodeHeirarchy(const Animation* animation, float animationTime
     const auto& it = boneIndexMap.find(node->name);
     if (it != this->boneIndexMap.end()) {
         size_t boneIndex = it->second;
-        finalTransforms[boneIndex] = glm::transpose(bones[boneIndex] * globalTransformation * this->globalInverseTransform); // TODO TRANSPOSE?
+        finalTransforms[boneIndex] = glm::transpose(bones[boneIndex] * globalTransformation * this->globalInverseTransform);
     }
 
     for (std::size_t i = 0; i < node->children.size(); ++i) {

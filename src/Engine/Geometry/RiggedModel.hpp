@@ -38,7 +38,10 @@ namespace Geometry {
              */
             const Type GetType() const;
 
+            /// Skeleton to animate.
             Skeleton skeleton;
+
+            /// Animations to animate skeleton.
             std::vector<Animation> animations;
 
         protected:
@@ -58,7 +61,7 @@ namespace Geometry {
             void LoadMeshes(const aiScene* aScene);
             void LoadAnimations(const aiScene* aScene);
 
-            // Skin vertices on CPU.
+            // Skin vertices on CPU. Used only for debugging purposes.
             void MeshTransform(const std::vector<glm::mat4>& transforms);
 
             std::vector<VertexType::SkinVertex> vertices;

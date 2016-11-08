@@ -53,9 +53,8 @@ void RiggedModel::Load(const char* filename) {
     LoadAnimations(aScene);
 
     // TMP
-    if (!animations.empty()) {
+    if (!animations.empty())
         skeleton.Animate(&animations[0], 50.f);
-    }
     // ~TMP
 
     // Generate buffers.
@@ -167,22 +166,18 @@ void RiggedModel::MeshTransform(const std::vector<glm::mat4>& transforms) {
 
     // Vertex shader
     for (unsigned int v = 0; v < vertices.size(); ++v) {
-        float t = 0;
         for (unsigned int i = 0; i < 4; ++i) {
             boneIDs[i] = vertices[v].boneIDs[i];
             boneWeights[i] = vertices[v].weights[i];
-            t += boneWeights[i];
         }
-        if (t > 1.05f) {
-            bool bad = true;
-        }
+        
+        assert(abs(1.f - boneWeights[0] + boneWeights[1] + boneWeights[2] + boneWeights[3]) < 0.01f); // Assert weights sum equals 1.
 
         glm::mat4 boneTransform = transforms[boneIDs[0]] * boneWeights[0];
         boneTransform += transforms[boneIDs[1]] * boneWeights[1];
         boneTransform += transforms[boneIDs[2]] * boneWeights[2];
         boneTransform += transforms[boneIDs[3]] * boneWeights[3];
 
-        //boneTransform = glm::transpose(boneTransform);
         VertexType::SkinVertex& vert = vertices[v];
         vert.position = boneTransform * glm::vec4(vert.position, 1.f);
         vert.normal = boneTransform * glm::vec4(vert.normal, 0.f);
