@@ -30,7 +30,7 @@ namespace Component {
             /**
              * Default: nullptr
              */
-            Geometry::RiggedModel* riggedModel;
+            Geometry::RiggedModel* riggedModel = nullptr;
 
             /// Total time of animation.
             /**

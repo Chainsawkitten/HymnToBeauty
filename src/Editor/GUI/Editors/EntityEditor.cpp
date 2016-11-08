@@ -79,10 +79,10 @@ void EntityEditor::SetVisible(bool visible) {
 }
 
 void EntityEditor::AnimationEditor(Component::Animation* animation) {
-    if (ImGui::Button("Select model"))
-        ImGui::OpenPopup("Select model");
+    if (ImGui::Button("Select model##Animation"))
+        ImGui::OpenPopup("Select model##Animation");
 
-    if (ImGui::BeginPopup("Select model")) {
+    if (ImGui::BeginPopup("Select model##Animation")) {
         ImGui::Text("Models");
         ImGui::Separator();
 
@@ -115,10 +115,10 @@ void EntityEditor::PhysicsEditor(Component::Physics* physics) {
 }
 
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
-    if (ImGui::Button("Select model"))
-        ImGui::OpenPopup("Select model");
+    if (ImGui::Button("Select model##Mesh"))
+        ImGui::OpenPopup("Select model##Mesh");
     
-    if (ImGui::BeginPopup("Select model")) {
+    if (ImGui::BeginPopup("Select model##Mesh")) {
         ImGui::Text("Models");
         ImGui::Separator();
         

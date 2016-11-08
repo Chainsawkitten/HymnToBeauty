@@ -35,7 +35,7 @@ void RiggedModel::Load(const char* filename) {
         aiProcess_GenUVCoords | \
         aiProcess_SortByPType | \
         aiProcess_FindDegenerates | \
-        /*aiProcess_FindInvalidData | \*/
+        aiProcess_FindInvalidData | \
         aiProcess_ValidateDataStructure | \
         0);
 
@@ -52,6 +52,7 @@ void RiggedModel::Load(const char* filename) {
     // Load animation data.
     LoadAnimations(aScene);
     
+    // Set model to bind pose.
     skeleton.BindPose();
 
     // Generate buffers.

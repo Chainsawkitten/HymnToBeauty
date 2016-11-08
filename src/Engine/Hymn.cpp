@@ -14,6 +14,7 @@
 #include "DefaultGlow.png.hpp"
 #include "Entity/Entity.hpp"
 #include "Geometry/RiggedModel.hpp"
+#include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
@@ -133,7 +134,13 @@ void ActiveHymn::Load(const string& path) {
     // Load models.
     const Json::Value modelsNode = root["models"];
     for (unsigned int i=0; i < modelsNode.size(); ++i) {
-        Geometry::Model* model = new Geometry::RiggedModel();
+        Geometry::Model* model;
+        std::string type = modelsNode[i].get("type", "").asString();
+        if (type == "Static") {
+            model = new Geometry::StaticModel();
+        } else {
+            model = new Geometry::RiggedModel();
+        }
         model->Load(modelsNode[i]);
         models.push_back(model);
     }
@@ -166,8 +173,10 @@ void ActiveHymn::Update(float deltaTime) {
         if (anim != nullptr) {
             Geometry::RiggedModel* model = anim->riggedModel;
             if (model != nullptr) {
-                anim->time += deltaTime;
-                model->skeleton.Animate(&model->animations[0], anim->time);
+                if (!model->animations.empty()) {
+                    anim->time += deltaTime;
+                    model->skeleton.Animate(&model->animations[0], anim->time);
+                }
             }
         }
     }

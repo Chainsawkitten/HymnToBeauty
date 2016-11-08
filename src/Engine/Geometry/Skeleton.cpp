@@ -142,4 +142,3 @@ const std::vector<glm::mat4>& Skeleton::GetFinalTransformations() const {
 const std::vector<glm::mat3>& Skeleton::GetFinalTransformationsIT() const {
     return finalTransformsIT;
 }
-

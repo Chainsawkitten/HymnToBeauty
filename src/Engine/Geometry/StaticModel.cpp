@@ -31,7 +31,7 @@ void StaticModel::Load(const char* filename) {
         aiProcess_GenUVCoords | \
         aiProcess_SortByPType | \
         aiProcess_FindDegenerates | \
-        /*aiProcess_FindInvalidData | \*/
+        aiProcess_FindInvalidData | \
         aiProcess_ValidateDataStructure | \
         0);
 
