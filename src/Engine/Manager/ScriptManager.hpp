@@ -22,9 +22,6 @@ class ScriptManager {
          */
         void Update(Scene& scene);
         
-        /// Run a test script.
-        void TestScripting();
-        
     private:
         ScriptManager();
         ~ScriptManager();

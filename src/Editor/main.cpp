@@ -29,8 +29,6 @@ int main() {
     
     Managers().StartUp();
     
-    Managers().scriptManager->TestScripting();
-    
     Editor* editor = new Editor();
     
     // Setup imgui implementation.
