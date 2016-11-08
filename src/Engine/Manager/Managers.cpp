@@ -7,6 +7,7 @@
 #include "SoundManager.hpp"
 #include "ScriptManager.hpp"
 #include "DebugDrawingManager.hpp"
+#include "ProfilingManager.hpp"
 
 Hub::Hub() {
     
@@ -26,9 +27,11 @@ void Hub::StartUp() {
     soundManager = new SoundManager();
     scriptManager = new ScriptManager();
     debugDrawingManager = new DebugDrawingManager();
+    profilingManager = new ProfilingManager();
 }
 
 void Hub::ShutDown() {
+    delete profilingManager;
     delete debugDrawingManager;
     delete scriptManager;
     delete soundManager;

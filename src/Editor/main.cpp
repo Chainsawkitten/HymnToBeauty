@@ -8,6 +8,8 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
+#include <Engine/Manager/ProfilingManager.hpp>
+#include <Engine/Util/Profiling.hpp>
 #include <Engine/Hymn.hpp>
 #include <thread>
 #include "ImGui/OpenGLImplementation.hpp"
@@ -37,6 +39,8 @@ int main() {
     // Test debug drawing facilites.
     Managers().debugDrawingManager->AddPoint(glm::vec3(3.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 1.f), 10.f, 20.f, false);
     
+    bool profiling = false;
+    
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
@@ -45,32 +49,48 @@ int main() {
         double deltaTime = glfwGetTime() - lastTime;
         lastTime = glfwGetTime();
         
-        glfwPollEvents();
+        // Begin new profiling frame.
+        Managers().profilingManager->BeginFrame();
         
-        // Start new frame.
-        ImGuiImplementation::NewFrame();
-        
-        window->Update();
-        
-        if (editor->IsVisible()) {
-            Hymn().activeScene.ClearKilled();
-            Hymn().Render();
+        { PROFILE("Frame");
+            glfwPollEvents();
             
-            editor->Show();
-            ImGui::Render();
-        } else {
-            Hymn().Update(deltaTime);
-            Hymn().Render();
+            if (Input()->Triggered(InputHandler::PROFILE))
+                profiling = !profiling;
             
-            if (Input()->Triggered(InputHandler::PLAYTEST)) {
-                // Reload hymn.
-                std::string path = Hymn().GetPath();
-                Hymn().Load(path);
+            // Start new frame.
+            ImGuiImplementation::NewFrame();
+            
+            window->Update();
+            
+            if (editor->IsVisible()) {
+                Hymn().activeScene.ClearKilled();
+                Hymn().Render();
                 
-                // Turn editor back on.
-                editor->SetVisible(true);
+                editor->Show();
+            } else {
+                { PROFILE("Update");
+                    Hymn().Update(deltaTime);
+                }
+                { PROFILE("Render");
+                    Hymn().Render();
+                }
+                
+                if (Input()->Triggered(InputHandler::PLAYTEST)) {
+                    // Reload hymn.
+                    std::string path = Hymn().GetPath();
+                    Hymn().Load(path);
+                    
+                    // Turn editor back on.
+                    editor->SetVisible(true);
+                }
             }
         }
+        
+        if (profiling)
+            Managers().profilingManager->ShowResults();
+        
+        ImGui::Render();
         
         // Swap buffers and wait until next frame.
         window->SwapBuffers();
