@@ -6,3 +6,6 @@ C++/OpenGL 3D Engine
 2. Run `git submodule update --init`
 3. Use CMake to generate make/project files for Hymn to Beauty.
 4. Build Hymn to Beauty.
+
+## License
+Released under the [MIT license](LICENSE).
