@@ -158,6 +158,7 @@ set(ENGINE_SRCS
         src/Engine/RenderTarget.cpp
         src/Engine/Audio/SoundBuffer.cpp
         src/Engine/Audio/VorbisFile.cpp
+        src/Engine/Component/Animation.cpp
         src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
         src/Engine/Component/Listener.cpp
@@ -223,6 +224,7 @@ set(ENGINE_HEADERS
         src/Engine/Audio/SoundBuffer.hpp
         src/Engine/Audio/SoundFile.hpp
         src/Engine/Audio/VorbisFile.hpp
+        src/Engine/Component/Animation.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Listener.hpp
