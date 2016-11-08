@@ -68,8 +68,10 @@ void SkinRenderProgram::Render(Mesh* mesh) const {
         glm::mat4 normalMat = glm::transpose(glm::inverse(viewMat * modelMat));
         glUniformMatrix3fv(shaderProgram->GetUniformLocation("normalMatrix"), 1, GL_FALSE, &glm::mat3(normalMat)[0][0]);
         const std::vector<glm::mat4>& bones = model->skeleton.GetFinalTransformations();
-        assert(bones.size() <= 100);
+        const std::vector<glm::mat3>& bonesIT = model->skeleton.GetFinalTransformationsIT();
+        assert(bones.size() <= 100 && bonesIT.size() <= 100);
         glUniformMatrix4fv(shaderProgram->GetUniformLocation("bones"), bones.size(), GL_FALSE, &bones[0][0][0]);
+        glUniformMatrix3fv(shaderProgram->GetUniformLocation("bonesIT"), bonesIT.size(), GL_FALSE, &bonesIT[0][0][0]);
 
         glDrawElements(GL_TRIANGLES, mesh->geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     }

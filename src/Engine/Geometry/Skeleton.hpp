@@ -69,6 +69,13 @@ class Skeleton {
          */
         const std::vector<glm::mat4>& GetFinalTransformations() const;
 
+        /// Get vector of inverse transpose transformations of skeleton.
+        /**
+         * Final transformations are updated when skeleton is animated.
+         * @return Vector of bone inverse transpose transformations.
+         */
+        const std::vector<glm::mat3>& GetFinalTransformationsIT() const;
+
     private:
         struct Node {
             std::string name;
@@ -85,5 +92,6 @@ class Skeleton {
         Node rootNode;
         std::vector<glm::mat4> bones;
         std::vector<glm::mat4> finalTransforms;
+        std::vector<glm::mat3> finalTransformsIT;
         std::map<std::string, std::size_t> boneIndexMap;
 };

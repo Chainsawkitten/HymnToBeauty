@@ -31,5 +31,11 @@ namespace Component {
              * Default: nullptr
              */
             Geometry::RiggedModel* riggedModel;
+
+            /// Total time of animation.
+            /**
+             * Default: 0
+             */
+            float time = 0.f;
     };
 }

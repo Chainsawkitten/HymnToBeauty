@@ -19,6 +19,8 @@
 #include <json/json.h>
 #include <fstream>
 
+#include "Component/Animation.hpp"
+
 using namespace std;
 
 ActiveHymn::ActiveHymn() {
@@ -157,6 +159,19 @@ void ActiveHymn::Update(float deltaTime) {
     Managers().particleManager->Update(activeScene, deltaTime);
     Managers().soundManager->Update(activeScene);
     Managers().debugDrawingManager->Update(deltaTime);
+
+    // Update animations.
+    for (Entity* entity : activeScene.GetEntities()) {
+        Component::Animation* anim = entity->GetComponent<Component::Animation>();
+        if (anim != nullptr) {
+            Geometry::RiggedModel* model = anim->riggedModel;
+            if (model != nullptr) {
+                anim->time += deltaTime;
+                model->skeleton.Animate(&model->animations[0], anim->time);
+            }
+        }
+    }
+
     activeScene.ClearKilled();
 }
 

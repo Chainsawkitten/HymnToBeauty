@@ -51,11 +51,8 @@ void RiggedModel::Load(const char* filename) {
 
     // Load animation data.
     LoadAnimations(aScene);
-
-    // TMP
-    if (!animations.empty())
-        skeleton.Animate(&animations[0], 50.f);
-    // ~TMP
+    
+    skeleton.BindPose();
 
     // Generate buffers.
     GenerateVertexBuffer(vertexBuffer);

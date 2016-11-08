@@ -49,6 +49,7 @@ void Skeleton::Load(const aiScene* aScene) {
     }
     bones.resize(countBones);
     finalTransforms.resize(countBones);
+    finalTransformsIT.resize(countBones);
 }
 
 std::size_t Skeleton::GetNumBones() const {
@@ -111,7 +112,8 @@ void Skeleton::ReadNodeHeirarchy(const Geometry::Animation* animation, float ani
     const auto& it = boneIndexMap.find(node->name);
     if (it != this->boneIndexMap.end()) {
         size_t boneIndex = it->second;
-        finalTransforms[boneIndex] = glm::transpose(bones[boneIndex] * globalTransformation * this->globalInverseTransform);
+        finalTransforms[boneIndex] = glm::transpose(bones[boneIndex] * (globalTransformation * this->globalInverseTransform));
+        finalTransformsIT[boneIndex] = glm::mat3(glm::transpose(glm::inverse(finalTransforms[boneIndex])));
     }
 
     for (std::size_t i = 0; i < node->children.size(); ++i) {
@@ -136,3 +138,8 @@ std::size_t Skeleton::FindBoneIndex(const std::string& name) {
 const std::vector<glm::mat4>& Skeleton::GetFinalTransformations() const {
     return finalTransforms;
 }
+
+const std::vector<glm::mat3>& Skeleton::GetFinalTransformationsIT() const {
+    return finalTransformsIT;
+}
+

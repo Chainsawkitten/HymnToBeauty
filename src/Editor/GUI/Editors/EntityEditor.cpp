@@ -1,5 +1,6 @@
 #include "EntityEditor.hpp"
 
+#include <Engine/Component/Animation.hpp>
 #include <Engine/Component/Transform.hpp>
 #include <Engine/Component/Physics.hpp>
 #include <Engine/Component/Mesh.hpp>
@@ -19,6 +20,7 @@
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
+    AddEditor<Component::Animation>("Animation", std::bind(&EntityEditor::AnimationEditor, this, std::placeholders::_1));
     AddEditor<Component::Transform>("Transform", std::bind(&EntityEditor::TransformEditor, this, std::placeholders::_1));
     AddEditor<Component::Physics>("Physics", std::bind(&EntityEditor::PhysicsEditor, this, std::placeholders::_1));
     AddEditor<Component::Mesh>("Mesh", std::bind(&EntityEditor::MeshEditor, this, std::placeholders::_1));
@@ -74,6 +76,23 @@ bool EntityEditor::IsVisible() const {
 
 void EntityEditor::SetVisible(bool visible) {
     this->visible = visible;
+}
+
+void EntityEditor::AnimationEditor(Component::Animation* animation) {
+    if (ImGui::Button("Select model"))
+        ImGui::OpenPopup("Select model");
+
+    if (ImGui::BeginPopup("Select model")) {
+        ImGui::Text("Models");
+        ImGui::Separator();
+
+        for (Geometry::Model* model : Hymn().models) {
+            if (ImGui::Selectable(model->name.c_str()))
+                animation->riggedModel = dynamic_cast<Geometry::RiggedModel*>(model);
+        }
+
+        ImGui::EndPopup();
+    }
 }
 
 void EntityEditor::TransformEditor(Component::Transform* transform) {
