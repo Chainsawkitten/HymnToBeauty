@@ -1,8 +1,11 @@
 #include "ScriptManager.hpp"
 
 #include <angelscript.h>
+#include <scriptbuilder/scriptbuilder.h>
 #include <scriptstdstring/scriptstdstring.h>
 #include "../Util/Log.hpp"
+#include "../Util/FileSystem.hpp"
+#include "../Hymn.hpp"
 
 void print(const std::string& message) {
     Log() << message;
@@ -56,4 +59,25 @@ void ScriptManager::TestScripting() {
     
     // Clean up.
     context->Release();
+}
+
+void ScriptManager::BuildScript(const std::string& name) {
+    std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as";
+    if (!FileSystem::FileExists(filename.c_str())) {
+        Log() << "Script file does not exist: " << filename << "\n";
+        return;
+    }
+    
+    CScriptBuilder builder;
+    int r = builder.StartNewModule(engine, name.c_str());
+    if (r < 0)
+        Log() << "Couldn't start new module: " << name << ".\n";
+    
+    r = builder.AddSectionFromFile(filename.c_str());
+    if (r < 0)
+        Log() << "File section could not be added: " << filename << ".\n";
+    
+    r = builder.BuildModule();
+    if (r < 0)
+        Log() << "Compile errors.\n";
 }
