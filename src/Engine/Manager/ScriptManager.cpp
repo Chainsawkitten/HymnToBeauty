@@ -8,6 +8,7 @@
 #include "../Hymn.hpp"
 #include "../Scene/Scene.hpp"
 #include "../Component/Script.hpp"
+#include "../Entity/Entity.hpp"
 
 void print(const std::string& message) {
     Log() << message;
@@ -87,7 +88,29 @@ void ScriptManager::BuildScript(const std::string& name) {
 void ScriptManager::Update(Scene& scene) {
     for (Component::Script* script : scene.GetComponents<Component::Script>()) {
         if (!script->initialized) {
-            Log() << "Initializing script.\n";
+            // Create, load and build script module.
+            asIScriptModule* module = engine->GetModule(script->entity->name.c_str(), asGM_ONLY_IF_EXISTS);
+            
+            // Find function to call.
+            asIScriptFunction* function = module->GetFunctionByDecl("void Init()");
+            if (function == nullptr)
+                Log() << "Couldn't find \"void Init()\" function.\n";
+            
+            // Create context, prepare it and execute.
+            asIScriptContext* context = engine->CreateContext();
+            context->Prepare(function);
+            int r = context->Execute();
+            if (r != asEXECUTION_FINISHED) {
+                // The execution didn't complete as expected. Determine what happened.
+                if (r == asEXECUTION_EXCEPTION) {
+                  // An exception occurred, let the script writer know what happened so it can be corrected.
+                  Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
+                }
+            }
+            
+            // Clean up.
+            context->Release();
+            
             script->initialized = true;
         }
     }
