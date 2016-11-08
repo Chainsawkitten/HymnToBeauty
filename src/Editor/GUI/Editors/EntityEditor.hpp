@@ -16,6 +16,7 @@ namespace Component {
     class PointLight;
     class SpotLight;
     class Listener;
+    class Script;
     class SoundSource;
     class ParticleEmitter;
 }
@@ -66,6 +67,7 @@ namespace GUI {
             void PointLightEditor(Component::PointLight* pointLight);
             void SpotLightEditor(Component::SpotLight* spotLight);
             void ListenerEditor(Component::Listener* listener);
+            void ScriptEditor(Component::Script* script);
             void SoundSourceEditor(Component::SoundSource* soundSource);
             void ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter);
             
