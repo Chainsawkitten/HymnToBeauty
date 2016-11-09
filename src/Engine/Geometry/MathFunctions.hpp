@@ -8,7 +8,6 @@
 #include <glm/glm.hpp>
 
 namespace Geometry {
-
     /// Mix two vectors.
     /**
      * @param v1 First vector.

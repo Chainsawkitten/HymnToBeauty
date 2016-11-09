@@ -46,9 +46,17 @@ namespace Geometry {
 
         protected:
             /// Generate vertex buffer.
+            /**
+             * @param vertexBuffer Vertex buffer.
+             */
             void GenerateVertexBuffer(GLuint& vertexBuffer);
 
             /// Generate vertex array.
+            /**
+             * @param vertexBuffer Vertex buffer.
+             * @param indexBuffer Index buffer.
+             * @param vertexArray Vertex array.
+             */
             void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
 
         private:
