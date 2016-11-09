@@ -17,7 +17,7 @@ class Shader {
 		 */
 		Shader(const char* source, int sourceLength, GLenum shaderType);
 
-		/// Destructor
+		/// Destructor.
 		~Shader();
 
 		/// Get shader ID.
