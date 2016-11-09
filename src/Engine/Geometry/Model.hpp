@@ -39,7 +39,7 @@ namespace Geometry {
         /**
          * @return Type.
          */
-        virtual const Type GetType() const = 0;
+        virtual Type GetType() const = 0;
 
         /// The name of the model.
         std::string name;
