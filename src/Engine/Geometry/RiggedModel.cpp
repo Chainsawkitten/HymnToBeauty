@@ -72,7 +72,7 @@ void RiggedModel::Load(const char* filename) {
     indices.shrink_to_fit();
 }
 
-const Geometry3D::Type RiggedModel::GetType() const {
+Geometry3D::Type RiggedModel::GetType() const {
     return SKIN;
 }
 

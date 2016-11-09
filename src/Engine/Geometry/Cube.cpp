@@ -243,7 +243,7 @@ Cube::Cube() {
 Cube::~Cube() {
 }
 
-const Geometry3D::Type Cube::GetType() const {
+Geometry3D::Type Cube::GetType() const {
     return STATIC;
 }
 

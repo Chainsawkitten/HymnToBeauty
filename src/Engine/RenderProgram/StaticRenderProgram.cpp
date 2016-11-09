@@ -22,7 +22,7 @@ StaticRenderProgram::~StaticRenderProgram() {
     this->shaderProgram = nullptr;
 }
 
-void StaticRenderProgram::PreRender(Entity* camera, glm::vec2& screenSize) {
+void StaticRenderProgram::PreRender(Entity* camera, const glm::vec2& screenSize) {
     shaderProgram->Use();
 
     viewMat = camera->GetComponent<Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Transform>()->position);

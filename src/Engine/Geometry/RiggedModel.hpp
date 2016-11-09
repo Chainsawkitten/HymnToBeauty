@@ -36,7 +36,7 @@ namespace Geometry {
             /**
              * @return Type.
              */
-            const Type GetType() const;
+            Type GetType() const;
 
             /// Skeleton to animate.
             Skeleton skeleton;

@@ -21,13 +21,13 @@ namespace GUI {
             
             /// Set extensions to select files of.
             /**
-             * @param extensions Set the extensions of which files to show.
+             * @param extensions Extensions of which files to show.
              */
             void SetExtensions(const std::vector<std::string>& extensions);
 
             /// Add extension to select files of.
             /**
-             * @param extension Add an extension of which files to show.
+             * @param extension An extension of which files to show.
              */
             void AddExtensions(const std::string& extension);
             

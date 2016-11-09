@@ -7,11 +7,11 @@ Geometry3D::~Geometry3D() {
     glDeleteBuffers(1, &indexBuffer);
 }
 
-const GLuint Geometry3D::GetVertexArray() const {
+GLuint Geometry3D::GetVertexArray() const {
     return vertexArray;
 }
 
-const unsigned int Geometry3D::GetIndexCount() const {
+unsigned int Geometry3D::GetIndexCount() const {
     return indexCount;
 }
 

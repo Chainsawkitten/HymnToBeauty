@@ -13,16 +13,20 @@ namespace Component {
 class StaticRenderProgram {
     public:
         /// Create new default render program.
-		/**
-		 * @param shaderProgram A GLSL shader program.
-		 */
+        /**
+         * @param shaderProgram A GLSL shader program.
+         */
         StaticRenderProgram(ShaderProgram* shaderProgram);
         
         /// Destructor.
         ~StaticRenderProgram();
         
         /// Bind render program.
-        void PreRender(Entity* camera, glm::vec2& screenSize);
+        /**
+         * @param camera Camera to render from.
+         * @param screenSize Screen size in pixels (width, height).
+         */
+        void PreRender(Entity* camera, const glm::vec2& screenSize);
 
         /// Render mesh.
         /**

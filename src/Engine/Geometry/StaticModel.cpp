@@ -59,7 +59,7 @@ void StaticModel::Load(const char* filename) {
     indices.shrink_to_fit();
 }
 
-const Geometry3D::Type StaticModel::GetType() const {
+Geometry3D::Type StaticModel::GetType() const {
     return STATIC;
 }
 

@@ -22,7 +22,7 @@ SkinRenderProgram::~SkinRenderProgram() {
     this->shaderProgram = nullptr;
 }
 
-void SkinRenderProgram::PreRender(Entity* camera, glm::vec2& screenSize) {
+void SkinRenderProgram::PreRender(Entity* camera, const glm::vec2& screenSize) {
     shaderProgram->Use();
 
     viewMat = camera->GetComponent<Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Transform>()->position);

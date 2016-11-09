@@ -2,7 +2,6 @@
 
 #include "SuperComponent.hpp"
 #include "../Geometry/RiggedModel.hpp"
-#include <glm/glm.hpp>
 
 namespace Component {
     /// %Component handling animations.
