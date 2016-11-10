@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 if(UNIX OR MINGW)
-    set(CMAKE_CXX_FLAGS "-g -gdwarf-2 -O3 -static-libstdc++ -Wall")
+    set(CMAKE_CXX_FLAGS "-g -gdwarf-2 -O3 -static-libstdc++ -Wall -fno-strict-aliasing")
 endif()
 
 # GLFW
@@ -54,6 +54,11 @@ include_directories(externals/jsoncpp/include)
 set(ENABLE_BOOST_WORKAROUND ON CACHE BOOL "Building Assimp without boost" FORCE)
 add_subdirectory(externals/assimp)
 include_directories(externals/assimp/include)
+
+# AngelScript
+add_subdirectory(externals/AngelScript/sdk/angelscript/projects/cmake)
+include_directories(externals/AngelScript/sdk/angelscript/include)
+include_directories(externals/AngelScript/sdk/add_on)
 
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
@@ -153,6 +158,9 @@ include_directories(src)
 
 ## Engine ##
 set(ENGINE_SRCS
+        externals/AngelScript/sdk/add_on/scriptbuilder/scriptbuilder.cpp
+        externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
+        externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
         externals/imgui/imgui.cpp
         externals/imgui/imgui_demo.cpp
         externals/imgui/imgui_draw.cpp
@@ -170,6 +178,7 @@ set(ENGINE_SRCS
         src/Engine/Component/ParticleEmitter.cpp
         src/Engine/Component/Physics.cpp
         src/Engine/Component/PointLight.cpp
+        src/Engine/Component/Script.cpp
         src/Engine/Component/SoundSource.cpp
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
@@ -184,6 +193,7 @@ set(ENGINE_SRCS
         src/Engine/Manager/PhysicsManager.cpp
         src/Engine/Manager/RenderManager.cpp
         src/Engine/Manager/ResourceManager.cpp
+        src/Engine/Manager/ScriptManager.cpp
         src/Engine/Manager/SoundManager.cpp
         src/Engine/Physics/AxisAlignedBoundingBox.cpp
         src/Engine/Physics/Frustum.cpp
@@ -238,6 +248,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/ParticleEmitter.hpp
         src/Engine/Component/Physics.hpp
         src/Engine/Component/PointLight.hpp
+        src/Engine/Component/Script.hpp
         src/Engine/Component/SoundSource.hpp
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
@@ -252,6 +263,7 @@ set(ENGINE_HEADERS
         src/Engine/Manager/PhysicsManager.hpp
         src/Engine/Manager/RenderManager.hpp
         src/Engine/Manager/ResourceManager.hpp
+        src/Engine/Manager/ScriptManager.hpp
         src/Engine/Manager/SoundManager.hpp
         src/Engine/Physics/AxisAlignedBoundingBox.hpp
         src/Engine/Physics/Frustum.hpp
@@ -296,6 +308,7 @@ create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
 set_property(SOURCE ${ENGINE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
 
 add_library(Engine STATIC ${ENGINE_SRCS} ${ENGINE_HEADERS} ${EMBEDDED_SOURCE})
+target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} angelscript assimp)
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -333,7 +346,6 @@ create_directory_groups(${EDITOR_SRCS} ${EDITOR_HEADERS})
 
 add_executable(HymnToBeauty ${EDITOR_SRCS} ${EDITOR_HEADERS})
 target_link_libraries(HymnToBeauty Engine)
-target_link_libraries(HymnToBeauty glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} assimp)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD 11)
 set_property(TARGET HymnToBeauty PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -352,6 +364,5 @@ create_directory_groups(${GAME_SRCS} ${GAME_HEADERS})
 
 add_executable(Game ${GAME_SRCS} ${GAME_HEADERS})
 target_link_libraries(Game Engine)
-target_link_libraries(Game glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} assimp)
 set_property(TARGET Game PROPERTY CXX_STANDARD 11)
 set_property(TARGET Game PROPERTY CXX_STANDARD_REQUIRED ON)

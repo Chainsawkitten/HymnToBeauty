@@ -6,6 +6,7 @@
 #include "Manager/ResourceManager.hpp"
 #include "Manager/PhysicsManager.hpp"
 #include "Manager/ParticleManager.hpp"
+#include "Manager/ScriptManager.hpp"
 #include "Manager/SoundManager.hpp"
 #include "Manager/DebugDrawingManager.hpp"
 #include "DefaultDiffuse.png.hpp"
@@ -73,8 +74,9 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
-    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Sounds").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
 }
 
 void ActiveHymn::Save() const {
@@ -163,6 +165,10 @@ void ActiveHymn::Load(const string& path) {
 }
 
 void ActiveHymn::Update(float deltaTime) {
+    { PROFILE("Run scripts.");
+        Managers().scriptManager->Update(activeScene);
+    }
+    
     { PROFILE("Update physics");
         Managers().physicsManager->Update(activeScene, deltaTime);
     }

@@ -10,6 +10,7 @@
 #include <Engine/Component/PointLight.hpp>
 #include <Engine/Component/SpotLight.hpp>
 #include <Engine/Component/Listener.hpp>
+#include <Engine/Component/Script.hpp>
 #include <Engine/Component/SoundSource.hpp>
 #include <Engine/Component/ParticleEmitter.hpp>
 #include <Engine/Hymn.hpp>
@@ -30,6 +31,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::PointLight>("Point light", std::bind(&EntityEditor::PointLightEditor, this, std::placeholders::_1));
     AddEditor<Component::SpotLight>("Spot light", std::bind(&EntityEditor::SpotLightEditor, this, std::placeholders::_1));
     AddEditor<Component::Listener>("Listener", std::bind(&EntityEditor::ListenerEditor, this, std::placeholders::_1));
+    AddEditor<Component::Script>("Script", std::bind(&EntityEditor::ScriptEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
     AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&EntityEditor::ParticleEmitterEditor, this, std::placeholders::_1));
 }
@@ -224,6 +226,10 @@ void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
 }
 
 void EntityEditor::ListenerEditor(Component::Listener* listener) {
+    
+}
+
+void EntityEditor::ScriptEditor(Component::Script* script) {
     
 }
 
