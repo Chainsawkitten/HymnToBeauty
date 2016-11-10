@@ -119,3 +119,12 @@ void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum
  * @see <a href="https://www.opengl.org/wiki/Debug_Output">OpenGL Debug Output</a>
  */
 void APIENTRY DebugMessageCallbackIgnoreNotifications(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+
+struct asSMessageInfo;
+
+/// Handles AngelScript messages.
+/**
+ * @param message Message.
+ * @param param Parameters.
+ */
+void AngelScriptMessageCallback(const asSMessageInfo* message, void* param);
