@@ -50,6 +50,11 @@ set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "Don't build JsonCpp with pkgc
 add_subdirectory(externals/jsoncpp)
 include_directories(externals/jsoncpp/include)
 
+# Assimp
+set(ENABLE_BOOST_WORKAROUND ON CACHE BOOL "Building Assimp without boost" FORCE)
+add_subdirectory(externals/assimp)
+include_directories(externals/assimp/include)
+
 # AngelScript
 add_subdirectory(externals/AngelScript/sdk/angelscript/projects/cmake)
 include_directories(externals/AngelScript/sdk/angelscript/include)
@@ -82,6 +87,7 @@ set(EMBEDDED_INPUT
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag
+    shaders/Skinning.vert
     shaders/Texture2D.frag
     shaders/Particle.vert
     shaders/Particle.geom
@@ -163,6 +169,7 @@ set(ENGINE_SRCS
         src/Engine/RenderTarget.cpp
         src/Engine/Audio/SoundBuffer.cpp
         src/Engine/Audio/VorbisFile.cpp
+        src/Engine/Component/Animation.cpp
         src/Engine/Component/DirectionalLight.cpp
         src/Engine/Component/Lens.cpp
         src/Engine/Component/Listener.cpp
@@ -198,6 +205,8 @@ set(ENGINE_SRCS
         src/Engine/PostProcessing/GlowFilter.cpp
         src/Engine/PostProcessing/GlowBlurFilter.cpp
         src/Engine/PostProcessing/PostProcessing.cpp
+        src/Engine/RenderProgram/SkinRenderProgram.cpp
+        src/Engine/RenderProgram/StaticRenderProgram.cpp
         src/Engine/Util/FileSystem.cpp
         src/Engine/Util/Input.cpp
         src/Engine/Util/Json.cpp
@@ -206,11 +215,18 @@ set(ENGINE_SRCS
         src/Engine/Util/Log.cpp
         src/Engine/Shader/Shader.cpp
         src/Engine/Shader/ShaderProgram.cpp
+        src/Engine/Geometry/Animation.cpp
         src/Engine/Geometry/Cube.cpp
         src/Engine/Geometry/Geometry2D.cpp
         src/Engine/Geometry/Geometry3D.cpp
-        src/Engine/Geometry/OBJModel.cpp
+        src/Engine/Geometry/MathFunctions.cpp
+        src/Engine/Geometry/Model.cpp
         src/Engine/Geometry/Rectangle.cpp
+        src/Engine/Geometry/RiggedModel.cpp
+        src/Engine/Geometry/Skeleton.cpp
+        src/Engine/Geometry/StaticModel.cpp
+        src/Engine/Geometry/VertexType/SkinVertex.cpp
+        src/Engine/Geometry/VertexType/StaticVertex.cpp
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
@@ -223,6 +239,7 @@ set(ENGINE_HEADERS
         src/Engine/Audio/SoundBuffer.hpp
         src/Engine/Audio/SoundFile.hpp
         src/Engine/Audio/VorbisFile.hpp
+        src/Engine/Component/Animation.hpp
         src/Engine/Component/DirectionalLight.hpp
         src/Engine/Component/Lens.hpp
         src/Engine/Component/Listener.hpp
@@ -259,6 +276,8 @@ set(ENGINE_HEADERS
         src/Engine/PostProcessing/GlowFilter.hpp
         src/Engine/PostProcessing/GlowBlurFilter.hpp
         src/Engine/PostProcessing/PostProcessing.hpp
+        src/Engine/RenderProgram/SkinRenderProgram.hpp
+        src/Engine/RenderProgram/StaticRenderProgram.hpp
         src/Engine/Util/FileSystem.hpp
         src/Engine/Util/Input.hpp
         src/Engine/Util/Json.hpp
@@ -267,11 +286,18 @@ set(ENGINE_HEADERS
         src/Engine/Util/Log.hpp
         src/Engine/Shader/Shader.hpp
         src/Engine/Shader/ShaderProgram.hpp
+        src/Engine/Geometry/Animation.hpp
         src/Engine/Geometry/Cube.hpp
         src/Engine/Geometry/Geometry2D.hpp
         src/Engine/Geometry/Geometry3D.hpp
-        src/Engine/Geometry/OBJModel.hpp
+        src/Engine/Geometry/MathFunctions.hpp
+        src/Engine/Geometry/Model.hpp
         src/Engine/Geometry/Rectangle.hpp
+        src/Engine/Geometry/RiggedModel.hpp
+        src/Engine/Geometry/Skeleton.hpp
+        src/Engine/Geometry/StaticModel.hpp
+        src/Engine/Geometry/VertexType/SkinVertex.hpp
+        src/Engine/Geometry/VertexType/StaticVertex.hpp
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
@@ -282,7 +308,7 @@ create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
 set_property(SOURCE ${ENGINE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
 
 add_library(Engine STATIC ${ENGINE_SRCS} ${ENGINE_HEADERS} ${EMBEDDED_SOURCE})
-target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} angelscript)
+target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} angelscript assimp)
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 

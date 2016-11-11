@@ -41,8 +41,17 @@ void FileSelector::SetFileSelectedCallback(std::function<void(const std::string&
     hasFileSelectedCallback = true;
 }
 
-void FileSelector::SetExtension(const string& extension) {
-    this->extension = extension;
+void FileSelector::SetExtensions(const std::vector<string>& extensions) {
+    this->extensions.clear();
+
+    this->extensions.reserve(extensions.size());
+    for (std::size_t i = 0; i < extensions.size(); ++i)
+        this->extensions.push_back(extensions[i]);
+    pathChanged = true;
+}
+
+void FileSelector::AddExtensions(const std::string& extension) {
+    this->extensions.push_back(extension);
     pathChanged = true;
 }
 
@@ -77,7 +86,7 @@ void FileSelector::ScanDirectory() {
     files.clear();
     std::vector<std::string> tempFiles = FileSystem::DirectoryContents(path, FileSystem::FILE);
     for (const std::string& file : tempFiles) {
-        if (FileSystem::GetExtension(file) == extension)
+        if (std::find(extensions.begin(), extensions.end(), FileSystem::GetExtension(file)) != extensions.end())
             files.push_back(file);
     }
 }

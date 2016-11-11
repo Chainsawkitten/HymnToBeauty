@@ -1,5 +1,6 @@
 #include "Entity.hpp"
 
+#include "../Component/Animation.hpp"
 #include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Mesh.hpp"
@@ -37,6 +38,7 @@ Json::Value Entity::Save() const {
     Json::Value entity;
     entity["name"] = name;
     
+    Save<Component::Animation>(entity, "Animation");
     Save<Component::Transform>(entity, "Transform");
     Save<Component::Lens>(entity, "Lens");
     Save<Component::Mesh>(entity, "Mesh");
@@ -56,6 +58,7 @@ Json::Value Entity::Save() const {
 void Entity::Load(const Json::Value& node) {
     name = node.get("name", "").asString();
     
+    Load<Component::Animation>(node, "Animation");
     Load<Component::Transform>(node, "Transform");
     Load<Component::Lens>(node, "Lens");
     Load<Component::Mesh>(node, "Mesh");

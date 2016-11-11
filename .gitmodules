@@ -23,6 +23,13 @@
 [submodule "externals/openal-soft"]
 	path = externals/openal-soft
 	url = https://github.com/kcat/openal-soft.git
+[submodule "externals/jsoncpp"]
+	path = externals/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git
+    ignore = dirty
+[submodule "externals/assimp"]
+	path = externals/assimp
+	url = https://github.com/assimp/assimp.git
 [submodule "externals/imgui"]
 	path = externals/imgui
 	url = https://github.com/ocornut/imgui.git

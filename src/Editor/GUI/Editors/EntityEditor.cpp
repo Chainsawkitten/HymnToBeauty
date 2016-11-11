@@ -1,5 +1,6 @@
 #include "EntityEditor.hpp"
 
+#include <Engine/Component/Animation.hpp>
 #include <Engine/Component/Transform.hpp>
 #include <Engine/Component/Physics.hpp>
 #include <Engine/Component/Mesh.hpp>
@@ -13,13 +14,14 @@
 #include <Engine/Component/SoundSource.hpp>
 #include <Engine/Component/ParticleEmitter.hpp>
 #include <Engine/Hymn.hpp>
-#include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Geometry/Model.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
 
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
+    AddEditor<Component::Animation>("Animation", std::bind(&EntityEditor::AnimationEditor, this, std::placeholders::_1));
     AddEditor<Component::Transform>("Transform", std::bind(&EntityEditor::TransformEditor, this, std::placeholders::_1));
     AddEditor<Component::Physics>("Physics", std::bind(&EntityEditor::PhysicsEditor, this, std::placeholders::_1));
     AddEditor<Component::Mesh>("Mesh", std::bind(&EntityEditor::MeshEditor, this, std::placeholders::_1));
@@ -78,6 +80,23 @@ void EntityEditor::SetVisible(bool visible) {
     this->visible = visible;
 }
 
+void EntityEditor::AnimationEditor(Component::Animation* animation) {
+    if (ImGui::Button("Select model##Animation"))
+        ImGui::OpenPopup("Select model##Animation");
+
+    if (ImGui::BeginPopup("Select model##Animation")) {
+        ImGui::Text("Models");
+        ImGui::Separator();
+
+        for (Geometry::Model* model : Hymn().models) {
+            if (ImGui::Selectable(model->name.c_str()))
+                animation->riggedModel = dynamic_cast<Geometry::RiggedModel*>(model);
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
 void EntityEditor::TransformEditor(Component::Transform* transform) {
     ImGui::InputFloat3("Position", &transform->position[0]);
     ImGui::InputFloat3("Rotation", &transform->rotation[0]);
@@ -98,14 +117,14 @@ void EntityEditor::PhysicsEditor(Component::Physics* physics) {
 }
 
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
-    if (ImGui::Button("Select model"))
-        ImGui::OpenPopup("Select model");
+    if (ImGui::Button("Select model##Mesh"))
+        ImGui::OpenPopup("Select model##Mesh");
     
-    if (ImGui::BeginPopup("Select model")) {
+    if (ImGui::BeginPopup("Select model##Mesh")) {
         ImGui::Text("Models");
         ImGui::Separator();
         
-        for (Geometry::OBJModel* model : Hymn().models) {
+        for (Geometry::Model* model : Hymn().models) {
             if (ImGui::Selectable(model->name.c_str()))
                 mesh->geometry = model;
         }

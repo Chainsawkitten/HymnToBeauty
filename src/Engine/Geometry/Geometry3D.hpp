@@ -1,83 +1,86 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <glm/glm.hpp>
 #include "../Physics/AxisAlignedBoundingBox.hpp"
+#include <vector>
 
 namespace Geometry {
-    /// Interface for renderable 3D geometry.
-    /**
-     * Can be rendered using the default shaders.
-     */
+    /// Renderable 3D geometry.
     class Geometry3D {
         public:
-            /// A vertex point.
-            struct Vertex {
-                /// Position.
-                glm::vec3 position;
-                /// %Texture coordinate.
-                glm::vec2 textureCoordinate;
-                /// Normal.
-                glm::vec3 normal;
-                /// Tangent vector.
-                glm::vec3 tangent;
+            /// Type of layout of vertex points.
+            enum Type {
+                STATIC = 0, ///< Default3D vertex layout (Default3D.vert).
+                SKIN ///< Skinning vertex layout (Skinning.vert).
             };
-            
-            /// Destructor
+
+            /// Destructor.
             virtual ~Geometry3D();
-            
-            /// Get all the vertices.
-            /**
-             * @return Array of vertices
-             */
-            virtual Vertex* GetVertices() const = 0;
-            
-            /// Get the number of vertices.
-            /**
-             * @return The number of vertices
-             */
-            virtual unsigned int GetVertexCount() const = 0;
-            
-            /// Get all the vertex indices.
-            /**
-             * @return Array of vertex indices
-             */
-            virtual unsigned int* GetIndices() const = 0;
-            
-            /// Get the number of indicies.
-            /**
-             * @return The number of vertex indices.
-             */
-            virtual unsigned int GetIndexCount() const = 0;
-            
+
             /// Get the vertex array.
             /**
-             * @return The vertex array
+             * @return The vertex array.
              */
             GLuint GetVertexArray() const;
-            
+
+            /// Get number of indices.
+            /**
+             * @return Index count.
+             */
+            unsigned int GetIndexCount() const;
+
             /// Get the axis-aligned bounding box around the geometry.
             /**
              * @return Local space axis-aligned bounding box around the geometry.
              */
             const Physics::AxisAlignedBoundingBox& GetAxisAlignedBoundingBox() const;
-            
+
+            /// Get geometry type.
+            /**
+             * @return Type.
+             */
+            virtual Type GetType() const = 0;
+
         protected:
-            /// Generate vertex and index buffers.
-            void GenerateBuffers();
-            
+            /// Generate vertex buffer.
+            /**
+             * @param vertexBuffer Vertex buffer.
+             */
+            virtual void GenerateVertexBuffer(GLuint& vertexBuffer) = 0;
+
             /// Generate vertex array.
-            void GenerateVertexArray();
-            
+            /**
+             * @param vertexBuffer Vertex buffer.
+             * @param indexBuffer Index buffer.
+             * @param vertexArray Vertex array.
+             */
+            virtual void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray) = 0;
+
+            /// Generate index buffer.
+            /**
+             * @param indexData Pointer to array of indices.
+             * @param indexCount Number of indices.
+             * @param indexBuffer Index buffer.
+             */
+            void GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount, GLuint& indexBuffer);
+
             /// Create local space axis-aligned bounding box around the geometry.
-            void CreateAxisAlignedBoundingBox();
-            
-        private:
+            /**
+             * @param positions Vector of vertex positions.
+             */
+            void CreateAxisAlignedBoundingBox(const std::vector<glm::vec3*>& positions);
+
+            /// Vertex buffer.
             GLuint vertexBuffer;
+
+            /// Index buffer.
             GLuint indexBuffer;
+
+            /// Vertex array.
             GLuint vertexArray;
-            
+
+        private:
             Physics::AxisAlignedBoundingBox axisAlignedBoundingBox;
+            unsigned int indexCount = 0;
     };
 }
-

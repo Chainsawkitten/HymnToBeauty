@@ -1,6 +1,7 @@
 #include "ResourceList.hpp"
 
-#include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Geometry/RiggedModel.hpp>
+#include <Engine/Geometry/StaticModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
 
@@ -45,14 +46,19 @@ void ResourceList::Show() {
     
     // Models.
     if (ImGui::TreeNode("Models")) {
-        if (ImGui::Button("Add model")) {
-            Geometry::OBJModel* model = new Geometry::OBJModel();
-            model->name = "Model #" + std::to_string(Hymn().modelNumber++);
+        if (ImGui::Button("Add rigged model")) {
+            Geometry::Model* model = new Geometry::RiggedModel();
+            model->name = "RiggedModel #" + std::to_string(Hymn().modelNumber++);
+            Hymn().models.push_back(model);
+        }
+        if (ImGui::Button("Add static model")) {
+            Geometry::Model* model = new Geometry::StaticModel();
+            model->name = "StaticModel #" + std::to_string(Hymn().modelNumber++);
             Hymn().models.push_back(model);
         }
         
         for (auto it = Hymn().models.begin(); it != Hymn().models.end(); ++it) {
-            Geometry::OBJModel* model = *it;
+            Geometry::Model* model = *it;
             if (ImGui::Selectable(model->name.c_str())) {
                 modelEditors[model].SetVisible(true);
                 modelEditors[model].SetModel(model);
@@ -61,7 +67,9 @@ void ResourceList::Show() {
             if (ImGui::BeginPopupContextItem(model->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
                     delete model;
-                    Hymn().models.erase(it--);
+                    Hymn().models.erase(it);
+                    ImGui::EndPopup();
+                    break;
                 }
                 ImGui::EndPopup();
             }
@@ -71,7 +79,7 @@ void ResourceList::Show() {
     }
     
     // Model editors.
-    for (Geometry::OBJModel* model : Hymn().models) {
+    for (Geometry::Model* model : Hymn().models) {
         if (modelEditors[model].IsVisible()) {
             modelEditors[model].Show();
         }
@@ -95,7 +103,9 @@ void ResourceList::Show() {
             if (ImGui::BeginPopupContextItem(texture->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
                     delete texture;
-                    Hymn().textures.erase(it--);
+                    Hymn().textures.erase(it);
+                    ImGui::EndPopup();
+                    break;
                 }
                 ImGui::EndPopup();
             }
@@ -129,7 +139,9 @@ void ResourceList::Show() {
             if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
                     delete sound;
-                    Hymn().sounds.erase(it--);
+                    Hymn().sounds.erase(it);
+                    ImGui::EndPopup();
+                    break;
                 }
                 ImGui::EndPopup();
             }

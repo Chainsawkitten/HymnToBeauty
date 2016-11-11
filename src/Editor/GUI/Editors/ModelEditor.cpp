@@ -1,6 +1,6 @@
 #include "ModelEditor.hpp"
 
-#include <Engine/Geometry/OBJModel.hpp>
+#include <Engine/Geometry/Model.hpp>
 #include "../FileSelector.hpp"
 #include <functional>
 #include <Engine/Hymn.hpp>
@@ -14,8 +14,9 @@ void ModelEditor::Show() {
         ImGui::InputText("Name", name, 128);
         model->name = name;
         
-        if (ImGui::Button("Load OBJ model")) {
-            fileSelector.SetExtension("obj");
+        if (ImGui::Button("Load model")) {
+            fileSelector.AddExtensions("fbx");
+            fileSelector.AddExtensions("md5mesh");
             fileSelector.SetFileSelectedCallback(std::bind(&ModelEditor::FileSelected, this, std::placeholders::_1));
             fileSelector.SetVisible(true);
         }
@@ -26,7 +27,7 @@ void ModelEditor::Show() {
         fileSelector.Show();
 }
 
-void ModelEditor::SetModel(Geometry::OBJModel* model) {
+void ModelEditor::SetModel(Geometry::Model* model) {
     this->model = model;
     
     strcpy(name, model->name.c_str());
@@ -41,7 +42,8 @@ void ModelEditor::SetVisible(bool visible) {
 }
 
 void ModelEditor::FileSelected(const std::string& file) {
-    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + model->name + ".obj";
+    model->extension = file.substr(file.find_last_of(".") + 1);
+    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Models" + FileSystem::DELIMITER + model->name + "." + model->extension;
     FileSystem::Copy(file.c_str(), destination.c_str());
     model->Load(file.c_str());
 }

@@ -4,8 +4,10 @@ using namespace Geometry;
 
 Cube::Cube() {
     // Vertices
-    vertexCount = 24;
-    vertexData = new Vertex[vertexCount];
+    std::size_t vertexCount = 24;
+    vertices.resize(vertexCount);
+    VertexType::StaticVertex* vertexData = vertices.data();
+    verticesPos.resize(vertexCount);
     
     // Side 1
     vertexData[0] = {
@@ -162,10 +164,16 @@ Cube::Cube() {
         glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, -1.0f)
     };
+
+    // Store vertex positions
+    for (std::size_t i = 0; i < vertices.size(); ++i) {
+        verticesPos[i] = &vertices[i].position;
+    }
     
-    // Vertexindices
-    indexCount = 36;
-    indexData = new unsigned int[indexCount];
+    // Vertex indices
+    std::size_t indexCount = 36;
+    indices.resize(indexCount);
+    unsigned int* indexData = indices.data();
     
     // Side 1
     indexData[0] = 0;
@@ -215,28 +223,34 @@ Cube::Cube() {
     indexData[34] = 21;
     indexData[35] = 22;
     
-    GenerateBuffers();
-    GenerateVertexArray();
-    CreateAxisAlignedBoundingBox();
+    // Generate buffers.
+    GenerateVertexBuffer(vertexBuffer);
+    GenerateIndexBuffer(indices.data(), indices.size(), indexBuffer);
+    GenerateVertexArray(vertexBuffer, indexBuffer, vertexArray);
+
+    // Generate AABB
+    CreateAxisAlignedBoundingBox(verticesPos);
+
+    // Clear vectors.
+    vertices.clear();
+    vertices.shrink_to_fit();
+    verticesPos.clear();
+    verticesPos.shrink_to_fit();
+    indices.clear();
+    indices.shrink_to_fit();
 }
 
 Cube::~Cube() {
-    delete[] vertexData;
-    delete[] indexData;
 }
 
-Geometry3D::Vertex* Cube::GetVertices() const {
-    return vertexData;
+Geometry3D::Type Cube::GetType() const {
+    return STATIC;
 }
 
-unsigned int Cube::GetVertexCount() const {
-    return vertexCount;
+void Cube::GenerateVertexBuffer(GLuint& vertexBuffer) {
+    vertexBuffer = VertexType::StaticVertex::GenerateVertexBuffer(vertices.data(), vertices.size());
 }
 
-unsigned int* Cube::GetIndices() const {
-    return indexData;
-}
-
-unsigned int Cube::GetIndexCount() const {
-    return indexCount;
+void Cube::GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray) {
+    vertexArray = VertexType::StaticVertex::GenerateVertexArray(vertexBuffer, indexBuffer);
 }
