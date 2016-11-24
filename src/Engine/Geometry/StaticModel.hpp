@@ -26,7 +26,7 @@ namespace Geometry {
             /**
              * @param filename Filename (relative or absolute) to the model file.
              */
-            void StaticModel::Load(const char* filename);
+            void Load(const char* filename);
 
             /// Get geometry type.
             /**
