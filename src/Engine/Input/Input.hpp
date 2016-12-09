@@ -1,41 +1,67 @@
 #pragma once
 
 #include <GLFW\glfw3.h>
-#include <Engine\MainWindow.hpp>
 #include <vector>
 
-
-/// Interface for renderable 2D geometry.
 class Input {
 
 public:
 
-    static GLFWwindow* window;
+    /// Sets the window to check for input against.
+    /**
+    * @param window The target GLFWwindow.
+    */
+    static void SetWindow(GLFWwindow* window);
 
+    /// Adds a button to the input system.
+    /**
+    * @param key The GLFW key value.
+    * @param action What action was performed on the key. GLFW_Press, GLFW_Release or GLFW_Repeat.
+    * @param desc A string description of the buttons function.
+    */
     static void AddButton(int key, int action, std::string desc = "");
+
+    /// Checks if a button were activated this frame.
+    /**
+    * @param index The index of the button in the buttons array.
+    */
     static bool Check_Button(int index);
 
 private:
 
-    static class Button {
+    static Input& getInstance() {
 
-    public:
+        static Input instance;
+        return instance;
 
-        Button(int key, int action, std::string desc) {
+    }
 
-            this->key = key;
-            this->action = action;
-            this->desc = desc;
+    GLFWwindow* window;
 
-        }
+    struct Button {
 
         std::string desc;
         int key;
         int action;
-        
+
     };
-    
-    static std::vector<Button> buttons;
-    static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
+    int nrOfButtons;
+    int size;
+    Button buttons[10];
+
+    Input() {
+
+        nrOfButtons = 0;
+        size = 10;
+
+    }
+    Input(Input const&);
+    void operator=(Input const&);
 
 };
+
+
+
+
+

@@ -1,18 +1,28 @@
 #include "Input.hpp"
 
-void Input::AddButton(int key, int action, std::string desc = "") {
+void Input::SetWindow(GLFWwindow* window) {
 
-    buttons.push_back(Button(key, action, desc));
+    getInstance().window = window;
 
 }
 
-bool Input::Check_Button(int index) {
+void Input::AddButton(int key, int action, std::string desc) {
+    
+    Button button;
+    button.key = key;
+    button.action = action;
+    button.desc = desc;
 
-    Button button = buttons[index];
+    getInstance().buttons[getInstance().nrOfButtons] = button;
 
-    int state = glfwGetKey(window, button.key);
+}
+
+bool Input::Check_Button(int index){
+
+    Button button = getInstance().buttons[index];
+
+    int state = glfwGetKey(getInstance().window, button.key);
 
     return state == button.action;
-    
 
 }
