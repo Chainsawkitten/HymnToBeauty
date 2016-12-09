@@ -4,7 +4,7 @@
 #include "../FileSelector.hpp"
 
 namespace Geometry {
-    class OBJModel;
+    class Model;
 }
 
 namespace GUI {
@@ -18,7 +18,7 @@ namespace GUI {
             /**
              * @param model Model to edit.
              */
-            void SetModel(Geometry::OBJModel* model);
+            void SetModel(Geometry::Model* model);
             
             /// Get whether the window is visible.
             /**
@@ -36,7 +36,7 @@ namespace GUI {
             void LoadPressed();
             void FileSelected(const std::string& file);
             
-            Geometry::OBJModel* model = nullptr;
+            Geometry::Model* model = nullptr;
             bool visible = false;
             
             FileSelector fileSelector;

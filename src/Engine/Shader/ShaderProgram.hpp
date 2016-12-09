@@ -24,7 +24,7 @@ class ShaderProgram {
 		 */
 		ShaderProgram(std::initializer_list<const Shader*> shaders);
 
-		/// Destructor
+		/// Destructor.
 		~ShaderProgram();
 
 		/// Use shader program.

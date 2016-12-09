@@ -5,6 +5,8 @@
 class Scene;
 class Shader;
 class ShaderProgram;
+class StaticRenderProgram;
+class SkinRenderProgram;
 class DeferredLighting;
 class PostProcessing;
 class FXAAFilter;
@@ -29,9 +31,13 @@ class RenderManager {
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;
         
-        Shader* vertexShader;
-        Shader* fragmentShader;
-        ShaderProgram* shaderProgram;
+        Shader* defaultVertexShader;
+        Shader* defaultFragmentShader;
+        Shader* skinningVertexShader;
+        ShaderProgram* staticShaderProgram;
+        ShaderProgram* skinShaderProgram;
+        StaticRenderProgram* staticRenderProgram;
+        SkinRenderProgram* skinRenderProgram;
         
         DeferredLighting* deferredLighting;
         

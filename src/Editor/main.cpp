@@ -7,6 +7,7 @@
 #include <Engine/Util/Log.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
+#include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Util/Profiling.hpp>
 #include <Engine/Hymn.hpp>

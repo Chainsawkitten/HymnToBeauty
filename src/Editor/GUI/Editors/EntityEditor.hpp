@@ -7,6 +7,7 @@
 #include <imgui.h>
 
 namespace Component {
+    class Animation;
     class Transform;
     class Physics;
     class Mesh;
@@ -16,6 +17,7 @@ namespace Component {
     class PointLight;
     class SpotLight;
     class Listener;
+    class Script;
     class SoundSource;
     class ParticleEmitter;
 }
@@ -57,6 +59,7 @@ namespace GUI {
             template<typename type> void EditComponent(const std::string& name, std::function<void(type*)> editorFunction);
             
             // Editors
+            void AnimationEditor(Component::Animation* animation);
             void TransformEditor(Component::Transform* transform);
             void PhysicsEditor(Component::Physics* physics);
             void MeshEditor(Component::Mesh* mesh);
@@ -66,6 +69,7 @@ namespace GUI {
             void PointLightEditor(Component::PointLight* pointLight);
             void SpotLightEditor(Component::SpotLight* spotLight);
             void ListenerEditor(Component::Listener* listener);
+            void ScriptEditor(Component::Script* script);
             void SoundSourceEditor(Component::SoundSource* soundSource);
             void ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter);
             

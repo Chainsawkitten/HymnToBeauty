@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Geometry3D.hpp"
-
+#include "VertexType/StaticVertex.hpp"
 
 namespace Geometry {
     /// A cube.
@@ -10,38 +10,25 @@ namespace Geometry {
             /// Create new cube.
             Cube();
             
-            /// Destructor
+            /// Destructor.
             ~Cube() final;
-            
-            /// Get all the vertices.
+
+            /// Get geometry type.
             /**
-            * @return Array of vertices
-            */
-            Vertex* GetVertices() const final;
-            
-            /// Get the number of vertices.
-            /**
-            * @return The number of vertices
-            */
-            unsigned int GetVertexCount() const final;
-            
-            /// Get all the vertex indices.
-            /**
-            * @return Array of vertex indices
-            */
-            unsigned int* GetIndices() const final;
-            
-            /// Get the number of indices.
-            /**
-            * @return The number of vertex indices.
-            */
-            unsigned int GetIndexCount() const final;
-            
+             * @return Type.
+             */
+            Type GetType() const;
+
+        protected:
+            /// Generate vertex buffer.
+            void GenerateVertexBuffer(GLuint& vertexBuffer);
+
+            /// Generate vertex array.
+            void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
+
         private:
-            Vertex* vertexData = nullptr;
-            unsigned int vertexCount = 0;
-            
-            unsigned int* indexData = nullptr;
-            unsigned int indexCount = 0;
+            std::vector<VertexType::StaticVertex> vertices;
+            std::vector<unsigned int> indices;
+            std::vector<glm::vec3*> verticesPos;
     };
 }

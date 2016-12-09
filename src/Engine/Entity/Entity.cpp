@@ -1,5 +1,6 @@
 #include "Entity.hpp"
 
+#include "../Component/Animation.hpp"
 #include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Mesh.hpp"
@@ -9,6 +10,7 @@
 #include "../Component/SpotLight.hpp"
 #include "../Component/Physics.hpp"
 #include "../Component/Listener.hpp"
+#include "../Component/Script.hpp"
 #include "../Component/SoundSource.hpp"
 #include "../Component/ParticleEmitter.hpp"
 
@@ -36,6 +38,7 @@ Json::Value Entity::Save() const {
     Json::Value entity;
     entity["name"] = name;
     
+    Save<Component::Animation>(entity, "Animation");
     Save<Component::Transform>(entity, "Transform");
     Save<Component::Lens>(entity, "Lens");
     Save<Component::Mesh>(entity, "Mesh");
@@ -45,6 +48,7 @@ Json::Value Entity::Save() const {
     Save<Component::SpotLight>(entity, "SpotLight");
     Save<Component::Physics>(entity, "Physics");
     Save<Component::Listener>(entity, "Listener");
+    Save<Component::Script>(entity, "Script");
     Save<Component::SoundSource>(entity, "SoundSource");
     Save<Component::ParticleEmitter>(entity, "ParticleEmitter");
     
@@ -54,6 +58,7 @@ Json::Value Entity::Save() const {
 void Entity::Load(const Json::Value& node) {
     name = node.get("name", "").asString();
     
+    Load<Component::Animation>(node, "Animation");
     Load<Component::Transform>(node, "Transform");
     Load<Component::Lens>(node, "Lens");
     Load<Component::Mesh>(node, "Mesh");
@@ -63,6 +68,7 @@ void Entity::Load(const Json::Value& node) {
     Load<Component::SpotLight>(node, "SpotLight");
     Load<Component::Physics>(node, "Physics");
     Load<Component::Listener>(node, "Listener");
+    Load<Component::Script>(node, "Script");
     Load<Component::SoundSource>(node, "SoundSource");
     Load<Component::ParticleEmitter>(node, "ParticleEmitter");
 }

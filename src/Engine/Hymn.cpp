@@ -6,6 +6,7 @@
 #include "Manager/ResourceManager.hpp"
 #include "Manager/PhysicsManager.hpp"
 #include "Manager/ParticleManager.hpp"
+#include "Manager/ScriptManager.hpp"
 #include "Manager/SoundManager.hpp"
 #include "Manager/DebugDrawingManager.hpp"
 #include "DefaultDiffuse.png.hpp"
@@ -13,12 +14,15 @@
 #include "DefaultSpecular.png.hpp"
 #include "DefaultGlow.png.hpp"
 #include "Entity/Entity.hpp"
-#include "Geometry/OBJModel.hpp"
+#include "Geometry/RiggedModel.hpp"
+#include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
 #include <json/json.h>
 #include <fstream>
 #include "Util/Profiling.hpp"
+
+#include "Component/Animation.hpp"
 
 using namespace std;
 
@@ -43,7 +47,7 @@ void ActiveHymn::Clear() {
     
     entityNumber = 1U;
     
-    for (Geometry::OBJModel* model : models) {
+    for (Geometry::Model* model : models) {
         delete model;
     }
     models.clear();
@@ -70,8 +74,9 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
-    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Sounds").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
 }
 
 void ActiveHymn::Save() const {
@@ -86,7 +91,7 @@ void ActiveHymn::Save() const {
     
     // Save models.
     Json::Value modelsNode;
-    for (Geometry::OBJModel* model : models) {
+    for (Geometry::Model* model : models) {
         modelsNode.append(model->Save());
     }
     root["models"] = modelsNode;
@@ -132,7 +137,13 @@ void ActiveHymn::Load(const string& path) {
     // Load models.
     const Json::Value modelsNode = root["models"];
     for (unsigned int i=0; i < modelsNode.size(); ++i) {
-        Geometry::OBJModel* model = new Geometry::OBJModel();
+        Geometry::Model* model;
+        std::string type = modelsNode[i].get("type", "").asString();
+        if (type == "Static") {
+            model = new Geometry::StaticModel();
+        } else {
+            model = new Geometry::RiggedModel();
+        }
         model->Load(modelsNode[i]);
         models.push_back(model);
     }
@@ -154,8 +165,27 @@ void ActiveHymn::Load(const string& path) {
 }
 
 void ActiveHymn::Update(float deltaTime) {
+    { PROFILE("Run scripts.");
+        Managers().scriptManager->Update(activeScene);
+    }
+    
     { PROFILE("Update physics");
         Managers().physicsManager->Update(activeScene, deltaTime);
+    }
+
+    { PROFILE("Update animations");
+        for (Entity* entity : activeScene.GetEntities()) {
+            Component::Animation* anim = entity->GetComponent<Component::Animation>();
+            if (anim != nullptr) {
+                Geometry::RiggedModel* model = anim->riggedModel;
+                if (model != nullptr) {
+                    if (!model->animations.empty()) {
+                        anim->time += deltaTime;
+                        model->skeleton.Animate(&model->animations[0], anim->time);
+                    }
+                }
+            }
+        }
     }
     
     { PROFILE("Update particles");

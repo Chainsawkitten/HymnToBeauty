@@ -9,7 +9,7 @@
 class Texture2D;
 class Entity;
 namespace Geometry {
-    class OBJModel;
+    class Model;
 }
 namespace Audio {
     class SoundBuffer;
@@ -44,7 +44,7 @@ namespace GUI {
             bool visible = false;
             
             std::map<Entity*, EntityEditor> entityEditors;
-            std::map<Geometry::OBJModel*, ModelEditor> modelEditors;
+            std::map<Geometry::Model*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
             std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
     };
