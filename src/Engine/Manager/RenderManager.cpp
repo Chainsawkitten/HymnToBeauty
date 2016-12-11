@@ -4,6 +4,7 @@
 #include "Managers.hpp"
 #include "ResourceManager.hpp"
 #include "ParticleManager.hpp"
+#include "DebugDrawingManager.hpp"
 #include "Default3D.vert.hpp"
 #include "Default3D.frag.hpp"
 #include "Skinning.vert.hpp"
@@ -15,6 +16,7 @@
 #include "../Component/Transform.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
+#include "../Component/ParticleEmitter.hpp"
 #include "../Geometry/Geometry3D.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Lighting/DeferredLighting.hpp"
@@ -141,6 +143,17 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
     
     // Render from camera.
     if (camera != nullptr) {
+        /// @todo Render sound sources
         
+        /// @todo Render particle emitter
+        for (Component::ParticleEmitter* emitter : scene.GetComponents<Component::ParticleEmitter>()) {
+            Entity* entity = emitter->entity;
+            Component::Transform* transform = entity->GetComponent<Component::Transform>();
+            if (transform != nullptr) {
+                Managers().debugDrawingManager->AddPoint(transform->position, glm::vec3(1.f, 1.f, 1.f), 2.f);
+            }
+        }
+        
+        /// @todo Render light sources
     }
 }
