@@ -129,3 +129,18 @@ void RenderManager::Render(Scene& scene) {
         postProcessing->Render(true);
     }
 }
+
+void RenderManager::RenderEditorEntities(Scene& scene) {
+    // Find camera entity.
+    Entity* camera = nullptr;
+    std::vector<Lens*> lenses = scene.GetComponents<Lens>();
+    for (Lens* lens : lenses) {
+        if (lens->entity->GetComponent<Transform>() != nullptr)
+            camera = lens->entity;
+    };
+    
+    // Render from camera.
+    if (camera != nullptr) {
+        
+    }
+}

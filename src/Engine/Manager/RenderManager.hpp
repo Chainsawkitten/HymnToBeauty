@@ -19,11 +19,17 @@ class RenderManager {
     friend class Hub;
     
     public:
-        /// Render Scene containing entities.
+        /// Render scene containing entities.
         /**
          * @param scene Contains a bunch of entities.
          */
         void Render(Scene& scene);
+        
+        /// Render editor entities.
+        /**
+         * @param scene Scene to render.
+         */
+        void RenderEditorEntities(Scene& scene);
     
     private:
         RenderManager();

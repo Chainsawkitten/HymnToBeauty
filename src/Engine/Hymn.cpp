@@ -205,9 +205,15 @@ void ActiveHymn::Update(float deltaTime) {
     }
 }
 
-void ActiveHymn::Render() {
+void ActiveHymn::Render(bool editorRendering) {
     { PROFILE("Render scene");
         Managers().renderManager->Render(activeScene);
+    }
+    
+    if (editorRendering) {
+        { PROFILE("Render editor entities");
+            Managers().renderManager->RenderEditorEntities(activeScene);
+        }
     }
     
     { PROFILE("Render debug entities");
