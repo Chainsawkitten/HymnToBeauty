@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 class Scene;
@@ -58,4 +59,8 @@ class RenderManager {
         GammaCorrectionFilter* gammaCorrectionFilter;
         GlowFilter* glowFilter;
         GlowBlurFilter* glowBlurFilter;
+        
+        // Geometry.
+        GLuint vertexBuffer;
+        GLuint vertexArray;
 };

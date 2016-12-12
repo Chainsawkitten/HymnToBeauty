@@ -36,6 +36,7 @@
 using namespace Component;
 
 RenderManager::RenderManager() {
+    // Init shaders.
     defaultVertexShader = Managers().resourceManager->CreateShader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
     skinningVertexShader = Managers().resourceManager->CreateShader(SKINNING_VERT, SKINNING_VERT_LENGTH, GL_VERTEX_SHADER);
     defaultFragmentShader = Managers().resourceManager->CreateShader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
@@ -51,12 +52,30 @@ RenderManager::RenderManager() {
 
     deferredLighting = new DeferredLighting();
     
+    // Init filters.
     postProcessing = new PostProcessing();
     fxaaFilter = new FXAAFilter();
     gammaCorrectionFilter = new GammaCorrectionFilter();
     glowFilter = new GlowFilter();
     glowBlurFilter = new GlowBlurFilter();
     
+    // Create editor entity geometry.
+    float vertex;
+    
+    glBindVertexArray(0);
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 1 * sizeof(float), &vertex, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &vertexArray);
+    glBindVertexArray(vertexArray);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
+    
+    glBindVertexArray(0);
 }
 
 RenderManager::~RenderManager() {
@@ -72,6 +91,8 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeShader(editorEntityGeometryShader);
     Managers().resourceManager->FreeShader(editorEntityFragmentShader);
     Managers().resourceManager->FreeShaderProgram(editorEntityShaderProgram);
+    
+    Managers().resourceManager->FreeTexture2D(particleEmitterTexture);
 
     delete deferredLighting;
     
@@ -80,6 +101,9 @@ RenderManager::~RenderManager() {
     delete gammaCorrectionFilter;
     delete glowFilter;
     delete glowBlurFilter;
+    
+    glDeleteBuffers(1, &vertexBuffer);
+    glDeleteVertexArrays(1, &vertexArray);
 }
 
 void RenderManager::Render(Scene& scene) {
