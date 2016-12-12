@@ -233,6 +233,7 @@ set(ENGINE_SRCS
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
+        src/Engine/Input/Input.cpp
     )
 
 set(ENGINE_HEADERS
@@ -304,6 +305,7 @@ set(ENGINE_HEADERS
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
+        src/Engine/Input/Input.hpp
     )
 
 create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
