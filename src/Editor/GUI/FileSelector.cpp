@@ -2,6 +2,7 @@
 
 #include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
+#include <algorithm>
 
 using namespace GUI;
 using namespace std;
