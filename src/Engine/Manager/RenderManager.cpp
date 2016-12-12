@@ -8,6 +8,9 @@
 #include "Default3D.vert.hpp"
 #include "Default3D.frag.hpp"
 #include "Skinning.vert.hpp"
+#include "EditorEntity.vert.hpp"
+#include "EditorEntity.geom.hpp"
+#include "EditorEntity.frag.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../RenderProgram/SkinRenderProgram.hpp"
 #include "../RenderProgram/StaticRenderProgram.hpp"
@@ -40,6 +43,11 @@ RenderManager::RenderManager() {
     skinShaderProgram = Managers().resourceManager->CreateShaderProgram({ skinningVertexShader, defaultFragmentShader });
     staticRenderProgram = new StaticRenderProgram(staticShaderProgram);
     skinRenderProgram = new SkinRenderProgram(skinShaderProgram);
+    
+    editorEntityVertexShader = Managers().resourceManager->CreateShader(EDITORENTITY_VERT, EDITORENTITY_VERT_LENGTH, GL_VERTEX_SHADER);
+    editorEntityGeometryShader = Managers().resourceManager->CreateShader(EDITORENTITY_GEOM, EDITORENTITY_GEOM_LENGTH, GL_GEOMETRY_SHADER);
+    editorEntityFragmentShader = Managers().resourceManager->CreateShader(EDITORENTITY_FRAG, EDITORENTITY_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    editorEntityShaderProgram = Managers().resourceManager->CreateShaderProgram({ editorEntityVertexShader, editorEntityGeometryShader, editorEntityFragmentShader });
 
     deferredLighting = new DeferredLighting();
     
@@ -59,6 +67,11 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeShaderProgram(skinShaderProgram);
     delete staticRenderProgram;
     delete skinRenderProgram;
+    
+    Managers().resourceManager->FreeShader(editorEntityVertexShader);
+    Managers().resourceManager->FreeShader(editorEntityGeometryShader);
+    Managers().resourceManager->FreeShader(editorEntityFragmentShader);
+    Managers().resourceManager->FreeShaderProgram(editorEntityShaderProgram);
 
     delete deferredLighting;
     

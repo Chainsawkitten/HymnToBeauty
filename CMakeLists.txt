@@ -87,6 +87,9 @@ set(EMBEDDED_INPUT
     shaders/Deferred.frag
     shaders/DebugDrawing.vert
     shaders/DebugDrawing.frag
+    shaders/EditorEntity.vert
+    shaders/EditorEntity.geom
+    shaders/EditorEntity.frag
     shaders/Font.vert
     shaders/Font.frag
     shaders/SingleColor2D.frag

@@ -45,6 +45,11 @@ class RenderManager {
         StaticRenderProgram* staticRenderProgram;
         SkinRenderProgram* skinRenderProgram;
         
+        Shader* editorEntityVertexShader;
+        Shader* editorEntityGeometryShader;
+        Shader* editorEntityFragmentShader;
+        ShaderProgram* editorEntityShaderProgram;
+        
         DeferredLighting* deferredLighting;
         
         // Post-processing.
