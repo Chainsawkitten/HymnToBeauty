@@ -15,6 +15,9 @@ class GammaCorrectionFilter;
 class GlowFilter;
 class GlowBlurFilter;
 class Texture2D;
+namespace Component {
+    class SuperComponent;
+}
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -38,6 +41,8 @@ class RenderManager {
         ~RenderManager();
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;
+        
+        void RenderEditorEntity(Component::SuperComponent* component);
         
         Shader* defaultVertexShader;
         Shader* defaultFragmentShader;

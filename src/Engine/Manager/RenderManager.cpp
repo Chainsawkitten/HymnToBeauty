@@ -214,55 +214,34 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, soundSourceTexture->GetTextureID());
         
-        for (SoundSource* soundSource : scene.GetComponents<SoundSource>()) {
-            Entity* entity = soundSource->entity;
-            Transform* transform = entity->GetComponent<Transform>();
-            if (transform != nullptr) {
-                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
-                glDrawArrays(GL_POINTS, 0, 1);
-            }
-        }
+        for (SoundSource* soundSource : scene.GetComponents<SoundSource>())
+            RenderEditorEntity(soundSource);
         
         // Render particle emitters.
         glBindTexture(GL_TEXTURE_2D, particleEmitterTexture->GetTextureID());
         
-        for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>()) {
-            Entity* entity = emitter->entity;
-            Transform* transform = entity->GetComponent<Transform>();
-            if (transform != nullptr) {
-                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
-                glDrawArrays(GL_POINTS, 0, 1);
-            }
-        }
+        for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>())
+            RenderEditorEntity(emitter);
         
         // Render light sources.
         glBindTexture(GL_TEXTURE_2D, lightTexture->GetTextureID());
         
-        for (DirectionalLight* light : scene.GetComponents<DirectionalLight>()) {
-            Entity* entity = light->entity;
-            Transform* transform = entity->GetComponent<Transform>();
-            if (transform != nullptr) {
-                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
-                glDrawArrays(GL_POINTS, 0, 1);
-            }
-        }
+        for (DirectionalLight* light : scene.GetComponents<DirectionalLight>())
+            RenderEditorEntity(light);
         
-        for (PointLight* light : scene.GetComponents<PointLight>()) {
-            Entity* entity = light->entity;
-            Transform* transform = entity->GetComponent<Transform>();
-            if (transform != nullptr) {
-                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
-                glDrawArrays(GL_POINTS, 0, 1);
-            }
-        }
+        for (PointLight* light : scene.GetComponents<PointLight>())
+            RenderEditorEntity(light);
         
-        for (SpotLight* light : scene.GetComponents<SpotLight>()) {
-            Entity* entity = light->entity;
-            Transform* transform = entity->GetComponent<Transform>();
-            if (transform != nullptr) {
-                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
-                glDrawArrays(GL_POINTS, 0, 1);
-            }
-        }
+        for (SpotLight* light : scene.GetComponents<SpotLight>())
+            RenderEditorEntity(light);
+    }
+}
+
+void RenderManager::RenderEditorEntity(SuperComponent* component) {
+    Entity* entity = component->entity;
+    Transform* transform = entity->GetComponent<Transform>();
+    if (transform != nullptr) {
+        glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
+        glDrawArrays(GL_POINTS, 0, 1);
     }
 }
