@@ -113,6 +113,7 @@ set(EMBEDDED_INPUT
     assets/DefaultSpecular.png
     assets/DefaultGlow.png
     assets/ParticleAtlas.png
+    assets/ParticleEmitter.png
 )
 
 # Headerize
