@@ -115,6 +115,7 @@ set(EMBEDDED_INPUT
     assets/Light.png
     assets/ParticleAtlas.png
     assets/ParticleEmitter.png
+    assets/SoundSource.png
 )
 
 # Headerize

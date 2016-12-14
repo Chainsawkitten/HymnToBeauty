@@ -13,6 +13,7 @@
 #include "EditorEntity.frag.hpp"
 #include "Light.png.hpp"
 #include "ParticleEmitter.png.hpp"
+#include "SoundSource.png.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../RenderProgram/SkinRenderProgram.hpp"
 #include "../RenderProgram/StaticRenderProgram.hpp"
@@ -25,6 +26,7 @@
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
+#include "../Component/SoundSource.hpp"
 #include "../Geometry/Geometry3D.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Lighting/DeferredLighting.hpp"
@@ -58,6 +60,7 @@ RenderManager::RenderManager() {
     // Init textures.
     particleEmitterTexture = Managers().resourceManager->CreateTexture2D(PARTICLEEMITTER_PNG, PARTICLEEMITTER_PNG_LENGTH);
     lightTexture = Managers().resourceManager->CreateTexture2D(LIGHT_PNG, LIGHT_PNG_LENGTH);
+    soundSourceTexture = Managers().resourceManager->CreateTexture2D(SOUNDSOURCE_PNG, SOUNDSOURCE_PNG_LENGTH);
     
     deferredLighting = new DeferredLighting();
     
@@ -103,6 +106,7 @@ RenderManager::~RenderManager() {
     
     Managers().resourceManager->FreeTexture2D(particleEmitterTexture);
     Managers().resourceManager->FreeTexture2D(lightTexture);
+    Managers().resourceManager->FreeTexture2D(soundSourceTexture);
     
     delete deferredLighting;
     
@@ -206,10 +210,20 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
         glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniform1i(editorEntityShaderProgram->GetUniformLocation("baseImage"), 0);
         
-        /// @todo Render sound sources
+        // Render sound sources.
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, soundSourceTexture->GetTextureID());
+        
+        for (SoundSource* soundSource : scene.GetComponents<SoundSource>()) {
+            Entity* entity = soundSource->entity;
+            Transform* transform = entity->GetComponent<Transform>();
+            if (transform != nullptr) {
+                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
+                glDrawArrays(GL_POINTS, 0, 1);
+            }
+        }
         
         // Render particle emitters.
-        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, particleEmitterTexture->GetTextureID());
         
         for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>()) {
@@ -221,8 +235,7 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
             }
         }
         
-        // Render light sources
-        glActiveTexture(GL_TEXTURE0);
+        // Render light sources.
         glBindTexture(GL_TEXTURE_2D, lightTexture->GetTextureID());
         
         for (DirectionalLight* light : scene.GetComponents<DirectionalLight>()) {
