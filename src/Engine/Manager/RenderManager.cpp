@@ -11,6 +11,7 @@
 #include "EditorEntity.vert.hpp"
 #include "EditorEntity.geom.hpp"
 #include "EditorEntity.frag.hpp"
+#include "DefaultDiffuse.png.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../RenderProgram/SkinRenderProgram.hpp"
 #include "../RenderProgram/StaticRenderProgram.hpp"
@@ -49,7 +50,10 @@ RenderManager::RenderManager() {
     editorEntityGeometryShader = Managers().resourceManager->CreateShader(EDITORENTITY_GEOM, EDITORENTITY_GEOM_LENGTH, GL_GEOMETRY_SHADER);
     editorEntityFragmentShader = Managers().resourceManager->CreateShader(EDITORENTITY_FRAG, EDITORENTITY_FRAG_LENGTH, GL_FRAGMENT_SHADER);
     editorEntityShaderProgram = Managers().resourceManager->CreateShaderProgram({ editorEntityVertexShader, editorEntityGeometryShader, editorEntityFragmentShader });
-
+    
+    // Init textures.
+    particleEmitterTexture = Managers().resourceManager->CreateTexture2D(DEFAULTDIFFUSE_PNG, DEFAULTDIFFUSE_PNG_LENGTH);
+    
     deferredLighting = new DeferredLighting();
     
     // Init filters.
@@ -180,14 +184,34 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
     
     // Render from camera.
     if (camera != nullptr) {
+        editorEntityShaderProgram->Use();
+        glBindVertexArray(vertexArray);
+        
+        // Set camera uniforms.
+        glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
+        Transform* cameraTransform = camera->GetComponent<Component::Transform>();
+        glm::mat4 viewMat(cameraTransform->GetCameraOrientation() * glm::translate(glm::mat4(), -cameraTransform->position));
+        glm::mat4 projectionMat(camera->GetComponent<Lens>()->GetProjection(screenSize));
+        glm::mat4 viewProjectionMat(projectionMat * viewMat);
+        glm::vec3 up(glm::inverse(cameraTransform->GetCameraOrientation())* glm::vec4(0, 1, 0, 1));
+    
+        glUniformMatrix4fv(editorEntityShaderProgram->GetUniformLocation("viewProjectionMatrix"), 1, GL_FALSE, &viewProjectionMat[0][0]);
+        glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraPosition"), 1, &cameraTransform->position[0]);
+        glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
+        glUniform1i(editorEntityShaderProgram->GetUniformLocation("baseImage"), 0);
+        
         /// @todo Render sound sources
         
-        /// @todo Render particle emitter
-        for (Component::ParticleEmitter* emitter : scene.GetComponents<Component::ParticleEmitter>()) {
+        // Render particle emitters.
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, particleEmitterTexture->GetTextureID());
+        
+        for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>()) {
             Entity* entity = emitter->entity;
-            Component::Transform* transform = entity->GetComponent<Component::Transform>();
+            Transform* transform = entity->GetComponent<Transform>();
             if (transform != nullptr) {
-                Managers().debugDrawingManager->AddPoint(transform->position, glm::vec3(1.f, 1.f, 1.f), 2.f);
+                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
+                glDrawArrays(GL_POINTS, 0, 1);
             }
         }
         

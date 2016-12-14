@@ -14,6 +14,7 @@ class FXAAFilter;
 class GammaCorrectionFilter;
 class GlowFilter;
 class GlowBlurFilter;
+class Texture2D;
 
 /// Handles rendering a scene.
 class RenderManager {
@@ -59,6 +60,9 @@ class RenderManager {
         GammaCorrectionFilter* gammaCorrectionFilter;
         GlowFilter* glowFilter;
         GlowBlurFilter* glowBlurFilter;
+        
+        // Editor entity textures.
+        Texture2D* particleEmitterTexture;
         
         // Geometry.
         GLuint vertexBuffer;
