@@ -112,6 +112,7 @@ set(EMBEDDED_INPUT
     assets/DefaultNormal.png
     assets/DefaultSpecular.png
     assets/DefaultGlow.png
+    assets/Light.png
     assets/ParticleAtlas.png
     assets/ParticleEmitter.png
 )

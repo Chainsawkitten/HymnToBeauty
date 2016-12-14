@@ -63,6 +63,7 @@ class RenderManager {
         
         // Editor entity textures.
         Texture2D* particleEmitterTexture;
+        Texture2D* lightTexture;
         
         // Geometry.
         GLuint vertexBuffer;

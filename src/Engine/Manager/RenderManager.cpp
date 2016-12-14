@@ -11,6 +11,7 @@
 #include "EditorEntity.vert.hpp"
 #include "EditorEntity.geom.hpp"
 #include "EditorEntity.frag.hpp"
+#include "Light.png.hpp"
 #include "ParticleEmitter.png.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../RenderProgram/SkinRenderProgram.hpp"
@@ -21,6 +22,9 @@
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
 #include "../Component/ParticleEmitter.hpp"
+#include "../Component/DirectionalLight.hpp"
+#include "../Component/PointLight.hpp"
+#include "../Component/SpotLight.hpp"
 #include "../Geometry/Geometry3D.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Lighting/DeferredLighting.hpp"
@@ -53,6 +57,7 @@ RenderManager::RenderManager() {
     
     // Init textures.
     particleEmitterTexture = Managers().resourceManager->CreateTexture2D(PARTICLEEMITTER_PNG, PARTICLEEMITTER_PNG_LENGTH);
+    lightTexture = Managers().resourceManager->CreateTexture2D(LIGHT_PNG, LIGHT_PNG_LENGTH);
     
     deferredLighting = new DeferredLighting();
     
@@ -97,7 +102,8 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeShaderProgram(editorEntityShaderProgram);
     
     Managers().resourceManager->FreeTexture2D(particleEmitterTexture);
-
+    Managers().resourceManager->FreeTexture2D(lightTexture);
+    
     delete deferredLighting;
     
     delete postProcessing;
@@ -215,6 +221,35 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
             }
         }
         
-        /// @todo Render light sources
+        // Render light sources
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, lightTexture->GetTextureID());
+        
+        for (DirectionalLight* light : scene.GetComponents<DirectionalLight>()) {
+            Entity* entity = light->entity;
+            Transform* transform = entity->GetComponent<Transform>();
+            if (transform != nullptr) {
+                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
+                glDrawArrays(GL_POINTS, 0, 1);
+            }
+        }
+        
+        for (PointLight* light : scene.GetComponents<PointLight>()) {
+            Entity* entity = light->entity;
+            Transform* transform = entity->GetComponent<Transform>();
+            if (transform != nullptr) {
+                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
+                glDrawArrays(GL_POINTS, 0, 1);
+            }
+        }
+        
+        for (SpotLight* light : scene.GetComponents<SpotLight>()) {
+            Entity* entity = light->entity;
+            Transform* transform = entity->GetComponent<Transform>();
+            if (transform != nullptr) {
+                glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
+                glDrawArrays(GL_POINTS, 0, 1);
+            }
+        }
     }
 }
