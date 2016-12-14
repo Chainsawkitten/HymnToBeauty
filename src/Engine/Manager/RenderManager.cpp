@@ -196,6 +196,9 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
     if (camera != nullptr) {
         editorEntityShaderProgram->Use();
         glBindVertexArray(vertexArray);
+        glDepthMask(GL_FALSE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         
         // Set camera uniforms.
         glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
@@ -234,6 +237,9 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
         
         for (SpotLight* light : scene.GetComponents<SpotLight>())
             RenderEditorEntity(light);
+        
+        glDepthMask(GL_TRUE);
+        glDisable(GL_BLEND);
     }
 }
 
