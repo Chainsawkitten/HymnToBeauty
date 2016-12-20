@@ -24,6 +24,10 @@ ScriptManager::ScriptManager() {
     // Register add-ons.
     RegisterStdString(engine);
     
+    // Register Entity.
+    engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
+    
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
 }
