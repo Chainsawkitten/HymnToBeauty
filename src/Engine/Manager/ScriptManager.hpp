@@ -4,6 +4,7 @@
 
 class asIScriptEngine;
 class Scene;
+class Entity;
 
 /// Handles scripting.
 class ScriptManager {
@@ -21,6 +22,9 @@ class ScriptManager {
          * @param scene The scene to update.
          */
         void Update(Scene& scene);
+        
+        /// The entity currently being executed.
+        Entity* currentEntity;
         
     private:
         ScriptManager();

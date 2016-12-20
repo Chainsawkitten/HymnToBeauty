@@ -60,6 +60,8 @@ void ScriptManager::BuildScript(const std::string& name) {
 void ScriptManager::Update(Scene& scene) {
     for (Component::Script* script : scene.GetComponents<Component::Script>()) {
         if (!script->initialized) {
+            currentEntity = script->entity;
+            
             // Create, load and build script module.
             asIScriptModule* module = engine->GetModule(script->entity->name.c_str(), asGM_ONLY_IF_EXISTS);
             
