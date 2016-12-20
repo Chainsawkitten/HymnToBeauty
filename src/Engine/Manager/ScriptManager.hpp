@@ -32,5 +32,7 @@ class ScriptManager {
         ScriptManager(ScriptManager const&) = delete;
         void operator=(ScriptManager const&) = delete;
         
+        void CallScript(Entity* entity, const std::string& functionName);
+        
         asIScriptEngine* engine;
 };

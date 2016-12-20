@@ -49,6 +49,7 @@ void ScriptManager::BuildScript(const std::string& name) {
         return;
     }
     
+    // Create and build script module.
     CScriptBuilder builder;
     int r = builder.StartNewModule(engine, name.c_str());
     if (r < 0)
@@ -66,32 +67,39 @@ void ScriptManager::BuildScript(const std::string& name) {
 void ScriptManager::Update(Scene& scene) {
     for (Component::Script* script : scene.GetComponents<Component::Script>()) {
         if (!script->initialized) {
-            currentEntity = script->entity;
-            
-            // Create, load and build script module.
-            asIScriptModule* module = engine->GetModule(script->entity->name.c_str(), asGM_ONLY_IF_EXISTS);
-            
-            // Find function to call.
-            asIScriptFunction* function = module->GetFunctionByDecl("void Init()");
-            if (function == nullptr)
-                Log() << "Couldn't find \"void Init()\" function.\n";
-            
-            // Create context, prepare it and execute.
-            asIScriptContext* context = engine->CreateContext();
-            context->Prepare(function);
-            int r = context->Execute();
-            if (r != asEXECUTION_FINISHED) {
-                // The execution didn't complete as expected. Determine what happened.
-                if (r == asEXECUTION_EXCEPTION) {
-                  // An exception occurred, let the script writer know what happened so it can be corrected.
-                  Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
-                }
-            }
-            
-            // Clean up.
-            context->Release();
-            
+            CallScript(script->entity, "void Init()");
             script->initialized = true;
         }
     }
+}
+
+void ScriptManager::RegisterUpdate(Entity* entity) {
+    updateEntities.push_back(entity);
+}
+
+void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
+    currentEntity = entity;
+    
+    // Get script module.
+    asIScriptModule* module = engine->GetModule(entity->name.c_str(), asGM_ONLY_IF_EXISTS);
+    
+    // Find function to call.
+    asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
+    if (function == nullptr)
+        Log() << "Couldn't find \"" + functionName + "\" function.\n";
+    
+    // Create context, prepare it and execute.
+    asIScriptContext* context = engine->CreateContext();
+    context->Prepare(function);
+    int r = context->Execute();
+    if (r != asEXECUTION_FINISHED) {
+        // The execution didn't complete as expected. Determine what happened.
+        if (r == asEXECUTION_EXCEPTION) {
+          // An exception occurred, let the script writer know what happened so it can be corrected.
+          Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
+        }
+    }
+    
+    // Clean up.
+    context->Release();
 }
