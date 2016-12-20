@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 class asIScriptEngine;
 class Scene;
@@ -23,6 +24,13 @@ class ScriptManager {
          */
         void Update(Scene& scene);
         
+        /// Register an entity to recieve update callbacks.
+        /**
+         * @param entity %Entity to register.
+         * @todo Fix so registered entities can be removed.
+         */
+        void RegisterUpdate(Entity* entity);
+        
         /// The entity currently being executed.
         Entity* currentEntity;
         
@@ -35,4 +43,6 @@ class ScriptManager {
         void CallScript(Entity* entity, const std::string& functionName);
         
         asIScriptEngine* engine;
+        
+        std::vector<Entity*> updateEntities;
 };
