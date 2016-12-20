@@ -19,6 +19,10 @@ Entity* GetEntity() {
     return Managers().scriptManager->currentEntity;
 }
 
+void RegisterUpdate() {
+    Managers().scriptManager->RegisterUpdate(GetEntity());
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -36,6 +40,9 @@ ScriptManager::ScriptManager() {
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
+    int r = engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
+    if (r < 0)
+        Log() << "asdfsadsad\n";
 }
 
 ScriptManager::~ScriptManager() {
@@ -65,12 +72,17 @@ void ScriptManager::BuildScript(const std::string& name) {
 }
 
 void ScriptManager::Update(Scene& scene) {
+    // Init.
     for (Component::Script* script : scene.GetComponents<Component::Script>()) {
         if (!script->initialized) {
             CallScript(script->entity, "void Init()");
             script->initialized = true;
         }
     }
+    
+    // Update.
+    for (Entity* entity : updateEntities)
+        CallScript(entity, "void Update()");
 }
 
 void ScriptManager::RegisterUpdate(Entity* entity) {
