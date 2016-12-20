@@ -9,9 +9,14 @@
 #include "../Scene/Scene.hpp"
 #include "../Component/Script.hpp"
 #include "../Entity/Entity.hpp"
+#include "Managers.hpp"
 
 void print(const std::string& message) {
     Log() << message;
+}
+
+Entity* GetEntity() {
+    return Managers().scriptManager->currentEntity;
 }
 
 ScriptManager::ScriptManager() {
@@ -30,6 +35,7 @@ ScriptManager::ScriptManager() {
     
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
+    engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
 }
 
 ScriptManager::~ScriptManager() {
