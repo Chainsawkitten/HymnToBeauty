@@ -99,8 +99,13 @@ void ScriptManager::Update(Scene& scene) {
     }
     
     // Update.
-    for (Entity* entity : updateEntities)
+    for (Entity* entity : scene.GetUpdateEntities())
         CallScript(entity, "void Update()");
+    
+    // Register entities for events.
+    for (Entity* entity : updateEntities)
+        scene.RegisterUpdate(entity);
+    updateEntities.clear();
 }
 
 void ScriptManager::RegisterUpdate(Entity* entity) {
