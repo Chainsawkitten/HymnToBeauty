@@ -43,6 +43,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
     engine->RegisterObjectMethod("Entity", "void Kill()", asMETHOD(Entity, Kill), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "bool IsKilled()", asMETHOD(Entity, IsKilled), asCALL_THISCALL);
     
     // Register components.
     engine->SetDefaultNamespace("Component");
