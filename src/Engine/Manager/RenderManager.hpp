@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 class Scene;
@@ -13,23 +14,35 @@ class FXAAFilter;
 class GammaCorrectionFilter;
 class GlowFilter;
 class GlowBlurFilter;
+class Texture2D;
+namespace Component {
+    class SuperComponent;
+}
 
 /// Handles rendering a scene.
 class RenderManager {
     friend class Hub;
     
     public:
-        /// Render Scene containing entities.
+        /// Render scene containing entities.
         /**
          * @param scene Contains a bunch of entities.
          */
         void Render(Scene& scene);
+        
+        /// Render editor entities.
+        /**
+         * @param scene Scene to render.
+         */
+        void RenderEditorEntities(Scene& scene);
     
     private:
         RenderManager();
         ~RenderManager();
         RenderManager(RenderManager const&) = delete;
         void operator=(RenderManager const&) = delete;
+        
+        void RenderEditorEntity(Component::SuperComponent* component);
         
         Shader* defaultVertexShader;
         Shader* defaultFragmentShader;
@@ -39,6 +52,11 @@ class RenderManager {
         StaticRenderProgram* staticRenderProgram;
         SkinRenderProgram* skinRenderProgram;
         
+        Shader* editorEntityVertexShader;
+        Shader* editorEntityGeometryShader;
+        Shader* editorEntityFragmentShader;
+        ShaderProgram* editorEntityShaderProgram;
+        
         DeferredLighting* deferredLighting;
         
         // Post-processing.
@@ -47,4 +65,13 @@ class RenderManager {
         GammaCorrectionFilter* gammaCorrectionFilter;
         GlowFilter* glowFilter;
         GlowBlurFilter* glowBlurFilter;
+        
+        // Editor entity textures.
+        Texture2D* particleEmitterTexture;
+        Texture2D* lightTexture;
+        Texture2D* soundSourceTexture;
+        
+        // Geometry.
+        GLuint vertexBuffer;
+        GLuint vertexArray;
 };
