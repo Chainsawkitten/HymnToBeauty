@@ -49,6 +49,9 @@ ScriptManager::ScriptManager() {
     // Register components.
     engine->SetDefaultNamespace("Component");
     engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Transform", "vec3 position", asOFFSET(Component::Transform, position));
+    engine->RegisterObjectProperty("Transform", "vec3 scale", asOFFSET(Component::Transform, scale));
+    engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(Component::Transform, rotation));
     engine->SetDefaultNamespace("");
     
     // Register GetComponent.
