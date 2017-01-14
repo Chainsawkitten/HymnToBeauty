@@ -33,6 +33,12 @@ ScriptManager::ScriptManager() {
     // Register add-ons.
     RegisterStdString(engine);
     
+    // Register GLM types.
+    engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
+    engine->RegisterObjectProperty("vec3", "float x", asOFFSET(glm::vec3, x));
+    engine->RegisterObjectProperty("vec3", "float y", asOFFSET(glm::vec3, y));
+    engine->RegisterObjectProperty("vec3", "float z", asOFFSET(glm::vec3, z));
+    
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
