@@ -43,7 +43,7 @@ class Scene {
         /// Clear the scene of all entities.
         void Clear();
         
-        /// Removes all killed game objects, entities and components in the scene.
+        /// Removes all killed entities and components in the scene.
         void ClearKilled();
         
         /// Get all the particles in the scene.
