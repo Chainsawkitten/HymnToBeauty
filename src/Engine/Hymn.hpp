@@ -48,7 +48,10 @@ class ActiveHymn {
         void Update(float deltaTime);
         
         /// Render the active scene.
-        void Render();
+        /**
+         * @param editorRendering Whether to render editor entities.
+         */
+        void Render(bool editorRendering = false);
         
         /// The active scene.
         Scene activeScene;
