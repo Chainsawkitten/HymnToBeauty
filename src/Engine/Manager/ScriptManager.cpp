@@ -37,12 +37,15 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
     
+    // Register components.
+    engine->SetDefaultNamespace("Component");
+    engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->SetDefaultNamespace("");
+    
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
-    int r = engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
-    if (r < 0)
-        Log() << "asdfsadsad\n";
+    engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
 }
 
 ScriptManager::~ScriptManager() {
