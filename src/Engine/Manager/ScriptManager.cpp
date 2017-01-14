@@ -8,6 +8,7 @@
 #include "../Hymn.hpp"
 #include "../Scene/Scene.hpp"
 #include "../Component/Script.hpp"
+#include "../Component/Transform.hpp"
 #include "../Entity/Entity.hpp"
 #include "Managers.hpp"
 
@@ -43,12 +44,15 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
     engine->RegisterObjectMethod("Entity", "void Kill()", asMETHOD(Entity, Kill), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "bool IsKilled()", asMETHOD(Entity, IsKilled), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "bool IsKilled() const", asMETHOD(Entity, IsKilled), asCALL_THISCALL);
     
     // Register components.
     engine->SetDefaultNamespace("Component");
     engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->SetDefaultNamespace("");
+    
+    // Register GetComponent.
+    engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
     
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
