@@ -13,6 +13,7 @@
  * Height                 | Height of the editor window.    | long | 600
  * Sound Source Icons     | Show sound source icons.        | bool | true
  * Particle Emitter Icons | Show particle emitter icons.    | bool | true
+ * Light Source Icons     | Show light source icons.        | bool | true
  */
 class EditorSettings : public Settings {
     public:

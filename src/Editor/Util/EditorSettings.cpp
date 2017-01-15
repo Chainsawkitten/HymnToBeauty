@@ -14,6 +14,7 @@ EditorSettings::EditorSettings() {
     
     AddBoolSetting("Sound Source Icons", "View", "Sound Source Icons", true);
     AddBoolSetting("Particle Emitter Icons", "View", "Particle Emitter Icons", true);
+    AddBoolSetting("Light Source Icons", "View", "Light Source Icons", true);
 }
 
 EditorSettings& EditorSettings::GetInstance() {
