@@ -205,14 +205,14 @@ void ActiveHymn::Update(float deltaTime) {
     }
 }
 
-void ActiveHymn::Render(bool editorRendering) {
+void ActiveHymn::Render(bool soundSources, bool particleEmitters, bool lightSources) {
     { PROFILE("Render scene");
         Managers().renderManager->Render(activeScene);
     }
     
-    if (editorRendering) {
+    if (soundSources || particleEmitters || lightSources) {
         { PROFILE("Render editor entities");
-            Managers().renderManager->RenderEditorEntities(activeScene);
+            Managers().renderManager->RenderEditorEntities(activeScene, soundSources, particleEmitters, lightSources);
         }
     }
     

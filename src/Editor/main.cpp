@@ -65,7 +65,7 @@ int main() {
             
             if (editor->IsVisible()) {
                 Hymn().activeScene.ClearKilled();
-                Hymn().Render(true);
+                Hymn().Render(true, true, true);
                 
                 editor->Show();
             } else {
