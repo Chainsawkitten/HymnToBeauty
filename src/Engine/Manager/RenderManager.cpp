@@ -213,9 +213,10 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
         glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniform1i(editorEntityShaderProgram->GetUniformLocation("baseImage"), 0);
         
+        glActiveTexture(GL_TEXTURE0);
+        
         // Render sound sources.
         if (soundSources) {
-            glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, soundSourceTexture->GetTextureID());
             
             for (SoundSource* soundSource : scene.GetComponents<SoundSource>())

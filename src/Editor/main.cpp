@@ -65,7 +65,7 @@ int main() {
             
             if (editor->IsVisible()) {
                 Hymn().activeScene.ClearKilled();
-                Hymn().Render(true, true, true);
+                Hymn().Render(EditorSettings::GetInstance().GetBool("Sound Source Icons"), true, true);
                 
                 editor->Show();
             } else {
