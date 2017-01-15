@@ -33,9 +33,12 @@ class RenderManager {
         /// Render editor entities.
         /**
          * @param scene Scene to render.
+         * @param soundSources Whether to show sound sources.
+         * @param particleEmitters Whether to show particle emitters.
+         * @param lightSources Whether to show light sources.
          */
-        void RenderEditorEntities(Scene& scene);
-    
+        void RenderEditorEntities(Scene& scene, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
+        
     private:
         RenderManager();
         ~RenderManager();
