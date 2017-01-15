@@ -34,7 +34,9 @@ include_directories(externals/stb)
 include_directories(externals/imgui)
 
 # OpenAL Soft
+set(ALSOFT_UTILS OFF CACHE BOOL "Don't build OpenAL Soft utility programs" FORCE)
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
+set(ALSOFT_TESTS OFF CACHE BOOL "Don't build OpenAL Soft tests" FORCE)
 add_subdirectory(externals/openal-soft)
 include_directories(externals/openal-soft/include)
 if(WIN32)
