@@ -18,6 +18,7 @@ add_subdirectory(externals/glfw)
 include_directories(externals/glfw/include)
 
 # GLEW
+set(BUILD_UTILS OFF CACHE BOOL "Don't build GLEW utility programs" FORCE)
 add_subdirectory(externals/glew/build/cmake)
 include_directories(externals/glew/include)
 
