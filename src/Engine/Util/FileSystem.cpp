@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <cctype>
+#include <cstring>
 #include <fstream>
 
 // Platform-dependent includes.
@@ -35,7 +36,7 @@ namespace FileSystem {
 #else
         // MacOS and Linux
         struct stat buf;
-        int result = stat(Name.c_str(), &buf);
+        int result = stat(filename, &buf);
 #endif
         return result == 0;
     }
