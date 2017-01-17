@@ -24,6 +24,14 @@ const std::vector<Entity*>& Scene::GetEntities() const {
     return entities;
 }
 
+void Scene::RegisterUpdate(Entity* entity) {
+    updateEntities.push_back(entity);
+}
+
+const std::vector<Entity*>& Scene::GetUpdateEntities() const {
+    return updateEntities;
+}
+
 void Scene::Clear() {
     for (Entity* entity : entities)
         delete entity;
@@ -36,6 +44,7 @@ void Scene::Clear() {
     components.clear();
     
     particleCount = 0;
+    updateEntities.clear();
 }
 
 void Scene::ClearKilled() {
