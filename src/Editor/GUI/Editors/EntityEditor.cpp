@@ -21,6 +21,7 @@
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
+    name[0] = '\0';
     AddEditor<Component::Animation>("Animation", std::bind(&EntityEditor::AnimationEditor, this, std::placeholders::_1));
     AddEditor<Component::Transform>("Transform", std::bind(&EntityEditor::TransformEditor, this, std::placeholders::_1));
     AddEditor<Component::Physics>("Physics", std::bind(&EntityEditor::PhysicsEditor, this, std::placeholders::_1));

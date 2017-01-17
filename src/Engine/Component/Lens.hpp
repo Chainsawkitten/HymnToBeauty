@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SuperComponent.hpp"
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 
 namespace Component {
     /// %Component handling a camera lens.

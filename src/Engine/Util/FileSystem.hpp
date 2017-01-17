@@ -49,7 +49,7 @@ namespace FileSystem {
      * The application data folder is created if it does not already exist.
      * On Windows, this is \<User>\\AppData\\Roaming\\\<AppName>.
      * On MacOS, this is ~/Library/Application Support/\<AppName>.
-     * On Linux, this is ~/.local/\<AppName>.
+     * On Linux, this is ~/.local/share/\<AppName>.
      * @param appName The name of the app/game.
      * @return The path
      */
@@ -60,7 +60,7 @@ namespace FileSystem {
      * The application data folder is created if it does not already exist.
      * On Windows, this is \<User>\\AppData\\Roaming\\\<AppName>\\\<Filename>.
      * On MacOS, this is ~/Library/Application Support/\<AppName>/\<Filename>.
-     * On Linux, this is ~/.local/\<AppName>/\<Filename>.
+     * On Linux, this is ~/.local/share/\<AppName>/\<Filename>.
      * @param appName The name of the app/game.
      * @param filename Filename, eg. "settings.ini".
      * @return The path
