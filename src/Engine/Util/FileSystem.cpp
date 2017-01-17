@@ -112,7 +112,8 @@ namespace FileSystem {
         path = "~/Library/Application Support/";
 #elif __linux__
         // Linux
-        path = "~/.local/";
+        path = getenv("HOME");
+        path += "/.local/share/";
 #endif
         
         path += appName;
