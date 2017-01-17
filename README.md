@@ -1,4 +1,6 @@
 # Hymn to Beauty
+[![AppVeyor CI Build Status](https://ci.appveyor.com/api/projects/status/ol462v1vrb3dse2v?svg=true)](https://ci.appveyor.com/project/Chainsawkitten/hymntobeauty)
+
 C++/OpenGL 3D Engine
 
 ## Building

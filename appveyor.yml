@@ -1,0 +1,17 @@
+version: '{build}'
+
+skip_tags: true
+
+configuration: Release
+
+platform: x64
+
+install:
+- cmd: git submodule update --init
+
+before_build:
+- cmd: cmake -G "Visual Studio 14 2015 Win64"
+
+build:
+  project: HymnToBeauty.sln
+  verbosity: minimal
