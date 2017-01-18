@@ -183,7 +183,7 @@ void RenderManager::Render(Scene& scene) {
     }
 }
 
-void RenderManager::RenderEditorEntities(Scene& scene) {
+void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool particleEmitters, bool lightSources) {
     // Find camera entity.
     Entity* camera = nullptr;
     std::vector<Lens*> lenses = scene.GetComponents<Lens>();
@@ -213,30 +213,37 @@ void RenderManager::RenderEditorEntities(Scene& scene) {
         glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniform1i(editorEntityShaderProgram->GetUniformLocation("baseImage"), 0);
         
-        // Render sound sources.
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, soundSourceTexture->GetTextureID());
         
-        for (SoundSource* soundSource : scene.GetComponents<SoundSource>())
-            RenderEditorEntity(soundSource);
+        // Render sound sources.
+        if (soundSources) {
+            glBindTexture(GL_TEXTURE_2D, soundSourceTexture->GetTextureID());
+            
+            for (SoundSource* soundSource : scene.GetComponents<SoundSource>())
+                RenderEditorEntity(soundSource);
+        }
         
         // Render particle emitters.
-        glBindTexture(GL_TEXTURE_2D, particleEmitterTexture->GetTextureID());
-        
-        for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>())
-            RenderEditorEntity(emitter);
+        if (particleEmitters) {
+            glBindTexture(GL_TEXTURE_2D, particleEmitterTexture->GetTextureID());
+            
+            for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>())
+                RenderEditorEntity(emitter);
+        }
         
         // Render light sources.
-        glBindTexture(GL_TEXTURE_2D, lightTexture->GetTextureID());
-        
-        for (DirectionalLight* light : scene.GetComponents<DirectionalLight>())
-            RenderEditorEntity(light);
-        
-        for (PointLight* light : scene.GetComponents<PointLight>())
-            RenderEditorEntity(light);
-        
-        for (SpotLight* light : scene.GetComponents<SpotLight>())
-            RenderEditorEntity(light);
+        if (lightSources) {
+            glBindTexture(GL_TEXTURE_2D, lightTexture->GetTextureID());
+            
+            for (DirectionalLight* light : scene.GetComponents<DirectionalLight>())
+                RenderEditorEntity(light);
+            
+            for (PointLight* light : scene.GetComponents<PointLight>())
+                RenderEditorEntity(light);
+            
+            for (SpotLight* light : scene.GetComponents<SpotLight>())
+                RenderEditorEntity(light);
+        }
         
         glDepthMask(GL_TRUE);
         glDisable(GL_BLEND);

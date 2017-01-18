@@ -11,6 +11,10 @@ EditorSettings::EditorSettings() {
     
     AddLongSetting("Width", "Graphics", "Width", 800);
     AddLongSetting("Height", "Graphics", "Height", 600);
+    
+    AddBoolSetting("Sound Source Icons", "View", "Sound Source Icons", true);
+    AddBoolSetting("Particle Emitter Icons", "View", "Particle Emitter Icons", true);
+    AddBoolSetting("Light Source Icons", "View", "Light Source Icons", true);
 }
 
 EditorSettings& EditorSettings::GetInstance() {

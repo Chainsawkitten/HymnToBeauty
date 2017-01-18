@@ -32,6 +32,23 @@ void Editor::Show() {
             ImGui::EndMenu();
         }
         
+        // View menu.
+        if (ImGui::BeginMenu("View")) {
+            static bool soundSources = EditorSettings::GetInstance().GetBool("Sound Source Icons");
+            ImGui::MenuItem("Sound Sources", "", &soundSources);
+            EditorSettings::GetInstance().SetBool("Sound Source Icons", soundSources);
+            
+            static bool particleEmitters = EditorSettings::GetInstance().GetBool("Particle Emitter Icons");
+            ImGui::MenuItem("Particle Emitters", "", &particleEmitters);
+            EditorSettings::GetInstance().SetBool("Particle Emitter Icons", particleEmitters);
+            
+            static bool lightSources = EditorSettings::GetInstance().GetBool("Light Source Icons");
+            ImGui::MenuItem("Light Sources", "", &lightSources);
+            EditorSettings::GetInstance().SetBool("Light Source Icons", lightSources);
+            
+            ImGui::EndMenu();
+        }
+        
         // Play
         if (ImGui::BeginMenu("Play")) {
             if (ImGui::MenuItem("Play", "F5")) {

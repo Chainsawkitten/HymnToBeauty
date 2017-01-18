@@ -65,7 +65,7 @@ int main() {
             
             if (editor->IsVisible()) {
                 Hymn().activeScene.ClearKilled();
-                Hymn().Render(true);
+                Hymn().Render(EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"));
                 
                 editor->Show();
             } else {

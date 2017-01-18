@@ -49,9 +49,11 @@ class ActiveHymn {
         
         /// Render the active scene.
         /**
-         * @param editorRendering Whether to render editor entities.
+         * @param soundSources Whether to show sound sources.
+         * @param particleEmitters Whether to show particle emitters.
+         * @param lightSources Whether to show light sources.
          */
-        void Render(bool editorRendering = false);
+        void Render(bool soundSources = false, bool particleEmitters = false, bool lightSources = false);
         
         /// The active scene.
         Scene activeScene;
