@@ -1,6 +1,15 @@
 language: cpp
 
 os: linux
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake
+      - cmake-data
 
 script:
 - cmake .
