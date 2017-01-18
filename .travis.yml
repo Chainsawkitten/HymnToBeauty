@@ -3,5 +3,5 @@ language: cpp
 os: linux
 
 script:
-- cmake
+- cmake .
 - make -j
