@@ -10,6 +10,7 @@ addons:
     packages:
       - cmake
       - cmake-data
+      - libxrandr-dev
 
 script:
 - cmake .
