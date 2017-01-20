@@ -8,6 +8,7 @@
 #include "../Hymn.hpp"
 #include "../Scene/Scene.hpp"
 #include "../Component/Script.hpp"
+#include "../Component/DirectionalLight.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Listener.hpp"
 #include "../Component/Transform.hpp"
@@ -51,6 +52,10 @@ ScriptManager::ScriptManager() {
     // Register components.
     engine->SetDefaultNamespace("Component");
     
+    engine->RegisterObjectType("DirectionalLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("DirectionalLight", "vec3 color", asOFFSET(Component::DirectionalLight, color));
+    engine->RegisterObjectProperty("DirectionalLight", "float ambientCoefficient", asOFFSET(Component::DirectionalLight, ambientCoefficient));
+    
     engine->RegisterObjectType("Lens", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Lens", "float fieldOfView", asOFFSET(Component::Lens, fieldOfView));
     engine->RegisterObjectProperty("Lens", "float zNear", asOFFSET(Component::Lens, zNear));
@@ -66,6 +71,9 @@ ScriptManager::ScriptManager() {
     engine->SetDefaultNamespace("");
     
     // Register adding and getting components..
+    engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ AddDirectionalLight()", asMETHODPR(Entity, AddComponent<Component::DirectionalLight>, (), Component::DirectionalLight*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ GetDirectionalLight()", asMETHODPR(Entity, GetComponent<Component::DirectionalLight>, (), Component::DirectionalLight*), asCALL_THISCALL);
+    
     engine->RegisterObjectMethod("Entity", "Component::Lens@ AddLens()", asMETHODPR(Entity, AddComponent<Component::Lens>, (), Component::Lens*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Lens@ GetLens()", asMETHODPR(Entity, GetComponent<Component::Lens>, (), Component::Lens*), asCALL_THISCALL);
     
