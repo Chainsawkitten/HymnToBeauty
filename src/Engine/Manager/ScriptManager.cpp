@@ -54,7 +54,8 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(Component::Transform, rotation));
     engine->SetDefaultNamespace("");
     
-    // Register GetComponent.
+    // Register adding and getting components..
+    engine->RegisterObjectMethod("Entity", "Component::Transform@ AddTransform()", asMETHODPR(Entity, AddComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
     
     // Register functions.
