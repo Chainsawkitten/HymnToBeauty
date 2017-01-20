@@ -8,6 +8,7 @@
 #include "../Hymn.hpp"
 #include "../Scene/Scene.hpp"
 #include "../Component/Script.hpp"
+#include "../Component/Lens.hpp"
 #include "../Component/Transform.hpp"
 #include "../Entity/Entity.hpp"
 #include "Managers.hpp"
@@ -48,13 +49,23 @@ ScriptManager::ScriptManager() {
     
     // Register components.
     engine->SetDefaultNamespace("Component");
+    
+    engine->RegisterObjectType("Lens", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Lens", "float fieldOfView", asOFFSET(Component::Lens, fieldOfView));
+    engine->RegisterObjectProperty("Lens", "float zNear", asOFFSET(Component::Lens, zNear));
+    engine->RegisterObjectProperty("Lens", "float zFar", asOFFSET(Component::Lens, zFar));
+    
     engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Transform", "vec3 position", asOFFSET(Component::Transform, position));
     engine->RegisterObjectProperty("Transform", "vec3 scale", asOFFSET(Component::Transform, scale));
     engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(Component::Transform, rotation));
+    
     engine->SetDefaultNamespace("");
     
     // Register adding and getting components..
+    engine->RegisterObjectMethod("Entity", "Component::Lens@ AddLens()", asMETHODPR(Entity, AddComponent<Component::Lens>, (), Component::Lens*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Lens@ GetLens()", asMETHODPR(Entity, GetComponent<Component::Lens>, (), Component::Lens*), asCALL_THISCALL);
+    
     engine->RegisterObjectMethod("Entity", "Component::Transform@ AddTransform()", asMETHODPR(Entity, AddComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
     
