@@ -11,6 +11,7 @@
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Listener.hpp"
+#include "../Component/Physics.hpp"
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Component/Transform.hpp"
@@ -65,6 +66,18 @@ ScriptManager::ScriptManager() {
     
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
     
+    engine->RegisterObjectType("Physics", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Physics", "vec3 velocity", asOFFSET(Component::Physics, velocity));
+    engine->RegisterObjectProperty("Physics", "float maxVelocity", asOFFSET(Component::Physics, maxVelocity));
+    engine->RegisterObjectProperty("Physics", "vec3 angularVelocity", asOFFSET(Component::Physics, angularVelocity));
+    engine->RegisterObjectProperty("Physics", "float maxAngularVelocity", asOFFSET(Component::Physics, maxAngularVelocity));
+    engine->RegisterObjectProperty("Physics", "vec3 acceleration", asOFFSET(Component::Physics, acceleration));
+    engine->RegisterObjectProperty("Physics", "vec3 angularAcceleration", asOFFSET(Component::Physics, angularAcceleration));
+    engine->RegisterObjectProperty("Physics", "float velocityDragFactor", asOFFSET(Component::Physics, velocityDragFactor));
+    engine->RegisterObjectProperty("Physics", "float angularDragFactor", asOFFSET(Component::Physics, angularDragFactor));
+    engine->RegisterObjectProperty("Physics", "float gravityFactor", asOFFSET(Component::Physics, gravityFactor));
+    engine->RegisterObjectProperty("Physics", "vec3 momentOfInertia", asOFFSET(Component::Physics, momentOfInertia));
+    
     engine->RegisterObjectType("PointLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("PointLight", "vec3 color", asOFFSET(Component::PointLight, color));
     engine->RegisterObjectProperty("PointLight", "float ambientCoefficient", asOFFSET(Component::PointLight, ambientCoefficient));
@@ -94,6 +107,9 @@ ScriptManager::ScriptManager() {
     
     engine->RegisterObjectMethod("Entity", "Component::Listener@ AddListener()", asMETHODPR(Entity, AddComponent<Component::Listener>, (), Component::Listener*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Listener@ GetListener()", asMETHODPR(Entity, GetComponent<Component::Listener>, (), Component::Listener*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::Physics@ AddPhysics()", asMETHODPR(Entity, AddComponent<Component::Physics>, (), Component::Physics*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Physics@ GetPhysics()", asMETHODPR(Entity, GetComponent<Component::Physics>, (), Component::Physics*), asCALL_THISCALL);
     
     engine->RegisterObjectMethod("Entity", "Component::PointLight@ AddPointLight()", asMETHODPR(Entity, AddComponent<Component::PointLight>, (), Component::PointLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::PointLight@ GetPointLight()", asMETHODPR(Entity, GetComponent<Component::PointLight>, (), Component::PointLight*), asCALL_THISCALL);
