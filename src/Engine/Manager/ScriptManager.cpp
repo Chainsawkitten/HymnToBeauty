@@ -11,6 +11,7 @@
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Listener.hpp"
+#include "../Component/PointLight.hpp"
 #include "../Component/Transform.hpp"
 #include "../Entity/Entity.hpp"
 #include "Managers.hpp"
@@ -63,6 +64,12 @@ ScriptManager::ScriptManager() {
     
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
     
+    engine->RegisterObjectType("PointLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("PointLight", "vec3 color", asOFFSET(Component::PointLight, color));
+    engine->RegisterObjectProperty("PointLight", "float ambientCoefficient", asOFFSET(Component::PointLight, ambientCoefficient));
+    engine->RegisterObjectProperty("PointLight", "float attenuation", asOFFSET(Component::PointLight, attenuation));
+    engine->RegisterObjectProperty("PointLight", "float intensity", asOFFSET(Component::PointLight, intensity));
+    
     engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Transform", "vec3 position", asOFFSET(Component::Transform, position));
     engine->RegisterObjectProperty("Transform", "vec3 scale", asOFFSET(Component::Transform, scale));
@@ -79,6 +86,9 @@ ScriptManager::ScriptManager() {
     
     engine->RegisterObjectMethod("Entity", "Component::Listener@ AddListener()", asMETHODPR(Entity, AddComponent<Component::Listener>, (), Component::Listener*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Listener@ GetListener()", asMETHODPR(Entity, GetComponent<Component::Listener>, (), Component::Listener*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::PointLight@ AddPointLight()", asMETHODPR(Entity, AddComponent<Component::PointLight>, (), Component::PointLight*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::PointLight@ GetPointLight()", asMETHODPR(Entity, GetComponent<Component::PointLight>, (), Component::PointLight*), asCALL_THISCALL);
     
     engine->RegisterObjectMethod("Entity", "Component::Transform@ AddTransform()", asMETHODPR(Entity, AddComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
