@@ -62,7 +62,7 @@ class FogFilter : public Filter {
         glm::vec3 color;
         GLint colorLocation;
         
-        const Component::Lens* lens;
+        const Component::Lens* lens = nullptr;
         glm::vec2 screenSize;
         GLint matrixLocation;
         
