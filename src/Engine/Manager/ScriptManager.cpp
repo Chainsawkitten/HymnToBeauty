@@ -8,9 +8,17 @@
 #include "../Hymn.hpp"
 #include "../Scene/Scene.hpp"
 #include "../Component/Script.hpp"
+#include "../Component/DirectionalLight.hpp"
+#include "../Component/Lens.hpp"
+#include "../Component/Listener.hpp"
+#include "../Component/Physics.hpp"
+#include "../Component/PointLight.hpp"
+#include "../Component/SpotLight.hpp"
 #include "../Component/Transform.hpp"
 #include "../Entity/Entity.hpp"
 #include "Managers.hpp"
+
+using namespace Component;
 
 void print(const std::string& message) {
     Log() << message;
@@ -48,14 +56,71 @@ ScriptManager::ScriptManager() {
     
     // Register components.
     engine->SetDefaultNamespace("Component");
+    
+    engine->RegisterObjectType("DirectionalLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("DirectionalLight", "vec3 color", asOFFSET(DirectionalLight, color));
+    engine->RegisterObjectProperty("DirectionalLight", "float ambientCoefficient", asOFFSET(DirectionalLight, ambientCoefficient));
+    
+    engine->RegisterObjectType("Lens", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Lens", "float fieldOfView", asOFFSET(Lens, fieldOfView));
+    engine->RegisterObjectProperty("Lens", "float zNear", asOFFSET(Lens, zNear));
+    engine->RegisterObjectProperty("Lens", "float zFar", asOFFSET(Lens, zFar));
+    
+    engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    
+    engine->RegisterObjectType("Physics", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Physics", "vec3 velocity", asOFFSET(Physics, velocity));
+    engine->RegisterObjectProperty("Physics", "float maxVelocity", asOFFSET(Physics, maxVelocity));
+    engine->RegisterObjectProperty("Physics", "vec3 angularVelocity", asOFFSET(Physics, angularVelocity));
+    engine->RegisterObjectProperty("Physics", "float maxAngularVelocity", asOFFSET(Physics, maxAngularVelocity));
+    engine->RegisterObjectProperty("Physics", "vec3 acceleration", asOFFSET(Physics, acceleration));
+    engine->RegisterObjectProperty("Physics", "vec3 angularAcceleration", asOFFSET(Physics, angularAcceleration));
+    engine->RegisterObjectProperty("Physics", "float velocityDragFactor", asOFFSET(Physics, velocityDragFactor));
+    engine->RegisterObjectProperty("Physics", "float angularDragFactor", asOFFSET(Physics, angularDragFactor));
+    engine->RegisterObjectProperty("Physics", "float gravityFactor", asOFFSET(Physics, gravityFactor));
+    engine->RegisterObjectProperty("Physics", "vec3 momentOfInertia", asOFFSET(Physics, momentOfInertia));
+    
+    engine->RegisterObjectType("PointLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("PointLight", "vec3 color", asOFFSET(PointLight, color));
+    engine->RegisterObjectProperty("PointLight", "float ambientCoefficient", asOFFSET(PointLight, ambientCoefficient));
+    engine->RegisterObjectProperty("PointLight", "float attenuation", asOFFSET(PointLight, attenuation));
+    engine->RegisterObjectProperty("PointLight", "float intensity", asOFFSET(PointLight, intensity));
+    
+    engine->RegisterObjectType("SpotLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("SpotLight", "vec3 color", asOFFSET(SpotLight, color));
+    engine->RegisterObjectProperty("SpotLight", "float ambientCoefficient", asOFFSET(SpotLight, ambientCoefficient));
+    engine->RegisterObjectProperty("SpotLight", "float attenuation", asOFFSET(SpotLight, attenuation));
+    engine->RegisterObjectProperty("SpotLight", "float intensity", asOFFSET(SpotLight, intensity));
+    engine->RegisterObjectProperty("SpotLight", "float coneAngle", asOFFSET(SpotLight, coneAngle));
+    
     engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
-    engine->RegisterObjectProperty("Transform", "vec3 position", asOFFSET(Component::Transform, position));
-    engine->RegisterObjectProperty("Transform", "vec3 scale", asOFFSET(Component::Transform, scale));
-    engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(Component::Transform, rotation));
+    engine->RegisterObjectProperty("Transform", "vec3 position", asOFFSET(Transform, position));
+    engine->RegisterObjectProperty("Transform", "vec3 scale", asOFFSET(Transform, scale));
+    engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(Transform, rotation));
+    
     engine->SetDefaultNamespace("");
     
-    // Register GetComponent.
-    engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Component::Transform>, (), Component::Transform*), asCALL_THISCALL);
+    // Register adding and getting components..
+    engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ AddDirectionalLight()", asMETHODPR(Entity, AddComponent<DirectionalLight>, (), DirectionalLight*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ GetDirectionalLight()", asMETHODPR(Entity, GetComponent<DirectionalLight>, (), DirectionalLight*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::Lens@ AddLens()", asMETHODPR(Entity, AddComponent<Lens>, (), Lens*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Lens@ GetLens()", asMETHODPR(Entity, GetComponent<Lens>, (), Lens*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::Listener@ AddListener()", asMETHODPR(Entity, AddComponent<Listener>, (), Listener*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Listener@ GetListener()", asMETHODPR(Entity, GetComponent<Listener>, (), Listener*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::Physics@ AddPhysics()", asMETHODPR(Entity, AddComponent<Physics>, (), Physics*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Physics@ GetPhysics()", asMETHODPR(Entity, GetComponent<Physics>, (), Physics*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::PointLight@ AddPointLight()", asMETHODPR(Entity, AddComponent<PointLight>, (), PointLight*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::PointLight@ GetPointLight()", asMETHODPR(Entity, GetComponent<PointLight>, (), PointLight*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::SpotLight@ AddSpotLight()", asMETHODPR(Entity, AddComponent<SpotLight>, (), SpotLight*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::SpotLight@ GetSpotLight()", asMETHODPR(Entity, GetComponent<SpotLight>, (), SpotLight*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::Transform@ AddTransform()", asMETHODPR(Entity, AddComponent<Transform>, (), Transform*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Transform>, (), Transform*), asCALL_THISCALL);
     
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
@@ -91,7 +156,7 @@ void ScriptManager::BuildScript(const std::string& name) {
 
 void ScriptManager::Update(Scene& scene) {
     // Init.
-    for (Component::Script* script : scene.GetComponents<Component::Script>()) {
+    for (Script* script : scene.GetComponents<Script>()) {
         if (!script->initialized) {
             CallScript(script->entity, "void Init()");
             script->initialized = true;
