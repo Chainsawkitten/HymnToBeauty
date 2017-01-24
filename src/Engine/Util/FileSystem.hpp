@@ -80,4 +80,11 @@ namespace FileSystem {
      * @return The extension part of the filename, converted to lower case.
      */
     std::string GetExtension(const std::string& filename);
+    
+    /// Execute a program asynchronously.
+    /**
+     * @param path The path to the program to execute.
+     * @param arguments The arguments to the program.
+     */
+    void ExecuteProgram(const std::string& path, const std::string& arguments);
 }

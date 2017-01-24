@@ -17,6 +17,8 @@
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Util/FileSystem.hpp>
+#include "../../Util/EditorSettings.hpp"
 
 using namespace GUI;
 
@@ -231,7 +233,10 @@ void EntityEditor::ListenerEditor(Component::Listener* listener) {
 }
 
 void EntityEditor::ScriptEditor(Component::Script* script) {
-    
+    if (ImGui::Button("Edit")) {
+        std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + entity->name + ".as";
+        FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
+    }
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {

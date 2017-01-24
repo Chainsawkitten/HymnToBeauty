@@ -5,15 +5,16 @@
 /// %Settings for the editor.
 /**
  * Available settings:
- * Name                   | Description                     | Type | Default Value
- * ---------------------- | ------------------------------- | ---- | -------------
- * Logging                | Output a log file.              | bool | false
- * Debug Context          | Create an OpenGL Debug Context. | bool | false
- * Width                  | Width of the editor window.     | long | 800
- * Height                 | Height of the editor window.    | long | 600
- * Sound Source Icons     | Show sound source icons.        | bool | true
- * Particle Emitter Icons | Show particle emitter icons.    | bool | true
- * Light Source Icons     | Show light source icons.        | bool | true
+ * Name                   | Description                      | Type   | Default Value
+ * ---------------------- | -------------------------------- | ------ | -------------
+ * Logging                | Output a log file.               | bool   | false
+ * Debug Context          | Create an OpenGL Debug Context.  | bool   | false
+ * Width                  | Width of the editor window.      | long   | 800
+ * Height                 | Height of the editor window.     | long   | 600
+ * Sound Source Icons     | Show sound source icons.         | bool   | true
+ * Particle Emitter Icons | Show particle emitter icons.     | bool   | true
+ * Light Source Icons     | Show light source icons.         | bool   | true
+ * Text Editor            | Path to text editor for scripts. | string | 
  */
 class EditorSettings : public Settings {
     public:

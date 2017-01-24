@@ -6,6 +6,7 @@
 #include <cctype>
 #include <cstring>
 #include <fstream>
+#include "Log.hpp"
 
 // Platform-dependent includes.
 #if defined(_WIN32) || defined(WIN32)
@@ -150,5 +151,22 @@ namespace FileSystem {
             extension[i] = tolower(extension[i]);
         
         return extension;
+    }
+    
+    void ExecuteProgram(const std::string& path, const std::string& arguments) {
+#if defined(_WIN32) || defined(WIN32)
+        STARTUPINFO si = { 0 };
+        si.cb = sizeof(si);
+        PROCESS_INFORMATION pi;
+        char* temp = new char[path.length() + arguments.length() + 4];
+        strcpy(temp, ("\"" + path + "\" " + arguments).c_str());
+        if (!CreateProcess(path.c_str(), temp, NULL, NULL, FALSE, 0, 0, 0, &si, &pi))
+            Log() << "Failed to execute program.\n";
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+        delete[] temp;
+#else
+        Log() << "Executing a program not supported on this platform.\n";
+#endif
     }
 }
