@@ -16,7 +16,7 @@ namespace Json {
      * @param value The JSON node to load from.
      * @return The loaded vec2.
      */
-    glm::vec2 LoadVec2(const Json::Value& value);
+    glm::vec2 LoadVec2(const Value& value);
     
     /// Convert a vec3 to a JSON node.
     /**
@@ -30,5 +30,5 @@ namespace Json {
      * @param value The JSON node to load from.
      * @return The loaded vec3.
      */
-    glm::vec3 LoadVec3(const Json::Value& value);
+    glm::vec3 LoadVec3(const Value& value);
 }
