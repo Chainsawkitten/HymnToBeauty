@@ -1,4 +1,5 @@
 # Hymn to Beauty
+[![Travis CI Build Status](https://travis-ci.org/Chainsawkitten/HymnToBeauty.svg?branch=master)](https://travis-ci.org/Chainsawkitten/HymnToBeauty)
 [![AppVeyor CI Build Status](https://ci.appveyor.com/api/projects/status/ol462v1vrb3dse2v?svg=true)](https://ci.appveyor.com/project/Chainsawkitten/hymntobeauty)
 
 C++/OpenGL 3D Engine
