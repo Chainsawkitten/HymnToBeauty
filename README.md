@@ -19,8 +19,8 @@ Hymn to Beauty uses several third party libraries with their own licenses:
 | [AngelScript](https://github.com/IngwiePhoenix/AngelScript) | zlib |
 | [assimp](https://github.com/assimp/assimp) | Modified BSD |
 | [Headerize](https://github.com/Chainsawkitten/Headerize) | Public domain |
-| [GLEW](https://github.com/Perlmint/glew-cmake) | Modified BSD, MIT |
-| [GLFW](https://github.com/glfw/glfw) | zlib/libpng |
+| [GLEW](https://github.com/Perlmint/glew-cmake) | Modified BSD / MIT |
+| [GLFW](https://github.com/glfw/glfw) | zlib / libpng |
 | [GLM](https://github.com/g-truc/glm) | Modified MIT / MIT |
 | [dear imgui](https://github.com/ocornut/imgui) | MIT |
 | [JsonCpp](https://github.com/open-source-parsers/jsoncpp) | MIT / Public domain |
