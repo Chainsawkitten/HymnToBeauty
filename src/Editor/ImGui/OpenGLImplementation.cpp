@@ -13,8 +13,8 @@
 namespace ImGuiImplementation {
     // Forward declarations.
     void RenderDrawLists(ImDrawData* draw_data);
-    static const char* GetClipboardText();
-    static void SetClipboardText(const char* text);
+    static const char* GetClipboardText(void* userData);
+    static void SetClipboardText(void* userData, const char* text);
     void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
     void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
     void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -63,6 +63,7 @@ namespace ImGuiImplementation {
         io.RenderDrawListsFn = RenderDrawLists;
         io.SetClipboardTextFn = SetClipboardText;
         io.GetClipboardTextFn = GetClipboardText;
+        io.ClipboardUserData = g_Window;
 #ifdef _WIN32
         io.ImeWindowHandle = glfwGetWin32Window(g_Window);
 #endif
@@ -214,12 +215,12 @@ namespace ImGuiImplementation {
         glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
     }
     
-    static const char* GetClipboardText() {
-        return glfwGetClipboardString(g_Window);
+    static const char* GetClipboardText(void* userData) {
+        return glfwGetClipboardString(static_cast<GLFWwindow*>(userData));
     }
     
-    static void SetClipboardText(const char* text) {
-        glfwSetClipboardString(g_Window, text);
+    static void SetClipboardText(void* userData, const char* text) {
+        glfwSetClipboardString(static_cast<GLFWwindow*>(userData), text);
     }
     
     void MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/) {
