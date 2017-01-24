@@ -42,7 +42,7 @@ namespace Component {
             /// Acceleration (in meter/second^2).
             glm::vec3 acceleration = glm::vec3(0.f, 0.f, 0.f);
             
-            /// Angular acceleration (in rad/second^2).
+            /// Angular acceleration (in Hz/second).
             glm::vec3 angularAcceleration = glm::vec3(0.f, 0.f, 0.f);
             
             /// Friction factor. Describes the percentage of the velocity that is lost each second. 
