@@ -16,16 +16,16 @@ namespace Geometry {
  * Used to load a 2D texture from an image file.
  */
 class Texture2D : public Texture {
-	public:
+    public:
         /// Create new unloaded texture.
         Texture2D();
         
-		/// Create new texture from the given image file.
-		/**
-	 	 * @param filename Filename (relative or absolute) of the image file.
-	 	 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
-		 */
-		Texture2D(const char* filename, bool srgb = false);
+        /// Create new texture from the given image file.
+        /**
+         * @param filename Filename (relative or absolute) of the image file.
+         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
+         */
+        Texture2D(const char* filename, bool srgb = false);
         
         /// Create new texture from given source string.
         /**
@@ -34,35 +34,35 @@ class Texture2D : public Texture {
          * @param srgb Whether the image is in SRGB space and should be converted to linear space.
          */
         Texture2D(const char* source, int sourceLength, bool srgb = false);
-
-		/// Destructor
-		~Texture2D() override;
-
-		/// Get OpenGL texture ID.
-		/**
-		 * Used when binding a texture before draw calls.
-		 * @return The OpenGL texture identifier
-		 */
-		GLuint GetTextureID() const override;
-
-		/// Get the width of the texture.
-		/**
-		 * @return The width of the texture in texels
-		 */
-		int GetWidth() const override;
-
-		/// Get the height of the texture.
-		/**
-		 * @return The height of the texture in texels
-		 */
-		int GetHeight() const override;
-
-		/// Set how coordinates outside 0..1 are handled.
-		/**
-		 * Default: GL_REPEAT
-		 * @param wrapMode One of GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE or GL_CLAMP_TO_BORDER.
-		 */
-		void SetWrapping(GLint wrapMode);
+        
+        /// Destructor
+        ~Texture2D() override;
+        
+        /// Get OpenGL texture ID.
+        /**
+         * Used when binding a texture before draw calls.
+         * @return The OpenGL texture identifier
+         */
+        GLuint GetTextureID() const override;
+        
+        /// Get the width of the texture.
+        /**
+         * @return The width of the texture in texels
+         */
+        int GetWidth() const override;
+        
+        /// Get the height of the texture.
+        /**
+         * @return The height of the texture in texels
+         */
+        int GetHeight() const override;
+        
+        /// Set how coordinates outside 0..1 are handled.
+        /**
+         * Default: GL_REPEAT
+         * @param wrapMode One of GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE or GL_CLAMP_TO_BORDER.
+         */
+        void SetWrapping(GLint wrapMode);
         
         /// Render the texture to the screen.
         /**
@@ -103,9 +103,10 @@ class Texture2D : public Texture {
         /// Whether to convert from SRGB space to linear space when loading.
         bool srgb = false;
         
-	private:
-		GLuint texID;
-		int width, height;
+    private:
+        GLuint texID = 0;
+        int width = 0;
+        int height = 0;
         bool isFromFile;
         
         Geometry::Rectangle* rectangle;

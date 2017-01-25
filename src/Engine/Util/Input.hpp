@@ -141,7 +141,8 @@ class InputHandler {
         // Button data.
         ButtonData buttonData[BUTTONS];
         
-        double cursorX, cursorY;
+        double cursorX = 0.0;
+        double cursorY = 0.0;
         double lastScroll = 0.0;
         double scroll = 0.0;
         

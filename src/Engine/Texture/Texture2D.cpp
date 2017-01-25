@@ -20,10 +20,24 @@
 
 Texture2D::Texture2D() {
     isFromFile = false;
+    
+    // For rendering.
+    rectangle = Managers().resourceManager->CreateRectangle();
+    
+    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
 }
 
 Texture2D::Texture2D(const char* filename, bool srgb) {
 	Load(filename, srgb);
+    
+    // For rendering.
+    rectangle = Managers().resourceManager->CreateRectangle();
+    
+    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
+    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
+    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
 }
 
 Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
@@ -67,7 +81,8 @@ Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
 }
 
 Texture2D::~Texture2D() {
-	glDeleteTextures(1, &texID);
+    if (texID != 0)
+        glDeleteTextures(1, &texID);
     
     Managers().resourceManager->FreeShader(vertexShader);
     Managers().resourceManager->FreeShader(fragmentShader);
@@ -175,13 +190,6 @@ void Texture2D::Load(const char* filename, bool srgb) {
 
 	// Generate mipmaps.
 	glGenerateMipmap(GL_TEXTURE_2D);
-    
-    // For rendering.
-    rectangle = Managers().resourceManager->CreateRectangle();
-    
-    vertexShader = Managers().resourceManager->CreateShader(DEFAULT2D_VERT, DEFAULT2D_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = Managers().resourceManager->CreateShader(TEXTURE2D_FRAG, TEXTURE2D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = Managers().resourceManager->CreateShaderProgram({ vertexShader, fragmentShader });
     
     isFromFile = true;
     this->srgb = srgb;

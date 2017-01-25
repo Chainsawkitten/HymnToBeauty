@@ -23,7 +23,7 @@ class ProfilingManager {
         
         struct Result {
             std::string name;
-            double duration;
+            double duration = 0.0;
             std::list<Result> children;
             Result* parent;
             
