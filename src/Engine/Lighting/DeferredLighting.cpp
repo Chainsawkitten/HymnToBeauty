@@ -11,7 +11,6 @@
 #include "Deferred.frag.hpp"
 
 #include "../Entity/Entity.hpp"
-#include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/SpotLight.hpp"
@@ -133,7 +132,7 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     glUniform1i(shaderProgram->GetUniformLocation("lightCount"), 32);
     
     // Get the camera matrices.
-    glm::mat4 viewMat(camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position));
+    glm::mat4 viewMat(camera->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->position));
     glm::mat4 projectionMat(camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize()));
     glm::mat4 viewProjectionMat(projectionMat * viewMat);
     
@@ -148,20 +147,17 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     std::vector<Component::DirectionalLight*>& directionalLights = scene.GetComponents<Component::DirectionalLight>();
     for (Component::DirectionalLight* light : directionalLights) {
         Entity* lightEntity = light->entity;
-        Component::Transform* transform = lightEntity->GetComponent<Component::Transform>();
-        if (transform != nullptr) {
-            glm::vec4 direction(glm::vec4(transform->GetDirection(), 0.f));
-            glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * -direction)[0]);
-            glUniform3fv(lightUniforms[lightIndex].intensities, 1, &light->color[0]);
-            glUniform1f(lightUniforms[lightIndex].attenuation, 1.f);
-            glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
-            glUniform1f(lightUniforms[lightIndex].coneAngle, 0.f);
-            glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(0.f, 0.f, 0.f)[0]);
-            
-            if (++lightIndex >= lightCount) {
-                lightIndex = 0U;
-                glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-            }
+        glm::vec4 direction(glm::vec4(lightEntity->GetDirection(), 0.f));
+        glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * -direction)[0]);
+        glUniform3fv(lightUniforms[lightIndex].intensities, 1, &light->color[0]);
+        glUniform1f(lightUniforms[lightIndex].attenuation, 1.f);
+        glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
+        glUniform1f(lightUniforms[lightIndex].coneAngle, 0.f);
+        glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(0.f, 0.f, 0.f)[0]);
+        
+        if (++lightIndex >= lightCount) {
+            lightIndex = 0U;
+            glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
         }
     }
     
@@ -169,21 +165,18 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     std::vector<Component::SpotLight*>& spotLights = scene.GetComponents<Component::SpotLight>();
     for (Component::SpotLight* light : spotLights) {
         Entity* lightEntity = light->entity;
-        Component::Transform* transform = lightEntity->GetComponent<Component::Transform>();
-        if (transform != nullptr) {
-            glm::vec4 direction(viewMat * glm::vec4(transform->GetDirection(), 0.f));
-            glm::mat4 modelMatrix(transform->GetModelMatrix());
-            glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0)))[0]);
-            glUniform3fv(lightUniforms[lightIndex].intensities, 1, &(light->color * light->intensity)[0]);
-            glUniform1f(lightUniforms[lightIndex].attenuation, light->attenuation);
-            glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
-            glUniform1f(lightUniforms[lightIndex].coneAngle, light->coneAngle);
-            glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(direction)[0]);
-            
-            if (++lightIndex >= lightCount) {
-                lightIndex = 0U;
-                glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-            }
+        glm::vec4 direction(viewMat * glm::vec4(lightEntity->GetDirection(), 0.f));
+        glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
+        glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0)))[0]);
+        glUniform3fv(lightUniforms[lightIndex].intensities, 1, &(light->color * light->intensity)[0]);
+        glUniform1f(lightUniforms[lightIndex].attenuation, light->attenuation);
+        glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
+        glUniform1f(lightUniforms[lightIndex].coneAngle, light->coneAngle);
+        glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(direction)[0]);
+        
+        if (++lightIndex >= lightCount) {
+            lightIndex = 0U;
+            glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
         }
     }
     
@@ -194,25 +187,22 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     std::vector<Component::PointLight*>& pointLights = scene.GetComponents<Component::PointLight>();
     for (Component::PointLight* light : pointLights) {
         Entity* lightEntity = light->entity;
-        Component::Transform* transform = lightEntity->GetComponent<Component::Transform>();
-        if (transform != nullptr) {
-            float scale = sqrt((1.0 / cutOff - 1.0) / light->attenuation);
-            glm::mat4 modelMat = glm::translate(glm::mat4(), transform->position) * glm::scale(glm::mat4(), glm::vec3(1.f, 1.f, 1.f) * scale);
+        float scale = sqrt((1.0 / cutOff - 1.0) / light->attenuation);
+        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->position) * glm::scale(glm::mat4(), glm::vec3(1.f, 1.f, 1.f) * scale);
+        
+        Physics::Frustum frustum(viewProjectionMat * modelMat);
+        if (frustum.Collide(aabb)) {
+            glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
+            glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0)))[0]);
+            glUniform3fv(lightUniforms[lightIndex].intensities, 1, &(light->color * light->intensity)[0]);
+            glUniform1f(lightUniforms[lightIndex].attenuation, light->attenuation);
+            glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
+            glUniform1f(lightUniforms[lightIndex].coneAngle, 180.f);
+            glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(1.f, 0.f, 0.f)[0]);
             
-            Physics::Frustum frustum(viewProjectionMat * modelMat);
-            if (frustum.Collide(aabb)) {
-                glm::mat4 modelMatrix(transform->GetModelMatrix());
-                glUniform4fv(lightUniforms[lightIndex].position, 1, &(viewMat * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0)))[0]);
-                glUniform3fv(lightUniforms[lightIndex].intensities, 1, &(light->color * light->intensity)[0]);
-                glUniform1f(lightUniforms[lightIndex].attenuation, light->attenuation);
-                glUniform1f(lightUniforms[lightIndex].ambientCoefficient, light->ambientCoefficient);
-                glUniform1f(lightUniforms[lightIndex].coneAngle, 180.f);
-                glUniform3fv(lightUniforms[lightIndex].direction, 1, &glm::vec3(1.f, 0.f, 0.f)[0]);
-                
-                if (++lightIndex >= lightCount) {
-                    lightIndex = 0U;
-                    glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-                }
+            if (++lightIndex >= lightCount) {
+                lightIndex = 0U;
+                glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
             }
         }
     }
