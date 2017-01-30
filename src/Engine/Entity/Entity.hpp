@@ -55,8 +55,51 @@ class Entity {
          */
         void Load(const Json::Value& node);
         
+        /// Get the model matrix.
+        /**
+         * @return The model matrix.
+         */
+        glm::mat4 GetModelMatrix() const;
+        
+        /// Get orientation matrix.
+        /**
+         * @return The entity's orientation matrix.
+         */
+        glm::mat4 GetOrientation() const;
+        
+        /// Get orientation matrix (for camera).
+        /**
+         * Calculates the orientation matrix as if the entity was a camera.
+         * @return The entity's orientation matrix.
+         */
+        glm::mat4 GetCameraOrientation() const;
+        
+        /// Get direction of the entity.
+        /**
+         * @return The entity's direction.
+         */
+        glm::vec3 GetDirection() const;
+        
         /// Name of the entity.
         std::string name;
+        
+        /// Position in the world.
+        /**
+         * Default: 0.f, 0.f, 0.f
+         */
+        glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
+        
+        /// Scale.
+        /**
+         * Default: 1.f, 1.f, 1.f
+         */
+        glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f);
+        
+        /// Rotation (yaw, pitch, roll in degrees).
+        /**
+         * Default: 0.f, 0.f, 0.f
+         */
+        glm::vec3 rotation = glm::vec3(0.f, 0.f, 0.f);
         
     private:
         template<typename T> void Save(Json::Value& node, const std::string& name) const;
