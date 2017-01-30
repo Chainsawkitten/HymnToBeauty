@@ -2,7 +2,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Component/Animation.hpp"
-#include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
@@ -44,7 +43,6 @@ Json::Value Entity::Save() const {
     entity["rotation"] = Json::SaveVec3(rotation);
     
     Save<Component::Animation>(entity, "Animation");
-    Save<Component::Transform>(entity, "Transform");
     Save<Component::Lens>(entity, "Lens");
     Save<Component::Mesh>(entity, "Mesh");
     Save<Component::Material>(entity, "Material");
@@ -67,7 +65,6 @@ void Entity::Load(const Json::Value& node) {
     rotation = Json::LoadVec3(node["rotation"]);
     
     Load<Component::Animation>(node, "Animation");
-    Load<Component::Transform>(node, "Transform");
     Load<Component::Lens>(node, "Lens");
     Load<Component::Mesh>(node, "Mesh");
     Load<Component::Material>(node, "Material");

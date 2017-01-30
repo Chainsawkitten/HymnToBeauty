@@ -14,7 +14,6 @@
 #include "../Component/Physics.hpp"
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
-#include "../Component/Transform.hpp"
 #include "../Entity/Entity.hpp"
 #include "Managers.hpp"
 
@@ -96,11 +95,6 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("SpotLight", "float intensity", asOFFSET(SpotLight, intensity));
     engine->RegisterObjectProperty("SpotLight", "float coneAngle", asOFFSET(SpotLight, coneAngle));
     
-    engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
-    engine->RegisterObjectProperty("Transform", "vec3 position", asOFFSET(Transform, position));
-    engine->RegisterObjectProperty("Transform", "vec3 scale", asOFFSET(Transform, scale));
-    engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(Transform, rotation));
-    
     engine->SetDefaultNamespace("");
     
     // Register adding and getting components..
@@ -121,9 +115,6 @@ ScriptManager::ScriptManager() {
     
     engine->RegisterObjectMethod("Entity", "Component::SpotLight@ AddSpotLight()", asMETHODPR(Entity, AddComponent<SpotLight>, (), SpotLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::SpotLight@ GetSpotLight()", asMETHODPR(Entity, GetComponent<SpotLight>, (), SpotLight*), asCALL_THISCALL);
-    
-    engine->RegisterObjectMethod("Entity", "Component::Transform@ AddTransform()", asMETHODPR(Entity, AddComponent<Transform>, (), Transform*), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "Component::Transform@ GetTransform()", asMETHODPR(Entity, GetComponent<Transform>, (), Transform*), asCALL_THISCALL);
     
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
