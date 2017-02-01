@@ -5,7 +5,6 @@
 #include "../Scene/Scene.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/ParticleEmitter.hpp"
-#include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include "../MainWindow.hpp"
 #include "../Manager/Managers.hpp"
@@ -129,12 +128,12 @@ void ParticleManager::Render(Scene& scene, Entity* camera) {
         glBindTexture(GL_TEXTURE_2D, textureAtlas->GetTextureID());
         
         // Send the matrices to the shader.
-        glm::mat4 viewMat = camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position);
+        glm::mat4 viewMat = camera->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->position);
         glm::mat4 projectionMat = camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize());
         glm::mat4 viewProjectionMat = projectionMat * viewMat;
-        glm::vec3 up(glm::inverse(camera->GetComponent<Component::Transform>()->GetCameraOrientation())* glm::vec4(0, 1, 0, 1));
+        glm::vec3 up(glm::inverse(camera->GetCameraOrientation())* glm::vec4(0, 1, 0, 1));
         
-        glUniform3fv(shaderProgram->GetUniformLocation("cameraPosition"), 1, &camera->GetComponent<Component::Transform>()->position[0]);
+        glUniform3fv(shaderProgram->GetUniformLocation("cameraPosition"), 1, &camera->position[0]);
         glUniform3fv(shaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjectionMatrix"), 1, GL_FALSE, &viewProjectionMat[0][0]);
         glUniform1fv(shaderProgram->GetUniformLocation("textureAtlasRows"), 1, &textureAtlasRowNumber);
@@ -153,16 +152,13 @@ void ParticleManager::Render(Scene& scene, Entity* camera) {
 }
 
 void ParticleManager::EmitParticle(Scene& scene, Component::ParticleEmitter* emitter) {
-    Component::Transform* transform = emitter->entity->GetComponent<Component::Transform>();
-    if (transform != nullptr) {
-        glm::vec3 position(transform->position);
-        if (emitter->emitterType == Component::ParticleEmitter::CUBOID) {
-            std::uniform_real_distribution<float> randomSpread(-0.5f, 0.5f);
-            glm::vec3 random(randomSpread(randomEngine), randomSpread(randomEngine), randomSpread(randomEngine));
-            position += random * emitter->size;
-        }
-        EmitParticle(scene, position, emitter);
+    glm::vec3 position(emitter->entity->position);
+    if (emitter->emitterType == Component::ParticleEmitter::CUBOID) {
+        std::uniform_real_distribution<float> randomSpread(-0.5f, 0.5f);
+        glm::vec3 random(randomSpread(randomEngine), randomSpread(randomEngine), randomSpread(randomEngine));
+        position += random * emitter->size;
     }
+    EmitParticle(scene, position, emitter);
 }
 
 void ParticleManager::EmitParticle(Scene& scene, const glm::vec3& position, Component::ParticleEmitter* emitter) {

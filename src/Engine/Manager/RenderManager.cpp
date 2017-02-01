@@ -19,7 +19,6 @@
 #include "../RenderProgram/StaticRenderProgram.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Lens.hpp"
-#include "../Component/Transform.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
 #include "../Component/ParticleEmitter.hpp"
@@ -125,9 +124,8 @@ void RenderManager::Render(Scene& scene) {
     Entity* camera = nullptr;
     std::vector<Lens*> lenses = scene.GetComponents<Lens>();
     for (Lens* lens : lenses) {
-        if (lens->entity->GetComponent<Transform>() != nullptr)
-            camera = lens->entity;
-    };
+        camera = lens->entity;
+    }
     
     // Render from camera.
     if (camera != nullptr) {
@@ -188,9 +186,8 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
     Entity* camera = nullptr;
     std::vector<Lens*> lenses = scene.GetComponents<Lens>();
     for (Lens* lens : lenses) {
-        if (lens->entity->GetComponent<Transform>() != nullptr)
-            camera = lens->entity;
-    };
+        camera = lens->entity;
+    }
     
     // Render from camera.
     if (camera != nullptr) {
@@ -202,14 +199,13 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
         
         // Set camera uniforms.
         glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
-        Transform* cameraTransform = camera->GetComponent<Component::Transform>();
-        glm::mat4 viewMat(cameraTransform->GetCameraOrientation() * glm::translate(glm::mat4(), -cameraTransform->position));
+        glm::mat4 viewMat(camera->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->position));
         glm::mat4 projectionMat(camera->GetComponent<Lens>()->GetProjection(screenSize));
         glm::mat4 viewProjectionMat(projectionMat * viewMat);
-        glm::vec3 up(glm::inverse(cameraTransform->GetCameraOrientation())* glm::vec4(0, 1, 0, 1));
+        glm::vec3 up(glm::inverse(camera->GetCameraOrientation())* glm::vec4(0, 1, 0, 1));
     
         glUniformMatrix4fv(editorEntityShaderProgram->GetUniformLocation("viewProjectionMatrix"), 1, GL_FALSE, &viewProjectionMat[0][0]);
-        glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraPosition"), 1, &cameraTransform->position[0]);
+        glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraPosition"), 1, &camera->position[0]);
         glUniform3fv(editorEntityShaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniform1i(editorEntityShaderProgram->GetUniformLocation("baseImage"), 0);
         
@@ -252,9 +248,6 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
 
 void RenderManager::RenderEditorEntity(SuperComponent* component) {
     Entity* entity = component->entity;
-    Transform* transform = entity->GetComponent<Transform>();
-    if (transform != nullptr) {
-        glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &transform->position[0]);
-        glDrawArrays(GL_POINTS, 0, 1);
-    }
+    glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &entity->position[0]);
+    glDrawArrays(GL_POINTS, 0, 1);
 }

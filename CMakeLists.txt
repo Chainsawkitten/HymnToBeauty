@@ -240,7 +240,6 @@ set(ENGINE_SRCS
         src/Engine/Component/SoundSource.cpp
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
-        src/Engine/Component/Transform.cpp
         src/Engine/Entity/Entity.cpp
         src/Engine/Font/Font.cpp
         src/Engine/Lighting/DeferredLighting.cpp
@@ -310,7 +309,6 @@ set(ENGINE_HEADERS
         src/Engine/Component/SoundSource.hpp
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
-        src/Engine/Component/Transform.hpp
         src/Engine/Entity/Entity.hpp
         src/Engine/Font/Font.hpp
         src/Engine/Lighting/DeferredLighting.hpp

@@ -2,7 +2,6 @@
 
 #include "../Scene/Scene.hpp"
 #include "../Entity/Entity.hpp"
-#include "../Component/Transform.hpp"
 #include "../Component/Lens.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../MainWindow.hpp"
@@ -76,12 +75,11 @@ void DebugDrawingManager::Render(Scene& scene) {
     Entity* camera = nullptr;
     std::vector<Component::Lens*> lenses = scene.GetComponents<Component::Lens>();
     for (Component::Lens* lens : lenses) {
-        if (lens->entity->GetComponent<Component::Transform>() != nullptr)
-            camera = lens->entity;
+        camera = lens->entity;
     };
     
     if (camera != nullptr) {
-        glm::mat4 viewMat(camera->GetComponent<Component::Transform>()->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->GetComponent<Component::Transform>()->position));
+        glm::mat4 viewMat(camera->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->position));
         glm::mat4 projectionMat(camera->GetComponent<Component::Lens>()->GetProjection(MainWindow::GetInstance()->GetSize()));
         glm::mat4 viewProjectionMat(projectionMat * viewMat);
         
