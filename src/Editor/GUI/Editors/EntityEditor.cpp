@@ -246,17 +246,13 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
 		int script_number = 0;
 		for (ScriptFile* script_file : Hymn().scripts) {
-			if (ImGui::Selectable(("Script #" + std::to_string(script_number)).c_str()))
+			if (ImGui::Selectable(script_file->name.c_str()))
 				script->scriptfile = script_file;
 		}
 
 		ImGui::EndPopup();
 	}
 
-
-	if (ImGui::Button("Build")) {
-		Managers().scriptManager->BuildSpecificScript(script->scriptfile->path.c_str());
-	}
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {

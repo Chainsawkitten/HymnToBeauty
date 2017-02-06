@@ -1,12 +1,15 @@
 #include "ScriptEditor.hpp"
 
 #include <Engine/Script/ScriptFile.hpp>
-#include "../FileSelector.hpp"
-#include <functional>
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
-#include <imgui.h>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ScriptManager.hpp>
 #include <Editor/Util/EditorSettings.hpp>
+#include <functional>
+#include <imgui.h>
+
+#include "../FileSelector.hpp"
 
 using namespace GUI;
 
@@ -29,8 +32,6 @@ void ScriptEditor::Show() {
 
 		}
 
-		ImGui::Text(script->path.c_str());
-
         if (ImGui::Button("Load Script")) {
             fileSelector.AddExtensions("as");
             fileSelector.SetFileSelectedCallback(std::bind(&ScriptEditor::FileSelected, this, std::placeholders::_1));
@@ -40,6 +41,11 @@ void ScriptEditor::Show() {
 		if (ImGui::Button("Edit Script")) {
 			FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + script->path + "\"");
 		}
+        if (ImGui::Button("Build Script")) {
+          
+            Managers().scriptManager->BuildSpecificScript(script->path.c_str());
+        
+        }
     }
     ImGui::End();
     
