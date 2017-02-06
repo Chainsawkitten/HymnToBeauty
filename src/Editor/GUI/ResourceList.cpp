@@ -4,6 +4,9 @@
 #include <Engine/Geometry/StaticModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Script/ScriptFile.hpp>
+#include <Engine/Util/FileSystem.hpp>
+#include <Editor/Util/EditorSettings.hpp>
 
 #include <Engine/Hymn.hpp>
 #include <Engine/Scene/Scene.hpp>
@@ -121,42 +124,87 @@ void ResourceList::Show() {
         }
     }
     
-    // Sounds.
-    if (ImGui::TreeNode("Sounds")) {
-        if (ImGui::Button("Add sound")) {
-            Audio::SoundBuffer* sound = new Audio::SoundBuffer();
-            sound->name = "Sound #" + std::to_string(Hymn().soundNumber++);
-            Hymn().sounds.push_back(sound);
-        }
-        
-        for (auto it = Hymn().sounds.begin(); it != Hymn().sounds.end(); ++it) {
-            Audio::SoundBuffer* sound = *it;
-            if (ImGui::Selectable(sound->name.c_str())) {
-                soundEditors[sound].SetVisible(true);
-                soundEditors[sound].SetSound(sound);
-            }
-            
-            if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
-                if (ImGui::Selectable("Delete")) {
-                    delete sound;
-                    Hymn().sounds.erase(it);
-                    ImGui::EndPopup();
-                    break;
-                }
-                ImGui::EndPopup();
-            }
-        }
-        
-        ImGui::TreePop();
-    }
-    
-    // Sound editors.
-    for (Audio::SoundBuffer* sound : Hymn().sounds) {
-        if (soundEditors[sound].IsVisible()) {
-            soundEditors[sound].Show();
-        }
-    }
-    
+	// Sounds.
+	if (ImGui::TreeNode("Sounds")) {
+		if (ImGui::Button("Add sound")) {
+			Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+			sound->name = "Sound #" + std::to_string(Hymn().soundNumber++);
+			Hymn().sounds.push_back(sound);
+		}
+
+		for (auto it = Hymn().sounds.begin(); it != Hymn().sounds.end(); ++it) {
+			Audio::SoundBuffer* sound = *it;
+			if (ImGui::Selectable(sound->name.c_str())) {
+				soundEditors[sound].SetVisible(true);
+				soundEditors[sound].SetSound(sound);
+			}
+
+			if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
+				if (ImGui::Selectable("Delete")) {
+					delete sound;
+					Hymn().sounds.erase(it);
+					ImGui::EndPopup();
+					break;
+				}
+				ImGui::EndPopup();
+			}
+		}
+
+		ImGui::TreePop();
+	}
+
+	// Sound editors.
+	for (Audio::SoundBuffer* sound : Hymn().sounds) {
+		if (soundEditors[sound].IsVisible()) {
+			soundEditors[sound].Show();
+		}
+	}
+	// Scripts.
+	if (ImGui::TreeNode("Scripts")) {
+		if (ImGui::Button("Add script")) {
+
+			std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
+			std::string* filename = new std::string(Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as");
+			FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + *filename + "\"");
+			ScriptFile* script_file = new ScriptFile();
+			script_file->path = *filename;
+			script_file->name = name;
+			Hymn().scripts.push_back(script_file);
+
+		}
+
+		int script_number = 0;
+		for (auto it = Hymn().scripts.begin(); it != Hymn().scripts.end(); ++it) {
+			
+			ScriptFile* script = *it;
+			std::string name = script->name;
+
+			if (ImGui::Selectable(name.c_str())) {
+				scriptEditors[script].SetVisible(true);
+				scriptEditors[script].SetScript(script);
+			}
+
+			if (ImGui::BeginPopupContextItem(name.c_str())) {
+				if (ImGui::Selectable("Delete")) {
+					ImGui::Text(script->path.c_str());
+					Hymn().scripts.erase(it);
+					ImGui::EndPopup();
+					break;
+				}
+				ImGui::EndPopup();
+			}
+		}
+
+		ImGui::TreePop();
+	}
+
+	// Script editors.
+	for (ScriptFile* script : Hymn().scripts) {
+		if (scriptEditors[script].IsVisible()) {
+			scriptEditors[script].Show();
+		}
+	}
+
     ImGui::End();
 }
 
@@ -181,7 +229,12 @@ void ResourceList::HideEditors() {
         editor.second.SetVisible(false);
     }
     
-    for (auto& editor : soundEditors) {
-        editor.second.SetVisible(false);
-    }
+	for (auto& editor : soundEditors) {
+		editor.second.SetVisible(false);
+	}
+
+	for (auto& editor : scriptEditors) {
+		editor.second.SetVisible(false);
+	}
+
 }

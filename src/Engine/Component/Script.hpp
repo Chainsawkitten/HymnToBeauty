@@ -3,6 +3,7 @@
 #include "SuperComponent.hpp"
 
 class Entity;
+class ScriptFile;
 
 namespace Component {
     /// %Component controlled by a script.
@@ -28,5 +29,11 @@ namespace Component {
             
             /// Whether the script component has been initialized.
             bool initialized = false;
+
+			///The scriptfile.
+			ScriptFile* scriptfile = nullptr;
+
+		private:
+
     };
 }

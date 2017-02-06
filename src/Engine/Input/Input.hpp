@@ -19,13 +19,19 @@ public:
     * @param action What action was performed on the key. GLFW_Press, GLFW_Release or GLFW_Repeat.
     * @param desc A string description of the buttons function.
     */
-    static void AddButton(int key, int action, std::string desc = "");
+    static void AddButton(int key, int state, const std::string& action);
 
-    /// Checks if a button were activated this frame.
-    /**
-    * @param index The index of the button in the buttons array.
-    */
-    static bool Check_Button(int index);
+	/// Checks if a button were activated this frame.
+	/**
+	* @param index The index of the button in the buttons array.
+	*/
+	static bool Check_Button(int key, int action);
+
+	/// Checks if a button were activated this frame.
+	/**
+	* @param index The index of the button in the buttons array.
+	*/
+	static bool Check_Button(const std::string& action);
 
 private:
 
@@ -40,18 +46,19 @@ private:
 
     struct Button {
 
-        std::string desc;
+        std::string action;
         int key;
-        int action;
+        int state;
 
     };
 
     int nrOfButtons;
     int size;
-    Button buttons[10];
+    Button* buttons;
 
     Input() {
 
+		buttons = new Button[10];
         nrOfButtons = 0;
         size = 10;
 

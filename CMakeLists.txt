@@ -288,6 +288,7 @@ set(ENGINE_SRCS
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
         src/Engine/Input/Input.cpp
+        src/Engine/Script/ScriptFile.cpp
     )
 
 set(ENGINE_HEADERS
@@ -359,6 +360,7 @@ set(ENGINE_HEADERS
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
         src/Engine/Input/Input.hpp
+        src/Engine/Script/ScriptFile.hpp
     )
 
 create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
@@ -383,6 +385,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
         src/Editor/GUI/Editors/SoundEditor.cpp
+        src/Editor/GUI/Editors/ScriptEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
         src/Editor/Util/EditorSettings.cpp
     )
@@ -396,6 +399,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
         src/Editor/GUI/Editors/SoundEditor.hpp
+        src/Editor/GUI/Editors/ScriptEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
         src/Editor/Util/EditorSettings.hpp
     )

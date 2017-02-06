@@ -32,8 +32,8 @@ int main() {
     window->Init(false);
 
     Managers().StartUp();
-    
-    Editor* editor = new Editor();
+	Input::SetWindow(window->GetGLFWWindow());
+	Editor* editor = new Editor();
     
     // Setup imgui implementation.
     ImGuiImplementation::Init(window->GetGLFWWindow());

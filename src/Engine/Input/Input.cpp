@@ -6,23 +6,55 @@ void Input::SetWindow(GLFWwindow* window) {
 
 }
 
-void Input::AddButton(int key, int action, std::string desc) {
+void Input::AddButton(int key, int state, const std::string& action) {
     
-    Button button;
-    button.key = key;
-    button.action = action;
-    button.desc = desc;
+	//if (getInstance().nrOfButtons >= getInstance().size) {
 
-    getInstance().buttons[getInstance().nrOfButtons] = button;
+	//	Button* new_buttons = new Input::Button[getInstance().size + 10];
+
+	//	for (int i = 0; i < getInstance().size; i++) {
+
+	//		new_buttons[i] = getInstance().buttons[i];
+
+	//	}
+	//	getInstance().size += 10;
+	//	getInstance().buttons = new_buttons;
+
+	//}
+
+	Button button;
+	button.key = key;
+	button.state = state;
+	button.action = action;
+
+	getInstance().buttons[getInstance().nrOfButtons] = button;
+	getInstance().nrOfButtons++;
 
 }
 
-bool Input::Check_Button(int index){
+bool Input::Check_Button(const std::string& action) {
 
-    Button button = getInstance().buttons[index];
+	Button* buttons = getInstance().buttons;
 
-    int state = glfwGetKey(getInstance().window, button.key);
+	for (int i = 0; i < getInstance().size; i++) {
 
-    return state == button.action;
+		if (action == buttons[i].action) {
+
+			int state = glfwGetKey(getInstance().window, buttons[i].key);
+
+			return state == buttons[i].state;
+		}
+
+	}
+
+	return false;
+
+}
+
+bool Input::Check_Button(int key, int action) {
+
+	int state = glfwGetKey(getInstance().window, key);
+
+	return state == action;
 
 }
