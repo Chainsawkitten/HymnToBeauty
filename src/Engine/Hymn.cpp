@@ -18,6 +18,7 @@
 #include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
+#include "Script/ScriptFile.hpp"
 #include <json/json.h>
 #include <fstream>
 #include "Util/Profiling.hpp"
@@ -59,11 +60,19 @@ void ActiveHymn::Clear() {
     textures.clear();
     textureNumber = 0U;
     
-    for (Audio::SoundBuffer* sound : sounds) {
-        delete sound;
-    }
-    sounds.clear();
-    soundNumber = 0U;
+	for (Audio::SoundBuffer* sound : sounds) {
+		delete sound;
+	}
+	sounds.clear();
+	soundNumber = 0U;
+
+	for (ScriptFile* script : scripts) {
+		delete script;
+	}
+	scripts.clear();
+	scriptNumber = 0U;
+
+
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -74,7 +83,8 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
-    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
+	FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
+	FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts/Engine_Scripts").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Sounds").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
 }
@@ -96,20 +106,36 @@ void ActiveHymn::Save() const {
     }
     root["models"] = modelsNode;
     
-    // Save sounds.
-    Json::Value soundsNode;
-    for (Audio::SoundBuffer* sound : sounds) {
-        soundsNode.append(sound->Save());
-    }
-    root["sounds"] = soundsNode;
-    
+	// Save scripts.
+	Json::Value scriptNode;
+	for (ScriptFile* script : scripts) {
+		scriptNode.append(script->Save());
+	}
+	root["scripts"] = scriptNode;
+
+	// Save sounds.
+	Json::Value soundsNode;
+	for (Audio::SoundBuffer* sound : sounds) {
+		soundsNode.append(sound->Save());
+	}
+	root["sounds"] = soundsNode;
+
     // Save entities.
     Json::Value entitiesNode;
     for (Entity* entity : activeScene.GetEntities()) {
         entitiesNode.append(entity->Save());
     }
     root["entities"] = entitiesNode;
-    
+
+	Json::Value numbersNode;
+	numbersNode["texture"] = textureNumber;
+	numbersNode["model"] = modelNumber;
+	numbersNode["sound"] = soundNumber;
+	numbersNode["script"] = scriptNumber;
+	numbersNode["entity"] = entityNumber;
+
+	root["numbers"] = numbersNode;
+
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
@@ -148,20 +174,36 @@ void ActiveHymn::Load(const string& path) {
         models.push_back(model);
     }
     
-    // Load sounds.
-    const Json::Value soundsNode = root["sounds"];
-    for (unsigned int i=0; i < soundsNode.size(); ++i) {
-        Audio::SoundBuffer* sound = new Audio::SoundBuffer();
-        sound->Load(soundsNode[i]);
-        sounds.push_back(sound);
-    }
-    
+	// Load sounds.
+	const Json::Value soundsNode = root["sounds"];
+	for (unsigned int i = 0; i < soundsNode.size(); ++i) {
+		Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+		sound->Load(soundsNode[i]);
+		sounds.push_back(sound);
+	}
+
+	// Load scriptss.
+	const Json::Value scriptNode = root["scripts"];
+	for (unsigned int i = 0; i < scriptNode.size(); ++i) {
+		ScriptFile* script = new ScriptFile();
+		script->Load(scriptNode[i]);
+		scripts.push_back(script);
+	}
+
     // Load entities.
     const Json::Value entitiesNode = root["entities"];
     for (unsigned int i=0; i < entitiesNode.size(); ++i) {
         Entity* entity = activeScene.CreateEntity("");
         entity->Load(entitiesNode[i]);
     }
+
+	const Json::Value numberNode = root["numbers"];
+	textureNumber = numberNode["texture"].asUInt();
+	modelNumber = numberNode["model"].asUInt();
+	soundNumber = numberNode["sound"].asUInt();
+	scriptNumber = numberNode["script"].asUInt();
+	entityNumber = numberNode["entity"].asUInt();
+
 }
 
 void ActiveHymn::Update(float deltaTime) {

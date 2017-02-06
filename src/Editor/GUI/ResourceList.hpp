@@ -5,9 +5,11 @@
 #include "Editors/ModelEditor.hpp"
 #include "Editors/TextureEditor.hpp"
 #include "Editors/SoundEditor.hpp"
+#include "Editors/ScriptEditor.hpp"
 
 class Texture2D;
 class Entity;
+class ScriptFile;
 namespace Geometry {
     class Model;
 }
@@ -46,6 +48,8 @@ namespace GUI {
             std::map<Entity*, EntityEditor> entityEditors;
             std::map<Geometry::Model*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
-            std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
+			std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
+			std::map<ScriptFile*, ScriptEditor> scriptEditors;
+
     };
 }
