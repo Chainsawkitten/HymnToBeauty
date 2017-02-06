@@ -17,9 +17,15 @@ class PostProcessing {
         
         /// Get render target.
         /**
-         * @return Target to render to´.
+         * @return Target to render to.
          */
         RenderTarget* GetRenderTarget() const;
+
+        /// Get render target.
+        /**
+         * @return Target to render to.
+         */
+        void UpdateBufferSize();
         
         /// Apply a filter to the render image.
         /**
