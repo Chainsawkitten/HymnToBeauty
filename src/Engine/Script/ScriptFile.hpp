@@ -11,7 +11,7 @@ class ScriptFile {
 		std::string path;
 
 		///The module the script executes in.
-		std::string module = "Main_Module";
+		std::string module = "";
 
 		///The module the script executes in.
 		std::string name = "";
@@ -20,6 +20,9 @@ class ScriptFile {
 		Json::Value Save() const;
 
 		///Loads the script from a Json value.
+        /**
+         * @param node JSON node to load from.
+         */
 		void ScriptFile::Load(const Json::Value& node);
 
 };

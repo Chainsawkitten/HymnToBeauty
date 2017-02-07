@@ -11,11 +11,11 @@ namespace GUI {
             /// Show the editor.
             void Show();
             
-            /// Set the sound to edit.
+            /// Set the scriptfile to edit.
             /**
-             * @param sound Sound to edit.
+             * @param sound Scriptfile to edit.
              */
-            void SetScript (ScriptFile* sound);
+            void SetScript (ScriptFile* script);
             
             /// Get whether the window is visible.
             /**

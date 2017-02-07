@@ -237,7 +237,8 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 	if(script->scriptfile != nullptr)
 		ImGui::Text(script->scriptfile->name.c_str());
 	else ImGui::Text("No script loaded");
-	if (ImGui::Button("Select script"))
+	
+    if (ImGui::Button("Select script"))
 		ImGui::OpenPopup("Select script");
 
 	if (ImGui::BeginPopup("Select script")) {

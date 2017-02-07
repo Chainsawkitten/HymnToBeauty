@@ -287,7 +287,6 @@ set(ENGINE_SRCS
         src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
-        src/Engine/Input/Input.cpp
         src/Engine/Script/ScriptFile.cpp
     )
 
@@ -359,7 +358,6 @@ set(ENGINE_HEADERS
         src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
-        src/Engine/Input/Input.hpp
         src/Engine/Script/ScriptFile.hpp
     )
 

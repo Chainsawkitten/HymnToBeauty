@@ -15,7 +15,6 @@
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Entity/Entity.hpp"
-#include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 #include "Managers.hpp"
 
@@ -27,16 +26,6 @@ void print(const std::string& message) {
 
 Entity* GetEntity() {
     return Managers().scriptManager->currentEntity;
-}
-
-bool Check_GLFWButton(int key, int state) {
-	return Input::Check_Button(key, state);
-}
-bool Check_Button(std::string action) {
-	return Input::Check_Button(action);
-}
-void Add_Button(int key, int state, std::string action) {
-	Input::AddButton(key, state, action);
 }
 
 void RegisterUpdate() {
@@ -132,9 +121,6 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
 	engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
-	engine->RegisterGlobalFunction("bool GLFWInput(int GLFW_Key, int GLFW_State)", asFUNCTION(Check_GLFWButton), asCALL_CDECL);
-	engine->RegisterGlobalFunction("bool Input(const string &in)", asFUNCTION(Check_Button), asCALL_CDECL);
-	engine->RegisterGlobalFunction("void AddButton(int GLFW_Key, int GLFW_State, const string &in)", asFUNCTION(Add_Button), asCALL_CDECL);
 
 }
 

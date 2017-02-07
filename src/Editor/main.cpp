@@ -15,8 +15,6 @@
 #include "ImGui/OpenGLImplementation.hpp"
 #include <imgui.h>
 
-#include "Engine/Input/Input.hpp"
-
 int main() {
     // Enable logging if requested.
     if (EditorSettings::GetInstance().GetBool("Logging"))
@@ -32,8 +30,8 @@ int main() {
     window->Init(false);
 
     Managers().StartUp();
-	Input::SetWindow(window->GetGLFWWindow());
-	Editor* editor = new Editor();
+
+    Editor* editor = new Editor();
     
     // Setup imgui implementation.
     ImGuiImplementation::Init(window->GetGLFWWindow());

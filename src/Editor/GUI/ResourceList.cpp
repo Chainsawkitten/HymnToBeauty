@@ -159,7 +159,8 @@ void ResourceList::Show() {
 			soundEditors[sound].Show();
 		}
 	}
-	// Scripts.
+	
+    // Scripts.
 	if (ImGui::TreeNode("Scripts")) {
 		if (ImGui::Button("Add script")) {
 
@@ -174,7 +175,6 @@ void ResourceList::Show() {
 
 		}
 
-		int script_number = 0;
 		for (auto it = Hymn().scripts.begin(); it != Hymn().scripts.end(); ++it) {
 			
 			ScriptFile* script = *it;
