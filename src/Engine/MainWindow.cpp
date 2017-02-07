@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 
 MainWindow* MainWindow::instance = nullptr;
-void window_size_callback(GLFWwindow* window, int width, int height);
+void WindowSizeCallback(GLFWwindow* window, int width, int height);
 
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
