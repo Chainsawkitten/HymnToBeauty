@@ -1,12 +1,15 @@
 #include "Util/Log.hpp"
 #include "MainWindow.hpp"
+#include "Manager/Managers.hpp"
+#include "Manager/RenderManager.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 MainWindow* MainWindow::instance = nullptr;
+void window_size_callback(GLFWwindow* window, int width, int height);
 
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     
     if (borderless)
         glfwWindowHint(GLFW_DECORATED, GL_FALSE);
@@ -18,6 +21,7 @@ MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, 
     GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
     
     window = glfwCreateWindow(width, height, title, monitor, nullptr);
+    
     if (!window) {
         glfwTerminate();
         /// @todo Print error to log.
@@ -34,6 +38,9 @@ MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, 
     
     size = glm::vec2(width, height);
     instance = this;
+
+    glfwSetWindowSizeCallback(window, WindowSizeCallback);
+
 }
 
 MainWindow::~MainWindow() {
@@ -70,6 +77,11 @@ const glm::vec2& MainWindow::GetSize() const {
     return size;
 }
 
+void MainWindow::SetSize(int width, int height){
+    size.x = width;
+    size.y = height;
+}
+
 void MainWindow::SetTitle(const char *title) {
     glfwSetWindowTitle(window, title);
 }
@@ -88,4 +100,12 @@ void MainWindow::SwapBuffers() {
 
 GLFWwindow* MainWindow::GetGLFWWindow() const {
     return window;
+}
+
+void WindowSizeCallback(GLFWwindow* window, int width, int height)
+{
+
+    MainWindow::GetInstance()->SetSize(width, height);
+    Managers().renderManager->UpdateBufferSize();
+
 }
