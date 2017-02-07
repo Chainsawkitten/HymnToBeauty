@@ -45,15 +45,15 @@ class MainWindow {
         
         /// Get the size of the window.
         /**
-        * @return The size of the window in pixels.
-        */
+         * @return The size of the window in pixels.
+         */
         const glm::vec2& GetSize() const;
 
         /// Set the size of the window.
         /**
-        * @param width The width of the window in pixels.
-        * @param height The height of the window in pixels.
-        */
+         * @param width The width of the window in pixels.
+         * @param height The height of the window in pixels.
+         */
         void SetSize(int width, int height);
 
         /// Set window title.
@@ -81,6 +81,7 @@ class MainWindow {
         GLFWwindow* GetGLFWWindow() const;
         
     private:
+
         static MainWindow* instance;
         
         InputHandler* input;
