@@ -39,7 +39,7 @@ MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, 
     size = glm::vec2(width, height);
     instance = this;
 
-    glfwSetWindowSizeCallback(window, window_size_callback);
+    glfwSetWindowSizeCallback(window, WindowSizeCallback);
 
 }
 
@@ -102,7 +102,7 @@ GLFWwindow* MainWindow::GetGLFWWindow() const {
     return window;
 }
 
-void window_size_callback(GLFWwindow* window, int width, int height)
+void WindowSizeCallback(GLFWwindow* window, int width, int height)
 {
 
     MainWindow::GetInstance()->SetSize(width, height);
