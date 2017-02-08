@@ -31,10 +31,13 @@ namespace GUI {
              */
             void SetVisible(bool visible);
             
+            /// Save currently open scene to file.
+            void Save() const;
+            
         private:
             bool visible = false;
             
-            std::string* scene;
+            std::string* scene = nullptr;
             char name[128] = "";
             
             std::map<Entity*, EntityEditor> entityEditors;

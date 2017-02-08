@@ -1,6 +1,8 @@
 #include "SceneEditor.hpp"
 
 #include <Engine/Hymn.hpp>
+#include <Engine/Util/FileSystem.hpp>
+#include <Engine/Util/Log.hpp>
 #include <imgui.h>
 
 using namespace GUI;
@@ -54,4 +56,10 @@ bool SceneEditor::IsVisible() const {
 
 void SceneEditor::SetVisible(bool visible) {
     this->visible = visible;
+}
+
+void SceneEditor::Save() const {
+    if (scene != nullptr) {
+        Hymn().world.Save(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + *scene + ".json");
+    }
 }

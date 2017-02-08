@@ -3,6 +3,7 @@
 #include "../Entity/Entity.hpp"
 #include "../Component/SuperComponent.hpp"
 #include "../Manager/Managers.hpp"
+#include <fstream>
 
 World::World() {
     particles = new ParticleManager::Particle[Managers().particleManager->GetMaxParticleCount()];
@@ -86,6 +87,18 @@ unsigned int World::GetParticleCount() const {
 
 void World::SetParticleCount(unsigned int particleCount) {
     this->particleCount = particleCount;
+}
+
+void World::Save(const std::string& filename) const {
+    Json::Value root;
+    
+    for (Entity* entity : entities) {
+        root.append(entity->Save());
+    }
+    
+    std::ofstream file(filename);
+    file << root;
+    file.close();
 }
 
 void World::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {

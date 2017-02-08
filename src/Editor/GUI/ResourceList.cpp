@@ -20,6 +20,7 @@ void ResourceList::Show() {
         
         for (std::size_t i = 0; i < Hymn().scenes.size(); ++i) {
             if (ImGui::Selectable(Hymn().scenes[i].c_str())) {
+                sceneEditor.Save();
                 sceneEditor.SetVisible(true);
                 sceneEditor.SetScene(&Hymn().scenes[i]);
             }

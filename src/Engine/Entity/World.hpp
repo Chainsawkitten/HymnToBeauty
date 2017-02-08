@@ -76,6 +76,12 @@ class World {
          */
         void SetParticleCount(unsigned int particleCount);
         
+        /// Save the world to file.
+        /**
+         * @param filename The name of the file.
+         */
+        void Save(const std::string& filename) const;
+        
     private:
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
