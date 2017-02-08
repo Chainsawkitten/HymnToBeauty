@@ -15,6 +15,27 @@ using namespace GUI;
 void ResourceList::Show() {
     ImGui::Begin("Resources");
     
+    // Scenes.
+    if (ImGui::TreeNode("Scenes")) {
+        if (ImGui::Button("Add scene"))
+            Hymn().scenes.push_back("Scene #" + std::to_string(Hymn().scenes.size()));
+        
+        for (const std::string& scene : Hymn().scenes) {
+            if (ImGui::Selectable(scene.c_str())) {
+                /// @todo Scene editor.
+            }
+            
+            if (ImGui::BeginPopupContextItem(scene.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    /// @todo Delete scene.
+                }
+                ImGui::EndPopup();
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
     // Entities.
     if (ImGui::TreeNode("Entities")) {
         if (ImGui::Button("Add entity"))
