@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include <map>
+#include "EntityEditor.hpp"
+
+class Entity;
 
 namespace GUI {
     /// Used to edit a scene.
@@ -32,5 +36,7 @@ namespace GUI {
             
             std::string* scene;
             char name[128] = "";
+            
+            std::map<Entity*, EntityEditor> entityEditors;
     };
 }
