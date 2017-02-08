@@ -74,6 +74,7 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scenes").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Sounds").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
