@@ -15,6 +15,7 @@
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Entity/Entity.hpp"
+#include "../Input/Input.hpp"
 #include "Managers.hpp"
 
 using namespace Component;
@@ -31,6 +32,10 @@ void RegisterUpdate() {
     Managers().scriptManager->RegisterUpdate(GetEntity());
 }
 
+bool Input(int button_index) {
+    return Input::GetInstance().Check_Button(button_index);
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -40,9 +45,8 @@ ScriptManager::ScriptManager() {
     
     // Register add-ons.
     RegisterStdString(engine);
-    
-	engine->RegisterEnum("input");
-	engine->RegisterEnumValue("input", "fire", 0);
+
+    RegisterInput();
 
     // Register GLM types.
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
@@ -123,6 +127,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
+
 }
 
 ScriptManager::~ScriptManager() {
@@ -172,6 +177,19 @@ void ScriptManager::Update(Scene& scene) {
 
 void ScriptManager::RegisterUpdate(Entity* entity) {
     updateEntities.push_back(entity);
+}
+
+void ScriptManager::RegisterInput() {
+
+    engine->RegisterEnum("input");
+    for (int i = 0; i < Input::GetInstance().buttons.size(); i++) {
+
+        engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
+            
+    }
+
+    engine->RegisterGlobalFunction("bool Input(int Button)", asFUNCTION(Input), asCALL_CDECL);
+
 }
 
 void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
