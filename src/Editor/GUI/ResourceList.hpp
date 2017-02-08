@@ -44,7 +44,7 @@ namespace GUI {
         private:
             bool visible = false;
             
-            std::map<std::string*, SceneEditor> sceneEditors;
+            SceneEditor sceneEditor;
             std::map<Entity*, EntityEditor> entityEditors;
             std::map<Geometry::Model*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;

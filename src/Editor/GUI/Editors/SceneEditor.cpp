@@ -5,7 +5,7 @@
 using namespace GUI;
 
 void SceneEditor::Show() {
-    if (ImGui::Begin(("Scene: " + *scene).c_str(), &visible)) {
+    if (ImGui::Begin(("Scene: " + *scene + "###Scene").c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
         *scene = name;
     }
