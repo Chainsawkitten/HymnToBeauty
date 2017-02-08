@@ -378,6 +378,7 @@ set(EDITOR_SRCS
         src/Editor/Editor.cpp
         src/Editor/ImGui/OpenGLImplementation.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
+        src/Editor/GUI/InputWindow.cpp
         src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
@@ -391,6 +392,7 @@ set(EDITOR_HEADERS
         src/Editor/Editor.hpp
         src/Editor/ImGui/OpenGLImplementation.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
+        src/Editor/GUI/InputWindow.hpp
         src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp

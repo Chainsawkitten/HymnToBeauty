@@ -98,7 +98,7 @@ class ActiveHymn {
         ActiveHymn(ActiveHymn const&) = delete;
         void operator=(ActiveHymn const&) = delete;
         
-        std::string path;
+        std::string path = "";
 };
 
 /// Get the active hymn.

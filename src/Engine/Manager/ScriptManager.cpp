@@ -41,6 +41,9 @@ ScriptManager::ScriptManager() {
     // Register add-ons.
     RegisterStdString(engine);
     
+	engine->RegisterEnum("input");
+	engine->RegisterEnumValue("input", "fire", 0);
+
     // Register GLM types.
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
     engine->RegisterObjectProperty("vec3", "float x", asOFFSET(glm::vec3, x));

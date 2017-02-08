@@ -56,6 +56,15 @@ void Editor::Show() {
             }
             ImGui::EndMenu();
         }
+		if(Hymn().GetPath() != "")
+			if (ImGui::BeginMenu("Input")) {
+
+				inputWindow.SetVisible(true);
+				
+				ImGui::EndMenu();
+
+			}
+
         ImGui::EndMainMenuBar();
     }
     
@@ -63,6 +72,9 @@ void Editor::Show() {
     if (selectHymnWindow.IsVisible())
         selectHymnWindow.Show();
     
+	if (inputWindow.IsVisible())
+		inputWindow.Show();
+
     // Show resource list.
     if (resourceList.IsVisible())
         resourceList.Show();
