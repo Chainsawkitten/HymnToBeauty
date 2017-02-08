@@ -6,7 +6,7 @@
 #include <Engine/Audio/SoundBuffer.hpp>
 
 #include <Engine/Hymn.hpp>
-#include <Engine/Scene/Scene.hpp>
+#include <Engine/Entity/World.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <imgui.h>
 
@@ -18,9 +18,9 @@ void ResourceList::Show() {
     // Entities.
     if (ImGui::TreeNode("Entities")) {
         if (ImGui::Button("Add entity"))
-            Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
+            Hymn().world.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
         
-        for (Entity* entity : Hymn().activeScene.GetEntities()) {
+        for (Entity* entity : Hymn().world.GetEntities()) {
             if (ImGui::Selectable(entity->name.c_str())) {
                 entityEditors[entity].SetVisible(true);
                 entityEditors[entity].SetEntity(entity);
@@ -38,7 +38,7 @@ void ResourceList::Show() {
     }
     
     // Entity editors.
-    for (Entity* entity : Hymn().activeScene.GetEntities()) {
+    for (Entity* entity : Hymn().world.GetEntities()) {
         if (entityEditors[entity].IsVisible()) {
             entityEditors[entity].Show();
         }

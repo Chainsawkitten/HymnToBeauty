@@ -43,7 +43,7 @@ ActiveHymn& ActiveHymn::GetInstance() {
 
 void ActiveHymn::Clear() {
     path = "";
-    activeScene.Clear();
+    world.Clear();
     
     entityNumber = 1U;
     
@@ -105,7 +105,7 @@ void ActiveHymn::Save() const {
     
     // Save entities.
     Json::Value entitiesNode;
-    for (Entity* entity : activeScene.GetEntities()) {
+    for (Entity* entity : world.GetEntities()) {
         entitiesNode.append(entity->Save());
     }
     root["entities"] = entitiesNode;
@@ -159,22 +159,22 @@ void ActiveHymn::Load(const string& path) {
     // Load entities.
     const Json::Value entitiesNode = root["entities"];
     for (unsigned int i=0; i < entitiesNode.size(); ++i) {
-        Entity* entity = activeScene.CreateEntity("");
+        Entity* entity = world.CreateEntity("");
         entity->Load(entitiesNode[i]);
     }
 }
 
 void ActiveHymn::Update(float deltaTime) {
     { PROFILE("Run scripts.");
-        Managers().scriptManager->Update(activeScene);
+        Managers().scriptManager->Update(world);
     }
     
     { PROFILE("Update physics");
-        Managers().physicsManager->Update(activeScene, deltaTime);
+        Managers().physicsManager->Update(world, deltaTime);
     }
 
     { PROFILE("Update animations");
-        for (Entity* entity : activeScene.GetEntities()) {
+        for (Entity* entity : world.GetEntities()) {
             Component::Animation* anim = entity->GetComponent<Component::Animation>();
             if (anim != nullptr) {
                 Geometry::RiggedModel* model = anim->riggedModel;
@@ -189,11 +189,11 @@ void ActiveHymn::Update(float deltaTime) {
     }
     
     { PROFILE("Update particles");
-        Managers().particleManager->Update(activeScene, deltaTime);
+        Managers().particleManager->Update(world, deltaTime);
     }
     
     { PROFILE("Update sounds");
-        Managers().soundManager->Update(activeScene);
+        Managers().soundManager->Update(world);
     }
     
     { PROFILE("Update debug drawing");
@@ -201,23 +201,23 @@ void ActiveHymn::Update(float deltaTime) {
     }
     
     { PROFILE("Clear killed entities/components");
-        activeScene.ClearKilled();
+        world.ClearKilled();
     }
 }
 
 void ActiveHymn::Render(bool soundSources, bool particleEmitters, bool lightSources) {
-    { PROFILE("Render scene");
-        Managers().renderManager->Render(activeScene);
+    { PROFILE("Render world");
+        Managers().renderManager->Render(world);
     }
     
     if (soundSources || particleEmitters || lightSources) {
         { PROFILE("Render editor entities");
-            Managers().renderManager->RenderEditorEntities(activeScene, soundSources, particleEmitters, lightSources);
+            Managers().renderManager->RenderEditorEntities(world, soundSources, particleEmitters, lightSources);
         }
     }
     
     { PROFILE("Render debug entities");
-        Managers().debugDrawingManager->Render(activeScene);
+        Managers().debugDrawingManager->Render(world);
     }
 }
 

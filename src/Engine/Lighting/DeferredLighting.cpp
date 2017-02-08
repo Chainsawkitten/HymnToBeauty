@@ -101,7 +101,7 @@ void DeferredLighting::ResetTarget() {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
-void DeferredLighting::Render(Scene& scene, Entity* camera) {
+void DeferredLighting::Render(World& world, Entity* camera) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
@@ -144,7 +144,7 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     unsigned int lightIndex = 0U;
     
     // Render all directional lights.
-    std::vector<Component::DirectionalLight*>& directionalLights = scene.GetComponents<Component::DirectionalLight>();
+    std::vector<Component::DirectionalLight*>& directionalLights = world.GetComponents<Component::DirectionalLight>();
     for (Component::DirectionalLight* light : directionalLights) {
         Entity* lightEntity = light->entity;
         glm::vec4 direction(glm::vec4(lightEntity->GetDirection(), 0.f));
@@ -162,7 +162,7 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     }
     
     // Render all spot lights.
-    std::vector<Component::SpotLight*>& spotLights = scene.GetComponents<Component::SpotLight>();
+    std::vector<Component::SpotLight*>& spotLights = world.GetComponents<Component::SpotLight>();
     for (Component::SpotLight* light : spotLights) {
         Entity* lightEntity = light->entity;
         glm::vec4 direction(viewMat * glm::vec4(lightEntity->GetDirection(), 0.f));
@@ -184,7 +184,7 @@ void DeferredLighting::Render(Scene& scene, Entity* camera) {
     cutOff = 0.0001;
     
     // Render all point lights.
-    std::vector<Component::PointLight*>& pointLights = scene.GetComponents<Component::PointLight>();
+    std::vector<Component::PointLight*>& pointLights = world.GetComponents<Component::PointLight>();
     for (Component::PointLight* light : pointLights) {
         Entity* lightEntity = light->entity;
         float scale = sqrt((1.0 / cutOff - 1.0) / light->attenuation);

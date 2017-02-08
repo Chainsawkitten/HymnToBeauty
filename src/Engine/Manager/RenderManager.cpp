@@ -119,10 +119,10 @@ RenderManager::~RenderManager() {
     glDeleteVertexArrays(1, &vertexArray);
 }
 
-void RenderManager::Render(Scene& scene) {
+void RenderManager::Render(World& world) {
     // Find camera entity.
     Entity* camera = nullptr;
-    std::vector<Lens*> lenses = scene.GetComponents<Lens>();
+    std::vector<Lens*> lenses = world.GetComponents<Lens>();
     for (Lens* lens : lenses) {
         camera = lens->entity;
     }
@@ -135,7 +135,7 @@ void RenderManager::Render(Scene& scene) {
         glm::vec2 screenSize(MainWindow::GetInstance()->GetSize());
         glViewport(0, 0, static_cast<GLsizei>(screenSize.x), static_cast<GLsizei>(screenSize.y));
         
-        std::vector<Mesh*> meshes = scene.GetComponents<Mesh>();
+        std::vector<Mesh*> meshes = world.GetComponents<Mesh>();
         // Static render program.
         staticRenderProgram->PreRender(camera, screenSize);
         for (Mesh* mesh : meshes)
@@ -150,17 +150,17 @@ void RenderManager::Render(Scene& scene) {
                 skinRenderProgram->Render(mesh);
         skinRenderProgram->PostRender();
         
-        // Light the scene.
+        // Light the world.
         postProcessing->GetRenderTarget()->SetTarget();
-        deferredLighting->Render(scene, camera);
+        deferredLighting->Render(world, camera);
         
         // Anti-aliasing.
         fxaaFilter->SetScreenSize(screenSize);
         postProcessing->ApplyFilter(fxaaFilter);
         
         // Render particles.
-        Managers().particleManager->UpdateBuffer(scene);
-        Managers().particleManager->Render(scene, camera);
+        Managers().particleManager->UpdateBuffer(world);
+        Managers().particleManager->Render(world, camera);
         
         // Glow.
         glowBlurFilter->SetScreenSize(screenSize);
@@ -181,10 +181,10 @@ void RenderManager::Render(Scene& scene) {
     }
 }
 
-void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool particleEmitters, bool lightSources) {
+void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool particleEmitters, bool lightSources) {
     // Find camera entity.
     Entity* camera = nullptr;
-    std::vector<Lens*> lenses = scene.GetComponents<Lens>();
+    std::vector<Lens*> lenses = world.GetComponents<Lens>();
     for (Lens* lens : lenses) {
         camera = lens->entity;
     }
@@ -215,7 +215,7 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
         if (soundSources) {
             glBindTexture(GL_TEXTURE_2D, soundSourceTexture->GetTextureID());
             
-            for (SoundSource* soundSource : scene.GetComponents<SoundSource>())
+            for (SoundSource* soundSource : world.GetComponents<SoundSource>())
                 RenderEditorEntity(soundSource);
         }
         
@@ -223,7 +223,7 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
         if (particleEmitters) {
             glBindTexture(GL_TEXTURE_2D, particleEmitterTexture->GetTextureID());
             
-            for (ParticleEmitter* emitter : scene.GetComponents<ParticleEmitter>())
+            for (ParticleEmitter* emitter : world.GetComponents<ParticleEmitter>())
                 RenderEditorEntity(emitter);
         }
         
@@ -231,13 +231,13 @@ void RenderManager::RenderEditorEntities(Scene& scene, bool soundSources, bool p
         if (lightSources) {
             glBindTexture(GL_TEXTURE_2D, lightTexture->GetTextureID());
             
-            for (DirectionalLight* light : scene.GetComponents<DirectionalLight>())
+            for (DirectionalLight* light : world.GetComponents<DirectionalLight>())
                 RenderEditorEntity(light);
             
-            for (PointLight* light : scene.GetComponents<PointLight>())
+            for (PointLight* light : world.GetComponents<PointLight>())
                 RenderEditorEntity(light);
             
-            for (SpotLight* light : scene.GetComponents<SpotLight>())
+            for (SpotLight* light : world.GetComponents<SpotLight>())
                 RenderEditorEntity(light);
         }
         

@@ -1,38 +1,38 @@
-#include "Scene.hpp"
+#include "World.hpp"
 
 #include "../Entity/Entity.hpp"
 #include "../Component/SuperComponent.hpp"
 #include "../Manager/Managers.hpp"
 
-Scene::Scene() {
+World::World() {
     particles = new ParticleManager::Particle[Managers().particleManager->GetMaxParticleCount()];
 }
 
-Scene::~Scene() {
+World::~World() {
     Clear();
     
     delete[] particles;
 }
 
-Entity* Scene::CreateEntity(const std::string& name) {
+Entity* World::CreateEntity(const std::string& name) {
     Entity* entity = new Entity(this, name);
     entities.push_back(entity);
     return entity;
 }
 
-const std::vector<Entity*>& Scene::GetEntities() const {
+const std::vector<Entity*>& World::GetEntities() const {
     return entities;
 }
 
-void Scene::RegisterUpdate(Entity* entity) {
+void World::RegisterUpdate(Entity* entity) {
     updateEntities.push_back(entity);
 }
 
-const std::vector<Entity*>& Scene::GetUpdateEntities() const {
+const std::vector<Entity*>& World::GetUpdateEntities() const {
     return updateEntities;
 }
 
-void Scene::Clear() {
+void World::Clear() {
     for (Entity* entity : entities)
         delete entity;
     entities.clear();
@@ -47,7 +47,7 @@ void Scene::Clear() {
     updateEntities.clear();
 }
 
-void Scene::ClearKilled() {
+void World::ClearKilled() {
     // Clear killed components.
     std::size_t i;
     for (auto& componentIt : components) {
@@ -76,18 +76,18 @@ void Scene::ClearKilled() {
     }
 }
 
-ParticleManager::Particle* Scene::GetParticles() const {
+ParticleManager::Particle* World::GetParticles() const {
     return particles;
 }
 
-unsigned int Scene::GetParticleCount() const {
+unsigned int World::GetParticleCount() const {
     return particleCount;
 }
 
-void Scene::SetParticleCount(unsigned int particleCount) {
+void World::SetParticleCount(unsigned int particleCount) {
     this->particleCount = particleCount;
 }
 
-void Scene::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {
+void World::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {
     components[componentType].push_back(component);
 }

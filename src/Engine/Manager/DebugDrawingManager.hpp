@@ -6,19 +6,19 @@
 
 class Shader;
 class ShaderProgram;
-class Scene;
+class World;
 
 /// Debug drawing facilities.
 class DebugDrawingManager {
     friend class Hub;
     
     public:
-        /// Add a point to the scene.
+        /// Add a point to the world.
         /**
          * @param position World position of the point.
          * @param color Color of the point.
          * @param size Size of the point.
-         * @param duration How long the point should stay in the scene (in seconds).
+         * @param duration How long the point should stay in the world (in seconds).
          * @param depthTesting Whether to enable depth testing.
          */
         void AddPoint(const glm::vec3& position, const glm::vec3& color, float size, float duration = 0.f, bool depthTesting = true);
@@ -29,11 +29,11 @@ class DebugDrawingManager {
          */
         void Update(float deltaTime);
         
-        /// Render the debug scene.
+        /// Render the debug primitives.
         /**
-         * @param scene Contains a camera through which to render.
+         * @param world Contains a camera through which to render.
          */
-        void Render(Scene& scene);
+        void Render(World& world);
         
     private:
         DebugDrawingManager();

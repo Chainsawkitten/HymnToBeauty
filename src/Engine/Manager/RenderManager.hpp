@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-class Scene;
+class World;
 class Shader;
 class ShaderProgram;
 class StaticRenderProgram;
@@ -19,25 +19,25 @@ namespace Component {
     class SuperComponent;
 }
 
-/// Handles rendering a scene.
+/// Handles rendering the world.
 class RenderManager {
     friend class Hub;
     
     public:
-        /// Render scene containing entities.
+        /// Render world containing entities.
         /**
-         * @param scene Contains a bunch of entities.
+         * @param world Contains a bunch of entities.
          */
-        void Render(Scene& scene);
+        void Render(World& world);
         
         /// Render editor entities.
         /**
-         * @param scene Scene to render.
+         * @param world World to render.
          * @param soundSources Whether to show sound sources.
          * @param particleEmitters Whether to show particle emitters.
          * @param lightSources Whether to show light sources.
          */
-        void RenderEditorEntities(Scene& scene, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
+        void RenderEditorEntities(World& world, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
         
     private:
         RenderManager();
