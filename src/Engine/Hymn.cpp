@@ -13,7 +13,6 @@
 #include "DefaultNormal.png.hpp"
 #include "DefaultSpecular.png.hpp"
 #include "DefaultGlow.png.hpp"
-#include "Entity/Entity.hpp"
 #include "Geometry/RiggedModel.hpp"
 #include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
@@ -22,6 +21,7 @@
 #include <fstream>
 #include "Util/Profiling.hpp"
 
+#include "Entity/Entity.hpp"
 #include "Component/Animation.hpp"
 
 using namespace std;
@@ -113,13 +113,6 @@ void ActiveHymn::Save() const {
     }
     root["scenes"] = scenesNode;
     
-    // Save entities.
-    Json::Value entitiesNode;
-    for (Entity* entity : world.GetEntities()) {
-        entitiesNode.append(entity->Save());
-    }
-    root["entities"] = entitiesNode;
-    
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
@@ -170,13 +163,6 @@ void ActiveHymn::Load(const string& path) {
     const Json::Value scenesNode = root["scenes"];
     for (unsigned int i=0; i < scenesNode.size(); ++i) {
         scenes.push_back(scenesNode[i].asString());
-    }
-    
-    // Load entities.
-    const Json::Value entitiesNode = root["entities"];
-    for (unsigned int i=0; i < entitiesNode.size(); ++i) {
-        Entity* entity = world.CreateEntity("");
-        entity->Load(entitiesNode[i]);
     }
 }
 
