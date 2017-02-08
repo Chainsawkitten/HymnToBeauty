@@ -9,7 +9,6 @@ MainWindow* MainWindow::instance = nullptr;
 void WindowSizeCallback(GLFWwindow* window, int width, int height);
 
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     
     if (borderless)
         glfwWindowHint(GLFW_DECORATED, GL_FALSE);
