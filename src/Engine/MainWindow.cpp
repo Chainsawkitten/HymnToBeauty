@@ -11,11 +11,11 @@ void WindowSizeCallback(GLFWwindow* window, int width, int height);
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
     
     if (borderless)
-        glfwWindowHint(GLFW_DECORATED, GL_FALSE);
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     
     this->debugContext = debugContext;
     if (debugContext)
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
     
     GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
     
@@ -68,7 +68,7 @@ void MainWindow::Update() {
     input->Update();
     input->SetActive();
     
-    if (glfwWindowShouldClose(window) != GL_FALSE)
+    if (glfwWindowShouldClose(window) != GLFW_FALSE)
         shouldClose = true;
 }
 
