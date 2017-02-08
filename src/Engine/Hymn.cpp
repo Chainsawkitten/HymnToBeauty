@@ -47,6 +47,8 @@ void ActiveHymn::Clear() {
     
     entityNumber = 1U;
     
+    scenes.clear();
+    
     for (Geometry::Model* model : models) {
         delete model;
     }
@@ -104,6 +106,13 @@ void ActiveHymn::Save() const {
     }
     root["sounds"] = soundsNode;
     
+    // Save scenes.
+    Json::Value scenesNode;
+    for (const string& scene : scenes) {
+        scenesNode.append(scene);
+    }
+    root["scenes"] = scenesNode;
+    
     // Save entities.
     Json::Value entitiesNode;
     for (Entity* entity : world.GetEntities()) {
@@ -155,6 +164,12 @@ void ActiveHymn::Load(const string& path) {
         Audio::SoundBuffer* sound = new Audio::SoundBuffer();
         sound->Load(soundsNode[i]);
         sounds.push_back(sound);
+    }
+    
+    // Load scenes.
+    const Json::Value scenesNode = root["scenes"];
+    for (unsigned int i=0; i < scenesNode.size(); ++i) {
+        scenes.push_back(scenesNode[i].asString());
     }
     
     // Load entities.

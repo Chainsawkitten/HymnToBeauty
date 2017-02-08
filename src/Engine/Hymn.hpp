@@ -61,6 +61,9 @@ class ActiveHymn {
         /// The id of the next entity to create.
         unsigned int entityNumber = 1U;
         
+        /// Scenes.
+        std::vector<std::string> scenes;
+        
         /// Models.
         std::vector<Geometry::Model*> models;
         
