@@ -6,8 +6,6 @@
 #include <Engine/Audio/SoundBuffer.hpp>
 
 #include <Engine/Hymn.hpp>
-#include <Engine/Entity/World.hpp>
-#include <Engine/Entity/Entity.hpp>
 #include <imgui.h>
 
 using namespace GUI;
@@ -39,38 +37,9 @@ void ResourceList::Show() {
         ImGui::TreePop();
     }
     
-    // Scene editors.
+    // Scene editor.
     if (sceneEditor.IsVisible())
         sceneEditor.Show();
-    
-    // Entities.
-    if (ImGui::TreeNode("Entities")) {
-        if (ImGui::Button("Add entity"))
-            Hymn().world.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
-        
-        for (Entity* entity : Hymn().world.GetEntities()) {
-            if (ImGui::Selectable(entity->name.c_str())) {
-                entityEditors[entity].SetVisible(true);
-                entityEditors[entity].SetEntity(entity);
-            }
-            
-            if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
-                if (ImGui::Selectable("Delete")) {
-                    entity->Kill();
-                }
-                ImGui::EndPopup();
-            }
-        }
-        
-        ImGui::TreePop();
-    }
-    
-    // Entity editors.
-    for (Entity* entity : Hymn().world.GetEntities()) {
-        if (entityEditors[entity].IsVisible()) {
-            entityEditors[entity].Show();
-        }
-    }
     
     // Models.
     if (ImGui::TreeNode("Models")) {
@@ -197,9 +166,7 @@ void ResourceList::SetVisible(bool visible) {
 }
 
 void ResourceList::HideEditors() {
-    for (auto& editor : entityEditors) {
-        editor.second.SetVisible(false);
-    }
+    sceneEditor.SetVisible(false);
     
     for (auto& editor : modelEditors) {
         editor.second.SetVisible(false);

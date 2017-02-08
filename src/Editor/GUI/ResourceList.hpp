@@ -1,14 +1,12 @@
 #pragma once
 
 #include <map>
-#include "Editors/EntityEditor.hpp"
 #include "Editors/ModelEditor.hpp"
 #include "Editors/SceneEditor.hpp"
 #include "Editors/SoundEditor.hpp"
 #include "Editors/TextureEditor.hpp"
 
 class Texture2D;
-class Entity;
 namespace Geometry {
     class Model;
 }
@@ -45,7 +43,6 @@ namespace GUI {
             bool visible = false;
             
             SceneEditor sceneEditor;
-            std::map<Entity*, EntityEditor> entityEditors;
             std::map<Geometry::Model*, ModelEditor> modelEditors;
             std::map<Texture2D*, TextureEditor> textureEditors;
             std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
