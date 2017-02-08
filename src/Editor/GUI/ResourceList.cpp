@@ -28,7 +28,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(Hymn().scenes[i].c_str())) {
                 if (ImGui::Selectable("Delete")) {
-                    /// @todo Delete scene.
+                    Hymn().scenes.erase(Hymn().scenes.begin() + i);
+                    ImGui::EndPopup();
+                    break;
                 }
                 ImGui::EndPopup();
             }
