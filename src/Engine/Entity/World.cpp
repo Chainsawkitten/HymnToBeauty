@@ -101,6 +101,22 @@ void World::Save(const std::string& filename) const {
     file.close();
 }
 
+void World::Load(const std::string& filename) {
+    Clear();
+    
+    // Load Json document from file.
+    Json::Value root;
+    std::ifstream file(filename);
+    file >> root;
+    file.close();
+    
+    // Load entities.
+    for (unsigned int i=0; i < root.size(); ++i) {
+        Entity* entity = CreateEntity("");
+        entity->Load(root[i]);
+    }
+}
+
 void World::AddComponent(Component::SuperComponent* component, const std::type_info* componentType) {
     components[componentType].push_back(component);
 }

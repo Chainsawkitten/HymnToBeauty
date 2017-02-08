@@ -6,6 +6,7 @@
 #include <Engine/Audio/SoundBuffer.hpp>
 
 #include <Engine/Hymn.hpp>
+#include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
 
 using namespace GUI;
@@ -23,6 +24,7 @@ void ResourceList::Show() {
                 sceneEditor.Save();
                 sceneEditor.SetVisible(true);
                 sceneEditor.SetScene(&Hymn().scenes[i]);
+                Hymn().world.Load(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json");
             }
             
             if (ImGui::BeginPopupContextItem(Hymn().scenes[i].c_str())) {

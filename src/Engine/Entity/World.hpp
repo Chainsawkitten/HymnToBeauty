@@ -82,6 +82,12 @@ class World {
          */
         void Save(const std::string& filename) const;
         
+        /// Load the world from file.
+        /**
+         * @param filename The name of the file.
+         */
+        void Load(const std::string& filename);
+        
     private:
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
