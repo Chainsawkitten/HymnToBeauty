@@ -81,6 +81,7 @@ void Editor::Show() {
 }
 
 void Editor::Save() const {
+    resourceList.SaveScene();
     Hymn().Save();
 }
 

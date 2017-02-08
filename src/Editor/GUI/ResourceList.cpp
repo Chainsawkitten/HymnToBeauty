@@ -181,3 +181,7 @@ void ResourceList::HideEditors() {
         editor.second.SetVisible(false);
     }
 }
+
+void ResourceList::SaveScene() const {
+    sceneEditor.Save();
+}

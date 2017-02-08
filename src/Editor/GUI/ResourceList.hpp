@@ -39,6 +39,9 @@ namespace GUI {
              */
             void HideEditors();
             
+            /// Save the currently active scene.
+            void SaveScene() const;
+            
         private:
             bool visible = false;
             
