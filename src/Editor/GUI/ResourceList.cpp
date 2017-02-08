@@ -20,12 +20,13 @@ void ResourceList::Show() {
         if (ImGui::Button("Add scene"))
             Hymn().scenes.push_back("Scene #" + std::to_string(Hymn().scenes.size()));
         
-        for (const std::string& scene : Hymn().scenes) {
-            if (ImGui::Selectable(scene.c_str())) {
-                /// @todo Scene editor.
+        for (std::size_t i = 0; i < Hymn().scenes.size(); ++i) {
+            if (ImGui::Selectable(Hymn().scenes[i].c_str())) {
+                sceneEditors[&Hymn().scenes[i]].SetVisible(true);
+                sceneEditors[&Hymn().scenes[i]].SetScene(&Hymn().scenes[i]);
             }
             
-            if (ImGui::BeginPopupContextItem(scene.c_str())) {
+            if (ImGui::BeginPopupContextItem(Hymn().scenes[i].c_str())) {
                 if (ImGui::Selectable("Delete")) {
                     /// @todo Delete scene.
                 }
@@ -34,6 +35,13 @@ void ResourceList::Show() {
         }
         
         ImGui::TreePop();
+    }
+    
+    // Scene editors.
+    for (std::size_t i = 0; i < Hymn().scenes.size(); ++i) {
+        if (sceneEditors[&Hymn().scenes[i]].IsVisible()) {
+            sceneEditors[&Hymn().scenes[i]].Show();
+        }
     }
     
     // Entities.
