@@ -6,23 +6,45 @@ void Input::SetWindow(GLFWwindow* window) {
 
 }
 
-void Input::AddButton(int key, int state, std::string action) {
-    
-    Button button;
-    button.key = key;
-    button.state = state;
-    button.action = action;
+bool Input::Check_Button(int index){
 
-	buttons.push_back(button);
+    Button* button = buttons[index];
+
+    int state = glfwGetKey(window, button->key);
+
+    return state == button->state;
 
 }
 
-bool Input::Check_Button(int index){
+Json::Value Input::Save() {
 
-    Button button = buttons[index];
+    Json::Value buttonsNode;
+    buttonsNode["size"] = buttons.size();
+    for (int i = 0; i < buttons.size(); i++) {
 
-    int state = glfwGetKey(window, button.key);
+        buttonsNode[std::to_string(i)]["action"] = buttons[i]->action;
+        buttonsNode[std::to_string(i)]["key"] = buttons[i]->key;
+        buttonsNode[std::to_string(i)]["state"] = buttons[i]->state;
 
-    return state == button.state;
+    }
+
+    return buttonsNode;
+
+}
+
+void Input::Load(const Json::Value& buttonsNode) {
+    
+    unsigned int size = buttonsNode.get("size", 0).asUInt();
+    for (int i = 0; i < size; i++) {
+
+        Button* button = new Button();
+
+        strcpy(button->action, buttonsNode[std::to_string(i)]["action"].asCString());
+        button->key = buttonsNode[std::to_string(i)]["key"].asInt();
+        button->state = buttonsNode[std::to_string(i)]["state"].asInt();
+
+        buttons.push_back(button);
+
+    }
 
 }

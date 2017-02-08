@@ -18,6 +18,7 @@
 #include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
+#include "Input/Input.hpp"
 #include <json/json.h>
 #include <fstream>
 #include "Util/Profiling.hpp"
@@ -110,10 +111,15 @@ void ActiveHymn::Save() const {
     }
     root["entities"] = entitiesNode;
     
+    Json::Value inputNode;
+    inputNode.append(Input::GetInstance().Save());
+    root["input"] = inputNode;
+
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
     file.close();
+
 }
 
 void ActiveHymn::Load(const string& path) {
@@ -162,6 +168,10 @@ void ActiveHymn::Load(const string& path) {
         Entity* entity = activeScene.CreateEntity("");
         entity->Load(entitiesNode[i]);
     }
+
+    const Json::Value inputNode = root["input"];
+    Input::GetInstance().Load(inputNode[0]);
+
 }
 
 void ActiveHymn::Update(float deltaTime) {
