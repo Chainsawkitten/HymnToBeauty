@@ -39,6 +39,9 @@ class RenderManager {
          */
         void RenderEditorEntities(World& world, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
         
+        /// Updates the buffers to fit the current screen size.
+        void UpdateBufferSize();
+        
     private:
         RenderManager();
         ~RenderManager();
