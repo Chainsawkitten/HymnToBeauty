@@ -150,14 +150,14 @@ void ResourceList::Show() {
 
 	if (sceneEditor.IsVisible()) {
 		
-		ImGui::SetNextWindowPos(ImVec2(0, 0));
-		ImGui::SetNextWindowSize(ImVec2(250, size.y - 250));
+		ImGui::SetNextWindowPos(ImVec2(0, 20));
+		ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
 		sceneEditor.Show();
 
 	}
 
- 	ImGui::SetNextWindowPos(ImVec2(size.x - 250, 0));
-	ImGui::SetNextWindowSize(ImVec2(250, size.y));
+ 	ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
+	ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
    
 	if (sceneEditor.entityEditor.IsVisible())
 		sceneEditor.entityEditor.Show();

@@ -8,7 +8,7 @@
 using namespace GUI;
 
 void SceneEditor::Show() {
-    if (ImGui::Begin(("Scene: " + std::to_string(sceneIndex) + "###Scene").c_str(), &visible)) {
+    if (ImGui::Begin(("Scene: " + Hymn().scenes[sceneIndex] + "###Scene").c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
 		Hymn().scenes[sceneIndex] = name;
         
@@ -59,5 +59,5 @@ void SceneEditor::SetVisible(bool visible) {
 
 void SceneEditor::Save() const {
 	if(sceneIndex < Hymn().scenes.size())
-		Hymn().world.Save(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + std::to_string(sceneIndex) + ".json");
+		Hymn().world.Save(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[sceneIndex] + ".json");
 }
