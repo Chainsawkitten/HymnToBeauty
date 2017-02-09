@@ -1,13 +1,12 @@
 #pragma once
 
 #include <map>
-#include "Editors/EntityEditor.hpp"
 #include "Editors/ModelEditor.hpp"
-#include "Editors/TextureEditor.hpp"
+#include "Editors/SceneEditor.hpp"
 #include "Editors/SoundEditor.hpp"
+#include "Editors/TextureEditor.hpp"
 
 class Texture2D;
-class Entity;
 namespace Geometry {
     class Model;
 }
@@ -40,13 +39,20 @@ namespace GUI {
              */
             void HideEditors();
             
+            /// Save the currently active scene.
+            void SaveScene() const;
+            
+            /// Reset which scene is open.
+            void ResetScene();
+            
         private:
             bool visible = false;
             
+			SceneEditor sceneEditor;
             EntityEditor entityEditor;
             ModelEditor modelEditor;
             TextureEditor textureEditor;
             SoundEditor soundEditor;
-
+            
     };
 }

@@ -4,7 +4,7 @@
 #include <vector>
 
 class asIScriptEngine;
-class Scene;
+class World;
 class Entity;
 
 /// Handles scripting.
@@ -18,11 +18,11 @@ class ScriptManager {
          */
         void BuildScript(const std::string& name);
         
-        /// Update all script components in a scene.
+        /// Update all script components in the world.
         /**
-         * @param scene The scene to update.
+         * @param world The world to update.
          */
-        void Update(Scene& scene);
+        void Update(World& world);
         
         /// Register an entity to recieve update callbacks.
         /**

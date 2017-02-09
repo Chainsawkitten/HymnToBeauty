@@ -1,6 +1,6 @@
 #include "PhysicsManager.hpp"
 
-#include "../Scene/Scene.hpp"
+#include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Physics.hpp"
 
@@ -12,8 +12,8 @@ PhysicsManager::~PhysicsManager() {
     
 }
 
-void PhysicsManager::Update(Scene& scene, float deltaTime) {
-    std::vector<Component::Physics*> physicsObjects = scene.GetComponents<Component::Physics>();
+void PhysicsManager::Update(World& world, float deltaTime) {
+    std::vector<Component::Physics*> physicsObjects = world.GetComponents<Component::Physics>();
     for (Component::Physics* physicsComp : physicsObjects) {
         if (physicsComp->IsKilled())
             continue;

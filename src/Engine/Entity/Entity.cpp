@@ -15,8 +15,8 @@
 #include "../Component/ParticleEmitter.hpp"
 #include "../Util/Json.hpp"
 
-Entity::Entity(Scene* scene, const std::string& name) {
-    this->scene = scene;
+Entity::Entity(World* world, const std::string& name) {
+    this->world = world;
     this->name = name;
 }
 

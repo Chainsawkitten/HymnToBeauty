@@ -241,6 +241,7 @@ set(ENGINE_SRCS
         src/Engine/Component/SpotLight.cpp
         src/Engine/Component/SuperComponent.cpp
         src/Engine/Entity/Entity.cpp
+        src/Engine/Entity/World.cpp
         src/Engine/Font/Font.cpp
         src/Engine/Lighting/DeferredLighting.cpp
         src/Engine/Manager/Managers.cpp
@@ -284,7 +285,6 @@ set(ENGINE_SRCS
         src/Engine/Geometry/StaticModel.cpp
         src/Engine/Geometry/VertexType/SkinVertex.cpp
         src/Engine/Geometry/VertexType/StaticVertex.cpp
-        src/Engine/Scene/Scene.cpp
         src/Engine/Texture/Texture.cpp
         src/Engine/Texture/Texture2D.cpp
     )
@@ -310,6 +310,7 @@ set(ENGINE_HEADERS
         src/Engine/Component/SpotLight.hpp
         src/Engine/Component/SuperComponent.hpp
         src/Engine/Entity/Entity.hpp
+        src/Engine/Entity/World.hpp
         src/Engine/Font/Font.hpp
         src/Engine/Lighting/DeferredLighting.hpp
         src/Engine/Manager/Managers.hpp
@@ -354,7 +355,6 @@ set(ENGINE_HEADERS
         src/Engine/Geometry/StaticModel.hpp
         src/Engine/Geometry/VertexType/SkinVertex.hpp
         src/Engine/Geometry/VertexType/StaticVertex.hpp
-        src/Engine/Scene/Scene.hpp
         src/Engine/Texture/Texture.hpp
         src/Engine/Texture/Texture2D.hpp
     )
@@ -380,6 +380,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/ResourceList.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
+        src/Editor/GUI/Editors/SceneEditor.cpp
         src/Editor/GUI/Editors/SoundEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
         src/Editor/Util/EditorSettings.cpp
@@ -393,6 +394,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
+        src/Editor/GUI/Editors/SceneEditor.hpp
         src/Editor/GUI/Editors/SoundEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
         src/Editor/Util/EditorSettings.hpp

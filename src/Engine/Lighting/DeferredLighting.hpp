@@ -5,7 +5,7 @@
 namespace Geometry {
     class Rectangle;
 }
-class Scene;
+class World;
 class Entity;
 class Shader;
 class ShaderProgram;
@@ -40,12 +40,12 @@ class DeferredLighting {
          */
         void ResetTarget();
         
-        /// Render the lighting in the scene.
+        /// Render the lighting in the world.
 		/**
-         * @param scene Scene to get the lights from.
+         * @param world World to get the lights from.
 		 * @param camera Camera to use.
 		 */
-		void Render(Scene& scene, Entity* camera);
+		void Render(World& world, Entity* camera);
         
 	private:
         static void AttachTexture(GLuint texture, unsigned int width, unsigned int height, GLenum attachment, GLint internalFormat);
