@@ -42,6 +42,9 @@ namespace GUI {
             /// Save the currently active scene.
             void SaveScene() const;
             
+            /// Reset which scene is open.
+            void ResetScene();
+            
         private:
             bool visible = false;
             

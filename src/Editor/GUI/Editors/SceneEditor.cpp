@@ -47,7 +47,8 @@ void SceneEditor::Show() {
 void SceneEditor::SetScene(std::string* scene) {
     this->scene = scene;
     
-    strcpy(name, scene->c_str());
+    if (scene != nullptr)
+        strcpy(name, scene->c_str());
 }
 
 bool SceneEditor::IsVisible() const {

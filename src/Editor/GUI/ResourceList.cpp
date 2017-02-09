@@ -189,3 +189,8 @@ void ResourceList::HideEditors() {
 void ResourceList::SaveScene() const {
     sceneEditor.Save();
 }
+
+void ResourceList::ResetScene() {
+    sceneEditor.SetScene(nullptr);
+    sceneEditor.SetVisible(false);
+}
