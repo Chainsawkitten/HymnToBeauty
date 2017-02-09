@@ -38,6 +38,9 @@ class RenderManager {
          * @param lightSources Whether to show light sources.
          */
         void RenderEditorEntities(Scene& scene, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
+
+        /// Updates the buffers to fit the current screen size.
+        void UpdateBufferSize();
         
     private:
         RenderManager();
