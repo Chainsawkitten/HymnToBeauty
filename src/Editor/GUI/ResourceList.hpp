@@ -43,9 +43,10 @@ namespace GUI {
         private:
             bool visible = false;
             
-            std::map<Entity*, EntityEditor> entityEditors;
-            std::map<Geometry::Model*, ModelEditor> modelEditors;
-            std::map<Texture2D*, TextureEditor> textureEditors;
-            std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
+            EntityEditor entityEditor;
+            ModelEditor modelEditor;
+            TextureEditor textureEditor;
+            SoundEditor soundEditor;
+
     };
 }

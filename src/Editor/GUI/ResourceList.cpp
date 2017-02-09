@@ -17,16 +17,15 @@ void ResourceList::Show() {
     ImGui::Begin("Resources");
     
     // Entities.
-    Entity* selected_entity = nullptr;
+    bool entityPressed = false;
     if (ImGui::TreeNode("Entities")) {
         if (ImGui::Button("Add entity"))
             Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
         
         for (Entity* entity : Hymn().activeScene.GetEntities()) {
             if (ImGui::Selectable(entity->name.c_str())) {
-                selected_entity = entity;
-                entityEditors[entity].SetVisible(true);
-                entityEditors[entity].SetEntity(entity);
+                entityPressed = true;
+                entityEditor.SetEntity(entity);
             }
             
             if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
@@ -36,12 +35,11 @@ void ResourceList::Show() {
                 ImGui::EndPopup();
             }
         }
-        
         ImGui::TreePop();
     }
         
     // Models.
-    Geometry::Model* selected_model = nullptr;
+    bool modelPressed = false;
     if (ImGui::TreeNode("Models")) {
         if (ImGui::Button("Add rigged model")) {
             Geometry::Model* model = new Geometry::RiggedModel();
@@ -57,9 +55,8 @@ void ResourceList::Show() {
         for (auto it = Hymn().models.begin(); it != Hymn().models.end(); ++it) {
             Geometry::Model* model = *it;
             if (ImGui::Selectable(model->name.c_str())) {
-                selected_model = model;
-                modelEditors[model].SetVisible(true);
-                modelEditors[model].SetModel(model);
+                modelPressed = true;
+                modelEditor.SetModel(model);
             }
             
             if (ImGui::BeginPopupContextItem(model->name.c_str())) {
@@ -72,12 +69,11 @@ void ResourceList::Show() {
                 ImGui::EndPopup();
             }
         }
-        
         ImGui::TreePop();
     }
         
     // Textures.
-    Texture2D* selected_texture = nullptr;
+    bool texturePressed = false;
     if (ImGui::TreeNode("Textures")) {
         if (ImGui::Button("Add texture")) {
             Texture2D* texture = new Texture2D();
@@ -88,9 +84,8 @@ void ResourceList::Show() {
         for (auto it = Hymn().textures.begin(); it != Hymn().textures.end(); ++it) {
             Texture2D* texture = *it;
             if (ImGui::Selectable(texture->name.c_str())) {
-                selected_texture = texture;
-                textureEditors[texture].SetVisible(true);
-                textureEditors[texture].SetTexture(texture);
+                texturePressed = true;
+                textureEditor.SetTexture(texture);
             }
             
             if (ImGui::BeginPopupContextItem(texture->name.c_str())) {
@@ -108,7 +103,7 @@ void ResourceList::Show() {
     }
     
     // Sounds.
-    Audio::SoundBuffer* selected_sound = nullptr;
+    bool soundPressed = false;
     if (ImGui::TreeNode("Sounds")) {
         if (ImGui::Button("Add sound")) {
             Audio::SoundBuffer* sound = new Audio::SoundBuffer();
@@ -119,9 +114,8 @@ void ResourceList::Show() {
         for (auto it = Hymn().sounds.begin(); it != Hymn().sounds.end(); ++it) {
             Audio::SoundBuffer* sound = *it;
             if (ImGui::Selectable(sound->name.c_str())) {
-                selected_sound = sound;
-                soundEditors[sound].SetVisible(true);
-                soundEditors[sound].SetSound(sound);
+                soundPressed = true;
+                soundEditor.SetSound(sound);
             }
             
             if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
@@ -142,79 +136,24 @@ void ResourceList::Show() {
     ImGui::SetNextWindowPos(ImVec2(size.x - 250, 0));
     ImGui::SetNextWindowSize(ImVec2(250, size.y));
 
-    bool no_selection = selected_entity == nullptr && selected_texture == nullptr && selected_sound == nullptr && selected_model == nullptr;
+    if (entityPressed || texturePressed || modelPressed || soundPressed) {
 
-    // Entity editors.
-    if (!no_selection) {
-        for (Entity* entity : Hymn().activeScene.GetEntities()) {
-            if (entityEditors[entity].IsVisible()) {
-                if(entity != selected_entity)
-                    entityEditors[entity].SetVisible(false);
-                else entityEditors[entity].Show();
-            } 
-        }
-    }
-    else{
-        for (Entity* entity : Hymn().activeScene.GetEntities()) {
-            if (entityEditors[entity].IsVisible()) {
-                entityEditors[entity].Show();
-            }
-        }
+        entityEditor.SetVisible(entityPressed);
+        textureEditor.SetVisible(texturePressed);
+        modelEditor.SetVisible(modelPressed);
+        soundEditor.SetVisible(soundPressed);
+
     }
 
-    // Model editors.
-    if (!no_selection) {
-        for (Geometry::Model* models : Hymn().models) {
-            if (modelEditors[models].IsVisible()) {
-                if (models != selected_model)
-                    modelEditors[models].SetVisible(false);
-                else modelEditors[models].Show();
-            }
-        }
-    }
-    else{
-        for (Geometry::Model* model : Hymn().models) {
-            if (modelEditors[model].IsVisible()) {
-                modelEditors[model].Show();
-            }
-        }
-    }
+    if (entityEditor.IsVisible())
+        entityEditor.Show();
+    if (textureEditor.IsVisible())
+        textureEditor.Show();
+    if (modelEditor.IsVisible())
+        modelEditor.Show();
+    if (soundEditor.IsVisible())
+        soundEditor.Show();
 
-    // Texture editors.
-    if (!no_selection) {
-        for (Texture2D* texture : Hymn().textures) {
-            if (textureEditors[texture].IsVisible()) {
-                if (texture != selected_texture)
-                    textureEditors[texture].SetVisible(false);
-                else textureEditors[texture].Show();
-            }
-        }
-    }
-    else{
-        for (Texture2D* texture : Hymn().textures) {
-            if (textureEditors[texture].IsVisible()) {
-                textureEditors[texture].Show();
-            }
-        }
-    }
-
-    // Sound editors.
-    if (!no_selection) {
-        for (Audio::SoundBuffer* sound : Hymn().sounds) {
-            if (soundEditors[sound].IsVisible()) {
-                if (sound != selected_sound)
-                    soundEditors[sound].SetVisible(false);
-                else soundEditors[sound].Show();
-            }
-        }
-    }
-    else{
-        for (Audio::SoundBuffer* sound : Hymn().sounds) {
-            if (soundEditors[sound].IsVisible()) {
-                soundEditors[sound].Show();
-            }
-        }
-    }
     ImGui::End();
 }
 
@@ -227,19 +166,8 @@ void ResourceList::SetVisible(bool visible) {
 }
 
 void ResourceList::HideEditors() {
-    for (auto& editor : entityEditors) {
-        editor.second.SetVisible(false);
-    }
-    
-    for (auto& editor : modelEditors) {
-        editor.second.SetVisible(false);
-    }
-    
-    for (auto& editor : textureEditors) {
-        editor.second.SetVisible(false);
-    }
-    
-    for (auto& editor : soundEditors) {
-        editor.second.SetVisible(false);
-    }
+    entityEditor.SetVisible(false);
+    modelEditor.SetVisible(false);
+    textureEditor.SetVisible(false);
+    soundEditor.SetVisible(false);
 }
