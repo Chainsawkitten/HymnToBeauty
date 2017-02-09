@@ -1,15 +1,17 @@
 #pragma once
 
 #include <map>
-#include "Editors/EntityEditor.hpp"
 #include "Editors/ModelEditor.hpp"
-#include "Editors/TextureEditor.hpp"
+#include "Editors/SceneEditor.hpp"
 #include "Editors/SoundEditor.hpp"
 #include "Editors/ScriptEditor.hpp"
+#include "Editors/TextureEditor.hpp"
+
 
 class Texture2D;
 class Entity;
 class ScriptFile;
+
 namespace Geometry {
     class Model;
 }
@@ -42,14 +44,21 @@ namespace GUI {
              */
             void HideEditors();
             
+            /// Save the currently active scene.
+            void SaveScene() const;
+            
+            /// Reset which scene is open.
+            void ResetScene();
+            
         private:
             bool visible = false;
             
-            std::map<Entity*, EntityEditor> entityEditors;
-            std::map<Geometry::Model*, ModelEditor> modelEditors;
-            std::map<Texture2D*, TextureEditor> textureEditors;
-			std::map<Audio::SoundBuffer*, SoundEditor> soundEditors;
-			std::map<ScriptFile*, ScriptEditor> scriptEditors;
+
+			SceneEditor sceneEditor;
+            ScriptEditor scriptEditor;
+            ModelEditor modelEditor;
+            TextureEditor textureEditor;
+            SoundEditor soundEditor;
 
     };
 }

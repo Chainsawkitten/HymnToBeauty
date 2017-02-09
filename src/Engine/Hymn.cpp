@@ -13,7 +13,6 @@
 #include "DefaultNormal.png.hpp"
 #include "DefaultSpecular.png.hpp"
 #include "DefaultGlow.png.hpp"
-#include "Entity/Entity.hpp"
 #include "Geometry/RiggedModel.hpp"
 #include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
@@ -23,6 +22,7 @@
 #include <fstream>
 #include "Util/Profiling.hpp"
 
+#include "Entity/Entity.hpp"
 #include "Component/Animation.hpp"
 
 using namespace std;
@@ -44,9 +44,11 @@ ActiveHymn& ActiveHymn::GetInstance() {
 
 void ActiveHymn::Clear() {
     path = "";
-    activeScene.Clear();
+    world.Clear();
     
     entityNumber = 1U;
+    
+    scenes.clear();
     
     for (Geometry::Model* model : models) {
         delete model;
@@ -83,7 +85,8 @@ void ActiveHymn::SetPath(const string& path) {
     this->path = path;
     FileSystem::CreateDirectory(path.c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Models").c_str());
-	FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scenes").c_str());
+    FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Scripts").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Sounds").c_str());
     FileSystem::CreateDirectory((path + FileSystem::DELIMITER + "Textures").c_str());
 }
@@ -104,7 +107,7 @@ void ActiveHymn::Save() const {
         modelsNode.append(model->Save());
     }
     root["models"] = modelsNode;
-    
+
 	// Save scripts.
 	Json::Value scriptNode;
 	for (ScriptFile* script : scripts) {
@@ -119,22 +122,13 @@ void ActiveHymn::Save() const {
 	}
 	root["sounds"] = soundsNode;
 
-    // Save entities.
-    Json::Value entitiesNode;
-    for (Entity* entity : activeScene.GetEntities()) {
-        entitiesNode.append(entity->Save());
-    }
-    root["entities"] = entitiesNode;
-
-	Json::Value numbersNode;
-	numbersNode["texture"] = textureNumber;
-	numbersNode["model"] = modelNumber;
-	numbersNode["sound"] = soundNumber;
-	numbersNode["script"] = scriptNumber;
-	numbersNode["entity"] = entityNumber;
-
-	root["numbers"] = numbersNode;
-
+	// Save scenes.
+	Json::Value scenesNode;
+	for (const string& scene : scenes) {
+		scenesNode.append(scene);
+	}
+	root["scenes"] = scenesNode;
+    
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
@@ -172,14 +166,6 @@ void ActiveHymn::Load(const string& path) {
         model->Load(modelsNode[i]);
         models.push_back(model);
     }
-    
-	// Load sounds.
-	const Json::Value soundsNode = root["sounds"];
-	for (unsigned int i = 0; i < soundsNode.size(); ++i) {
-		Audio::SoundBuffer* sound = new Audio::SoundBuffer();
-		sound->Load(soundsNode[i]);
-		sounds.push_back(sound);
-	}
 
 	// Load scriptss.
 	const Json::Value scriptNode = root["scripts"];
@@ -189,33 +175,38 @@ void ActiveHymn::Load(const string& path) {
 		scripts.push_back(script);
 	}
 
-    // Load entities.
-    const Json::Value entitiesNode = root["entities"];
-    for (unsigned int i=0; i < entitiesNode.size(); ++i) {
-        Entity* entity = activeScene.CreateEntity("");
-        entity->Load(entitiesNode[i]);
+    // Load sounds.
+    const Json::Value soundsNode = root["sounds"];
+    for (unsigned int i=0; i < soundsNode.size(); ++i) {
+        Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+        sound->Load(soundsNode[i]);
+        sounds.push_back(sound);
+    }
+    
+    // Load scenes.
+    const Json::Value scenesNode = root["scenes"];
+    for (unsigned int i=0; i < scenesNode.size(); ++i) {
+        scenes.push_back(scenesNode[i].asString());
     }
 
-	const Json::Value numberNode = root["numbers"];
-	textureNumber = numberNode["texture"].asUInt();
-	modelNumber = numberNode["model"].asUInt();
-	soundNumber = numberNode["sound"].asUInt();
-	scriptNumber = numberNode["script"].asUInt();
-	entityNumber = numberNode["entity"].asUInt();
+	textureNumber = textures.size();
+	modelNumber = models.size();
+	soundNumber = sounds.size();
+	scriptNumber = scripts.size();
 
 }
 
 void ActiveHymn::Update(float deltaTime) {
     { PROFILE("Run scripts.");
-        Managers().scriptManager->Update(activeScene);
+        Managers().scriptManager->Update(world);
     }
     
     { PROFILE("Update physics");
-        Managers().physicsManager->Update(activeScene, deltaTime);
+        Managers().physicsManager->Update(world, deltaTime);
     }
 
     { PROFILE("Update animations");
-        for (Entity* entity : activeScene.GetEntities()) {
+        for (Entity* entity : world.GetEntities()) {
             Component::Animation* anim = entity->GetComponent<Component::Animation>();
             if (anim != nullptr) {
                 Geometry::RiggedModel* model = anim->riggedModel;
@@ -230,11 +221,11 @@ void ActiveHymn::Update(float deltaTime) {
     }
     
     { PROFILE("Update particles");
-        Managers().particleManager->Update(activeScene, deltaTime);
+        Managers().particleManager->Update(world, deltaTime);
     }
     
     { PROFILE("Update sounds");
-        Managers().soundManager->Update(activeScene);
+        Managers().soundManager->Update(world);
     }
     
     { PROFILE("Update debug drawing");
@@ -242,23 +233,23 @@ void ActiveHymn::Update(float deltaTime) {
     }
     
     { PROFILE("Clear killed entities/components");
-        activeScene.ClearKilled();
+        world.ClearKilled();
     }
 }
 
 void ActiveHymn::Render(bool soundSources, bool particleEmitters, bool lightSources) {
-    { PROFILE("Render scene");
-        Managers().renderManager->Render(activeScene);
+    { PROFILE("Render world");
+        Managers().renderManager->Render(world);
     }
     
     if (soundSources || particleEmitters || lightSources) {
         { PROFILE("Render editor entities");
-            Managers().renderManager->RenderEditorEntities(activeScene, soundSources, particleEmitters, lightSources);
+            Managers().renderManager->RenderEditorEntities(world, soundSources, particleEmitters, lightSources);
         }
     }
     
     { PROFILE("Render debug entities");
-        Managers().debugDrawingManager->Render(activeScene);
+        Managers().debugDrawingManager->Render(world);
     }
 }
 

@@ -10,33 +10,33 @@ namespace Component {
     class SuperComponent;
 }
 
-/// A scene containing entities.
-class Scene {
+/// The game world containing all entities.
+class World {
     friend class Entity;
     
     public:
-        /// Create a new scene.
-        Scene();
+        /// Create a new world.
+        World();
         
         /// Destructor.
-        ~Scene();
+        ~World();
         
-        /// Create a new entity in the scene.
+        /// Create a new entity in the world.
         /**
          * @param name Name of the entity to create.
          * @return The new entity.
          */
         Entity* CreateEntity(const std::string& name = "");
         
-        /// Get all the entities in the scene.
+        /// Get all the entities in the world.
         /**
-         * @return The entities in the scene.
+         * @return The entities in the world.
          */
         const std::vector<Entity*>& GetEntities() const;
         
         /// Gets all components of a specific type.
         /**
-         * @return A list of pointers to all components of the specified scene.
+         * @return A list of pointers to all components of the world.
          */
         template<typename T> std::vector<T*>& GetComponents();
         
@@ -52,41 +52,53 @@ class Scene {
          */
         const std::vector<Entity*>& GetUpdateEntities() const;
         
-        /// Clear the scene of all entities.
+        /// Clear the world of all entities.
         void Clear();
         
-        /// Removes all killed entities and components in the scene.
+        /// Removes all killed entities and components in the world.
         void ClearKilled();
         
-        /// Get all the particles in the scene.
+        /// Get all the particles in the world.
         /**
-         * @return Array of all the particles in the scene.
+         * @return Array of all the particles in the world.
          */
         ParticleManager::Particle* GetParticles() const;
         
-        /// Get the number of particles in the scene.
+        /// Get the number of particles in the world.
         /**
-         * @return The number of particles in the scene.
+         * @return The number of particles in the world.
          */
         unsigned int GetParticleCount() const;
         
-        /// Set the number of particles in the scene.
+        /// Set the number of particles in the world.
         /**
-         * @param particleCount The number of particles in the scene.
+         * @param particleCount The number of particles in the world.
          */
         void SetParticleCount(unsigned int particleCount);
+        
+        /// Save the world to file.
+        /**
+         * @param filename The name of the file.
+         */
+        void Save(const std::string& filename) const;
+        
+        /// Load the world from file.
+        /**
+         * @param filename The name of the file.
+         */
+        void Load(const std::string& filename);
         
     private:
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
         
-        // List of all entities in this scene.
+        // List of all entities in this world.
         std::vector<Entity*> entities;
         
         // Map containing list of components.
         std::map<const std::type_info*, std::vector<Component::SuperComponent*>> components;
         
-        // All particles in the scene.
+        // All particles in the world.
         ParticleManager::Particle* particles;
         unsigned int particleCount = 0;
         
@@ -94,6 +106,6 @@ class Scene {
         std::vector<Entity*> updateEntities;
 };
 
-template<typename T> inline std::vector<T*>& Scene::GetComponents() {
+template<typename T> inline std::vector<T*>& World::GetComponents() {
     return reinterpret_cast<std::vector<T*>&>(components[&typeid(T*)]);
 }

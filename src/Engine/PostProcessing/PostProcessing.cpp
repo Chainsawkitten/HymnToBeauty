@@ -8,11 +8,14 @@
 #include "Filter.hpp"
 #include "../MainWindow.hpp"
 
+
 PostProcessing::PostProcessing() {
+
     buffers[0] = new RenderTarget(MainWindow::GetInstance()->GetSize());
     buffers[1] = new RenderTarget(MainWindow::GetInstance()->GetSize());
     
     rectangle = Managers().resourceManager->CreateRectangle();
+
 }
 
 PostProcessing::~PostProcessing() {
@@ -24,6 +27,18 @@ PostProcessing::~PostProcessing() {
 
 RenderTarget* PostProcessing::GetRenderTarget() const {
     return buffers[which];
+}
+
+void PostProcessing::UpdateBufferSize(){
+
+    delete buffers[0];
+    delete buffers[1];
+
+    buffers[0] = new RenderTarget(MainWindow::GetInstance()->GetSize());
+    buffers[1] = new RenderTarget(MainWindow::GetInstance()->GetSize());
+
+    rectangle = Managers().resourceManager->CreateRectangle();
+
 }
 
 void PostProcessing::ApplyFilter(Filter* filter) {

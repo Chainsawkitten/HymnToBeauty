@@ -2,7 +2,7 @@
 
 #include <map>
 #include <typeinfo>
-#include "../Scene/Scene.hpp"
+#include "../Entity/World.hpp"
 #include <json/json.h>
 #include "../Component/SuperComponent.hpp"
 
@@ -11,10 +11,10 @@ class Entity {
     public:
         /// Create new entity.
         /**
-         * @param scene The scene in which the entity is contained.
+         * @param world The game world in which the entity is contained.
          * @param name Name of the entity.
          */
-        Entity(Scene* scene, const std::string& name = "");
+        Entity(World* world, const std::string& name = "");
         
         /// Destructor.
         ~Entity();
@@ -105,7 +105,7 @@ class Entity {
         template<typename T> void Save(Json::Value& node, const std::string& name) const;
         template<typename T> void Load(const Json::Value& node, const std::string& name);
         
-        Scene* scene;
+        World* world;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         
@@ -118,7 +118,7 @@ template<typename T> T* Entity::AddComponent() {
         return nullptr;
     T* component = new T(this);
     components[componentType] = component;
-    scene->AddComponent(component, componentType);
+    world->AddComponent(component, componentType);
     return component;
 }
 

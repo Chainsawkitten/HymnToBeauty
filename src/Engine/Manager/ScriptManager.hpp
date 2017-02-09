@@ -4,7 +4,7 @@
 #include <vector>
 
 class asIScriptEngine;
-class Scene;
+class World;
 class Entity;
 class ScriptFile;
 
@@ -13,6 +13,7 @@ class ScriptManager {
     friend class Hub;
     
     public:
+
 		/// Build a script¨in the script folder that can later be run.
 		/**
 		 * @param name Name of the script to build.
@@ -28,13 +29,13 @@ class ScriptManager {
 		/// Build all scripts in the script folder.
 		void BuildAllScripts();
 
+		///Loads a script from a .as file into a string readable by the ASengine.
 		void LoadScriptFile(const char *fileName, std::string &script);
 
-		/// Update all script components in a scene.
         /**
-         * @param scene The scene to update.
+         * @param world The world to update.
          */
-        void Update(Scene& scene);
+        void Update(World& world);
         
         /// Register an entity to recieve update callbacks.
         /**
