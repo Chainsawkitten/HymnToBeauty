@@ -81,6 +81,7 @@ void Editor::Show() {
 }
 
 void Editor::Save() const {
+    resourceList.SaveScene();
     Hymn().Save();
 }
 
@@ -96,6 +97,7 @@ void Editor::Play() {
     Save();
     SetVisible(false);
     resourceList.HideEditors();
+    resourceList.ResetScene();
 }
 
 void Editor::NewHymn() {
@@ -109,6 +111,7 @@ void Editor::NewHymn() {
 void Editor::NewHymnClosed(const std::string& hymn) {
     // Create new hymn
     if (!hymn.empty()) {
+        resourceList.ResetScene();
         Hymn().Clear();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
@@ -128,6 +131,7 @@ void Editor::OpenHymn() {
 void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
+        resourceList.ResetScene();
         Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
     }

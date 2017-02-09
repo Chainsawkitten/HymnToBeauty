@@ -1,20 +1,20 @@
 #pragma once
 
-class Scene;
+class World;
 
 #include <glm/glm.hpp>
 
-/// Updates the physics of a scene.
+/// Updates the physics of the world.
 class PhysicsManager {
     friend class Hub;
     
     public:
-        /// Update scene containing entities. Moves entities and updates the physics component.
+        /// Update world containing entities. Moves entities and updates the physics component.
         /**
-         * @param scene The scene to update.
+         * @param world The world to update.
          * @param deltaTime Time since last frame (in seconds).
          */
-        void Update(Scene& scene, float deltaTime);
+        void Update(World& world, float deltaTime);
         
     private:
         PhysicsManager();

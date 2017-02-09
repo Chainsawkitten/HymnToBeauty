@@ -6,8 +6,7 @@
 #include <Engine/Audio/SoundBuffer.hpp>
 
 #include <Engine/Hymn.hpp>
-#include <Engine/Scene/Scene.hpp>
-#include <Engine/Entity/Entity.hpp>
+#include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
 
 using namespace GUI;
@@ -15,20 +14,26 @@ using namespace GUI;
 void ResourceList::Show() {
     ImGui::Begin("Resources");
     
-    // Entities.
-    if (ImGui::TreeNode("Entities")) {
-        if (ImGui::Button("Add entity"))
-            Hymn().activeScene.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
+    // Scenes.
+    if (ImGui::TreeNode("Scenes")) {
+        if (ImGui::Button("Add scene"))
+            Hymn().scenes.push_back("Scene #" + std::to_string(Hymn().scenes.size()));
         
-        for (Entity* entity : Hymn().activeScene.GetEntities()) {
-            if (ImGui::Selectable(entity->name.c_str())) {
-                entityEditors[entity].SetVisible(true);
-                entityEditors[entity].SetEntity(entity);
+        for (std::size_t i = 0; i < Hymn().scenes.size(); ++i) {
+            if (ImGui::Selectable(Hymn().scenes[i].c_str())) {
+                sceneEditor.Save();
+                sceneEditor.SetVisible(true);
+                sceneEditor.SetScene(&Hymn().scenes[i]);
+                std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
+                if (FileSystem::FileExists(sceneFile.c_str()))
+                    Hymn().world.Load(sceneFile);
             }
             
-            if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
+            if (ImGui::BeginPopupContextItem(Hymn().scenes[i].c_str())) {
                 if (ImGui::Selectable("Delete")) {
-                    entity->Kill();
+                    Hymn().scenes.erase(Hymn().scenes.begin() + i);
+                    ImGui::EndPopup();
+                    break;
                 }
                 ImGui::EndPopup();
             }
@@ -37,12 +42,9 @@ void ResourceList::Show() {
         ImGui::TreePop();
     }
     
-    // Entity editors.
-    for (Entity* entity : Hymn().activeScene.GetEntities()) {
-        if (entityEditors[entity].IsVisible()) {
-            entityEditors[entity].Show();
-        }
-    }
+    // Scene editor.
+    if (sceneEditor.IsVisible())
+        sceneEditor.Show();
     
     // Models.
     if (ImGui::TreeNode("Models")) {
@@ -169,9 +171,7 @@ void ResourceList::SetVisible(bool visible) {
 }
 
 void ResourceList::HideEditors() {
-    for (auto& editor : entityEditors) {
-        editor.second.SetVisible(false);
-    }
+    sceneEditor.SetVisible(false);
     
     for (auto& editor : modelEditors) {
         editor.second.SetVisible(false);
@@ -184,4 +184,13 @@ void ResourceList::HideEditors() {
     for (auto& editor : soundEditors) {
         editor.second.SetVisible(false);
     }
+}
+
+void ResourceList::SaveScene() const {
+    sceneEditor.Save();
+}
+
+void ResourceList::ResetScene() {
+    sceneEditor.SetScene(nullptr);
+    sceneEditor.SetVisible(false);
 }
