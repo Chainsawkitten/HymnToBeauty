@@ -97,6 +97,7 @@ void Editor::Play() {
     Save();
     SetVisible(false);
     resourceList.HideEditors();
+    resourceList.ResetScene();
 }
 
 void Editor::NewHymn() {
