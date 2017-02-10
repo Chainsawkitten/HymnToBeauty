@@ -16,21 +16,21 @@ using namespace GUI;
 void ScriptEditor::Show() {
     if (ImGui::Begin(("Script: " + std::to_string(reinterpret_cast<uintptr_t>(script))).c_str(), &visible)) {
 
-		char name_text[255];
-		strcpy(name_text, script->name.c_str());
-		if (ImGui::InputText("Name", name_text, 255)) {
+        char name_text[255];
+        strcpy(name_text, script->name.c_str());
+        if (ImGui::InputText("Name", name_text, 255)) {
 
-			script->name = name_text;
+            script->name = name_text;
 
-		}
+        }
 
-		char module_text[255];
-		strcpy(module_text, script->module.c_str());
-		if (ImGui::InputText("Module", module_text, 255)) {
+        char module_text[255];
+        strcpy(module_text, script->module.c_str());
+        if (ImGui::InputText("Module", module_text, 255)) {
 
-			script->module = module_text;
+            script->module = module_text;
 
-		}
+        }
 
         if (ImGui::Button("Load Script")) {
             fileSelector.AddExtensions("as");
@@ -38,9 +38,9 @@ void ScriptEditor::Show() {
             fileSelector.SetVisible(true);
         }
 
-		if (ImGui::Button("Edit Script")) {
-			FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + script->path + "\"");
-		}
+        if (ImGui::Button("Edit Script")) {
+            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + script->path + "\"");
+        }
         if (ImGui::Button("Build Script")) {
           
             Managers().scriptManager->BuildSpecificScript(script->path.c_str());
@@ -66,5 +66,5 @@ void ScriptEditor::SetVisible(bool visible) {
 }
 
 void ScriptEditor::FileSelected(const std::string& file) {
-	script->path = file.c_str();
+    script->path = file.c_str();
 }

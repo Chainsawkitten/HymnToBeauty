@@ -54,7 +54,7 @@ namespace GUI {
             bool visible = false;
             
 
-			SceneEditor sceneEditor;
+            SceneEditor sceneEditor;
             ScriptEditor scriptEditor;
             ModelEditor modelEditor;
             TextureEditor textureEditor;

@@ -60,7 +60,7 @@ Log & Log::operator<<(const glm::vec4 & value) {
 }
 
 void ErrorCallback(int error, const char* description) {
-	fputs(description, stderr);
+    fputs(description, stderr);
 }
 
 void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam, bool showNotifications) {
@@ -141,7 +141,7 @@ void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, 
 }
 
 void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-	HandleDebugMessage(source, type, id, severity, length, message, userParam, true);
+    HandleDebugMessage(source, type, id, severity, length, message, userParam, true);
 }
 
 void APIENTRY DebugMessageCallbackIgnoreNotifications(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {

@@ -29,8 +29,8 @@ namespace GUI {
              */
             void SetVisible(bool visible);
 
-			///The path of the script.
-			//std::string* path;
+            ///The path of the script.
+            //std::string* path;
 
         private:
             void FileSelected(const std::string& file);

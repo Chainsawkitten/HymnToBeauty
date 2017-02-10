@@ -63,7 +63,7 @@ void Editor::Show() {
         // Play
         if (ImGui::BeginMenu("Play")) {
             if (ImGui::MenuItem("Play", "F5")) {
-				Managers().scriptManager->BuildAllScripts();
+                Managers().scriptManager->BuildAllScripts();
                 play = true;
             }
             ImGui::EndMenu();

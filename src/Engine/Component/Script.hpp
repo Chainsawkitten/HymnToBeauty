@@ -30,10 +30,10 @@ namespace Component {
             /// Whether the script component has been initialized.
             bool initialized = false;
 
-			///The scriptfile.
-			ScriptFile* scriptfile = nullptr;
+            ///The scriptfile.
+            ScriptFile* scriptfile = nullptr;
 
-		private:
+        private:
 
     };
 }
