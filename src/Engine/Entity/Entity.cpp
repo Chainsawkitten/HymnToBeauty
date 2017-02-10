@@ -31,6 +31,10 @@ Entity* Entity::AddChild(const std::string& name) {
     return child;
 }
 
+const std::vector<Entity*>& Entity::GetChildren() const {
+    return children;
+}
+
 void Entity::Kill() {
     killed = true;
     

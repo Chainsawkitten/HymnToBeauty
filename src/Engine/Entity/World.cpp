@@ -26,6 +26,10 @@ const std::vector<Entity*>& World::GetEntities() const {
     return entities;
 }
 
+Entity* World::GetRoot() const {
+    return root;
+}
+
 void World::RegisterUpdate(Entity* entity) {
     updateEntities.push_back(entity);
 }

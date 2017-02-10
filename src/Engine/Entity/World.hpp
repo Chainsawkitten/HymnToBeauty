@@ -34,6 +34,12 @@ class World {
          */
         const std::vector<Entity*>& GetEntities() const;
         
+        /// Get the root entity.
+        /**
+         * @return The root entity.
+         */
+        Entity* GetRoot() const;
+        
         /// Gets all components of a specific type.
         /**
          * @return A list of pointers to all components of the world.

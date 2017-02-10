@@ -13,22 +13,7 @@ void SceneEditor::Show() {
         *scene = name;
         
         // Entities.
-        for (Entity* entity : Hymn().world.GetEntities()) {
-            if (ImGui::Selectable(entity->name.c_str())) {
-                entityEditors[entity].SetVisible(true);
-                entityEditors[entity].SetEntity(entity);
-            }
-            
-            if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
-                if (ImGui::Selectable("Add child")) {
-                    entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
-                }
-                if (ImGui::Selectable("Delete")) {
-                    entity->Kill();
-                }
-                ImGui::EndPopup();
-            }
-        }
+        ShowEntity(Hymn().world.GetRoot());
         
         // Entity editors.
         for (Entity* entity : Hymn().world.GetEntities()) {
@@ -58,5 +43,26 @@ void SceneEditor::SetVisible(bool visible) {
 void SceneEditor::Save() const {
     if (scene != nullptr) {
         Hymn().world.Save(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + *scene + ".json");
+    }
+}
+
+void SceneEditor::ShowEntity(Entity* entity) {
+    if (ImGui::TreeNode(entity->name.c_str())) {
+        if (ImGui::Button("Edit")) {
+            entityEditors[entity].SetVisible(true);
+            entityEditors[entity].SetEntity(entity);
+        }
+        
+        if (ImGui::Button("Add child"))
+            entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
+        
+        if (ImGui::Button("Delete"))
+            entity->Kill();
+        
+        for (Entity* child : entity->GetChildren()) {
+            ShowEntity(child);
+        }
+        
+        ImGui::TreePop();
     }
 }

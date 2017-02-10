@@ -27,6 +27,12 @@ class Entity {
          */
         Entity* AddChild(const std::string& name = "");
         
+        /// Get all of the entity's children.
+        /**
+         * @return All the children.
+         */
+        const std::vector<Entity*>& GetChildren() const;
+        
         /// Adds component with type T.
         /**
          * @return The created component.

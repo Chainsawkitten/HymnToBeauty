@@ -35,6 +35,8 @@ namespace GUI {
             void Save() const;
             
         private:
+            void ShowEntity(Entity* entity);
+            
             bool visible = false;
             
             std::string* scene = nullptr;
