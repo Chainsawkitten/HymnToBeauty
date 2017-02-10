@@ -3,6 +3,7 @@
 #include "../Entity/Entity.hpp"
 #include "../Component/SuperComponent.hpp"
 #include "../Manager/Managers.hpp"
+#include "../Util/FileSystem.hpp"
 #include <fstream>
 
 World::World() {
@@ -106,15 +107,19 @@ void World::Load(const std::string& filename) {
     Clear();
     
     // Load Json document from file.
-    Json::Value root;
-    std::ifstream file(filename);
-    file >> root;
-    file.close();
-    
-    // Load entities.
-    for (unsigned int i=0; i < root.size(); ++i) {
-        Entity* entity = CreateEntity("");
-        entity->Load(root[i]);
+    if (FileSystem::FileExists(filename.c_str())) {
+        Json::Value root;
+        std::ifstream file(filename);
+        file >> root;
+        file.close();
+        
+        // Load entities.
+        for (unsigned int i=0; i < root.size(); ++i) {
+            Entity* entity = CreateEntity("");
+            entity->Load(root[i]);
+        }
+    } else {
+        root = CreateEntity("Root");
     }
 }
 

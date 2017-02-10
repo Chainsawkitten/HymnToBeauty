@@ -25,8 +25,7 @@ void ResourceList::Show() {
                 sceneEditor.SetVisible(true);
                 sceneEditor.SetScene(&Hymn().scenes[i]);
                 std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
-                if (FileSystem::FileExists(sceneFile.c_str()))
-                    Hymn().world.Load(sceneFile);
+                Hymn().world.Load(sceneFile);
             }
             
             if (ImGui::BeginPopupContextItem(Hymn().scenes[i].c_str())) {
