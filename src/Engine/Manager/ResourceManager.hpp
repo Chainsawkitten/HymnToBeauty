@@ -23,11 +23,11 @@ class ResourceManager {
     public:
         /// Create a shader if it doesn't already exist.
         /**
-		 * @param source GLSL code for the shader.
-		 * @param sourceLength Length of the GLSL source code.
-		 * @param shaderType %Shader type. One of GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
-		 * @return The shader instance
-		 */
+         * @param source GLSL code for the shader.
+         * @param sourceLength Length of the GLSL source code.
+         * @param shaderType %Shader type. One of GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
+         * @return The shader instance
+         */
         Shader* CreateShader(const char* source, int sourceLength, GLenum shaderType);
         
         /// Free the reference to the shader.
@@ -38,21 +38,21 @@ class ResourceManager {
         void FreeShader(Shader* shader);
         
         /// Create shader program if it doesn't already exist.
-		/**
-		 * Link together shaders into a shader program that can be run on the GPU.
-		 *
-		 * Sample:
-		 * \code{.cpp}
-		 * Shader* vertexShader = new Shader(vertexSource, vertexSourceLength, GL_VERTEX_SHADER);
-		 * Shader* geometryShader = new Shader(geometrySource, geometrySourceLength, GL_GEOMETRY_SHADER);
-		 * Shader* fragmentShader = new Shader(fragmentSource, fragmentSourceLength, GL_FRAGMENT_SHADER);
-		 * ShaderProgram* shaderProgram = new ResourceManager::GetInstance().CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
-		 * \endcode
-		 *
-		 * @param shaders List of shaders to link together.
-		 * @return The shader program instance
-		 */
-		ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders);
+        /**
+         * Link together shaders into a shader program that can be run on the GPU.
+         *
+         * Sample:
+         * \code{.cpp}
+         * Shader* vertexShader = new Shader(vertexSource, vertexSourceLength, GL_VERTEX_SHADER);
+         * Shader* geometryShader = new Shader(geometrySource, geometrySourceLength, GL_GEOMETRY_SHADER);
+         * Shader* fragmentShader = new Shader(fragmentSource, fragmentSourceLength, GL_FRAGMENT_SHADER);
+         * ShaderProgram* shaderProgram = new ResourceManager::GetInstance().CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
+         * \endcode
+         *
+         * @param shaders List of shaders to link together.
+         * @return The shader program instance
+         */
+        ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders);
         
         /// Free the reference to a shader program.
         /**
@@ -100,19 +100,19 @@ class ResourceManager {
         
         /// Create a 2D texture if it doesn't already exist.
         /**
-		 * @param data Image file data.
-		 * @param dataLength Length of the image file data.
-		 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
-		 * @return The %Texture2D instance
-		 */
+         * @param data Image file data.
+         * @param dataLength Length of the image file data.
+         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
+         * @return The %Texture2D instance
+         */
         Texture2D* CreateTexture2D(const char* data, int dataLength, bool srgb = false);
         
         /// Create a 2D texture if it doesn't already exist.
         /**
-		 * @param filename Filename of image file.
-		 * @param srgb Whether the image is in SRGB space and should be converted to linear space.
-		 * @return The %Texture2D instance
-		 */
+         * @param filename Filename of image file.
+         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
+         * @return The %Texture2D instance
+         */
         Texture2D* CreateTexture2DFromFile(std::string filename, bool srgb = false);
         
         /// Free the reference to the 2D texture.

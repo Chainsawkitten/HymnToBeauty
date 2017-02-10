@@ -4,12 +4,12 @@
 #include "../Util/Log.hpp"
 
 Shader::Shader(const char* source, int sourceLength, GLenum shaderType) {
-	this->shaderType = shaderType;
+    this->shaderType = shaderType;
 
-	shader = glCreateShader(shaderType);
+    shader = glCreateShader(shaderType);
     GLint length = sourceLength;
-	glShaderSource(shader, 1, &source, &length);
-	glCompileShader(shader);
+    glShaderSource(shader, 1, &source, &length);
+    glCompileShader(shader);
     
     // Check for shader compilation errors.
     GLint isCompiled = 0;
@@ -27,13 +27,13 @@ Shader::Shader(const char* source, int sourceLength, GLenum shaderType) {
 }
 
 Shader::~Shader() {
-	glDeleteShader(shader);
+    glDeleteShader(shader);
 }
 
 GLuint Shader::GetShaderID() const {
-	return shader;
+    return shader;
 }
 
 GLenum Shader::GetShaderType() const {
-	return shaderType;
+    return shaderType;
 }

@@ -12,24 +12,24 @@ class ShaderProgram;
 
 /// Holds the frame buffers used for deferred rendering.
 class DeferredLighting {
-	public:
-		/// The different buffer types.
-		enum TEXTURE_TYPE {
-			DIFFUSE, ///< Diffuse texture
-			NORMAL, ///< Normals
-			SPECULAR, ///< Specular
+    public:
+        /// The different buffer types.
+        enum TEXTURE_TYPE {
+            DIFFUSE, ///< Diffuse texture
+            NORMAL, ///< Normals
+            SPECULAR, ///< Specular
             GLOW, ///< Glow
-			NUM_TEXTURES ///< Total number of textures (excluding depth buffer)
-		};
+            NUM_TEXTURES ///< Total number of textures (excluding depth buffer)
+        };
         
-		/// Create new render target.
-		DeferredLighting();
+        /// Create new render target.
+        DeferredLighting();
         
-		/// Destructor
-		/**
-		 * Free allocated resources.
-		 */
-		~DeferredLighting();
+        /// Destructor
+        /**
+         * Free allocated resources.
+         */
+        ~DeferredLighting();
         
         /// Set as render target.
         void SetTarget();
@@ -41,20 +41,20 @@ class DeferredLighting {
         void ResetTarget();
         
         /// Render the lighting in the world.
-		/**
+        /**
          * @param world World to get the lights from.
-		 * @param camera Camera to use.
-		 */
-		void Render(World& world, Entity* camera);
+         * @param camera Camera to use.
+         */
+        void Render(World& world, Entity* camera);
         
-	private:
+    private:
         static void AttachTexture(GLuint texture, unsigned int width, unsigned int height, GLenum attachment, GLint internalFormat);
         void BindForReading();
         
-		GLuint textures[NUM_TEXTURES];
+        GLuint textures[NUM_TEXTURES];
         
-		GLuint frameBufferObject;
-		GLuint depthHandle;
+        GLuint frameBufferObject;
+        GLuint depthHandle;
         
         Geometry::Rectangle* rectangle;
         
