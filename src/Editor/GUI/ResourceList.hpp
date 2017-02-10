@@ -1,6 +1,5 @@
 #pragma once
 
-#include <map>
 #include "Editors/ModelEditor.hpp"
 #include "Editors/SceneEditor.hpp"
 #include "Editors/SoundEditor.hpp"
@@ -53,6 +52,5 @@ namespace GUI {
             ModelEditor modelEditor;
             TextureEditor textureEditor;
             SoundEditor soundEditor;
-            
     };
 }
