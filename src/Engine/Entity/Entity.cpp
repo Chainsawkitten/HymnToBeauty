@@ -24,6 +24,13 @@ Entity::~Entity() {
     
 }
 
+Entity* Entity::AddChild(const std::string& name) {
+    Entity* child = world->CreateEntity(name);
+    child->parent = this;
+    children.push_back(child);
+    return child;
+}
+
 void Entity::Kill() {
     killed = true;
     

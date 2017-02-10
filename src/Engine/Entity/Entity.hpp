@@ -20,6 +20,13 @@ class Entity {
         /// Destructor.
         ~Entity();
         
+        /// Add child entity.
+        /**
+         * @param name The name of the child entity.
+         * @return The new entity.
+         */
+        Entity* AddChild(const std::string& name = "");
+        
         /// Adds component with type T.
         /**
          * @return The created component.
