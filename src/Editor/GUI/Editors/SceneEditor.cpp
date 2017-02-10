@@ -13,25 +13,18 @@ void SceneEditor::Show() {
         *scene = name;
         
         // Entities.
-        if (ImGui::TreeNode("Entities")) {
-            if (ImGui::Button("Add entity"))
-                Hymn().world.CreateEntity("Entity #" + std::to_string(Hymn().entityNumber++));
-            
-            for (Entity* entity : Hymn().world.GetEntities()) {
-                if (ImGui::Selectable(entity->name.c_str())) {
-                    entityEditors[entity].SetVisible(true);
-                    entityEditors[entity].SetEntity(entity);
-                }
-                
-                if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
-                    if (ImGui::Selectable("Delete")) {
-                        entity->Kill();
-                    }
-                    ImGui::EndPopup();
-                }
+        for (Entity* entity : Hymn().world.GetEntities()) {
+            if (ImGui::Selectable(entity->name.c_str())) {
+                entityEditors[entity].SetVisible(true);
+                entityEditors[entity].SetEntity(entity);
             }
             
-            ImGui::TreePop();
+            if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    entity->Kill();
+                }
+                ImGui::EndPopup();
+            }
         }
         
         // Entity editors.
