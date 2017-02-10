@@ -31,6 +31,7 @@ void ResourceList::Show() {
                 sceneEditor.SetScene(i);
 				Hymn().activeScene = i;
 				sceneEditor.entityEditor.SetVisible(false);
+				Hymn().world.Clear();
                 std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
                 if (FileSystem::FileExists(sceneFile.c_str()))
                     Hymn().world.Load(sceneFile);
