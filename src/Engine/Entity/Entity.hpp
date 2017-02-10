@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include <typeinfo>
 #include "../Entity/World.hpp"
 #include <json/json.h>
@@ -106,6 +107,8 @@ class Entity {
         template<typename T> void Load(const Json::Value& node, const std::string& name);
         
         World* world;
+        Entity* parent = nullptr;
+        std::vector<Entity*> children;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         
