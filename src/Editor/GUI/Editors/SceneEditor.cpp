@@ -8,28 +8,22 @@
 using namespace GUI;
 
 void SceneEditor::Show() {
-    if (ImGui::Begin(("Scene: " + *scene + "###Scene").c_str(), &visible)) {
+    if (ImGui::Begin(("Scene: " + Hymn().scenes[sceneIndex] + "###Scene").c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
-        *scene = name;
+        Hymn().scenes[sceneIndex] = name;
         
         // Entities.
+        entityPressed = false;
         ShowEntity(Hymn().world.GetRoot());
-        
-        // Entity editors.
-        for (Entity* entity : Hymn().world.GetEntities()) {
-            if (entityEditors[entity].IsVisible()) {
-                entityEditors[entity].Show();
-            }
-        }
     }
     ImGui::End();
 }
 
-void SceneEditor::SetScene(std::string* scene) {
-    this->scene = scene;
-    
-    if (scene != nullptr)
-        strcpy(name, scene->c_str());
+void SceneEditor::SetScene(std::size_t sceneIndex) {
+    if (sceneIndex < Hymn().scenes.size()) {
+        this->sceneIndex = sceneIndex;
+        strcpy(name, Hymn().scenes[sceneIndex].c_str());
+    }
 }
 
 bool SceneEditor::IsVisible() const {
@@ -41,16 +35,15 @@ void SceneEditor::SetVisible(bool visible) {
 }
 
 void SceneEditor::Save() const {
-    if (scene != nullptr) {
-        Hymn().world.Save(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + *scene + ".json");
-    }
+    if (sceneIndex < Hymn().scenes.size())
+        Hymn().world.Save(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[sceneIndex] + ".json");
 }
 
 void SceneEditor::ShowEntity(Entity* entity) {
     if (ImGui::TreeNode(entity->name.c_str())) {
         if (ImGui::Button("Edit")) {
-            entityEditors[entity].SetVisible(true);
-            entityEditors[entity].SetEntity(entity);
+            entityPressed = true;
+            entityEditor.SetEntity(entity);
         }
         
         if (ImGui::Button("Add child"))

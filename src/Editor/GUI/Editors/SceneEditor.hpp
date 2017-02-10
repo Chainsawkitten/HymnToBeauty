@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <map>
 #include "EntityEditor.hpp"
 
 class Entity;
@@ -17,7 +16,7 @@ namespace GUI {
             /**
              * @param scene Scene to edit.
              */
-            void SetScene(std::string* scene);
+            void SetScene(std::size_t scene);
             
             /// Get whether the window is visible.
             /**
@@ -34,14 +33,18 @@ namespace GUI {
             /// Save currently open scene to file.
             void Save() const;
             
+            /// Did we press on an entity this frame.
+            bool entityPressed = false;
+            
+            /// The Entity Editor
+            EntityEditor entityEditor;
+            
         private:
             void ShowEntity(Entity* entity);
             
             bool visible = false;
             
-            std::string* scene = nullptr;
+            std::size_t sceneIndex;
             char name[128] = "";
-            
-            std::map<Entity*, EntityEditor> entityEditors;
     };
 }
