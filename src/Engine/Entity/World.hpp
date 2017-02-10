@@ -94,6 +94,7 @@ class World {
         
         // List of all entities in this world.
         std::vector<Entity*> entities;
+        Entity* root = nullptr;
         
         // Map containing list of components.
         std::map<const std::type_info*, std::vector<Component::SuperComponent*>> components;

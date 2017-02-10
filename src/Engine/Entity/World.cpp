@@ -37,6 +37,7 @@ void World::Clear() {
     for (Entity* entity : entities)
         delete entity;
     entities.clear();
+    root = nullptr;
     
     for (auto& it : components) {
         for (Component::SuperComponent* component : it.second)
