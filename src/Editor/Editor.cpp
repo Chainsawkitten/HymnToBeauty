@@ -21,12 +21,9 @@ void Editor::Show() {
     bool play = false;
     
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
-    ImVec2 menu_size;
 
     // Main menu bar.
     if (ImGui::BeginMainMenuBar()) {
-
-        menu_size = ImGui::GetWindowSize();
 
         // File menu.
         if (ImGui::BeginMenu("File")) {
