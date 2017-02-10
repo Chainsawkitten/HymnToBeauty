@@ -29,6 +29,7 @@ void ResourceList::Show() {
                 sceneEditor.Save();
                 sceneEditor.SetVisible(true);
                 sceneEditor.SetScene(i);
+				Hymn().activeScene = i;
 				sceneEditor.entityEditor.SetVisible(false);
                 std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
                 if (FileSystem::FileExists(sceneFile.c_str()))
@@ -229,6 +230,7 @@ void ResourceList::SetVisible(bool visible) {
 void ResourceList::HideEditors() {
 	
 	sceneEditor.SetVisible(false);
+	sceneEditor.entityEditor.SetVisible(false);
 	scriptEditor.SetVisible(false);
 	modelEditor.SetVisible(false);
     textureEditor.SetVisible(false);

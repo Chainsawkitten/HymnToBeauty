@@ -128,7 +128,8 @@ void ActiveHymn::Save() const {
 		scenesNode.append(scene);
 	}
 	root["scenes"] = scenesNode;
-    
+	root["activeScene"] = activeScene;
+
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
@@ -188,6 +189,9 @@ void ActiveHymn::Load(const string& path) {
     for (unsigned int i=0; i < scenesNode.size(); ++i) {
         scenes.push_back(scenesNode[i].asString());
     }
+	activeScene = root["activeScene"].asUInt();
+
+	Hymn().world.Load(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + scenes[activeScene] + ".json");
 
 	textureNumber = textures.size();
 	modelNumber = models.size();

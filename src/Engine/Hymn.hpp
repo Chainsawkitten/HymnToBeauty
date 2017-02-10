@@ -90,6 +90,9 @@ class ActiveHymn {
 		/// The id of the next script to create.
 		unsigned int scriptNumber = 0U;
 
+		///The index to the activeScene.
+		std::size_t activeScene;
+
         /// Default diffuse texture.
         Texture2D* defaultDiffuse;
         
