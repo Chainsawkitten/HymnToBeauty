@@ -29,9 +29,9 @@ void ResourceList::Show() {
                 sceneEditor.Save();
                 sceneEditor.SetVisible(true);
                 sceneEditor.SetScene(i);
-				Hymn().activeScene = i;
-				sceneEditor.entityEditor.SetVisible(false);
-				Hymn().world.Clear();
+                Hymn().activeScene = i;
+                sceneEditor.entityEditor.SetVisible(false);
+                Hymn().world.Clear();
                 std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
                 if (FileSystem::FileExists(sceneFile.c_str()))
                     Hymn().world.Load(sceneFile);
@@ -112,46 +112,46 @@ void ResourceList::Show() {
         
         ImGui::TreePop();
     }
-	
+    
     // Scripts.
-	bool scriptPressed = false;
-	if (ImGui::TreeNode("Scripts")) {
-		if (ImGui::Button("Add script")) {
+    bool scriptPressed = false;
+    if (ImGui::TreeNode("Scripts")) {
+        if (ImGui::Button("Add script")) {
 
-			std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
-			std::string* filename = new std::string(Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as");
-			FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + *filename + "\"");
-			ScriptFile* script_file = new ScriptFile();
+            std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
+            std::string* filename = new std::string(Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as");
+            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + *filename + "\"");
+            ScriptFile* script_file = new ScriptFile();
             script_file->name = name;
             script_file->module = name;
-			script_file->path = *filename;
-			Hymn().scripts.push_back(script_file);
+            script_file->path = *filename;
+            Hymn().scripts.push_back(script_file);
 
-		}
+        }
 
-		for (auto it = Hymn().scripts.begin(); it != Hymn().scripts.end(); ++it) {
-			
-			ScriptFile* script = *it;
-			std::string name = script->name;
+        for (auto it = Hymn().scripts.begin(); it != Hymn().scripts.end(); ++it) {
+            
+            ScriptFile* script = *it;
+            std::string name = script->name;
 
-			if (ImGui::Selectable(name.c_str())) {
-				scriptPressed = true;
-				scriptEditor.SetScript(script);
-			}
+            if (ImGui::Selectable(name.c_str())) {
+                scriptPressed = true;
+                scriptEditor.SetScript(script);
+            }
 
-			if (ImGui::BeginPopupContextItem(name.c_str())) {
-				if (ImGui::Selectable("Delete")) {
-					ImGui::Text(script->path.c_str());
-					Hymn().scripts.erase(it);
-					ImGui::EndPopup();
-					break;
-				}
-				ImGui::EndPopup();
-			}
-		}
+            if (ImGui::BeginPopupContextItem(name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    ImGui::Text(script->path.c_str());
+                    Hymn().scripts.erase(it);
+                    ImGui::EndPopup();
+                    break;
+                }
+                ImGui::EndPopup();
+            }
+        }
 
-		ImGui::TreePop();
-	}
+        ImGui::TreePop();
+    }
 
     // Sounds.
     bool soundPressed = false;
@@ -186,31 +186,31 @@ void ResourceList::Show() {
 
     if (sceneEditor.entityPressed || scriptPressed || texturePressed || modelPressed || soundPressed) {
 
-		sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
-		scriptEditor.SetVisible(scriptPressed);
+        sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
+        scriptEditor.SetVisible(scriptPressed);
         textureEditor.SetVisible(texturePressed);
         modelEditor.SetVisible(modelPressed);
         soundEditor.SetVisible(soundPressed);
 
     }
-	ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
 
-	if (sceneEditor.IsVisible()) {
-		
-		ImGui::SetNextWindowPos(ImVec2(0, 20));
-		ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
-		sceneEditor.Show();
+    if (sceneEditor.IsVisible()) {
+        
+        ImGui::SetNextWindowPos(ImVec2(0, 20));
+        ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
+        sceneEditor.Show();
 
-	}
+    }
 
- 	ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
-	ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
+    ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
+    ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
    
-	if (sceneEditor.entityEditor.IsVisible())
-		sceneEditor.entityEditor.Show();
-	if (scriptEditor.IsVisible())
-		scriptEditor.Show();
-	if (textureEditor.IsVisible())
+    if (sceneEditor.entityEditor.IsVisible())
+        sceneEditor.entityEditor.Show();
+    if (scriptEditor.IsVisible())
+        scriptEditor.Show();
+    if (textureEditor.IsVisible())
         textureEditor.Show();
     if (modelEditor.IsVisible())
         modelEditor.Show();
@@ -229,11 +229,11 @@ void ResourceList::SetVisible(bool visible) {
 }
 
 void ResourceList::HideEditors() {
-	
-	sceneEditor.SetVisible(false);
-	sceneEditor.entityEditor.SetVisible(false);
-	scriptEditor.SetVisible(false);
-	modelEditor.SetVisible(false);
+    
+    sceneEditor.SetVisible(false);
+    sceneEditor.entityEditor.SetVisible(false);
+    scriptEditor.SetVisible(false);
+    modelEditor.SetVisible(false);
     textureEditor.SetVisible(false);
     soundEditor.SetVisible(false);
 
