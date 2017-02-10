@@ -13,16 +13,16 @@ namespace Geometry {
 class RenderTarget {
     public:
         /// Create new render target.
-		/**
-		 * @param size Size of the new render target.
-		 */
-		RenderTarget(const glm::vec2& size);
+        /**
+         * @param size Size of the new render target.
+         */
+        RenderTarget(const glm::vec2& size);
         
         /// Destructor.
         ~RenderTarget();
         
         /// Set as render target.
-		void SetTarget();
+        void SetTarget();
         
         /// Get size of the render target.
         /**
@@ -57,12 +57,12 @@ class RenderTarget {
         
     private:
         unsigned int width;
-		unsigned int height;
+        unsigned int height;
         
         GLuint frameBuffer;
-		GLuint colorBuffer;
+        GLuint colorBuffer;
         GLuint extraBuffer;
-		GLuint depthBuffer;
+        GLuint depthBuffer;
         
         Geometry::Rectangle* rectangle;
         
