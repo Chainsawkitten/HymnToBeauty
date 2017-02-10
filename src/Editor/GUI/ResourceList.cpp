@@ -140,28 +140,28 @@ void ResourceList::Show() {
 
     if (sceneEditor.entityPressed || texturePressed || modelPressed || soundPressed) {
 
-		sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
+        sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
         textureEditor.SetVisible(texturePressed);
         modelEditor.SetVisible(modelPressed);
         soundEditor.SetVisible(soundPressed);
 
     }
-	ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
 
-	if (sceneEditor.IsVisible()) {
-		
-		ImGui::SetNextWindowPos(ImVec2(0, 20));
-		ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
-		sceneEditor.Show();
+    if (sceneEditor.IsVisible()) {
+        
+        ImGui::SetNextWindowPos(ImVec2(0, 20));
+        ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
+        sceneEditor.Show();
 
-	}
+    }
 
- 	ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
-	ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
+    ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
+    ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
    
-	if (sceneEditor.entityEditor.IsVisible())
-		sceneEditor.entityEditor.Show();
-	if (textureEditor.IsVisible())
+    if (sceneEditor.entityEditor.IsVisible())
+        sceneEditor.entityEditor.Show();
+    if (textureEditor.IsVisible())
         textureEditor.Show();
     if (modelEditor.IsVisible())
         modelEditor.Show();
@@ -180,9 +180,9 @@ void ResourceList::SetVisible(bool visible) {
 }
 
 void ResourceList::HideEditors() {
-	
-	sceneEditor.SetVisible(false);
-	modelEditor.SetVisible(false);
+    
+    sceneEditor.SetVisible(false);
+    modelEditor.SetVisible(false);
     textureEditor.SetVisible(false);
     soundEditor.SetVisible(false);
 

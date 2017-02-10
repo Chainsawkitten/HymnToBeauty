@@ -48,7 +48,7 @@ namespace GUI {
         private:
             bool visible = false;
             
-			SceneEditor sceneEditor;
+            SceneEditor sceneEditor;
             EntityEditor entityEditor;
             ModelEditor modelEditor;
             TextureEditor textureEditor;
