@@ -20,6 +20,9 @@ void SceneEditor::Show() {
             }
             
             if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
+                if (ImGui::Selectable("Add child")) {
+                    entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
+                }
                 if (ImGui::Selectable("Delete")) {
                     entity->Kill();
                 }
