@@ -96,34 +96,26 @@ void World::SetParticleCount(unsigned int particleCount) {
 }
 
 void World::Save(const std::string& filename) const {
-    Json::Value root;
-    
-    for (Entity* entity : entities) {
-        root.append(entity->Save());
-    }
+    Json::Value rootNode = root->Save();
     
     std::ofstream file(filename);
-    file << root;
+    file << rootNode;
     file.close();
 }
 
 void World::Load(const std::string& filename) {
     Clear();
     
+    root = CreateEntity("Root");
+    
     // Load Json document from file.
     if (FileSystem::FileExists(filename.c_str())) {
-        Json::Value root;
+        Json::Value rootNode;
         std::ifstream file(filename);
-        file >> root;
+        file >> rootNode;
         file.close();
         
-        // Load entities.
-        for (unsigned int i=0; i < root.size(); ++i) {
-            Entity* entity = CreateEntity("");
-            entity->Load(root[i]);
-        }
-    } else {
-        root = CreateEntity("Root");
+        root->Load(rootNode);
     }
 }
 

@@ -53,6 +53,7 @@ Json::Value Entity::Save() const {
     entity["scale"] = Json::SaveVec3(scale);
     entity["rotation"] = Json::SaveVec3(rotation);
     
+    // Save components.
     Save<Component::Animation>(entity, "Animation");
     Save<Component::Lens>(entity, "Lens");
     Save<Component::Mesh>(entity, "Mesh");
@@ -66,6 +67,12 @@ Json::Value Entity::Save() const {
     Save<Component::SoundSource>(entity, "SoundSource");
     Save<Component::ParticleEmitter>(entity, "ParticleEmitter");
     
+    // Save children.
+    Json::Value childNodes;
+    for (Entity* child : children)
+        childNodes.append(child->Save());
+    entity["children"] = childNodes;
+    
     return entity;
 }
 
@@ -75,6 +82,7 @@ void Entity::Load(const Json::Value& node) {
     scale = Json::LoadVec3(node["scale"]);
     rotation = Json::LoadVec3(node["rotation"]);
     
+    // Load components.
     Load<Component::Animation>(node, "Animation");
     Load<Component::Lens>(node, "Lens");
     Load<Component::Mesh>(node, "Mesh");
@@ -87,6 +95,12 @@ void Entity::Load(const Json::Value& node) {
     Load<Component::Script>(node, "Script");
     Load<Component::SoundSource>(node, "SoundSource");
     Load<Component::ParticleEmitter>(node, "ParticleEmitter");
+    
+    // Load children.
+    for (unsigned int i=0; i < node["children"].size(); ++i) {
+        Entity* entity = AddChild("");
+        entity->Load(node["children"][i]);
+    }
 }
 
 glm::mat4 Entity::GetModelMatrix() const {
