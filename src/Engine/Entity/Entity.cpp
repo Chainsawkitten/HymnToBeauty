@@ -45,11 +45,17 @@ Entity* Entity::InstantiateScene(const std::string& name) {
     file.close();
     child->Load(root);
     
+    child->scene = true;
+    
     return child;
 }
 
 const std::vector<Entity*>& Entity::GetChildren() const {
     return children;
+}
+
+bool Entity::IsScene() const {
+    return scene;
 }
 
 void Entity::Kill() {

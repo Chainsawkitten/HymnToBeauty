@@ -40,6 +40,12 @@ class Entity {
          */
         const std::vector<Entity*>& GetChildren() const;
         
+        /// Get whether the entity is an instantiated scene.
+        /**
+         * @return Whether the entity is an instantiated scene.
+         */
+        bool IsScene() const;
+        
         /// Adds component with type T.
         /**
          * @return The created component.
@@ -135,6 +141,7 @@ class Entity {
         World* world;
         Entity* parent = nullptr;
         std::vector<Entity*> children;
+        bool scene = false;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         
