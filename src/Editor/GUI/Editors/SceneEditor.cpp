@@ -49,8 +49,9 @@ void SceneEditor::ShowEntity(Entity* entity) {
         if (ImGui::Button("Add child"))
             entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
         
-        if (ImGui::Button("Delete"))
-            entity->Kill();
+        if (entity != Hymn().world.GetRoot())
+            if (ImGui::Button("Delete"))
+                entity->Kill();
         
         for (Entity* child : entity->GetChildren()) {
             ShowEntity(child);
