@@ -40,6 +40,19 @@ void Entity::Kill() {
     
     for (auto& it : components)
         it.second->Kill();
+    
+    for (Entity* child : children)
+        child->Kill();
+    
+    // Remove this entity from the parent's list of children.
+    if (parent != nullptr && !parent->killed) {
+        for (auto it = parent->children.begin(); it != parent->children.end(); ++it) {
+            if (*it == this) {
+                parent->children.erase(it);
+                break;
+            }
+        }
+    }
 }
 
 bool Entity::IsKilled() const {
