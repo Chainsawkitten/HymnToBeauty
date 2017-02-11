@@ -139,14 +139,14 @@ void RenderManager::Render(World& world) {
         // Static render program.
         staticRenderProgram->PreRender(camera, screenSize);
         for (Mesh* mesh : meshes)
-            if (mesh->geometry->GetType() == Geometry::Geometry3D::STATIC)
+            if (mesh->geometry != nullptr && mesh->geometry->GetType() == Geometry::Geometry3D::STATIC)
                 staticRenderProgram->Render(mesh);
         staticRenderProgram->PostRender();
 
         // Skin render program.
         skinRenderProgram->PreRender(camera, screenSize);
         for (Mesh* mesh : meshes)
-            if (mesh->geometry->GetType() == Geometry::Geometry3D::SKIN)
+            if (mesh->geometry != nullptr && mesh->geometry->GetType() == Geometry::Geometry3D::SKIN)
                 skinRenderProgram->Render(mesh);
         skinRenderProgram->PostRender();
         
