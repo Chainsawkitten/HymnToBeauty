@@ -46,30 +46,34 @@ void SceneEditor::ShowEntity(Entity* entity) {
             entityEditor.SetEntity(entity);
         }
         
-        if (ImGui::Button("Add child"))
-            entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
-        
-        if (ImGui::Button("Instantiate scene"))
-            ImGui::OpenPopup("Select scene");
-        
-        if (ImGui::BeginPopup("Select scene")) {
-            ImGui::Text("Scenes");
-            ImGui::Separator();
+        if (!entity->IsScene()) {
+            if (ImGui::Button("Add child"))
+                entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
             
-            for (const std::string& scene : Hymn().scenes) {
-                if (ImGui::Selectable(scene.c_str()))
-                    entity->InstantiateScene(scene);
+            if (ImGui::Button("Instantiate scene"))
+                ImGui::OpenPopup("Select scene");
+            
+            if (ImGui::BeginPopup("Select scene")) {
+                ImGui::Text("Scenes");
+                ImGui::Separator();
+                
+                for (const std::string& scene : Hymn().scenes) {
+                    if (ImGui::Selectable(scene.c_str()))
+                        entity->InstantiateScene(scene);
+                }
+                
+                ImGui::EndPopup();
             }
-            
-            ImGui::EndPopup();
         }
         
         if (entity != Hymn().world.GetRoot())
             if (ImGui::Button("Delete"))
                 entity->Kill();
         
-        for (Entity* child : entity->GetChildren()) {
-            ShowEntity(child);
+        if (!entity->IsScene()) {
+            for (Entity* child : entity->GetChildren()) {
+                ShowEntity(child);
+            }
         }
         
         ImGui::TreePop();
