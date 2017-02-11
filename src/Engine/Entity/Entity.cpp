@@ -14,6 +14,9 @@
 #include "../Component/SoundSource.hpp"
 #include "../Component/ParticleEmitter.hpp"
 #include "../Util/Json.hpp"
+#include "../Util/FileSystem.hpp"
+#include "../Hymn.hpp"
+#include <fstream>
 
 Entity::Entity(World* world, const std::string& name) {
     this->world = world;
@@ -28,6 +31,20 @@ Entity* Entity::AddChild(const std::string& name) {
     Entity* child = world->CreateEntity(name);
     child->parent = this;
     children.push_back(child);
+    return child;
+}
+
+Entity* Entity::InstantiateScene(const std::string& name) {
+    Entity* child = AddChild();
+    
+    // Load scene.
+    std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + name + ".json";
+    Json::Value root;
+    std::ifstream file(filename);
+    file >> root;
+    file.close();
+    child->Load(root);
+    
     return child;
 }
 

@@ -27,6 +27,13 @@ class Entity {
          */
         Entity* AddChild(const std::string& name = "");
         
+        /// Instantiate a scene as a child to this entity.
+        /**
+         * @param name The name of the scene to instantiate.
+         * @return The created root entity of the scene.
+         */
+        Entity* InstantiateScene(const std::string& name);
+        
         /// Get all of the entity's children.
         /**
          * @return All the children.
