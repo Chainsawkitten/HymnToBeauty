@@ -247,17 +247,14 @@ void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool p
 }
 
 void RenderManager::UpdateBufferSize() {
-
     postProcessing->UpdateBufferSize();
-
+    
     delete deferredLighting;
     deferredLighting = new DeferredLighting();
-
-
 }
 
 void RenderManager::RenderEditorEntity(SuperComponent* component) {
     Entity* entity = component->entity;
-    glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &entity->position[0]);
+    glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &entity->GetWorldPosition()[0]);
     glDrawArrays(GL_POINTS, 0, 1);
 }

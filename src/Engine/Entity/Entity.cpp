@@ -24,11 +24,35 @@ Entity::~Entity() {
     
 }
 
+Entity* Entity::AddChild(const std::string& name) {
+    Entity* child = world->CreateEntity(name);
+    child->parent = this;
+    children.push_back(child);
+    return child;
+}
+
+const std::vector<Entity*>& Entity::GetChildren() const {
+    return children;
+}
+
 void Entity::Kill() {
     killed = true;
     
     for (auto& it : components)
         it.second->Kill();
+    
+    for (Entity* child : children)
+        child->Kill();
+    
+    // Remove this entity from the parent's list of children.
+    if (parent != nullptr && !parent->killed) {
+        for (auto it = parent->children.begin(); it != parent->children.end(); ++it) {
+            if (*it == this) {
+                parent->children.erase(it);
+                break;
+            }
+        }
+    }
 }
 
 bool Entity::IsKilled() const {
@@ -42,6 +66,7 @@ Json::Value Entity::Save() const {
     entity["scale"] = Json::SaveVec3(scale);
     entity["rotation"] = Json::SaveVec3(rotation);
     
+    // Save components.
     Save<Component::Animation>(entity, "Animation");
     Save<Component::Lens>(entity, "Lens");
     Save<Component::Mesh>(entity, "Mesh");
@@ -55,6 +80,12 @@ Json::Value Entity::Save() const {
     Save<Component::SoundSource>(entity, "SoundSource");
     Save<Component::ParticleEmitter>(entity, "ParticleEmitter");
     
+    // Save children.
+    Json::Value childNodes;
+    for (Entity* child : children)
+        childNodes.append(child->Save());
+    entity["children"] = childNodes;
+    
     return entity;
 }
 
@@ -64,6 +95,7 @@ void Entity::Load(const Json::Value& node) {
     scale = Json::LoadVec3(node["scale"]);
     rotation = Json::LoadVec3(node["rotation"]);
     
+    // Load components.
     Load<Component::Animation>(node, "Animation");
     Load<Component::Lens>(node, "Lens");
     Load<Component::Mesh>(node, "Mesh");
@@ -76,14 +108,21 @@ void Entity::Load(const Json::Value& node) {
     Load<Component::Script>(node, "Script");
     Load<Component::SoundSource>(node, "SoundSource");
     Load<Component::ParticleEmitter>(node, "ParticleEmitter");
+    
+    // Load children.
+    for (unsigned int i=0; i < node["children"].size(); ++i) {
+        Entity* entity = AddChild("");
+        entity->Load(node["children"][i]);
+    }
 }
 
 glm::mat4 Entity::GetModelMatrix() const {
-    glm::mat4 orientation;
-    orientation = glm::rotate(orientation, glm::radians(rotation.x), glm::vec3(0.f, 1.f, 0.f));
-    orientation = glm::rotate(orientation, glm::radians(rotation.y), glm::vec3(1.f, 0.f, 0.f));
-    orientation = glm::rotate(orientation, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f));
-    return glm::translate(glm::mat4(), position) * orientation * glm::scale(glm::mat4(), scale);
+    glm::mat4 matrix = glm::translate(glm::mat4(), position) * GetOrientation() * glm::scale(glm::mat4(), scale);
+    
+    if (parent != nullptr)
+        matrix = parent->GetModelMatrix() * matrix;
+    
+    return matrix;
 }
 
 glm::mat4 Entity::GetOrientation() const {
@@ -102,4 +141,11 @@ glm::mat4 Entity::GetCameraOrientation() const {
 
 glm::vec3 Entity::GetDirection() const {
     return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, 1.f, 0.f)));
+}
+
+glm::vec3 Entity::GetWorldPosition() const {
+    if (parent != nullptr)
+        return glm::vec3(parent->GetModelMatrix() * glm::vec4(position, 1.f));
+    
+    return position;
 }
