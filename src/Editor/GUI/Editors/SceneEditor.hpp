@@ -33,11 +33,11 @@ namespace GUI {
             /// Save currently open scene to file.
             void Save() const;
 
-			///Did we press on an entity this frame.
-			bool entityPressed = false;
+            ///Did we press on an entity this frame.
+            bool entityPressed = false;
 
-			///The Entity Editor
-			EntityEditor entityEditor;
+            ///The Entity Editor
+            EntityEditor entityEditor;
             
         private:
             bool visible = false;

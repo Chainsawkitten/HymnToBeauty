@@ -53,9 +53,8 @@ namespace GUI {
         private:
             bool visible = false;
             
-
-            SceneEditor sceneEditor;
             ScriptEditor scriptEditor;
+            SceneEditor sceneEditor;
             ModelEditor modelEditor;
             TextureEditor textureEditor;
             SoundEditor soundEditor;
