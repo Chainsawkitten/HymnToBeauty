@@ -94,10 +94,16 @@ class Entity {
          */
         glm::vec3 GetDirection() const;
         
+        /// Get the position in the world.
+        /**
+         * @return The position in the world (not relative to parent).
+         */
+        glm::vec3 GetWorldPosition() const;
+        
         /// Name of the entity.
         std::string name;
         
-        /// Position in the world.
+        /// Position relative to the parent entity.
         /**
          * Default: 0.f, 0.f, 0.f
          */

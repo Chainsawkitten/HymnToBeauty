@@ -117,11 +117,12 @@ void Entity::Load(const Json::Value& node) {
 }
 
 glm::mat4 Entity::GetModelMatrix() const {
-    glm::mat4 orientation;
-    orientation = glm::rotate(orientation, glm::radians(rotation.x), glm::vec3(0.f, 1.f, 0.f));
-    orientation = glm::rotate(orientation, glm::radians(rotation.y), glm::vec3(1.f, 0.f, 0.f));
-    orientation = glm::rotate(orientation, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f));
-    return glm::translate(glm::mat4(), position) * orientation * glm::scale(glm::mat4(), scale);
+    glm::mat4 matrix = glm::translate(glm::mat4(), position) * GetOrientation() * glm::scale(glm::mat4(), scale);
+    
+    if (parent != nullptr)
+        matrix = parent->GetModelMatrix() * matrix;
+    
+    return matrix;
 }
 
 glm::mat4 Entity::GetOrientation() const {
@@ -140,4 +141,11 @@ glm::mat4 Entity::GetCameraOrientation() const {
 
 glm::vec3 Entity::GetDirection() const {
     return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, 1.f, 0.f)));
+}
+
+glm::vec3 Entity::GetWorldPosition() const {
+    if (parent != nullptr)
+        return glm::vec3(parent->GetModelMatrix() * glm::vec4(position, 1.f));
+    
+    return position;
 }
