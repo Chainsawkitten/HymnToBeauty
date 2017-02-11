@@ -20,6 +20,8 @@ void SceneEditor::Show() {
 }
 
 void SceneEditor::SetScene(std::size_t sceneIndex) {
+    entityEditor.SetVisible(false);
+    
     if (sceneIndex < Hymn().scenes.size()) {
         this->sceneIndex = sceneIndex;
         strcpy(name, Hymn().scenes[sceneIndex].c_str());
