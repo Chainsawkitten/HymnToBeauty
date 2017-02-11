@@ -142,6 +142,7 @@ class Entity {
         Entity* parent = nullptr;
         std::vector<Entity*> children;
         bool scene = false;
+        std::string sceneName;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         
