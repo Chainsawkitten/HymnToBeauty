@@ -23,6 +23,6 @@ class ScriptFile {
         /**
          * @param node JSON node to load from.
          */
-        void ScriptFile::Load(const Json::Value& node);
+        void Load(const Json::Value& node);
 
 };
