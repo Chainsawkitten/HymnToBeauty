@@ -27,11 +27,24 @@ class Entity {
          */
         Entity* AddChild(const std::string& name = "");
         
+        /// Instantiate a scene as a child to this entity.
+        /**
+         * @param name The name of the scene to instantiate.
+         * @return The created root entity of the scene.
+         */
+        Entity* InstantiateScene(const std::string& name);
+        
         /// Get all of the entity's children.
         /**
          * @return All the children.
          */
         const std::vector<Entity*>& GetChildren() const;
+        
+        /// Get whether the entity is an instantiated scene.
+        /**
+         * @return Whether the entity is an instantiated scene.
+         */
+        bool IsScene() const;
         
         /// Adds component with type T.
         /**
@@ -128,6 +141,8 @@ class Entity {
         World* world;
         Entity* parent = nullptr;
         std::vector<Entity*> children;
+        bool scene = false;
+        std::string sceneName;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         
