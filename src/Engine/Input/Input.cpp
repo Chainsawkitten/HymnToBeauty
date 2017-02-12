@@ -1,4 +1,5 @@
 #include "Input.hpp"
+#include <stdio.h>
 
 void Input::SetWindow(GLFWwindow* window) {
 
@@ -41,7 +42,7 @@ void Input::Load(const Json::Value& buttonsNode) {
 
         Button* button = new Button();
 
-        std::strcpy(button->action, buttonsNode[std::to_string(i)]["action"].asCString());
+        strcpy(button->action, buttonsNode[std::to_string(i)]["action"].asCString());
         button->key = buttonsNode[std::to_string(i)]["key"].asInt();
         button->state = buttonsNode[std::to_string(i)]["state"].asInt();
 
