@@ -41,7 +41,7 @@ void Input::Load(const Json::Value& buttonsNode) {
 
         Button* button = new Button();
 
-        strcpy(button->action, buttonsNode[std::to_string(i)]["action"].asCString());
+        std::strcpy(button->action, buttonsNode[std::to_string(i)]["action"].asCString());
         button->key = buttonsNode[std::to_string(i)]["key"].asInt();
         button->state = buttonsNode[std::to_string(i)]["state"].asInt();
 
