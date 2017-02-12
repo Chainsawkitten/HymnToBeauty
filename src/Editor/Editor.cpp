@@ -4,7 +4,10 @@
 #include "Util/EditorSettings.hpp"
 #include <Engine/Hymn.hpp>
 #include <Engine/Util/FileSystem.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/MainWindow.hpp>
+
 #include <imgui.h>
 #include <GLFW/glfw3.h>
 
@@ -57,6 +60,7 @@ void Editor::Show() {
         // Play
         if (ImGui::BeginMenu("Play")) {
             if (ImGui::MenuItem("Play", "F5")) {
+                Managers().scriptManager->BuildAllScripts();
                 play = true;
             }
             ImGui::EndMenu();

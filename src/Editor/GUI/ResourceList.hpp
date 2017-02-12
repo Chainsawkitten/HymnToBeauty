@@ -3,9 +3,14 @@
 #include "Editors/ModelEditor.hpp"
 #include "Editors/SceneEditor.hpp"
 #include "Editors/SoundEditor.hpp"
+#include "Editors/ScriptEditor.hpp"
 #include "Editors/TextureEditor.hpp"
 
+
 class Texture2D;
+class Entity;
+class ScriptFile;
+
 namespace Geometry {
     class Model;
 }
@@ -47,10 +52,11 @@ namespace GUI {
         private:
             bool visible = false;
             
+            ScriptEditor scriptEditor;
             SceneEditor sceneEditor;
-            EntityEditor entityEditor;
             ModelEditor modelEditor;
             TextureEditor textureEditor;
             SoundEditor soundEditor;
+
     };
 }

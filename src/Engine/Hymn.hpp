@@ -12,6 +12,8 @@ namespace Audio {
     class SoundBuffer;
 }
 
+class ScriptFile;
+
 /// A hymn to beauty.
 class ActiveHymn {
     friend ActiveHymn& Hymn();
@@ -78,10 +80,19 @@ class ActiveHymn {
         
         /// Sounds.
         std::vector<Audio::SoundBuffer*> sounds;
-        
+
         /// The id of the next sound to create.
         unsigned int soundNumber = 0U;
-        
+
+        /// Scripts.
+        std::vector<ScriptFile*> scripts;
+
+        /// The id of the next script to create.
+        unsigned int scriptNumber = 0U;
+
+        ///The index to the activeScene.
+        std::size_t activeScene;
+
         /// Default diffuse texture.
         Texture2D* defaultDiffuse;
         

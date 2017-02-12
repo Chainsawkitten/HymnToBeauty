@@ -4,12 +4,16 @@
 #include <Engine/Geometry/StaticModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Script/ScriptFile.hpp>
+#include <Engine/Util/FileSystem.hpp>
+#include <Editor/Util/EditorSettings.hpp>
 
 #include <Engine/Hymn.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/MainWindow.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
+#include <limits>
 
 using namespace GUI;
 
@@ -26,6 +30,9 @@ void ResourceList::Show() {
                 sceneEditor.Save();
                 sceneEditor.SetVisible(true);
                 sceneEditor.SetScene(i);
+                Hymn().activeScene = i;
+                sceneEditor.entityEditor.SetVisible(false);
+                Hymn().world.Clear();
                 std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
                 Hymn().world.Load(sceneFile);
             }
@@ -106,6 +113,46 @@ void ResourceList::Show() {
         ImGui::TreePop();
     }
     
+    // Scripts.
+    bool scriptPressed = false;
+    if (ImGui::TreeNode("Scripts")) {
+        if (ImGui::Button("Add script")) {
+
+            std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
+            std::string* filename = new std::string(Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as");
+            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + *filename + "\"");
+            ScriptFile* scriptFile = new ScriptFile();
+            scriptFile->name = name;
+            scriptFile->module = name;
+            scriptFile->path = *filename;
+            Hymn().scripts.push_back(scriptFile);
+
+        }
+
+        for (auto it = Hymn().scripts.begin(); it != Hymn().scripts.end(); ++it) {
+            
+            ScriptFile* script = *it;
+            std::string name = script->name;
+
+            if (ImGui::Selectable(name.c_str())) {
+                scriptPressed = true;
+                scriptEditor.SetScript(script);
+            }
+
+            if (ImGui::BeginPopupContextItem(name.c_str())) {
+                if (ImGui::Selectable("Delete")) {
+                    ImGui::Text(script->path.c_str());
+                    Hymn().scripts.erase(it);
+                    ImGui::EndPopup();
+                    break;
+                }
+                ImGui::EndPopup();
+            }
+        }
+
+        ImGui::TreePop();
+    }
+
     // Sounds.
     bool soundPressed = false;
     if (ImGui::TreeNode("Sounds")) {
@@ -135,13 +182,15 @@ void ResourceList::Show() {
         
         ImGui::TreePop();
     }
-    
-    if (sceneEditor.entityPressed || texturePressed || modelPressed || soundPressed) {
+
+    if (sceneEditor.entityPressed || scriptPressed || texturePressed || modelPressed || soundPressed) {
         sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
+        scriptEditor.SetVisible(scriptPressed);
         textureEditor.SetVisible(texturePressed);
         modelEditor.SetVisible(modelPressed);
         soundEditor.SetVisible(soundPressed);
     }
+
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
     
     if (sceneEditor.IsVisible()) {
@@ -155,6 +204,8 @@ void ResourceList::Show() {
     
     if (sceneEditor.entityEditor.IsVisible())
         sceneEditor.entityEditor.Show();
+    if (scriptEditor.IsVisible())
+        scriptEditor.Show();
     if (textureEditor.IsVisible())
         textureEditor.Show();
     if (modelEditor.IsVisible())
@@ -175,6 +226,8 @@ void ResourceList::SetVisible(bool visible) {
 
 void ResourceList::HideEditors() {
     sceneEditor.SetVisible(false);
+    sceneEditor.entityEditor.SetVisible(false);
+    scriptEditor.SetVisible(false);
     modelEditor.SetVisible(false);
     textureEditor.SetVisible(false);
     soundEditor.SetVisible(false);
@@ -184,7 +237,8 @@ void ResourceList::SaveScene() const {
     sceneEditor.Save();
 }
 
+#undef max;
 void ResourceList::ResetScene() {
-    sceneEditor.SetScene(0);
+    sceneEditor.SetScene(std::numeric_limits<std::size_t>::max());
     sceneEditor.SetVisible(false);
 }

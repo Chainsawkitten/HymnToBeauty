@@ -16,8 +16,13 @@
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Util/FileSystem.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/ScriptManager.hpp>
+
 #include "../../Util/EditorSettings.hpp"
+#include "../FileSelector.hpp"
 
 using namespace GUI;
 
@@ -230,10 +235,27 @@ void EntityEditor::ListenerEditor(Component::Listener* listener) {
 }
 
 void EntityEditor::ScriptEditor(Component::Script* script) {
-    if (ImGui::Button("Edit")) {
-        std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + entity->name + ".as";
-        FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
+
+    if(script->scriptFile != nullptr)
+        ImGui::Text(script->scriptFile->name.c_str());
+    else
+        ImGui::Text("No script loaded");
+    
+    if (ImGui::Button("Select script"))
+        ImGui::OpenPopup("Select script");
+
+    if (ImGui::BeginPopup("Select script")) {
+        ImGui::Text("Scripts");
+        ImGui::Separator();
+
+        for (ScriptFile* scriptFile : Hymn().scripts) {
+            if (ImGui::Selectable(scriptFile->name.c_str()))
+                script->scriptFile = scriptFile;
+        }
+
+        ImGui::EndPopup();
     }
+
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
