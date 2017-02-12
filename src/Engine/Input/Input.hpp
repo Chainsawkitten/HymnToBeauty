@@ -17,6 +17,8 @@ public:
 		int key;
 		///The GLFW state of that key.
 		int state;
+        ///Is the button registerd in the engine.
+        bool registered = false;
 
 	};
 	std::vector<Button*> buttons;

@@ -130,7 +130,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
-    //engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
+    engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
 
 }
 
@@ -271,11 +271,15 @@ void ScriptManager::RegisterInput() {
     engine->RegisterEnum("input");
     for (int i = 0; i < Input::GetInstance().buttons.size(); i++) {
 
-        engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
+        if (!Input::GetInstance().buttons[i]->registered) {
+
+            std::string name = Input::GetInstance().buttons[i]->action;
+            engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
+            Input::GetInstance().buttons[i]->registered = true;
+
+        }
             
     }
-
-    //engine->RegisterGlobalFunction("bool Input(int Button)", asFUNCTION(Input), asCALL_CDECL);
 
 }
 

@@ -2,7 +2,7 @@
 
 void Input::SetWindow(GLFWwindow* window) {
 
-    window = window;
+    this->window = window;
 
 }
 
@@ -34,6 +34,8 @@ Json::Value Input::Save() {
 
 void Input::Load(const Json::Value& buttonsNode) {
     
+    buttons.clear();
+
     unsigned int size = buttonsNode.get("size", 0).asUInt();
     for (int i = 0; i < size; i++) {
 
