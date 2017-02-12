@@ -18,6 +18,7 @@
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
 #include "Input/Input.hpp"
+#include "Script/ScriptFile.hpp"
 #include <json/json.h>
 #include <fstream>
 #include "Util/Profiling.hpp"
@@ -67,6 +68,14 @@ void ActiveHymn::Clear() {
     }
     sounds.clear();
     soundNumber = 0U;
+
+    for (ScriptFile* script : scripts) {
+        delete script;
+    }
+    scripts.clear();
+    scriptNumber = 0U;
+
+
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -99,21 +108,29 @@ void ActiveHymn::Save() const {
         modelsNode.append(model->Save());
     }
     root["models"] = modelsNode;
-    
+
+    // Save scripts.
+    Json::Value scriptNode;
+    for (ScriptFile* script : scripts) {
+        scriptNode.append(script->Save());
+    }
+    root["scripts"] = scriptNode;
+
     // Save sounds.
     Json::Value soundsNode;
     for (Audio::SoundBuffer* sound : sounds) {
         soundsNode.append(sound->Save());
     }
     root["sounds"] = soundsNode;
-    
+
     // Save scenes.
     Json::Value scenesNode;
     for (const string& scene : scenes) {
         scenesNode.append(scene);
     }
     root["scenes"] = scenesNode;
-    
+    root["activeScene"] = activeScene;
+
     Json::Value inputNode;
     inputNode.append(Input::GetInstance().Save());
     root["input"] = inputNode;
@@ -156,7 +173,15 @@ void ActiveHymn::Load(const string& path) {
         model->Load(modelsNode[i]);
         models.push_back(model);
     }
-    
+
+    // Load scriptss.
+    const Json::Value scriptNode = root["scripts"];
+    for (unsigned int i = 0; i < scriptNode.size(); ++i) {
+        ScriptFile* script = new ScriptFile();
+        script->Load(scriptNode[i]);
+        scripts.push_back(script);
+    }
+
     // Load sounds.
     const Json::Value soundsNode = root["sounds"];
     for (unsigned int i=0; i < soundsNode.size(); ++i) {
@@ -171,8 +196,16 @@ void ActiveHymn::Load(const string& path) {
         scenes.push_back(scenesNode[i].asString());
     }
 
+    activeScene = root["activeScene"].asUInt();
+    Hymn().world.Load(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + scenes[activeScene] + ".json");
+
     const Json::Value inputNode = root["input"];
     Input::GetInstance().Load(inputNode[0]);
+
+    textureNumber = textures.size();
+    modelNumber = models.size();
+    soundNumber = sounds.size();
+    scriptNumber = scripts.size();
 
 }
 

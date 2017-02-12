@@ -6,19 +6,32 @@
 class asIScriptEngine;
 class World;
 class Entity;
+class ScriptFile;
 
 /// Handles scripting.
 class ScriptManager {
     friend class Hub;
     
     public:
-        /// Build a script that can later be run.
+
+        /// Build a script in the script folder that can later be run.
         /**
          * @param name Name of the script to build.
          */
         void BuildScript(const std::string& name);
         
-        /// Update all script components in the world.
+        /// Build a script that can later be run.
+        /**
+         * @param name The script to build.
+         */
+        void BuildSpecificScript(const std::string& path);
+
+        /// Build all scripts in the script folder.
+        void BuildAllScripts();
+
+        ///Loads a script from a .as file into a string readable by the ASengine.
+        void LoadScriptFile(const char* fileName, std::string& script);
+
         /**
          * @param world The world to update.
          */
@@ -44,7 +57,8 @@ class ScriptManager {
         void operator=(ScriptManager const&) = delete;
         
         void CallScript(Entity* entity, const std::string& functionName);
-        
+        void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
+
         asIScriptEngine* engine;
         
         std::vector<Entity*> updateEntities;
