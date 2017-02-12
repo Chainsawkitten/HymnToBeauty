@@ -139,14 +139,14 @@ void RenderManager::Render(World& world) {
         // Static render program.
         staticRenderProgram->PreRender(camera, screenSize);
         for (Mesh* mesh : meshes)
-            if (mesh->geometry->GetType() == Geometry::Geometry3D::STATIC)
+            if (mesh->geometry != nullptr && mesh->geometry->GetType() == Geometry::Geometry3D::STATIC)
                 staticRenderProgram->Render(mesh);
         staticRenderProgram->PostRender();
 
         // Skin render program.
         skinRenderProgram->PreRender(camera, screenSize);
         for (Mesh* mesh : meshes)
-            if (mesh->geometry->GetType() == Geometry::Geometry3D::SKIN)
+            if (mesh->geometry != nullptr && mesh->geometry->GetType() == Geometry::Geometry3D::SKIN)
                 skinRenderProgram->Render(mesh);
         skinRenderProgram->PostRender();
         
@@ -247,17 +247,14 @@ void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool p
 }
 
 void RenderManager::UpdateBufferSize() {
-
     postProcessing->UpdateBufferSize();
-
+    
     delete deferredLighting;
     deferredLighting = new DeferredLighting();
-
-
 }
 
 void RenderManager::RenderEditorEntity(SuperComponent* component) {
     Entity* entity = component->entity;
-    glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &entity->position[0]);
+    glUniform3fv(editorEntityShaderProgram->GetUniformLocation("position"), 1, &entity->GetWorldPosition()[0]);
     glDrawArrays(GL_POINTS, 0, 1);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include <typeinfo>
 #include "../Entity/World.hpp"
 #include <json/json.h>
@@ -18,6 +19,32 @@ class Entity {
         
         /// Destructor.
         ~Entity();
+        
+        /// Add child entity.
+        /**
+         * @param name The name of the child entity.
+         * @return The new entity.
+         */
+        Entity* AddChild(const std::string& name = "");
+        
+        /// Instantiate a scene as a child to this entity.
+        /**
+         * @param name The name of the scene to instantiate.
+         * @return The created root entity of the scene.
+         */
+        Entity* InstantiateScene(const std::string& name);
+        
+        /// Get all of the entity's children.
+        /**
+         * @return All the children.
+         */
+        const std::vector<Entity*>& GetChildren() const;
+        
+        /// Get whether the entity is an instantiated scene.
+        /**
+         * @return Whether the entity is an instantiated scene.
+         */
+        bool IsScene() const;
         
         /// Adds component with type T.
         /**
@@ -80,10 +107,16 @@ class Entity {
          */
         glm::vec3 GetDirection() const;
         
+        /// Get the position in the world.
+        /**
+         * @return The position in the world (not relative to parent).
+         */
+        glm::vec3 GetWorldPosition() const;
+        
         /// Name of the entity.
         std::string name;
         
-        /// Position in the world.
+        /// Position relative to the parent entity.
         /**
          * Default: 0.f, 0.f, 0.f
          */
@@ -106,6 +139,10 @@ class Entity {
         template<typename T> void Load(const Json::Value& node, const std::string& name);
         
         World* world;
+        Entity* parent = nullptr;
+        std::vector<Entity*> children;
+        bool scene = false;
+        std::string sceneName;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         

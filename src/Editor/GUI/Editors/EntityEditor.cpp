@@ -54,22 +54,24 @@ void EntityEditor::Show() {
         ImGui::InputFloat3("Rotation", &entity->rotation[0]);
         ImGui::InputFloat3("Scale", &entity->scale[0]);
         
-        if (ImGui::Button("Add component"))
-            ImGui::OpenPopup("Add component");
-        
-        if (ImGui::BeginPopup("Add component")) {
-            ImGui::Text("Components");
-            ImGui::Separator();
+        if (!entity->IsScene()) {
+            if (ImGui::Button("Add component"))
+                ImGui::OpenPopup("Add component");
             
-            for (Editor& editor : editors) {
-                editor.addFunction();
+            if (ImGui::BeginPopup("Add component")) {
+                ImGui::Text("Components");
+                ImGui::Separator();
+                
+                for (Editor& editor : editors) {
+                    editor.addFunction();
+                }
+                
+                ImGui::EndPopup();
             }
             
-            ImGui::EndPopup();
-        }
-        
-        for (Editor& editor : editors) {
-            editor.editFunction();
+            for (Editor& editor : editors) {
+                editor.editFunction();
+            }
         }
     }
     ImGui::End();

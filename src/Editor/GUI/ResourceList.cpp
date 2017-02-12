@@ -33,8 +33,7 @@ void ResourceList::Show() {
                 sceneEditor.entityEditor.SetVisible(false);
                 Hymn().world.Clear();
                 std::string sceneFile = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + Hymn().scenes[i] + ".json";
-                if (FileSystem::FileExists(sceneFile.c_str()))
-                    Hymn().world.Load(sceneFile);
+                Hymn().world.Load(sceneFile);
             }
             
             if (ImGui::BeginPopupContextItem(Hymn().scenes[i].c_str())) {
@@ -48,7 +47,7 @@ void ResourceList::Show() {
         }
         ImGui::TreePop();
     }
-
+    
     // Models.
     bool modelPressed = false;
     if (ImGui::TreeNode("Models")) {
@@ -82,7 +81,7 @@ void ResourceList::Show() {
         }
         ImGui::TreePop();
     }
-        
+    
     // Textures.
     bool texturePressed = false;
     if (ImGui::TreeNode("Textures")) {
@@ -183,29 +182,25 @@ void ResourceList::Show() {
         ImGui::TreePop();
     }
 
-
     if (sceneEditor.entityPressed || scriptPressed || texturePressed || modelPressed || soundPressed) {
-
         sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
         scriptEditor.SetVisible(scriptPressed);
         textureEditor.SetVisible(texturePressed);
         modelEditor.SetVisible(modelPressed);
         soundEditor.SetVisible(soundPressed);
-
     }
-    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
 
+    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+    
     if (sceneEditor.IsVisible()) {
-        
         ImGui::SetNextWindowPos(ImVec2(0, 20));
         ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
         sceneEditor.Show();
-
     }
-
+    
     ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
     ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
-   
+    
     if (sceneEditor.entityEditor.IsVisible())
         sceneEditor.entityEditor.Show();
     if (scriptEditor.IsVisible())
@@ -216,7 +211,7 @@ void ResourceList::Show() {
         modelEditor.Show();
     if (soundEditor.IsVisible())
         soundEditor.Show();
-
+    
     ImGui::End();
 }
 
@@ -229,14 +224,12 @@ void ResourceList::SetVisible(bool visible) {
 }
 
 void ResourceList::HideEditors() {
-    
     sceneEditor.SetVisible(false);
     sceneEditor.entityEditor.SetVisible(false);
     scriptEditor.SetVisible(false);
     modelEditor.SetVisible(false);
     textureEditor.SetVisible(false);
     soundEditor.SetVisible(false);
-
 }
 
 void ResourceList::SaveScene() const {

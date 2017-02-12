@@ -32,18 +32,19 @@ namespace GUI {
             
             /// Save currently open scene to file.
             void Save() const;
-
-            ///Did we press on an entity this frame.
+            
+            /// Did we press on an entity this frame.
             bool entityPressed = false;
-
-            ///The Entity Editor
+            
+            /// The Entity Editor
             EntityEditor entityEditor;
             
         private:
+            void ShowEntity(Entity* entity);
+            
             bool visible = false;
             
             std::size_t sceneIndex;
             char name[128] = "";
-            
     };
 }
