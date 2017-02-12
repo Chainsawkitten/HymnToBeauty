@@ -24,11 +24,11 @@ void ScriptEditor::Show() {
 
         }
 
-        char module_text[255];
-        strcpy(module_text, script->module.c_str());
-        if (ImGui::InputText("Module", module_text, 255)) {
+        char moduleText[255];
+        strcpy(moduleText, script->module.c_str());
+        if (ImGui::InputText("Module", moduleText, 255)) {
 
-            script->module = module_text;
+            script->module = moduleText;
 
         }
 
