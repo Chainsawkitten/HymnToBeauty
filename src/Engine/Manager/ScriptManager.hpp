@@ -39,9 +39,9 @@ class ScriptManager {
         
         /// Register an entity to recieve update callbacks.
         /**
-        * @param entity %Entity to register.
-        * @todo Fix so registered entities can be removed.
-        */
+         * @param entity %Entity to register.
+         * @todo Fix so registered entities can be removed.
+         */
         void RegisterUpdate(Entity* entity);
 
         /// Register the input enum.

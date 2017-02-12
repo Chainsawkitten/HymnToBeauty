@@ -6,7 +6,7 @@ void Input::SetWindow(GLFWwindow* window) {
 
 }
 
-bool Input::Check_Button(int index){
+bool Input::CheckButton(int index){
 
     Button* button = buttons[index];
 

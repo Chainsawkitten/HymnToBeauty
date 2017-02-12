@@ -26,21 +26,21 @@ void InputWindow::Show() {
             SetVisible(false);
             ImGui::CloseCurrentPopup();
         }
-        unsigned int button_number = 0;
+        unsigned int buttonNumber = 0;
         for (Input::Button* button : Input::GetInstance().buttons) {
             ImGui::Text("Action");
             ImGui::SameLine();
-            ImGui::InputText(("##action" + std::to_string(button_number)).c_str(), button->action, 255);
+            ImGui::InputText(("##action" + std::to_string(buttonNumber)).c_str(), button->action, 255);
             ImGui::SameLine();
             ImGui::Text("Key");
             ImGui::SameLine();
-            ImGui::InputInt(("##key" + std::to_string(button_number)).c_str(), &(button->key));
+            ImGui::InputInt(("##key" + std::to_string(buttonNumber)).c_str(), &(button->key));
             ImGui::SameLine();
             ImGui::Text("State");
             ImGui::SameLine();
-            ImGui::InputInt(("##state" + std::to_string(button_number)).c_str(), &(button->state));
+            ImGui::InputInt(("##state" + std::to_string(buttonNumber)).c_str(), &(button->state));
 
-            button_number++;
+            buttonNumber++;
 
         }
 

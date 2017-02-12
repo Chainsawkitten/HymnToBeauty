@@ -35,8 +35,8 @@ void RegisterUpdate() {
     Managers().scriptManager->RegisterUpdate(GetEntity());
 }
 
-bool Input(int button_index) {
-    return Input::GetInstance().Check_Button(button_index);
+bool Input(int buttonIndex) {
+    return Input::GetInstance().CheckButton(buttonIndex);
 }
 
 ScriptManager::ScriptManager() {

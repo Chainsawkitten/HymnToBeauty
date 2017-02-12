@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <json/json.h>
 #include <vector>
 
@@ -21,6 +21,7 @@ public:
         bool registered = false;
 
     };
+    ///The buttons to register.
     std::vector<Button*> buttons;
     /// Gets the input singleton instance.
     /**
@@ -41,7 +42,7 @@ public:
     /**
      * @param index The index of the button in the buttons array.
      */
-    bool Check_Button(int index);
+    bool CheckButton(int index);
 
     ///Saves the buttons to a Json value.
     /**
