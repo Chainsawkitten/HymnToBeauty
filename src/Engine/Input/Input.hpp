@@ -8,28 +8,28 @@ class Input {
 
 public:
 
-	///The information needed to identify a button.
-	struct Button {
+    ///The information needed to identify a button.
+    struct Button {
 
-		///A string describing the action, e.g "Fire".
-		char action[255];
-		///The GLFW key to press.
-		int key;
-		///The GLFW state of that key.
-		int state;
+        ///A string describing the action, e.g "Fire".
+        char action[255];
+        ///The GLFW key to press.
+        int key;
+        ///The GLFW state of that key.
+        int state;
         ///Is the button registerd in the engine.
         bool registered = false;
 
-	};
-	std::vector<Button*> buttons;
-	/// Gets the input singleton instance.
-	/**
-	 * @return The input instance.
-	 */
-	static Input& GetInstance() {
-		static Input instance;
-		return instance;
-	}
+    };
+    std::vector<Button*> buttons;
+    /// Gets the input singleton instance.
+    /**
+     * @return The input instance.
+     */
+    static Input& GetInstance() {
+        static Input instance;
+        return instance;
+    }
 
     /// Sets the window to check for input against.
     /**

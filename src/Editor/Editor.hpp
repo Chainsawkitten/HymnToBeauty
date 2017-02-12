@@ -37,7 +37,7 @@ class Editor {
         void OpenHymnClosed(const std::string& hymn);
         
         bool visible = true;
-		GUI::SelectHymnWindow selectHymnWindow;
-		GUI::InputWindow inputWindow;
-		GUI::ResourceList resourceList;
+        GUI::SelectHymnWindow selectHymnWindow;
+        GUI::InputWindow inputWindow;
+        GUI::ResourceList resourceList;
 };

@@ -35,7 +35,7 @@ namespace GUI {
             bool hasClosedCallback = false;
             std::function<void(const std::string&)> closedCallback;
             
-			void AddButton();
+            void AddButton();
 
             bool visible = false;
             
