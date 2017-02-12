@@ -248,9 +248,9 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
         ImGui::Text("Scripts");
         ImGui::Separator();
 
-        for (ScriptFile* script_file : Hymn().scripts) {
-            if (ImGui::Selectable(script_file->name.c_str()))
-                script->scriptFile = script_file;
+        for (ScriptFile* scriptFile : Hymn().scripts) {
+            if (ImGui::Selectable(scriptFile->name.c_str()))
+                script->scriptFile = scriptFile;
         }
 
         ImGui::EndPopup();

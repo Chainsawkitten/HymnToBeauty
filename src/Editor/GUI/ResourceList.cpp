@@ -13,6 +13,7 @@
 #include <Engine/MainWindow.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
+#include <limits>
 
 using namespace GUI;
 
@@ -236,7 +237,8 @@ void ResourceList::SaveScene() const {
     sceneEditor.Save();
 }
 
+#undef max;
 void ResourceList::ResetScene() {
-    sceneEditor.SetScene((std::size_t)-1);
+    sceneEditor.SetScene(std::numeric_limits<std::size_t>::max());
     sceneEditor.SetVisible(false);
 }

@@ -13,7 +13,7 @@ namespace GUI {
             
             /// Set the scriptfile to edit.
             /**
-             * @param sound Scriptfile to edit.
+             * @param script Scriptfile to edit.
              */
             void SetScript (ScriptFile* script);
             

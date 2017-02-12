@@ -14,7 +14,7 @@ class ScriptManager {
     
     public:
 
-        /// Build a script¨in the script folder that can later be run.
+        /// Build a scriptin the script folder that can later be run.
         /**
          * @param name Name of the script to build.
          */
