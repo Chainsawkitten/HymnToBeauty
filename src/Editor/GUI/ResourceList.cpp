@@ -237,6 +237,6 @@ void ResourceList::SaveScene() const {
 }
 
 void ResourceList::ResetScene() {
-    sceneEditor.SetScene(MAXSIZE_T);
+    sceneEditor.SetScene((std::size_t)-1);
     sceneEditor.SetVisible(false);
 }
