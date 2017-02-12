@@ -6,7 +6,8 @@
 #include "../Util/Log.hpp"
 #include "../Util/FileSystem.hpp"
 #include "../Hymn.hpp"
-#include "../Scene/Scene.hpp"
+#include "../Entity/World.hpp"
+#include "../Entity/Entity.hpp"
 #include "../Component/Script.hpp"
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/Lens.hpp"
@@ -156,9 +157,9 @@ void ScriptManager::BuildScript(const std::string& name) {
         Log() << "Compile errors.\n";
 }
 
-void ScriptManager::Update(Scene& scene) {
+void ScriptManager::Update(World& world) {
     // Init.
-    for (Script* script : scene.GetComponents<Script>()) {
+    for (Script* script : world.GetComponents<Script>()) {
         if (!script->initialized) {
             CallScript(script->entity, "void Init()");
             script->initialized = true;
@@ -166,12 +167,12 @@ void ScriptManager::Update(Scene& scene) {
     }
     
     // Update.
-    for (Entity* entity : scene.GetUpdateEntities())
+    for (Entity* entity : world.GetUpdateEntities())
         CallScript(entity, "void Update()");
     
     // Register entities for events.
     for (Entity* entity : updateEntities)
-        scene.RegisterUpdate(entity);
+        world.RegisterUpdate(entity);
     updateEntities.clear();
 }
 

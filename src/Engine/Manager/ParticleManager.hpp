@@ -5,7 +5,7 @@
 #include <random>
 
 class Entity;
-class Scene;
+class World;
 class Shader;
 class ShaderProgram;
 class Texture2D;
@@ -53,24 +53,24 @@ class ParticleManager {
         
         /// Update all the system's particles, spawn new particles etc.
         /**
-         * @param scene Scene to update.
+         * @param world World to update.
          * @param time Time since last frame (in seconds).
          */
-        void Update(Scene& scene, double time);
+        void Update(World& world, double time);
         
         /// Update particle buffer.
         /**
          * Needs to be called before rendering (but only once a frame).
-         * @param scene The scene to render.
+         * @param world The world to render.
          */
-        void UpdateBuffer(Scene& scene);
+        void UpdateBuffer(World& world);
 
-        /// Render the particles in a scene.
+        /// Render the particles in a world.
         /**
-         * @param scene %Scene containing particles to render.
+         * @param world %World containing particles to render.
          * @param camera Camera through which to render.
          */
-        void Render(Scene& scene, Entity* camera);
+        void Render(World& world, Entity* camera);
         
     private:
         ParticleManager();
@@ -79,10 +79,10 @@ class ParticleManager {
         void operator=(ParticleManager const&) = delete;
         
         // Decide where the emitter should emit before rendering.
-        void EmitParticle(Scene& scene, Component::ParticleEmitter* emitter);
+        void EmitParticle(World& world, Component::ParticleEmitter* emitter);
         
         // Emit a particle at the given position.
-        void EmitParticle(Scene& scene, const glm::vec3& position, Component::ParticleEmitter* emitter);
+        void EmitParticle(World& world, const glm::vec3& position, Component::ParticleEmitter* emitter);
         
         unsigned int maxParticleCount = 10000;
         

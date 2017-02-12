@@ -2,7 +2,7 @@
 
 #include <AL/alc.h>
 
-class Scene;
+class World;
 
 /// Handles OpenAL sound.
 class SoundManager {
@@ -27,11 +27,11 @@ class SoundManager {
          */
         static void CheckError(const char* message);
         
-        /// Update Scene containing entities. Moves sound sources and plays sounds.
+        /// Update world containing entities. Moves sound sources and plays sounds.
         /**
-         * @param scene The scene to update.
+         * @param world The world to update.
          */
-        void Update(Scene& scene);
+        void Update(World& world);
         
     private:
         SoundManager();

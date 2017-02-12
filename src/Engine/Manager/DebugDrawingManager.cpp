@@ -1,6 +1,6 @@
 #include "DebugDrawingManager.hpp"
 
-#include "../Scene/Scene.hpp"
+#include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Lens.hpp"
 #include <glm/gtc/matrix_transform.hpp>
@@ -70,10 +70,10 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 }
 
-void DebugDrawingManager::Render(Scene& scene) {
+void DebugDrawingManager::Render(World& world) {
     // Find camera entity.
     Entity* camera = nullptr;
-    std::vector<Component::Lens*> lenses = scene.GetComponents<Component::Lens>();
+    std::vector<Component::Lens*> lenses = world.GetComponents<Component::Lens>();
     for (Component::Lens* lens : lenses) {
         camera = lens->entity;
     };

@@ -6,6 +6,7 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Util/FileSystem.hpp>
+#include <Engine/MainWindow.hpp>
 #include <imgui.h>
 #include <GLFW/glfw3.h>
 
@@ -21,8 +22,11 @@ Editor::Editor() {
 void Editor::Show() {
     bool play = false;
     
+    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+
     // Main menu bar.
     if (ImGui::BeginMainMenuBar()) {
+
         // File menu.
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("New Hymn", "CTRL+N")) {
@@ -36,6 +40,7 @@ void Editor::Show() {
         
         // View menu.
         if (ImGui::BeginMenu("View")) {
+            
             static bool soundSources = EditorSettings::GetInstance().GetBool("Sound Source Icons");
             ImGui::MenuItem("Sound Sources", "", &soundSources);
             EditorSettings::GetInstance().SetBool("Sound Source Icons", soundSources);
@@ -70,17 +75,27 @@ void Editor::Show() {
 
         ImGui::EndMainMenuBar();
     }
-    
+
     // Show hymn selection window.
-    if (selectHymnWindow.IsVisible())
+    if (selectHymnWindow.IsVisible()) {
+
+        ImGui::SetNextWindowPosCenter();
         selectHymnWindow.Show();
+
+    }
     
 	if (inputWindow.IsVisible())
 		inputWindow.Show();
 
     // Show resource list.
-    if (resourceList.IsVisible())
+    if (resourceList.IsVisible()) {
+
+        ImGui::SetNextWindowPos(ImVec2(0, size.y - 250));
+        ImGui::SetNextWindowSize(ImVec2(size.x - 250, 250));
+
         resourceList.Show();
+
+    }
     
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
@@ -96,6 +111,7 @@ void Editor::Show() {
 }
 
 void Editor::Save() const {
+    resourceList.SaveScene();
     Hymn().Save();
 }
 
@@ -111,6 +127,7 @@ void Editor::Play() {
     Save();
     SetVisible(false);
     resourceList.HideEditors();
+    resourceList.ResetScene();
 }
 
 void Editor::NewHymn() {
@@ -124,6 +141,7 @@ void Editor::NewHymn() {
 void Editor::NewHymnClosed(const std::string& hymn) {
     // Create new hymn
     if (!hymn.empty()) {
+        resourceList.ResetScene();
         Hymn().Clear();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
@@ -143,6 +161,7 @@ void Editor::OpenHymn() {
 void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
+        resourceList.ResetScene();
         Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
     }

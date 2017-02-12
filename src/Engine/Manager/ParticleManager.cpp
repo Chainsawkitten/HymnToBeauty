@@ -2,7 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
-#include "../Scene/Scene.hpp"
+#include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/ParticleEmitter.hpp"
 #include "../Component/Lens.hpp"
@@ -73,19 +73,19 @@ unsigned int ParticleManager::GetMaxParticleCount() const {
     return maxParticleCount;
 }
 
-void ParticleManager::Update(Scene& scene, double time) {
+void ParticleManager::Update(World& world, double time) {
     // Remove old particles.
-    for (unsigned int i = 0; i < scene.GetParticleCount(); ++i) {
-        scene.GetParticles()[i].life += static_cast<float>(time);
-        if (scene.GetParticles()[i].life >= scene.GetParticles()[i].lifetime) {
-            scene.GetParticles()[i--] = scene.GetParticles()[scene.GetParticleCount() - 1];
-            scene.SetParticleCount(scene.GetParticleCount() - 1);
+    for (unsigned int i = 0; i < world.GetParticleCount(); ++i) {
+        world.GetParticles()[i].life += static_cast<float>(time);
+        if (world.GetParticles()[i].life >= world.GetParticles()[i].lifetime) {
+            world.GetParticles()[i--] = world.GetParticles()[world.GetParticleCount() - 1];
+            world.SetParticleCount(world.GetParticleCount() - 1);
         }
     }
     
     // Spawn new particles from emitters.
     std::uniform_real_distribution<> zeroToOne(0, 1);
-    std::vector<Component::ParticleEmitter*> particleEmitters = scene.GetComponents<Component::ParticleEmitter>();
+    std::vector<Component::ParticleEmitter*> particleEmitters = world.GetComponents<Component::ParticleEmitter>();
     for (Component::ParticleEmitter* emitter : particleEmitters) {
         if (emitter->IsKilled())
             continue;
@@ -93,19 +93,19 @@ void ParticleManager::Update(Scene& scene, double time) {
         emitter->timeToNext -= time;
         while (emitter->timeToNext < 0.0) {
             emitter->timeToNext += emitter->minEmitTime + zeroToOne(randomEngine) * (emitter->maxEmitTime - emitter->minEmitTime);
-            EmitParticle(scene, emitter);
+            EmitParticle(world, emitter);
         }
     }
 }
 
-void ParticleManager::UpdateBuffer(Scene& scene) {
+void ParticleManager::UpdateBuffer(World& world) {
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, scene.GetParticleCount() * sizeof(Particle), scene.GetParticles());
+    glBufferSubData(GL_ARRAY_BUFFER, 0, world.GetParticleCount() * sizeof(Particle), world.GetParticles());
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ParticleManager::Render(Scene& scene, Entity* camera) {
-    if (scene.GetParticleCount() > 0) {
+void ParticleManager::Render(World& world, Entity* camera) {
+    if (world.GetParticleCount() > 0) {
         // Don't write to depth buffer.
         GLboolean depthWriting;
         glGetBooleanv(GL_DEPTH_WRITEMASK, &depthWriting);
@@ -139,7 +139,7 @@ void ParticleManager::Render(Scene& scene, Entity* camera) {
         glUniform1fv(shaderProgram->GetUniformLocation("textureAtlasRows"), 1, &textureAtlasRowNumber);
         
         // Draw the triangles
-        glDrawArrays(GL_POINTS, 0, scene.GetParticleCount());
+        glDrawArrays(GL_POINTS, 0, world.GetParticleCount());
         
         // Reset state values we've changed.
         glDepthMask(depthWriting);
@@ -151,18 +151,18 @@ void ParticleManager::Render(Scene& scene, Entity* camera) {
     }
 }
 
-void ParticleManager::EmitParticle(Scene& scene, Component::ParticleEmitter* emitter) {
+void ParticleManager::EmitParticle(World& world, Component::ParticleEmitter* emitter) {
     glm::vec3 position(emitter->entity->position);
     if (emitter->emitterType == Component::ParticleEmitter::CUBOID) {
         std::uniform_real_distribution<float> randomSpread(-0.5f, 0.5f);
         glm::vec3 random(randomSpread(randomEngine), randomSpread(randomEngine), randomSpread(randomEngine));
         position += random * emitter->size;
     }
-    EmitParticle(scene, position, emitter);
+    EmitParticle(world, position, emitter);
 }
 
-void ParticleManager::EmitParticle(Scene& scene, const glm::vec3& position, Component::ParticleEmitter* emitter) {
-    if (scene.GetParticleCount() < maxParticleCount) {
+void ParticleManager::EmitParticle(World& world, const glm::vec3& position, Component::ParticleEmitter* emitter) {
+    if (world.GetParticleCount() < maxParticleCount) {
         Particle particle;
         std::uniform_real_distribution<float> zeroToOne(0.f, 1.f);
         particle.worldPos = position;
@@ -185,7 +185,7 @@ void ParticleManager::EmitParticle(Scene& scene, const glm::vec3& position, Comp
         particle.velocity.y = emitter->particleType.minVelocity.y + zeroToOne(randomEngine) * (emitter->particleType.maxVelocity.y - emitter->particleType.minVelocity.y);
         particle.velocity.z = emitter->particleType.minVelocity.z + zeroToOne(randomEngine) * (emitter->particleType.maxVelocity.z - emitter->particleType.minVelocity.z);
         
-        scene.GetParticles()[scene.GetParticleCount()] = particle;
-        scene.SetParticleCount(scene.GetParticleCount() + 1);
+        world.GetParticles()[world.GetParticleCount()] = particle;
+        world.SetParticleCount(world.GetParticleCount() + 1);
     }
 }

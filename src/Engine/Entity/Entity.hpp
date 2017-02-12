@@ -1,8 +1,9 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include <typeinfo>
-#include "../Scene/Scene.hpp"
+#include "../Entity/World.hpp"
 #include <json/json.h>
 #include "../Component/SuperComponent.hpp"
 
@@ -11,13 +12,39 @@ class Entity {
     public:
         /// Create new entity.
         /**
-         * @param scene The scene in which the entity is contained.
+         * @param world The game world in which the entity is contained.
          * @param name Name of the entity.
          */
-        Entity(Scene* scene, const std::string& name = "");
+        Entity(World* world, const std::string& name = "");
         
         /// Destructor.
         ~Entity();
+        
+        /// Add child entity.
+        /**
+         * @param name The name of the child entity.
+         * @return The new entity.
+         */
+        Entity* AddChild(const std::string& name = "");
+        
+        /// Instantiate a scene as a child to this entity.
+        /**
+         * @param name The name of the scene to instantiate.
+         * @return The created root entity of the scene.
+         */
+        Entity* InstantiateScene(const std::string& name);
+        
+        /// Get all of the entity's children.
+        /**
+         * @return All the children.
+         */
+        const std::vector<Entity*>& GetChildren() const;
+        
+        /// Get whether the entity is an instantiated scene.
+        /**
+         * @return Whether the entity is an instantiated scene.
+         */
+        bool IsScene() const;
         
         /// Adds component with type T.
         /**
@@ -80,10 +107,16 @@ class Entity {
          */
         glm::vec3 GetDirection() const;
         
+        /// Get the position in the world.
+        /**
+         * @return The position in the world (not relative to parent).
+         */
+        glm::vec3 GetWorldPosition() const;
+        
         /// Name of the entity.
         std::string name;
         
-        /// Position in the world.
+        /// Position relative to the parent entity.
         /**
          * Default: 0.f, 0.f, 0.f
          */
@@ -105,7 +138,11 @@ class Entity {
         template<typename T> void Save(Json::Value& node, const std::string& name) const;
         template<typename T> void Load(const Json::Value& node, const std::string& name);
         
-        Scene* scene;
+        World* world;
+        Entity* parent = nullptr;
+        std::vector<Entity*> children;
+        bool scene = false;
+        std::string sceneName;
         
         std::map<const std::type_info*, Component::SuperComponent*> components;
         
@@ -118,7 +155,7 @@ template<typename T> T* Entity::AddComponent() {
         return nullptr;
     T* component = new T(this);
     components[componentType] = component;
-    scene->AddComponent(component, componentType);
+    world->AddComponent(component, componentType);
     return component;
 }
 

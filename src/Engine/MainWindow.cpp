@@ -1,23 +1,26 @@
 #include "Util/Log.hpp"
 #include "MainWindow.hpp"
+#include "Manager/Managers.hpp"
+#include "Manager/RenderManager.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 MainWindow* MainWindow::instance = nullptr;
+void WindowSizeCallback(GLFWwindow* window, int width, int height);
 
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
     if (borderless)
-        glfwWindowHint(GLFW_DECORATED, GL_FALSE);
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     
     this->debugContext = debugContext;
     if (debugContext)
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
     
     GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
     
     window = glfwCreateWindow(width, height, title, monitor, nullptr);
+    
     if (!window) {
         glfwTerminate();
         /// @todo Print error to log.
@@ -34,6 +37,9 @@ MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, 
     
     size = glm::vec2(width, height);
     instance = this;
+
+    glfwSetWindowSizeCallback(window, WindowSizeCallback);
+
 }
 
 MainWindow::~MainWindow() {
@@ -62,12 +68,17 @@ void MainWindow::Update() {
     input->Update();
     input->SetActive();
     
-    if (glfwWindowShouldClose(window) != GL_FALSE)
+    if (glfwWindowShouldClose(window) != GLFW_FALSE)
         shouldClose = true;
 }
 
 const glm::vec2& MainWindow::GetSize() const {
     return size;
+}
+
+void MainWindow::SetSize(int width, int height){
+    size.x = width;
+    size.y = height;
 }
 
 void MainWindow::SetTitle(const char *title) {
@@ -88,4 +99,12 @@ void MainWindow::SwapBuffers() {
 
 GLFWwindow* MainWindow::GetGLFWWindow() const {
     return window;
+}
+
+void WindowSizeCallback(GLFWwindow* window, int width, int height)
+{
+
+    MainWindow::GetInstance()->SetSize(width, height);
+    Managers().renderManager->UpdateBufferSize();
+
 }

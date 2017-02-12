@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "Scene/Scene.hpp"
+#include "Entity/World.hpp"
 
 class Texture2D;
 namespace Geometry {
@@ -41,13 +41,13 @@ class ActiveHymn {
          */
         void Load(const std::string& path);
         
-        /// Update the scene.
+        /// Update the world.
         /**
          * @param deltaTime Time since last frame (in seconds).
          */
         void Update(float deltaTime);
         
-        /// Render the active scene.
+        /// Render the world.
         /**
          * @param soundSources Whether to show sound sources.
          * @param particleEmitters Whether to show particle emitters.
@@ -55,11 +55,14 @@ class ActiveHymn {
          */
         void Render(bool soundSources = false, bool particleEmitters = false, bool lightSources = false);
         
-        /// The active scene.
-        Scene activeScene;
+        /// The game world.
+        World world;
         
         /// The id of the next entity to create.
         unsigned int entityNumber = 1U;
+        
+        /// Scenes.
+        std::vector<std::string> scenes;
         
         /// Models.
         std::vector<Geometry::Model*> models;
