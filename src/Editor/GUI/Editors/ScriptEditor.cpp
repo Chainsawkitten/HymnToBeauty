@@ -16,11 +16,11 @@ using namespace GUI;
 void ScriptEditor::Show() {
     if (ImGui::Begin(("Script: " + std::to_string(reinterpret_cast<uintptr_t>(script))).c_str(), &visible)) {
 
-        char name_text[255];
-        strcpy(name_text, script->name.c_str());
-        if (ImGui::InputText("Name", name_text, 255)) {
+        char nameText[255];
+        strcpy(nameText, script->name.c_str());
+        if (ImGui::InputText("Name", nameText, 255)) {
 
-            script->name = name_text;
+            script->name = nameText;
 
         }
 

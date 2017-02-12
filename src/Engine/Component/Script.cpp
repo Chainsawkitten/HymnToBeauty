@@ -15,20 +15,20 @@ Script::Script(Entity* entity) : SuperComponent(entity) {
 
 Json::Value Script::Save() const {
     Json::Value component;
-    if (scriptfile != nullptr)
-        component["Path"] = scriptfile->path;
+    if (scriptFile != nullptr)
+        component["Path"] = scriptFile->path;
 
     return component;
 }
 
 void Script::Load(const Json::Value& node) {
 
-    for (ScriptFile* script_file : Hymn().scripts) {
+    for (ScriptFile* scriptFile : Hymn().scripts) {
 
         std::string path = node.get("Path", "").asString();
-        if (script_file->path == path) {
+        if (scriptFile->path == path) {
 
-            scriptfile = script_file;
+            this->scriptFile = scriptFile;
 
         }
 

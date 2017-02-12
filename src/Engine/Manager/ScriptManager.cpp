@@ -218,10 +218,10 @@ void ScriptManager::BuildAllScripts() {
 
 }
 // Load the entire script file into a string buffer
-void ScriptManager::LoadScriptFile(const char *fileName, std::string &script)
-{
+void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
+
     // Open the file in binary mode
-    FILE *f = fopen(fileName, "rb");
+    FILE* f = fopen(fileName, "rb");
 
     // Determine the size of the file
     fseek(f, 0, SEEK_END);
@@ -239,7 +239,7 @@ void ScriptManager::Update(World& world) {
     // Init.
     for (Script* script : world.GetComponents<Script>()) {
         if (!script->initialized) {
-            CallSpecificScript(script->scriptfile, "void Init()");
+            CallSpecificScript(script->scriptFile, "void Init()");
             script->initialized = true;
         }
     }

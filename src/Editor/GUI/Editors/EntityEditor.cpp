@@ -236,9 +236,10 @@ void EntityEditor::ListenerEditor(Component::Listener* listener) {
 
 void EntityEditor::ScriptEditor(Component::Script* script) {
 
-    if(script->scriptfile != nullptr)
-        ImGui::Text(script->scriptfile->name.c_str());
-    else ImGui::Text("No script loaded");
+    if(script->scriptFile != nullptr)
+        ImGui::Text(script->scriptFile->name.c_str());
+    else
+        ImGui::Text("No script loaded");
     
     if (ImGui::Button("Select script"))
         ImGui::OpenPopup("Select script");
@@ -247,10 +248,9 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
         ImGui::Text("Scripts");
         ImGui::Separator();
 
-        int script_number = 0;
         for (ScriptFile* script_file : Hymn().scripts) {
             if (ImGui::Selectable(script_file->name.c_str()))
-                script->scriptfile = script_file;
+                script->scriptFile = script_file;
         }
 
         ImGui::EndPopup();

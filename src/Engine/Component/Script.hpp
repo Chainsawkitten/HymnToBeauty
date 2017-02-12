@@ -31,9 +31,7 @@ namespace Component {
             bool initialized = false;
 
             ///The scriptfile.
-            ScriptFile* scriptfile = nullptr;
-
-        private:
+            ScriptFile* scriptFile = nullptr;
 
     };
 }

@@ -120,11 +120,11 @@ void ResourceList::Show() {
             std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
             std::string* filename = new std::string(Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as");
             FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + *filename + "\"");
-            ScriptFile* script_file = new ScriptFile();
-            script_file->name = name;
-            script_file->module = name;
-            script_file->path = *filename;
-            Hymn().scripts.push_back(script_file);
+            ScriptFile* scriptFile = new ScriptFile();
+            scriptFile->name = name;
+            scriptFile->module = name;
+            scriptFile->path = *filename;
+            Hymn().scripts.push_back(scriptFile);
 
         }
 

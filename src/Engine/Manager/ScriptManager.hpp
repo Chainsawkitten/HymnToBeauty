@@ -30,7 +30,7 @@ class ScriptManager {
         void BuildAllScripts();
 
         ///Loads a script from a .as file into a string readable by the ASengine.
-        void LoadScriptFile(const char *fileName, std::string &script);
+        void LoadScriptFile(const char* fileName, std::string& script);
 
         /**
          * @param world The world to update.

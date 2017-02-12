@@ -5,7 +5,7 @@
 
 class ScriptFile;
 namespace GUI {
-    /// Used to edit a sound.
+    /// Used to edit a script.
     class ScriptEditor {
         public:
             /// Show the editor.
@@ -28,9 +28,6 @@ namespace GUI {
              * @param visible Whether the window should be visible.
              */
             void SetVisible(bool visible);
-
-            ///The path of the script.
-            //std::string* path;
 
         private:
             void FileSelected(const std::string& file);

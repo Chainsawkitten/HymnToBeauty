@@ -3,7 +3,7 @@
 #include <string>
 #include <json/json.h>
     
-/// Wrapper for OpenAL buffers.
+///Information about a file containing a script.
 class ScriptFile {
     public:
 
@@ -13,10 +13,13 @@ class ScriptFile {
         ///The module the script executes in.
         std::string module = "";
 
-        ///The module the script executes in.
+        ///The name of the script.
         std::string name = "";
 
         ///Saves the scriptfile to Json value.
+        /**
+         * @return The saved data in a JSON node.
+         */
         Json::Value Save() const;
 
         ///Loads the script from a Json value.
