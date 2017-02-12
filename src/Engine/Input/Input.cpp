@@ -1,5 +1,5 @@
 #include "Input.hpp"
-#include <stdio.h>
+#include <cstring>
 
 void Input::SetWindow(GLFWwindow* window) {
 
