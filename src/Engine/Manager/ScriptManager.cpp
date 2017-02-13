@@ -49,7 +49,7 @@ ScriptManager::ScriptManager() {
     // Register add-ons.
     RegisterStdString(engine);
 
-    RegisterInput();
+    engine->RegisterEnum("input");
 
     // Register GLM types.
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
@@ -268,16 +268,42 @@ void ScriptManager::RegisterUpdate(Entity* entity) {
 
 void ScriptManager::RegisterInput() {
 
-    engine->RegisterEnum("input");
-    for (int i = 0; i < Input::GetInstance().buttons.size(); i++) {
+    //We get the input enum.
+    unsigned int enumCount = engine->GetEnumCount();
+    asITypeInfo* inputEnum;
+    for (int i = 0; i < enumCount; i++) {
 
-        if (!Input::GetInstance().buttons[i]->registered) {
+        asITypeInfo* asEnum = engine->GetEnumByIndex(i);
+        std::string name = asEnum->GetName();
+        if (name == "input") {
 
-            std::string name = Input::GetInstance().buttons[i]->action;
-            engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
-            Input::GetInstance().buttons[i]->registered = true;
+            inputEnum = engine->GetEnumByIndex(i);
+            break;
 
         }
+
+    }
+    for (int i = 0; i < Input::GetInstance().buttons.size(); i++) {
+        Input::Button* button = Input::GetInstance().buttons[i];
+
+        //We check if we've already registered the button.
+        unsigned int inputCount = inputEnum->GetEnumValueCount();
+        bool registered = false;
+        for (int j = 0; j < inputCount; j++) {
+            int* value = new int();
+            std::string registeredButton = inputEnum->GetEnumValueByIndex(i, value);
+            if (registeredButton == button->action) {
+
+                registered = true;
+                break;
+
+            }
+
+
+        }
+        
+        if(!registered)
+            engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
             
     }
 

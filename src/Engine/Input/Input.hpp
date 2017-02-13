@@ -17,8 +17,6 @@ class Input {
         int key;
         ///The GLFW state of that key.
         int state;
-        ///Is the button registered in the engine.
-        bool registered = false;
 
     };
     ///The buttons to register.
