@@ -84,7 +84,7 @@ void EntityEditor::SetEntity(Entity* entity) {
 }
 
 bool EntityEditor::ShowsEntity(Entity* entity) {
-    return entity == entity;
+    return this->entity == entity;
 }
 
 bool EntityEditor::IsVisible() const {
