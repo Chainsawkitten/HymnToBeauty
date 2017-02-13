@@ -79,8 +79,11 @@ void EntityEditor::Show() {
 
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
-    
     strcpy(name, entity->name.c_str());
+}
+
+bool EntityEditor::ShowsEntity(Entity* entity) {
+    return this->entity == entity;
 }
 
 bool EntityEditor::IsVisible() const {

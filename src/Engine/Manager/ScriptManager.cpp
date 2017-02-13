@@ -16,6 +16,7 @@
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Entity/Entity.hpp"
+#include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 
 #include "Managers.hpp"
@@ -34,6 +35,10 @@ void RegisterUpdate() {
     Managers().scriptManager->RegisterUpdate(GetEntity());
 }
 
+bool Input(int buttonIndex) {
+    return Input::GetInstance().CheckButton(buttonIndex);
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -43,7 +48,9 @@ ScriptManager::ScriptManager() {
     
     // Register add-ons.
     RegisterStdString(engine);
-    
+
+    engine->RegisterEnum("input");
+
     // Register GLM types.
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
     engine->RegisterObjectProperty("vec3", "float x", asOFFSET(glm::vec3, x));
@@ -123,6 +130,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
+    engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
 
 }
 
@@ -239,14 +247,14 @@ void ScriptManager::Update(World& world) {
     // Init.
     for (Script* script : world.GetComponents<Script>()) {
         if (!script->initialized) {
-            CallSpecificScript(script->scriptFile, "void Init()");
+            CallSpecificScript(script->entity, script->scriptFile, "void Init()");
             script->initialized = true;
         }
     }
     
     // Update.
     for (Entity* entity : world.GetUpdateEntities())
-        CallScript(entity, "void Update()");
+        CallSpecificScript(entity, entity->GetComponent<Script>()->scriptFile, "void Update()");
     
     // Register entities for events.
     for (Entity* entity : updateEntities)
@@ -256,6 +264,49 @@ void ScriptManager::Update(World& world) {
 
 void ScriptManager::RegisterUpdate(Entity* entity) {
     updateEntities.push_back(entity);
+}
+
+void ScriptManager::RegisterInput() {
+
+    //We get the input enum.
+    unsigned int enumCount = engine->GetEnumCount();
+    asITypeInfo* inputEnum;
+    for (int i = 0; i < enumCount; i++) {
+
+        asITypeInfo* asEnum = engine->GetEnumByIndex(i);
+        std::string name = asEnum->GetName();
+        if (name == "input") {
+
+            inputEnum = engine->GetEnumByIndex(i);
+            break;
+
+        }
+
+    }
+    for (int i = 0; i < Input::GetInstance().buttons.size(); i++) {
+        Input::Button* button = Input::GetInstance().buttons[i];
+
+        //We check if we've already registered the button.
+        unsigned int inputCount = inputEnum->GetEnumValueCount();
+        bool registered = false;
+        for (int j = 0; j < inputCount; j++) {
+            int value;
+            std::string registeredButton = inputEnum->GetEnumValueByIndex(i, &value);
+            if (registeredButton == button->action) {
+
+                registered = true;
+                break;
+
+            }
+
+
+        }
+        
+        if(!registered)
+            engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
+            
+    }
+
 }
 
 void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
@@ -284,7 +335,9 @@ void ScriptManager::CallScript(Entity* entity, const std::string& functionName) 
     // Clean up.
     context->Release();
 }
-void ScriptManager::CallSpecificScript(ScriptFile* script, const std::string& functionName) {
+void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
+
+    currentEntity = entity;
 
     // Get script module.
     asIScriptModule* module = engine->GetModule(script->module.c_str(), asGM_ONLY_IF_EXISTS);

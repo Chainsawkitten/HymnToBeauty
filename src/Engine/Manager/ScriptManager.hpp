@@ -43,7 +43,10 @@ class ScriptManager {
          * @todo Fix so registered entities can be removed.
          */
         void RegisterUpdate(Entity* entity);
-        
+
+        /// Register the input enum.
+        void RegisterInput();
+
         /// The entity currently being executed.
         Entity* currentEntity;
         
@@ -54,7 +57,7 @@ class ScriptManager {
         void operator=(ScriptManager const&) = delete;
         
         void CallScript(Entity* entity, const std::string& functionName);
-        void CallSpecificScript(ScriptFile* script, const std::string& functionName);
+        void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
 
         asIScriptEngine* engine;
         

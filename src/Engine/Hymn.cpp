@@ -17,6 +17,7 @@
 #include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Audio/SoundBuffer.hpp"
+#include "Input/Input.hpp"
 #include "Script/ScriptFile.hpp"
 #include <json/json.h>
 #include <fstream>
@@ -130,10 +131,15 @@ void ActiveHymn::Save() const {
     root["scenes"] = scenesNode;
     root["activeScene"] = activeScene;
 
+    Json::Value inputNode;
+    inputNode.append(Input::GetInstance().Save());
+    root["input"] = inputNode;
+
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
     file.close();
+
 }
 
 void ActiveHymn::Load(const string& path) {
@@ -189,9 +195,12 @@ void ActiveHymn::Load(const string& path) {
     for (unsigned int i=0; i < scenesNode.size(); ++i) {
         scenes.push_back(scenesNode[i].asString());
     }
-    activeScene = root["activeScene"].asUInt();
 
+    activeScene = root["activeScene"].asUInt();
     Hymn().world.Load(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + scenes[activeScene] + ".json");
+
+    const Json::Value inputNode = root["input"];
+    Input::GetInstance().Load(inputNode[0]);
 
     textureNumber = textures.size();
     modelNumber = models.size();

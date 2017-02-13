@@ -15,6 +15,7 @@
 #include "../Component/ParticleEmitter.hpp"
 #include "../Util/Json.hpp"
 #include "../Util/FileSystem.hpp"
+#include "../Util/Log.hpp"
 #include "../Hymn.hpp"
 #include <fstream>
 
@@ -39,15 +40,23 @@ Entity* Entity::InstantiateScene(const std::string& name) {
     
     // Load scene.
     std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + name + ".json";
-    Json::Value root;
-    std::ifstream file(filename);
-    file >> root;
-    file.close();
-    child->Load(root);
-    
-    child->scene = true;
-    child->sceneName = name;
-    
+    if (FileSystem::FileExists(filename.c_str())) {
+        Json::Value root;
+        std::ifstream file(filename);
+        file >> root;
+        file.close();
+        child->Load(root);
+
+        child->scene = true;
+        child->sceneName = name;
+    }
+    else {
+
+        child->name = "Error loading scene";
+        Log() << "Couldn't find scene to load.";
+
+    }
+
     return child;
 }
 

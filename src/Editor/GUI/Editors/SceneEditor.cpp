@@ -69,12 +69,19 @@ void SceneEditor::ShowEntity(Entity* entity) {
         }
         
         if (entity != Hymn().world.GetRoot())
-            if (ImGui::Button("Delete"))
+            if (ImGui::Button("Delete")) {
+
                 entity->Kill();
-        
+                if (entityEditor.ShowsEntity(entity)) {
+                    entityEditor.SetVisible(false);
+                }
+            }
+
         if (!entity->IsScene()) {
-            for (Entity* child : entity->GetChildren()) {
-                ShowEntity(child);
+            unsigned int size = entity->GetChildren().size();
+            std::vector<Entity*> entityChildren = entity->GetChildren();
+            for (unsigned int i = 0; i < size; i++) {
+                ShowEntity(entityChildren[i]);
             }
         }
         

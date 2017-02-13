@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GUI/SelectHymnWindow.hpp"
+#include "GUI/InputWindow.hpp"
 #include "GUI/ResourceList.hpp"
 #include <string>
 
@@ -37,5 +38,6 @@ class Editor {
         
         bool visible = true;
         GUI::SelectHymnWindow selectHymnWindow;
+        GUI::InputWindow inputWindow;
         GUI::ResourceList resourceList;
 };

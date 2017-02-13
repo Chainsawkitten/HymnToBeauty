@@ -5,6 +5,7 @@
 #include "Util/EditorSettings.hpp"
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
+#include <Engine/Input/Input.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
@@ -28,6 +29,8 @@ int main() {
     MainWindow* window = new MainWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), false, false, "Hymn to Beauty", EditorSettings::GetInstance().GetBool("Debug Context"));
     glewInit();
     window->Init(false);
+
+    Input::GetInstance().SetWindow(window->GetGLFWWindow());
 
     Managers().StartUp();
 
@@ -67,7 +70,6 @@ int main() {
                 Hymn().world.ClearKilled();
                 Hymn().Render(EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"));
                 
-
                 editor->Show();
 
             } else {
