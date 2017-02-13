@@ -6,7 +6,7 @@
 
 class Input {
 
-public:
+    public:
 
     ///The information needed to identify a button.
     struct Button {
@@ -17,7 +17,7 @@ public:
         int key;
         ///The GLFW state of that key.
         int state;
-        ///Is the button registerd in the engine.
+        ///Is the button registered in the engine.
         bool registered = false;
 
     };
@@ -38,17 +38,17 @@ public:
      */
     void SetWindow(GLFWwindow* window);
 
-    /// Checks if a button were activated this frame.
+    /// Check if a button was activated this frame.
     /**
      * @param index The index of the button in the buttons array.
      */
-    bool CheckButton(int index);
+    bool CheckButton(int index) const;
 
     ///Saves the buttons to a Json value.
     /**
      * @return The saved json value.
      */
-    Json::Value Save();
+    Json::Value Save() const;
 
     ///Saves the buttons to a Json value.
     /**
@@ -56,7 +56,7 @@ public:
      */
     void Load(const Json::Value& buttonsNode);
 
-private:
+    private:
 
     GLFWwindow* window;
 

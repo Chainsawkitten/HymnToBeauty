@@ -1,11 +1,10 @@
 #pragma once
 
 #include <functional>
-#include <vector>
 #include <string>
 
 namespace GUI {
-    /// A window where a input is configured.
+    /// A window where input is configured.
     class InputWindow {
         public:
             
