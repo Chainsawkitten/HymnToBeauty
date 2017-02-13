@@ -69,8 +69,13 @@ void SceneEditor::ShowEntity(Entity* entity) {
         }
         
         if (entity != Hymn().world.GetRoot())
-            if (ImGui::Button("Delete"))
+            if (ImGui::Button("Delete")) {
+
                 entity->Kill();
+                if (entityEditor.ShowsEntity(entity)) {
+                    entityEditor.SetVisible(false);
+                }
+            }
 
         if (!entity->IsScene()) {
             unsigned int size = entity->GetChildren().size();

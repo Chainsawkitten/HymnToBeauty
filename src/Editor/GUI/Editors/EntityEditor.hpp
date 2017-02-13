@@ -39,7 +39,14 @@ namespace GUI {
              * @param entity The entity to edit.
              */
             void SetEntity(Entity* entity);
-            
+
+            /// Checks if the editor is showing this entity.
+            /**
+             * @param entity The entity to check.
+             * @return Is it showing.
+             */
+            bool ShowsEntity(Entity* entity);
+
             /// Get whether the window is visible.
             /**
              * @return Whether the window is visible.
