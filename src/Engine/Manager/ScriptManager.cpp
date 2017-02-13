@@ -290,8 +290,8 @@ void ScriptManager::RegisterInput() {
         unsigned int inputCount = inputEnum->GetEnumValueCount();
         bool registered = false;
         for (int j = 0; j < inputCount; j++) {
-            int* value = new int();
-            std::string registeredButton = inputEnum->GetEnumValueByIndex(i, value);
+            int value;
+            std::string registeredButton = inputEnum->GetEnumValueByIndex(i, &value);
             if (registeredButton == button->action) {
 
                 registered = true;

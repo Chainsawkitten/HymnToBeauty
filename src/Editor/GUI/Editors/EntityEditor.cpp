@@ -79,7 +79,6 @@ void EntityEditor::Show() {
 
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
-
     strcpy(name, entity->name.c_str());
 }
 
