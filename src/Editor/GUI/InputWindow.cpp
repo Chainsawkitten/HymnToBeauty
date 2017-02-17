@@ -10,8 +10,6 @@ using namespace GUI;
 using namespace std;
 
 void InputWindow::Show() {
-    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
-    
     ImGui::SetNextWindowPosCenter();
     ImGui::OpenPopup("Input");
     
