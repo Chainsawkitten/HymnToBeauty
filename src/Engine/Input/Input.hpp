@@ -4,6 +4,7 @@
 #include <json/json.h>
 #include <vector>
 
+/// Hold information about the hymn's inputs.
 class Input {
     public:
         /// The information needed to identify a button.
@@ -17,9 +18,11 @@ class Input {
             /// The GLFW state of that key.
             int state;
         };
+        
         /// The buttons to register.
         std::vector<Button*> buttons;
-        /// Gets the input singleton instance.
+        
+        /// Get the input singleton instance.
         /**
          * @return The input instance.
          */
@@ -28,7 +31,7 @@ class Input {
             return instance;
         }
         
-        /// Sets the window to check for input against.
+        /// Set the window to check for input against.
         /**
          * @param window The target GLFWwindow.
          */
@@ -37,18 +40,19 @@ class Input {
         /// Check if a button was activated this frame.
         /**
          * @param index The index of the button in the buttons array.
+         * @return Whether the button was activated this frame.
          */
         bool CheckButton(int index) const;
         
-        ///Saves the buttons to a Json value.
+        /// Save the buttons to a JSON value.
         /**
-         * @return The saved json value.
+         * @return The saved JSON value.
          */
         Json::Value Save() const;
         
-        ///Saves the buttons to a Json value.
+        /// Load buttons from JSON node.
         /**
-         * @param buttonsNode the json value to load.
+         * @param buttonsNode The JSON value to load.
          */
         void Load(const Json::Value& buttonsNode);
         
