@@ -174,7 +174,7 @@ void ActiveHymn::Load(const string& path) {
         models.push_back(model);
     }
 
-    // Load scriptss.
+    // Load scripts.
     const Json::Value scriptNode = root["scripts"];
     for (unsigned int i = 0; i < scriptNode.size(); ++i) {
         ScriptFile* script = new ScriptFile();
