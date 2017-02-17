@@ -28,9 +28,6 @@ class ScriptManager {
         /// Build all scripts in the script folder.
         void BuildAllScripts();
         
-        ///Loads a script from a .as file into a string readable by the ASengine.
-        void LoadScriptFile(const char* fileName, std::string& script);
-        
         /// Update all script entities in the game world.
         /**
          * @param world The world to update.
@@ -58,6 +55,7 @@ class ScriptManager {
         
         void CallScript(Entity* entity, const std::string& functionName);
         void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
+        void LoadScriptFile(const char* fileName, std::string& script);
         
         asIScriptEngine* engine;
         

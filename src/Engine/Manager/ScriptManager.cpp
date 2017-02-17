@@ -216,22 +216,6 @@ void ScriptManager::BuildAllScripts() {
         }
     }
 }
-// Load the entire script file into a string buffer
-void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
-    // Open the file in binary mode
-    FILE* f = fopen(fileName, "rb");
-    
-    // Determine the size of the file
-    fseek(f, 0, SEEK_END);
-    int len = ftell(f);
-    fseek(f, 0, SEEK_SET);
-    
-    // Load the entire file in one call
-    script.resize(len);
-    fread(&script[0], len, 1, f);
-    
-    fclose(f);
-}
 
 void ScriptManager::Update(World& world) {
     // Init.
@@ -340,4 +324,20 @@ void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const
     
     // Clean up.
     context->Release();
+}
+
+void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
+    // Open the file in binary mode
+    FILE* f = fopen(fileName, "rb");
+    
+    // Determine the size of the file
+    fseek(f, 0, SEEK_END);
+    int len = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    
+    // Load the entire file in one call
+    script.resize(len);
+    fread(&script[0], len, 1, f);
+    
+    fclose(f);
 }
