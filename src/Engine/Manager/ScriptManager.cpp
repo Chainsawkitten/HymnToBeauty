@@ -299,6 +299,7 @@ void ScriptManager::CallScript(Entity* entity, const std::string& functionName) 
     // Clean up.
     context->Release();
 }
+
 void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
     currentEntity = entity;
     
