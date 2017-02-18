@@ -6,7 +6,6 @@
 #include <map>
 #include "MathFunctions.hpp"
 #include "../Util/Log.hpp"
-#include "../Util/Log.hpp"
 
 using namespace Geometry;
 
