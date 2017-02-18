@@ -23,7 +23,7 @@ after_build:
         $GITREV = $(git show -s --format='%h')
         $BUILD_NAME = "HymnToBeauty-Windows-$GITDATE-$GITREV.zip" -replace " ",""
         
-        $env:$BUILD_NAME = $BUILD_NAME
+        $env:BUILD_NAME = $BUILD_NAME
         
         7z a -tzip $BUILD_NAME bin\Release\Game.exe bin\Release\glew32.dll bin\Release\HymnToBeauty.exe bin\Release\OpenAL32.dll
 
