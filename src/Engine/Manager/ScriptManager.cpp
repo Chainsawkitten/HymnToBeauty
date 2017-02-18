@@ -15,7 +15,6 @@
 #include "../Component/Physics.hpp"
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
-#include "../Entity/Entity.hpp"
 #include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 
