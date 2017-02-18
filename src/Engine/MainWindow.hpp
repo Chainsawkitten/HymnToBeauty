@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Util/Input.hpp"
 #include <glm/glm.hpp>
 
 struct GLFWwindow;
+class InputHandler;
 
 /// The main game window in which the game is contained.
 class MainWindow {
@@ -81,7 +81,6 @@ class MainWindow {
         GLFWwindow* GetGLFWWindow() const;
         
     private:
-
         static MainWindow* instance;
         
         InputHandler* input;

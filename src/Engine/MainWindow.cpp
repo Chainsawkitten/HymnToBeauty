@@ -1,9 +1,11 @@
-#include "Util/Log.hpp"
 #include "MainWindow.hpp"
-#include "Manager/Managers.hpp"
-#include "Manager/RenderManager.hpp"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "Manager/Managers.hpp"
+#include "Manager/RenderManager.hpp"
+#include "Util/Input.hpp"
+#include "Util/Log.hpp"
 
 MainWindow* MainWindow::instance = nullptr;
 void WindowSizeCallback(GLFWwindow* window, int width, int height);

@@ -3,6 +3,7 @@
 #include <Engine/MainWindow.hpp>
 #include "Editor.hpp"
 #include "Util/EditorSettings.hpp"
+#include <Engine/Util/Input.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
 #include <Engine/Input/Input.hpp>
