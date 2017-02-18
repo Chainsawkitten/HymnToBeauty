@@ -138,7 +138,7 @@ void DeferredLighting::Render(World& world, Entity* camera) {
     
     glUniformMatrix4fv(shaderProgram->GetUniformLocation("inverseProjectionMatrix"), 1, GL_FALSE, &glm::inverse(projectionMat)[0][0]);
     
-    double cutOff;
+    float cutOff;
     Physics::AxisAlignedBoundingBox aabb(glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f));
     
     unsigned int lightIndex = 0U;
@@ -181,13 +181,13 @@ void DeferredLighting::Render(World& world, Entity* camera) {
     }
     
     // At which point lights should be cut off (no longer contribute).
-    cutOff = 0.0001;
+    cutOff = 0.0001f;
     
     // Render all point lights.
     std::vector<Component::PointLight*>& pointLights = world.GetComponents<Component::PointLight>();
     for (Component::PointLight* light : pointLights) {
         Entity* lightEntity = light->entity;
-        float scale = sqrt((1.0 / cutOff - 1.0) / light->attenuation);
+        float scale = sqrt((1.f / cutOff - 1.f) / light->attenuation);
         glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->position) * glm::scale(glm::mat4(), glm::vec3(1.f, 1.f, 1.f) * scale);
         
         Physics::Frustum frustum(viewProjectionMat * modelMat);
