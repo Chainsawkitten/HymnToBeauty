@@ -49,7 +49,7 @@ int main() {
     double lastTime = glfwGetTime();
     double lastTimeRender = glfwGetTime();
     while (!window->ShouldClose()) {
-        double deltaTime = glfwGetTime() - lastTime;
+        float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
         lastTime = glfwGetTime();
         
         // Begin new profiling frame.
