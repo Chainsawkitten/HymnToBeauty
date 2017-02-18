@@ -77,8 +77,8 @@ const glm::vec2& MainWindow::GetSize() const {
 }
 
 void MainWindow::SetSize(int width, int height){
-    size.x = width;
-    size.y = height;
+    size.x = static_cast<float>(width);
+    size.y = static_cast<float>(height);
 }
 
 void MainWindow::SetTitle(const char *title) {
@@ -101,10 +101,7 @@ GLFWwindow* MainWindow::GetGLFWWindow() const {
     return window;
 }
 
-void WindowSizeCallback(GLFWwindow* window, int width, int height)
-{
-
+void WindowSizeCallback(GLFWwindow* window, int width, int height) {
     MainWindow::GetInstance()->SetSize(width, height);
     Managers().renderManager->UpdateBufferSize();
-
 }
