@@ -1,6 +1,7 @@
 #include "Animation.hpp"
 
 #include "../Hymn.hpp"
+#include "../Geometry/RiggedModel.hpp"
 
 Component::Animation::Animation(Entity* entity) : SuperComponent(entity) {
     
