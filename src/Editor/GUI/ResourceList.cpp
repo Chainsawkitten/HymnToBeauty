@@ -7,11 +7,9 @@
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Editor/Util/EditorSettings.hpp>
-
 #include <Engine/Hymn.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/MainWindow.hpp>
-#include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
 #include <limits>
 
