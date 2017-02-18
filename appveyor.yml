@@ -31,3 +31,16 @@ artifacts:
   - path: $(BUILD_NAME)
     name: msvcbuild
     type: zip
+
+deploy:
+  provider: GitHub
+  release: nightly-$(appveyor_build_number)
+  description: |
+    Nightly build of Hymn to Beauty.
+  auth_token:
+    secure: UPPvFLF8tuplKLs7uN2lxusHQ3kUpIal8hB25+TKa+DghkNpiIYo1hxoA3IFKSE3
+  artifact: msvcbuild
+  draft: false
+  prerelease: false
+  on:
+    branch: master
