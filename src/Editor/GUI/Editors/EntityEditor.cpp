@@ -14,6 +14,7 @@
 #include <Engine/Component/ParticleEmitter.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Geometry/Model.hpp>
+#include <Engine/Geometry/RiggedModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
 #include <Engine/Audio/SoundBuffer.hpp>
 #include <Engine/Script/ScriptFile.hpp>

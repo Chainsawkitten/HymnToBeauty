@@ -3,6 +3,7 @@
 #include <Engine/MainWindow.hpp>
 #include "Editor.hpp"
 #include "Util/EditorSettings.hpp"
+#include <Engine/Util/Input.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Util/Log.hpp>
 #include <Engine/Input/Input.hpp>
@@ -49,7 +50,7 @@ int main() {
     double lastTime = glfwGetTime();
     double lastTimeRender = glfwGetTime();
     while (!window->ShouldClose()) {
-        double deltaTime = glfwGetTime() - lastTime;
+        float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
         lastTime = glfwGetTime();
         
         // Begin new profiling frame.

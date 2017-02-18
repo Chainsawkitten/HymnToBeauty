@@ -11,9 +11,8 @@ class ScriptFile;
 /// Handles scripting.
 class ScriptManager {
     friend class Hub;
-    
+        
     public:
-
         /// Build a script in the script folder that can later be run.
         /**
          * @param name Name of the script to build.
@@ -25,13 +24,11 @@ class ScriptManager {
          * @param name The script to build.
          */
         void BuildSpecificScript(const std::string& path);
-
+        
         /// Build all scripts in the script folder.
         void BuildAllScripts();
-
-        ///Loads a script from a .as file into a string readable by the ASengine.
-        void LoadScriptFile(const char* fileName, std::string& script);
-
+        
+        /// Update all script entities in the game world.
         /**
          * @param world The world to update.
          */
@@ -43,10 +40,10 @@ class ScriptManager {
          * @todo Fix so registered entities can be removed.
          */
         void RegisterUpdate(Entity* entity);
-
+        
         /// Register the input enum.
         void RegisterInput();
-
+        
         /// The entity currently being executed.
         Entity* currentEntity;
         
@@ -58,7 +55,8 @@ class ScriptManager {
         
         void CallScript(Entity* entity, const std::string& functionName);
         void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
-
+        void LoadScriptFile(const char* fileName, std::string& script);
+        
         asIScriptEngine* engine;
         
         std::vector<Entity*> updateEntities;

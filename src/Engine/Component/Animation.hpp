@@ -1,7 +1,10 @@
 #pragma once
 
 #include "SuperComponent.hpp"
-#include "../Geometry/RiggedModel.hpp"
+
+namespace Geometry {
+	class RiggedModel;
+}
 
 namespace Component {
     /// %Component handling animations.

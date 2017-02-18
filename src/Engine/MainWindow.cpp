@@ -1,9 +1,11 @@
-#include "Util/Log.hpp"
 #include "MainWindow.hpp"
-#include "Manager/Managers.hpp"
-#include "Manager/RenderManager.hpp"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "Manager/Managers.hpp"
+#include "Manager/RenderManager.hpp"
+#include "Util/Input.hpp"
+#include "Util/Log.hpp"
 
 MainWindow* MainWindow::instance = nullptr;
 void WindowSizeCallback(GLFWwindow* window, int width, int height);
@@ -77,8 +79,8 @@ const glm::vec2& MainWindow::GetSize() const {
 }
 
 void MainWindow::SetSize(int width, int height){
-    size.x = width;
-    size.y = height;
+    size.x = static_cast<float>(width);
+    size.y = static_cast<float>(height);
 }
 
 void MainWindow::SetTitle(const char *title) {
@@ -101,10 +103,7 @@ GLFWwindow* MainWindow::GetGLFWWindow() const {
     return window;
 }
 
-void WindowSizeCallback(GLFWwindow* window, int width, int height)
-{
-
+void WindowSizeCallback(GLFWwindow* window, int width, int height) {
     MainWindow::GetInstance()->SetSize(width, height);
     Managers().renderManager->UpdateBufferSize();
-
 }

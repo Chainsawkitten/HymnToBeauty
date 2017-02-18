@@ -7,7 +7,6 @@ namespace GUI {
     /// A window where input is configured.
     class InputWindow {
         public:
-            
             /// Show the window
             void Show();
             
@@ -28,15 +27,14 @@ namespace GUI {
              * @param visible Whether the window should be visible.
              */
             void SetVisible(bool visible);
-                        
+            
         private:
+            void AddButton();
+            
             // Interaction
             bool hasClosedCallback = false;
             std::function<void(const std::string&)> closedCallback;
             
-            void AddButton();
-
             bool visible = false;
-            
     };
 }

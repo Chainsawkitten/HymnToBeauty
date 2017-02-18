@@ -6,18 +6,6 @@
 #include "Editors/ScriptEditor.hpp"
 #include "Editors/TextureEditor.hpp"
 
-
-class Texture2D;
-class Entity;
-class ScriptFile;
-
-namespace Geometry {
-    class Model;
-}
-namespace Audio {
-    class SoundBuffer;
-}
-
 namespace GUI {
     /// Displays all the hymn's resources.
     class ResourceList {
@@ -57,6 +45,5 @@ namespace GUI {
             ModelEditor modelEditor;
             TextureEditor textureEditor;
             SoundEditor soundEditor;
-
     };
 }

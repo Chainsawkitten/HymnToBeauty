@@ -7,11 +7,9 @@
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Editor/Util/EditorSettings.hpp>
-
 #include <Engine/Hymn.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/MainWindow.hpp>
-#include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
 #include <limits>
 
@@ -237,7 +235,7 @@ void ResourceList::SaveScene() const {
     sceneEditor.Save();
 }
 
-#undef max;
+#undef max
 void ResourceList::ResetScene() {
     sceneEditor.SetScene(std::numeric_limits<std::size_t>::max());
     sceneEditor.SetVisible(false);

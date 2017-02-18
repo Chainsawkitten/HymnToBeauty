@@ -5,8 +5,6 @@
 #include "Skeleton.hpp"
 #include "VertexType/SkinVertex.hpp"
 
-struct aiNode;
-
 namespace Geometry {
     /// A model loaded from a file.
     class RiggedModel : public Model {

@@ -15,7 +15,6 @@
 #include "../Component/Physics.hpp"
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
-#include "../Entity/Entity.hpp"
 #include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 
@@ -48,9 +47,9 @@ ScriptManager::ScriptManager() {
     
     // Register add-ons.
     RegisterStdString(engine);
-
+    
     engine->RegisterEnum("input");
-
+    
     // Register GLM types.
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
     engine->RegisterObjectProperty("vec3", "float x", asOFFSET(glm::vec3, x));
@@ -131,7 +130,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
     engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
-
+    
 }
 
 ScriptManager::~ScriptManager() {
@@ -144,17 +143,17 @@ void ScriptManager::BuildScript(const std::string& name) {
         Log() << "Script file does not exist: " << filename << "\n";
         return;
     }
-
+    
     // Create and build script module.
     CScriptBuilder builder;
     int r = builder.StartNewModule(engine, name.c_str());
     if (r < 0)
         Log() << "Couldn't start new module: " << name << ".\n";
-
+    
     r = builder.AddSectionFromFile(filename.c_str());
     if (r < 0)
         Log() << "File section could not be added: " << filename << ".\n";
-
+    
     r = builder.BuildModule();
     if (r < 0)
         Log() << "Compile errors.\n";
@@ -166,29 +165,27 @@ void ScriptManager::BuildSpecificScript(const std::string& path) {
         Log() << "Script file does not exist: " << filename << "\n";
         return;
     }
-
+    
     // Create and build script module.
     CScriptBuilder builder;
     int r = builder.StartNewModule(engine, path.c_str());
     if (r < 0)
         Log() << "Couldn't start new module: " << path << ".\n";
-
+    
     r = builder.AddSectionFromFile(filename.c_str());
     if (r < 0)
         Log() << "File section could not be added: " << filename << ".\n";
-
+    
     r = builder.BuildModule();
     if (r < 0)
         Log() << "Compile errors.\n";
 }
 
 void ScriptManager::BuildAllScripts() {
-
     std::string path = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER;
     std::vector<std::string> files = FileSystem::DirectoryContents(path, FileSystem::FILE);
     
     for (ScriptFile* file : Hymn().scripts) {
-
         if (!FileSystem::FileExists(file->path.c_str())) {
             Log() << "Script file does not exist: " << file->path << "\n";
             return;
@@ -197,21 +194,17 @@ void ScriptManager::BuildAllScripts() {
         CScriptBuilder builder;
         asIScriptModule* module = engine->GetModule(file->module.c_str());
         if (module == nullptr) {
-
             int r = builder.StartNewModule(engine, file->module.c_str());
             if (r < 0)
                 Log() << "Couldn't start new module: " << path << ".\n";
             r = builder.AddSectionFromFile(file->path.c_str());
             if (r < 0)
                 Log() << "File section could not be added: " << file->path << ".\n";
-
+            
             r = builder.BuildModule();
             if (r < 0)
                 Log() << "Compile errors.\n";
-
-        }
-        else {
-
+        } else {
             std::string script;
             LoadScriptFile(file->path.c_str(), script);
             module->AddScriptSection(file->path.c_str(), script.c_str());
@@ -219,28 +212,8 @@ void ScriptManager::BuildAllScripts() {
             int r = module->Build();
             if (r < 0)
                 Log() << file->module.c_str() << "Compile errors.\n";
-
         }
-
     }
-
-}
-// Load the entire script file into a string buffer
-void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
-
-    // Open the file in binary mode
-    FILE* f = fopen(fileName, "rb");
-
-    // Determine the size of the file
-    fseek(f, 0, SEEK_END);
-    int len = ftell(f);
-    fseek(f, 0, SEEK_SET);
-
-    // Load the entire file in one call
-    script.resize(len);
-    fread(&script[0], len, 1, f);
-
-    fclose(f);
 }
 
 void ScriptManager::Update(World& world) {
@@ -267,59 +240,49 @@ void ScriptManager::RegisterUpdate(Entity* entity) {
 }
 
 void ScriptManager::RegisterInput() {
-
-    //We get the input enum.
+    // Get the input enum.
     unsigned int enumCount = engine->GetEnumCount();
     asITypeInfo* inputEnum;
-    for (int i = 0; i < enumCount; i++) {
-
+    for (unsigned int i = 0; i < enumCount; ++i) {
         asITypeInfo* asEnum = engine->GetEnumByIndex(i);
         std::string name = asEnum->GetName();
         if (name == "input") {
-
             inputEnum = engine->GetEnumByIndex(i);
             break;
-
         }
-
     }
-    for (int i = 0; i < Input::GetInstance().buttons.size(); i++) {
+    
+    for (std::size_t i = 0; i < Input::GetInstance().buttons.size(); ++i) {
         Input::Button* button = Input::GetInstance().buttons[i];
-
-        //We check if we've already registered the button.
+        
+        // Check if we've already registered the button.
         unsigned int inputCount = inputEnum->GetEnumValueCount();
         bool registered = false;
-        for (int j = 0; j < inputCount; j++) {
+        for (unsigned int j = 0; j < inputCount; ++j) {
             int value;
             std::string registeredButton = inputEnum->GetEnumValueByIndex(i, &value);
             if (registeredButton == button->action) {
-
                 registered = true;
                 break;
-
             }
-
-
         }
         
-        if(!registered)
+        if (!registered)
             engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
-            
     }
-
 }
 
 void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
     currentEntity = entity;
-
+    
     // Get script module.
     asIScriptModule* module = engine->GetModule(entity->name.c_str(), asGM_ONLY_IF_EXISTS);
-
+    
     // Find function to call.
     asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
     if (function == nullptr)
         Log() << "Couldn't find \"" + functionName + "\" function.\n";
-
+    
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(function);
@@ -331,22 +294,22 @@ void ScriptManager::CallScript(Entity* entity, const std::string& functionName) 
             Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
         }
     }
-
+    
     // Clean up.
     context->Release();
 }
+
 void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
-
     currentEntity = entity;
-
+    
     // Get script module.
     asIScriptModule* module = engine->GetModule(script->module.c_str(), asGM_ONLY_IF_EXISTS);
-
+    
     // Find function to call.
     asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
     if (function == nullptr)
         Log() << "Couldn't find \"" + functionName + "\" function.\n";
-
+    
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(function);
@@ -358,7 +321,23 @@ void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const
             Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
         }
     }
-
+    
     // Clean up.
     context->Release();
+}
+
+void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
+    // Open the file in binary mode
+    FILE* f = fopen(fileName, "rb");
+    
+    // Determine the size of the file
+    fseek(f, 0, SEEK_END);
+    int len = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    
+    // Load the entire file in one call
+    script.resize(len);
+    fread(&script[0], len, 1, f);
+    
+    fclose(f);
 }

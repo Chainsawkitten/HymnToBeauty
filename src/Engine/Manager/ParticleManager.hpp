@@ -56,7 +56,7 @@ class ParticleManager {
          * @param world World to update.
          * @param time Time since last frame (in seconds).
          */
-        void Update(World& world, double time);
+        void Update(World& world, float time);
         
         /// Update particle buffer.
         /**

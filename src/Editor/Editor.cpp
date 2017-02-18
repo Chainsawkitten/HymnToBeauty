@@ -6,8 +6,6 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Util/FileSystem.hpp>
-#include <Engine/Manager/Managers.hpp>
-#include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/MainWindow.hpp>
 
 #include <imgui.h>
