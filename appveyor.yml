@@ -14,4 +14,33 @@ before_build:
 
 build:
   project: HymnToBeauty.sln
+  parallel: true
   verbosity: minimal
+
+after_build:
+  - ps: |
+        $GITDATE = $(git show -s --date=short --format='%ad') -replace "-",""
+        $GITREV = $(git show -s --format='%h')
+        $BUILD_NAME = "HymnToBeauty-Windows-$GITDATE-$GITREV.zip" -replace " ",""
+        
+        $env:BUILD_NAME = $BUILD_NAME
+        
+        7z a -tzip $BUILD_NAME .\bin\Release\Game.exe .\bin\Release\glew32.dll .\bin\Release\HymnToBeauty.exe .\bin\Release\OpenAL32.dll
+
+artifacts:
+  - path: $(BUILD_NAME)
+    name: msvcbuild
+    type: zip
+
+deploy:
+  provider: GitHub
+  release: nightly-$(appveyor_build_number)
+  description: |
+    Nightly build of Hymn to Beauty.
+  auth_token:
+    secure: UPPvFLF8tuplKLs7uN2lxusHQ3kUpIal8hB25+TKa+DghkNpiIYo1hxoA3IFKSE3
+  artifact: msvcbuild
+  draft: false
+  prerelease: false
+  on:
+    branch: master
