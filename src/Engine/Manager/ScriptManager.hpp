@@ -5,6 +5,7 @@
 
 class asIScriptEngine;
 class asIScriptContext;
+class asITypeInfo;
 class World;
 class Entity;
 class ScriptFile;
@@ -52,9 +53,10 @@ class ScriptManager {
         void operator=(ScriptManager const&) = delete;
         
         void CreateInstance(Component::Script* script);
-        void CallScript(Entity* entity, ScriptFile* script, const std::string& functionName);
+        void CallScript(Component::Script* script, const std::string& functionName);
         void LoadScriptFile(const char* fileName, std::string& script);
         void ExecuteCall(asIScriptContext* context);
+        asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);
         
         asIScriptEngine* engine;
         

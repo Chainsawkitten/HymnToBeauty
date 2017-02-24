@@ -207,7 +207,7 @@ void ScriptManager::Update(World& world) {
     
     // Update.
     for (Entity* entity : world.GetUpdateEntities())
-        CallScript(entity, entity->GetComponent<Script>()->scriptFile, "void Update()");
+        CallScript(entity->GetComponent<Script>(), "void Update()");
     
     // Register entities for events.
     for (Entity* entity : updateEntities)
@@ -253,27 +253,11 @@ void ScriptManager::RegisterInput() {
 }
 
 void ScriptManager::CreateInstance(Component::Script* script) {
+    currentEntity = script->entity;
     ScriptFile* scriptFile = script->scriptFile;
     
-    // Get script module.
-    asIScriptModule* module = engine->GetModule(scriptFile->name.c_str(), asGM_ONLY_IF_EXISTS);
-    if (module == nullptr)
-        Log() << "Couldn't find \"" << scriptFile->name << "\" module.\n";
-    
-    // Find the class.
-    asITypeInfo* type = nullptr;
-    bool found = false;
-    asUINT typeCount = module->GetObjectTypeCount();
-    for (asUINT i = 0; i < typeCount; ++i) {
-        type = module->GetObjectTypeByIndex(i);
-        if (strcmp(type->GetName(), scriptFile->name.c_str()) == 0) {
-            found = true;
-            break;
-        }
-    }
-    
-    if (!found)
-        Log() << "Couldn't find class \"" << scriptFile->name << "\".\n";
+    // Find the class to instantiate.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
     
     // Find factory function / constructor.
     std::string factoryName = scriptFile->name + "@ " + scriptFile->name + "(Entity@)";
@@ -295,22 +279,20 @@ void ScriptManager::CreateInstance(Component::Script* script) {
     context->Release();
 }
 
-void ScriptManager::CallScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
-    currentEntity = entity;
+void ScriptManager::CallScript(Component::Script* script, const std::string& functionName) {
+    currentEntity = script->entity;
+    ScriptFile* scriptFile = script->scriptFile;
     
-    // Get script module.
-    asIScriptModule* module = engine->GetModule(script->name.c_str(), asGM_ONLY_IF_EXISTS);
-    if (module == nullptr)
-        Log() << "Couldn't find \"" + script->name + "\" module.\n";
+    // Get class.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
     
-    // Find function to call.
-    asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
-    if (function == nullptr)
-        Log() << "Couldn't find \"" + functionName + "\" function.\n";
+    // Find method to call.
+    asIScriptFunction* method = type->GetMethodByDecl(functionName.c_str());
     
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
-    context->Prepare(function);
+    context->Prepare(method);
+    context->SetObject(script->instance);
     ExecuteCall(context);
     
     // Clean up.
@@ -342,4 +324,22 @@ void ScriptManager::ExecuteCall(asIScriptContext* context) {
             Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
         }
     }
+}
+
+asITypeInfo* ScriptManager::GetClass(const std::string& moduleName, const std::string& className) {
+    // Get script module.
+    asIScriptModule* module = engine->GetModule(moduleName.c_str(), asGM_ONLY_IF_EXISTS);
+    if (module == nullptr)
+        Log() << "Couldn't find \"" << moduleName << "\" module.\n";
+    
+    // Find the class.
+    asUINT typeCount = module->GetObjectTypeCount();
+    for (asUINT i = 0; i < typeCount; ++i) {
+        asITypeInfo* type = module->GetObjectTypeByIndex(i);
+        if (strcmp(type->GetName(), className.c_str()) == 0)
+            return type;
+    }
+    
+    Log() << "Couldn't find class \"" << className << "\".\n";
+    return nullptr;
 }
