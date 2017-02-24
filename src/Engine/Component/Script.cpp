@@ -10,7 +10,7 @@
 using namespace Component;
 
 Script::Script(Entity* entity) : SuperComponent(entity) {
-
+    
 }
 
 Json::Value Script::Save() const {

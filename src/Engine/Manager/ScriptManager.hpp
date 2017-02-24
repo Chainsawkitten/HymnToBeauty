@@ -7,6 +7,9 @@ class asIScriptEngine;
 class World;
 class Entity;
 class ScriptFile;
+namespace Component {
+    class Script;
+}
 
 /// Handles scripting.
 class ScriptManager {
@@ -47,6 +50,7 @@ class ScriptManager {
         ScriptManager(ScriptManager const&) = delete;
         void operator=(ScriptManager const&) = delete;
         
+        void CreateInstance(Component::Script* script);
         void CallScript(Entity* entity, const std::string& functionName);
         void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
         void LoadScriptFile(const char* fileName, std::string& script);

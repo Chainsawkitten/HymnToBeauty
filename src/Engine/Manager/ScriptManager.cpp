@@ -200,7 +200,7 @@ void ScriptManager::Update(World& world) {
     // Init.
     for (Script* script : world.GetComponents<Script>()) {
         if (!script->initialized) {
-            CallSpecificScript(script->entity, script->scriptFile, "void Init()");
+            CreateInstance(script);
             script->initialized = true;
         }
     }
@@ -252,6 +252,53 @@ void ScriptManager::RegisterInput() {
     }
 }
 
+void ScriptManager::CreateInstance(Component::Script* script) {
+    ScriptFile* scriptFile = script->scriptFile;
+    
+    // Get script module.
+    asIScriptModule* module = engine->GetModule(scriptFile->name.c_str(), asGM_ONLY_IF_EXISTS);
+    if (module == nullptr)
+        Log() << "Couldn't find \"" << scriptFile->name << "\" module.\n";
+    
+    // Find the class.
+    asITypeInfo* type = nullptr;
+    bool found = false;
+    asUINT typeCount = module->GetObjectTypeCount();
+    for (asUINT i = 0; i < typeCount; ++i) {
+        type = module->GetObjectTypeByIndex(i);
+        if (strcmp(type->GetName(), scriptFile->name.c_str()) == 0) {
+            found = true;
+            break;
+        }
+    }
+    
+    if (!found)
+        Log() << "Couldn't find class \"" << scriptFile->name << "\".\n";
+    
+    // Find factory function / constructor.
+    std::string factoryName = scriptFile->name + "@ " + scriptFile->name + "(Entity@)";
+    asIScriptFunction* factoryFunction = type->GetFactoryByDecl(factoryName.c_str());
+    if (factoryFunction == nullptr)
+        Log() << "Couldn't find the factory function for " << scriptFile->name << ".\n";
+    
+    // Create context, prepare it and execute.
+    asIScriptContext* context = engine->CreateContext();
+    context->Prepare(factoryFunction);
+    context->SetArgObject(0, script->entity);
+    int r = context->Execute();
+    if (r != asEXECUTION_FINISHED) {
+        // The execution didn't complete as expected. Determine what happened.
+        if (r == asEXECUTION_EXCEPTION) {
+            // An exception occurred, let the script writer know what happened so it can be corrected.
+            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
+        }
+    }
+    
+    // Get the newly created object.
+    script->instance = *(static_cast<asIScriptObject**>(context->GetAddressOfReturnValue()));
+    script->instance->AddRef();
+}
+
 void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
     currentEntity = entity;
     
@@ -261,7 +308,7 @@ void ScriptManager::CallScript(Entity* entity, const std::string& functionName) 
     // Find function to call.
     asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
     if (function == nullptr)
-        Log() << "Couldn't find \"" + functionName + "\" function.\n";
+        Log() << "Couldn't find \"" << functionName << "\" function.\n";
     
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();

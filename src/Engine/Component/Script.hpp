@@ -4,6 +4,7 @@
 
 class Entity;
 class ScriptFile;
+class asIScriptObject;
 
 namespace Component {
     /// %Component controlled by a script.
@@ -32,5 +33,8 @@ namespace Component {
             
             /// The script file.
             ScriptFile* scriptFile = nullptr;
+            
+            /// The instance of the script class.
+            asIScriptObject* instance = nullptr;
     };
 }
