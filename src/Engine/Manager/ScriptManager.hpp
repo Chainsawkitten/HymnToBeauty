@@ -4,6 +4,7 @@
 #include <vector>
 
 class asIScriptEngine;
+class asIScriptContext;
 class World;
 class Entity;
 class ScriptFile;
@@ -54,6 +55,7 @@ class ScriptManager {
         void CallScript(Entity* entity, const std::string& functionName);
         void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
         void LoadScriptFile(const char* fileName, std::string& script);
+        void ExecuteCall(asIScriptContext* context);
         
         asIScriptEngine* engine;
         

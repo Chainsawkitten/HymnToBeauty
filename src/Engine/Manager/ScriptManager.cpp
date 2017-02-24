@@ -285,14 +285,7 @@ void ScriptManager::CreateInstance(Component::Script* script) {
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(factoryFunction);
     context->SetArgObject(0, script->entity);
-    int r = context->Execute();
-    if (r != asEXECUTION_FINISHED) {
-        // The execution didn't complete as expected. Determine what happened.
-        if (r == asEXECUTION_EXCEPTION) {
-            // An exception occurred, let the script writer know what happened so it can be corrected.
-            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
-        }
-    }
+    ExecuteCall(context);
     
     // Get the newly created object.
     script->instance = *(static_cast<asIScriptObject**>(context->GetAddressOfReturnValue()));
@@ -307,6 +300,8 @@ void ScriptManager::CallScript(Entity* entity, const std::string& functionName) 
     
     // Get script module.
     asIScriptModule* module = engine->GetModule(entity->name.c_str(), asGM_ONLY_IF_EXISTS);
+    if (module == nullptr)
+        Log() << "Couldn't find \"" + entity->name + "\" module.\n";
     
     // Find function to call.
     asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
@@ -316,14 +311,7 @@ void ScriptManager::CallScript(Entity* entity, const std::string& functionName) 
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(function);
-    int r = context->Execute();
-    if (r != asEXECUTION_FINISHED) {
-        // The execution didn't complete as expected. Determine what happened.
-        if (r == asEXECUTION_EXCEPTION) {
-            // An exception occurred, let the script writer know what happened so it can be corrected.
-            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
-        }
-    }
+    ExecuteCall(context);
     
     // Clean up.
     context->Release();
@@ -345,14 +333,7 @@ void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(function);
-    int r = context->Execute();
-    if (r != asEXECUTION_FINISHED) {
-        // The execution didn't complete as expected. Determine what happened.
-        if (r == asEXECUTION_EXCEPTION) {
-            // An exception occurred, let the script writer know what happened so it can be corrected.
-            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
-        }
-    }
+    ExecuteCall(context);
     
     // Clean up.
     context->Release();
@@ -372,4 +353,15 @@ void ScriptManager::LoadScriptFile(const char* fileName, std::string& script){
     fread(&script[0], len, 1, f);
     
     fclose(f);
+}
+
+void ScriptManager::ExecuteCall(asIScriptContext* context) {
+    int r = context->Execute();
+    if (r != asEXECUTION_FINISHED) {
+        // The execution didn't complete as expected. Determine what happened.
+        if (r == asEXECUTION_EXCEPTION) {
+            // An exception occurred, let the script writer know what happened so it can be corrected.
+            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
+        }
+    }
 }
