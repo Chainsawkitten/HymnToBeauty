@@ -58,11 +58,9 @@ void Editor::Show() {
         
         // Play
         if (ImGui::BeginMenu("Play")) {
-            if (ImGui::MenuItem("Play", "F5")) {
-                Managers().scriptManager->RegisterInput();
-                Managers().scriptManager->BuildAllScripts();
+            if (ImGui::MenuItem("Play", "F5"))
                 play = true;
-            }
+            
             ImGui::EndMenu();
         }
         
@@ -126,6 +124,8 @@ void Editor::Play() {
     SetVisible(false);
     resourceList.HideEditors();
     resourceList.ResetScene();
+    Managers().scriptManager->RegisterInput();
+    Managers().scriptManager->BuildAllScripts();
 }
 
 void Editor::NewHymn() {
