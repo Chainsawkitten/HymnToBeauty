@@ -175,7 +175,8 @@ void ScriptManager::BuildAllScripts() {
         if (module == nullptr) {
             int r = builder.StartNewModule(engine, file->name.c_str());
             if (r < 0)
-                Log() << "Couldn't start new module: " << path << ".\n";
+                Log() << "Couldn't start new module: " << file->name << ".\n";
+            
             r = builder.AddSectionFromFile(filename.c_str());
             if (r < 0)
                 Log() << "File section could not be added: " << filename << ".\n";
