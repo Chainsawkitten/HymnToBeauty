@@ -207,7 +207,7 @@ void ScriptManager::Update(World& world) {
     
     // Update.
     for (Entity* entity : world.GetUpdateEntities())
-        CallSpecificScript(entity, entity->GetComponent<Script>()->scriptFile, "void Update()");
+        CallScript(entity, entity->GetComponent<Script>()->scriptFile, "void Update()");
     
     // Register entities for events.
     for (Entity* entity : updateEntities)
@@ -295,29 +295,7 @@ void ScriptManager::CreateInstance(Component::Script* script) {
     context->Release();
 }
 
-void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
-    currentEntity = entity;
-    
-    // Get script module.
-    asIScriptModule* module = engine->GetModule(entity->name.c_str(), asGM_ONLY_IF_EXISTS);
-    if (module == nullptr)
-        Log() << "Couldn't find \"" + entity->name + "\" module.\n";
-    
-    // Find function to call.
-    asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
-    if (function == nullptr)
-        Log() << "Couldn't find \"" << functionName << "\" function.\n";
-    
-    // Create context, prepare it and execute.
-    asIScriptContext* context = engine->CreateContext();
-    context->Prepare(function);
-    ExecuteCall(context);
-    
-    // Clean up.
-    context->Release();
-}
-
-void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
+void ScriptManager::CallScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
     currentEntity = entity;
     
     // Get script module.

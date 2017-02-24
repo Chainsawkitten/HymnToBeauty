@@ -52,8 +52,7 @@ class ScriptManager {
         void operator=(ScriptManager const&) = delete;
         
         void CreateInstance(Component::Script* script);
-        void CallScript(Entity* entity, const std::string& functionName);
-        void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
+        void CallScript(Entity* entity, ScriptFile* script, const std::string& functionName);
         void LoadScriptFile(const char* fileName, std::string& script);
         void ExecuteCall(asIScriptContext* context);
         
