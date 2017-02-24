@@ -8,9 +8,6 @@ class ScriptFile {
     public:
         /// The name of the script.
         std::string name = "";
-
-        /// The module the script executes in.
-        std::string module = "";
         
         /// Saves the scriptfile to Json value.
         /**

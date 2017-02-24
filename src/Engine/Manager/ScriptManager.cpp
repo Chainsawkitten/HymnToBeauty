@@ -171,9 +171,9 @@ void ScriptManager::BuildAllScripts() {
         
         // Create and build script module.
         CScriptBuilder builder;
-        asIScriptModule* module = engine->GetModule(file->module.c_str());
+        asIScriptModule* module = engine->GetModule(file->name.c_str());
         if (module == nullptr) {
-            int r = builder.StartNewModule(engine, file->module.c_str());
+            int r = builder.StartNewModule(engine, file->name.c_str());
             if (r < 0)
                 Log() << "Couldn't start new module: " << path << ".\n";
             r = builder.AddSectionFromFile(filename.c_str());
@@ -190,7 +190,7 @@ void ScriptManager::BuildAllScripts() {
             
             int r = module->Build();
             if (r < 0)
-                Log() << file->module.c_str() << "Compile errors.\n";
+                Log() << file->name.c_str() << "Compile errors.\n";
         }
     }
 }
@@ -282,7 +282,7 @@ void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const
     currentEntity = entity;
     
     // Get script module.
-    asIScriptModule* module = engine->GetModule(script->module.c_str(), asGM_ONLY_IF_EXISTS);
+    asIScriptModule* module = engine->GetModule(script->name.c_str(), asGM_ONLY_IF_EXISTS);
     
     // Find function to call.
     asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
@@ -305,7 +305,7 @@ void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const
     context->Release();
 }
 
-void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
+void ScriptManager::LoadScriptFile(const char* fileName, std::string& script){
     // Open the file in binary mode
     FILE* f = fopen(fileName, "rb");
     

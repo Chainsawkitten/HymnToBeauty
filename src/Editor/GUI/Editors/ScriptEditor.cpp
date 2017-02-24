@@ -17,11 +17,6 @@ void ScriptEditor::Show() {
         if (ImGui::InputText("Name", nameText, 255))
             script->name = nameText;
         
-        char moduleText[255];
-        strcpy(moduleText, script->module.c_str());
-        if (ImGui::InputText("Module", moduleText, 255))
-            script->module = moduleText;
-        
         if (ImGui::Button("Edit Script")) {
             std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + script->name + ".as";
             FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");

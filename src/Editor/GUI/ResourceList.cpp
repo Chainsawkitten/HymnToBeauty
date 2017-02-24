@@ -120,7 +120,6 @@ void ResourceList::Show() {
             FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
             ScriptFile* scriptFile = new ScriptFile();
             scriptFile->name = name;
-            scriptFile->module = name;
             Hymn().scripts.push_back(scriptFile);
         }
         
