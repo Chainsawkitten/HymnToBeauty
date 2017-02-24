@@ -16,6 +16,9 @@ namespace Component {
              */
             Script(Entity* entity);
             
+            /// Destructor.
+            ~Script() final;
+            
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.

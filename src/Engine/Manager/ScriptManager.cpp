@@ -297,6 +297,9 @@ void ScriptManager::CreateInstance(Component::Script* script) {
     // Get the newly created object.
     script->instance = *(static_cast<asIScriptObject**>(context->GetAddressOfReturnValue()));
     script->instance->AddRef();
+    
+    // Clean up.
+    context->Release();
 }
 
 void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {

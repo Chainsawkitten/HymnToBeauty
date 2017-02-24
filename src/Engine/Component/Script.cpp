@@ -1,6 +1,7 @@
 #include "Script.hpp"
 
 #include <string>
+#include <angelscript.h>
 #include "../Manager/Managers.hpp"
 #include "../Manager/ScriptManager.hpp"
 #include "../Entity/Entity.hpp"
@@ -11,6 +12,11 @@ using namespace Component;
 
 Script::Script(Entity* entity) : SuperComponent(entity) {
     
+}
+
+Script::~Script() {
+    if (instance != nullptr)
+        instance->Release();
 }
 
 Json::Value Script::Save() const {
