@@ -186,10 +186,12 @@ void ScriptManager::BuildAllScripts() {
     std::vector<std::string> files = FileSystem::DirectoryContents(path, FileSystem::FILE);
     
     for (ScriptFile* file : Hymn().scripts) {
-        if (!FileSystem::FileExists(file->path.c_str())) {
-            Log() << "Script file does not exist: " << file->path << "\n";
+        std::string filename = path + file->name + ".as";
+        if (!FileSystem::FileExists(filename.c_str())) {
+            Log() << "Script file does not exist: " << filename << "\n";
             return;
         }
+        
         // Create and build script module.
         CScriptBuilder builder;
         asIScriptModule* module = engine->GetModule(file->module.c_str());
@@ -197,17 +199,17 @@ void ScriptManager::BuildAllScripts() {
             int r = builder.StartNewModule(engine, file->module.c_str());
             if (r < 0)
                 Log() << "Couldn't start new module: " << path << ".\n";
-            r = builder.AddSectionFromFile(file->path.c_str());
+            r = builder.AddSectionFromFile(filename.c_str());
             if (r < 0)
-                Log() << "File section could not be added: " << file->path << ".\n";
+                Log() << "File section could not be added: " << filename << ".\n";
             
             r = builder.BuildModule();
             if (r < 0)
                 Log() << "Compile errors.\n";
         } else {
             std::string script;
-            LoadScriptFile(file->path.c_str(), script);
-            module->AddScriptSection(file->path.c_str(), script.c_str());
+            LoadScriptFile(filename.c_str(), script);
+            module->AddScriptSection(filename.c_str(), script.c_str());
             
             int r = module->Build();
             if (r < 0)

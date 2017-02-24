@@ -1,9 +1,9 @@
 #pragma once
 
 #include <string>
-#include "../FileSelector.hpp"
 
 class ScriptFile;
+
 namespace GUI {
     /// Used to edit a script.
     class ScriptEditor {
@@ -28,14 +28,9 @@ namespace GUI {
              * @param visible Whether the window should be visible.
              */
             void SetVisible(bool visible);
-
-        private:
-            void FileSelected(const std::string& file);
             
+        private:
             ScriptFile* script = nullptr;
             bool visible = false;
-            
-            FileSelector fileSelector;            
-
     };
 }

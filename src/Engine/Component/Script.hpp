@@ -29,9 +29,8 @@ namespace Component {
             
             /// Whether the script component has been initialized.
             bool initialized = false;
-
-            ///The scriptfile.
+            
+            /// The script file.
             ScriptFile* scriptFile = nullptr;
-
     };
 }
