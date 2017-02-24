@@ -283,6 +283,8 @@ void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const
     
     // Get script module.
     asIScriptModule* module = engine->GetModule(script->name.c_str(), asGM_ONLY_IF_EXISTS);
+    if (module == nullptr)
+        Log() << "Couldn't find \"" + script->name + "\" module.\n";
     
     // Find function to call.
     asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
