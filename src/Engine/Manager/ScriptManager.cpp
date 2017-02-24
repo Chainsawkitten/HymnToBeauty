@@ -161,7 +161,6 @@ void ScriptManager::BuildScript(const std::string& name) {
 
 void ScriptManager::BuildAllScripts() {
     std::string path = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER;
-    std::vector<std::string> files = FileSystem::DirectoryContents(path, FileSystem::FILE);
     
     for (ScriptFile* file : Hymn().scripts) {
         std::string filename = path + file->name + ".as";
