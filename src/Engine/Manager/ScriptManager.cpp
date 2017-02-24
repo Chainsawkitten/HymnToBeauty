@@ -159,28 +159,6 @@ void ScriptManager::BuildScript(const std::string& name) {
         Log() << "Compile errors.\n";
 }
 
-void ScriptManager::BuildSpecificScript(const std::string& path) {
-    std::string filename = path;
-    if (!FileSystem::FileExists(filename.c_str())) {
-        Log() << "Script file does not exist: " << filename << "\n";
-        return;
-    }
-    
-    // Create and build script module.
-    CScriptBuilder builder;
-    int r = builder.StartNewModule(engine, path.c_str());
-    if (r < 0)
-        Log() << "Couldn't start new module: " << path << ".\n";
-    
-    r = builder.AddSectionFromFile(filename.c_str());
-    if (r < 0)
-        Log() << "File section could not be added: " << filename << ".\n";
-    
-    r = builder.BuildModule();
-    if (r < 0)
-        Log() << "Compile errors.\n";
-}
-
 void ScriptManager::BuildAllScripts() {
     std::string path = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER;
     std::vector<std::string> files = FileSystem::DirectoryContents(path, FileSystem::FILE);

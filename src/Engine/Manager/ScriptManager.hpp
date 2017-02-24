@@ -19,12 +19,6 @@ class ScriptManager {
          */
         void BuildScript(const std::string& name);
         
-        /// Build a script that can later be run.
-        /**
-         * @param name The script to build.
-         */
-        void BuildSpecificScript(const std::string& path);
-        
         /// Build all scripts in the script folder.
         void BuildAllScripts();
         
