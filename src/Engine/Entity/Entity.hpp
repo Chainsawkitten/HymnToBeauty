@@ -20,6 +20,12 @@ class Entity {
         /// Destructor.
         ~Entity();
         
+        /// Get the entity's parent entity.
+        /**
+         * @return The parent entity, or nullptr if none.
+         */
+        Entity* GetParent() const;
+        
         /// Add child entity.
         /**
          * @param name The name of the child entity.

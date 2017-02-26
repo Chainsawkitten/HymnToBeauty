@@ -28,6 +28,10 @@ Entity::~Entity() {
     
 }
 
+Entity* Entity::GetParent() const {
+    return parent;
+}
+
 Entity* Entity::AddChild(const std::string& name) {
     Entity* child = world->CreateEntity(name);
     child->parent = this;
