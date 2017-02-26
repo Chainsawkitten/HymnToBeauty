@@ -68,6 +68,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("Entity", "Entity@ AddChild(const string &in)", asMETHOD(Entity, AddChild), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Entity@ InstantiateScene(const string &in)", asMETHOD(Entity, InstantiateScene), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "bool IsScene() const", asMETHOD(Entity, IsScene), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Entity@ GetChild(const string &in) const", asMETHOD(Entity, GetChild), asCALL_THISCALL);
     
     // Register components.
     engine->SetDefaultNamespace("Component");
