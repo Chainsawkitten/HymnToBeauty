@@ -115,31 +115,26 @@ void ResourceList::Show() {
     bool scriptPressed = false;
     if (ImGui::TreeNode("Scripts")) {
         if (ImGui::Button("Add script")) {
-
             std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
-            std::string* filename = new std::string(Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as");
-            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + *filename + "\"");
+            std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as";
+            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
             ScriptFile* scriptFile = new ScriptFile();
             scriptFile->name = name;
-            scriptFile->module = name;
-            scriptFile->path = *filename;
             Hymn().scripts.push_back(scriptFile);
-
         }
-
+        
         for (auto it = Hymn().scripts.begin(); it != Hymn().scripts.end(); ++it) {
-            
             ScriptFile* script = *it;
             std::string name = script->name;
-
+            
             if (ImGui::Selectable(name.c_str())) {
                 scriptPressed = true;
                 scriptEditor.SetScript(script);
             }
-
+            
             if (ImGui::BeginPopupContextItem(name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
-                    ImGui::Text(script->path.c_str());
+                    ImGui::Text(script->name.c_str());
                     Hymn().scripts.erase(it);
                     ImGui::EndPopup();
                     break;
@@ -147,10 +142,10 @@ void ResourceList::Show() {
                 ImGui::EndPopup();
             }
         }
-
+        
         ImGui::TreePop();
     }
-
+    
     // Sounds.
     bool soundPressed = false;
     if (ImGui::TreeNode("Sounds")) {
@@ -180,7 +175,7 @@ void ResourceList::Show() {
         
         ImGui::TreePop();
     }
-
+    
     if (sceneEditor.entityPressed || scriptPressed || texturePressed || modelPressed || soundPressed) {
         sceneEditor.entityEditor.SetVisible(sceneEditor.entityPressed);
         scriptEditor.SetVisible(scriptPressed);
@@ -188,7 +183,7 @@ void ResourceList::Show() {
         modelEditor.SetVisible(modelPressed);
         soundEditor.SetVisible(soundPressed);
     }
-
+    
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
     
     if (sceneEditor.IsVisible()) {

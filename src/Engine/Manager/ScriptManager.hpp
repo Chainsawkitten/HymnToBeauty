@@ -4,9 +4,14 @@
 #include <vector>
 
 class asIScriptEngine;
+class asIScriptContext;
+class asITypeInfo;
 class World;
 class Entity;
 class ScriptFile;
+namespace Component {
+    class Script;
+}
 
 /// Handles scripting.
 class ScriptManager {
@@ -18,12 +23,6 @@ class ScriptManager {
          * @param name Name of the script to build.
          */
         void BuildScript(const std::string& name);
-        
-        /// Build a script that can later be run.
-        /**
-         * @param name The script to build.
-         */
-        void BuildSpecificScript(const std::string& path);
         
         /// Build all scripts in the script folder.
         void BuildAllScripts();
@@ -53,9 +52,11 @@ class ScriptManager {
         ScriptManager(ScriptManager const&) = delete;
         void operator=(ScriptManager const&) = delete;
         
-        void CallScript(Entity* entity, const std::string& functionName);
-        void CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName);
+        void CreateInstance(Component::Script* script);
+        void CallScript(Component::Script* script, const std::string& functionName);
         void LoadScriptFile(const char* fileName, std::string& script);
+        void ExecuteCall(asIScriptContext* context);
+        asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);
         
         asIScriptEngine* engine;
         

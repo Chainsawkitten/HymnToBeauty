@@ -24,24 +24,23 @@ void Editor::Show() {
     bool play = false;
     
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
-
+    
     // Main menu bar.
     if (ImGui::BeginMainMenuBar()) {
-
+        
         // File menu.
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("New Hymn", "CTRL+N")) {
+            if (ImGui::MenuItem("New Hymn", "CTRL+N"))
                 NewHymn();
-            }
-            if (ImGui::MenuItem("Open Hymn", "CTRL+O")) {
+            
+            if (ImGui::MenuItem("Open Hymn", "CTRL+O"))
                 OpenHymn();
-            }
+            
             ImGui::EndMenu();
         }
         
         // View menu.
         if (ImGui::BeginMenu("View")) {
-            
             static bool soundSources = EditorSettings::GetInstance().GetBool("Sound Source Icons");
             ImGui::MenuItem("Sound Sources", "", &soundSources);
             EditorSettings::GetInstance().SetBool("Sound Source Icons", soundSources);
@@ -59,44 +58,39 @@ void Editor::Show() {
         
         // Play
         if (ImGui::BeginMenu("Play")) {
-            if (ImGui::MenuItem("Play", "F5")) {
-                Managers().scriptManager->RegisterInput();
-                Managers().scriptManager->BuildAllScripts();
+            if (ImGui::MenuItem("Play", "F5"))
                 play = true;
-            }
+            
             ImGui::EndMenu();
         }
-        if(Hymn().GetPath() != "")
+        
+        // Input
+        if(Hymn().GetPath() != "") {
             if (ImGui::BeginMenu("Input")) {
-
                 inputWindow.SetVisible(true);
-
+                
                 ImGui::EndMenu();
-
             }
-
+        }
+        
         ImGui::EndMainMenuBar();
     }
-
+    
     // Show hymn selection window.
     if (selectHymnWindow.IsVisible()) {
-
         ImGui::SetNextWindowPosCenter();
         selectHymnWindow.Show();
-
     }
     
     if (inputWindow.IsVisible())
         inputWindow.Show();
-
+    
     // Show resource list.
     if (resourceList.IsVisible()) {
-
         ImGui::SetNextWindowPos(ImVec2(0, size.y - 250));
         ImGui::SetNextWindowSize(ImVec2(size.x - 250, 250));
-
+        
         resourceList.Show();
-
     }
     
     if (Input()->Triggered(InputHandler::PLAYTEST))
@@ -130,6 +124,8 @@ void Editor::Play() {
     SetVisible(false);
     resourceList.HideEditors();
     resourceList.ResetScene();
+    Managers().scriptManager->RegisterInput();
+    Managers().scriptManager->BuildAllScripts();
 }
 
 void Editor::NewHymn() {

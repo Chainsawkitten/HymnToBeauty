@@ -4,6 +4,7 @@
 
 class Entity;
 class ScriptFile;
+class asIScriptObject;
 
 namespace Component {
     /// %Component controlled by a script.
@@ -14,6 +15,9 @@ namespace Component {
              * @param entity Pointer to which entity this component corresponds.
              */
             Script(Entity* entity);
+            
+            /// Destructor.
+            ~Script() final;
             
             /// Save the component.
             /**
@@ -29,9 +33,11 @@ namespace Component {
             
             /// Whether the script component has been initialized.
             bool initialized = false;
-
-            ///The scriptfile.
+            
+            /// The script file.
             ScriptFile* scriptFile = nullptr;
-
+            
+            /// The instance of the script class.
+            asIScriptObject* instance = nullptr;
     };
 }

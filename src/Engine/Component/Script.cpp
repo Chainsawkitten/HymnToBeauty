@@ -1,6 +1,7 @@
 #include "Script.hpp"
 
 #include <string>
+#include <angelscript.h>
 #include "../Manager/Managers.hpp"
 #include "../Manager/ScriptManager.hpp"
 #include "../Entity/Entity.hpp"
@@ -10,28 +11,26 @@
 using namespace Component;
 
 Script::Script(Entity* entity) : SuperComponent(entity) {
+    
+}
 
+Script::~Script() {
+    if (instance != nullptr)
+        instance->Release();
 }
 
 Json::Value Script::Save() const {
     Json::Value component;
     if (scriptFile != nullptr)
-        component["Path"] = scriptFile->path;
-
+        component["scriptName"] = scriptFile->name;
+    
     return component;
 }
 
 void Script::Load(const Json::Value& node) {
-
+    std::string name = node.get("scriptName", "").asString();
     for (ScriptFile* scriptFile : Hymn().scripts) {
-
-        std::string path = node.get("Path", "").asString();
-        if (scriptFile->path == path) {
-
+        if (scriptFile->name == name)
             this->scriptFile = scriptFile;
-
-        }
-
     }
-
 }

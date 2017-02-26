@@ -159,59 +159,39 @@ void ScriptManager::BuildScript(const std::string& name) {
         Log() << "Compile errors.\n";
 }
 
-void ScriptManager::BuildSpecificScript(const std::string& path) {
-    std::string filename = path;
-    if (!FileSystem::FileExists(filename.c_str())) {
-        Log() << "Script file does not exist: " << filename << "\n";
-        return;
-    }
-    
-    // Create and build script module.
-    CScriptBuilder builder;
-    int r = builder.StartNewModule(engine, path.c_str());
-    if (r < 0)
-        Log() << "Couldn't start new module: " << path << ".\n";
-    
-    r = builder.AddSectionFromFile(filename.c_str());
-    if (r < 0)
-        Log() << "File section could not be added: " << filename << ".\n";
-    
-    r = builder.BuildModule();
-    if (r < 0)
-        Log() << "Compile errors.\n";
-}
-
 void ScriptManager::BuildAllScripts() {
     std::string path = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER;
-    std::vector<std::string> files = FileSystem::DirectoryContents(path, FileSystem::FILE);
     
     for (ScriptFile* file : Hymn().scripts) {
-        if (!FileSystem::FileExists(file->path.c_str())) {
-            Log() << "Script file does not exist: " << file->path << "\n";
+        std::string filename = path + file->name + ".as";
+        if (!FileSystem::FileExists(filename.c_str())) {
+            Log() << "Script file does not exist: " << filename << "\n";
             return;
         }
+        
         // Create and build script module.
         CScriptBuilder builder;
-        asIScriptModule* module = engine->GetModule(file->module.c_str());
+        asIScriptModule* module = engine->GetModule(file->name.c_str());
         if (module == nullptr) {
-            int r = builder.StartNewModule(engine, file->module.c_str());
+            int r = builder.StartNewModule(engine, file->name.c_str());
             if (r < 0)
-                Log() << "Couldn't start new module: " << path << ".\n";
-            r = builder.AddSectionFromFile(file->path.c_str());
+                Log() << "Couldn't start new module: " << file->name << ".\n";
+            
+            r = builder.AddSectionFromFile(filename.c_str());
             if (r < 0)
-                Log() << "File section could not be added: " << file->path << ".\n";
+                Log() << "File section could not be added: " << filename << ".\n";
             
             r = builder.BuildModule();
             if (r < 0)
                 Log() << "Compile errors.\n";
         } else {
             std::string script;
-            LoadScriptFile(file->path.c_str(), script);
-            module->AddScriptSection(file->path.c_str(), script.c_str());
+            LoadScriptFile(filename.c_str(), script);
+            module->AddScriptSection(filename.c_str(), script.c_str());
             
             int r = module->Build();
             if (r < 0)
-                Log() << file->module.c_str() << "Compile errors.\n";
+                Log() << file->name.c_str() << "Compile errors.\n";
         }
     }
 }
@@ -220,14 +200,14 @@ void ScriptManager::Update(World& world) {
     // Init.
     for (Script* script : world.GetComponents<Script>()) {
         if (!script->initialized) {
-            CallSpecificScript(script->entity, script->scriptFile, "void Init()");
+            CreateInstance(script);
             script->initialized = true;
         }
     }
     
     // Update.
     for (Entity* entity : world.GetUpdateEntities())
-        CallSpecificScript(entity, entity->GetComponent<Script>()->scriptFile, "void Update()");
+        CallScript(entity->GetComponent<Script>(), "void Update()");
     
     // Register entities for events.
     for (Entity* entity : updateEntities)
@@ -272,61 +252,54 @@ void ScriptManager::RegisterInput() {
     }
 }
 
-void ScriptManager::CallScript(Entity* entity, const std::string& functionName) {
-    currentEntity = entity;
+void ScriptManager::CreateInstance(Component::Script* script) {
+    currentEntity = script->entity;
+    ScriptFile* scriptFile = script->scriptFile;
     
-    // Get script module.
-    asIScriptModule* module = engine->GetModule(entity->name.c_str(), asGM_ONLY_IF_EXISTS);
+    // Find the class to instantiate.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
     
-    // Find function to call.
-    asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
-    if (function == nullptr)
-        Log() << "Couldn't find \"" + functionName + "\" function.\n";
+    // Find factory function / constructor.
+    std::string factoryName = scriptFile->name + "@ " + scriptFile->name + "(Entity@)";
+    asIScriptFunction* factoryFunction = type->GetFactoryByDecl(factoryName.c_str());
+    if (factoryFunction == nullptr)
+        Log() << "Couldn't find the factory function for " << scriptFile->name << ".\n";
     
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
-    context->Prepare(function);
-    int r = context->Execute();
-    if (r != asEXECUTION_FINISHED) {
-        // The execution didn't complete as expected. Determine what happened.
-        if (r == asEXECUTION_EXCEPTION) {
-            // An exception occurred, let the script writer know what happened so it can be corrected.
-            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
-        }
-    }
+    context->Prepare(factoryFunction);
+    context->SetArgObject(0, script->entity);
+    ExecuteCall(context);
+    
+    // Get the newly created object.
+    script->instance = *(static_cast<asIScriptObject**>(context->GetAddressOfReturnValue()));
+    script->instance->AddRef();
     
     // Clean up.
     context->Release();
 }
 
-void ScriptManager::CallSpecificScript(Entity* entity, ScriptFile* script, const std::string& functionName) {
-    currentEntity = entity;
+void ScriptManager::CallScript(Component::Script* script, const std::string& functionName) {
+    currentEntity = script->entity;
+    ScriptFile* scriptFile = script->scriptFile;
     
-    // Get script module.
-    asIScriptModule* module = engine->GetModule(script->module.c_str(), asGM_ONLY_IF_EXISTS);
+    // Get class.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
     
-    // Find function to call.
-    asIScriptFunction* function = module->GetFunctionByDecl(functionName.c_str());
-    if (function == nullptr)
-        Log() << "Couldn't find \"" + functionName + "\" function.\n";
+    // Find method to call.
+    asIScriptFunction* method = type->GetMethodByDecl(functionName.c_str());
     
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
-    context->Prepare(function);
-    int r = context->Execute();
-    if (r != asEXECUTION_FINISHED) {
-        // The execution didn't complete as expected. Determine what happened.
-        if (r == asEXECUTION_EXCEPTION) {
-            // An exception occurred, let the script writer know what happened so it can be corrected.
-            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
-        }
-    }
+    context->Prepare(method);
+    context->SetObject(script->instance);
+    ExecuteCall(context);
     
     // Clean up.
     context->Release();
 }
 
-void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
+void ScriptManager::LoadScriptFile(const char* fileName, std::string& script){
     // Open the file in binary mode
     FILE* f = fopen(fileName, "rb");
     
@@ -340,4 +313,33 @@ void ScriptManager::LoadScriptFile(const char *fileName, std::string &script){
     fread(&script[0], len, 1, f);
     
     fclose(f);
+}
+
+void ScriptManager::ExecuteCall(asIScriptContext* context) {
+    int r = context->Execute();
+    if (r != asEXECUTION_FINISHED) {
+        // The execution didn't complete as expected. Determine what happened.
+        if (r == asEXECUTION_EXCEPTION) {
+            // An exception occurred, let the script writer know what happened so it can be corrected.
+            Log() << "An exception '" << context->GetExceptionString() << "' occurred. Please correct the code and try again.\n";
+        }
+    }
+}
+
+asITypeInfo* ScriptManager::GetClass(const std::string& moduleName, const std::string& className) {
+    // Get script module.
+    asIScriptModule* module = engine->GetModule(moduleName.c_str(), asGM_ONLY_IF_EXISTS);
+    if (module == nullptr)
+        Log() << "Couldn't find \"" << moduleName << "\" module.\n";
+    
+    // Find the class.
+    asUINT typeCount = module->GetObjectTypeCount();
+    for (asUINT i = 0; i < typeCount; ++i) {
+        asITypeInfo* type = module->GetObjectTypeByIndex(i);
+        if (strcmp(type->GetName(), className.c_str()) == 0)
+            return type;
+    }
+    
+    Log() << "Couldn't find class \"" << className << "\".\n";
+    return nullptr;
 }
