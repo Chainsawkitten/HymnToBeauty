@@ -28,6 +28,10 @@ Entity::~Entity() {
     
 }
 
+Entity* Entity::GetParent() const {
+    return parent;
+}
+
 Entity* Entity::AddChild(const std::string& name) {
     Entity* child = world->CreateEntity(name);
     child->parent = this;
@@ -63,6 +67,15 @@ Entity* Entity::InstantiateScene(const std::string& name) {
 const std::vector<Entity*>& Entity::GetChildren() const {
     return children;
 }
+
+Entity* Entity::GetChild(const std::string& name) const {
+    for (Entity* child : children) {
+        if (child->name == name)
+            return child;
+    }
+    
+    return nullptr;
+}        
 
 bool Entity::IsScene() const {
     return scene;

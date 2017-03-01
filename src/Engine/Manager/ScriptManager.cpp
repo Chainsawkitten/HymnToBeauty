@@ -64,6 +64,11 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Entity", "vec3 rotation", asOFFSET(Entity, rotation));
     engine->RegisterObjectMethod("Entity", "void Kill()", asMETHOD(Entity, Kill), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "bool IsKilled() const", asMETHOD(Entity, IsKilled), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Entity@ GetParent() const", asMETHOD(Entity, GetParent), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Entity@ AddChild(const string &in)", asMETHOD(Entity, AddChild), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Entity@ InstantiateScene(const string &in)", asMETHOD(Entity, InstantiateScene), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "bool IsScene() const", asMETHOD(Entity, IsScene), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Entity@ GetChild(const string &in) const", asMETHOD(Entity, GetChild), asCALL_THISCALL);
     
     // Register components.
     engine->SetDefaultNamespace("Component");

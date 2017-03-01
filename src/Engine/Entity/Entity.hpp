@@ -20,6 +20,12 @@ class Entity {
         /// Destructor.
         ~Entity();
         
+        /// Get the entity's parent entity.
+        /**
+         * @return The parent entity, or nullptr if none.
+         */
+        Entity* GetParent() const;
+        
         /// Add child entity.
         /**
          * @param name The name of the child entity.
@@ -39,6 +45,13 @@ class Entity {
          * @return All the children.
          */
         const std::vector<Entity*>& GetChildren() const;
+        
+        /// Get child based on its name.
+        /**
+         * @param name The name of the child to get.
+         * @return The child or nullptr if none was found.
+         */
+        Entity* GetChild(const std::string& name) const;
         
         /// Get whether the entity is an instantiated scene.
         /**
