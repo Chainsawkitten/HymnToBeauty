@@ -38,6 +38,10 @@ bool Input(int buttonIndex) {
     return Input::GetInstance().CheckButton(buttonIndex);
 }
 
+void SendMessage(Entity* recipient, int type) {
+    Managers().scriptManager->SendMessage(recipient, type);
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -135,7 +139,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
     engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
-    
+    engine->RegisterGlobalFunction("void SendMessage(Entity@, int)", asFUNCTION(::SendMessage), asCALL_CDECL);
 }
 
 ScriptManager::~ScriptManager() {
@@ -255,6 +259,13 @@ void ScriptManager::RegisterInput() {
         if (!registered)
             engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
     }
+}
+
+void ScriptManager::SendMessage(Entity* recipient, int type) {
+    Message message;
+    message.recipient = recipient;
+    message.type = type;
+    messages.push_back(message);
 }
 
 void ScriptManager::CreateInstance(Component::Script* script) {
