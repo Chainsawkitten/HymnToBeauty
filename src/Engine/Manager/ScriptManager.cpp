@@ -218,6 +218,15 @@ void ScriptManager::Update(World& world) {
     for (Entity* entity : world.GetUpdateEntities())
         CallScript(entity->GetComponent<Script>(), "void Update()");
     
+    // Handle messages.
+    while (!messages.empty()) {
+        std::vector<Message> temp = messages;
+        messages.clear();
+        
+        for (const Message& message : temp)
+            CallMessageReceived(message);
+    }
+    
     // Register entities for events.
     for (Entity* entity : updateEntities)
         world.RegisterUpdate(entity);
@@ -309,6 +318,30 @@ void ScriptManager::CallScript(Component::Script* script, const std::string& fun
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(method);
     context->SetObject(script->instance);
+    ExecuteCall(context);
+    
+    // Clean up.
+    context->Release();
+}
+
+void ScriptManager::CallMessageReceived(const Message& message) {
+    currentEntity = message.recipient;
+    Component::Script* script = currentEntity->GetComponent<Component::Script>();
+    ScriptFile* scriptFile = script->scriptFile;
+    
+    // Get class.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    
+    // Find method to call.
+    asIScriptFunction* method = type->GetMethodByDecl("void ReceiveMessage(int)");
+    if (method == nullptr)
+        Log() << "Can't find method void ReceiveMessage(int)\n";
+    
+    // Create context, prepare it and execute.
+    asIScriptContext* context = engine->CreateContext();
+    context->Prepare(method);
+    context->SetObject(script->instance);
+    context->SetArgDWord(0, message.type);
     ExecuteCall(context);
     
     // Clean up.

@@ -66,6 +66,7 @@ class ScriptManager {
         
         void CreateInstance(Component::Script* script);
         void CallScript(Component::Script* script, const std::string& functionName);
+        void CallMessageReceived(const Message& message);
         void LoadScriptFile(const char* fileName, std::string& script);
         void ExecuteCall(asIScriptContext* context);
         asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);
