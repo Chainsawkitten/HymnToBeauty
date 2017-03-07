@@ -12,6 +12,12 @@ namespace GUI {
             /// Show the editor.
             void Show();
             
+            /// Get the texture being edited.
+            /**
+             * @return The texture being edited.
+             */
+            const Texture2D* GetTexture() const;
+            
             /// Set the texture to edit.
             /**
              * @param texture %Texture to edit.

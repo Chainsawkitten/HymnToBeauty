@@ -99,6 +99,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(texture->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (textureEditor.GetTexture() == texture)
+                        textureEditor.SetVisible(false);
+                    
                     delete texture;
                     Hymn().textures.erase(it);
                     ImGui::EndPopup();
