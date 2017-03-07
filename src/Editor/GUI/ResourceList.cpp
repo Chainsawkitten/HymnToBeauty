@@ -115,11 +115,8 @@ void ResourceList::Show() {
     bool scriptPressed = false;
     if (ImGui::TreeNode("Scripts")) {
         if (ImGui::Button("Add script")) {
-            std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
-            std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as";
-            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
             ScriptFile* scriptFile = new ScriptFile();
-            scriptFile->name = name;
+            scriptFile->name = "Script #" + std::to_string(Hymn().scriptNumber++);
             Hymn().scripts.push_back(scriptFile);
         }
         
