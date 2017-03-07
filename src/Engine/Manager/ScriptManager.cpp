@@ -226,13 +226,13 @@ void ScriptManager::RegisterUpdate(Entity* entity) {
 
 void ScriptManager::RegisterInput() {
     // Get the input enum.
-    unsigned int enumCount = engine->GetEnumCount();
-    asITypeInfo* inputEnum;
-    for (unsigned int i = 0; i < enumCount; ++i) {
+    asUINT enumCount = engine->GetEnumCount();
+    asITypeInfo* inputEnum = nullptr;
+    for (asUINT i = 0; i < enumCount; ++i) {
         asITypeInfo* asEnum = engine->GetEnumByIndex(i);
         std::string name = asEnum->GetName();
         if (name == "input") {
-            inputEnum = engine->GetEnumByIndex(i);
+            inputEnum = asEnum;
             break;
         }
     }
@@ -241,11 +241,11 @@ void ScriptManager::RegisterInput() {
         Input::Button* button = Input::GetInstance().buttons[i];
         
         // Check if we've already registered the button.
-        unsigned int inputCount = inputEnum->GetEnumValueCount();
         bool registered = false;
-        for (unsigned int j = 0; j < inputCount; ++j) {
+        asUINT inputCount = inputEnum->GetEnumValueCount();
+        for (asUINT j = 0; j < inputCount; ++j) {
             int value;
-            std::string registeredButton = inputEnum->GetEnumValueByIndex(i, &value);
+            std::string registeredButton = inputEnum->GetEnumValueByIndex(j, &value);
             if (registeredButton == button->action) {
                 registered = true;
                 break;
@@ -253,7 +253,7 @@ void ScriptManager::RegisterInput() {
         }
         
         if (!registered)
-            engine->RegisterEnumValue("input", std::string(Input::GetInstance().buttons[i]->action).c_str(), i);
+            engine->RegisterEnumValue("input", std::string(button->action).c_str(), i);
     }
 }
 
