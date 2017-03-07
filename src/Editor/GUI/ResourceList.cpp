@@ -131,6 +131,7 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    delete script;
                     Hymn().scripts.erase(it);
                     ImGui::EndPopup();
                     break;
