@@ -27,6 +27,10 @@ void ModelEditor::Show() {
         fileSelector.Show();
 }
 
+const Geometry::Model* ModelEditor::GetModel() const {
+    return model;
+}
+
 void ModelEditor::SetModel(Geometry::Model* model) {
     this->model = model;
     

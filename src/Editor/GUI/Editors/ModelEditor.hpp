@@ -14,6 +14,12 @@ namespace GUI {
             /// Show the editor.
             void Show();
             
+            /// Get the model being edited.
+            /**
+             * @return The model being edited.
+             */
+            const Geometry::Model* GetModel() const;
+            
             /// Set the model to edit.
             /**
              * @param model Model to edit.

@@ -70,6 +70,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(model->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (modelEditor.GetModel() == model)
+                        modelEditor.SetVisible(false);
+                    
                     delete model;
                     Hymn().models.erase(it);
                     ImGui::EndPopup();
