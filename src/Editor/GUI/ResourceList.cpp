@@ -170,6 +170,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (soundEditor.GetSound() == sound)
+                        soundEditor.SetVisible(false);
+                    
                     delete sound;
                     Hymn().sounds.erase(it);
                     ImGui::EndPopup();
