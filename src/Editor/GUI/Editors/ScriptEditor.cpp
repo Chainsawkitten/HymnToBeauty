@@ -28,6 +28,10 @@ void ScriptEditor::Show() {
     ImGui::End();
 }
 
+const ScriptFile* ScriptEditor::GetScript() const {
+    return script;
+}
+
 void ScriptEditor::SetScript(ScriptFile* script) {
     this->script = script;
 }

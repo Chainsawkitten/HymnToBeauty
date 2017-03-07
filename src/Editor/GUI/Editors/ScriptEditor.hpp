@@ -11,11 +11,17 @@ namespace GUI {
             /// Show the editor.
             void Show();
             
-            /// Set the scriptfile to edit.
+            /// Get the script file being edited
             /**
-             * @param script Scriptfile to edit.
+             * @return The script file being edited.
              */
-            void SetScript (ScriptFile* script);
+            const ScriptFile* GetScript() const;
+            
+            /// Set the script file to edit.
+            /**
+             * @param script %Script file to edit.
+             */
+            void SetScript(ScriptFile* script);
             
             /// Get whether the window is visible.
             /**

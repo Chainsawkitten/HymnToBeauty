@@ -131,6 +131,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (scriptEditor.GetScript() == script)
+                        scriptEditor.SetVisible(false);
+                    
                     delete script;
                     Hymn().scripts.erase(it);
                     ImGui::EndPopup();
