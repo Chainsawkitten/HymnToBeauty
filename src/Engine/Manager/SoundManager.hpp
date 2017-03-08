@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AL/alc.h>
+#include <portaudio.h>
 
 class World;
 
@@ -38,6 +39,8 @@ class SoundManager {
         ~SoundManager();
         SoundManager(SoundManager const&) = delete;
         void operator=(SoundManager const&) = delete;
+        
+        PaStream* audioStream;
         
         ALCdevice* device;
         ALCcontext* context;

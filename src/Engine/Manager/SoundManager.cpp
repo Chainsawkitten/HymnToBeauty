@@ -2,20 +2,42 @@
 
 #include "../Util/Log.hpp"
 #include <AL/al.h>
-#include <portaudio.h>
 #include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Listener.hpp"
 #include "../Component/SoundSource.hpp"
+
+static int audioCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData) {
+    float* out = static_cast<float*>(outputBuffer);
+    
+    for (unsigned long i = 0; i < framesPerBuffer; ++i) {
+        // Left channel.
+        *out++ = 0.f;
+        
+        // Right channel.
+        *out++ = 0.f;
+    }
+    
+    return 0;
+}
 
 SoundManager::SoundManager() {
     // Initialize PortAudio.
     PaError error = Pa_Initialize();
     if (error != paNoError)
         Log() << Pa_GetErrorText(error) << "\n";
+    
+    // Open stream.
+    error = Pa_OpenDefaultStream(&audioStream, 0, 2, paFloat32, 44100, 256, audioCallback, nullptr);
+    if (error != paNoError)
+        Log() << Pa_GetErrorText(error) << "\n";
 }
 
 SoundManager::~SoundManager() {
+    // Abort and close stream.
+    Pa_AbortStream(audioStream);
+    Pa_CloseStream(audioStream);
+    
     // Terminate PortAudio.
     PaError error = Pa_Terminate();
     if (error != paNoError)
