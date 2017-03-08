@@ -2,6 +2,7 @@
 
 #include <angelscript.h>
 #include <scriptbuilder/scriptbuilder.h>
+#include <scriptmath/scriptmath.h>
 #include <scriptstdstring/scriptstdstring.h>
 #include "../Util/Log.hpp"
 #include "../Util/FileSystem.hpp"
@@ -47,6 +48,10 @@ double GetMouseY() {
     return Input()->CursorY();
 }
 
+void SendMessage(Entity* recipient, int type) {
+    Managers().scriptManager->SendMessage(recipient, type);
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -56,6 +61,7 @@ ScriptManager::ScriptManager() {
     
     // Register add-ons.
     RegisterStdString(engine);
+    RegisterScriptMath(engine);
     
     engine->RegisterEnum("input");
     
@@ -146,6 +152,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(CheckInput), asCALL_CDECL);
     engine->RegisterGlobalFunction("double GetMouseX()", asFUNCTION(GetMouseX), asCALL_CDECL);
     engine->RegisterGlobalFunction("double GetMouseY()", asFUNCTION(GetMouseY), asCALL_CDECL);
+    engine->RegisterGlobalFunction("void SendMessage(Entity@, int)", asFUNCTION(::SendMessage), asCALL_CDECL);
 }
 
 ScriptManager::~ScriptManager() {
@@ -224,6 +231,15 @@ void ScriptManager::Update(World& world) {
     for (Entity* entity : world.GetUpdateEntities())
         CallScript(entity->GetComponent<Script>(), "void Update()");
     
+    // Handle messages.
+    while (!messages.empty()) {
+        std::vector<Message> temp = messages;
+        messages.clear();
+        
+        for (const Message& message : temp)
+            CallMessageReceived(message);
+    }
+    
     // Register entities for events.
     for (Entity* entity : updateEntities)
         world.RegisterUpdate(entity);
@@ -267,6 +283,13 @@ void ScriptManager::RegisterInput() {
     }
 }
 
+void ScriptManager::SendMessage(Entity* recipient, int type) {
+    Message message;
+    message.recipient = recipient;
+    message.type = type;
+    messages.push_back(message);
+}
+
 void ScriptManager::CreateInstance(Component::Script* script) {
     currentEntity = script->entity;
     ScriptFile* scriptFile = script->scriptFile;
@@ -308,6 +331,30 @@ void ScriptManager::CallScript(Component::Script* script, const std::string& fun
     asIScriptContext* context = engine->CreateContext();
     context->Prepare(method);
     context->SetObject(script->instance);
+    ExecuteCall(context);
+    
+    // Clean up.
+    context->Release();
+}
+
+void ScriptManager::CallMessageReceived(const Message& message) {
+    currentEntity = message.recipient;
+    Component::Script* script = currentEntity->GetComponent<Component::Script>();
+    ScriptFile* scriptFile = script->scriptFile;
+    
+    // Get class.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    
+    // Find method to call.
+    asIScriptFunction* method = type->GetMethodByDecl("void ReceiveMessage(int)");
+    if (method == nullptr)
+        Log() << "Can't find method void ReceiveMessage(int)\n";
+    
+    // Create context, prepare it and execute.
+    asIScriptContext* context = engine->CreateContext();
+    context->Prepare(method);
+    context->SetObject(script->instance);
+    context->SetArgDWord(0, message.type);
     ExecuteCall(context);
     
     // Clean up.

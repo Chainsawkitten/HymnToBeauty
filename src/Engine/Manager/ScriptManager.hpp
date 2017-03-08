@@ -43,10 +43,22 @@ class ScriptManager {
         /// Register the input enum.
         void RegisterInput();
         
+        /// Send a message to an entity.
+        /**
+         * @param recipient The entity to receive the message.
+         * @param type The type of message to send.
+         */
+        void SendMessage(Entity* recipient, int type);
+        
         /// The entity currently being executed.
         Entity* currentEntity;
         
     private:
+        struct Message {
+            Entity* recipient;
+            int type;
+        };
+        
         ScriptManager();
         ~ScriptManager();
         ScriptManager(ScriptManager const&) = delete;
@@ -54,6 +66,7 @@ class ScriptManager {
         
         void CreateInstance(Component::Script* script);
         void CallScript(Component::Script* script, const std::string& functionName);
+        void CallMessageReceived(const Message& message);
         void LoadScriptFile(const char* fileName, std::string& script);
         void ExecuteCall(asIScriptContext* context);
         asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);
@@ -61,4 +74,5 @@ class ScriptManager {
         asIScriptEngine* engine;
         
         std::vector<Entity*> updateEntities;
+        std::vector<Message> messages;
 };
