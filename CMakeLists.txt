@@ -48,6 +48,10 @@ else()
     set(OPENAL_LIB openal)
 endif()
 
+# PortAudio
+add_subdirectory(externals/portaudio)
+include_directories(externals/portaudio/include)
+
 # JsonCpp
 set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Don't build JsonCpp tests" FORCE)
 set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "Don't build JsonCpp unit tests" FORCE)
@@ -372,7 +376,7 @@ create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
 set_property(SOURCE ${ENGINE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
 
 add_library(Engine STATIC ${ENGINE_SRCS} ${ENGINE_HEADERS} ${EMBEDDED_SOURCE})
-target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} angelscript assimp)
+target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} angelscript assimp portaudio_static)
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
