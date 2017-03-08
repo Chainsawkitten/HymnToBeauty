@@ -16,6 +16,7 @@
 #include "../Component/PointLight.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Input/Input.hpp"
+#include "../Util/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 
 #include "Managers.hpp"
@@ -34,8 +35,16 @@ void RegisterUpdate() {
     Managers().scriptManager->RegisterUpdate(GetEntity());
 }
 
-bool Input(int buttonIndex) {
+bool CheckInput(int buttonIndex) {
     return Input::GetInstance().CheckButton(buttonIndex);
+}
+
+double GetMouseX() {
+    return Input()->CursorX();
+}
+
+double GetMouseY() {
+    return Input()->CursorY();
 }
 
 ScriptManager::ScriptManager() {
@@ -134,8 +143,9 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
-    engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
-    
+    engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(CheckInput), asCALL_CDECL);
+    engine->RegisterGlobalFunction("double GetMouseX()", asFUNCTION(GetMouseX), asCALL_CDECL);
+    engine->RegisterGlobalFunction("double GetMouseY()", asFUNCTION(GetMouseY), asCALL_CDECL);
 }
 
 ScriptManager::~ScriptManager() {
