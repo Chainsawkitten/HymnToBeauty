@@ -55,6 +55,9 @@ class InputHandler {
          */
         double CursorY() const;
         
+        /// Set mouse cursor to the center of the screen.
+        void CenterMouse();
+        
         /// Get whether user has moved scroll wheel up.
         /**
          * @return Whether user has scrolled up

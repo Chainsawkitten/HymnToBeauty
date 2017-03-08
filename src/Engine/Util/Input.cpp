@@ -80,6 +80,12 @@ double InputHandler::CursorY() const {
     return cursorY;
 }
 
+void InputHandler::CenterMouse() {
+    cursorX = 0.0;
+    cursorY = 0.0;
+    glfwSetCursorPos(window, cursorX, cursorY);
+}
+
 bool InputHandler::ScrollUp() const {
     return lastScroll > 0.0;
 }

@@ -48,6 +48,10 @@ double GetMouseY() {
     return Input()->CursorY();
 }
 
+void CenterMouse() {
+    Input()->CenterMouse();
+}
+
 void SendMessage(Entity* recipient, int type) {
     Managers().scriptManager->SendMessage(recipient, type);
 }
@@ -152,6 +156,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(CheckInput), asCALL_CDECL);
     engine->RegisterGlobalFunction("double GetMouseX()", asFUNCTION(GetMouseX), asCALL_CDECL);
     engine->RegisterGlobalFunction("double GetMouseY()", asFUNCTION(GetMouseY), asCALL_CDECL);
+    engine->RegisterGlobalFunction("void CenterMouse()", asFUNCTION(CenterMouse), asCALL_CDECL);
     engine->RegisterGlobalFunction("void SendMessage(Entity@, int)", asFUNCTION(::SendMessage), asCALL_CDECL);
 }
 
