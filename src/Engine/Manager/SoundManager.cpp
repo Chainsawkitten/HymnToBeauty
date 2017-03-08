@@ -2,17 +2,24 @@
 
 #include "../Util/Log.hpp"
 #include <AL/al.h>
+#include <portaudio.h>
 #include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Listener.hpp"
 #include "../Component/SoundSource.hpp"
 
 SoundManager::SoundManager() {
-    
+    // Initialize PortAudio.
+    PaError error = Pa_Initialize();
+    if (error != paNoError)
+        Log() << Pa_GetErrorText(error) << "\n";
 }
 
 SoundManager::~SoundManager() {
-    
+    // Terminate PortAudio.
+    PaError error = Pa_Terminate();
+    if (error != paNoError)
+        Log() << Pa_GetErrorText(error) << "\n";
 }
 
 void SoundManager::SetVolume(float volume) {
