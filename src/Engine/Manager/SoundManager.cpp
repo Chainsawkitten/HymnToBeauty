@@ -7,12 +7,16 @@
 #include "../Component/Listener.hpp"
 #include "../Component/SoundSource.hpp"
 
+static const double sampleRate = 44100.0;
+
 static int audioCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData) {
     float* out = static_cast<float*>(outputBuffer);
     
+    float frequency = 440.f;
+    
     for (unsigned long i = 0; i < framesPerBuffer; ++i) {
         // Left channel.
-        *out++ = 0.f;
+        *out++ = 0.1f * sin(i / sampleRate * frequency);
         
         // Right channel.
         *out++ = 0.f;
@@ -28,7 +32,12 @@ SoundManager::SoundManager() {
         Log() << Pa_GetErrorText(error) << "\n";
     
     // Open stream.
-    error = Pa_OpenDefaultStream(&audioStream, 0, 2, paFloat32, 44100, 256, audioCallback, nullptr);
+    error = Pa_OpenDefaultStream(&audioStream, 0, 2, paFloat32, sampleRate, 256, audioCallback, nullptr);
+    if (error != paNoError)
+        Log() << Pa_GetErrorText(error) << "\n";
+    
+    // Start stream.
+    error = Pa_StartStream(audioStream);
     if (error != paNoError)
         Log() << Pa_GetErrorText(error) << "\n";
 }
