@@ -11,7 +11,7 @@
 using namespace GUI;
 
 void ScriptEditor::Show() {
-    if (ImGui::Begin(("Script: " + script->name).c_str(), &visible)) {
+    if (ImGui::Begin(("Script: " + script->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(script))).c_str(), &visible)) {
         char nameText[255];
         strcpy(nameText, script->name.c_str());
         if (ImGui::InputText("Name", nameText, 255))
@@ -26,6 +26,10 @@ void ScriptEditor::Show() {
             Managers().scriptManager->BuildScript(script->name);
     }
     ImGui::End();
+}
+
+const ScriptFile* ScriptEditor::GetScript() const {
+    return script;
 }
 
 void ScriptEditor::SetScript(ScriptFile* script) {

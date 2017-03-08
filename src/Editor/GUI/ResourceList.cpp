@@ -70,6 +70,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(model->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (modelEditor.GetModel() == model)
+                        modelEditor.SetVisible(false);
+                    
                     delete model;
                     Hymn().models.erase(it);
                     ImGui::EndPopup();
@@ -99,6 +102,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(texture->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (textureEditor.GetTexture() == texture)
+                        textureEditor.SetVisible(false);
+                    
                     delete texture;
                     Hymn().textures.erase(it);
                     ImGui::EndPopup();
@@ -115,11 +121,8 @@ void ResourceList::Show() {
     bool scriptPressed = false;
     if (ImGui::TreeNode("Scripts")) {
         if (ImGui::Button("Add script")) {
-            std::string name = "Script #" + std::to_string(Hymn().scriptNumber++);
-            std::string filename = Hymn().GetPath() + FileSystem::DELIMITER + "Scripts" + FileSystem::DELIMITER + name + ".as";
-            FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
             ScriptFile* scriptFile = new ScriptFile();
-            scriptFile->name = name;
+            scriptFile->name = "Script #" + std::to_string(Hymn().scriptNumber++);
             Hymn().scripts.push_back(scriptFile);
         }
         
@@ -134,7 +137,10 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
-                    ImGui::Text(script->name.c_str());
+                    if (scriptEditor.GetScript() == script)
+                        scriptEditor.SetVisible(false);
+                    
+                    delete script;
                     Hymn().scripts.erase(it);
                     ImGui::EndPopup();
                     break;
@@ -164,6 +170,9 @@ void ResourceList::Show() {
             
             if (ImGui::BeginPopupContextItem(sound->name.c_str())) {
                 if (ImGui::Selectable("Delete")) {
+                    if (soundEditor.GetSound() == sound)
+                        soundEditor.SetVisible(false);
+                    
                     delete sound;
                     Hymn().sounds.erase(it);
                     ImGui::EndPopup();

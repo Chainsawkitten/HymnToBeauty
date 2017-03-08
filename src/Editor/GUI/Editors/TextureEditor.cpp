@@ -28,6 +28,10 @@ void TextureEditor::Show() {
         fileSelector.Show();
 }
 
+const Texture2D* TextureEditor::GetTexture() const {
+    return texture;
+}
+
 void TextureEditor::SetTexture(Texture2D* texture) {
     this->texture = texture;
     

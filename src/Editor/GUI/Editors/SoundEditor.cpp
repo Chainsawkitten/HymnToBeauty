@@ -27,6 +27,10 @@ void SoundEditor::Show() {
         fileSelector.Show();
 }
 
+const Audio::SoundBuffer* SoundEditor::GetSound() const {
+    return sound;
+}
+
 void SoundEditor::SetSound(Audio::SoundBuffer* sound) {
     this->sound = sound;
     

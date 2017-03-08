@@ -14,6 +14,12 @@ namespace GUI {
             /// Show the editor.
             void Show();
             
+            /// Get the sound being edited.
+            /**
+             * @return The sound being edited.
+             */
+            const Audio::SoundBuffer* GetSound() const;
+            
             /// Set the sound to edit.
             /**
              * @param sound Sound to edit.
