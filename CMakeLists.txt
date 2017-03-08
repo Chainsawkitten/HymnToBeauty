@@ -219,6 +219,7 @@ include_directories(src)
 ## Engine ##
 set(ENGINE_SRCS
         externals/AngelScript/sdk/add_on/scriptbuilder/scriptbuilder.cpp
+        externals/AngelScript/sdk/add_on/scriptmath/scriptmath.cpp
         externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
         externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
         externals/imgui/imgui.cpp
