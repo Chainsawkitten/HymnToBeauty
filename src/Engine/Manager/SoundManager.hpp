@@ -27,6 +27,13 @@ class SoundManager {
          */
         void Update(World& world);
         
+        /// Update audio buffer.
+        /**
+         * @param outputBuffer Audio buffer to output.
+         * @param bufferSize Size of the buffer.
+         */
+        void UpdateBuffer(float* outputBuffer, int bufferSize);
+        
     private:
         SoundManager();
         ~SoundManager();
@@ -34,6 +41,9 @@ class SoundManager {
         void operator=(SoundManager const&) = delete;
         
         PaStream* audioStream;
+        
+        World* world = nullptr;
+        float* buffer;
         
         float volume = 1.f;
 };

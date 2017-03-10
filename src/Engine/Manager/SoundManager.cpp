@@ -5,22 +5,12 @@
 #include "../Entity/Entity.hpp"
 #include "../Component/Listener.hpp"
 #include "../Component/SoundSource.hpp"
+#include "Managers.hpp"
 
 static const double sampleRate = 44100.0;
 
 static int audioCallback(const void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData) {
-    float* out = static_cast<float*>(outputBuffer);
-    
-    float frequency = 440.f;
-    
-    for (unsigned long i = 0; i < framesPerBuffer; ++i) {
-        // Left channel.
-        *out++ = 0.1f * sin(i / sampleRate * frequency);
-        
-        // Right channel.
-        *out++ = 0.f;
-    }
-    
+    Managers().soundManager->UpdateBuffer(static_cast<float*>(outputBuffer), framesPerBuffer);
     return 0;
 }
 
@@ -30,8 +20,12 @@ SoundManager::SoundManager() {
     if (error != paNoError)
         Log() << Pa_GetErrorText(error) << "\n";
     
+    // Allocate buffer.
+    int bufferSize = 256;
+    buffer = new float[256];
+    
     // Open stream.
-    error = Pa_OpenDefaultStream(&audioStream, 0, 2, paFloat32, sampleRate, 256, audioCallback, nullptr);
+    error = Pa_OpenDefaultStream(&audioStream, 0, 2, paFloat32, sampleRate, bufferSize, audioCallback, nullptr);
     if (error != paNoError)
         Log() << Pa_GetErrorText(error) << "\n";
     
@@ -50,6 +44,8 @@ SoundManager::~SoundManager() {
     PaError error = Pa_Terminate();
     if (error != paNoError)
         Log() << Pa_GetErrorText(error) << "\n";
+    
+    delete[] buffer;
 }
 
 void SoundManager::SetVolume(float volume) {
@@ -62,6 +58,8 @@ float SoundManager::GetVolume() const {
 }
 
 void SoundManager::Update(World& world) {
+    this->world = &world;
+    
     // Update sound sources.
     std::vector<Component::SoundSource*> soundComponents = world.GetComponents<Component::SoundSource>();
     for (Component::SoundSource* sound : soundComponents) {
@@ -69,27 +67,18 @@ void SoundManager::Update(World& world) {
             continue;
         
         Entity* entity = sound->entity;
-        
-        // Pause it.
-        if (sound->shouldPause) {
-            /// @todo Pause it.
-            sound->shouldPause = false;
-        }
-        
-        // Stop it.
-        if (sound->shouldStop) {
-            /// @todo Stop it.
-            sound->shouldStop = false;
-        }
-        
-        /// @todo Set position.
-        
-        // Play it.
-        if (sound->shouldPlay) {
-            /// @todo Play it.
-            sound->shouldPlay = false;
-        }
     }
     
     /// @todo Update listener.
+}
+
+void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
+    float frequency = 440.f;
+    for (unsigned long i = 0; i < bufferSize; ++i) {
+        // Left channel.
+        *outputBuffer++ = 0.f; //0.1f * sin(i / sampleRate * frequency);
+        
+        // Right channel.
+        *outputBuffer++ = 0.f;
+    }
 }
