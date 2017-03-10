@@ -62,15 +62,6 @@ float SoundManager::GetVolume() const {
 void SoundManager::Update(World& world) {
     this->world = &world;
     
-    // Update sound sources.
-    std::vector<Component::SoundSource*> soundComponents = world.GetComponents<Component::SoundSource>();
-    for (Component::SoundSource* sound : soundComponents) {
-        if (sound->IsKilled())
-            continue;
-        
-        Entity* entity = sound->entity;
-    }
-    
     /// @todo Update listener.
 }
 
@@ -81,10 +72,18 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
         rightBuffer[i] = 0.f;
     }
     
-    // Test sine wave.
-    float frequency = 440.f;
-    for (int i = 0; i < bufferSize; ++i)
-        leftBuffer[i] += 0.1f * sin(i / sampleRate * frequency);
+    // Play sound sources.
+    if (world != nullptr) {
+        const std::vector<Component::SoundSource*>& soundComponents = world->GetComponents<Component::SoundSource>();
+        for (Component::SoundSource* sound : soundComponents) {
+            if (sound->IsKilled())
+                continue;
+            
+            Entity* entity = sound->entity;
+            
+            /// @todo Write to buffers.
+        }
+    }
     
     // Copy final buffer contents.
     for (unsigned long i = 0; i < bufferSize; ++i) {
