@@ -1,7 +1,6 @@
 #include "SoundManager.hpp"
 
 #include "../Util/Log.hpp"
-#include <AL/al.h>
 #include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Listener.hpp"
@@ -60,18 +59,6 @@ void SoundManager::SetVolume(float volume) {
 
 float SoundManager::GetVolume() const {
     return volume;
-}
-
-void SoundManager::CheckError(const char* message) {
-    ALenum error = alGetError();
-    if (error != AL_NO_ERROR) {
-        Log() << message << "\n";
-        if (error == AL_INVALID_NAME) Log() << "Invalid name\n";
-        if (error == AL_INVALID_ENUM) Log() << "Invalid enum\n";
-        if (error == AL_INVALID_VALUE) Log() << "Invalid value\n";
-        if (error == AL_INVALID_OPERATION) Log() << "Invalid operation\n";
-        if (error == AL_OUT_OF_MEMORY) Log() << "Out of memory like!\n";
-    }
 }
 
 void SoundManager::Update(World& world) {

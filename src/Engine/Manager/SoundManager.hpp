@@ -1,11 +1,10 @@
 #pragma once
 
-#include <AL/alc.h>
 #include <portaudio.h>
 
 class World;
 
-/// Handles OpenAL sound.
+/// Handles sound.
 class SoundManager {
     friend class Hub;
     
@@ -22,12 +21,6 @@ class SoundManager {
          */
         float GetVolume() const;
         
-        /// Check for OpenAL errors.
-        /**
-         * @param message Message to print to standard error if an error was encountered.
-         */
-        static void CheckError(const char* message);
-        
         /// Update world containing entities. Moves sound sources and plays sounds.
         /**
          * @param world The world to update.
@@ -41,9 +34,6 @@ class SoundManager {
         void operator=(SoundManager const&) = delete;
         
         PaStream* audioStream;
-        
-        ALCdevice* device;
-        ALCcontext* context;
         
         float volume = 1.f;
 };
