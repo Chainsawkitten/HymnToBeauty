@@ -60,7 +60,5 @@ namespace Component {
             bool shouldPlay = false;
             bool shouldPause = false;
             bool shouldStop = false;
-            
-            bool soundBufferSet = false;
     };
 }
