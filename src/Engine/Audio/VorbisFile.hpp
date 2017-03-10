@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SoundFile.hpp"
+#include <cstddef>
 
 namespace Audio {
     /// Ogg Vorbis implementation of SoundFile.
@@ -45,6 +46,9 @@ namespace Audio {
     
         private:
             char* data;
+            float* audio;
+            bool stereo;
+            std::size_t length;
             int dataSize;
             int sampleRate;
             ALenum format;
