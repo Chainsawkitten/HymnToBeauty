@@ -47,9 +47,6 @@ namespace Component {
             /// Sound buffer.
             Audio::VorbisFile* vorbisFile = nullptr;
             
-            /// Pitch.
-            float pitch = 1.f;
-            
             /// Gain.
             float gain = 1.f;
             

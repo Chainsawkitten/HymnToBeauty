@@ -20,7 +20,6 @@ Json::Value SoundSource::Save() const {
     if (vorbisFile != nullptr)
         component["sound"] = vorbisFile->name;
     
-    component["pitch"] = pitch;
     component["gain"] = gain;
     component["loop"] = loop;
     return component;
@@ -33,7 +32,6 @@ void SoundSource::Load(const Json::Value& node) {
             vorbisFile = sound;
     }
     
-    pitch = node.get("pitch", 1.f).asFloat();
     gain = node.get("gain", 1.f).asFloat();
     loop = node.get("loop", false).asBool();
 }

@@ -278,7 +278,6 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
         ImGui::EndPopup();
     }
     
-    ImGui::InputFloat("Pitch", &soundSource->pitch);
     ImGui::InputFloat("Gain", &soundSource->gain);
     ImGui::Checkbox("Loop", &soundSource->loop);
 }
