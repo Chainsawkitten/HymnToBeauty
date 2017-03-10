@@ -7,11 +7,11 @@
 using namespace Component;
 
 SoundSource::SoundSource(Entity* entity) : SuperComponent(entity) {
-    alGenSources(1, &source);
+    
 }
 
 SoundSource::~SoundSource() {
-    alDeleteSources(1, &source);
+    
 }
 
 Json::Value SoundSource::Save() const {

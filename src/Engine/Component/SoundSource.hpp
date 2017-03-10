@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SuperComponent.hpp"
-#include <AL/al.h>
 
 class Entity;
 class SoundManager;
@@ -58,8 +57,6 @@ namespace Component {
             bool loop = false;
             
         private:
-            ALuint source;
-            
             bool shouldPlay = false;
             bool shouldPause = false;
             bool shouldStop = false;
