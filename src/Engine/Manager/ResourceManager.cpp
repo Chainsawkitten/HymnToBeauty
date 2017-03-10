@@ -7,8 +7,6 @@
 #include "../Geometry/StaticModel.hpp"
 #include "../Texture/Texture2D.hpp"
 #include "../Font/Font.hpp"
-#include "../Audio/SoundBuffer.hpp"
-#include "../Audio/VorbisFile.hpp"
 
 using namespace std;
 
@@ -201,30 +199,6 @@ void ResourceManager::FreeTexture2D(Texture2D* texture) {
             delete texture;
             textures.erase(data);
         }
-    }
-}
-
-Audio::SoundBuffer* ResourceManager::CreateSound(string filename) {
-    if (sounds.find(filename) == sounds.end()) {
-        Audio::SoundFile* soundFile = new Audio::VorbisFile(filename.c_str());
-        sounds[filename].soundBuffer = new Audio::SoundBuffer(soundFile);
-        delete soundFile;
-        soundsInverse[sounds[filename].soundBuffer] = filename;
-        sounds[filename].count = 1;
-    } else {
-        sounds[filename].count++;
-    }
-    
-    return sounds[filename].soundBuffer;
-}
-
-void ResourceManager::FreeSound(Audio::SoundBuffer* soundBuffer) {
-    string filename = soundsInverse[soundBuffer];
-    
-    if (sounds[filename].count-- <= 1) {
-        soundsInverse.erase(soundBuffer);
-        delete soundBuffer;
-        sounds.erase(filename);
     }
 }
 

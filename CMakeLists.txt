@@ -232,7 +232,6 @@ set(ENGINE_SRCS
         src/Engine/Hymn.cpp
         src/Engine/MainWindow.cpp
         src/Engine/RenderTarget.cpp
-        src/Engine/Audio/SoundBuffer.cpp
         src/Engine/Audio/VorbisFile.cpp
         src/Engine/Component/Animation.cpp
         src/Engine/Component/DirectionalLight.cpp
@@ -302,7 +301,6 @@ set(ENGINE_HEADERS
         src/Engine/Hymn.hpp
         src/Engine/MainWindow.hpp
         src/Engine/RenderTarget.hpp
-        src/Engine/Audio/SoundBuffer.hpp
         src/Engine/Audio/SoundFile.hpp
         src/Engine/Audio/VorbisFile.hpp
         src/Engine/Component/Animation.hpp
