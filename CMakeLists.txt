@@ -301,7 +301,6 @@ set(ENGINE_HEADERS
         src/Engine/Hymn.hpp
         src/Engine/MainWindow.hpp
         src/Engine/RenderTarget.hpp
-        src/Engine/Audio/SoundFile.hpp
         src/Engine/Audio/VorbisFile.hpp
         src/Engine/Component/Animation.hpp
         src/Engine/Component/DirectionalLight.hpp

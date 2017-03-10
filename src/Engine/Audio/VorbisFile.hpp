@@ -1,16 +1,16 @@
 #pragma once
 
-#include "SoundFile.hpp"
+#include <AL/al.h>
 #include <cstddef>
 #include <string>
 #include <json/json.h>
 
 namespace Audio {
-    /// Ogg Vorbis implementation of SoundFile.
+    /// Ogg Vorbis sound file.
     /**
      * Loads .ogg-files.
      */
-    class VorbisFile : public SoundFile {
+    class VorbisFile {
         public:
             /// Create new vorbis file.
             VorbisFile();
