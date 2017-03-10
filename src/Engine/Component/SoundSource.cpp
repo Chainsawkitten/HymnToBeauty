@@ -50,6 +50,6 @@ void SoundSource::Stop() {
 
 float SoundSource::GetSample() {
     float sample = vorbisFile->GetData()[position];
-    position = (position + 1) % vorbisFile->GetLength();
+    position = (position + 1) % (vorbisFile->GetLength() * (vorbisFile->IsStereo() ? 2 : 1));
     return sample;
 }

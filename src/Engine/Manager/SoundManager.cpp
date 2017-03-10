@@ -83,18 +83,25 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
             if (sound->vorbisFile != nullptr) {
                 if (sound->vorbisFile->IsStereo()) {
                     // Stereo sound (no 3D effects).
-                    /// @todo Stereo sounds.
+                    for (int i = 0; i < bufferSize; ++i) {
+                        leftBuffer[i] += sound->gain * sound->GetSample();
+                        rightBuffer[i] += sound->gain * sound->GetSample();
+                    }
                 } else {
                     // Mono sound (3D positional).
                     Entity* entity = sound->entity;
                     
                     /// @todo Falloff.
+                    float volume = sound->gain;
+                    
                     /// @todo Panning.
+                    float leftVolume = volume;
+                    float rightVolume = volume;
                     
                     for (int i = 0; i < bufferSize; ++i) {
                         float sample = sound->GetSample();
-                        leftBuffer[i] = sample;
-                        rightBuffer[i] = sample;
+                        leftBuffer[i] += leftVolume * sample;
+                        rightBuffer[i] += rightVolume * sample;
                     }
                 }
             }
