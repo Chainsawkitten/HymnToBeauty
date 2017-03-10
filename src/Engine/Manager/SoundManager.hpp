@@ -43,7 +43,8 @@ class SoundManager {
         PaStream* audioStream;
         
         World* world = nullptr;
-        float* buffer;
+        float* leftBuffer;
+        float* rightBuffer;
         
         float volume = 1.f;
 };

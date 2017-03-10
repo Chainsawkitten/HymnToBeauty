@@ -22,7 +22,8 @@ SoundManager::SoundManager() {
     
     // Allocate buffer.
     int bufferSize = 256;
-    buffer = new float[256];
+    leftBuffer = new float[bufferSize];
+    rightBuffer = new float[bufferSize];
     
     // Open stream.
     error = Pa_OpenDefaultStream(&audioStream, 0, 2, paFloat32, sampleRate, bufferSize, audioCallback, nullptr);
@@ -45,7 +46,8 @@ SoundManager::~SoundManager() {
     if (error != paNoError)
         Log() << Pa_GetErrorText(error) << "\n";
     
-    delete[] buffer;
+    delete[] leftBuffer;
+    delete[] rightBuffer;
 }
 
 void SoundManager::SetVolume(float volume) {
