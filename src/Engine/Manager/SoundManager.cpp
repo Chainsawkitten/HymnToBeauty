@@ -7,6 +7,7 @@
 #include "../Component/SoundSource.hpp"
 #include "../Audio/VorbisFile.hpp"
 #include "Managers.hpp"
+#include <algorithm>
 
 static const double sampleRate = 44100.0;
 
@@ -73,35 +74,44 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
         rightBuffer[i] = 0.f;
     }
     
-    // Play sound sources.
     if (world != nullptr) {
-        const std::vector<Component::SoundSource*>& soundComponents = world->GetComponents<Component::SoundSource>();
-        for (Component::SoundSource* sound : soundComponents) {
-            if (sound->IsKilled())
-                continue;
+        // Get listener.
+        const std::vector<Component::Listener*>& listeners = world->GetComponents<Component::Listener>();
+        if (listeners.size() > 0) {
+            Component::Listener* listener = listeners[0];
             
-            if (sound->vorbisFile != nullptr) {
-                if (sound->vorbisFile->IsStereo()) {
-                    // Stereo sound (no 3D effects).
-                    for (int i = 0; i < bufferSize; ++i) {
-                        leftBuffer[i] += sound->gain * sound->GetSample();
-                        rightBuffer[i] += sound->gain * sound->GetSample();
-                    }
-                } else {
-                    // Mono sound (3D positional).
-                    Entity* entity = sound->entity;
-                    
-                    /// @todo Falloff.
-                    float volume = sound->gain;
-                    
-                    /// @todo Panning.
-                    float leftVolume = volume;
-                    float rightVolume = volume;
-                    
-                    for (int i = 0; i < bufferSize; ++i) {
-                        float sample = sound->GetSample();
-                        leftBuffer[i] += leftVolume * sample;
-                        rightBuffer[i] += rightVolume * sample;
+            // Play sound sources.
+            const std::vector<Component::SoundSource*>& soundComponents = world->GetComponents<Component::SoundSource>();
+            for (Component::SoundSource* sound : soundComponents) {
+                if (sound->IsKilled())
+                    continue;
+                
+                if (sound->vorbisFile != nullptr) {
+                    if (sound->vorbisFile->IsStereo()) {
+                        // Stereo sound (no 3D effects).
+                        for (int i = 0; i < bufferSize; ++i) {
+                            leftBuffer[i] += sound->gain * sound->GetSample();
+                            rightBuffer[i] += sound->gain * sound->GetSample();
+                        }
+                    } else {
+                        // Mono sound (3D positional).
+                        Entity* entity = sound->entity;
+                        
+                        // Attenuation.
+                        float distance = glm::length(entity->position - listener->entity->position);
+                        float attenuation = 0.25f;
+                        float minDistance = 1.f;
+                        float volume = sound->gain * minDistance / (minDistance + attenuation * ((std::max)(distance, minDistance) - minDistance));
+                        
+                        /// @todo Panning.
+                        float leftVolume = volume;
+                        float rightVolume = volume;
+                        
+                        for (int i = 0; i < bufferSize; ++i) {
+                            float sample = sound->GetSample();
+                            leftBuffer[i] += leftVolume * sample;
+                            rightBuffer[i] += rightVolume * sample;
+                        }
                     }
                 }
             }
