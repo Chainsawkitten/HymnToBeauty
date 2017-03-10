@@ -16,7 +16,7 @@
 #include "Geometry/RiggedModel.hpp"
 #include "Geometry/StaticModel.hpp"
 #include "Texture/Texture2D.hpp"
-#include "Audio/SoundBuffer.hpp"
+#include "Audio/VorbisFile.hpp"
 #include "Input/Input.hpp"
 #include "Script/ScriptFile.hpp"
 #include <json/json.h>
@@ -63,7 +63,7 @@ void ActiveHymn::Clear() {
     textures.clear();
     textureNumber = 0U;
     
-    for (Audio::SoundBuffer* sound : sounds) {
+    for (Audio::VorbisFile* sound : sounds) {
         delete sound;
     }
     sounds.clear();
@@ -118,7 +118,7 @@ void ActiveHymn::Save() const {
 
     // Save sounds.
     Json::Value soundsNode;
-    for (Audio::SoundBuffer* sound : sounds) {
+    for (Audio::VorbisFile* sound : sounds) {
         soundsNode.append(sound->Save());
     }
     root["sounds"] = soundsNode;
@@ -185,7 +185,7 @@ void ActiveHymn::Load(const string& path) {
     // Load sounds.
     const Json::Value soundsNode = root["sounds"];
     for (unsigned int i=0; i < soundsNode.size(); ++i) {
-        Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+        Audio::VorbisFile* sound = new Audio::VorbisFile();
         sound->Load(soundsNode[i]);
         sounds.push_back(sound);
     }

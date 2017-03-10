@@ -16,7 +16,7 @@
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Geometry/RiggedModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
-#include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Audio/VorbisFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Manager/Managers.hpp>
@@ -270,9 +270,9 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
         ImGui::Text("Sounds");
         ImGui::Separator();
         
-        for (Audio::SoundBuffer* sound : Hymn().sounds) {
+        for (Audio::VorbisFile* sound : Hymn().sounds) {
             if (ImGui::Selectable(sound->name.c_str()))
-                soundSource->soundBuffer = sound;
+                soundSource->vorbisFile = sound;
         }
         
         ImGui::EndPopup();

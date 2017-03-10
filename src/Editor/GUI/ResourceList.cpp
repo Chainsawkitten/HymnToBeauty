@@ -3,7 +3,7 @@
 #include <Engine/Geometry/RiggedModel.hpp>
 #include <Engine/Geometry/StaticModel.hpp>
 #include <Engine/Texture/Texture2D.hpp>
-#include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Audio/VorbisFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Editor/Util/EditorSettings.hpp>
@@ -156,13 +156,13 @@ void ResourceList::Show() {
     bool soundPressed = false;
     if (ImGui::TreeNode("Sounds")) {
         if (ImGui::Button("Add sound")) {
-            Audio::SoundBuffer* sound = new Audio::SoundBuffer();
+            Audio::VorbisFile* sound = new Audio::VorbisFile();
             sound->name = "Sound #" + std::to_string(Hymn().soundNumber++);
             Hymn().sounds.push_back(sound);
         }
         
         for (auto it = Hymn().sounds.begin(); it != Hymn().sounds.end(); ++it) {
-            Audio::SoundBuffer* sound = *it;
+            Audio::VorbisFile* sound = *it;
             if (ImGui::Selectable(sound->name.c_str())) {
                 soundPressed = true;
                 soundEditor.SetSound(sound);

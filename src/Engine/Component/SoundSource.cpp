@@ -2,7 +2,7 @@
 
 #include "../Entity/Entity.hpp"
 #include "../Hymn.hpp"
-#include "../Audio/SoundBuffer.hpp"
+#include "../Audio/VorbisFile.hpp"
 
 using namespace Component;
 
@@ -17,8 +17,8 @@ SoundSource::~SoundSource() {
 Json::Value SoundSource::Save() const {
     Json::Value component;
     
-    if (soundBuffer != nullptr)
-        component["sound"] = soundBuffer->name;
+    if (vorbisFile != nullptr)
+        component["sound"] = vorbisFile->name;
     
     component["pitch"] = pitch;
     component["gain"] = gain;
@@ -28,9 +28,9 @@ Json::Value SoundSource::Save() const {
 
 void SoundSource::Load(const Json::Value& node) {
     std::string name = node.get("sound", "").asString();
-    for (Audio::SoundBuffer* s : Hymn().sounds) {
-        if (s->name == name)
-            soundBuffer = s;
+    for (Audio::VorbisFile* sound : Hymn().sounds) {
+        if (sound->name == name)
+            vorbisFile = sound;
     }
     
     pitch = node.get("pitch", 1.f).asFloat();

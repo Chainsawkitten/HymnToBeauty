@@ -9,7 +9,7 @@ namespace Geometry {
     class Model;
 }
 namespace Audio {
-    class SoundBuffer;
+    class VorbisFile;
 }
 
 class ScriptFile;
@@ -79,7 +79,7 @@ class ActiveHymn {
         unsigned int textureNumber = 0U;
         
         /// Sounds.
-        std::vector<Audio::SoundBuffer*> sounds;
+        std::vector<Audio::VorbisFile*> sounds;
 
         /// The id of the next sound to create.
         unsigned int soundNumber = 0U;

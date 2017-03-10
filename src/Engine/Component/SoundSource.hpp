@@ -6,7 +6,7 @@
 class Entity;
 class SoundManager;
 namespace Audio {
-    class SoundBuffer;
+    class VorbisFile;
 }
 
 namespace Component {
@@ -46,7 +46,7 @@ namespace Component {
             void Stop();
             
             /// Sound buffer.
-            Audio::SoundBuffer* soundBuffer = nullptr;
+            Audio::VorbisFile* vorbisFile = nullptr;
             
             /// Pitch.
             float pitch = 1.f;

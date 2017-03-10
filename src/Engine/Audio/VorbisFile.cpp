@@ -7,6 +7,10 @@
 
 using namespace Audio;
 
+VorbisFile::VorbisFile() {
+    
+}
+
 VorbisFile::VorbisFile(const char* filename) {
     Load(filename);
 }

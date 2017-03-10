@@ -12,6 +12,9 @@ namespace Audio {
      */
     class VorbisFile : public SoundFile {
         public:
+            /// Create new vorbis file.
+            VorbisFile();
+            
             /// Loads the specified ogg-file.
             /**
              * @param filename Filename (relative or absolute) to ogg-file.
@@ -58,12 +61,16 @@ namespace Audio {
              */
             void Load(const Json::Value& node);
             
+            /// Load sound from Ogg Vorbis file.
+            /**
+             * @param filename Filename (relative or absolute) to ogg-file.
+             */
+            void Load(const char* filename);
+            
             /// The name of the sound.
             std::string name;
     
         private:
-            void Load(const char* filename);
-            
             char* data;
             float* audio;
             bool stereo;
