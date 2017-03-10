@@ -78,7 +78,7 @@ void VorbisFile::Load(const char* filename) {
     int n = 0;
     length = 0;
     do {
-        int bufferSize = 256;
+        const int bufferSize = 256;
         float buffer[bufferSize];
         n = stb_vorbis_get_samples_float_interleaved(vorbisFile, info.channels, buffer, bufferSize);
         length += n;
