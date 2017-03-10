@@ -5,6 +5,7 @@
 #include "../Entity/Entity.hpp"
 #include "../Component/Listener.hpp"
 #include "../Component/SoundSource.hpp"
+#include "../Audio/VorbisFile.hpp"
 #include "Managers.hpp"
 
 static const double sampleRate = 44100.0;
@@ -79,9 +80,24 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
             if (sound->IsKilled())
                 continue;
             
-            Entity* entity = sound->entity;
-            
-            /// @todo Write to buffers.
+            if (sound->vorbisFile != nullptr) {
+                if (sound->vorbisFile->IsStereo()) {
+                    // Stereo sound (no 3D effects).
+                    /// @todo Stereo sounds.
+                } else {
+                    // Mono sound (3D positional).
+                    Entity* entity = sound->entity;
+                    
+                    /// @todo Falloff.
+                    /// @todo Panning.
+                    
+                    for (int i = 0; i < bufferSize; ++i) {
+                        float sample = sound->GetSample();
+                        leftBuffer[i] = sample;
+                        rightBuffer[i] = sample;
+                    }
+                }
+            }
         }
     }
     

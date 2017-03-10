@@ -44,6 +44,12 @@ namespace Component {
             /// Stop the sound.
             void Stop();
             
+            /// Get audio sample.
+            /**
+             * @return The next audio sample to play.
+             */
+            float GetSample();
+            
             /// Sound buffer.
             Audio::VorbisFile* vorbisFile = nullptr;
             
@@ -57,5 +63,7 @@ namespace Component {
             bool shouldPlay = false;
             bool shouldPause = false;
             bool shouldStop = false;
+            
+            std::size_t position = 0;
     };
 }

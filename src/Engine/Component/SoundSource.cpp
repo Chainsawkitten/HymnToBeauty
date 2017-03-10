@@ -47,3 +47,9 @@ void SoundSource::Pause() {
 void SoundSource::Stop() {
     shouldStop = true;
 }
+
+float SoundSource::GetSample() {
+    float sample = vorbisFile->GetData()[position];
+    position = (position + 1) % vorbisFile->GetLength();
+    return sample;
+}
