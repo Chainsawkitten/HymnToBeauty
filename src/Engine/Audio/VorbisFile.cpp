@@ -2,10 +2,48 @@
 
 #include "../Util/Log.hpp"
 #include <stb_vorbis.c>
+#include "../Hymn.hpp"
+#include "../Util/FileSystem.hpp"
 
 using namespace Audio;
 
 VorbisFile::VorbisFile(const char* filename) {
+    Load(filename);
+}
+
+VorbisFile::~VorbisFile() {
+    free(data);
+    delete[] audio;
+}
+
+const char* VorbisFile::Data() const {
+    return data;
+}
+
+ALsizei VorbisFile::Size() const {
+    return dataSize;
+}
+
+ALenum VorbisFile::Format() const {
+    return format;
+}
+
+ALsizei VorbisFile::SampleRate() const {
+    return sampleRate;
+}
+
+Json::Value VorbisFile::Save() const {
+    Json::Value sound;
+    sound["name"] = name;
+    return sound;
+}
+
+void VorbisFile::Load(const Json::Value& node) {
+    name = node.get("name", "").asString();
+    Load((Hymn().GetPath() + FileSystem::DELIMITER + "Sounds" + FileSystem::DELIMITER + name + ".ogg").c_str());
+}
+
+void VorbisFile::Load(const char* filename) {
     int channels;
     dataSize = stb_vorbis_decode_filename(filename, &channels, &sampleRate, reinterpret_cast<short**>(&data));
     
@@ -48,25 +86,4 @@ VorbisFile::VorbisFile(const char* filename) {
     stb_vorbis_get_samples_float_interleaved(vorbisFile, info.channels, audio, length);
     
     stb_vorbis_close(vorbisFile);
-}
-
-VorbisFile::~VorbisFile() {
-    free(data);
-    delete[] audio;
-}
-
-const char* VorbisFile::Data() const {
-    return data;
-}
-
-ALsizei VorbisFile::Size() const {
-    return dataSize;
-}
-
-ALenum VorbisFile::Format() const {
-    return format;
-}
-
-ALsizei VorbisFile::SampleRate() const {
-    return sampleRate;
 }

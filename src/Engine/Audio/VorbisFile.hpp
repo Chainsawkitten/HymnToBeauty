@@ -2,6 +2,8 @@
 
 #include "SoundFile.hpp"
 #include <cstddef>
+#include <string>
+#include <json/json.h>
 
 namespace Audio {
     /// Ogg Vorbis implementation of SoundFile.
@@ -43,8 +45,25 @@ namespace Audio {
              * @return The sound file's sample rate (Hz).
              */
             ALsizei SampleRate() const;
+            
+            /// Save the sound.
+            /**
+             * @return JSON value to be stored on disk.
+             */
+            Json::Value Save() const;
+            
+            /// Load sound from JSON node.
+            /**
+             * @param node JSON node to load from.
+             */
+            void Load(const Json::Value& node);
+            
+            /// The name of the sound.
+            std::string name;
     
         private:
+            void Load(const char* filename);
+            
             char* data;
             float* audio;
             bool stereo;
