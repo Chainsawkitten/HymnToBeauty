@@ -81,9 +81,10 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
         rightBuffer[i] = 0.f;
     }
     
-    /// @todo Test sine wave.
+    // Test sine wave.
     float frequency = 440.f;
-    //0.1f * sin(i / sampleRate * frequency);
+    for (int i = 0; i < bufferSize; ++i)
+        leftBuffer[i] += 0.1f * sin(i / sampleRate * frequency);
     
     // Copy final buffer contents.
     for (unsigned long i = 0; i < bufferSize; ++i) {
