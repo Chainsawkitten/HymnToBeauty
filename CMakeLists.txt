@@ -36,18 +36,6 @@ include_directories(externals/stb)
 # Imgui
 include_directories(externals/imgui)
 
-# OpenAL Soft
-set(ALSOFT_UTILS OFF CACHE BOOL "Don't build OpenAL Soft utility programs" FORCE)
-set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
-set(ALSOFT_TESTS OFF CACHE BOOL "Don't build OpenAL Soft tests" FORCE)
-add_subdirectory(externals/openal-soft)
-include_directories(externals/openal-soft/include)
-if(WIN32)
-    set(OPENAL_LIB OpenAL32)
-else()
-    set(OPENAL_LIB openal)
-endif()
-
 # PortAudio
 add_subdirectory(externals/portaudio)
 include_directories(externals/portaudio/include)
@@ -373,7 +361,7 @@ create_directory_groups(${ENGINE_SRCS} ${ENGINE_HEADERS})
 set_property(SOURCE ${ENGINE_SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
 
 add_library(Engine STATIC ${ENGINE_SRCS} ${ENGINE_HEADERS} ${EMBEDDED_SOURCE})
-target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static ${OPENAL_LIB} angelscript assimp portaudio_static)
+target_link_libraries(Engine glew glfw ${GLFW_LIBRARIES} jsoncpp_lib_static angelscript assimp portaudio_static)
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 
