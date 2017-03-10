@@ -16,23 +16,22 @@ VorbisFile::VorbisFile(const char* filename) {
 }
 
 VorbisFile::~VorbisFile() {
-    free(data);
     delete[] audio;
 }
 
-const char* VorbisFile::Data() const {
-    return data;
+const float* VorbisFile::GetData() const {
+    return audio;
 }
 
-ALsizei VorbisFile::Size() const {
-    return dataSize;
+std::size_t VorbisFile::GetLength() const {
+    return length;
 }
 
-ALenum VorbisFile::Format() const {
-    return format;
+bool VorbisFile::IsStereo() const {
+    return stereo;
 }
 
-ALsizei VorbisFile::SampleRate() const {
+int VorbisFile::GetSampleRate() const {
     return sampleRate;
 }
 
@@ -48,20 +47,6 @@ void VorbisFile::Load(const Json::Value& node) {
 }
 
 void VorbisFile::Load(const char* filename) {
-    int channels;
-    dataSize = stb_vorbis_decode_filename(filename, &channels, &sampleRate, reinterpret_cast<short**>(&data));
-    
-    if (dataSize == -1)
-        Log() << "Couldn't load OGG Vorbis file: " << filename << "\n";
-    
-    // We get size in samples, but we need it in bytes.
-    dataSize *= channels * sizeof(short);
-    
-    if (channels > 1)
-        format = AL_FORMAT_STEREO16;
-    else
-        format = AL_FORMAT_MONO16;
-    
     // Open vorbis file.
     int error;
     stb_vorbis* vorbisFile = stb_vorbis_open_filename(filename, &error, NULL);
@@ -71,7 +56,8 @@ void VorbisFile::Load(const char* filename) {
     // Show file info.
     stb_vorbis_info info = stb_vorbis_get_info(vorbisFile);
     stereo = (info.channels == 2);
-    if (info.sample_rate != 44100)
+    sampleRate = info.sample_rate;
+    if (sampleRate != 44100)
         Log() << filename << ": Warning! Only sample rates of 44100 Hz supported.\n";
     
     // Get length.

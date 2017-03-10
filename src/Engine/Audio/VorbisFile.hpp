@@ -1,6 +1,5 @@
 #pragma once
 
-#include <AL/al.h>
 #include <cstddef>
 #include <string>
 #include <json/json.h>
@@ -20,34 +19,33 @@ namespace Audio {
              * @param filename Filename (relative or absolute) to ogg-file.
              */
             VorbisFile(const char* filename);
-    
+            
             /// Destructor.
             ~VorbisFile();
-    
+            
             /// Get raw audio data.
             /**
              * @return Raw audio data.
              */
-            const char* Data() const;
-    
-            /// Get data size.
+            const float* GetData() const;
+            
+            /// Get the length of the decoded audio data (per channel).
             /**
              * @return The length of the raw audio data.
              */
-            ALsizei Size() const;
-    
-            /// Get AL format.
+            std::size_t GetLength() const;
+            
+            /// Get whether the sound file is in stereo format.
             /**
-             * 32-bit sound is not supported in OpenAL.
-             * @return One of AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8 or AL_FORMAT_STEREO16.
+             * @return Whether the sound file is in stereo format.
              */
-            ALenum Format() const;
-    
+            bool IsStereo() const;
+            
             /// Get sample rate.
             /**
              * @return The sound file's sample rate (Hz).
              */
-            ALsizei SampleRate() const;
+            int GetSampleRate() const;
             
             /// Save the sound.
             /**
@@ -71,12 +69,9 @@ namespace Audio {
             std::string name;
     
         private:
-            char* data;
             float* audio;
             bool stereo;
             std::size_t length;
-            int dataSize;
             int sampleRate;
-            ALenum format;
     };
 }
