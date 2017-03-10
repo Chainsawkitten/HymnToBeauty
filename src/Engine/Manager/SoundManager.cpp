@@ -75,6 +75,12 @@ void SoundManager::Update(World& world) {
 }
 
 void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
+    // Clear buffers.
+    for (int i = 0; i < bufferSize; ++i) {
+        leftBuffer[i] = 0.f;
+        rightBuffer[i] = 0.f;
+    }
+    
     float frequency = 440.f;
     for (unsigned long i = 0; i < bufferSize; ++i) {
         // Left channel.
