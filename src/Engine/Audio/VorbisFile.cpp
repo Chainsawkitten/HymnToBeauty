@@ -73,7 +73,7 @@ void VorbisFile::Load(const char* filename) {
     // Decode file.
     audio = new float[length * info.channels];
     stb_vorbis_seek_start(vorbisFile);
-    stb_vorbis_get_samples_float_interleaved(vorbisFile, info.channels, audio, length);
+    stb_vorbis_get_samples_float_interleaved(vorbisFile, info.channels, audio, length * info.channels);
     
     stb_vorbis_close(vorbisFile);
 }
