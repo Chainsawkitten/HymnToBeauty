@@ -98,7 +98,7 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                         Entity* entity = sound->entity;
                         
                         // Attenuation.
-                        glm::vec3 direction = entity->position - listener->entity->position;
+                        glm::vec3 direction = entity->GetWorldPosition() - listener->entity->position;
                         float distance = glm::length(direction);
                         float attenuation = 0.5f;
                         float minDistance = 1.f;
