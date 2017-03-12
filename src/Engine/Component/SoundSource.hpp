@@ -59,11 +59,10 @@ namespace Component {
             /// Whether the sound should loop.
             bool loop = false;
             
-        private:
-            bool shouldPlay = false;
-            bool shouldPause = false;
-            bool shouldStop = false;
+            /// Whether the sound is playing.
+            bool playing = true;
             
+        private:
             std::size_t position = 0;
     };
 }

@@ -83,7 +83,7 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
             // Play sound sources.
             const std::vector<Component::SoundSource*>& soundComponents = world->GetComponents<Component::SoundSource>();
             for (Component::SoundSource* sound : soundComponents) {
-                if (sound->IsKilled())
+                if (sound->IsKilled() || !sound->playing)
                     continue;
                 
                 if (sound->vorbisFile != nullptr) {

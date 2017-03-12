@@ -37,15 +37,16 @@ void SoundSource::Load(const Json::Value& node) {
 }
 
 void SoundSource::Play() {
-    shouldPlay = true;
+    playing = true;
 }
 
 void SoundSource::Pause() {
-    shouldPause = true;
+    playing = false;
 }
 
 void SoundSource::Stop() {
-    shouldStop = true;
+    playing = false;
+    position = 0;
 }
 
 float SoundSource::GetSample() {
