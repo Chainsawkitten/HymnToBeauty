@@ -98,14 +98,19 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                         Entity* entity = sound->entity;
                         
                         // Attenuation.
-                        float distance = glm::length(entity->position - listener->entity->position);
-                        float attenuation = 0.25f;
+                        glm::vec3 direction = entity->position - listener->entity->position;
+                        float distance = glm::length(direction);
+                        float attenuation = 0.5f;
                         float minDistance = 1.f;
                         float volume = sound->gain * minDistance / (minDistance + attenuation * ((std::max)(distance, minDistance) - minDistance));
                         
-                        /// @todo Panning.
-                        float leftVolume = volume;
-                        float rightVolume = volume;
+                        // Panning.
+                        glm::mat4 orientation = listener->entity->GetCameraOrientation();
+                        glm::vec3 right = glm::vec4(1.f, 0.f, 0.f, 0.f) * orientation;
+                        direction /= distance;
+                        float pan = glm::dot(right, direction);
+                        float leftVolume = volume * (1.f - pan) * 0.5f;
+                        float rightVolume = volume * (1.f + pan) * 0.5f;
                         
                         for (int i = 0; i < bufferSize; ++i) {
                             float sample = sound->GetSample();
