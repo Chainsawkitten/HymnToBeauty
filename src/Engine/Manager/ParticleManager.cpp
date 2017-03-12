@@ -152,7 +152,7 @@ void ParticleManager::Render(World& world, Entity* camera) {
 }
 
 void ParticleManager::EmitParticle(World& world, Component::ParticleEmitter* emitter) {
-    glm::vec3 position(emitter->entity->position);
+    glm::vec3 position(emitter->entity->GetWorldPosition());
     if (emitter->emitterType == Component::ParticleEmitter::CUBOID) {
         std::uniform_real_distribution<float> randomSpread(-0.5f, 0.5f);
         glm::vec3 random(randomSpread(randomEngine), randomSpread(randomEngine), randomSpread(randomEngine));
