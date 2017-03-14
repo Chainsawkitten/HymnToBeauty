@@ -14,6 +14,7 @@ class FXAAFilter;
 class GammaCorrectionFilter;
 class GlowFilter;
 class GlowBlurFilter;
+class FogFilter;
 class Texture2D;
 namespace Component {
     class SuperComponent;
@@ -71,6 +72,7 @@ class RenderManager {
         GammaCorrectionFilter* gammaCorrectionFilter;
         GlowFilter* glowFilter;
         GlowBlurFilter* glowBlurFilter;
+        FogFilter* fogFilter;
         
         // Editor entity textures.
         Texture2D* particleEmitterTexture;

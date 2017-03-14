@@ -38,6 +38,7 @@
 #include "../PostProcessing/GammaCorrectionFilter.hpp"
 #include "../PostProcessing/GlowFilter.hpp"
 #include "../PostProcessing/GlowBlurFilter.hpp"
+#include "../PostProcessing/FogFilter.hpp"
 
 using namespace Component;
 
@@ -69,6 +70,7 @@ RenderManager::RenderManager() {
     gammaCorrectionFilter = new GammaCorrectionFilter();
     glowFilter = new GlowFilter();
     glowBlurFilter = new GlowBlurFilter();
+    fogFilter = new FogFilter(glm::vec3(1.f, 1.f, 1.f));
     
     // Create editor entity geometry.
     float vertex;
@@ -114,6 +116,7 @@ RenderManager::~RenderManager() {
     delete gammaCorrectionFilter;
     delete glowFilter;
     delete glowBlurFilter;
+    delete fogFilter;
     
     glDeleteBuffers(1, &vertexBuffer);
     glDeleteVertexArrays(1, &vertexArray);
@@ -155,6 +158,12 @@ void RenderManager::Render(World& world) {
         // Light the world.
         postProcessing->GetRenderTarget()->SetTarget();
         deferredLighting->Render(world, camera);
+        
+        // Fog.
+        fogFilter->SetScreenSize(screenSize);
+        fogFilter->SetCamera(camera->GetComponent<Lens>());
+        fogFilter->SetDensity(0.02f);
+        postProcessing->ApplyFilter(fogFilter);
         
         // Anti-aliasing.
         fxaaFilter->SetScreenSize(screenSize);
