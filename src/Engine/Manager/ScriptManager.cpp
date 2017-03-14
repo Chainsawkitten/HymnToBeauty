@@ -103,6 +103,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Lens", "float zFar", asOFFSET(Lens, zFar));
     
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Listener", "bool lowpass", asOFFSET(Listener, lowpass));
     
     engine->RegisterObjectType("Physics", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Physics", "vec3 velocity", asOFFSET(Physics, velocity));

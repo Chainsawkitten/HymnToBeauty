@@ -87,7 +87,9 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                     continue;
                 
                 if (sound->vorbisFile != nullptr) {
-                    int filterSize = 50;
+                    int filterSize = 1;
+                    if (listener->lowpass)
+                        filterSize = 50;
                     
                     if (sound->vorbisFile->IsStereo()) {
                         // Stereo sound (no 3D effects).
