@@ -22,6 +22,7 @@ Json::Value SoundSource::Save() const {
     
     component["gain"] = gain;
     component["loop"] = loop;
+    component["ignoreLowpass"] = ignoreLowpass;
     return component;
 }
 
@@ -34,6 +35,7 @@ void SoundSource::Load(const Json::Value& node) {
     
     gain = node.get("gain", 1.f).asFloat();
     loop = node.get("loop", false).asBool();
+    ignoreLowpass = node.get("ignoreLowpass", false).asBool();
 }
 
 void SoundSource::Play() {

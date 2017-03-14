@@ -63,6 +63,9 @@ namespace Component {
             /// Whether the sound is playing.
             bool playing = true;
             
+            /// Ignore lowpass filter applied to listener.
+            bool ignoreLowpass = false;
+            
         private:
             std::size_t position = 0;
     };

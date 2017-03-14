@@ -280,6 +280,7 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
     
     ImGui::InputFloat("Gain", &soundSource->gain);
     ImGui::Checkbox("Loop", &soundSource->loop);
+    ImGui::Checkbox("Ignore lowpass", &soundSource->ignoreLowpass);
 }
 
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {

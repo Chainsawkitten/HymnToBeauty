@@ -88,7 +88,7 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                 
                 if (sound->vorbisFile != nullptr) {
                     int filterSize = 1;
-                    if (listener->lowpass)
+                    if (listener->lowpass && !sound->ignoreLowpass)
                         filterSize = 50;
                     
                     if (sound->vorbisFile->IsStereo()) {
