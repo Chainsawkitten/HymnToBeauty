@@ -87,11 +87,13 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                     continue;
                 
                 if (sound->vorbisFile != nullptr) {
+                    int filterSize = 50;
+                    
                     if (sound->vorbisFile->IsStereo()) {
                         // Stereo sound (no 3D effects).
                         for (int i = 0; i < bufferSize; ++i) {
-                            leftBuffer[i] += sound->gain * sound->GetSample();
-                            rightBuffer[i] += sound->gain * sound->GetSample();
+                            leftBuffer[i] += sound->gain * sound->GetSample(filterSize);
+                            rightBuffer[i] += sound->gain * sound->GetSample(filterSize);
                         }
                     } else {
                         // Mono sound (3D positional).
@@ -114,7 +116,7 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                         float rightVolume = volume / sqrt(2.f) * fabs(cos(pan) + sin(pan));
                         
                         for (int i = 0; i < bufferSize; ++i) {
-                            float sample = sound->GetSample();
+                            float sample = sound->GetSample(filterSize);
                             leftBuffer[i] += leftVolume * sample;
                             rightBuffer[i] += rightVolume * sample;
                         }

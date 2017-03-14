@@ -46,9 +46,10 @@ namespace Component {
             
             /// Get audio sample.
             /**
+             * @param count How many samples to average.
              * @return The next audio sample to play.
              */
-            float GetSample();
+            float GetSample(int count = 1);
             
             /// Sound buffer.
             Audio::VorbisFile* vorbisFile = nullptr;

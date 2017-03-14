@@ -49,8 +49,20 @@ void SoundSource::Stop() {
     position = 0;
 }
 
-float SoundSource::GetSample() {
-    float sample = vorbisFile->GetData()[position];
+float SoundSource::GetSample(int count) {
+    const float* data = vorbisFile->GetData();
+    
+    float sample = 0.f;
+    int samplePos = position;
+    for (int i = 0; i < count; ++i) {
+        sample += data[samplePos];
+        
+        samplePos -= vorbisFile->IsStereo() ? 2 : 1;
+        if (samplePos < 0)
+            samplePos += vorbisFile->GetLength();
+    }
+    sample /= static_cast<float>(count);
+    
     position = (position + 1) % (vorbisFile->GetLength() * (vorbisFile->IsStereo() ? 2 : 1));
     return sample;
 }
