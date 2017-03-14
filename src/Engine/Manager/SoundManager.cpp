@@ -109,7 +109,7 @@ void SoundManager::UpdateBuffer(float* outputBuffer, int bufferSize) {
                         glm::vec3 right = glm::vec4(1.f, 0.f, 0.f, 0.f) * orientation;
                         direction /= distance;
                         float pan = glm::dot(right, direction);
-                        pan *= M_PI / 4.f;
+                        pan *= 3.1415927f / 4.f;
                         float leftVolume = volume / sqrt(2.f) * fabs(cos(pan) - sin(pan));
                         float rightVolume = volume / sqrt(2.f) * fabs(cos(pan) + sin(pan));
                         
