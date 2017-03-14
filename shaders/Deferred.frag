@@ -61,7 +61,7 @@ vec3 ApplyLight(in vec3 surfaceColor, in vec3 normal, in vec3 position, in vec3 
     
     // Specular
     vec3 surfaceToCamera = normalize(-position);
-    float materialShininess = 20.0;
+    float materialShininess = 60.0;
     float specularCoefficient = 0.0;
     if (diffuseCoefficient > 0.0)
         specularCoefficient = pow(max(dot(surfaceToCamera, reflect(-surfaceToLight, normal)), 0.0), materialShininess);
