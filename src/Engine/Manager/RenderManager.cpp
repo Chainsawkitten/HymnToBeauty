@@ -70,7 +70,7 @@ RenderManager::RenderManager() {
     gammaCorrectionFilter = new GammaCorrectionFilter();
     glowFilter = new GlowFilter();
     glowBlurFilter = new GlowBlurFilter();
-    fogFilter = new FogFilter(glm::vec3(1.f, 1.f, 1.f));
+    fogFilter = new FogFilter(glm::vec3(0.8f, 0.8f, 0.8f));
     
     // Create editor entity geometry.
     float vertex;
