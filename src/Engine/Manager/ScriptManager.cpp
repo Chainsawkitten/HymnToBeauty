@@ -15,6 +15,7 @@
 #include "../Component/Listener.hpp"
 #include "../Component/Physics.hpp"
 #include "../Component/PointLight.hpp"
+#include "../Component/SoundSource.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
@@ -115,6 +116,8 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("SpotLight", "float intensity", asOFFSET(SpotLight, intensity));
     engine->RegisterObjectProperty("SpotLight", "float coneAngle", asOFFSET(SpotLight, coneAngle));
     
+    engine->RegisterObjectType("SoundSource", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    
     engine->SetDefaultNamespace("");
     
     // Register adding and getting components..
@@ -135,6 +138,9 @@ ScriptManager::ScriptManager() {
     
     engine->RegisterObjectMethod("Entity", "Component::SpotLight@ AddSpotLight()", asMETHODPR(Entity, AddComponent<SpotLight>, (), SpotLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::SpotLight@ GetSpotLight()", asMETHODPR(Entity, GetComponent<SpotLight>, (), SpotLight*), asCALL_THISCALL);
+    
+    engine->RegisterObjectMethod("Entity", "Component::SoundSource@ AddSoundSource()", asMETHODPR(Entity, AddComponent<SoundSource>, (), SoundSource*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::SoundSource@ GetSoundSource()", asMETHODPR(Entity, GetComponent<SoundSource>, (), SoundSource*), asCALL_THISCALL);
     
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
