@@ -1,6 +1,6 @@
 #include "Model.hpp"
+
 #include <glm/gtc/quaternion.hpp>
-#include "../Util/Log.hpp"
 #include "../Hymn.hpp"
 #include "../Util/FileSystem.hpp"
 
@@ -9,10 +9,11 @@ using namespace Geometry;
 Assimp::Importer Model::aImporter = Assimp::Importer();
 
 Model::Model() {
-
+    
 }
 
 Model::~Model() {
+    
 }
 
 Json::Value Model::Save() const {
