@@ -20,7 +20,7 @@ SoundBuffer::~SoundBuffer() {
     alDeleteBuffers(1, &buffer);
 }
 
-ALuint SoundBuffer::Buffer() const {
+ALuint SoundBuffer::GetBuffer() const {
     return buffer;
 }
 
