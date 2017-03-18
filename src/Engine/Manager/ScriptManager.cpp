@@ -120,6 +120,9 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("SoundSource", "float pitch", asOFFSET(SoundSource, pitch));
     engine->RegisterObjectProperty("SoundSource", "float gain", asOFFSET(SoundSource, gain));
     engine->RegisterObjectProperty("SoundSource", "bool loop", asOFFSET(SoundSource, loop));
+    engine->RegisterObjectMethod("SoundSource", "void Play()", asMETHOD(SoundSource, Play), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SoundSource", "void Pause()", asMETHOD(SoundSource, Pause), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SoundSource", "void Stop()", asMETHOD(SoundSource, Stop), asCALL_THISCALL);
     
     engine->SetDefaultNamespace("");
     
