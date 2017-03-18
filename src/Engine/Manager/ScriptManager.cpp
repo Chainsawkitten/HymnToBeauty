@@ -117,6 +117,9 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("SpotLight", "float coneAngle", asOFFSET(SpotLight, coneAngle));
     
     engine->RegisterObjectType("SoundSource", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("SoundSource", "float pitch", asOFFSET(SoundSource, pitch));
+    engine->RegisterObjectProperty("SoundSource", "float gain", asOFFSET(SoundSource, gain));
+    engine->RegisterObjectProperty("SoundSource", "bool loop", asOFFSET(SoundSource, loop));
     
     engine->SetDefaultNamespace("");
     
