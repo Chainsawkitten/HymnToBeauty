@@ -7,7 +7,7 @@
 using namespace Geometry;
 
 StaticModel::StaticModel() {
-
+    
 }
 
 StaticModel::StaticModel(const char* filename) {
@@ -15,6 +15,7 @@ StaticModel::StaticModel(const char* filename) {
 }
 
 StaticModel::~StaticModel() {
+    
 }
 
 void StaticModel::Load(const char* filename) {
@@ -34,22 +35,22 @@ void StaticModel::Load(const char* filename) {
         aiProcess_FindInvalidData | \
         aiProcess_ValidateDataStructure | \
         0);
-
+    
     Log() << aImporter.GetErrorString() << "\n";
-
+    
     assert(aScene != nullptr);
-
+    
     // Load meshes.
     LoadMeshes(aScene);
-
+    
     // Generate buffers.
     GenerateVertexBuffer(vertexBuffer);
     GenerateIndexBuffer(indices.data(), indices.size(), indexBuffer);
     GenerateVertexArray(vertexBuffer, indexBuffer, vertexArray);
-
+    
     // Generate AABB
     CreateAxisAlignedBoundingBox(verticesPos);
-
+    
     // Clear vectors.
     vertices.clear();
     vertices.shrink_to_fit();
@@ -74,31 +75,32 @@ void StaticModel::GenerateVertexArray(const GLuint vertexBuffer, const GLuint in
 void StaticModel::LoadMeshes(const aiScene* aScene) {
     std::vector<MeshEntry> entries;
     entries.resize(aScene->mNumMeshes);
-
+    
     std::size_t numVertices = 0;
     std::size_t numIndices = 0;
-
+    
     // Count the number of vertices and indices.
     for (unsigned int i = 0; i < aScene->mNumMeshes; ++i) {
         entries[i].numIndices = aScene->mMeshes[i]->mNumFaces * 3;
         entries[i].baseVertex = numVertices;
         entries[i].baseIndex = numIndices;
-
+        
         numVertices += aScene->mMeshes[i]->mNumVertices;
         numIndices += entries[i].numIndices;
     }
-
+    
     // Resize vectors to fit.
     vertices.resize(numVertices);
     verticesPos.resize(numVertices);
     indices.resize(numIndices);
-
+    
     numVertices = 0;
     numIndices = 0;
-
+    
     // Initialize the meshes in the scene one by one.
     for (unsigned int m = 0; m < aScene->mNumMeshes; ++m) {
         const aiMesh* aMesh = aScene->mMeshes[m];
+        
         // Load vertices.
         for (unsigned int i = 0; i < aMesh->mNumVertices; ++i) {
             VertexType::StaticVertex& vert = vertices[numVertices];
@@ -109,6 +111,7 @@ void StaticModel::LoadMeshes(const aiScene* aScene) {
             verticesPos[numVertices] = &vertices[numVertices].position;
             numVertices++;
         }
+        
         // Load indices.
         for (unsigned int i = 0; i < aMesh->mNumFaces; ++i) {
             const aiFace& aFace = aMesh->mFaces[i];
