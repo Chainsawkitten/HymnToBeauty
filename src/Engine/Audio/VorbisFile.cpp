@@ -25,18 +25,18 @@ VorbisFile::~VorbisFile() {
     free(data);
 }
 
-const char* VorbisFile::Data() const {
+const char* VorbisFile::GetData() const {
     return data;
 }
 
-ALsizei VorbisFile::Size() const {
+ALsizei VorbisFile::GetSize() const {
     return dataSize;
 }
 
-ALenum VorbisFile::Format() const {
+ALenum VorbisFile::GetFormat() const {
     return format;
 }
 
-ALsizei VorbisFile::SampleRate() const {
+ALsizei VorbisFile::GetSampleRate() const {
     return sampleRate;
 }

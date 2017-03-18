@@ -44,6 +44,6 @@ void SoundBuffer::Load(SoundFile* soundFile) {
     SoundManager::CheckError("Couldn't create buffers.");
     
     // Set the buffer data.
-    alBufferData(buffer, soundFile->Format(), soundFile->Data(), soundFile->Size(), soundFile->SampleRate());
+    alBufferData(buffer, soundFile->GetFormat(), soundFile->GetData(), soundFile->GetSize(), soundFile->GetSampleRate());
     SoundManager::CheckError("Couldn't set buffer data.");
 }
