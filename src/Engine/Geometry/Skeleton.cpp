@@ -1,4 +1,5 @@
 #include "Skeleton.hpp"
+
 #include "Animation.hpp"
 #include <assimp/scene.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,7 +8,7 @@
 using namespace Geometry;
 
 Skeleton::Skeleton() {
-
+    
 }
 
 Skeleton::Skeleton(const aiScene* aScene) {
@@ -15,23 +16,23 @@ Skeleton::Skeleton(const aiScene* aScene) {
 }
 
 Skeleton::~Skeleton() {
-
+    
 }
 
 void Skeleton::Load(const aiScene* aScene) {
     // Calculate global inverse transform.
     CpyMat(globalInverseTransform, aScene->mRootNode->mTransformation);
     globalInverseTransform = glm::inverse(globalInverseTransform);
-
+    
     // Load node tree.
     LoadNodeTree(aScene->mRootNode, &rootNode, nullptr);
-
+    
     // Count bones.
     std::size_t numBones = 0;
     for (unsigned int m = 0; m < aScene->mNumMeshes; ++m)
         numBones += aScene->mMeshes[m]->mNumBones;
     bones.resize(numBones);
-
+    
     // Load bones.
     std::size_t countBones = 0;
     for (unsigned int m = 0; m < aScene->mNumMeshes; ++m) {
@@ -61,7 +62,7 @@ void Skeleton::Animate(const Geometry::Animation* animation, const float timeInS
     float ticksPerSecond = (float)(animation->ticksPerSecond != 0 ? animation->ticksPerSecond : 25.0f);
     float timeInTicks = timeInSeconds * ticksPerSecond;
     animationTime = fmod(timeInTicks, static_cast<float>(animation->duration));
-
+    
     ReadNodeHeirarchy(animation, animationTime, &rootNode, glm::mat4());
 }
 
@@ -81,7 +82,7 @@ void Skeleton::LoadNodeTree(aiNode* aNode, Node* node, Node* parentNode) {
 
 void Skeleton::ReadNodeHeirarchy(const Geometry::Animation* animation, float animationTime, Node* node, const glm::mat4& parentTransform) {
     glm::mat4 nodeTransformation(node->transformation);
-
+    
     if (animation != nullptr) {
         const Animation::AnimChannel* channel = animation->FindChannel(node->name);
         if (channel != nullptr) {
@@ -106,16 +107,16 @@ void Skeleton::ReadNodeHeirarchy(const Geometry::Animation* animation, float ani
             nodeTransformation = scalingM * rotationM * glm::transpose(translationM);
         }
     }
-
+    
     glm::mat4 globalTransformation = nodeTransformation * parentTransform;
-
+    
     const auto& it = boneIndexMap.find(node->name);
     if (it != this->boneIndexMap.end()) {
         size_t boneIndex = it->second;
         finalTransforms[boneIndex] = glm::transpose(bones[boneIndex] * (globalTransformation * this->globalInverseTransform));
         finalTransformsIT[boneIndex] = glm::mat3(glm::transpose(glm::inverse(finalTransforms[boneIndex])));
     }
-
+    
     for (std::size_t i = 0; i < node->children.size(); ++i) {
         ReadNodeHeirarchy(animation, animationTime, &node->children[i], globalTransformation);
     }

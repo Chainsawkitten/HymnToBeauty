@@ -90,7 +90,7 @@ void SoundManager::Update(World& world) {
         alSourcef(sound->source, AL_GAIN, sound->gain);
         alSourcei(sound->source, AL_LOOPING, sound->loop);
         if (sound->soundBuffer != nullptr && !sound->soundBufferSet) {
-            alSourcei(sound->source, AL_BUFFER, sound->soundBuffer->Buffer());
+            alSourcei(sound->source, AL_BUFFER, sound->soundBuffer->GetBuffer());
             sound->soundBufferSet = true;
         }
         

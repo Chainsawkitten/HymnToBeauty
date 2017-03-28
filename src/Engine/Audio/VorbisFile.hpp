@@ -22,26 +22,26 @@ namespace Audio {
             /**
              * @return Raw audio data.
              */
-            const char* Data() const;
+            const char* GetData() const;
     
             /// Get data size.
             /**
              * @return The length of the raw audio data.
              */
-            ALsizei Size() const;
+            ALsizei GetSize() const;
     
             /// Get AL format.
             /**
              * 32-bit sound is not supported in OpenAL.
              * @return One of AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8 or AL_FORMAT_STEREO16.
              */
-            ALenum Format() const;
+            ALenum GetFormat() const;
     
             /// Get sample rate.
             /**
              * @return The sound file's sample rate (Hz).
              */
-            ALsizei SampleRate() const;
+            ALsizei GetSampleRate() const;
     
         private:
             char* data;
