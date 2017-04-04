@@ -12,20 +12,20 @@ namespace Geometry {
             
             /// Destructor.
             ~Cube() final;
-
+            
             /// Get geometry type.
             /**
              * @return Type.
              */
             Type GetType() const;
-
+        
         protected:
             /// Generate vertex buffer.
             void GenerateVertexBuffer(GLuint& vertexBuffer);
-
+            
             /// Generate vertex array.
             void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
-
+            
         private:
             std::vector<VertexType::StaticVertex> vertices;
             std::vector<unsigned int> indices;

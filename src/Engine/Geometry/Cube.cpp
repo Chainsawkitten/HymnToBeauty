@@ -241,6 +241,7 @@ Cube::Cube() {
 }
 
 Cube::~Cube() {
+    
 }
 
 Geometry3D::Type Cube::GetType() const {

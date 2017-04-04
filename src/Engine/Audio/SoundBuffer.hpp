@@ -26,7 +26,7 @@ namespace Audio {
             /**
              * @return The OpenAL buffer ID.
              */
-            ALuint Buffer() const;
+            ALuint GetBuffer() const;
             
             /// Save the sound.
             /**
