@@ -11,8 +11,10 @@ addons:
       - cmake
       - cmake-data
       - xorg-dev
+      - cppcheck
 
 script:
+- cppcheck --template "{file}({line}): {severity} ({id}): {message}" --enable=style --force --std=c++11 -I headers hc common headers unix win32 2> cppcheck.txt
 - cmake .
 - make -j4
 
