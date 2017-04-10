@@ -15,3 +15,18 @@ addons:
 script:
 - cmake .
 - make -j4
+
+before_deploy:
+- $GITDATE = $(git show -s --date=short --format='%ad') -replace "-",""
+- $GITREV = $(git show -s --format='%h')
+- $BUILD_NAME = "HymnToBeauty-Linux-$GITDATE-$GITREV.tar.gz" -replace " ",""
+- tar -czf $BUILD_NAME ./bin/Game ./bin/HymnToBeauty
+
+deploy:
+    provider: releases
+    api_key:
+        secure: oBNKk6DWzndcMT2kJrsDIt482Wdml8Lpnn1OnSbA6JVqtUOj6baWNrVJB9uCbceiQOhYHBfvD/vdBgHoH64OR5SCocJngVg5Qb1uv7wShIjcCHvb30zZvesOBboY0cVBgTXg/TITTNfZKCZxMwF8eq0txOLQc2e3BDpdfWIGlq/nbOHbGEaO4kcofRqfSKN7XAlpdE7X1WhCXSJYjyJlVnb14MRETGE3xT+U7dt0LrqdCR9s8zzF7zpNXj4Vgh9k6MaMdGFACccC93oWfMOWf26pG9DrUL1FHy3TMf6DtufsLg0Huo523zusmRvaJVNYHiVfd3+5voBMa8fY7DzNrZ0SmqlI62BZjNR5JXzNFjh7M4JdRiJOqgL6VaOWuV+DjSsMJ1LzSCyIeMWJkJ1wy5GBxrDlBBxFwB6ym8dYHJS+14N9vumCo2JBnjbd5RpO6/MWWjR9kigpVTKWn1xfMvEtA98wxOV4F3dmfAssWBR2AEZqYORSWE9wgWpDlf05iazUBWD65pND6G5ilyjvhhnqzmoZNq+b0laSG/peUEOkIJXZ43tB7ZZ4gqQ6xUiQmBFaNZBdBZHy+vwJbtsxI7Tgp2x+eor9WDBF73P02YBMHjzwwwewPv9dq2eEanjDhaQ74szAHsf19qv3TmOGT533miqlL8XhIY+VD8fe/dY=
+    file: $BUILD_NAME
+    skip_cleanup: true
+    on:
+        tags: true
