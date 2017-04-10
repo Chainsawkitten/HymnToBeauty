@@ -14,7 +14,9 @@ addons:
       - cppcheck
 
 script:
-- cppcheck --enable=style --force --std=c++11 -I src/Editor -I src/Game -I src/Engine 2> cppcheck.txt
+- cd src
+- cppcheck --enable=style --force --std=c++11 . 2> cppcheck.txt
+- cd ..
 - cmake .
 - make -j4
 
