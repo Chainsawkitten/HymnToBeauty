@@ -17,9 +17,9 @@ script:
 - make -j4
 
 before_deploy:
-- $GITDATE = $(git show -s --date=short --format='%ad') -replace "-",""
-- $GITREV = $(git show -s --format='%h')
-- $BUILD_NAME = "HymnToBeauty-Linux-$GITDATE-$GITREV.tar.gz" -replace " ",""
+- GITDATE="`git show -s --date=short --format='%ad' | sed 's/-//g'`"
+- GITREV="`git show -s --format='%h'`"
+- BUILD_NAME = "HymnToBeauty-Linux-${GITDATE}-${GITREV}.tar.gz"
 - tar -czf $BUILD_NAME ./bin/Game ./bin/HymnToBeauty
 
 deploy:
