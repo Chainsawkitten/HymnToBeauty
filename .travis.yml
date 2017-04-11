@@ -15,7 +15,7 @@ addons:
 
 script:
 - cd src
-- cppcheck --enable=style --force --std=c++11 . 2> cppcheck.txt
+- cppcheck --enable=style --force --std=c++11 .
 - cd ..
 - cmake .
 - make -j4
