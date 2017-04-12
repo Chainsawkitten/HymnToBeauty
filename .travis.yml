@@ -11,8 +11,12 @@ addons:
       - cmake
       - cmake-data
       - xorg-dev
+      - cppcheck
 
 script:
+- cd src
+- cppcheck --enable=all --force --std=c++11 .
+- cd ..
 - cmake .
 - make -j4
 
