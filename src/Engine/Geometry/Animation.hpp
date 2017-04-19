@@ -118,6 +118,9 @@ namespace Geometry {
             
             /// Duration of the animation in ticks.
             double duration;
+            
+            /// Don't pull this shit.
+            float bullshit;
 
             /// Animation ticks per second.
             double ticksPerSecond;
