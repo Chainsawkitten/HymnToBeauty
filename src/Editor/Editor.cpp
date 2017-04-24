@@ -149,7 +149,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         resourceList.SetVisible(true);
         
         // Default scene.
-        Hymn().scenes.push_back("Scene #1");
+        Hymn().scenes.push_back("Scene #0");
         
         Entity* player = Hymn().world.GetRoot()->AddChild("Player");
         player->position.z = 10.f;
