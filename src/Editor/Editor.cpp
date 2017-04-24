@@ -7,6 +7,8 @@
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/MainWindow.hpp>
+#include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Listener.hpp>
 
 #include <imgui.h>
 #include <GLFW/glfw3.h>
@@ -147,6 +149,10 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         
         // Default scene.
         Hymn().scenes.push_back("Scene #1");
+        Entity* player = Hymn().world.GetRoot()->AddChild("Player");
+        player->position.z = 10.f;
+        player->AddComponent<Component::Lens>();
+        player->AddComponent<Component::Listener>();
     }
     
     selectHymnWindow.SetVisible(false);
