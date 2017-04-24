@@ -72,7 +72,6 @@ int main() {
                 Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"));
                 
                 editor->Show();
-
             } else {
                 { PROFILE("Update");
                     Hymn().Update(deltaTime);

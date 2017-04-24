@@ -262,7 +262,7 @@ void ActiveHymn::Render(Entity* camera, bool soundSources, bool particleEmitters
     }
     
     { PROFILE("Render debug entities");
-        Managers().debugDrawingManager->Render(world);
+        Managers().debugDrawingManager->Render(world, camera);
     }
 }
 
