@@ -20,6 +20,10 @@ Editor::Editor() {
     Input()->AssignButton(InputHandler::NEW, InputHandler::KEYBOARD, GLFW_KEY_N);
     Input()->AssignButton(InputHandler::OPEN, InputHandler::KEYBOARD, GLFW_KEY_O);
     Input()->AssignButton(InputHandler::CAMERA, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_MIDDLE);
+    Input()->AssignButton(InputHandler::FORWARD, InputHandler::KEYBOARD, GLFW_KEY_W);
+    Input()->AssignButton(InputHandler::BACKWARD, InputHandler::KEYBOARD, GLFW_KEY_S);
+    Input()->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_A);
+    Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_D);
     
     // Create editor camera.
     cameraWorld = new World();
@@ -118,6 +122,12 @@ void Editor::Show() {
         
         lastX = Input()->CursorX();
         lastY = Input()->CursorY();
+        
+        glm::mat4 orientation = cameraEntity->GetOrientation();
+        glm::vec3 backward(orientation[0][2], orientation[1][2], orientation[2][2]);
+        glm::vec3 right(orientation[0][0], orientation[1][0], orientation[2][0]);
+        cameraEntity->position += backward * static_cast<float>(Input()->Pressed(InputHandler::BACKWARD) - Input()->Pressed(InputHandler::FORWARD));
+        cameraEntity->position += right * static_cast<float>(Input()->Pressed(InputHandler::RIGHT) - Input()->Pressed(InputHandler::LEFT));
     }
     
     if (Input()->Triggered(InputHandler::PLAYTEST))
