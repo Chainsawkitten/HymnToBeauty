@@ -47,25 +47,25 @@ class InputHandler {
         /**
          * @return X-position of the cursor
          */
-        double CursorX() const;
+        double GetCursorX() const;
         
         /// Get cursor's vertical position.
         /**
          * @return Y-position of the cursor
          */
-        double CursorY() const;
+        double GetCursorY() const;
         
         /// Get whether user has moved scroll wheel up.
         /**
          * @return Whether user has scrolled up
          */
-        bool ScrollUp() const;
+        bool GetScrollUp() const;
         
         /// Get whether user has moved scroll wheel down.
         /**
          * @return Whether user has scrolled down
          */
-        bool ScrollDown() const;
+        bool GetScrollDown() const;
         
         /// Assign a button binding.
         /**
@@ -104,7 +104,7 @@ class InputHandler {
         /**
          * @return Text input since last frame.
          */
-        const std::string& Text() const;
+        const std::string& GetText() const;
         
         /// GLFW character callback.
         /**

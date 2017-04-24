@@ -72,19 +72,19 @@ void InputHandler::Update() {
     tempText = "";
 }
 
-double InputHandler::CursorX() const {
+double InputHandler::GetCursorX() const {
     return cursorX;
 }
 
-double InputHandler::CursorY() const {
+double InputHandler::GetCursorY() const {
     return cursorY;
 }
 
-bool InputHandler::ScrollUp() const {
+bool InputHandler::GetScrollUp() const {
     return lastScroll > 0.0;
 }
 
-bool InputHandler::ScrollDown() const {
+bool InputHandler::GetScrollDown() const {
     return lastScroll < 0.0;
 }
 
@@ -109,7 +109,7 @@ bool InputHandler::Released(Button button) {
     return buttonData[button].released;
 }
 
-const std::string& InputHandler::Text() const {
+const std::string& InputHandler::GetText() const {
     return text;
 }
 
