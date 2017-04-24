@@ -101,7 +101,7 @@ void DeferredLighting::ResetTarget() {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
-void DeferredLighting::Render(World& world, Entity* camera) {
+void DeferredLighting::Render(World& world, const Entity* camera) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
