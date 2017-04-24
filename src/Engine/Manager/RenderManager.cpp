@@ -14,6 +14,7 @@
 #include "Light.png.hpp"
 #include "ParticleEmitter.png.hpp"
 #include "SoundSource.png.hpp"
+#include "Camera.png.hpp"
 #include "../Shader/ShaderProgram.hpp"
 #include "../RenderProgram/SkinRenderProgram.hpp"
 #include "../RenderProgram/StaticRenderProgram.hpp"
@@ -60,6 +61,7 @@ RenderManager::RenderManager() {
     particleEmitterTexture = Managers().resourceManager->CreateTexture2D(PARTICLEEMITTER_PNG, PARTICLEEMITTER_PNG_LENGTH);
     lightTexture = Managers().resourceManager->CreateTexture2D(LIGHT_PNG, LIGHT_PNG_LENGTH);
     soundSourceTexture = Managers().resourceManager->CreateTexture2D(SOUNDSOURCE_PNG, SOUNDSOURCE_PNG_LENGTH);
+    cameraTexture = Managers().resourceManager->CreateTexture2D(CAMERA_PNG, CAMERA_PNG_LENGTH);
     
     deferredLighting = new DeferredLighting();
     
@@ -106,6 +108,7 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeTexture2D(particleEmitterTexture);
     Managers().resourceManager->FreeTexture2D(lightTexture);
     Managers().resourceManager->FreeTexture2D(soundSourceTexture);
+    Managers().resourceManager->FreeTexture2D(cameraTexture);
     
     delete deferredLighting;
     
@@ -184,7 +187,7 @@ void RenderManager::Render(World& world, Entity* camera) {
     }
 }
 
-void RenderManager::RenderEditorEntities(World& world, Entity* camera, bool soundSources, bool particleEmitters, bool lightSources) {
+void RenderManager::RenderEditorEntities(World& world, Entity* camera, bool soundSources, bool particleEmitters, bool lightSources, bool cameras) {
     // Find camera entity.
     if (camera == nullptr) {
         std::vector<Lens*> lenses = world.GetComponents<Lens>();
@@ -243,6 +246,14 @@ void RenderManager::RenderEditorEntities(World& world, Entity* camera, bool soun
             
             for (SpotLight* light : world.GetComponents<SpotLight>())
                 RenderEditorEntity(light);
+        }
+        
+        // Render cameras.
+        if (cameras) {
+            glBindTexture(GL_TEXTURE_2D, cameraTexture->GetTextureID());
+            
+            for (Lens* lens : world.GetComponents<Lens>())
+                RenderEditorEntity(lens);
         }
         
         glDepthMask(GL_TRUE);

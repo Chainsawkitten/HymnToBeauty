@@ -39,8 +39,9 @@ class RenderManager {
          * @param soundSources Whether to show sound sources.
          * @param particleEmitters Whether to show particle emitters.
          * @param lightSources Whether to show light sources.
+         * @param cameras Whether to show cameras.
          */
-        void RenderEditorEntities(World& world, Entity* camera = nullptr, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
+        void RenderEditorEntities(World& world, Entity* camera = nullptr, bool soundSources = true, bool particleEmitters = true, bool lightSources = true, bool cameras = true);
         
         /// Updates the buffers to fit the current screen size.
         void UpdateBufferSize();
@@ -79,6 +80,7 @@ class RenderManager {
         Texture2D* particleEmitterTexture;
         Texture2D* lightTexture;
         Texture2D* soundSourceTexture;
+        Texture2D* cameraTexture;
         
         // Geometry.
         GLuint vertexBuffer;
