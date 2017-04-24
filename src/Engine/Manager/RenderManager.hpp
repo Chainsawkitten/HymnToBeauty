@@ -28,14 +28,14 @@ class RenderManager {
         /// Render world containing entities.
         /**
          * @param world Contains a bunch of entities.
-         * @param camera Camera through which to render (or first camera in the scene if nullptr).
+         * @param camera Camera through which to render (or first camera in the world if nullptr).
          */
         void Render(World& world, Entity* camera = nullptr);
         
         /// Render editor entities.
         /**
          * @param world World to render.
-         * @param camera Camera through which to render (or first camera in the scene if nullptr).
+         * @param camera Camera through which to render (or first camera in the world if nullptr).
          * @param soundSources Whether to show sound sources.
          * @param particleEmitters Whether to show particle emitters.
          * @param lightSources Whether to show light sources.
