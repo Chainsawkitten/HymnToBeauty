@@ -36,7 +36,7 @@ Editor::~Editor() {
     delete cameraWorld;
 }
 
-void Editor::Show() {
+void Editor::Show(float deltaTime) {
     bool play = false;
     
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
@@ -126,8 +126,9 @@ void Editor::Show() {
         glm::mat4 orientation = cameraEntity->GetOrientation();
         glm::vec3 backward(orientation[0][2], orientation[1][2], orientation[2][2]);
         glm::vec3 right(orientation[0][0], orientation[1][0], orientation[2][0]);
-        cameraEntity->position += backward * static_cast<float>(Input()->Pressed(InputHandler::BACKWARD) - Input()->Pressed(InputHandler::FORWARD));
-        cameraEntity->position += right * static_cast<float>(Input()->Pressed(InputHandler::RIGHT) - Input()->Pressed(InputHandler::LEFT));
+        float speed = 3.0f * deltaTime;
+        cameraEntity->position += speed * backward * static_cast<float>(Input()->Pressed(InputHandler::BACKWARD) - Input()->Pressed(InputHandler::FORWARD));
+        cameraEntity->position += speed * right * static_cast<float>(Input()->Pressed(InputHandler::RIGHT) - Input()->Pressed(InputHandler::LEFT));
     }
     
     if (Input()->Triggered(InputHandler::PLAYTEST))

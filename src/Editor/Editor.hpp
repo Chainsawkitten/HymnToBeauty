@@ -15,7 +15,10 @@ class Editor {
         ~Editor();
         
         /// Show the editor.
-        void Show();
+        /**
+         * @param deltaTime Time since last frame (in seconds).
+         */
+        void Show(float deltaTime);
         
         /// Save the hymn being edited.
         void Save() const;
