@@ -40,8 +40,10 @@ void ResourceList::Show() {
                     Hymn().scenes.erase(Hymn().scenes.begin() + i);
                     ImGui::EndPopup();
                     
-                    if (Hymn().activeScene > i) {
-                        Hymn().activeScene = Hymn().activeScene - 1;
+                    if (Hymn().activeScene >= i) {
+                        if (Hymn().activeScene > 0)
+                            Hymn().activeScene = Hymn().activeScene - 1;
+                        
                         sceneEditor.SetScene(Hymn().activeScene);
                     }
                     break;
