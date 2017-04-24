@@ -129,6 +129,10 @@ void Editor::SetVisible(bool visible) {
     this->visible = visible;
 }
 
+Entity* Editor::GetCamera() const {
+    return cameraEntity;
+}
+
 void Editor::Play() {
     Save();
     SetVisible(false);

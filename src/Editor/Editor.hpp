@@ -32,6 +32,12 @@ class Editor {
          */
         void SetVisible(bool visible);
         
+        /// Get the editor camera.
+        /**
+         * @return Camera through which to render.
+         */
+        Entity* GetCamera() const;
+        
     private:
         void Play();
         void NewHymn();
