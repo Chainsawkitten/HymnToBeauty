@@ -24,6 +24,7 @@ Editor::Editor() {
     cameraWorld = new World();
     cameraEntity = cameraWorld->CreateEntity("Editor Camera");
     cameraEntity->AddComponent<Component::Lens>();
+    cameraEntity->position.z = 10.0f;
 }
 
 Editor::~Editor() {
