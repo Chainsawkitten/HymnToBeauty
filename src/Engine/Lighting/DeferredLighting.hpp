@@ -49,7 +49,7 @@ class DeferredLighting {
         
     private:
         static void AttachTexture(GLuint texture, unsigned int width, unsigned int height, GLenum attachment, GLint internalFormat);
-        void BindForReading();
+        void BindForReading() const;
         
         GLuint textures[NUM_TEXTURES];
         
