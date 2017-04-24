@@ -68,14 +68,12 @@ void ActiveHymn::Clear() {
     }
     sounds.clear();
     soundNumber = 0U;
-
+    
     for (ScriptFile* script : scripts) {
         delete script;
     }
     scripts.clear();
     scriptNumber = 0U;
-
-
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -108,21 +106,21 @@ void ActiveHymn::Save() const {
         modelsNode.append(model->Save());
     }
     root["models"] = modelsNode;
-
+    
     // Save scripts.
     Json::Value scriptNode;
     for (ScriptFile* script : scripts) {
         scriptNode.append(script->Save());
     }
     root["scripts"] = scriptNode;
-
+    
     // Save sounds.
     Json::Value soundsNode;
     for (Audio::SoundBuffer* sound : sounds) {
         soundsNode.append(sound->Save());
     }
     root["sounds"] = soundsNode;
-
+    
     // Save scenes.
     Json::Value scenesNode;
     for (const string& scene : scenes) {
@@ -130,16 +128,15 @@ void ActiveHymn::Save() const {
     }
     root["scenes"] = scenesNode;
     root["activeScene"] = activeScene;
-
+    
     Json::Value inputNode;
     inputNode.append(Input::GetInstance().Save());
     root["input"] = inputNode;
-
+    
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
     file << root;
     file.close();
-
 }
 
 void ActiveHymn::Load(const string& path) {
@@ -195,18 +192,17 @@ void ActiveHymn::Load(const string& path) {
     for (unsigned int i=0; i < scenesNode.size(); ++i) {
         scenes.push_back(scenesNode[i].asString());
     }
-
+    
     activeScene = root["activeScene"].asUInt();
     Hymn().world.Load(Hymn().GetPath() + FileSystem::DELIMITER + "Scenes" + FileSystem::DELIMITER + scenes[activeScene] + ".json");
-
+    
     const Json::Value inputNode = root["input"];
     Input::GetInstance().Load(inputNode[0]);
-
+    
     textureNumber = textures.size();
     modelNumber = models.size();
     soundNumber = sounds.size();
     scriptNumber = scripts.size();
-
 }
 
 void ActiveHymn::Update(float deltaTime) {
@@ -217,7 +213,7 @@ void ActiveHymn::Update(float deltaTime) {
     { PROFILE("Update physics");
         Managers().physicsManager->Update(world, deltaTime);
     }
-
+    
     { PROFILE("Update animations");
         for (Entity* entity : world.GetEntities()) {
             Component::Animation* anim = entity->GetComponent<Component::Animation>();

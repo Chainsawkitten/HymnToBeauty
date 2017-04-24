@@ -143,6 +143,9 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         Hymn().Clear();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
+        
+        // Default scene.
+        Hymn().scenes.push_back("Scene #1");
     }
     
     selectHymnWindow.SetVisible(false);
