@@ -11,6 +11,9 @@ class Editor {
         /// Create new editor.
         Editor();
         
+        /// Destructor.
+        ~Editor();
+        
         /// Show the editor.
         void Show();
         
@@ -40,4 +43,7 @@ class Editor {
         GUI::SelectHymnWindow selectHymnWindow;
         GUI::InputWindow inputWindow;
         GUI::ResourceList resourceList;
+        
+        World* cameraWorld;
+        Entity* cameraEntity;
 };

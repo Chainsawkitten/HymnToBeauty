@@ -7,6 +7,7 @@
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/MainWindow.hpp>
+#include <Engine/Component/Lens.hpp>
 
 #include <imgui.h>
 #include <GLFW/glfw3.h>
@@ -18,6 +19,15 @@ Editor::Editor() {
     Input()->AssignButton(InputHandler::CONTROL, InputHandler::KEYBOARD, GLFW_KEY_LEFT_CONTROL);
     Input()->AssignButton(InputHandler::NEW, InputHandler::KEYBOARD, GLFW_KEY_N);
     Input()->AssignButton(InputHandler::OPEN, InputHandler::KEYBOARD, GLFW_KEY_O);
+    
+    // Create editor camera.
+    cameraWorld = new World();
+    cameraEntity = cameraWorld->CreateEntity("Editor Camera");
+    cameraEntity->AddComponent<Component::Lens>();
+}
+
+Editor::~Editor() {
+    delete cameraWorld;
 }
 
 void Editor::Show() {
