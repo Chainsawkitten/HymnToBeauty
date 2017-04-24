@@ -69,7 +69,7 @@ class Entity {
         /**
          * @return The requested component (or nullptr).
          */
-        template<typename T> T* GetComponent();
+        template<typename T> T* GetComponent() const;
         
         /// Kill component of type T.
         template <typename T> void KillComponent();
@@ -172,12 +172,12 @@ template<typename T> T* Entity::AddComponent() {
     return component;
 }
 
-template<typename T> T* Entity::GetComponent() {
-    if (components.count(&typeid(T*)) != 0) {
-        return static_cast<T*>(components[&typeid(T*)]);
-    } else {
+template<typename T> T* Entity::GetComponent() const {
+    auto it = components.find(&typeid(T*));
+    if (it != components.end())
+        return static_cast<T*>(it->second);
+    else
         return nullptr;
-    }
 }
 
 template <typename T> void Entity::KillComponent() {
