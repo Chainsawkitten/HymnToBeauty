@@ -141,6 +141,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
     if (!hymn.empty()) {
         resourceList.ResetScene();
         Hymn().Clear();
+        Hymn().world.CreateRoot();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
         
