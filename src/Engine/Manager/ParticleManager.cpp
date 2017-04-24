@@ -104,7 +104,7 @@ void ParticleManager::UpdateBuffer(World& world) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ParticleManager::Render(World& world, Entity* camera) {
+void ParticleManager::Render(World& world, const Entity* camera) {
     if (world.GetParticleCount() > 0) {
         // Don't write to depth buffer.
         GLboolean depthWriting;
