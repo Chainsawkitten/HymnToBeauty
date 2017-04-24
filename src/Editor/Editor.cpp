@@ -69,6 +69,10 @@ void Editor::Show(float deltaTime) {
             ImGui::MenuItem("Light Sources", "", &lightSources);
             EditorSettings::GetInstance().SetBool("Light Source Icons", lightSources);
             
+            static bool cameras = EditorSettings::GetInstance().GetBool("Camera Icons");
+            ImGui::MenuItem("Cameras", "", &cameras);
+            EditorSettings::GetInstance().SetBool("Camera Icons", cameras);
+            
             ImGui::EndMenu();
         }
         

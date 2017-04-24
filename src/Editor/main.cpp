@@ -30,11 +30,11 @@ int main() {
     MainWindow* window = new MainWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), false, false, "Hymn to Beauty", EditorSettings::GetInstance().GetBool("Debug Context"));
     glewInit();
     window->Init(false);
-
+    
     Input::GetInstance().SetWindow(window->GetGLFWWindow());
-
+    
     Managers().StartUp();
-
+    
     Editor* editor = new Editor();
     
     // Setup imgui implementation.
@@ -44,7 +44,7 @@ int main() {
     Managers().debugDrawingManager->AddPoint(glm::vec3(3.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 1.f), 10.f, 20.f, false);
     
     bool profiling = false;
-
+    
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
