@@ -119,14 +119,15 @@ RenderManager::~RenderManager() {
     glDeleteVertexArrays(1, &vertexArray);
 }
 
-void RenderManager::Render(World& world) {
+void RenderManager::Render(World& world, Entity* camera) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Find camera entity.
-    Entity* camera = nullptr;
-    std::vector<Lens*> lenses = world.GetComponents<Lens>();
-    for (Lens* lens : lenses) {
-        camera = lens->entity;
+    if (camera == nullptr) {
+        std::vector<Lens*> lenses = world.GetComponents<Lens>();
+        for (Lens* lens : lenses) {
+            camera = lens->entity;
+        }
     }
     
     // Render from camera.
@@ -183,12 +184,13 @@ void RenderManager::Render(World& world) {
     }
 }
 
-void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool particleEmitters, bool lightSources) {
+void RenderManager::RenderEditorEntities(World& world, Entity* camera, bool soundSources, bool particleEmitters, bool lightSources) {
     // Find camera entity.
-    Entity* camera = nullptr;
-    std::vector<Lens*> lenses = world.GetComponents<Lens>();
-    for (Lens* lens : lenses) {
-        camera = lens->entity;
+    if (camera == nullptr) {
+        std::vector<Lens*> lenses = world.GetComponents<Lens>();
+        for (Lens* lens : lenses) {
+            camera = lens->entity;
+        }
     }
     
     // Render from camera.

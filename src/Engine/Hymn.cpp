@@ -257,7 +257,7 @@ void ActiveHymn::Render(bool soundSources, bool particleEmitters, bool lightSour
     
     if (soundSources || particleEmitters || lightSources) {
         { PROFILE("Render editor entities");
-            Managers().renderManager->RenderEditorEntities(world, soundSources, particleEmitters, lightSources);
+            Managers().renderManager->RenderEditorEntities(world, nullptr, soundSources, particleEmitters, lightSources);
         }
     }
     

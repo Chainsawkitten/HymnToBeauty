@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 class World;
+class Entity;
 class Shader;
 class ShaderProgram;
 class StaticRenderProgram;
@@ -27,17 +28,19 @@ class RenderManager {
         /// Render world containing entities.
         /**
          * @param world Contains a bunch of entities.
+         * @param camera Camera through which to render (or first camera in the scene if nullptr).
          */
-        void Render(World& world);
+        void Render(World& world, Entity* camera = nullptr);
         
         /// Render editor entities.
         /**
          * @param world World to render.
+         * @param camera Camera through which to render (or first camera in the scene if nullptr).
          * @param soundSources Whether to show sound sources.
          * @param particleEmitters Whether to show particle emitters.
          * @param lightSources Whether to show light sources.
          */
-        void RenderEditorEntities(World& world, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
+        void RenderEditorEntities(World& world, Entity* camera = nullptr, bool soundSources = true, bool particleEmitters = true, bool lightSources = true);
         
         /// Updates the buffers to fit the current screen size.
         void UpdateBufferSize();
