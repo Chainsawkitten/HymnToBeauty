@@ -15,6 +15,7 @@ class InputHandler {
             CONTROL, ///< Control key.
             NEW, ///< Create new hymn.
             OPEN, ///< Open existing hymn.
+            CAMERA, ///< Move camera.
             BUTTONS, ///< Total number of inputs
         };
         

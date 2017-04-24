@@ -52,4 +52,7 @@ class Editor {
         
         World* cameraWorld;
         Entity* cameraEntity;
+        
+        double lastX;
+        double lastY;
 };

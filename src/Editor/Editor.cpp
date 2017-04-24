@@ -19,6 +19,7 @@ Editor::Editor() {
     Input()->AssignButton(InputHandler::CONTROL, InputHandler::KEYBOARD, GLFW_KEY_LEFT_CONTROL);
     Input()->AssignButton(InputHandler::NEW, InputHandler::KEYBOARD, GLFW_KEY_N);
     Input()->AssignButton(InputHandler::OPEN, InputHandler::KEYBOARD, GLFW_KEY_O);
+    Input()->AssignButton(InputHandler::CAMERA, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_MIDDLE);
     
     // Create editor camera.
     cameraWorld = new World();
@@ -102,6 +103,21 @@ void Editor::Show() {
         ImGui::SetNextWindowSize(ImVec2(size.x - 250, 250));
         
         resourceList.Show();
+    }
+    
+    // Control the editor camera.
+    if (Input()->Pressed(InputHandler::CAMERA)) {
+        if (Input()->Triggered(InputHandler::CAMERA)) {
+            lastX = Input()->CursorX();
+            lastY = Input()->CursorY();
+        }
+        
+        float sensitivity = 0.3f;
+        cameraEntity->rotation.x += sensitivity * (Input()->CursorX() - lastX);
+        cameraEntity->rotation.y += sensitivity * (Input()->CursorY() - lastY);
+        
+        lastX = Input()->CursorX();
+        lastY = Input()->CursorY();
     }
     
     if (Input()->Triggered(InputHandler::PLAYTEST))
