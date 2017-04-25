@@ -70,13 +70,14 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 }
 
-void DebugDrawingManager::Render(World& world) {
+void DebugDrawingManager::Render(World& world, Entity* camera) {
     // Find camera entity.
-    Entity* camera = nullptr;
-    std::vector<Component::Lens*> lenses = world.GetComponents<Component::Lens>();
-    for (Component::Lens* lens : lenses) {
-        camera = lens->entity;
-    };
+    if (camera == nullptr) {
+        std::vector<Component::Lens*> lenses = world.GetComponents<Component::Lens>();
+        for (Component::Lens* lens : lenses) {
+            camera = lens->entity;
+        }
+    }
     
     if (camera != nullptr) {
         glm::mat4 viewMat(camera->GetCameraOrientation() * glm::translate(glm::mat4(), -camera->position));

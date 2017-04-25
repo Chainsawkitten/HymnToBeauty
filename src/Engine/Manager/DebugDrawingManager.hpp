@@ -7,6 +7,7 @@
 class Shader;
 class ShaderProgram;
 class World;
+class Entity;
 
 /// Debug drawing facilities.
 class DebugDrawingManager {
@@ -32,8 +33,9 @@ class DebugDrawingManager {
         /// Render the debug primitives.
         /**
          * @param world Contains a camera through which to render.
+         * @param camera Camera through which to render (or first camera in world if nullptr).
          */
-        void Render(World& world);
+        void Render(World& world, Entity* camera);
         
     private:
         DebugDrawingManager();

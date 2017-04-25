@@ -166,6 +166,7 @@ set(EMBEDDED_INPUT
     shaders/PostGlow.frag
     shaders/PostGlowBlur.frag
     assets/ABeeZee.ttf
+    assets/Camera.png
     assets/DefaultDiffuse.png
     assets/DefaultNormal.png
     assets/DefaultSpecular.png
