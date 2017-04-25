@@ -116,16 +116,23 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 }
 
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
+    ImGui::LabelText("","Positional");
+    ImGui::Indent();
     ImGui::InputFloat3("Velocity", &physics->velocity[0]);
     ImGui::InputFloat("Max velocity", &physics->maxVelocity);
+    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
+    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
+    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
+    ImGui::Unindent();
+    ImGui::LabelText("","Angular");
+    ImGui::Indent();
     ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
     ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
-    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
     ImGui::InputFloat3("Angular acceleration", &physics->angularAcceleration[0]);
-    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
     ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
-    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
     ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+    ImGui::Unindent();
+
 }
 
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
