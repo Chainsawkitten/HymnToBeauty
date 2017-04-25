@@ -270,7 +270,7 @@ void EntityEditor::ListenerEditor(Component::Listener* listener) {
 }
 
 void EntityEditor::ScriptEditor(Component::Script* script) {
-
+    ImGui::Indent();
     if(script->scriptFile != nullptr)
         ImGui::Text(script->scriptFile->name.c_str());
     else
@@ -290,7 +290,7 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
         ImGui::EndPopup();
     }
-
+    ImGui::Unindent();
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
