@@ -39,6 +39,13 @@ void ResourceList::Show() {
                 if (ImGui::Selectable("Delete")) {
                     Hymn().scenes.erase(Hymn().scenes.begin() + i);
                     ImGui::EndPopup();
+                    
+                    if (Hymn().activeScene >= i) {
+                        if (Hymn().activeScene > 0)
+                            Hymn().activeScene = Hymn().activeScene - 1;
+                        
+                        sceneEditor.SetScene(Hymn().activeScene);
+                    }
                     break;
                 }
                 ImGui::EndPopup();

@@ -34,6 +34,9 @@ class World {
          */
         const std::vector<Entity*>& GetEntities() const;
         
+        /// Create root entity.
+        void CreateRoot();
+        
         /// Get the root entity.
         /**
          * @return The root entity.
