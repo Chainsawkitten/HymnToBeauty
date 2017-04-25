@@ -153,9 +153,11 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
 }
 
 void EntityEditor::LensEditor(Component::Lens* lens) {
+    ImGui::Indent();
     ImGui::InputFloat("Field of view", &lens->fieldOfView);
     ImGui::InputFloat("Z near", &lens->zNear);
     ImGui::InputFloat("Z far", &lens->zFar);
+    ImGui::Unindent();
 }
 
 void EntityEditor::MaterialEditor(Component::Material* material) {
