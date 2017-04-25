@@ -76,14 +76,15 @@ void ProfilingManager::ShowFrametimes() {
 }
 
 void ProfilingManager::ShowResult(Result& result) {
-    std::string resultString = result.name + " " + std::to_string(result.duration * 1000.0) + " ms###" + result.name;
-    
     ImGui::AlignFirstTextHeightToWidgets();
-    bool expanded = ImGui::TreeNode(resultString.c_str());
+    bool expanded = ImGui::TreeNode(result.name.c_str());
     
     ImGui::NextColumn();
-    if (result.parent != nullptr)
+    if (result.parent != nullptr) {
         ImGui::ProgressBar(result.duration / result.parent->duration, ImVec2(0.0f,0.0f));
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+    }
+    ImGui::Text((std::to_string(result.duration * 1000.0) + " ms").c_str());
     ImGui::NextColumn();
     
     if (expanded) {
