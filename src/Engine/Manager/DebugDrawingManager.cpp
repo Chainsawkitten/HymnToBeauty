@@ -57,6 +57,17 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     points.push_back(point);
 }
 
+void DebugDrawingManager::AddLine(const glm::vec3& startPosition, const glm::vec3& endPosition, const glm::vec3& color, float width, float duration, bool depthTesting) {
+    Line line;
+    line.startPosition = startPosition;
+    line.endPosition = endPosition;
+    line.color = color;
+    line.width = width;
+    line.duration = duration;
+    line.depthTesting = depthTesting;
+    lines.push_back(line);
+}
+
 void DebugDrawingManager::Update(float deltaTime) {
     // Points.
     for (std::size_t i=0; i<points.size(); ++i) {
@@ -66,6 +77,17 @@ void DebugDrawingManager::Update(float deltaTime) {
             --i;
         } else {
             points[i].duration -= deltaTime;
+        }
+    }
+    
+    // Lines.
+    for (std::size_t i=0; i < lines.size(); ++i) {
+        if (lines[i].duration < 0.f) {
+            lines[i] = lines[lines.size() - 1];
+            lines.pop_back();
+            --i;
+        } else {
+            lines[i].duration -= deltaTime;
         }
     }
 }
