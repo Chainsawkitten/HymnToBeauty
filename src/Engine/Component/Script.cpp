@@ -29,8 +29,8 @@ Json::Value Script::Save() const {
 
 void Script::Load(const Json::Value& node) {
     std::string name = node.get("scriptName", "").asString();
-    for (ScriptFile* scriptFile : Hymn().scripts) {
-        if (scriptFile->name == name)
-            this->scriptFile = scriptFile;
+    for (ScriptFile* currentScript : Hymn().scripts) {
+        if (currentScript->name == name)
+            this->scriptFile = currentScript;
     }
 }
