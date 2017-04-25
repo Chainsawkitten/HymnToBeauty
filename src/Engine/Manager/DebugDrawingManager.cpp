@@ -168,7 +168,7 @@ void DebugDrawingManager::Render(World& world) {
         // Axis-aligned bounding boxes.
         glBindVertexArray(aabbVertexArray);
         for (const AABB& aabb : aabbs) {
-            glm::mat4 model(glm::translate(glm::mat4(), aabb.minCoordinates));
+            glm::mat4 model(glm::translate(glm::mat4(), aabb.minCoordinates) * glm::scale(glm::mat4(), aabb.maxCoordinates - aabb.minCoordinates));
             
             glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &model[0][0]);
             aabb.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
