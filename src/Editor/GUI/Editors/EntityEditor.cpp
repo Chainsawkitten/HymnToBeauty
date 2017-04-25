@@ -51,7 +51,7 @@ void EntityEditor::Show() {
     if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
-        ImGui::LabelText("","Transform");
+        ImGui::Text("Transform");
         ImGui::Indent();
         ImGui::InputFloat3("Position", &entity->position[0]);
         ImGui::InputFloat3("Rotation", &entity->rotation[0]);
@@ -116,7 +116,7 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 }
 
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
-    ImGui::LabelText("","Positional");
+    ImGui::Text("Positional");
     ImGui::Indent();
     ImGui::InputFloat3("Velocity", &physics->velocity[0]);
     ImGui::InputFloat("Max velocity", &physics->maxVelocity);
@@ -124,7 +124,7 @@ void EntityEditor::PhysicsEditor(Component::Physics* physics) {
     ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
     ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
     ImGui::Unindent();
-    ImGui::LabelText("","Angular");
+    ImGui::Text("Angular");
     ImGui::Indent();
     ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
     ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
@@ -160,6 +160,8 @@ void EntityEditor::LensEditor(Component::Lens* lens) {
 
 void EntityEditor::MaterialEditor(Component::Material* material) {
     // Diffuse
+    //ImGui::LabelText();
+    ImGui::Indent();
     if (ImGui::Button("Select diffuse texture"))
         ImGui::OpenPopup("Select diffuse texture");
     
