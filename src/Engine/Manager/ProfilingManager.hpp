@@ -22,7 +22,7 @@ class ProfilingManager {
         void operator=(ProfilingManager const&) = delete;
         
         struct Result {
-            std::string name;
+            std::string name = "";
             double duration = 0.0;
             std::list<Result> children;
             Result* parent;
