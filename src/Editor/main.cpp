@@ -41,7 +41,7 @@ int main() {
     ImGuiImplementation::Init(window->GetGLFWWindow());
     
     // Test debug drawing facilites.
-    Managers().debugDrawingManager->AddPoint(glm::vec3(3.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 1.f), 10.f, 20.f, false);
+    Managers().debugDrawingManager->AddAxisAlignedBoundingBox(glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 1.f), 1.f, 10.f, false);
     
     bool profiling = false;
 

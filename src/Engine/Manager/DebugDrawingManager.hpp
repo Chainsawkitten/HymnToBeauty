@@ -23,6 +23,17 @@ class DebugDrawingManager {
          */
         void AddPoint(const glm::vec3& position, const glm::vec3& color, float size, float duration = 0.f, bool depthTesting = true);
         
+        /// Add an axis-aligned bounding box to the world.
+        /**
+         * @param minCoordinates The minimum coordinates of the box.
+         * @param maxCoordinates The maximum coordinates of the box.
+         * @param color Color of the lines.
+         * @param lineWidth The width of the lines used to draw the box.
+         * @param duration How long the box should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddAxisAlignedBoundingBox(const glm::vec3& minCoordinates, const glm::vec3& maxCoordinates, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        
         /// Update the debug geometry.
         /**
          * @param deltaTime Time since last frame (in seconds).
@@ -57,4 +68,15 @@ class DebugDrawingManager {
         
         GLuint pointVertexBuffer;
         GLuint pointVertexArray;
+        
+        // Axis-aligned bounding boxes.
+        struct AABB {
+            glm::vec3 minCoordinates;
+            glm::vec3 maxCoordinates;
+            glm::vec3 color;
+            float lineWidth;
+            float duration;
+            bool depthTesting;
+        };
+        std::vector<AABB> aabbs;
 };

@@ -57,15 +57,37 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     points.push_back(point);
 }
 
+void DebugDrawingManager::AddAxisAlignedBoundingBox(const glm::vec3& minCoordinates, const glm::vec3& maxCoordinates, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
+    AABB aabb;
+    aabb.minCoordinates = minCoordinates;
+    aabb.maxCoordinates = maxCoordinates;
+    aabb.color = color;
+    aabb.lineWidth = lineWidth;
+    aabb.duration = duration;
+    aabb.depthTesting = depthTesting;
+    aabbs.push_back(aabb);
+}
+
 void DebugDrawingManager::Update(float deltaTime) {
     // Points.
-    for (std::size_t i=0; i<points.size(); ++i) {
+    for (std::size_t i=0; i < points.size(); ++i) {
         if (points[i].duration < 0.f) {
             points[i] = points[points.size() - 1];
             points.pop_back();
             --i;
         } else {
             points[i].duration -= deltaTime;
+        }
+    }
+    
+    // Axis-aligned bounding boxes.
+    for (std::size_t i=0; i < aabbs.size(); ++i) {
+        if (aabbs[i].duration < 0.f) {
+            aabbs[i] = aabbs[aabbs.size() - 1];
+            aabbs.pop_back();
+            --i;
+        } else {
+            aabbs[i].duration -= deltaTime;
         }
     }
 }
