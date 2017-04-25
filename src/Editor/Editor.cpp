@@ -7,6 +7,9 @@
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/MainWindow.hpp>
+#include <Engine/Component/DirectionalLight.hpp>
+#include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Listener.hpp>
 
 #include <imgui.h>
 #include <GLFW/glfw3.h>
@@ -141,8 +144,20 @@ void Editor::NewHymnClosed(const std::string& hymn) {
     if (!hymn.empty()) {
         resourceList.ResetScene();
         Hymn().Clear();
+        Hymn().world.CreateRoot();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
         resourceList.SetVisible(true);
+        
+        // Default scene.
+        Hymn().scenes.push_back("Scene #0");
+        
+        Entity* player = Hymn().world.GetRoot()->AddChild("Player");
+        player->position.z = 10.f;
+        player->AddComponent<Component::Lens>();
+        player->AddComponent<Component::Listener>();
+        
+        Entity* sun = Hymn().world.GetRoot()->AddChild("Sun");
+        sun->AddComponent<Component::DirectionalLight>();
     }
     
     selectHymnWindow.SetVisible(false);
