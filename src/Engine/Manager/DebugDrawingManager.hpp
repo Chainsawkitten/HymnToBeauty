@@ -79,4 +79,7 @@ class DebugDrawingManager {
             bool depthTesting;
         };
         std::vector<Line> lines;
+        
+        GLuint lineVertexBuffer;
+        GLuint lineVertexArray;
 };

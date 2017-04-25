@@ -36,11 +36,34 @@ DebugDrawingManager::DebugDrawingManager() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
     
     glBindVertexArray(0);
+    
+    // Create line vertex array.
+    glm::vec3 line[2];
+    line[0] = glm::vec3(0.f, 0.f, 0.f);
+    line[1] = glm::vec3(1.f, 1.f, 1.f);
+    
+    glGenBuffers(1, &lineVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 2 * sizeof(glm::vec3), line, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &lineVertexArray);
+    glBindVertexArray(lineVertexArray);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
+    
+    glBindVertexArray(0);
 }
 
 DebugDrawingManager::~DebugDrawingManager() {
     glDeleteBuffers(1, &pointVertexBuffer);
     glDeleteVertexArrays(1, &pointVertexArray);
+    
+    glDeleteBuffers(1, &lineVertexBuffer);
+    glDeleteVertexArrays(1, &lineVertexArray);
     
     Managers().resourceManager->FreeShader(vertexShader);
     Managers().resourceManager->FreeShader(fragmentShader);
