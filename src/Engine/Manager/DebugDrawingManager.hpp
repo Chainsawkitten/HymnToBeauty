@@ -79,4 +79,7 @@ class DebugDrawingManager {
             bool depthTesting;
         };
         std::vector<AABB> aabbs;
+        
+        GLuint aabbVertexBuffer;
+        GLuint aabbVertexArray;
 };
