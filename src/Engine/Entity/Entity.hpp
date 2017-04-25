@@ -127,7 +127,7 @@ class Entity {
         glm::vec3 GetWorldPosition() const;
         
         /// Name of the entity.
-        std::string name;
+        std::string name = "";
         
         /// Position relative to the parent entity.
         /**
