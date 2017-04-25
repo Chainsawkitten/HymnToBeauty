@@ -51,10 +51,12 @@ void EntityEditor::Show() {
     if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
+        ImGui::LabelText("","Transform");
+        ImGui::Indent();
         ImGui::InputFloat3("Position", &entity->position[0]);
         ImGui::InputFloat3("Rotation", &entity->rotation[0]);
         ImGui::InputFloat3("Scale", &entity->scale[0]);
-        
+        ImGui::Unindent();
         if (!entity->IsScene()) {
             if (ImGui::Button("Add component"))
                 ImGui::OpenPopup("Add component");
@@ -75,6 +77,7 @@ void EntityEditor::Show() {
             }
         }
     }
+
     ImGui::End();
 }
 
