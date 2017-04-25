@@ -34,8 +34,11 @@ void ProfilingManager::ShowResults() {
     if (ImGui::CollapsingHeader("Frametimes"))
         ShowFrametimes();
     
-    if (ImGui::CollapsingHeader("Breakdown"))
+    if (ImGui::CollapsingHeader("Breakdown")) {
+        ImGui::Columns(2);
         ShowResult(first);
+        ImGui::Columns(1);
+    }
     
     ImGui::End();
 }
@@ -75,10 +78,15 @@ void ProfilingManager::ShowFrametimes() {
 void ProfilingManager::ShowResult(Result& result) {
     std::string resultString = result.name + " " + std::to_string(result.duration * 1000.0) + " ms###" + result.name;
     
-    if (ImGui::TreeNode(resultString.c_str())) {
-        if (result.parent != nullptr)
-            ImGui::ProgressBar(result.duration / result.parent->duration, ImVec2(0.0f,0.0f));
-        
+    ImGui::AlignFirstTextHeightToWidgets();
+    bool expanded = ImGui::TreeNode(resultString.c_str());
+    
+    ImGui::NextColumn();
+    if (result.parent != nullptr)
+        ImGui::ProgressBar(result.duration / result.parent->duration, ImVec2(0.0f,0.0f));
+    ImGui::NextColumn();
+    
+    if (expanded) {
         double otherTime = result.duration;
         for (Result& child : result.children) {
             ShowResult(child);
