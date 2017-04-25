@@ -139,7 +139,7 @@ class InputHandler {
         };
         
         // Button data.
-        ButtonData buttonData[BUTTONS] = {};
+        ButtonData buttonData[BUTTONS];
         
         double cursorX = 0.0;
         double cursorY = 0.0;
