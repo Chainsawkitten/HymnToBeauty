@@ -36,9 +36,54 @@ DebugDrawingManager::DebugDrawingManager() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
     
     glBindVertexArray(0);
+    
+    // Create axis-aligned bounding box vertex array.
+    glm::vec3 box[24];
+    box[0] = glm::vec3(0.f, 0.f, 0.f);
+    box[1] = glm::vec3(1.f, 0.f, 0.f);
+    box[2] = glm::vec3(1.f, 0.f, 0.f);
+    box[3] = glm::vec3(1.f, 1.f, 0.f);
+    box[4] = glm::vec3(1.f, 1.f, 0.f);
+    box[5] = glm::vec3(0.f, 1.f, 0.f);
+    box[6] = glm::vec3(1.f, 1.f, 0.f);
+    box[7] = glm::vec3(1.f, 1.f, 1.f);
+    box[8] = glm::vec3(1.f, 1.f, 1.f);
+    box[9] = glm::vec3(1.f, 0.f, 1.f);
+    box[10] = glm::vec3(1.f, 0.f, 1.f);
+    box[11] = glm::vec3(1.f, 0.f, 0.f);
+    box[12] = glm::vec3(0.f, 1.f, 0.f);
+    box[13] = glm::vec3(0.f, 1.f, 1.f);
+    box[14] = glm::vec3(0.f, 1.f, 1.f);
+    box[15] = glm::vec3(0.f, 0.f, 1.f);
+    box[16] = glm::vec3(0.f, 1.f, 0.f);
+    box[17] = glm::vec3(0.f, 0.f, 0.f);
+    box[18] = glm::vec3(0.f, 0.f, 1.f);
+    box[19] = glm::vec3(0.f, 0.f, 0.f);
+    box[20] = glm::vec3(0.f, 1.f, 1.f);
+    box[21] = glm::vec3(1.f, 1.f, 1.f);
+    box[22] = glm::vec3(0.f, 0.f, 1.f);
+    box[23] = glm::vec3(1.f, 0.f, 1.f);
+    
+    glGenBuffers(1, &aabbVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, aabbVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(glm::vec3), box, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &aabbVertexArray);
+    glBindVertexArray(aabbVertexArray);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, aabbVertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
+    
+    glBindVertexArray(0);
 }
 
 DebugDrawingManager::~DebugDrawingManager() {
+    glDeleteBuffers(1, &aabbVertexBuffer);
+    glDeleteVertexArrays(1, &aabbVertexArray);
+    
     glDeleteBuffers(1, &pointVertexBuffer);
     glDeleteVertexArrays(1, &pointVertexArray);
     
@@ -57,15 +102,37 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     points.push_back(point);
 }
 
+void DebugDrawingManager::AddAxisAlignedBoundingBox(const glm::vec3& minCoordinates, const glm::vec3& maxCoordinates, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
+    AABB aabb;
+    aabb.minCoordinates = minCoordinates;
+    aabb.maxCoordinates = maxCoordinates;
+    aabb.color = color;
+    aabb.lineWidth = lineWidth;
+    aabb.duration = duration;
+    aabb.depthTesting = depthTesting;
+    aabbs.push_back(aabb);
+}
+
 void DebugDrawingManager::Update(float deltaTime) {
     // Points.
-    for (std::size_t i=0; i<points.size(); ++i) {
+    for (std::size_t i=0; i < points.size(); ++i) {
         if (points[i].duration < 0.f) {
             points[i] = points[points.size() - 1];
             points.pop_back();
             --i;
         } else {
             points[i].duration -= deltaTime;
+        }
+    }
+    
+    // Axis-aligned bounding boxes.
+    for (std::size_t i=0; i < aabbs.size(); ++i) {
+        if (aabbs[i].duration < 0.f) {
+            aabbs[i] = aabbs[aabbs.size() - 1];
+            aabbs.pop_back();
+            --i;
+        } else {
+            aabbs[i].duration -= deltaTime;
         }
     }
 }
@@ -97,6 +164,19 @@ void DebugDrawingManager::Render(World& world, Entity* camera) {
             glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
             glUniform1f(shaderProgram->GetUniformLocation("size"), point.size);
             glDrawArrays(GL_POINTS, 0, 1);
+        }
+        
+        // Axis-aligned bounding boxes.
+        glBindVertexArray(aabbVertexArray);
+        for (const AABB& aabb : aabbs) {
+            glm::mat4 model(glm::translate(glm::mat4(), aabb.minCoordinates) * glm::scale(glm::mat4(), aabb.maxCoordinates - aabb.minCoordinates));
+            
+            glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &model[0][0]);
+            aabb.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+            glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &aabb.color[0]);
+            glUniform1f(shaderProgram->GetUniformLocation("size"), 10.f);
+            glLineWidth(aabb.lineWidth);
+            glDrawArrays(GL_LINES, 0, 24);
         }
         
         glEnable(GL_DEPTH_TEST);
