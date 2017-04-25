@@ -8,7 +8,6 @@
 #include <Engine/Util/Log.hpp>
 #include <Engine/Input/Input.hpp>
 #include <Engine/Manager/Managers.hpp>
-#include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Util/Profiling.hpp>
@@ -39,9 +38,6 @@ int main() {
     
     // Setup imgui implementation.
     ImGuiImplementation::Init(window->GetGLFWWindow());
-    
-    // Test debug drawing facilites.
-    Managers().debugDrawingManager->AddAxisAlignedBoundingBox(glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 1.f), 1.f, 10.f, false);
     
     bool profiling = false;
 
