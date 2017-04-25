@@ -77,7 +77,8 @@ void ProfilingManager::ShowFrametimes() {
 
 void ProfilingManager::ShowResult(Result& result) {
     ImGui::AlignFirstTextHeightToWidgets();
-    bool expanded = ImGui::TreeNode(result.name.c_str());
+    int flags = result.children.empty() ? ImGuiTreeNodeFlags_Leaf : 0;
+    bool expanded = ImGui::TreeNodeEx(result.name.c_str(), flags);
     
     ImGui::NextColumn();
     if (result.parent != nullptr) {
