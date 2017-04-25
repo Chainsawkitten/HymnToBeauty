@@ -28,14 +28,9 @@ Editor::Editor() {
     Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_D);
     
     // Create editor camera.
-    cameraWorld = new World();
-    cameraEntity = cameraWorld->CreateEntity("Editor Camera");
+    cameraEntity = cameraWorld.CreateEntity("Editor Camera");
     cameraEntity->AddComponent<Component::Lens>();
     cameraEntity->position.z = 10.0f;
-}
-
-Editor::~Editor() {
-    delete cameraWorld;
 }
 
 void Editor::Show(float deltaTime) {

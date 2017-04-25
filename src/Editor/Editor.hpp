@@ -11,9 +11,6 @@ class Editor {
         /// Create new editor.
         Editor();
         
-        /// Destructor.
-        ~Editor();
-        
         /// Show the editor.
         /**
          * @param deltaTime Time since last frame (in seconds).
@@ -53,7 +50,7 @@ class Editor {
         GUI::InputWindow inputWindow;
         GUI::ResourceList resourceList;
         
-        World* cameraWorld;
+        World cameraWorld;
         Entity* cameraEntity;
         
         double lastX = 0.0;
