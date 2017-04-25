@@ -296,6 +296,8 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
 }
 
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
+    ImGui::LabelText("", "Particle");
+    ImGui::Indent();
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
     ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
@@ -308,10 +310,13 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
     ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
     ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::Unindent();
+    ImGui::LabelText("", "Emitter");
+    ImGui::Indent();
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
     ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
     ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
-    
+
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
     
@@ -327,4 +332,7 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
+    ImGui::LabelText("To be implemented", "Preview");
+    ImGui::Indent();
 }
