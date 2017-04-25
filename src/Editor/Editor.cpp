@@ -21,9 +21,19 @@ Editor::Editor() {
     Input()->AssignButton(InputHandler::CONTROL, InputHandler::KEYBOARD, GLFW_KEY_LEFT_CONTROL);
     Input()->AssignButton(InputHandler::NEW, InputHandler::KEYBOARD, GLFW_KEY_N);
     Input()->AssignButton(InputHandler::OPEN, InputHandler::KEYBOARD, GLFW_KEY_O);
+    Input()->AssignButton(InputHandler::CAMERA, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_MIDDLE);
+    Input()->AssignButton(InputHandler::FORWARD, InputHandler::KEYBOARD, GLFW_KEY_W);
+    Input()->AssignButton(InputHandler::BACKWARD, InputHandler::KEYBOARD, GLFW_KEY_S);
+    Input()->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_A);
+    Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_D);
+    
+    // Create editor camera.
+    cameraEntity = cameraWorld.CreateEntity("Editor Camera");
+    cameraEntity->AddComponent<Component::Lens>();
+    cameraEntity->position.z = 10.0f;
 }
 
-void Editor::Show() {
+void Editor::Show(float deltaTime) {
     bool play = false;
     
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
@@ -55,6 +65,10 @@ void Editor::Show() {
             static bool lightSources = EditorSettings::GetInstance().GetBool("Light Source Icons");
             ImGui::MenuItem("Light Sources", "", &lightSources);
             EditorSettings::GetInstance().SetBool("Light Source Icons", lightSources);
+            
+            static bool cameras = EditorSettings::GetInstance().GetBool("Camera Icons");
+            ImGui::MenuItem("Cameras", "", &cameras);
+            EditorSettings::GetInstance().SetBool("Camera Icons", cameras);
             
             ImGui::EndMenu();
         }
@@ -96,6 +110,28 @@ void Editor::Show() {
         resourceList.Show();
     }
     
+    // Control the editor camera.
+    if (Input()->Pressed(InputHandler::CAMERA)) {
+        if (Input()->Triggered(InputHandler::CAMERA)) {
+            lastX = Input()->CursorX();
+            lastY = Input()->CursorY();
+        }
+        
+        float sensitivity = 0.3f;
+        cameraEntity->rotation.x += sensitivity * (Input()->CursorX() - lastX);
+        cameraEntity->rotation.y += sensitivity * (Input()->CursorY() - lastY);
+        
+        lastX = Input()->CursorX();
+        lastY = Input()->CursorY();
+        
+        glm::mat4 orientation = cameraEntity->GetOrientation();
+        glm::vec3 backward(orientation[0][2], orientation[1][2], orientation[2][2]);
+        glm::vec3 right(orientation[0][0], orientation[1][0], orientation[2][0]);
+        float speed = 3.0f * deltaTime;
+        cameraEntity->position += speed * backward * static_cast<float>(Input()->Pressed(InputHandler::BACKWARD) - Input()->Pressed(InputHandler::FORWARD));
+        cameraEntity->position += speed * right * static_cast<float>(Input()->Pressed(InputHandler::RIGHT) - Input()->Pressed(InputHandler::LEFT));
+    }
+    
     if (Input()->Triggered(InputHandler::PLAYTEST))
         play = true;
     
@@ -120,6 +156,10 @@ bool Editor::IsVisible() const {
 
 void Editor::SetVisible(bool visible) {
     this->visible = visible;
+}
+
+Entity* Editor::GetCamera() const {
+    return cameraEntity;
 }
 
 void Editor::Play() {
