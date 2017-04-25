@@ -56,6 +56,6 @@ class Editor {
         World* cameraWorld;
         Entity* cameraEntity;
         
-        double lastX;
-        double lastY;
+        double lastX = 0.0;
+        double lastY = 0.0;
 };
