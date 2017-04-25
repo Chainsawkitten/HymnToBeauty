@@ -143,6 +143,18 @@ void DebugDrawingManager::Render(World& world) {
             glDrawArrays(GL_POINTS, 0, 1);
         }
         
+        // Lines.
+        glBindVertexArray(lineVertexArray);
+        for (const Line& line : lines) {
+            glm::mat4 model(glm::translate(glm::mat4(), line.startPosition) * glm::scale(glm::mat4(), line.endPosition - line.startPosition));
+            
+            glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &model[0][0]);
+            line.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+            glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &line.color[0]);
+            glLineWidth(line.width);
+            glDrawArrays(GL_LINES, 0, 2);
+        }
+        
         glEnable(GL_DEPTH_TEST);
         glBindVertexArray(0);
     }
