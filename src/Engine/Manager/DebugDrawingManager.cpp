@@ -174,6 +174,7 @@ void DebugDrawingManager::Render(World& world) {
             aabb.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
             glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &aabb.color[0]);
             glUniform1f(shaderProgram->GetUniformLocation("size"), 10.f);
+            glLineWidth(aabb.lineWidth);
             glDrawArrays(GL_LINES, 0, 24);
         }
         
