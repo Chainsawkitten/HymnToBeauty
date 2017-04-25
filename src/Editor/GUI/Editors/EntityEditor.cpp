@@ -294,6 +294,8 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
+    ImGui::Text("Sound");
+    ImGui::Indent();
     if (ImGui::Button("Select sound"))
         ImGui::OpenPopup("Select sound");
     
@@ -308,10 +310,13 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+    ImGui::Text("Sound properties");
+    ImGui::Indent();
     ImGui::InputFloat("Pitch", &soundSource->pitch);
     ImGui::InputFloat("Gain", &soundSource->gain);
     ImGui::Checkbox("Loop", &soundSource->loop);
+    ImGui::Unindent();
 }
 
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
