@@ -99,6 +99,7 @@ void EntityEditor::SetVisible(bool visible) {
 }
 
 void EntityEditor::AnimationEditor(Component::Animation* animation) {
+    ImGui::Indent();
     if (ImGui::Button("Select model##Animation"))
         ImGui::OpenPopup("Select model##Animation");
 
@@ -113,6 +114,7 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
@@ -136,6 +138,7 @@ void EntityEditor::PhysicsEditor(Component::Physics* physics) {
 }
 
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
+    ImGui::Indent();
     if (ImGui::Button("Select model##Mesh"))
         ImGui::OpenPopup("Select model##Mesh");
     
@@ -150,6 +153,7 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::LensEditor(Component::Lens* lens) {
