@@ -160,7 +160,7 @@ void EntityEditor::LensEditor(Component::Lens* lens) {
 
 void EntityEditor::MaterialEditor(Component::Material* material) {
     // Diffuse
-    //ImGui::LabelText();
+    ImGui::Text("Diffuse");
     ImGui::Indent();
     if (ImGui::Button("Select diffuse texture"))
         ImGui::OpenPopup("Select diffuse texture");
@@ -176,8 +176,12 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
+
     // Normal
+    ImGui::Text("Normal");
+    ImGui::Indent();
     if (ImGui::Button("Select normal texture"))
         ImGui::OpenPopup("Select normal texture");
     
@@ -192,8 +196,11 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
     // Specular
+    ImGui::Text("Specular");
+    ImGui::Indent();
     if (ImGui::Button("Select specular texture"))
         ImGui::OpenPopup("Select specular texture");
     
@@ -208,8 +215,11 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
     // Glow
+    ImGui::Text("Glow");
+    ImGui::Indent();
     if (ImGui::Button("Select glow texture"))
         ImGui::OpenPopup("Select glow texture");
     
@@ -224,6 +234,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
