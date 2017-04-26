@@ -27,19 +27,19 @@ namespace Component {
                 glm::vec3 maxVelocity;
                 
                 /// The minimum lifetime of the particle (in seconds).
-                float minLifetime = 0.f;
+                float minLifetime = 1.f;
                 
                 /// The maximum lifetime of the particle (in seconds).
-                float maxLifetime = 0.f;
+                float maxLifetime = 1.f;
                 
                 /// The minimum size of the particle.
-                glm::vec2 minSize;
+                glm::vec2 minSize = glm::vec2(1.f, 1.f);
                 
                 /// The maximum size of the particle.
-                glm::vec2 maxSize;
+                glm::vec2 maxSize = glm::vec2(1.f, 1.f);
                 
                 /// Whether to scale all axes individually or uniformly.
-                bool uniformScaling = false;
+                bool uniformScaling = true;
                 
                 /// Alpha at the beginning of the particle's life.
                 float startAlpha = 0.f;

@@ -207,7 +207,7 @@ glm::mat4 Entity::GetCameraOrientation() const {
 }
 
 glm::vec3 Entity::GetDirection() const {
-    return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, 1.f, 0.f)));
+    return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, -1.f, 0.f)));
 }
 
 glm::vec3 Entity::GetWorldPosition() const {

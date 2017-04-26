@@ -51,10 +51,12 @@ void EntityEditor::Show() {
     if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
+        ImGui::Text("Transform");
+        ImGui::Indent();
         ImGui::InputFloat3("Position", &entity->position[0]);
         ImGui::InputFloat3("Rotation", &entity->rotation[0]);
         ImGui::InputFloat3("Scale", &entity->scale[0]);
-        
+        ImGui::Unindent();
         if (!entity->IsScene()) {
             if (ImGui::Button("Add component"))
                 ImGui::OpenPopup("Add component");
@@ -75,6 +77,7 @@ void EntityEditor::Show() {
             }
         }
     }
+
     ImGui::End();
 }
 
@@ -96,6 +99,7 @@ void EntityEditor::SetVisible(bool visible) {
 }
 
 void EntityEditor::AnimationEditor(Component::Animation* animation) {
+    ImGui::Indent();
     if (ImGui::Button("Select model##Animation"))
         ImGui::OpenPopup("Select model##Animation");
 
@@ -110,22 +114,31 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
+    ImGui::Text("Positional");
+    ImGui::Indent();
     ImGui::InputFloat3("Velocity", &physics->velocity[0]);
     ImGui::InputFloat("Max velocity", &physics->maxVelocity);
+    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
+    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
+    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
+    ImGui::Unindent();
+    ImGui::Text("Angular");
+    ImGui::Indent();
     ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
     ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
-    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
     ImGui::InputFloat3("Angular acceleration", &physics->angularAcceleration[0]);
-    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
     ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
-    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
     ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+    ImGui::Unindent();
+
 }
 
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
+    ImGui::Indent();
     if (ImGui::Button("Select model##Mesh"))
         ImGui::OpenPopup("Select model##Mesh");
     
@@ -140,16 +153,21 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::LensEditor(Component::Lens* lens) {
+    ImGui::Indent();
     ImGui::InputFloat("Field of view", &lens->fieldOfView);
     ImGui::InputFloat("Z near", &lens->zNear);
     ImGui::InputFloat("Z far", &lens->zFar);
+    ImGui::Unindent();
 }
 
 void EntityEditor::MaterialEditor(Component::Material* material) {
     // Diffuse
+    ImGui::Text("Diffuse");
+    ImGui::Indent();
     if (ImGui::Button("Select diffuse texture"))
         ImGui::OpenPopup("Select diffuse texture");
     
@@ -164,8 +182,12 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
+
     // Normal
+    ImGui::Text("Normal");
+    ImGui::Indent();
     if (ImGui::Button("Select normal texture"))
         ImGui::OpenPopup("Select normal texture");
     
@@ -180,8 +202,11 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
     // Specular
+    ImGui::Text("Specular");
+    ImGui::Indent();
     if (ImGui::Button("Select specular texture"))
         ImGui::OpenPopup("Select specular texture");
     
@@ -196,8 +221,11 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
     // Glow
+    ImGui::Text("Glow");
+    ImGui::Indent();
     if (ImGui::Button("Select glow texture"))
         ImGui::OpenPopup("Select glow texture");
     
@@ -212,26 +240,33 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
+    ImGui::Indent();
     ImGui::InputFloat3("Color", &directionalLight->color[0]);
     ImGui::InputFloat("Ambient coefficient", &directionalLight->ambientCoefficient);
+    ImGui::Unindent();
 }
 
 void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
+    ImGui::Indent();
     ImGui::InputFloat3("Color", &pointLight->color[0]);
     ImGui::InputFloat("Ambient coefficient", &pointLight->ambientCoefficient);
     ImGui::InputFloat("Attenuation", &pointLight->attenuation);
     ImGui::InputFloat("Intensity", &pointLight->intensity);
+    ImGui::Unindent();
 }
 
 void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
+    ImGui::Indent();
     ImGui::InputFloat3("Color", &spotLight->color[0]);
     ImGui::InputFloat("Ambient coefficient", &spotLight->ambientCoefficient);
     ImGui::InputFloat("Attenuation", &spotLight->attenuation);
     ImGui::InputFloat("Intensity", &spotLight->intensity);
     ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
+    ImGui::Unindent();
 }
 
 void EntityEditor::ListenerEditor(Component::Listener* listener) {
@@ -239,7 +274,7 @@ void EntityEditor::ListenerEditor(Component::Listener* listener) {
 }
 
 void EntityEditor::ScriptEditor(Component::Script* script) {
-
+    ImGui::Indent();
     if(script->scriptFile != nullptr)
         ImGui::Text(script->scriptFile->name.c_str());
     else
@@ -259,10 +294,12 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
         ImGui::EndPopup();
     }
-
+    ImGui::Unindent();
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
+    ImGui::Text("Sound");
+    ImGui::Indent();
     if (ImGui::Button("Select sound"))
         ImGui::OpenPopup("Select sound");
     
@@ -277,13 +314,18 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+    ImGui::Text("Sound properties");
+    ImGui::Indent();
     ImGui::InputFloat("Pitch", &soundSource->pitch);
     ImGui::InputFloat("Gain", &soundSource->gain);
     ImGui::Checkbox("Loop", &soundSource->loop);
+    ImGui::Unindent();
 }
 
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
+    ImGui::Text("Particle");
+    ImGui::Indent();
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
     ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
@@ -296,10 +338,13 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
     ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
     ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::Unindent();
+    ImGui::Text("Emitter");
+    ImGui::Indent();
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
     ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
     ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
-    
+
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
     
@@ -315,4 +360,8 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
+    ImGui::Text("Preview");
+    ImGui::Indent();
+    ImGui::Unindent();
 }
