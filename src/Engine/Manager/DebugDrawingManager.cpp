@@ -37,6 +37,26 @@ DebugDrawingManager::DebugDrawingManager() {
     
     glBindVertexArray(0);
     
+    // Create line vertex array.
+    glm::vec3 line[2];
+    line[0] = glm::vec3(0.f, 0.f, 0.f);
+    line[1] = glm::vec3(1.f, 1.f, 1.f);
+    
+    glGenBuffers(1, &lineVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 2 * sizeof(glm::vec3), line, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &lineVertexArray);
+    glBindVertexArray(lineVertexArray);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, lineVertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
+    
+    glBindVertexArray(0);
+    
     // Create axis-aligned bounding box vertex array.
     glm::vec3 box[24];
     box[0] = glm::vec3(0.f, 0.f, 0.f);
@@ -87,6 +107,9 @@ DebugDrawingManager::~DebugDrawingManager() {
     glDeleteBuffers(1, &pointVertexBuffer);
     glDeleteVertexArrays(1, &pointVertexArray);
     
+    glDeleteBuffers(1, &lineVertexBuffer);
+    glDeleteVertexArrays(1, &lineVertexArray);
+    
     Managers().resourceManager->FreeShader(vertexShader);
     Managers().resourceManager->FreeShader(fragmentShader);
     Managers().resourceManager->FreeShaderProgram(shaderProgram);
@@ -100,6 +123,17 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     point.duration = duration;
     point.depthTesting = depthTesting;
     points.push_back(point);
+}
+
+void DebugDrawingManager::AddLine(const glm::vec3& startPosition, const glm::vec3& endPosition, const glm::vec3& color, float width, float duration, bool depthTesting) {
+    Line line;
+    line.startPosition = startPosition;
+    line.endPosition = endPosition;
+    line.color = color;
+    line.width = width;
+    line.duration = duration;
+    line.depthTesting = depthTesting;
+    lines.push_back(line);
 }
 
 void DebugDrawingManager::AddAxisAlignedBoundingBox(const glm::vec3& minCoordinates, const glm::vec3& maxCoordinates, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
@@ -122,6 +156,17 @@ void DebugDrawingManager::Update(float deltaTime) {
             --i;
         } else {
             points[i].duration -= deltaTime;
+        }
+    }
+    
+    // Lines.
+    for (std::size_t i=0; i < lines.size(); ++i) {
+        if (lines[i].duration < 0.f) {
+            lines[i] = lines[lines.size() - 1];
+            lines.pop_back();
+            --i;
+        } else {
+            lines[i].duration -= deltaTime;
         }
     }
     
@@ -164,6 +209,18 @@ void DebugDrawingManager::Render(World& world, Entity* camera) {
             glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &point.color[0]);
             glUniform1f(shaderProgram->GetUniformLocation("size"), point.size);
             glDrawArrays(GL_POINTS, 0, 1);
+        }
+        
+        // Lines.
+        glBindVertexArray(lineVertexArray);
+        for (const Line& line : lines) {
+            glm::mat4 model(glm::translate(glm::mat4(), line.startPosition) * glm::scale(glm::mat4(), line.endPosition - line.startPosition));
+            
+            glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &model[0][0]);
+            line.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+            glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &line.color[0]);
+            glLineWidth(line.width);
+            glDrawArrays(GL_LINES, 0, 2);
         }
         
         // Axis-aligned bounding boxes.

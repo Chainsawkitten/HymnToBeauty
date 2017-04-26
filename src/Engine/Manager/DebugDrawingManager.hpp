@@ -24,6 +24,17 @@ class DebugDrawingManager {
          */
         void AddPoint(const glm::vec3& position, const glm::vec3& color, float size, float duration = 0.f, bool depthTesting = true);
         
+        /// Add a line to the world.
+        /**
+         * @param startPosition Position of the start point of the line.
+         * @param endPosition Position of the end point of the line.
+         * @param color Color of the line.
+         * @param width The width of the line.
+         * @param duration How long the line should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddLine(const glm::vec3& startPosition, const glm::vec3& endPosition, const glm::vec3& color, float width = 1.f, float duration = 0.f, bool depthTesting = true);
+        
         /// Add an axis-aligned bounding box to the world.
         /**
          * @param minCoordinates The minimum coordinates of the box.
@@ -70,6 +81,20 @@ class DebugDrawingManager {
         
         GLuint pointVertexBuffer;
         GLuint pointVertexArray;
+        
+        // Lines.
+        struct Line {
+            glm::vec3 startPosition;
+            glm::vec3 endPosition;
+            glm::vec3 color;
+            float width;
+            float duration;
+            bool depthTesting;
+        };
+        std::vector<Line> lines;
+        
+        GLuint lineVertexBuffer;
+        GLuint lineVertexArray;
         
         // Axis-aligned bounding boxes.
         struct AABB {
