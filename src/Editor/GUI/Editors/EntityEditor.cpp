@@ -168,6 +168,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Diffuse
     ImGui::Text("Diffuse");
     ImGui::Indent();
+    if (material->diffuse->IsLoaded())
+        ImGui::Image((void*) material->diffuse->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select diffuse texture"))
         ImGui::OpenPopup("Select diffuse texture");
     
@@ -188,6 +191,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Normal
     ImGui::Text("Normal");
     ImGui::Indent();
+    if (material->normal->IsLoaded())
+        ImGui::Image((void*) material->normal->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select normal texture"))
         ImGui::OpenPopup("Select normal texture");
     
@@ -207,6 +213,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Specular
     ImGui::Text("Specular");
     ImGui::Indent();
+    if (material->specular->IsLoaded())
+        ImGui::Image((void*) material->specular->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select specular texture"))
         ImGui::OpenPopup("Select specular texture");
     
@@ -226,6 +235,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Glow
     ImGui::Text("Glow");
     ImGui::Indent();
+    if (material->glow->IsLoaded())
+        ImGui::Image((void*) material->glow->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select glow texture"))
         ImGui::OpenPopup("Select glow texture");
     
@@ -326,13 +338,17 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
     ImGui::Text("Particle");
     ImGui::Indent();
+    int rows = Managers().particleManager->GetTextureAtlasRows();
+    float column = static_cast<float>(particleEmitter->particleType.textureIndex % rows);
+    float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
+    ImGui::Image((void*) Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128), ImVec2(column / rows, row / rows), ImVec2((column + 1.f) / rows, (row + 1.f) / rows));
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
     ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
-    ImGui::InputFloat("Min lifetime", &particleEmitter->particleType.minLifetime);
-    ImGui::InputFloat("Max lifetime", &particleEmitter->particleType.maxLifetime);
-    ImGui::InputFloat2("Min size", &particleEmitter->particleType.minSize[0]);
-    ImGui::InputFloat2("Max size", &particleEmitter->particleType.maxSize[0]);
+    ImGui::InputFloat("Average lifetime", &particleEmitter->particleType.averageLifetime);
+    ImGui::InputFloat("Lifetime variance", &particleEmitter->particleType.lifetimeVariance);
+    ImGui::InputFloat2("Average size", &particleEmitter->particleType.averageSize[0]);
+    ImGui::InputFloat2("Size variance", &particleEmitter->particleType.sizeVariance[0]);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
     ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
     ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
@@ -342,9 +358,9 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::Text("Emitter");
     ImGui::Indent();
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
-    ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
-    ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
-
+    ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
+    ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
+    
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
     

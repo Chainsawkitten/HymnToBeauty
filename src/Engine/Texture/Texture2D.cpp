@@ -78,6 +78,7 @@ Texture2D::Texture2D(const char *source, int sourceLength, bool srgb) {
     
     isFromFile = false;
     this->srgb = srgb;
+    loaded = true;
 }
 
 Texture2D::~Texture2D() {
@@ -192,5 +193,10 @@ void Texture2D::Load(const char* filename, bool srgb) {
     glGenerateMipmap(GL_TEXTURE_2D);
     
     isFromFile = true;
+    loaded = true;
     this->srgb = srgb;
+}
+
+bool Texture2D::IsLoaded() const {
+    return loaded;
 }
