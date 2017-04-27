@@ -15,7 +15,7 @@ void TextureEditor::Show() {
         texture->name = name;
         
         if (texture->IsLoaded()) {
-            ImGui::Text("Loaded");
+            ImGui::Image((void*) texture->GetTextureID(), ImVec2(128, 128));
         } else {
             ImGui::Text("Not loaded");
         }
