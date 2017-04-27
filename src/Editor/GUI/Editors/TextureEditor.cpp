@@ -14,6 +14,12 @@ void TextureEditor::Show() {
         ImGui::InputText("Name", name, 128);
         texture->name = name;
         
+        if (texture->IsLoaded()) {
+            ImGui::Text("Loaded");
+        } else {
+            ImGui::Text("Not loaded");
+        }
+        
         if (ImGui::Button("Load PNG image")) {
             fileSelector.AddExtensions("png");
             fileSelector.SetFileSelectedCallback(std::bind(&TextureEditor::FileSelected, this, std::placeholders::_1));
