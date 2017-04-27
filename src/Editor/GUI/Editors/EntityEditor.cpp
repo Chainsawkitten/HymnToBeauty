@@ -345,10 +345,10 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
     ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
-    ImGui::InputFloat("Min lifetime", &particleEmitter->particleType.minLifetime);
-    ImGui::InputFloat("Max lifetime", &particleEmitter->particleType.maxLifetime);
-    ImGui::InputFloat2("Min size", &particleEmitter->particleType.minSize[0]);
-    ImGui::InputFloat2("Max size", &particleEmitter->particleType.maxSize[0]);
+    ImGui::InputFloat("Average lifetime", &particleEmitter->particleType.averageLifetime);
+    ImGui::InputFloat("Lifetime variance", &particleEmitter->particleType.lifetimeVariance);
+    ImGui::InputFloat2("Average size", &particleEmitter->particleType.averageSize[0]);
+    ImGui::InputFloat2("Size variance", &particleEmitter->particleType.sizeVariance[0]);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
     ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
     ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
@@ -358,9 +358,9 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::Text("Emitter");
     ImGui::Indent();
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
-    ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
-    ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
-
+    ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
+    ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
+    
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
     
