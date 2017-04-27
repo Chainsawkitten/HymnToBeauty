@@ -338,6 +338,7 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
     ImGui::Text("Particle");
     ImGui::Indent();
+    ImGui::Image((void*) Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128));
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
     ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);

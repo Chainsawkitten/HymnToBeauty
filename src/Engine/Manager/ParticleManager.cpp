@@ -151,6 +151,10 @@ void ParticleManager::Render(World& world, Entity* camera) {
     }
 }
 
+const Texture2D* ParticleManager::GetTextureAtlas() const {
+    return textureAtlas;
+}
+
 void ParticleManager::EmitParticle(World& world, Component::ParticleEmitter* emitter) {
     glm::vec3 position(emitter->entity->GetWorldPosition());
     if (emitter->emitterType == Component::ParticleEmitter::CUBOID) {

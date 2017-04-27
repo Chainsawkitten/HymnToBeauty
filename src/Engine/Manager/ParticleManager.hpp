@@ -72,6 +72,12 @@ class ParticleManager {
          */
         void Render(World& world, Entity* camera);
         
+        /// Get the texture atlas.
+        /**
+         * @return The particle texture atlas.
+         */
+        const Texture2D* GetTextureAtlas() const;
+        
     private:
         ParticleManager();
         ~ParticleManager();
