@@ -26,17 +26,17 @@ namespace Component {
                 /// The maximum initial velocity in all directions.
                 glm::vec3 maxVelocity;
                 
-                /// The minimum lifetime of the particle (in seconds).
-                float minLifetime = 1.f;
+                /// The average lifetime of the particle (in seconds).
+                float averageLifetime = 1.f;
                 
-                /// The maximum lifetime of the particle (in seconds).
-                float maxLifetime = 1.f;
+                /// The lifetime variance of the particle (in seconds).
+                float lifetimeVariance = 0.f;
                 
-                /// The minimum size of the particle.
-                glm::vec2 minSize = glm::vec2(1.f, 1.f);
+                /// The average size of the particle.
+                glm::vec2 averageSize = glm::vec2(1.f, 1.f);
                 
-                /// The maximum size of the particle.
-                glm::vec2 maxSize = glm::vec2(1.f, 1.f);
+                /// The size variance of the particle.
+                glm::vec2 sizeVariance = glm::vec2(0.f, 0.f);
                 
                 /// Whether to scale all axes individually or uniformly.
                 bool uniformScaling = true;
@@ -78,11 +78,11 @@ namespace Component {
             /// Size of the emitter (area of effect).
             glm::vec3 size;
             
-            /// Minimum time for emitting particle.
-            float minEmitTime = 0.03f;
+            /// Average time for emitting particle (in seconds).
+            float averageEmitTime = 0.04f;
             
-            /// Maximum time for emitting particle.
-            float maxEmitTime = 0.05f;
+            /// Time variance for emitting particle (in seconds).
+            float emitTimeVariance = 0.01f;
             
             /// Time to next emit (random value between min and max),
             float timeToNext = 0.1f;
