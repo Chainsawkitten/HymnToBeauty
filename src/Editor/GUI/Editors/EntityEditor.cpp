@@ -235,6 +235,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Glow
     ImGui::Text("Glow");
     ImGui::Indent();
+    if (material->glow->IsLoaded())
+        ImGui::Image((void*) material->glow->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select glow texture"))
         ImGui::OpenPopup("Select glow texture");
     
