@@ -42,7 +42,8 @@ void SceneEditor::Save() const {
 }
 
 void SceneEditor::ShowEntity(Entity* entity) {
-    bool opened = ImGui::TreeNode(entity->name.c_str());
+    bool leaf = entity->IsScene() || entity->GetChildren().empty();
+    bool opened = ImGui::TreeNodeEx(entity->name.c_str(), leaf ? ImGuiTreeNodeFlags_Leaf : 0);
     
     if (ImGui::BeginPopupContextItem(entity->name.c_str())) {
         if (ImGui::Selectable("Edit")) {
