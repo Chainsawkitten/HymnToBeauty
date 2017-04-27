@@ -78,6 +78,12 @@ class ParticleManager {
          */
         const Texture2D* GetTextureAtlas() const;
         
+        /// Get the number of rows in the texture atlas.
+        /**
+         * @return The number of rows in the texture atlas.
+         */
+        int GetTextureAtlasRows() const;
+        
     private:
         ParticleManager();
         ~ParticleManager();
@@ -102,7 +108,7 @@ class ParticleManager {
         ShaderProgram* shaderProgram;
 
         // The number of rows in the texture atlas.
-        float textureAtlasRowNumber = 4.f;
+        int textureAtlasRowNumber = 4;
 
         // Texture atlas containing the particle textures.
         Texture2D* textureAtlas;
