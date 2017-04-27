@@ -191,6 +191,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Normal
     ImGui::Text("Normal");
     ImGui::Indent();
+    if (material->normal->IsLoaded())
+        ImGui::Image((void*) material->normal->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select normal texture"))
         ImGui::OpenPopup("Select normal texture");
     
