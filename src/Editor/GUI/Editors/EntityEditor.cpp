@@ -213,6 +213,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Specular
     ImGui::Text("Specular");
     ImGui::Indent();
+    if (material->specular->IsLoaded())
+        ImGui::Image((void*) material->specular->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select specular texture"))
         ImGui::OpenPopup("Select specular texture");
     
