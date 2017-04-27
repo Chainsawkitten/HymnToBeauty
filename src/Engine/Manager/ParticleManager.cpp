@@ -136,7 +136,7 @@ void ParticleManager::Render(World& world, Entity* camera) {
         glUniform3fv(shaderProgram->GetUniformLocation("cameraPosition"), 1, &camera->position[0]);
         glUniform3fv(shaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjectionMatrix"), 1, GL_FALSE, &viewProjectionMat[0][0]);
-        glUniform1fv(shaderProgram->GetUniformLocation("textureAtlasRows"), 1, &textureAtlasRowNumber);
+        glUniform1f(shaderProgram->GetUniformLocation("textureAtlasRows"), textureAtlasRowNumber);
         
         // Draw the triangles
         glDrawArrays(GL_POINTS, 0, world.GetParticleCount());
@@ -149,6 +149,14 @@ void ParticleManager::Render(World& world, Entity* camera) {
         glUseProgram(0);
         glBindVertexArray(0);
     }
+}
+
+const Texture2D* ParticleManager::GetTextureAtlas() const {
+    return textureAtlas;
+}
+
+int ParticleManager::GetTextureAtlasRows() const {
+    return textureAtlasRowNumber;
 }
 
 void ParticleManager::EmitParticle(World& world, Component::ParticleEmitter* emitter) {
