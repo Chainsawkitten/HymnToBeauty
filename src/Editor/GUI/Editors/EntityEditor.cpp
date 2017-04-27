@@ -168,6 +168,9 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     // Diffuse
     ImGui::Text("Diffuse");
     ImGui::Indent();
+    if (material->diffuse->IsLoaded())
+        ImGui::Image((void*) material->diffuse->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select diffuse texture"))
         ImGui::OpenPopup("Select diffuse texture");
     
