@@ -42,6 +42,10 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Script>("Script", std::bind(&EntityEditor::ScriptEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
     AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&EntityEditor::ParticleEmitterEditor, this, std::placeholders::_1));
+    for(int i = 0; i < 10; i++){
+        foo[i].x = float(i);
+        foo[i].y = float(i);
+    }
 }
 
 EntityEditor::~EntityEditor() {
