@@ -23,6 +23,7 @@
 #include <Engine/Manager/ScriptManager.hpp>
 
 #include "../../Util/EditorSettings.hpp"
+#include "../../ImGui/ImGuiBezier.hpp"
 #include "../FileSelector.hpp"
 
 using namespace GUI;
