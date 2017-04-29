@@ -391,6 +391,7 @@ set(EDITOR_SRCS
         src/Editor/main.cpp
         src/Editor/Editor.cpp
         src/Editor/ImGui/OpenGLImplementation.cpp
+        src/Editor/ImGui/ImGuiBezier.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/InputWindow.cpp
         src/Editor/GUI/FileSelector.cpp
@@ -407,6 +408,7 @@ set(EDITOR_SRCS
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
         src/Editor/ImGui/OpenGLImplementation.hpp
+        src/Editor/ImGui/ImGuiBezier.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/InputWindow.hpp
         src/Editor/GUI/FileSelector.hpp
