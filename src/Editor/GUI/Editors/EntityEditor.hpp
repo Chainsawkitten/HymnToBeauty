@@ -60,6 +60,8 @@ namespace GUI {
             void SetVisible(bool visible);
             
         private:
+            // TEMPORARY
+            ImVec2 foo[10];
             template<typename type> void AddEditor(const std::string& name, std::function<void(type*)> editorFunction);
             template<typename type> void AddComponent(const std::string& name);
             template<typename type> void EditComponent(const std::string& name, std::function<void(type*)> editorFunction);
