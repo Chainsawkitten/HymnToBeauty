@@ -42,10 +42,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Script>("Script", std::bind(&EntityEditor::ScriptEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
     AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&EntityEditor::ParticleEmitterEditor, this, std::placeholders::_1));
-    for(int i = 0; i < 10; i++){
-        foo[i].x = float(i);
-        foo[i].y = float(i);
-    }
+    foo[0].x = -1;
 }
 
 EntityEditor::~EntityEditor() {
@@ -366,10 +363,7 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
     ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
     
-    if (ImGui::Curve("Das editor", ImVec2(600, 200), 10, foo))
-    {
-        // curve changed
-    }
+    ImGui::Curve("Das editor", ImVec2(200, 200), 10, foo);
 
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
