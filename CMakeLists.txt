@@ -407,6 +407,7 @@ set(EDITOR_SRCS
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
         src/Editor/ImGui/OpenGLImplementation.hpp
+        src/Editor/GUI/ImGuiBezier.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/InputWindow.hpp
         src/Editor/GUI/FileSelector.hpp
