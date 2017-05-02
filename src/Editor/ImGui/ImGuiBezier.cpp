@@ -383,10 +383,10 @@ namespace ImGui
             points[1].y = 1;
             points[2].x = -1;
         }
-        
         ImGuiWindow* window = GetCurrentWindow();
         //ImGuiState& g = *GImGui;
-        const ImGuiStyle& style = ImGui::GetStyle();
+        ImGuiContext& g = *GImGui;
+        const ImGuiStyle& style = g.Style;
         const ImGuiID id = window->GetID(label);
         if (window->SkipItems)
             return 0;
@@ -435,10 +435,10 @@ namespace ImGui
         if (hovered)
         {
             SetHoveredID(id);
-            if (ImGui::GetIO().MouseDown[0])
+            if (g.IO.MouseDown[0])
             {
                 modified = 1;
-                ImVec2 pos = (ImGui::GetIO().MousePos - bb.Min) / (bb.Max - bb.Min);
+                ImVec2 pos = (g.IO.MousePos - bb.Min) / (bb.Max - bb.Min);
                 pos.y = 1 - pos.y;              
 
                 int left = 0;
@@ -608,7 +608,7 @@ namespace ImGui
             if( item > 0 ) {
                 for( i = 0; i < max; ++i) { 
                     points[i].x = i / float(max-1); 
-                    points[i].y = float( ease( item - 1, points[i].x ) );
+                    points[i].y = float( Tween::ease( item - 1, points[i].x ) );
                 }               
             }
         }
@@ -616,8 +616,10 @@ namespace ImGui
         char buf[128];
         const char *str = label;
 
+
+
         if( hovered ) {
-            ImVec2 pos = (ImGui::GetIO().MousePos - bb.Min) / (bb.Max - bb.Min);
+            ImVec2 pos = (g.IO.MousePos - bb.Min) / (bb.Max - bb.Min);
             pos.y = 1 - pos.y;              
 
             sprintf(buf, "%s (%f,%f)", label, pos.x, pos.y );
