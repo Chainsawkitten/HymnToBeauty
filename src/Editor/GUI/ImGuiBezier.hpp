@@ -714,7 +714,7 @@ namespace ImGui
             str = buf;
         }
 
-        RenderTextClipped(ImVec2(bb.Min.x, bb.Min.y + style.FramePadding.y), bb.Max, str, NULL, NULL, ImGuiAlign_Center);
+        //RenderTextClipped(ImVec2(bb.Min.x, bb.Min.y + style.FramePadding.y), bb.Max, str, NULL, NULL, ImGuiAlign_Center);
 
         return modified;
     }
