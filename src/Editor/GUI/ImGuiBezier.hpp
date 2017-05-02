@@ -16,6 +16,8 @@
 
 #include <cmath>
 
+#include <Engine/Util/Log.hpp>
+
 /* To use, add this prototype somewhere.. 
 namespace ImGui
 {
@@ -467,11 +469,16 @@ namespace ImGui
 
         if (points[0].x < 0)
         {
+            Log() << "Curve setup\n";
             points[0].x = 0;
             points[0].y = 0;
-            points[1].x = 1;
+            points[1].x = 0.25;
             points[1].y = 1;
-            points[2].x = -1;
+            points[2].x = 0.5;
+            points[2].y = 0.5;
+            points[3].x = 0.75;
+            points[3].y = 0.25;
+            points[4].x = -1;
         }
 
         ImGuiWindow* window = GetCurrentWindow();
@@ -527,6 +534,7 @@ namespace ImGui
             SetHoveredID(id);
             if (g.IO.MouseDown[0])
             {
+                Log() << "Test";
                 modified = 1;
                 ImVec2 pos = (g.IO.MousePos - bb.Min) / (bb.Max - bb.Min);
                 pos.y = 1 - pos.y;              
@@ -714,7 +722,8 @@ namespace ImGui
             str = buf;
         }
 
-        //RenderTextClipped(ImVec2(bb.Min.x, bb.Min.y + style.FramePadding.y), bb.Max, str, NULL, NULL, ImGuiAlign_Center);
+        //RenderTextClipped( bb.Max, str, NULL, NULL, ImGuiAlign_Center);
+        RenderTextClipped(ImVec2(bb.Min.x, bb.Min.y + style.FramePadding.y), bb.Max, str, NULL, NULL);
 
         return modified;
     }

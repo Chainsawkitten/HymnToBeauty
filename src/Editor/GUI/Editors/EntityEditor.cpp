@@ -25,6 +25,7 @@
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
 
+#include <Engine/Util/Log.hpp>
 #include "../ImGuiBezier.hpp"
 
 namespace ImGui
@@ -50,6 +51,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Script>("Script", std::bind(&EntityEditor::ScriptEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
     AddEditor<Component::ParticleEmitter>("Particle emitter", std::bind(&EntityEditor::ParticleEmitterEditor, this, std::placeholders::_1));
+    foo[0].x = -1;
 }
 
 EntityEditor::~EntityEditor() {
@@ -369,10 +371,15 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
     ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
     ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
-    ImVec2 foo[10];
-    foo[0].x = -1.f;
-    ImGui::Curve("test", ImVec2(200, 200), 10, foo);
-    
+    if(ImGui::Curve("test", ImVec2(200, 200), 10, foo)){
+        Log() << "0X: " << (float)foo[0].x << "\n";
+        Log() << "0Y: " << (float)foo[0].y << "\n";;
+        Log() << "9X: " << (float)foo[1].x << "\n";;
+        Log() << "9Y: " << (float)foo[1].y << "\n";;
+    }
+
+    float value_you_care_about = ImGui::CurveValue(0.7f, 10, foo);
+
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
     
