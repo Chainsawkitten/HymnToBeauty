@@ -25,6 +25,15 @@
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
 
+#include "../ImGuiBezier.hpp"
+
+namespace ImGui
+{
+    int Curve(const char *label, const ImVec2& size, int maxpoints, ImVec2 *points);
+    float CurveValue(float p, int maxpoints, const ImVec2 *points);
+    float CurveValueSmooth(float p, int maxpoints, const ImVec2 *points);
+};
+
 using namespace GUI;
 
 EntityEditor::EntityEditor() {
