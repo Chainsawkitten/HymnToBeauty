@@ -58,7 +58,7 @@ namespace GUI {
              * @param visible Whether the window should be visible.
              */
             void SetVisible(bool visible);
-            
+
         private:
             template<typename type> void AddEditor(const std::string& name, std::function<void(type*)> editorFunction);
             template<typename type> void AddComponent(const std::string& name);

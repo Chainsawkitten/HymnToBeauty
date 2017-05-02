@@ -369,6 +369,9 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
     ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
     ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
+    ImVec2 foo[10];
+    foo[0].x = -1.f;
+    ImGui::Curve("test", ImVec2(200, 200), 10, foo);
     
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
