@@ -401,6 +401,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/Editors/SoundEditor.cpp
         src/Editor/GUI/Editors/ScriptEditor.cpp
         src/Editor/GUI/Editors/TextureEditor.cpp
+        src/Editor/GUI/BezierWidget.cpp
         src/Editor/Util/EditorSettings.cpp
     )
 
@@ -417,6 +418,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/Editors/SoundEditor.hpp
         src/Editor/GUI/Editors/ScriptEditor.hpp
         src/Editor/GUI/Editors/TextureEditor.hpp
+        src/Editor/GUI/BezierWidget.hpp
         src/Editor/Util/EditorSettings.hpp
     )
 

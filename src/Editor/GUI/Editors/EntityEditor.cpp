@@ -24,6 +24,7 @@
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
+#include "../BezierWidget.hpp"
 
 using namespace GUI;
 
@@ -379,5 +380,10 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::Unindent();
     ImGui::Text("Preview");
     ImGui::Indent();
+
+    Curve test;
+    BezierWidget bezierWidget(ImVec2(200,200), test);
+    bezierWidget.show();
+
     ImGui::Unindent();
 }
