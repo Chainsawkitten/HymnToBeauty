@@ -105,7 +105,6 @@ void ProfilingManager::ShowResult(Result& result) {
     }
 }
 
-ProfilingManager::Result::Result(const std::string& name, Result* parent) {
-    this->name = name;
+ProfilingManager::Result::Result(const std::string& name, Result* parent) : name (name) {
     this->parent = parent;
 }
