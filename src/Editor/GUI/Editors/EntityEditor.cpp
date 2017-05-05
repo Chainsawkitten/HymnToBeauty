@@ -355,6 +355,7 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
     ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
     ImGui::Unindent();
+    
     ImGui::Text("Emitter");
     ImGui::Indent();
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
@@ -377,7 +378,9 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
         ImGui::EndPopup();
     }
     ImGui::Unindent();
+    
     ImGui::Text("Preview");
     ImGui::Indent();
+    ImGui::Checkbox("Simulate", &particleEmitter->preview);
     ImGui::Unindent();
 }

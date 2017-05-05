@@ -20,29 +20,29 @@ class ParticleManager {
     public:
         /// A particle in the particle system.
         struct Particle {
-                /// Position.
-                glm::vec3 worldPos;
-                
-                /// Size.
-                glm::vec2 size;
-                
-                /// Life (in seconds).
-                float life;
-                
-                /// Lifetime (in seconds).
-                float lifetime;
-                
-                /// Initial velocity.
-                glm::vec3 velocity;
-                
-                /// Start, mid and end of life alpha of particle.
-                glm::vec3 alpha;
-                
-                /// Color of the particle.
-                glm::vec3 color;
-                
-                /// Texture index (for the texture atlas, left to right, top to bottom indexing)
-                float textureIndex;
+            /// Position.
+            glm::vec3 worldPos;
+            
+            /// Size.
+            glm::vec2 size;
+            
+            /// Life (in seconds).
+            float life;
+            
+            /// Lifetime (in seconds).
+            float lifetime;
+            
+            /// Initial velocity.
+            glm::vec3 velocity;
+            
+            /// Start, mid and end of life alpha of particle.
+            glm::vec3 alpha;
+            
+            /// Color of the particle.
+            glm::vec3 color;
+            
+            /// Texture index (for the texture atlas, left to right, top to bottom indexing)
+            float textureIndex;
         };
         
         /// Get the maximum amount of particles.
@@ -55,8 +55,9 @@ class ParticleManager {
         /**
          * @param world World to update.
          * @param time Time since last frame (in seconds).
+         * @param preview Whether to only update particle emitters that are being previewed.
          */
-        void Update(World& world, float time);
+        void Update(World& world, float time, bool preview = false);
         
         /// Update particle buffer.
         /**
