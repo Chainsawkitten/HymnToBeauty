@@ -55,8 +55,9 @@ class ParticleManager {
         /**
          * @param world World to update.
          * @param time Time since last frame (in seconds).
+         * @param preview Whether to only update particle emitters that are being previewed.
          */
-        void Update(World& world, float time);
+        void Update(World& world, float time, bool preview = false);
         
         /// Update particle buffer.
         /**
