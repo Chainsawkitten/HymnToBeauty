@@ -96,7 +96,7 @@ class World {
         
     private:
         // Copy constructor.
-        World(World &world) = delete;
+        World(World& world) = delete;
         
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);

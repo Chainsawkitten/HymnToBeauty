@@ -15,7 +15,7 @@ class Entity {
          * @param world The game world in which the entity is contained.
          * @param name Name of the entity.
          */
-        Entity(World* world, const std::string& name = "");
+        Entity(World* world, const std::string& name);
         
         /// Destructor.
         ~Entity();
@@ -127,7 +127,7 @@ class Entity {
         glm::vec3 GetWorldPosition() const;
         
         /// Name of the entity.
-        std::string name = "";
+        std::string name;
         
         /// Position relative to the parent entity.
         /**

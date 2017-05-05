@@ -19,9 +19,8 @@
 #include "../Hymn.hpp"
 #include <fstream>
 
-Entity::Entity(World* world, const std::string& name) {
+Entity::Entity(World* world, const std::string& name) : name ( name ) {
     this->world = world;
-    this->name = name;
 }
 
 Entity::~Entity() {

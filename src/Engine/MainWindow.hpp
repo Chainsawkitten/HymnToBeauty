@@ -82,7 +82,7 @@ class MainWindow {
         
     private:
         // Copy Constructor
-        MainWindow(MainWindow &mainwindow) = delete;
+        MainWindow(MainWindow& mainwindow) = delete;
 
         static MainWindow* instance;
         
