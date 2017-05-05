@@ -63,6 +63,10 @@ template<typename type> type glmMul(float a, const void* memory) {
     return *static_cast<const type*>(memory) * a;
 }
 
+template<typename type> type glmMulR(float a, const void* memory) {
+    return a * *static_cast<const type*>(memory);
+}
+
 template<typename type> type glmDiv(float a, const void* memory) {
     return *static_cast<const type*>(memory) / a;
 }
@@ -93,6 +97,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3 &in) const", asFUNCTIONPR(glmAdd<glm::vec3>, (const glm::vec3&, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opSub(const vec3 &in) const", asFUNCTIONPR(glmSub<glm::vec3>, (const glm::vec3&, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opMul(float) const", asFUNCTIONPR(glmMul<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opMul_r(float) const", asFUNCTIONPR(glmMulR<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opDiv(float) const", asFUNCTIONPR(glmDiv<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator+=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
     engine->RegisterObjectMethod("vec3", "vec3& opSubAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator-=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
