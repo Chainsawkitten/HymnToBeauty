@@ -339,6 +339,8 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
     ImGui::Text("Particle");
     ImGui::Indent();
+    BezierWidget bezierWidget(ImVec2(200,200), test);
+    bezierWidget.Show();
     int rows = Managers().particleManager->GetTextureAtlasRows();
     float column = static_cast<float>(particleEmitter->particleType.textureIndex % rows);
     float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
@@ -356,6 +358,7 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
     ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
     ImGui::Unindent();
+    
     ImGui::Text("Emitter");
     ImGui::Indent();
     ImGui::InputFloat3("Size", &particleEmitter->size[0]);
@@ -378,11 +381,9 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
         ImGui::EndPopup();
     }
     ImGui::Unindent();
+    
     ImGui::Text("Preview");
     ImGui::Indent();
-
-    BezierWidget bezierWidget(ImVec2(200,200), test);
-    bezierWidget.Show();
-
+    ImGui::Checkbox("Simulate", &particleEmitter->preview);
     ImGui::Unindent();
 }

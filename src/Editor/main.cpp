@@ -65,6 +65,7 @@ int main() {
             
             if (editor->IsVisible()) {
                 Hymn().world.ClearKilled();
+                Managers().particleManager->Update(Hymn().world, deltaTime, true);
                 Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"));
                 
                 editor->Show(deltaTime);
