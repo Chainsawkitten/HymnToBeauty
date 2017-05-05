@@ -90,6 +90,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec3", "vec3 opSub(const vec3 &in) const", asFUNCTION(vec3Sub), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opMul(float) const", asFUNCTION(vec3Mul), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opDiv(float) const", asFUNCTION(vec3Div), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator+=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
     
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
