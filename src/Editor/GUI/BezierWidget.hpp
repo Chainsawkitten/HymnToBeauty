@@ -2,7 +2,9 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <imgui.h>
-
+///@TODO:   Separate Curve into separate class with a given ease function.
+///         Rename BezierWidget to CurveWidget.
+///         Make the widget draw the curve using ease function.
 class Curve {
     public:
         /// Constructor.
