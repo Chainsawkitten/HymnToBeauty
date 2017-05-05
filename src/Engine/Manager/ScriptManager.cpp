@@ -44,6 +44,13 @@ void SendMessage(Entity* recipient, int type) {
     Managers().scriptManager->SendMessage(recipient, type);
 }
 
+void vec3Constructor(float x, float y, float z, void* memory) {
+    glm::vec3* vec = static_cast<glm::vec3*>(memory);
+    vec->x = x;
+    vec->y = y;
+    vec->z = z;
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -59,6 +66,7 @@ ScriptManager::ScriptManager() {
     
     // Register GLM types.
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
+    engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(float, float, float)", asFUNCTION(vec3Constructor), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectProperty("vec3", "float x", asOFFSET(glm::vec3, x));
     engine->RegisterObjectProperty("vec3", "float y", asOFFSET(glm::vec3, y));
     engine->RegisterObjectProperty("vec3", "float z", asOFFSET(glm::vec3, z));
