@@ -21,6 +21,7 @@
 #include "../Script/ScriptFile.hpp"
 
 #include "Managers.hpp"
+#include "DebugDrawingManager.hpp"
 
 using namespace Component;
 
@@ -150,6 +151,7 @@ ScriptManager::ScriptManager() {
     
     // Register managers.
     engine->RegisterObjectType("DebugDrawingManager", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectMethod("DebugDrawingManager", "void AddPoint(const vec3 &in, const vec3 &in, float, float, bool)", asMETHOD(DebugDrawingManager, AddPoint), asCALL_THISCALL);
     
     engine->RegisterObjectType("Hub", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Hub", "DebugDrawingManager@ debugDrawingManager", asOFFSET(Hub, debugDrawingManager));
