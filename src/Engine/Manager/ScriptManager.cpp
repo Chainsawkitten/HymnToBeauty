@@ -63,6 +63,10 @@ glm::vec3 vec3Mul(float a, void* memory) {
     return *static_cast<glm::vec3*>(memory) * a;
 }
 
+glm::vec3 vec3Div(float a, void* memory) {
+    return *static_cast<glm::vec3*>(memory) / a;
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -85,6 +89,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3 &in) const", asFUNCTION(vec3Add), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opSub(const vec3 &in) const", asFUNCTION(vec3Sub), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opMul(float) const", asFUNCTION(vec3Mul), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opDiv(float) const", asFUNCTION(vec3Div), asCALL_CDECL_OBJLAST);
     
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
