@@ -381,9 +381,8 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::Text("Preview");
     ImGui::Indent();
 
-    Curve test;
     BezierWidget bezierWidget(ImVec2(200,200), test);
-    bezierWidget.show();
+    bezierWidget.Show();
 
     ImGui::Unindent();
 }
