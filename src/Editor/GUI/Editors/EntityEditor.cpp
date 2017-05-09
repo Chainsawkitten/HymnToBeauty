@@ -24,6 +24,7 @@
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
+#include "../BezierWidget.hpp"
 
 using namespace GUI;
 
@@ -338,6 +339,8 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
     ImGui::Text("Particle");
     ImGui::Indent();
+    BezierWidget bezierWidget(ImVec2(200,200), &test);
+    bezierWidget.Show();
     int rows = Managers().particleManager->GetTextureAtlasRows();
     float column = static_cast<float>(particleEmitter->particleType.textureIndex % rows);
     float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
