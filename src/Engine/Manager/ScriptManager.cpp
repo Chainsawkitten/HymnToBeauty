@@ -21,6 +21,7 @@
 #include "../Script/ScriptFile.hpp"
 
 #include "Managers.hpp"
+#include "DebugDrawingManager.hpp"
 
 using namespace Component;
 
@@ -243,12 +244,22 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("Entity", "Component::SoundSource@ AddSoundSource()", asMETHODPR(Entity, AddComponent<SoundSource>, (), SoundSource*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::SoundSource@ GetSoundSource()", asMETHODPR(Entity, GetComponent<SoundSource>, (), SoundSource*), asCALL_THISCALL);
     
+    // Register managers.
+    engine->RegisterObjectType("DebugDrawingManager", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectMethod("DebugDrawingManager", "void AddPoint(const vec3 &in, const vec3 &in, float, float = 0.0, bool = true)", asMETHOD(DebugDrawingManager, AddPoint), asCALL_THISCALL);
+    engine->RegisterObjectMethod("DebugDrawingManager", "void AddLine(const vec3 &in, const vec3 &in, const vec3 &in, float = 1.0, float = 0.0, bool = true)", asMETHOD(DebugDrawingManager, AddLine), asCALL_THISCALL);
+    engine->RegisterObjectMethod("DebugDrawingManager", "void AddAxisAlignedBoundingBox(const vec3 &in, const vec3 &in, const vec3 &in, float = 1.0, float = 0.0, bool = true)", asMETHOD(DebugDrawingManager, AddAxisAlignedBoundingBox), asCALL_THISCALL);
+    
+    engine->RegisterObjectType("Hub", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Hub", "DebugDrawingManager@ debugDrawingManager", asOFFSET(Hub, debugDrawingManager));
+    
     // Register functions.
     engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
     engine->RegisterGlobalFunction("Entity@ GetEntity()", asFUNCTION(GetEntity), asCALL_CDECL);
     engine->RegisterGlobalFunction("void RegisterUpdate()", asFUNCTION(::RegisterUpdate), asCALL_CDECL);
     engine->RegisterGlobalFunction("bool Input(input button)", asFUNCTION(Input), asCALL_CDECL);
     engine->RegisterGlobalFunction("void SendMessage(Entity@, int)", asFUNCTION(::SendMessage), asCALL_CDECL);
+    engine->RegisterGlobalFunction("Hub@ Managers()", asFUNCTION(Managers), asCALL_CDECL);
 }
 
 ScriptManager::~ScriptManager() {
