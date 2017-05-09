@@ -44,6 +44,55 @@ void SendMessage(Entity* recipient, int type) {
     Managers().scriptManager->SendMessage(recipient, type);
 }
 
+void vec2Constructor(float x, float y, void* memory) {
+    glm::vec2* vec = static_cast<glm::vec2*>(memory);
+    vec->x = x;
+    vec->y = y;
+}
+
+void vec3Constructor(float x, float y, float z, void* memory) {
+    glm::vec3* vec = static_cast<glm::vec3*>(memory);
+    vec->x = x;
+    vec->y = y;
+    vec->z = z;
+}
+
+void vec4Constructor(float x, float y, float z, float w, void* memory) {
+    glm::vec4* vec = static_cast<glm::vec4*>(memory);
+    vec->x = x;
+    vec->y = y;
+    vec->z = z;
+    vec->w = w;
+}
+
+template<typename type> type glmAdd(const type& a, const void* memory) {
+    return *static_cast<const type*>(memory) + a;
+}
+
+template<typename type> type glmSub(const type& a, const void* memory) {
+    return *static_cast<const type*>(memory) - a;
+}
+
+template<typename type> type glmMul(float a, const void* memory) {
+    return *static_cast<const type*>(memory) * a;
+}
+
+template<typename type> type glmMulR(float a, const void* memory) {
+    return a * *static_cast<const type*>(memory);
+}
+
+template<typename type> type glmDiv(float a, const void* memory) {
+    return *static_cast<const type*>(memory) / a;
+}
+
+template<typename type> type glmDivR(float a, const void* memory) {
+    return a / *static_cast<const type*>(memory);
+}
+
+template<typename type> type glmNeg(const void* memory) {
+    return -*static_cast<const type*>(memory);
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -58,10 +107,56 @@ ScriptManager::ScriptManager() {
     engine->RegisterEnum("input");
     
     // Register GLM types.
-    engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD);
+    engine->RegisterObjectType("vec2", sizeof(glm::vec2), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec2>());
+    engine->RegisterObjectProperty("vec2", "float x", asOFFSET(glm::vec2, x));
+    engine->RegisterObjectProperty("vec2", "float y", asOFFSET(glm::vec2, y));
+    engine->RegisterObjectBehaviour("vec2", asBEHAVE_CONSTRUCT, "void f(float, float)", asFUNCTION(vec2Constructor), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2 opAdd(const vec2 &in) const", asFUNCTIONPR(glmAdd<glm::vec2>, (const glm::vec2&, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2 opSub(const vec2 &in) const", asFUNCTIONPR(glmSub<glm::vec2>, (const glm::vec2&, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2 opMul(float) const", asFUNCTIONPR(glmMul<glm::vec2>, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2 opMul_r(float) const", asFUNCTIONPR(glmMulR<glm::vec2>, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2 opDiv(float) const", asFUNCTIONPR(glmDiv<glm::vec2>, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2 opDiv_r(float) const", asFUNCTIONPR(glmDivR<glm::vec2>, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec2", "vec2& opAddAssign(const vec2 &in) const", asMETHODPR(glm::vec2, operator+=, (const glm::vec2&), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opSubAssign(const vec2 &in) const", asMETHODPR(glm::vec2, operator-=, (const glm::vec2&), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opMulAssign(float) const", asMETHODPR(glm::vec2, operator*=, (float), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opDivAssign(float) const", asMETHODPR(glm::vec2, operator/=, (float), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2 opNeg() const", asFUNCTIONPR(glmNeg<glm::vec2>, (const void*), glm::vec2), asCALL_CDECL_OBJLAST);
+    
+    engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>());
     engine->RegisterObjectProperty("vec3", "float x", asOFFSET(glm::vec3, x));
     engine->RegisterObjectProperty("vec3", "float y", asOFFSET(glm::vec3, y));
     engine->RegisterObjectProperty("vec3", "float z", asOFFSET(glm::vec3, z));
+    engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(float, float, float)", asFUNCTION(vec3Constructor), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3 &in) const", asFUNCTIONPR(glmAdd<glm::vec3>, (const glm::vec3&, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opSub(const vec3 &in) const", asFUNCTIONPR(glmSub<glm::vec3>, (const glm::vec3&, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opMul(float) const", asFUNCTIONPR(glmMul<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opMul_r(float) const", asFUNCTIONPR(glmMulR<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opDiv(float) const", asFUNCTIONPR(glmDiv<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3 opDiv_r(float) const", asFUNCTIONPR(glmDivR<glm::vec3>, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator+=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opSubAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator-=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opMulAssign(float) const", asMETHODPR(glm::vec3, operator*=, (float), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opDivAssign(float) const", asMETHODPR(glm::vec3, operator/=, (float), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3 opNeg() const", asFUNCTIONPR(glmNeg<glm::vec3>, (const void*), glm::vec3), asCALL_CDECL_OBJLAST);
+    
+    engine->RegisterObjectType("vec4", sizeof(glm::vec4), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec4>());
+    engine->RegisterObjectProperty("vec4", "float x", asOFFSET(glm::vec4, x));
+    engine->RegisterObjectProperty("vec4", "float y", asOFFSET(glm::vec4, y));
+    engine->RegisterObjectProperty("vec4", "float z", asOFFSET(glm::vec4, z));
+    engine->RegisterObjectProperty("vec4", "float w", asOFFSET(glm::vec4, w));
+    engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(float, float, float, float)", asFUNCTION(vec4Constructor), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4 opAdd(const vec4 &in) const", asFUNCTIONPR(glmAdd<glm::vec4>, (const glm::vec4&, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4 opSub(const vec4 &in) const", asFUNCTIONPR(glmSub<glm::vec4>, (const glm::vec4&, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4 opMul(float) const", asFUNCTIONPR(glmMul<glm::vec4>, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4 opMul_r(float) const", asFUNCTIONPR(glmMulR<glm::vec4>, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4 opDiv(float) const", asFUNCTIONPR(glmDiv<glm::vec4>, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4 opDiv_r(float) const", asFUNCTIONPR(glmDivR<glm::vec4>, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("vec4", "vec4& opAddAssign(const vec4 &in) const", asMETHODPR(glm::vec4, operator+=, (const glm::vec4&), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opSubAssign(const vec4 &in) const", asMETHODPR(glm::vec4, operator-=, (const glm::vec4&), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opMulAssign(float) const", asMETHODPR(glm::vec4, operator*=, (float), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opDivAssign(float) const", asMETHODPR(glm::vec4, operator/=, (float), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4 opNeg() const", asFUNCTIONPR(glmNeg<glm::vec4>, (const void*), glm::vec4), asCALL_CDECL_OBJLAST);
     
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
