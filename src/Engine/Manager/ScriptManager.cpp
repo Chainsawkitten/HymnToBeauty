@@ -159,6 +159,19 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec4", "vec4& opDivAssign(float) const", asMETHODPR(glm::vec4, operator/=, (float), glm::vec4&), asCALL_THISCALL);
     engine->RegisterObjectMethod("vec4", "vec4 opNeg() const", asFUNCTIONPR(glmNeg<glm::vec4>, (const void*), glm::vec4), asCALL_CDECL_OBJLAST);
     
+    engine->RegisterObjectType("mat3", sizeof(glm::mat3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::mat3>());
+    engine->RegisterObjectMethod("mat3", "mat3 opAdd(const mat3 &in) const", asFUNCTIONPR(glmAdd<glm::mat3>, (const glm::mat3&, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "mat3 opSub(const mat3 &in) const", asFUNCTIONPR(glmSub<glm::mat3>, (const glm::mat3&, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "mat3 opMul(float) const", asFUNCTIONPR(glmMul<glm::mat3>, (float, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "mat3 opMul_r(float) const", asFUNCTIONPR(glmMulR<glm::mat3>, (float, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "mat3 opDiv(float) const", asFUNCTIONPR(glmDiv<glm::mat3>, (float, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "mat3 opDiv_r(float) const", asFUNCTIONPR(glmDivR<glm::mat3>, (float, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "mat3& opAddAssign(const vec2 &in) const", asMETHODPR(glm::mat3, operator+=, (const glm::mat3&), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opSubAssign(const vec2 &in) const", asMETHODPR(glm::mat3, operator-=, (const glm::mat3&), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opMulAssign(float) const", asMETHODPR(glm::mat3, operator*=, (float), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opDivAssign(float) const", asMETHODPR(glm::mat3, operator/=, (float), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3 opNeg() const", asFUNCTIONPR(glmNeg<glm::mat3>, (const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
