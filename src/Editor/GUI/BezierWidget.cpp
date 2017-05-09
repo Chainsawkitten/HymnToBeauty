@@ -50,9 +50,9 @@ void Curve::Sort(){
     std::sort(points.begin(), points.end(), compareVec3x);
 }
 
-BezierWidget::BezierWidget(ImVec2 size, Curve& curve){
+BezierWidget::BezierWidget(ImVec2 size, Curve* curve){
     this->size = size;
-    this->curve = &curve;
+    this->curve = curve;
 }
 
 void BezierWidget::Show() {

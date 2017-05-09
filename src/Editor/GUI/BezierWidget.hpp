@@ -36,7 +36,7 @@ class Curve {
 class BezierWidget {
     public:
         /// Constructor.
-        BezierWidget(ImVec2 size, Curve& curve);
+        BezierWidget(ImVec2 size, Curve* curve);
 
         /// Draws a bezier widget.
         void Show();
