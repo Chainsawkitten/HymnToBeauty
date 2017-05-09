@@ -94,6 +94,10 @@ template<typename type> type glmNeg(const void* memory) {
     return -*static_cast<const type*>(memory);
 }
 
+glm::vec3 mat3MulVec3(const glm::vec3& a, const void* memory) {
+    return *static_cast<const glm::mat3*>(memory) * a;
+}
+
 ScriptManager::ScriptManager() {
     // Create the script engine
     engine = asCreateScriptEngine();
@@ -171,6 +175,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("mat3", "mat3& opMulAssign(float) const", asMETHODPR(glm::mat3, operator*=, (float), glm::mat3&), asCALL_THISCALL);
     engine->RegisterObjectMethod("mat3", "mat3& opDivAssign(float) const", asMETHODPR(glm::mat3, operator/=, (float), glm::mat3&), asCALL_THISCALL);
     engine->RegisterObjectMethod("mat3", "mat3 opNeg() const", asFUNCTIONPR(glmNeg<glm::mat3>, (const void*), glm::mat3), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("mat3", "vec3 opMul(const vec3 &in) const", asFUNCTION(mat3MulVec3), asCALL_CDECL_OBJLAST);
     
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
