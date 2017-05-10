@@ -1,6 +1,5 @@
 #pragma once
 
-#define NOMINMAX
 #include <limits>
 
 namespace ImGui {
@@ -11,5 +10,5 @@ namespace ImGui {
      * @param min Minimum allowed value.
      * @param max Maximum allowed value.
      */
-    void DraggableFloat(const char* label, float& value, float min = std::numeric_limits<float>::lowest(), float max = std::numeric_limits<float>::max());
+    void DraggableFloat(const char* label, float& value, float min = std::numeric_limits<float>::lowest(), float max = (std::numeric_limits<float>::max)());
 }
