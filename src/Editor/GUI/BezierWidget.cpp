@@ -393,6 +393,8 @@ void Curve::Sort(){
     std::sort(points.begin(), points.end(), compareVec3x);
 }
 
+int BezierWidget::maximumNumberOfCurveLines = 256;
+
 BezierWidget::BezierWidget(ImVec2 size, Curve* curve){
     this->size = size;
     this->curve = curve;
@@ -443,10 +445,10 @@ void BezierWidget::Show() {
     }
 
     // Draw curve from sampled values.
-    for(float i = 0; i < (maximumNumberOfCurveLines-1); i+=1.f) {
+    for(int i = 0; i < maximumNumberOfCurveLines; i++) {
         // The x-value for the point we want to sample.
-        float samplePointA = i/maximumNumberOfCurveLines;
-        float samplePointB = (i+1)/maximumNumberOfCurveLines;
+        float samplePointA = static_cast<float>(i)/maximumNumberOfCurveLines;
+        float samplePointB = static_cast<float>(i+1)/maximumNumberOfCurveLines;
 
         // The y-value we are sampling for.
         float sampledPointA = curve->Sample(samplePointA);
@@ -549,4 +551,6 @@ void BezierWidget::Show() {
             if( ImGui::Combo("Ease type", &item, items, IM_ARRAYSIZE(items)) ) {
                     curve->curveType = static_cast<Curve::CurveType>(item);
             }
+            
+            ImGui::DragInt("test", &maximumNumberOfCurveLines, 1.f, 0, 1024);
 }

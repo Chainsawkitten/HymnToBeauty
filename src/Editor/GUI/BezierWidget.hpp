@@ -89,7 +89,7 @@ class BezierWidget {
         
     private:
         /// Increase this to increase the resolution of the graph.
-        const int maximumNumberOfCurveLines = 256;
+        static int maximumNumberOfCurveLines;
         
         Curve* curve;
         
