@@ -86,8 +86,14 @@ class BezierWidget {
 
         /// Draws a bezier widget.
         void Show();
+        
     private:
+        /// Increase this to increase the resolution of the graph.
+        const int maximumNumberOfCurveLines = 256;
+        
         Curve* curve;
+        
         ImVec2 size;
+        
         bool draggingPoint = false;
 };
