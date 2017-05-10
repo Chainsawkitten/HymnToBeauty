@@ -457,13 +457,13 @@ void BezierWidget::Show() {
         ImVec2 position = ImVec2((context.IO.MousePos.x - bb.Min.x)/(bb.Max.x - bb.Min.x), (context.IO.MousePos.y - bb.Min.y)/(bb.Max.y - bb.Min.y));
         position.y = 1.f - position.y;
         std::string info = "X: " + std::to_string(position.x) + " Y: " + std::to_string(position.y);
-        
+
         // Render position to screen.
         ImGui::RenderTextClipped(ImVec2(bb.Min.x, bb.Min.y + style.FramePadding.y ), bb.Max, info.c_str(), NULL, NULL);
-        
+
         // Get the index of the point closest to the mouse.
         int index = curve->GetClosestPointIndex(glm::vec2(position.x, position.y));
-        
+
         if(context.IO.MouseDown[0]){
             // LMB: add a point.
             if(curve->points.size() < 10)
