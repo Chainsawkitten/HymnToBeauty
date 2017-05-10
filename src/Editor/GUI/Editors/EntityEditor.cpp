@@ -24,6 +24,7 @@
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
+#include "../../ImGui/Draggable.hpp"
 
 using namespace GUI;
 
@@ -345,8 +346,8 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
     ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
-    ImGui::DragFloat("Average lifetime", &particleEmitter->particleType.averageLifetime, 0.001f*std::abs(ImGui::GetIO().MouseDelta.x));
-    ImGui::DragFloat("Lifetime variance", &particleEmitter->particleType.lifetimeVariance, 0.001f*std::abs(ImGui::GetIO().MouseDelta.x));
+    ImGui::DraggableFloat("Average lifetime", &particleEmitter->particleType.averageLifetime);
+    ImGui::DraggableFloat("Lifetime variance", &particleEmitter->particleType.lifetimeVariance);
     ImGui::InputFloat2("Average size", &particleEmitter->particleType.averageSize[0]);
     ImGui::InputFloat2("Size variance", &particleEmitter->particleType.sizeVariance[0]);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
