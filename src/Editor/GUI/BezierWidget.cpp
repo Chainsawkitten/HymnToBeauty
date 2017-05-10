@@ -428,23 +428,41 @@ void BezierWidget::Show() {
                     ImGui::GetColorU32(ImGuiCol_TextDisabled)
                     );
     }
-    
-    // Draw straight and bezier curve. TODO: Different ease functions.
+
+    // Draw straight guide lines.
     for(int i = 0; i < curve->points.size()-1; i++){
         ImVec2 current = ImVec2(bb.Min.x + curve->points[i].x*size.x, bb.Max.y - curve->points[i].y*size.y);
         ImVec2 next = ImVec2(bb.Min.x + curve->points[i+1].x*size.x, bb.Max.y - curve->points[i+1].y*size.y);
-        
+
         // Straight lines for reference.
         window->DrawList->AddLine(
                     current,
                     next,
                     ImGui::GetColorU32(ImGuiCol_PlotLines)
                     );
-        
-        // Bezier curves
-        window->DrawList->AddBezierCurve(current, ImVec2(current.x + 18.f, current.y), ImVec2(next.x - 18.f, next.y), next, ImGui::GetColorU32(ImGuiCol_PlotLinesHovered), 1.5f);
     }
-    
+
+    // Draw curve from sampled values.
+    for(float i = 0; i < (maximumNumberOfCurveLines-1); i+=1.f) {
+        // The x-value for the point we want to sample.
+        float samplePointA = i/maximumNumberOfCurveLines;
+        float samplePointB = (i+1)/maximumNumberOfCurveLines;
+
+        // The y-value we are sampling for.
+        float sampledPointA = curve->Sample(samplePointA);
+        float sampledPointB = curve->Sample(samplePointB);
+
+        // Transform to gui canvas.
+        ImVec2 current = ImVec2(bb.Min.x + samplePointA*size.x, bb.Max.y - sampledPointA*size.y);
+        ImVec2 next = ImVec2(bb.Min.x + samplePointB*size.x, bb.Max.y - sampledPointB*size.y);
+        window->DrawList->AddLine(
+                    current,
+                    next,
+                    ImGui::GetColorU32(ImGuiCol_PlotLinesHovered),
+                    2.f
+                    );
+    }
+
     // Ensure that the mouse is inside the rectangle.
     if(hovered){
         // Render control points.
