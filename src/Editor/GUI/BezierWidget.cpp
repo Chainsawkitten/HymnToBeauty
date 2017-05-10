@@ -500,4 +500,53 @@ void BezierWidget::Show() {
             }
         }
     }
+
+    // curve selector
+            const char* items[] = {
+                "Linear",
+                "Quad in",
+                "Quad out",
+                "Quad in  out",
+                "Cubic in",
+                "Cubic out",
+                "Cubic in  out",
+                "Quart in",
+                "Quart out",
+                "Quart in  out",
+                "Quint in",
+                "Quint out",
+                "Quint in  out",
+                "Sine in",
+                "Sine out",
+                "Sine in  out",
+                "Expo in",
+                "Expo out",
+                "Expo in  out",
+                "Circ in",
+                "Circ out",
+                "Circ in  out",
+                "Elastic in",
+                "Elastic out",
+                "Elastic in  out",
+                "Back in",
+                "Back out",
+                "Back in  out",
+                "Bounce in",
+                "Bounce out",
+                "Bounce in out",
+
+                "Sine square",
+                "Exponential",
+
+                "Schubring1",
+                "Schubring2",
+                "Schubring3",
+
+                "SinPi2",
+                "Swing"
+            };
+            int item = 0;
+            if( ImGui::Combo("Ease type", &item, items, IM_ARRAYSIZE(items)) ) {
+                    curve->curveType = static_cast<Curve::CurveType>(item);
+            }
 }
