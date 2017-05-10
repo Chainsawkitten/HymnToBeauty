@@ -4,6 +4,13 @@
 #define NOMINMAX
 #include <limits>
 #include <algorithm>
+#include <glm/gtc/constants.hpp>
+
+#           define bounceout(p) ( \
+                (p) < 4/11.0 ? (121 * (p) * (p))/16.0 : \
+                (p) < 8/11.0 ? (363/40.0 * (p) * (p)) - (99/10.0 * (p)) + 17/5.0 : \
+                (p) < 9/10.0 ? (4356/361.0 * (p) * (p)) - (35442/1805.0 * (p)) + 16061/1805.0 \
+                           : (54/5.0 * (p) * (p)) - (513/25.0 * (p)) + 268/25.0 )
 
 bool compareVec3x(glm::vec2 a, glm::vec2 b){
     return (a.x < b.x);
