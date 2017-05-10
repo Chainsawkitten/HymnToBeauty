@@ -545,7 +545,7 @@ void BezierWidget::Show() {
                 "SinPi2",
                 "Swing"
             };
-            int item = 0;
+            int item = static_cast<int>(curve->curveType);
             if( ImGui::Combo("Ease type", &item, items, IM_ARRAYSIZE(items)) ) {
                     curve->curveType = static_cast<Curve::CurveType>(item);
             }
