@@ -310,19 +310,19 @@ float Curve::Sample(float x){
             rightCoefficient = 1.f - leftCoefficient;
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         break;
-    
+
         case CurveType::EXPONENTIAL:
             leftCoefficient = 1.f / (1.f + std::exp(6.f - 12.f * (leftCoefficient)));
             rightCoefficient = 1.f - leftCoefficient;
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         break;
-        
+
         case CurveType::SCHUBRING1:
-            leftCoefficient = 2.f * (leftCoefficient +(0.5f - leftCoefficient) * std::abs(0.5f - leftCoefficient)) - 0.5f; 
+            leftCoefficient = 2.f * (leftCoefficient +(0.5f - leftCoefficient) * std::abs(0.5f - leftCoefficient)) - 0.5f;
             rightCoefficient = 1.f - leftCoefficient;
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         break;
-        
+
         case CurveType::SCHUBRING2:{
             float p1pass = 2.f * (leftCoefficient*(0.5f - leftCoefficient)*std::abs(0.5f - leftCoefficient)) - 0.5f;
             float p2pass = 2.f * (p1pass + (0.5f - p1pass) * std::abs(0.5f - p1pass)) - 0.5f;
@@ -331,7 +331,7 @@ float Curve::Sample(float x){
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         }
         break;
-        
+
         case CurveType::SCHUBRING3:{
             double p1pass= 2.f*(leftCoefficient+(0.5f-leftCoefficient)*std::abs(0.5f-leftCoefficient))-0.5f;
             double p2pass= 2.f*(p1pass+(0.5f-p1pass)*std::abs(0.5f-p1pass))-0.5f;
@@ -340,19 +340,19 @@ float Curve::Sample(float x){
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         }
         break;
-        
+
         case CurveType::SWING:
             leftCoefficient = ((-std::cos(pi * leftCoefficient) * 0.5f) + 0.5f);
             rightCoefficient = 1.f - leftCoefficient;
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         break;
-        
+
         case CurveType::SINPI2:
             leftCoefficient = std::sin(leftCoefficient * piHalf);
             rightCoefficient = 1.f - leftCoefficient;
             return leftCoefficient * points[leftIndex].y + rightCoefficient * points[rightIndex].y;
         break;
-        
+
         default:
             return -1.f;
         break;
@@ -371,7 +371,7 @@ void Curve::AddPoint(glm::vec2 newPoint) {
 int Curve::GetClosestPointIndex(glm::vec2 point){
     float closestDistance = std::numeric_limits<float>::max();
     int indexOfClosestPoint = 0;
-    
+
     for(int i = 0; i < points.size(); i++){
         float a = points[i].x - point.x;
         float b = points[i].y - point.y;
@@ -411,10 +411,10 @@ void BezierWidget::Show() {
     ImGui::RenderFrame(bb.Min, bb.Max, ImGui::GetColorU32(ImGuiCol_FrameBg, 1), true, style.FrameRounding);
     const bool hovered = ImGui::IsHovered(bb, id);
 
-    // Height and width 
+    // Height and width
     float height = bb.Max.y - bb.Min.y;
-    float width = bb.Max.x - bb.Min.x;    
- 
+    float width = bb.Max.x - bb.Min.x;
+
     // Draw reference lines along x/y axis.
     for(int i = 0; i < 9; i++) {
         window->DrawList->AddLine(
