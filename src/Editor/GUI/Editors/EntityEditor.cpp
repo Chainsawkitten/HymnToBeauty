@@ -121,19 +121,19 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
     ImGui::Text("Positional");
     ImGui::Indent();
-    ImGui::InputFloat3("Velocity", &physics->velocity[0]);
-    ImGui::InputFloat("Max velocity", &physics->maxVelocity);
-    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
-    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
-    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
+    ImGui::DraggableVec3("Velocity", physics->velocity);
+    ImGui::DraggableFloat("Max velocity", physics->maxVelocity, 0.0f);
+    ImGui::DraggableVec3("Acceleration", physics->acceleration);
+    ImGui::DraggableFloat("Velocity drag factor", physics->velocityDragFactor);
+    ImGui::DraggableFloat("Gravity factor", physics->gravityFactor);
     ImGui::Unindent();
     ImGui::Text("Angular");
     ImGui::Indent();
-    ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
-    ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
-    ImGui::InputFloat3("Angular acceleration", &physics->angularAcceleration[0]);
-    ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
-    ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+    ImGui::DraggableVec3("Angular velocity", physics->angularVelocity);
+    ImGui::DraggableFloat("Max angular velocity", physics->maxAngularVelocity, 0.0f);
+    ImGui::DraggableVec3("Angular acceleration", physics->angularAcceleration);
+    ImGui::DraggableFloat("Angular drag factor", physics->angularDragFactor);
+    ImGui::DraggableVec3("Moment of inertia", physics->momentOfInertia);
     ImGui::Unindent();
 
 }
