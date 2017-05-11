@@ -259,26 +259,26 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
 void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &directionalLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &directionalLight->ambientCoefficient);
+    ImGui::DraggableFloat("Ambient coefficient", directionalLight->ambientCoefficient, 0.0f);
     ImGui::Unindent();
 }
 
 void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &pointLight->color[0]);
-    ImGui::DraggableFloat("Ambient coefficient", pointLight->ambientCoefficient);
-    ImGui::DraggableFloat("Attenuation", pointLight->attenuation);
-    ImGui::DraggableFloat("Intensity", pointLight->intensity);
+    ImGui::DraggableFloat("Ambient coefficient", pointLight->ambientCoefficient, 0.0f);
+    ImGui::DraggableFloat("Attenuation", pointLight->attenuation, 0.0f);
+    ImGui::DraggableFloat("Intensity", pointLight->intensity, 0.0f);
     ImGui::Unindent();
 }
 
 void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &spotLight->color[0]);
-    ImGui::DraggableFloat("Ambient coefficient", spotLight->ambientCoefficient);
-    ImGui::DraggableFloat("Attenuation", spotLight->attenuation);
-    ImGui::DraggableFloat("Intensity", spotLight->intensity);
-    ImGui::DraggableFloat("Cone angle", spotLight->coneAngle);
+    ImGui::DraggableFloat("Ambient coefficient", spotLight->ambientCoefficient, 0.0f);
+    ImGui::DraggableFloat("Attenuation", spotLight->attenuation, 0.0f);
+    ImGui::DraggableFloat("Intensity", spotLight->intensity, 0.0f);
+    ImGui::DraggableFloat("Cone angle", spotLight->coneAngle, 0.0f, 180.f);
     ImGui::Unindent();
 }
 
