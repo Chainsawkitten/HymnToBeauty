@@ -159,9 +159,9 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
 
 void EntityEditor::LensEditor(Component::Lens* lens) {
     ImGui::Indent();
-    ImGui::InputFloat("Field of view", &lens->fieldOfView);
-    ImGui::InputFloat("Z near", &lens->zNear);
-    ImGui::InputFloat("Z far", &lens->zFar);
+    ImGui::DraggableFloat("Field of view", lens->fieldOfView, 0.0f, 180.f);
+    ImGui::DraggableFloat("Z near", lens->zNear, 0.0f);
+    ImGui::DraggableFloat("Z far", lens->zFar, 0.0f);
     ImGui::Unindent();
 }
 
