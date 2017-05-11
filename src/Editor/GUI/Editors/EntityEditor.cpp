@@ -348,8 +348,8 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
     ImGui::DraggableFloat("Average lifetime", particleEmitter->particleType.averageLifetime, 0.0f);
     ImGui::DraggableFloat("Lifetime variance", particleEmitter->particleType.lifetimeVariance, 0.0f);
-    ImGui::InputFloat2("Average size", &particleEmitter->particleType.averageSize[0]);
-    ImGui::InputFloat2("Size variance", &particleEmitter->particleType.sizeVariance[0]);
+    ImGui::DraggableVec2("Average size", particleEmitter->particleType.averageSize, 0.0f);
+    ImGui::DraggableVec2("Size variance", particleEmitter->particleType.sizeVariance, 0.0f);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
     ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
     ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
