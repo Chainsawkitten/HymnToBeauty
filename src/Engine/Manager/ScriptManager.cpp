@@ -201,6 +201,9 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("mat4", "mat4 opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::mat4), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat4", "vec4 opMul(const vec4 &in) const", asFUNCTION(mat4MulVec4), asCALL_CDECL_OBJLAST);
     
+    // Register GLM functions.
+    engine->RegisterGlobalFunction("vec2 normalize(const vec2 &in)", asFUNCTIONPR(glm::normalize, (const glm::vec2&), glm::vec2), asCALL_CDECL);
+    
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
