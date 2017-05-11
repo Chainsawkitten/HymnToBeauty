@@ -344,8 +344,8 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
     ImGui::Image((void*) Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128), ImVec2(column / rows, row / rows), ImVec2((column + 1.f) / rows, (row + 1.f) / rows));
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
-    ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
-    ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
+    ImGui::DraggableVec3("Min velocity", particleEmitter->particleType.minVelocity);
+    ImGui::DraggableVec3("Max velocity", particleEmitter->particleType.maxVelocity);
     ImGui::DraggableFloat("Average lifetime", particleEmitter->particleType.averageLifetime, 0.0f);
     ImGui::DraggableFloat("Lifetime variance", particleEmitter->particleType.lifetimeVariance, 0.0f);
     ImGui::DraggableVec2("Average size", particleEmitter->particleType.averageSize, 0.0f);
@@ -359,7 +359,7 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     
     ImGui::Text("Emitter");
     ImGui::Indent();
-    ImGui::InputFloat3("Size", &particleEmitter->size[0]);
+    ImGui::DraggableVec3("Size", particleEmitter->size);
     ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
     ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
     
