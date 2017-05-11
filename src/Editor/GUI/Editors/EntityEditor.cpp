@@ -54,9 +54,9 @@ void EntityEditor::Show() {
         entity->name = name;
         ImGui::Text("Transform");
         ImGui::Indent();
-        ImGui::InputFloat3("Position", &entity->position[0]);
-        ImGui::InputFloat3("Rotation", &entity->rotation[0]);
-        ImGui::InputFloat3("Scale", &entity->scale[0]);
+        ImGui::DraggableVec3("Position", entity->position);
+        ImGui::DraggableVec3("Rotation", entity->rotation);
+        ImGui::DraggableVec3("Scale", entity->scale);
         ImGui::Unindent();
         if (!entity->IsScene()) {
             if (ImGui::Button("Add component"))
