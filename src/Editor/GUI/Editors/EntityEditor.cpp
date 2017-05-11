@@ -330,8 +330,8 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
     ImGui::Unindent();
     ImGui::Text("Sound properties");
     ImGui::Indent();
-    ImGui::InputFloat("Pitch", &soundSource->pitch);
-    ImGui::InputFloat("Gain", &soundSource->gain);
+    ImGui::DraggableFloat("Pitch", soundSource->pitch, 0.0f);
+    ImGui::DraggableFloat("Gain", soundSource->gain, 0.0f);
     ImGui::Checkbox("Loop", &soundSource->loop);
     ImGui::Unindent();
 }
