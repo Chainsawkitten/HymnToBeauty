@@ -266,9 +266,9 @@ void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* direction
 void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &pointLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &pointLight->ambientCoefficient);
-    ImGui::InputFloat("Attenuation", &pointLight->attenuation);
-    ImGui::InputFloat("Intensity", &pointLight->intensity);
+    ImGui::DraggableFloat("Ambient coefficient", pointLight->ambientCoefficient);
+    ImGui::DraggableFloat("Attenuation", pointLight->attenuation);
+    ImGui::DraggableFloat("Intensity", pointLight->intensity);
     ImGui::Unindent();
 }
 
