@@ -275,10 +275,10 @@ void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
 void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &spotLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &spotLight->ambientCoefficient);
-    ImGui::InputFloat("Attenuation", &spotLight->attenuation);
-    ImGui::InputFloat("Intensity", &spotLight->intensity);
-    ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
+    ImGui::DraggableFloat("Ambient coefficient", spotLight->ambientCoefficient);
+    ImGui::DraggableFloat("Attenuation", spotLight->attenuation);
+    ImGui::DraggableFloat("Intensity", spotLight->intensity);
+    ImGui::DraggableFloat("Cone angle", spotLight->coneAngle);
     ImGui::Unindent();
 }
 
