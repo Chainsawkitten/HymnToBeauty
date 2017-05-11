@@ -351,17 +351,17 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::DraggableVec2("Average size", particleEmitter->particleType.averageSize, 0.0f);
     ImGui::DraggableVec2("Size variance", particleEmitter->particleType.sizeVariance, 0.0f);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
-    ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
-    ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
-    ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
+    ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
+    ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
+    ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);
     ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
     ImGui::Unindent();
     
     ImGui::Text("Emitter");
     ImGui::Indent();
     ImGui::DraggableVec3("Size", particleEmitter->size);
-    ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
-    ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
+    ImGui::DraggableFloat("Average emit time", particleEmitter->averageEmitTime, 0.0f);
+    ImGui::DraggableFloat("Emit time variance", particleEmitter->emitTimeVariance, 0.0f);
     
     if (ImGui::Button("Emitter type"))
         ImGui::OpenPopup("Emitter type");
