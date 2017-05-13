@@ -552,5 +552,5 @@ void BezierWidget::Show() {
         curve->curveType = static_cast<Curve::CurveType>(item);
     }
     
-    ImGui::DragInt("test", &maximumNumberOfCurveLines, 1.f, 0, 1024);
+    ImGui::DragInt("Resolution", &maximumNumberOfCurveLines, 1.f, 0, 1024);
 }
