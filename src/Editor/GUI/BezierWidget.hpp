@@ -88,7 +88,6 @@ class BezierWidget {
         void Show();
         
     private:
-        /// Increase this to increase the resolution of the graph.
         static int maximumNumberOfCurveLines;
         
         Curve* curve;
