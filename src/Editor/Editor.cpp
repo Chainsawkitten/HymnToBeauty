@@ -157,6 +157,11 @@ void Editor::Show(float deltaTime) {
     
     if (play)
         Play();
+    
+    // Set cursor.
+    if (ImGui::GetMouseCursor() < 5) {
+        glfwSetCursor(MainWindow::GetInstance()->GetGLFWWindow(), cursors[ImGui::GetMouseCursor()]);
+    }
 }
 
 void Editor::Save() const {
