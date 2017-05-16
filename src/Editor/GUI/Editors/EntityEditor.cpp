@@ -362,21 +362,10 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::DraggableFloat("Average emit time", particleEmitter->averageEmitTime, 0.0f);
     ImGui::DraggableFloat("Emit time variance", particleEmitter->emitTimeVariance, 0.0f);
     
-    if (ImGui::Button("Emitter type"))
-        ImGui::OpenPopup("Emitter type");
-    
-    if (ImGui::BeginPopup("Emitter type")) {
-        ImGui::Text("Emitter type");
-        ImGui::Separator();
-        
-        if (ImGui::Selectable("Point"))
-            particleEmitter->emitterType = Component::ParticleEmitter::POINT;
-        
-        if (ImGui::Selectable("Cuboid"))
-            particleEmitter->emitterType = Component::ParticleEmitter::CUBOID;
-        
-        ImGui::EndPopup();
-    }
+    const char* items[] = { "Point", "Cuboid" };
+    int item = static_cast<int>(particleEmitter->emitterType);
+    if (ImGui::Combo("Emitter type", &item, items, 2))
+        particleEmitter->emitterType = static_cast<Component::ParticleEmitter::EmitterType>(item);
     
     if (particleEmitter->emitterType == Component::ParticleEmitter::CUBOID)
         ImGui::DraggableVec3("Size", particleEmitter->size);
