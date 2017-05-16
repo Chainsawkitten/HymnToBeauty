@@ -344,6 +344,7 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
     ImGui::Image((void*) Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128), ImVec2(column / rows, row / rows), ImVec2((column + 1.f) / rows, (row + 1.f) / rows));
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
+    ImGui::ColorEdit3("Color", &particleEmitter->particleType.color[0]);
     ImGui::DraggableVec3("Min velocity", particleEmitter->particleType.minVelocity);
     ImGui::DraggableVec3("Max velocity", particleEmitter->particleType.maxVelocity);
     ImGui::DraggableFloat("Average lifetime", particleEmitter->particleType.averageLifetime, 0.0f);
@@ -354,7 +355,6 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
     ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
     ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);
-    ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
     ImGui::Unindent();
     
     ImGui::Text("Emitter");
