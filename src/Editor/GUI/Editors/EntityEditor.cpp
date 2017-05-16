@@ -359,7 +359,6 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     
     ImGui::Text("Emitter");
     ImGui::Indent();
-    ImGui::DraggableVec3("Size", particleEmitter->size);
     ImGui::DraggableFloat("Average emit time", particleEmitter->averageEmitTime, 0.0f);
     ImGui::DraggableFloat("Emit time variance", particleEmitter->emitTimeVariance, 0.0f);
     
@@ -378,6 +377,10 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
         
         ImGui::EndPopup();
     }
+    
+    if (particleEmitter->emitterType == Component::ParticleEmitter::CUBOID)
+        ImGui::DraggableVec3("Size", particleEmitter->size);
+    
     ImGui::Unindent();
     
     ImGui::Text("Preview");
