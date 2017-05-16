@@ -31,8 +31,6 @@ Editor::Editor() {
     cameraEntity = cameraWorld.CreateEntity("Editor Camera");
     cameraEntity->AddComponent<Component::Lens>();
     cameraEntity->position.z = 10.0f;
-    
-    ImGui::GetIO().MouseDrawCursor = true;
 }
 
 void Editor::Show(float deltaTime) {
