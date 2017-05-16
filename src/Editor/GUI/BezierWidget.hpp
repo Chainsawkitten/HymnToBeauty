@@ -60,6 +60,11 @@ class Curve {
          */
         void AddPoint(glm::vec2 newPoint);
         
+        /// Samples a value in the curve.
+        /**
+         * @param x The point in the curve which will be sampled.
+         * @return The sampled value.
+         */
         float Sample(float x);
         
         /// Gets the index of the point that is closest to the given input point.
