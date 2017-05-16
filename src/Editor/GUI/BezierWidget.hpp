@@ -10,11 +10,62 @@ class Curve {
         /// Constructor.
         Curve();
         
+        /// Curve types.
+        enum CurveType{
+            LINEAR,
+            QUADIN,          // t^2
+            QUADOUT,
+            QUADINOUT,
+            CUBICIN,         // t^3
+            CUBICOUT,
+            CUBICINOUT,
+            QUARTIN,         // t^4
+            QUARTOUT,
+            QUARTINOUT,
+            QUINTIN,         // t^5
+            QUINTOUT,
+            QUINTINOUT,
+            SINEIN,          // sin(t)
+            SINEOUT,
+            SINEINOUT,
+            EXPOIN,          // 2^t
+            EXPOOUT,
+            EXPOINOUT,
+            CIRCIN,          // sqrt(1-t^2)
+            CIRCOUT,
+            CIRCINOUT,
+            ELASTICIN,       // exponentially decaying sine wave
+            ELASTICOUT,
+            ELASTICINOUT,
+            BACKIN,          // overshooting cubic easing: (s+1)*t^3 - s*t^2
+            BACKOUT,
+            BACKINOUT,
+            BOUNCEIN,        // exponentially decaying parabolic bounce
+            BOUNCEOUT,
+            BOUNCEINOUT,
+            
+            SINESQUARE,      // gapjumper's
+            EXPONENTIAL,     // gapjumper's
+            SCHUBRING1,      // terry schubring's formula 1
+            SCHUBRING2,      // terry schubring's formula 2
+            SCHUBRING3,      // terry schubring's formula 3
+            
+            SINPI2,          // tomas cepeda's
+            SWING,           // tomas cepeda's & lquery's
+        } curveType = CurveType::QUADINOUT;
+        
         /// Adds a points to the curve.
         /**
          * @param newPoint the new point.
          */
         void AddPoint(glm::vec2 newPoint);
+        
+        /// Samples a value in the curve.
+        /**
+         * @param x The point in the curve which will be sampled.
+         * @return The sampled value.
+         */
+        float Sample(float x);
         
         /// Gets the index of the point that is closest to the given input point.
         /**
@@ -40,8 +91,13 @@ class BezierWidget {
 
         /// Draws a bezier widget.
         void Show();
+        
     private:
+        static int maximumNumberOfCurveLines;
+        
         Curve* curve;
+        
         ImVec2 size;
+        
         bool draggingPoint = false;
 };
