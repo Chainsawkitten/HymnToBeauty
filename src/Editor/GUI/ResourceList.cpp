@@ -218,12 +218,14 @@ void ResourceList::Show() {
         sceneEditor.Show();
     }
     
-    editorWidth = size.x - editorWidth;
-    ImGui::HorizontalSplitter(ImVec2(editorWidth, 20), size.y - 20, splitterSize, editorWidth, editorResize, sceneWidth + 20, size.x - 20);
-    editorWidth = size.x - editorWidth;
-    
-    ImGui::SetNextWindowPos(ImVec2(size.x - editorWidth, 20));
-    ImGui::SetNextWindowSize(ImVec2(editorWidth, size.y - 20));
+    if (sceneEditor.entityEditor.IsVisible() || scriptEditor.IsVisible() || textureEditor.IsVisible() || modelEditor.IsVisible() || soundEditor.IsVisible()) {
+        editorWidth = size.x - editorWidth;
+        ImGui::HorizontalSplitter(ImVec2(editorWidth, 20), size.y - 20, splitterSize, editorWidth, editorResize, sceneWidth + 20, size.x - 20);
+        editorWidth = size.x - editorWidth;
+        
+        ImGui::SetNextWindowPos(ImVec2(size.x - editorWidth, 20));
+        ImGui::SetNextWindowSize(ImVec2(editorWidth, size.y - 20));
+    }
     
     if (sceneEditor.entityEditor.IsVisible())
         sceneEditor.entityEditor.Show();
