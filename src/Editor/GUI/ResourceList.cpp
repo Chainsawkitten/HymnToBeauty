@@ -12,6 +12,7 @@
 #include <Engine/MainWindow.hpp>
 #include <imgui.h>
 #include <limits>
+#include "../ImGui/Splitter.hpp"
 
 using namespace GUI;
 
@@ -19,27 +20,9 @@ void ResourceList::Show() {
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
     
     // Splitter.
-    if (ImGui::GetIO().MousePos.x > 250 && ImGui::GetIO().MousePos.x < size.x - 250 &&
-        ImGui::GetIO().MousePos.y >= size.y - resourceHeight - splitterSize && ImGui::GetIO().MousePos.y <= size.y - resourceHeight + splitterSize) {
-        ImGui::SetMouseCursor(3);
-        
-        if (ImGui::GetIO().MouseClicked[0])
-            resourceResize = true;
-    }
-    
-    if (!ImGui::GetIO().MouseDown[0])
-        resourceResize = false;
-    
-    if (resourceResize) {
-        ImGui::SetMouseCursor(3);
-        resourceHeight = size.y - ImGui::GetIO().MousePos.y;
-        
-        if (resourceHeight < 20)
-            resourceHeight = 20;
-        
-        if (resourceHeight > size.y - 20)
-            resourceHeight = size.y - 20;
-    }
+    ImGui::VerticalSplitter(ImVec2(250, size.y - resourceHeight), size.x - 500, splitterSize, resourceHeight, resourceResize, 20, size.y - 20);
+    if (resourceResize)
+        resourceHeight = size.y - resourceHeight;
     
     ImGui::SetNextWindowPos(ImVec2(250, size.y - resourceHeight));
     ImGui::SetNextWindowSize(ImVec2(size.x - 500, resourceHeight));
