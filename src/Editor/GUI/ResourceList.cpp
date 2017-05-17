@@ -212,7 +212,7 @@ void ResourceList::Show() {
     }
     
     if (sceneEditor.IsVisible()) {
-        ImGui::HorizontalSplitter(ImVec2(0, 20), size.y - 20, splitterSize, sceneWidth, sceneResize, 20, size.x - 250);
+        ImGui::HorizontalSplitter(ImVec2(sceneWidth, 20), size.y - 20, splitterSize, sceneWidth, sceneResize, 20, size.x - 250);
         ImGui::SetNextWindowPos(ImVec2(0, 20));
         ImGui::SetNextWindowSize(ImVec2(sceneWidth, size.y - 20));
         sceneEditor.Show();

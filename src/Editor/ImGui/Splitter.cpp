@@ -16,7 +16,7 @@ namespace ImGui {
             active = false;
         
         if (active) {
-            ImGui::SetMouseCursor(3);
+            ImGui::SetMouseCursor(4);
             value = ImGui::GetIO().MousePos.x;
         }
         
