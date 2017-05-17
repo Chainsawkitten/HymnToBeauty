@@ -5,11 +5,16 @@
 #include "GUI/ResourceList.hpp"
 #include <string>
 
+struct GLFWcursor;
+
 /// Handles the main editor.
 class Editor {
     public:
         /// Create new editor.
         Editor();
+        
+        /// Destructor.
+        ~Editor();
         
         /// Show the editor.
         /**
@@ -55,4 +60,6 @@ class Editor {
         
         double lastX = 0.0;
         double lastY = 0.0;
+        
+        GLFWcursor* cursors[5];
 };
