@@ -49,5 +49,8 @@ namespace GUI {
             static const int splitterSize = 2;
             int resourceHeight = 250;
             bool resourceResize = false;
+            
+            int sceneWidth = 250;
+            bool sceneResize = false;
     };
 }
