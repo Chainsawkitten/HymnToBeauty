@@ -105,12 +105,8 @@ void Editor::Show(float deltaTime) {
         inputWindow.Show();
     
     // Show resource list.
-    if (resourceList.IsVisible()) {
-        ImGui::SetNextWindowPos(ImVec2(0, size.y - 250));
-        ImGui::SetNextWindowSize(ImVec2(size.x - 250, 250));
-        
+    if (resourceList.IsVisible())
         resourceList.Show();
-    }
     
     // Control the editor camera.
     if (Input()->Pressed(InputHandler::CAMERA)) {

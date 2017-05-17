@@ -16,6 +16,10 @@
 using namespace GUI;
 
 void ResourceList::Show() {
+    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+    ImGui::SetNextWindowPos(ImVec2(250, size.y - 250));
+    ImGui::SetNextWindowSize(ImVec2(size.x - 500, 250));
+    
     ImGui::Begin("Resources");
     
     // Scenes.
@@ -200,11 +204,9 @@ void ResourceList::Show() {
         soundEditor.SetVisible(soundPressed);
     }
     
-    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
-    
     if (sceneEditor.IsVisible()) {
         ImGui::SetNextWindowPos(ImVec2(0, 20));
-        ImGui::SetNextWindowSize(ImVec2(250, size.y - 270));
+        ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
         sceneEditor.Show();
     }
     
