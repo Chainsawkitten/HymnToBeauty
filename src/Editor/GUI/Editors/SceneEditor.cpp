@@ -8,7 +8,7 @@
 using namespace GUI;
 
 void SceneEditor::Show() {
-    if (ImGui::Begin(("Scene: " + Hymn().scenes[sceneIndex] + "###Scene").c_str(), &visible)) {
+    if (ImGui::Begin(("Scene: " + Hymn().scenes[sceneIndex] + "###Scene").c_str(), &visible, ImGuiWindowFlags_NoResize)) {
         ImGui::InputText("Name", name, 128);
         Hymn().scenes[sceneIndex] = name;
         
