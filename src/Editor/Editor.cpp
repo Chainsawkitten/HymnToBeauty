@@ -32,7 +32,19 @@ Editor::Editor() {
     cameraEntity->AddComponent<Component::Lens>();
     cameraEntity->position.z = 10.0f;
     
-    ImGui::GetIO().MouseDrawCursor = true;
+    // Create cursors.
+    cursors[0] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    cursors[1] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+    cursors[2] = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
+    cursors[3] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+    cursors[4] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+}
+
+Editor::~Editor() {
+    // Destroy cursors.
+    for (int i=0; i < 5; ++i) {
+        glfwDestroyCursor(cursors[i]);
+    }
 }
 
 void Editor::Show(float deltaTime) {
@@ -145,6 +157,11 @@ void Editor::Show(float deltaTime) {
     
     if (play)
         Play();
+    
+    // Set cursor.
+    if (ImGui::GetMouseCursor() < 5) {
+        glfwSetCursor(MainWindow::GetInstance()->GetGLFWWindow(), cursors[ImGui::GetMouseCursor()]);
+    }
 }
 
 void Editor::Save() const {
