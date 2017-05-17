@@ -20,12 +20,12 @@ void ResourceList::Show() {
     ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
     
     // Splitter.
-    ImGui::VerticalSplitter(ImVec2(sceneWidth, size.y - resourceHeight), size.x - sceneWidth - 250, splitterSize, resourceHeight, resourceResize, 20, size.y - 20);
+    ImGui::VerticalSplitter(ImVec2(sceneWidth, size.y - resourceHeight), size.x - sceneWidth - editorWidth, splitterSize, resourceHeight, resourceResize, 20, size.y - 20);
     if (resourceResize)
         resourceHeight = size.y - resourceHeight;
     
     ImGui::SetNextWindowPos(ImVec2(sceneWidth, size.y - resourceHeight));
-    ImGui::SetNextWindowSize(ImVec2(size.x - sceneWidth - 250, resourceHeight));
+    ImGui::SetNextWindowSize(ImVec2(size.x - sceneWidth - editorWidth, resourceHeight));
     
     ImGui::Begin("Resources", nullptr, ImGuiWindowFlags_NoResize);
     
@@ -212,14 +212,18 @@ void ResourceList::Show() {
     }
     
     if (sceneEditor.IsVisible()) {
-        ImGui::HorizontalSplitter(ImVec2(sceneWidth, 20), size.y - 20, splitterSize, sceneWidth, sceneResize, 20, size.x - 250);
+        ImGui::HorizontalSplitter(ImVec2(sceneWidth, 20), size.y - 20, splitterSize, sceneWidth, sceneResize, 20, size.x - editorWidth - 20);
         ImGui::SetNextWindowPos(ImVec2(0, 20));
         ImGui::SetNextWindowSize(ImVec2(sceneWidth, size.y - 20));
         sceneEditor.Show();
     }
     
-    ImGui::SetNextWindowPos(ImVec2(size.x - 250, 20));
-    ImGui::SetNextWindowSize(ImVec2(250, size.y - 20));
+    editorWidth = size.x - editorWidth;
+    ImGui::HorizontalSplitter(ImVec2(editorWidth, 20), size.y - 20, splitterSize, editorWidth, editorResize, sceneWidth + 20, size.x - 20);
+    editorWidth = size.x - editorWidth;
+    
+    ImGui::SetNextWindowPos(ImVec2(size.x - editorWidth, 20));
+    ImGui::SetNextWindowSize(ImVec2(editorWidth, size.y - 20));
     
     if (sceneEditor.entityEditor.IsVisible())
         sceneEditor.entityEditor.Show();

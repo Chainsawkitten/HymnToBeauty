@@ -52,5 +52,8 @@ namespace GUI {
             
             int sceneWidth = 250;
             bool sceneResize = false;
+            
+            int editorWidth = 250;
+            bool editorResize = false;
     };
 }
