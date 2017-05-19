@@ -3,16 +3,22 @@
 #include <imgui.h>
 #include "../ImGui/Theme.hpp"
 #include <Engine/Util/FileSystem.hpp>
+#include "../Util/EditorSettings.hpp"
 
 using namespace GUI;
 
 SettingsWindow::SettingsWindow() {
     themes.push_back("Default");
     
+    // Fetch a list of all themes (JSON files in Themes directory).
     std::vector<std::string> themeFiles = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes", FileSystem::FILE);
-    for (std::string theme : themeFiles) {
-        if (FileSystem::GetExtension(theme) == "json")
-            themes.push_back(theme.substr(0, theme.find_last_of(".")));
+    for (std::size_t i=0; i < themeFiles.size(); ++i) {
+        if (FileSystem::GetExtension(themeFiles[i]) == "json") {
+            std::string name = themeFiles[i].substr(0, themeFiles[i].find_last_of("."));
+            themes.push_back(name);
+            if (name == EditorSettings::GetInstance().GetString("Theme"))
+                theme = i + 1;
+        }
     }
 }
 
@@ -35,6 +41,8 @@ void SettingsWindow::Show() {
                 ImGui::LoadDefaultTheme();
             else
                 ImGui::LoadTheme(themes[theme].c_str());
+            
+            EditorSettings::GetInstance().SetString("Theme", themes[theme]);
         }
         
         // Clone current theme to create a new theme.
