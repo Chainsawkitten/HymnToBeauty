@@ -10,12 +10,15 @@ SettingsWindow::SettingsWindow() {
 
 void SettingsWindow::Show() {
     if (ImGui::Begin("Settings", &visible)) {
-        const char** items = new const char*[themes.size()];
+        // Show drop down list to select theme.
+        if (dropDownItems != nullptr)
+            delete[] dropDownItems;
+        dropDownItems = new const char*[themes.size()];
         for (std::size_t i=0; i < themes.size(); ++i) {
-            items[i] = themes[i].c_str();
+            dropDownItems[i] = themes[i].c_str();
         }
         
-        ImGui::Combo("Theme", &theme, items, themes.size());
+        ImGui::Combo("Theme", &theme, dropDownItems, themes.size());
         
         ImGui::ShowStyleEditor();
     }

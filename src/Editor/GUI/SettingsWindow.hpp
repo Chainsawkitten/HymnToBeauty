@@ -30,5 +30,6 @@ namespace GUI {
             
             std::vector<std::string> themes;
             int theme = 0;
+            const char** dropDownItems = nullptr;
     };
 }
