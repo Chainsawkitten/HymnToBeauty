@@ -12,6 +12,7 @@
 #include <Engine/Component/DirectionalLight.hpp>
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Listener.hpp>
+#include "ImGui/Theme.hpp"
 
 #include <imgui.h>
 #include <GLFW/glfw3.h>
@@ -19,6 +20,14 @@
 Editor::Editor() {
     // Create Hymns directory.
     FileSystem::CreateDirectory((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns").c_str());
+    
+    // Load theme.
+    std::string theme = EditorSettings::GetInstance().GetString("Theme");
+    if (FileSystem::FileExists((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes" + FileSystem::DELIMITER + theme + ".json").c_str())) {
+        ImGui::LoadTheme(theme.c_str());
+    } else {
+        ImGui::LoadDefaultTheme();
+    }
     
     // Assign controls.
     Input()->AssignButton(InputHandler::PROFILE, InputHandler::KEYBOARD, GLFW_KEY_F2);
