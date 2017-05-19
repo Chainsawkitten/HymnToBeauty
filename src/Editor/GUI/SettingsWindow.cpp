@@ -42,7 +42,8 @@ void SettingsWindow::Show() {
             ImGui::EndPopup();
         }
         
-        ImGui::ShowStyleEditor();
+        if (theme != 0)
+            ImGui::ShowStyleEditor();
     }
     
     ImGui::End();
