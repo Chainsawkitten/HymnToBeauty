@@ -49,11 +49,16 @@ void SettingsWindow::Show() {
             ImGui::EndPopup();
         }
         
-        ImGui::Separator();
-        
-        // Edit the current theme.
-        if (theme != 0)
+        if (theme != 0) {
+            ImGui::SameLine();
+            if (ImGui::Button("Save"))
+                ImGui::SaveTheme(themes[theme].c_str());
+            
+            ImGui::Separator();
+            
+            // Edit the current theme.
             ImGui::ShowStyleEditor();
+        }
     }
     
     ImGui::End();
