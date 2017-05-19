@@ -31,7 +31,8 @@ void SettingsWindow::Show() {
             ImGui::InputText("Name", themeName, 128);
             
             if (ImGui::Button("Create")) {
-                ImGui::SaveTheme("");
+                ImGui::SaveTheme(themeName);
+                themes.push_back(themeName);
                 ImGui::CloseCurrentPopup();
             }
             ImGui::SameLine();
