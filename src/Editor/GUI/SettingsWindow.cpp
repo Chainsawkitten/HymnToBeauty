@@ -26,7 +26,14 @@ void SettingsWindow::Show() {
             dropDownItems[i] = themes[i].c_str();
         }
         
+        int previousTheme = theme;
         ImGui::Combo("Theme", &theme, dropDownItems, themes.size());
+        
+        // If a different theme was selected, load it.
+        if (theme != previousTheme) {
+            if (theme != 0)
+                ImGui::LoadTheme(themes[theme].c_str());
+        }
         
         // Clone current theme to create a new theme.
         if (ImGui::Button("Clone")) {

@@ -77,4 +77,71 @@ namespace ImGui {
         file << root;
         file.close();
     }
+    
+    void LoadTheme(const char* name) {
+        // Load Json document from file.
+        Json::Value root;
+        std::ifstream file(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes" + FileSystem::DELIMITER + name + ".json");
+        file >> root;
+        file.close();
+        
+        // Get theme from JSON representation.
+        ImGuiStyle& style = ImGui::GetStyle();
+        
+        style.WindowPadding = Json::LoadImVec2(root["WindowPadding"]);
+        style.WindowRounding = root.get("WindowRounding", 0.0f).asFloat();
+        style.FramePadding = Json::LoadImVec2(root["FramePadding"]);
+        style.FrameRounding = root.get("FrameRounding", 0.0f).asFloat();
+        style.ItemSpacing = Json::LoadImVec2(root["ItemSpacing"]);
+        style.ItemInnerSpacing = Json::LoadImVec2(root["ItemInnerSpacing"]);
+        style.IndentSpacing = root.get("IndentSpacing", 0.0f).asFloat();
+        style.ScrollbarSize = root.get("ScrollbarSize", 0.0f).asFloat();
+        style.ScrollbarRounding = root.get("ScrollbarRounding", 0.0f).asFloat();
+        style.GrabMinSize = root.get("GrabMinSize", 0.0f).asFloat();
+        style.GrabRounding = root.get("GrabRounding", 0.0f).asFloat();
+        
+        style.Colors[ImGuiCol_Text] = Json::LoadImVec4(root["Color: Text"]);
+        style.Colors[ImGuiCol_TextDisabled] = Json::LoadImVec4(root["Color: TextDisabled"]);
+        style.Colors[ImGuiCol_WindowBg] = Json::LoadImVec4(root["Color: WindowBg"]);
+        style.Colors[ImGuiCol_ChildWindowBg] = Json::LoadImVec4(root["Color: ChildWindowBg"]);
+        style.Colors[ImGuiCol_PopupBg] = Json::LoadImVec4(root["Color: PopupBg"]);
+        style.Colors[ImGuiCol_Border] = Json::LoadImVec4(root["Color: Border"]);
+        style.Colors[ImGuiCol_BorderShadow] = Json::LoadImVec4(root["Color: BorderShadow"]);
+        style.Colors[ImGuiCol_FrameBg] = Json::LoadImVec4(root["Color: FrameBg"]);
+        style.Colors[ImGuiCol_FrameBgHovered] = Json::LoadImVec4(root["Color: FrameBgHovered"]);
+        style.Colors[ImGuiCol_FrameBgActive] = Json::LoadImVec4(root["Color: FrameBgActive"]);
+        style.Colors[ImGuiCol_TitleBg] = Json::LoadImVec4(root["Color: TitleBg"]);
+        style.Colors[ImGuiCol_TitleBgCollapsed] = Json::LoadImVec4(root["Color: TitleBgCollapsed"]);
+        style.Colors[ImGuiCol_TitleBgActive] = Json::LoadImVec4(root["Color: TitleBgActive"]);
+        style.Colors[ImGuiCol_MenuBarBg] = Json::LoadImVec4(root["Color: MenuBarBg"]);
+        style.Colors[ImGuiCol_ScrollbarBg] = Json::LoadImVec4(root["Color: ScrollbarBg"]);
+        style.Colors[ImGuiCol_ScrollbarGrab] = Json::LoadImVec4(root["Color: ScrollbarGrab"]);
+        style.Colors[ImGuiCol_ScrollbarGrabHovered] = Json::LoadImVec4(root["Color: ScrollbarGrabHovered"]);
+        style.Colors[ImGuiCol_ScrollbarGrabActive] = Json::LoadImVec4(root["Color: ScrollbarGrabActive"]);
+        style.Colors[ImGuiCol_ComboBg] = Json::LoadImVec4(root["Color: ComboBg"]);
+        style.Colors[ImGuiCol_CheckMark] = Json::LoadImVec4(root["Color: CheckMark"]);
+        style.Colors[ImGuiCol_SliderGrab] = Json::LoadImVec4(root["Color: SliderGrab"]);
+        style.Colors[ImGuiCol_SliderGrabActive] = Json::LoadImVec4(root["Color: SliderGrabActive"]);
+        style.Colors[ImGuiCol_Button] = Json::LoadImVec4(root["Color: Button"]);
+        style.Colors[ImGuiCol_ButtonHovered] = Json::LoadImVec4(root["Color: ButtonHovered"]);
+        style.Colors[ImGuiCol_ButtonActive] = Json::LoadImVec4(root["Color: ButtonActive"]);
+        style.Colors[ImGuiCol_Header] = Json::LoadImVec4(root["Color: Header"]);
+        style.Colors[ImGuiCol_HeaderHovered] = Json::LoadImVec4(root["Color: HeaderHovered"]);
+        style.Colors[ImGuiCol_HeaderActive] = Json::LoadImVec4(root["Color: HeaderActive"]);
+        style.Colors[ImGuiCol_Column] = Json::LoadImVec4(root["Color: Column"]);
+        style.Colors[ImGuiCol_ColumnHovered] = Json::LoadImVec4(root["Color: ColumnHovered"]);
+        style.Colors[ImGuiCol_ColumnActive] = Json::LoadImVec4(root["Color: ColumnActive"]);
+        style.Colors[ImGuiCol_ResizeGrip] = Json::LoadImVec4(root["Color: ResizeGrip"]);
+        style.Colors[ImGuiCol_ResizeGripHovered] = Json::LoadImVec4(root["Color: ResizeGripHovered"]);
+        style.Colors[ImGuiCol_ResizeGripActive] = Json::LoadImVec4(root["Color: ResizeGripActive"]);
+        style.Colors[ImGuiCol_CloseButton] = Json::LoadImVec4(root["Color: CloseButton"]);
+        style.Colors[ImGuiCol_CloseButtonHovered] = Json::LoadImVec4(root["Color: CloseButtonHovered"]);
+        style.Colors[ImGuiCol_CloseButtonActive] = Json::LoadImVec4(root["Color: CloseButtonActive"]);
+        style.Colors[ImGuiCol_PlotLines] = Json::LoadImVec4(root["Color: PlotLines"]);
+        style.Colors[ImGuiCol_PlotLinesHovered] = Json::LoadImVec4(root["Color: PlotLinesHovered"]);
+        style.Colors[ImGuiCol_PlotHistogram] = Json::LoadImVec4(root["Color: PlotHistogram"]);
+        style.Colors[ImGuiCol_PlotHistogramHovered] = Json::LoadImVec4(root["Color: PlotHistogramHovered"]);
+        style.Colors[ImGuiCol_TextSelectedBg] = Json::LoadImVec4(root["Color: TextSelectedBg"]);
+        style.Colors[ImGuiCol_ModalWindowDarkening] = Json::LoadImVec4(root["Color: ModalWindowDarkening"]);
+    }
 }
