@@ -2,11 +2,18 @@
 
 #include <imgui.h>
 #include "../ImGui/Theme.hpp"
+#include <Engine/Util/FileSystem.hpp>
 
 using namespace GUI;
 
 SettingsWindow::SettingsWindow() {
     themes.push_back("Default");
+    
+    std::vector<std::string> themeFiles = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes", FileSystem::FILE);
+    for (std::string theme : themeFiles) {
+        if (FileSystem::GetExtension(theme) == "json")
+            themes.push_back(theme.substr(0, theme.find_last_of(".")));
+    }
 }
 
 void SettingsWindow::Show() {
