@@ -1,9 +1,15 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
 namespace GUI {
     /// Used to edit Hymn to Beauty settings.
     class SettingsWindow {
         public:
+            /// Create new settings window.
+            SettingsWindow();
+            
             /// Show the settings window.
             void Show();
             
@@ -21,5 +27,8 @@ namespace GUI {
             
         private:
             bool visible = false;
+            
+            std::vector<std::string> themes;
+            int theme = 0;
     };
 }
