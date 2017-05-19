@@ -396,6 +396,7 @@ set(EDITOR_SRCS
         src/Editor/GUI/InputWindow.cpp
         src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/ResourceList.cpp
+        src/Editor/GUI/SettingsWindow.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
         src/Editor/GUI/Editors/SceneEditor.cpp
@@ -413,6 +414,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/InputWindow.hpp
         src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/ResourceList.hpp
+        src/Editor/GUI/SettingsWindow.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
         src/Editor/GUI/Editors/SceneEditor.hpp

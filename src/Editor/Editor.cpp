@@ -63,6 +63,9 @@ void Editor::Show(float deltaTime) {
             if (ImGui::MenuItem("Open Hymn", "CTRL+O"))
                 OpenHymn();
             
+            if (ImGui::MenuItem("Settings"))
+                settingsWindow.SetVisible(true);
+            
             ImGui::EndMenu();
         }
         
@@ -122,6 +125,11 @@ void Editor::Show(float deltaTime) {
         ImGui::SetNextWindowSize(ImVec2(size.x - 250, 250));
         
         resourceList.Show();
+    }
+    
+    // Show settings window.
+    if (settingsWindow.IsVisible()) {
+        settingsWindow.Show();
     }
     
     // Control the editor camera.
