@@ -63,6 +63,8 @@ void Editor::Show(float deltaTime) {
             if (ImGui::MenuItem("Open Hymn", "CTRL+O"))
                 OpenHymn();
             
+            ImGui::Separator();
+            
             if (ImGui::MenuItem("Settings"))
                 settingsWindow.SetVisible(true);
             
