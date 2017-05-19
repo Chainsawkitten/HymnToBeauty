@@ -42,6 +42,9 @@ void SettingsWindow::Show() {
             ImGui::EndPopup();
         }
         
+        ImGui::Separator();
+        
+        // Edit the current theme.
         if (theme != 0)
             ImGui::ShowStyleEditor();
     }
