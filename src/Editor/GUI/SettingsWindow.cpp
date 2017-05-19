@@ -31,7 +31,9 @@ void SettingsWindow::Show() {
         
         // If a different theme was selected, load it.
         if (theme != previousTheme) {
-            if (theme != 0)
+            if (theme == 0)
+                ImGui::LoadDefaultTheme();
+            else
                 ImGui::LoadTheme(themes[theme].c_str());
         }
         

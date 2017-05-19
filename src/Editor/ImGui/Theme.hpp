@@ -12,4 +12,7 @@ namespace ImGui {
      * @param name The name of the theme.
      */
     void LoadTheme(const char* name);
+    
+    /// Load the default theme.
+    void LoadDefaultTheme();
 }

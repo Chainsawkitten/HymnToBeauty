@@ -144,4 +144,64 @@ namespace ImGui {
         style.Colors[ImGuiCol_TextSelectedBg] = Json::LoadImVec4(root["Color: TextSelectedBg"]);
         style.Colors[ImGuiCol_ModalWindowDarkening] = Json::LoadImVec4(root["Color: ModalWindowDarkening"]);
     }
+    
+    void LoadDefaultTheme() {
+        ImGuiStyle& style = ImGui::GetStyle();
+        
+        style.WindowPadding = ImVec2(8.0f, 8.0f);
+        style.WindowRounding = 9.0f;
+        style.FramePadding = ImVec2(4.0f, 3.0f);
+        style.FrameRounding = 0.0f;
+        style.ItemSpacing = ImVec2(8.0f, 4.0f);
+        style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
+        style.IndentSpacing = 21.0f;
+        style.ScrollbarSize = 16.0f;
+        style.ScrollbarRounding = 9.0f;
+        style.GrabMinSize = 10.0f;
+        style.GrabRounding = 0.0f;
+        
+        style.Colors[ImGuiCol_Text] = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
+        style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.6f, 0.6f, 0.6f, 1.0f);
+        style.Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.7f);
+        style.Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+        style.Colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.05f, 0.1f, 0.9f);
+        style.Colors[ImGuiCol_Border] = ImVec4(0.7f, 0.7f, 0.7f, 0.65f);
+        style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+        style.Colors[ImGuiCol_FrameBg] = ImVec4(0.8f, 0.8f, 0.8f, 0.3f);
+        style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.9f, 0.8f, 0.8f, 0.4f);
+        style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.9f, 0.65f, 0.65f, 0.45f);
+        style.Colors[ImGuiCol_TitleBg] = ImVec4(0.27f, 0.27f, 0.54f, 0.83f);
+        style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.4f, 0.4f, 0.8f, 0.2f);
+        style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.32f, 0.32f, 0.63f, 0.87f);
+        style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.4f, 0.4f, 0.55f, 0.8f);
+        style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.2f, 0.25f, 0.3f, 0.6f);
+        style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.4f, 0.4f, 0.8f, 0.3f);
+        style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.4f, 0.4f, 0.8f, 0.4f);
+        style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.8f, 0.5f, 0.5f, 0.4f);
+        style.Colors[ImGuiCol_ComboBg] = ImVec4(0.2f, 0.2f, 0.2f, 0.99f);
+        style.Colors[ImGuiCol_CheckMark] = ImVec4(0.9f, 0.9f, 0.9f, 0.5f);
+        style.Colors[ImGuiCol_SliderGrab] = ImVec4(1.0f, 1.0f, 1.0f, 0.3f);
+        style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.8f, 0.5f, 0.5f, 1.0f);
+        style.Colors[ImGuiCol_Button] = ImVec4(0.67f, 0.4f, 0.4f, 0.6f);
+        style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.67f, 0.4f, 0.4f, 1.0f);
+        style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.8f, 0.5f, 0.5f, 1.0f);
+        style.Colors[ImGuiCol_Header] = ImVec4(0.4f, 0.4f, 0.9f, 0.45f);
+        style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.45f, 0.45f, 0.9f, 0.8f);
+        style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.53f, 0.53f, 0.87f, 0.8f);
+        style.Colors[ImGuiCol_Column] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+        style.Colors[ImGuiCol_ColumnHovered] = ImVec4(0.7f, 0.6f, 0.6f, 1.0f);
+        style.Colors[ImGuiCol_ColumnActive] = ImVec4(0.9f, 0.7f, 0.7f, 1.0f);
+        style.Colors[ImGuiCol_ResizeGrip] = ImVec4(1.0f, 1.0f, 1.0f, 0.3f);
+        style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.6f);
+        style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.9f);
+        style.Colors[ImGuiCol_CloseButton] = ImVec4(0.5f, 0.5f, 0.9f, 0.5f);
+        style.Colors[ImGuiCol_CloseButtonHovered] = ImVec4(0.7f, 0.7f, 0.9f, 0.6f);
+        style.Colors[ImGuiCol_CloseButtonActive] = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
+        style.Colors[ImGuiCol_PlotLines] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+        style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
+        style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
+        style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.0f, 0.6f, 0.0f, 1.0f);
+        style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.0f, 0.0f, 1.0f, 0.35f);
+        style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.2f, 0.2f, 0.2f, 0.35f);
+    }
 }
