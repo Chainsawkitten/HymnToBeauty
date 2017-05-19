@@ -1,6 +1,7 @@
 #include "SettingsWindow.hpp"
 
 #include <imgui.h>
+#include "../ImGui/Theme.hpp"
 
 using namespace GUI;
 
@@ -19,6 +20,26 @@ void SettingsWindow::Show() {
         }
         
         ImGui::Combo("Theme", &theme, dropDownItems, themes.size());
+        
+        // Clone current theme to create a new theme.
+        if (ImGui::Button("Clone")) {
+            ImGui::OpenPopup("Theme Name");
+            themeName[0] = '\0';
+        }
+        
+        if (ImGui::BeginPopupModal("Theme Name", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+            ImGui::InputText("Name", themeName, 128);
+            
+            if (ImGui::Button("Create")) {
+                ImGui::SaveTheme("");
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel"))
+                ImGui::CloseCurrentPopup();
+            
+            ImGui::EndPopup();
+        }
         
         ImGui::ShowStyleEditor();
     }
