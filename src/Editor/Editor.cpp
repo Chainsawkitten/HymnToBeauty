@@ -1,7 +1,9 @@
 #include "Editor.hpp"
 
-#include <Engine/Util/Input.hpp>
 #include "Util/EditorSettings.hpp"
+#undef CreateDirectory
+
+#include <Engine/Util/Input.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
@@ -15,6 +17,9 @@
 #include <GLFW/glfw3.h>
 
 Editor::Editor() {
+    // Create Hymns directory.
+    FileSystem::CreateDirectory((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns").c_str());
+    
     // Assign controls.
     Input()->AssignButton(InputHandler::PROFILE, InputHandler::KEYBOARD, GLFW_KEY_F2);
     Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
@@ -214,7 +219,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         resourceList.ResetScene();
         Hymn().Clear();
         Hymn().world.CreateRoot();
-        Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+        Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns" + FileSystem::DELIMITER +  hymn);
         resourceList.SetVisible(true);
         
         // Default scene.
@@ -244,7 +249,7 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
         resourceList.ResetScene();
-        Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+        Hymn().Load(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns" + FileSystem::DELIMITER +  hymn);
         resourceList.SetVisible(true);
     }
     
