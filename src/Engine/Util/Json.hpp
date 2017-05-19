@@ -3,6 +3,9 @@
 #include <json/json.h>
 #include <glm/glm.hpp>
 
+struct ImVec2;
+struct ImVec4;
+
 namespace Json {
     /// Convert a vec2 to a JSON node.
     /**
@@ -31,4 +34,18 @@ namespace Json {
      * @return The loaded vec3.
      */
     glm::vec3 LoadVec3(const Value& value);
+    
+    /// Convert an ImVec2 to a JSON node.
+    /**
+     * @param value %Value to convert.
+     * @return JSON node.
+     */
+    Json::Value SaveImVec2(const ImVec2& value);
+    
+    /// Convert an ImVec4 to a JSON node.
+    /**
+     * @param value %Value to convert.
+     * @return JSON node.
+     */
+    Json::Value SaveImVec4(const ImVec4& value);
 }
