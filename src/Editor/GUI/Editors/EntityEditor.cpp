@@ -21,6 +21,7 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
+#include "../GuiHelpers.hpp"
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
@@ -53,6 +54,7 @@ void EntityEditor::Show() {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
         ImGui::Text("Transform");
+        ImGui::ShowHelpMarker("The entities position, rotation and scale.", 75.f);
         ImGui::Indent();
         ImGui::DraggableVec3("Position", entity->position);
         ImGui::DraggableVec3("Rotation", entity->rotation);
