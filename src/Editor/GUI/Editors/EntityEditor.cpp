@@ -21,11 +21,11 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
-#include "../../imgui/GuiHelpers.hpp"
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
 #include "../../ImGui/Draggable.hpp"
+#include "../../ImGui/GuiHelpers.hpp"
 
 using namespace GUI;
 
