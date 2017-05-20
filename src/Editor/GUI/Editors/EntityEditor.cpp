@@ -54,7 +54,7 @@ void EntityEditor::Show() {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
         ImGui::Text("Transform");
-        ImGui::ShowHelpMarker("The entities position, rotation and scale.", 75.f);
+        ImGui::ShowHelpMarker("The entity's position, rotation and scale.", 75.f);
         ImGui::Indent();
         ImGui::DraggableVec3("Position", entity->position);
         ImGui::DraggableVec3("Rotation", entity->rotation);
