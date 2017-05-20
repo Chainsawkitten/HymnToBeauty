@@ -3,6 +3,7 @@
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/InputWindow.hpp"
 #include "GUI/ResourceList.hpp"
+#include "GUI/SettingsWindow.hpp"
 #include <string>
 
 struct GLFWcursor;
@@ -54,6 +55,7 @@ class Editor {
         GUI::SelectHymnWindow selectHymnWindow;
         GUI::InputWindow inputWindow;
         GUI::ResourceList resourceList;
+        GUI::SettingsWindow settingsWindow;
         
         World cameraWorld;
         Entity* cameraEntity;

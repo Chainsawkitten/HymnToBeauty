@@ -11,6 +11,7 @@
  * Debug Context          | Create an OpenGL Debug Context.  | bool   | false
  * Width                  | Width of the editor window.      | long   | 800
  * Height                 | Height of the editor window.     | long   | 600
+ * Theme                  | Visual theme to use.             | string | Default
  * Sound Source Icons     | Show sound source icons.         | bool   | true
  * Particle Emitter Icons | Show particle emitter icons.     | bool   | true
  * Light Source Icons     | Show light source icons.         | bool   | true

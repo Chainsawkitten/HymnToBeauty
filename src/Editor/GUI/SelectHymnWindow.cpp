@@ -7,7 +7,7 @@ using namespace GUI;
 using namespace std;
 
 void SelectHymnWindow::Scan() {
-    files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty"), FileSystem::DIRECTORY);
+    files = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns", FileSystem::DIRECTORY);
 }
 
 void SelectHymnWindow::Show() {

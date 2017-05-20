@@ -1,7 +1,9 @@
 #include "Editor.hpp"
 
-#include <Engine/Util/Input.hpp>
 #include "Util/EditorSettings.hpp"
+#undef CreateDirectory
+
+#include <Engine/Util/Input.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
@@ -10,11 +12,23 @@
 #include <Engine/Component/DirectionalLight.hpp>
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Listener.hpp>
+#include "ImGui/Theme.hpp"
 
 #include <imgui.h>
 #include <GLFW/glfw3.h>
 
 Editor::Editor() {
+    // Create Hymns directory.
+    FileSystem::CreateDirectory((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns").c_str());
+    
+    // Load theme.
+    std::string theme = EditorSettings::GetInstance().GetString("Theme");
+    if (FileSystem::FileExists((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes" + FileSystem::DELIMITER + theme + ".json").c_str())) {
+        ImGui::LoadTheme(theme.c_str());
+    } else {
+        ImGui::LoadDefaultTheme();
+    }
+    
     // Assign controls.
     Input()->AssignButton(InputHandler::PROFILE, InputHandler::KEYBOARD, GLFW_KEY_F2);
     Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
@@ -62,6 +76,11 @@ void Editor::Show(float deltaTime) {
             
             if (ImGui::MenuItem("Open Hymn", "CTRL+O"))
                 OpenHymn();
+            
+            ImGui::Separator();
+            
+            if (ImGui::MenuItem("Settings"))
+                settingsWindow.SetVisible(true);
             
             ImGui::EndMenu();
         }
@@ -119,6 +138,11 @@ void Editor::Show(float deltaTime) {
     // Show resource list.
     if (resourceList.IsVisible())
         resourceList.Show();
+    
+    // Show settings window.
+    if (settingsWindow.IsVisible()) {
+        settingsWindow.Show();
+    }
     
     // Control the editor camera.
     if (Input()->Pressed(InputHandler::CAMERA)) {
@@ -200,7 +224,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         resourceList.ResetScene();
         Hymn().Clear();
         Hymn().world.CreateRoot();
-        Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+        Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns" + FileSystem::DELIMITER +  hymn);
         resourceList.SetVisible(true);
         
         // Default scene.
@@ -230,7 +254,7 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
     // Open hymn.
     if (!hymn.empty()) {
         resourceList.ResetScene();
-        Hymn().Load(FileSystem::DataPath("Hymn to Beauty", hymn.c_str()));
+        Hymn().Load(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns" + FileSystem::DELIMITER +  hymn);
         resourceList.SetVisible(true);
     }
     
