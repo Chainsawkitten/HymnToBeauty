@@ -24,7 +24,6 @@
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
-#include "../../ImGui/Draggable.hpp"
 #include "../../ImGui/GuiHelpers.hpp"
 
 using namespace GUI;
