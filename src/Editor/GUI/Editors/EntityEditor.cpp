@@ -21,7 +21,7 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
-#include "../GuiHelpers.hpp"
+#include "../../imgui/GuiHelpers.hpp"
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
