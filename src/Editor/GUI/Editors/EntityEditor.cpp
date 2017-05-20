@@ -49,7 +49,7 @@ EntityEditor::~EntityEditor() {
 }
 
 void EntityEditor::Show() {
-    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
+    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
         ImGui::Text("Transform");
