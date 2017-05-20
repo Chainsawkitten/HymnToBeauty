@@ -25,6 +25,7 @@
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
 #include "../BezierWidget.hpp"
+#include "../../ImGui/Draggable.hpp"
 
 using namespace GUI;
 
@@ -54,9 +55,9 @@ void EntityEditor::Show() {
         entity->name = name;
         ImGui::Text("Transform");
         ImGui::Indent();
-        ImGui::InputFloat3("Position", &entity->position[0]);
-        ImGui::InputFloat3("Rotation", &entity->rotation[0]);
-        ImGui::InputFloat3("Scale", &entity->scale[0]);
+        ImGui::DraggableVec3("Position", entity->position);
+        ImGui::DraggableVec3("Rotation", entity->rotation);
+        ImGui::DraggableVec3("Scale", entity->scale);
         ImGui::Unindent();
         if (!entity->IsScene()) {
             if (ImGui::Button("Add component"))
@@ -121,19 +122,19 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
     ImGui::Text("Positional");
     ImGui::Indent();
-    ImGui::InputFloat3("Velocity", &physics->velocity[0]);
-    ImGui::InputFloat("Max velocity", &physics->maxVelocity);
-    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
-    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
-    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
+    ImGui::DraggableVec3("Velocity", physics->velocity);
+    ImGui::DraggableFloat("Max velocity", physics->maxVelocity, 0.0f);
+    ImGui::DraggableVec3("Acceleration", physics->acceleration);
+    ImGui::DraggableFloat("Velocity drag factor", physics->velocityDragFactor);
+    ImGui::DraggableFloat("Gravity factor", physics->gravityFactor);
     ImGui::Unindent();
     ImGui::Text("Angular");
     ImGui::Indent();
-    ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
-    ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
-    ImGui::InputFloat3("Angular acceleration", &physics->angularAcceleration[0]);
-    ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
-    ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+    ImGui::DraggableVec3("Angular velocity", physics->angularVelocity);
+    ImGui::DraggableFloat("Max angular velocity", physics->maxAngularVelocity, 0.0f);
+    ImGui::DraggableVec3("Angular acceleration", physics->angularAcceleration);
+    ImGui::DraggableFloat("Angular drag factor", physics->angularDragFactor);
+    ImGui::DraggableVec3("Moment of inertia", physics->momentOfInertia);
     ImGui::Unindent();
 
 }
@@ -159,9 +160,9 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
 
 void EntityEditor::LensEditor(Component::Lens* lens) {
     ImGui::Indent();
-    ImGui::InputFloat("Field of view", &lens->fieldOfView);
-    ImGui::InputFloat("Z near", &lens->zNear);
-    ImGui::InputFloat("Z far", &lens->zFar);
+    ImGui::DraggableFloat("Field of view", lens->fieldOfView, 0.0f, 180.f);
+    ImGui::DraggableFloat("Z near", lens->zNear, 0.0f);
+    ImGui::DraggableFloat("Z far", lens->zFar, 0.0f);
     ImGui::Unindent();
 }
 
@@ -259,26 +260,26 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
 void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &directionalLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &directionalLight->ambientCoefficient);
+    ImGui::DraggableFloat("Ambient coefficient", directionalLight->ambientCoefficient, 0.0f);
     ImGui::Unindent();
 }
 
 void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &pointLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &pointLight->ambientCoefficient);
-    ImGui::InputFloat("Attenuation", &pointLight->attenuation);
-    ImGui::InputFloat("Intensity", &pointLight->intensity);
+    ImGui::DraggableFloat("Ambient coefficient", pointLight->ambientCoefficient, 0.0f);
+    ImGui::DraggableFloat("Attenuation", pointLight->attenuation, 0.0f);
+    ImGui::DraggableFloat("Intensity", pointLight->intensity, 0.0f);
     ImGui::Unindent();
 }
 
 void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::Indent();
     ImGui::InputFloat3("Color", &spotLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &spotLight->ambientCoefficient);
-    ImGui::InputFloat("Attenuation", &spotLight->attenuation);
-    ImGui::InputFloat("Intensity", &spotLight->intensity);
-    ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
+    ImGui::DraggableFloat("Ambient coefficient", spotLight->ambientCoefficient, 0.0f);
+    ImGui::DraggableFloat("Attenuation", spotLight->attenuation, 0.0f);
+    ImGui::DraggableFloat("Intensity", spotLight->intensity, 0.0f);
+    ImGui::DraggableFloat("Cone angle", spotLight->coneAngle, 0.0f, 180.f);
     ImGui::Unindent();
 }
 
@@ -330,8 +331,8 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
     ImGui::Unindent();
     ImGui::Text("Sound properties");
     ImGui::Indent();
-    ImGui::InputFloat("Pitch", &soundSource->pitch);
-    ImGui::InputFloat("Gain", &soundSource->gain);
+    ImGui::DraggableFloat("Pitch", soundSource->pitch, 0.0f);
+    ImGui::DraggableFloat("Gain", soundSource->gain, 0.0f);
     ImGui::Checkbox("Loop", &soundSource->loop);
     ImGui::Unindent();
 }
@@ -346,40 +347,32 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
     ImGui::Image((void*) Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128), ImVec2(column / rows, row / rows), ImVec2((column + 1.f) / rows, (row + 1.f) / rows));
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
-    ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
-    ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
-    ImGui::DragFloat("Average lifetime", &particleEmitter->particleType.averageLifetime, 0.001f*std::abs(ImGui::GetIO().MouseDelta.x));
-    ImGui::DragFloat("Lifetime variance", &particleEmitter->particleType.lifetimeVariance, 0.001f*std::abs(ImGui::GetIO().MouseDelta.x));
-    ImGui::InputFloat2("Average size", &particleEmitter->particleType.averageSize[0]);
-    ImGui::InputFloat2("Size variance", &particleEmitter->particleType.sizeVariance[0]);
+    ImGui::ColorEdit3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::DraggableVec3("Min velocity", particleEmitter->particleType.minVelocity);
+    ImGui::DraggableVec3("Max velocity", particleEmitter->particleType.maxVelocity);
+    ImGui::DraggableFloat("Average lifetime", particleEmitter->particleType.averageLifetime, 0.0f);
+    ImGui::DraggableFloat("Lifetime variance", particleEmitter->particleType.lifetimeVariance, 0.0f);
+    ImGui::DraggableVec2("Average size", particleEmitter->particleType.averageSize, 0.0f);
+    ImGui::DraggableVec2("Size variance", particleEmitter->particleType.sizeVariance, 0.0f);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
-    ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
-    ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
-    ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
-    ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
+    ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
+    ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);
     ImGui::Unindent();
     
     ImGui::Text("Emitter");
     ImGui::Indent();
-    ImGui::InputFloat3("Size", &particleEmitter->size[0]);
-    ImGui::InputFloat("Average emit time", &particleEmitter->averageEmitTime);
-    ImGui::InputFloat("Emit time variance", &particleEmitter->emitTimeVariance);
+    ImGui::DraggableFloat("Average emit time", particleEmitter->averageEmitTime, 0.0f);
+    ImGui::DraggableFloat("Emit time variance", particleEmitter->emitTimeVariance, 0.0f);
     
-    if (ImGui::Button("Emitter type"))
-        ImGui::OpenPopup("Emitter type");
+    const char* items[] = { "Point", "Cuboid" };
+    int item = static_cast<int>(particleEmitter->emitterType);
+    if (ImGui::Combo("Emitter type", &item, items, 2))
+        particleEmitter->emitterType = static_cast<Component::ParticleEmitter::EmitterType>(item);
     
-    if (ImGui::BeginPopup("Emitter type")) {
-        ImGui::Text("Emitter type");
-        ImGui::Separator();
-        
-        if (ImGui::Selectable("Point"))
-            particleEmitter->emitterType = Component::ParticleEmitter::POINT;
-        
-        if (ImGui::Selectable("Cuboid"))
-            particleEmitter->emitterType = Component::ParticleEmitter::CUBOID;
-        
-        ImGui::EndPopup();
-    }
+    if (particleEmitter->emitterType == Component::ParticleEmitter::CUBOID)
+        ImGui::DraggableVec3("Size", particleEmitter->size);
+    
     ImGui::Unindent();
     
     ImGui::Text("Preview");

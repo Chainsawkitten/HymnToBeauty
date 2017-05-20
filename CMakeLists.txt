@@ -390,11 +390,14 @@ set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
 set(EDITOR_SRCS
         src/Editor/main.cpp
         src/Editor/Editor.cpp
+        src/Editor/ImGui/Draggable.cpp
         src/Editor/ImGui/OpenGLImplementation.cpp
+        src/Editor/ImGui/Theme.cpp
         src/Editor/GUI/SelectHymnWindow.cpp
         src/Editor/GUI/InputWindow.cpp
         src/Editor/GUI/FileSelector.cpp
         src/Editor/GUI/ResourceList.cpp
+        src/Editor/GUI/SettingsWindow.cpp
         src/Editor/GUI/Editors/EntityEditor.cpp
         src/Editor/GUI/Editors/ModelEditor.cpp
         src/Editor/GUI/Editors/SceneEditor.cpp
@@ -407,11 +410,14 @@ set(EDITOR_SRCS
 
 set(EDITOR_HEADERS
         src/Editor/Editor.hpp
+        src/Editor/ImGui/Draggable.hpp
         src/Editor/ImGui/OpenGLImplementation.hpp
+        src/Editor/ImGui/Theme.hpp
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/InputWindow.hpp
         src/Editor/GUI/FileSelector.hpp
         src/Editor/GUI/ResourceList.hpp
+        src/Editor/GUI/SettingsWindow.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
         src/Editor/GUI/Editors/ModelEditor.hpp
         src/Editor/GUI/Editors/SceneEditor.hpp
