@@ -415,6 +415,7 @@ set(EDITOR_HEADERS
         src/Editor/GUI/SelectHymnWindow.hpp
         src/Editor/GUI/InputWindow.hpp
         src/Editor/GUI/FileSelector.hpp
+        src/Editor/GUI/GuiHelpers.hpp
         src/Editor/GUI/ResourceList.hpp
         src/Editor/GUI/SettingsWindow.hpp
         src/Editor/GUI/Editors/EntityEditor.hpp
