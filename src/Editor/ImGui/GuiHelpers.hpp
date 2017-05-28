@@ -1,9 +1,19 @@
 #pragma once
-
+#include <imgui.h>
 #include <limits>
 #include <glm/glm.hpp>
+#include <imgui.h>
+#include <cmath>
+
 
 namespace ImGui {
+    /// Helper function that inserts a help marker that displays a tooltip.
+    /**
+     * @param description The content of the tooltip.
+     * @param sameLineOffset If set to higher than 0.f, the help marker will be offset on the same line.
+     */
+    void ShowHelpMarker(const char* description, const float sameLineOffset = 0.0f);
+    
     /// Show widget to edit a float.
     /**
      * @param label Label describing the value being edited.

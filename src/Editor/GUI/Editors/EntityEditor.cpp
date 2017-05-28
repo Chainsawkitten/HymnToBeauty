@@ -25,7 +25,8 @@
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
 #include "../BezierWidget.hpp"
-#include "../../ImGui/Draggable.hpp"
+#include "../../ImGui/GuiHelpers.hpp"
+
 
 using namespace GUI;
 
@@ -50,10 +51,11 @@ EntityEditor::~EntityEditor() {
 }
 
 void EntityEditor::Show() {
-    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
+    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
         ImGui::Text("Transform");
+        ImGui::ShowHelpMarker("The entity's position, rotation and scale.", 75.f);
         ImGui::Indent();
         ImGui::DraggableVec3("Position", entity->position);
         ImGui::DraggableVec3("Rotation", entity->rotation);
@@ -340,8 +342,6 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
     ImGui::Text("Particle");
     ImGui::Indent();
-    BezierWidget bezierWidget(ImVec2(200,200), &test);
-    bezierWidget.Show();
     int rows = Managers().particleManager->GetTextureAtlasRows();
     float column = static_cast<float>(particleEmitter->particleType.textureIndex % rows);
     float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
@@ -355,9 +355,14 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::DraggableVec2("Average size", particleEmitter->particleType.averageSize, 0.0f);
     ImGui::DraggableVec2("Size variance", particleEmitter->particleType.sizeVariance, 0.0f);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
+    
+    BezierWidget bezierWidget(ImVec2(200,200), &test);
+    bezierWidget.Show();
+    
     ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
     ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
     ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);
+    
     ImGui::Unindent();
     
     ImGui::Text("Emitter");

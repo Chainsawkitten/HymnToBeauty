@@ -11,7 +11,7 @@
 using namespace GUI;
 
 void SoundEditor::Show() {
-    if (ImGui::Begin(("Sound: " + sound->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(sound))).c_str(), &visible)) {
+    if (ImGui::Begin(("Sound: " + sound->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(sound))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
         ImGui::InputText("Name", name, 128);
         sound->name = name;
         
