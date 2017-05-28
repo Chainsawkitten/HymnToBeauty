@@ -85,7 +85,7 @@ namespace GUI {
             Entity* entity = nullptr;
             bool visible = false;
             char name[128];
-            
+            bool showBezierWidget = false;
             struct Editor {
                 std::function<void()> addFunction;
                 std::function<void()> editFunction;

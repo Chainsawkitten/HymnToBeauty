@@ -356,12 +356,19 @@ void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmi
     ImGui::DraggableVec2("Size variance", particleEmitter->particleType.sizeVariance, 0.0f);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
     
-    BezierWidget bezierWidget(ImVec2(200,200), &test);
-    bezierWidget.Show();
+    ImGui::Checkbox("Linear/Graph alpha", &showBezierWidget);
+    ImGui::Text("Alpha");
     
-    ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
-    ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
-    ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);
+    if(showBezierWidget){
+        ImGui::ShowHelpMarker("Double-click LMB: Add point to graph.\nRMB: Move point.\nDelete: Remove point.", 75.f);
+        BezierWidget bezierWidget(ImVec2(200,200), &test);
+        bezierWidget.Show();
+    } else {
+        ImGui::ShowHelpMarker("Linear interpolation between start, mid and end value.", 75.f);
+        ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
+        ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
+        ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);  
+    }
     
     ImGui::Unindent();
     
