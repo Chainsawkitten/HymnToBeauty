@@ -17,7 +17,7 @@ void FileSelector::Show() {
         pathChanged = false;
     }
     
-    if (ImGui::Begin("Select file", &visible)) {
+    if (ImGui::Begin("Select file", &visible, ImGuiWindowFlags_ShowBorders)) {
         if (ImGui::Selectable("..")) {
             OpenParentDirectory();
         }
