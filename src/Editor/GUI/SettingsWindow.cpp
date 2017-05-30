@@ -23,7 +23,7 @@ SettingsWindow::SettingsWindow() {
 }
 
 void SettingsWindow::Show() {
-    if (ImGui::Begin("Settings", &visible)) {
+    if (ImGui::Begin("Settings", &visible, ImGuiWindowFlags_ShowBorders)) {
         // Show drop down list to select theme.
         if (dropDownItems != nullptr)
             delete[] dropDownItems;
