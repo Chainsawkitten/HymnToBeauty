@@ -27,7 +27,7 @@ void ProfilingManager::ShowResults() {
         frame = 0;
     
     // Show the results.
-    ImGui::Begin("Profiling");
+    ImGui::Begin("Profiling", nullptr, ImGuiWindowFlags_ShowBorders);
     
     ImGui::Checkbox("Sync GPU and CPU", &syncGPU);
     

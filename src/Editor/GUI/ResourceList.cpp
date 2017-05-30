@@ -27,7 +27,7 @@ void ResourceList::Show() {
     ImGui::SetNextWindowPos(ImVec2(sceneWidth, size.y - resourceHeight));
     ImGui::SetNextWindowSize(ImVec2(size.x - sceneWidth - editorWidth, resourceHeight));
     
-    ImGui::Begin("Resources", nullptr, ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Resources", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_ShowBorders);
     
     // Scenes.
     if (ImGui::TreeNode("Scenes")) {

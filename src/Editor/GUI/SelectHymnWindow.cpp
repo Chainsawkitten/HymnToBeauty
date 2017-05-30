@@ -14,7 +14,7 @@ void SelectHymnWindow::Show() {
     ImGui::OpenPopup(title);
     
     // Create new hymn.
-    if (ImGui::BeginPopupModal(title, nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+    if (ImGui::BeginPopupModal(title, nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_ShowBorders)) {
         for (string file : files) {
             if (ImGui::Button(file.c_str()))
                 strcpy(name, file.c_str());
