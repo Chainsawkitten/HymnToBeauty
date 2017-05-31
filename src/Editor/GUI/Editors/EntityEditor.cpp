@@ -24,6 +24,7 @@
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
+#include "../../ImGui/GuiHelpers.hpp"
 
 using namespace GUI;
 
@@ -48,13 +49,16 @@ EntityEditor::~EntityEditor() {
 }
 
 void EntityEditor::Show() {
-    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible)) {
+    if (ImGui::Begin(("Entity: " + entity->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(entity))).c_str(), &visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_ShowBorders)) {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
-        ImGui::InputFloat3("Position", &entity->position[0]);
-        ImGui::InputFloat3("Rotation", &entity->rotation[0]);
-        ImGui::InputFloat3("Scale", &entity->scale[0]);
-        
+        ImGui::Text("Transform");
+        ImGui::ShowHelpMarker("The entity's position, rotation and scale.", 75.f);
+        ImGui::Indent();
+        ImGui::DraggableVec3("Position", entity->position);
+        ImGui::DraggableVec3("Rotation", entity->rotation);
+        ImGui::DraggableVec3("Scale", entity->scale);
+        ImGui::Unindent();
         if (!entity->IsScene()) {
             if (ImGui::Button("Add component"))
                 ImGui::OpenPopup("Add component");
@@ -75,6 +79,7 @@ void EntityEditor::Show() {
             }
         }
     }
+
     ImGui::End();
 }
 
@@ -96,6 +101,7 @@ void EntityEditor::SetVisible(bool visible) {
 }
 
 void EntityEditor::AnimationEditor(Component::Animation* animation) {
+    ImGui::Indent();
     if (ImGui::Button("Select model##Animation"))
         ImGui::OpenPopup("Select model##Animation");
 
@@ -110,22 +116,31 @@ void EntityEditor::AnimationEditor(Component::Animation* animation) {
 
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::PhysicsEditor(Component::Physics* physics) {
-    ImGui::InputFloat3("Velocity", &physics->velocity[0]);
-    ImGui::InputFloat("Max velocity", &physics->maxVelocity);
-    ImGui::InputFloat3("Angular velocity", &physics->angularVelocity[0]);
-    ImGui::InputFloat("Max angular velocity", &physics->maxAngularVelocity);
-    ImGui::InputFloat3("Acceleration", &physics->acceleration[0]);
-    ImGui::InputFloat3("Angular acceleration", &physics->angularAcceleration[0]);
-    ImGui::InputFloat("Velocity drag factor", &physics->velocityDragFactor);
-    ImGui::InputFloat("Angular drag factor", &physics->angularDragFactor);
-    ImGui::InputFloat("Gravity factor", &physics->gravityFactor);
-    ImGui::InputFloat3("Moment of inertia", &physics->momentOfInertia[0]);
+    ImGui::Text("Positional");
+    ImGui::Indent();
+    ImGui::DraggableVec3("Velocity", physics->velocity);
+    ImGui::DraggableFloat("Max velocity", physics->maxVelocity, 0.0f);
+    ImGui::DraggableVec3("Acceleration", physics->acceleration);
+    ImGui::DraggableFloat("Velocity drag factor", physics->velocityDragFactor);
+    ImGui::DraggableFloat("Gravity factor", physics->gravityFactor);
+    ImGui::Unindent();
+    ImGui::Text("Angular");
+    ImGui::Indent();
+    ImGui::DraggableVec3("Angular velocity", physics->angularVelocity);
+    ImGui::DraggableFloat("Max angular velocity", physics->maxAngularVelocity, 0.0f);
+    ImGui::DraggableVec3("Angular acceleration", physics->angularAcceleration);
+    ImGui::DraggableFloat("Angular drag factor", physics->angularDragFactor);
+    ImGui::DraggableVec3("Moment of inertia", physics->momentOfInertia);
+    ImGui::Unindent();
+
 }
 
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
+    ImGui::Indent();
     if (ImGui::Button("Select model##Mesh"))
         ImGui::OpenPopup("Select model##Mesh");
     
@@ -140,16 +155,24 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::LensEditor(Component::Lens* lens) {
-    ImGui::InputFloat("Field of view", &lens->fieldOfView);
-    ImGui::InputFloat("Z near", &lens->zNear);
-    ImGui::InputFloat("Z far", &lens->zFar);
+    ImGui::Indent();
+    ImGui::DraggableFloat("Field of view", lens->fieldOfView, 0.0f, 180.f);
+    ImGui::DraggableFloat("Z near", lens->zNear, 0.0f);
+    ImGui::DraggableFloat("Z far", lens->zFar, 0.0f);
+    ImGui::Unindent();
 }
 
 void EntityEditor::MaterialEditor(Component::Material* material) {
     // Diffuse
+    ImGui::Text("Diffuse");
+    ImGui::Indent();
+    if (material->diffuse->IsLoaded())
+        ImGui::Image((void*) material->diffuse->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select diffuse texture"))
         ImGui::OpenPopup("Select diffuse texture");
     
@@ -164,8 +187,15 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
+
     // Normal
+    ImGui::Text("Normal");
+    ImGui::Indent();
+    if (material->normal->IsLoaded())
+        ImGui::Image((void*) material->normal->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select normal texture"))
         ImGui::OpenPopup("Select normal texture");
     
@@ -180,8 +210,14 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
     // Specular
+    ImGui::Text("Specular");
+    ImGui::Indent();
+    if (material->specular->IsLoaded())
+        ImGui::Image((void*) material->specular->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select specular texture"))
         ImGui::OpenPopup("Select specular texture");
     
@@ -196,8 +232,14 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
-    
+    ImGui::Unindent();
+
     // Glow
+    ImGui::Text("Glow");
+    ImGui::Indent();
+    if (material->glow->IsLoaded())
+        ImGui::Image((void*) material->glow->GetTextureID(), ImVec2(128, 128));
+    
     if (ImGui::Button("Select glow texture"))
         ImGui::OpenPopup("Select glow texture");
     
@@ -212,26 +254,33 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         
         ImGui::EndPopup();
     }
+    ImGui::Unindent();
 }
 
 void EntityEditor::DirectionalLightEditor(Component::DirectionalLight* directionalLight) {
+    ImGui::Indent();
     ImGui::InputFloat3("Color", &directionalLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &directionalLight->ambientCoefficient);
+    ImGui::DraggableFloat("Ambient coefficient", directionalLight->ambientCoefficient, 0.0f);
+    ImGui::Unindent();
 }
 
 void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
+    ImGui::Indent();
     ImGui::InputFloat3("Color", &pointLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &pointLight->ambientCoefficient);
-    ImGui::InputFloat("Attenuation", &pointLight->attenuation);
-    ImGui::InputFloat("Intensity", &pointLight->intensity);
+    ImGui::DraggableFloat("Ambient coefficient", pointLight->ambientCoefficient, 0.0f);
+    ImGui::DraggableFloat("Attenuation", pointLight->attenuation, 0.0f);
+    ImGui::DraggableFloat("Intensity", pointLight->intensity, 0.0f);
+    ImGui::Unindent();
 }
 
 void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
+    ImGui::Indent();
     ImGui::InputFloat3("Color", &spotLight->color[0]);
-    ImGui::InputFloat("Ambient coefficient", &spotLight->ambientCoefficient);
-    ImGui::InputFloat("Attenuation", &spotLight->attenuation);
-    ImGui::InputFloat("Intensity", &spotLight->intensity);
-    ImGui::InputFloat("Cone angle", &spotLight->coneAngle);
+    ImGui::DraggableFloat("Ambient coefficient", spotLight->ambientCoefficient, 0.0f);
+    ImGui::DraggableFloat("Attenuation", spotLight->attenuation, 0.0f);
+    ImGui::DraggableFloat("Intensity", spotLight->intensity, 0.0f);
+    ImGui::DraggableFloat("Cone angle", spotLight->coneAngle, 0.0f, 180.f);
+    ImGui::Unindent();
 }
 
 void EntityEditor::ListenerEditor(Component::Listener* listener) {
@@ -239,7 +288,7 @@ void EntityEditor::ListenerEditor(Component::Listener* listener) {
 }
 
 void EntityEditor::ScriptEditor(Component::Script* script) {
-
+    ImGui::Indent();
     if(script->scriptFile != nullptr)
         ImGui::Text(script->scriptFile->name.c_str());
     else
@@ -259,10 +308,12 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
         ImGui::EndPopup();
     }
-
+    ImGui::Unindent();
 }
 
 void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
+    ImGui::Text("Sound");
+    ImGui::Indent();
     if (ImGui::Button("Select sound"))
         ImGui::OpenPopup("Select sound");
     
@@ -277,42 +328,53 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
         
         ImGui::EndPopup();
     }
-    
-    ImGui::InputFloat("Pitch", &soundSource->pitch);
-    ImGui::InputFloat("Gain", &soundSource->gain);
+    ImGui::Unindent();
+    ImGui::Text("Sound properties");
+    ImGui::Indent();
+    ImGui::DraggableFloat("Pitch", soundSource->pitch, 0.0f);
+    ImGui::DraggableFloat("Gain", soundSource->gain, 0.0f);
     ImGui::Checkbox("Loop", &soundSource->loop);
+    ImGui::Unindent();
 }
 
 void EntityEditor::ParticleEmitterEditor(Component::ParticleEmitter* particleEmitter) {
+    ImGui::Text("Particle");
+    ImGui::Indent();
+    int rows = Managers().particleManager->GetTextureAtlasRows();
+    float column = static_cast<float>(particleEmitter->particleType.textureIndex % rows);
+    float row = static_cast<float>(particleEmitter->particleType.textureIndex / rows);
+    ImGui::Image((void*) Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128), ImVec2(column / rows, row / rows), ImVec2((column + 1.f) / rows, (row + 1.f) / rows));
     ImGui::InputInt("Texture index", &particleEmitter->particleType.textureIndex);
-    ImGui::InputFloat3("Min velocity", &particleEmitter->particleType.minVelocity[0]);
-    ImGui::InputFloat3("Max velocity", &particleEmitter->particleType.maxVelocity[0]);
-    ImGui::InputFloat("Min lifetime", &particleEmitter->particleType.minLifetime);
-    ImGui::InputFloat("Max lifetime", &particleEmitter->particleType.maxLifetime);
-    ImGui::InputFloat2("Min size", &particleEmitter->particleType.minSize[0]);
-    ImGui::InputFloat2("Max size", &particleEmitter->particleType.maxSize[0]);
+    ImGui::ColorEdit3("Color", &particleEmitter->particleType.color[0]);
+    ImGui::DraggableVec3("Min velocity", particleEmitter->particleType.minVelocity);
+    ImGui::DraggableVec3("Max velocity", particleEmitter->particleType.maxVelocity);
+    ImGui::DraggableFloat("Average lifetime", particleEmitter->particleType.averageLifetime, 0.0f);
+    ImGui::DraggableFloat("Lifetime variance", particleEmitter->particleType.lifetimeVariance, 0.0f);
+    ImGui::DraggableVec2("Average size", particleEmitter->particleType.averageSize, 0.0f);
+    ImGui::DraggableVec2("Size variance", particleEmitter->particleType.sizeVariance, 0.0f);
     ImGui::Checkbox("Uniform scaling", &particleEmitter->particleType.uniformScaling);
-    ImGui::InputFloat("Start alpha", &particleEmitter->particleType.startAlpha);
-    ImGui::InputFloat("Mid alpha", &particleEmitter->particleType.midAlpha);
-    ImGui::InputFloat("End alpha", &particleEmitter->particleType.endAlpha);
-    ImGui::InputFloat3("Color", &particleEmitter->particleType.color[0]);
-    ImGui::InputFloat3("Size", &particleEmitter->size[0]);
-    ImGui::InputFloat("Min emit time", &particleEmitter->minEmitTime);
-    ImGui::InputFloat("Max emit time", &particleEmitter->maxEmitTime);
+    ImGui::DraggableFloat("Start alpha", particleEmitter->particleType.startAlpha, 0.0f, 1.0f);
+    ImGui::DraggableFloat("Mid alpha", particleEmitter->particleType.midAlpha, 0.0f, 1.0f);
+    ImGui::DraggableFloat("End alpha", particleEmitter->particleType.endAlpha, 0.0f, 1.0f);
+    ImGui::Unindent();
     
-    if (ImGui::Button("Emitter type"))
-        ImGui::OpenPopup("Emitter type");
+    ImGui::Text("Emitter");
+    ImGui::Indent();
+    ImGui::DraggableFloat("Average emit time", particleEmitter->averageEmitTime, 0.0f);
+    ImGui::DraggableFloat("Emit time variance", particleEmitter->emitTimeVariance, 0.0f);
     
-    if (ImGui::BeginPopup("Emitter type")) {
-        ImGui::Text("Emitter type");
-        ImGui::Separator();
-        
-        if (ImGui::Selectable("Point"))
-            particleEmitter->emitterType = Component::ParticleEmitter::POINT;
-        
-        if (ImGui::Selectable("Cuboid"))
-            particleEmitter->emitterType = Component::ParticleEmitter::CUBOID;
-        
-        ImGui::EndPopup();
-    }
+    const char* items[] = { "Point", "Cuboid" };
+    int item = static_cast<int>(particleEmitter->emitterType);
+    if (ImGui::Combo("Emitter type", &item, items, 2))
+        particleEmitter->emitterType = static_cast<Component::ParticleEmitter::EmitterType>(item);
+    
+    if (particleEmitter->emitterType == Component::ParticleEmitter::CUBOID)
+        ImGui::DraggableVec3("Size", particleEmitter->size);
+    
+    ImGui::Unindent();
+    
+    ImGui::Text("Preview");
+    ImGui::Indent();
+    ImGui::Checkbox("Simulate", &particleEmitter->preview);
+    ImGui::Unindent();
 }

@@ -73,7 +73,7 @@ unsigned int ParticleManager::GetMaxParticleCount() const {
     return maxParticleCount;
 }
 
-void ParticleManager::Update(World& world, float time) {
+void ParticleManager::Update(World& world, float time, bool preview) {
     // Remove old particles.
     for (unsigned int i = 0; i < world.GetParticleCount(); ++i) {
         world.GetParticles()[i].life += time;
@@ -84,15 +84,15 @@ void ParticleManager::Update(World& world, float time) {
     }
     
     // Spawn new particles from emitters.
-    std::uniform_real_distribution<float> zeroToOne(0.f, 1.f);
+    std::uniform_real_distribution<float> minusOneToOne(-1.f, 1.f);
     std::vector<Component::ParticleEmitter*> particleEmitters = world.GetComponents<Component::ParticleEmitter>();
     for (Component::ParticleEmitter* emitter : particleEmitters) {
-        if (emitter->IsKilled())
+        if (emitter->IsKilled() || (preview && !emitter->preview))
             continue;
         
         emitter->timeToNext -= time;
         while (emitter->timeToNext < 0.f) {
-            emitter->timeToNext += emitter->minEmitTime + zeroToOne(randomEngine) * (emitter->maxEmitTime - emitter->minEmitTime);
+            emitter->timeToNext += emitter->averageEmitTime + minusOneToOne(randomEngine) * emitter->emitTimeVariance;
             EmitParticle(world, emitter);
         }
     }
@@ -136,7 +136,7 @@ void ParticleManager::Render(World& world, const Entity* camera) {
         glUniform3fv(shaderProgram->GetUniformLocation("cameraPosition"), 1, &camera->position[0]);
         glUniform3fv(shaderProgram->GetUniformLocation("cameraUp"), 1, &up[0]);
         glUniformMatrix4fv(shaderProgram->GetUniformLocation("viewProjectionMatrix"), 1, GL_FALSE, &viewProjectionMat[0][0]);
-        glUniform1fv(shaderProgram->GetUniformLocation("textureAtlasRows"), 1, &textureAtlasRowNumber);
+        glUniform1f(shaderProgram->GetUniformLocation("textureAtlasRows"), textureAtlasRowNumber);
         
         // Draw the triangles
         glDrawArrays(GL_POINTS, 0, world.GetParticleCount());
@@ -149,6 +149,14 @@ void ParticleManager::Render(World& world, const Entity* camera) {
         glUseProgram(0);
         glBindVertexArray(0);
     }
+}
+
+const Texture2D* ParticleManager::GetTextureAtlas() const {
+    return textureAtlas;
+}
+
+int ParticleManager::GetTextureAtlasRows() const {
+    return textureAtlasRowNumber;
 }
 
 void ParticleManager::EmitParticle(World& world, Component::ParticleEmitter* emitter) {
@@ -165,9 +173,10 @@ void ParticleManager::EmitParticle(World& world, const glm::vec3& position, Comp
     if (world.GetParticleCount() < maxParticleCount) {
         Particle particle;
         std::uniform_real_distribution<float> zeroToOne(0.f, 1.f);
+        std::uniform_real_distribution<float> minusOneToOne(-1.f, 1.f);
         particle.worldPos = position;
         particle.life = 0.f;
-        particle.lifetime = emitter->particleType.minLifetime + zeroToOne(randomEngine) * (emitter->particleType.maxLifetime - emitter->particleType.minLifetime);
+        particle.lifetime = emitter->particleType.averageLifetime + minusOneToOne(randomEngine) * emitter->particleType.lifetimeVariance;
         particle.textureIndex = static_cast<float>(emitter->particleType.textureIndex);
         particle.alpha[0] = emitter->particleType.startAlpha;
         particle.alpha[1] = emitter->particleType.midAlpha;
@@ -175,10 +184,10 @@ void ParticleManager::EmitParticle(World& world, const glm::vec3& position, Comp
         particle.color = emitter->particleType.color;
         
         if (emitter->particleType.uniformScaling) {
-            particle.size = emitter->particleType.minSize + zeroToOne(randomEngine) * (emitter->particleType.maxSize - emitter->particleType.minSize);
+            particle.size = emitter->particleType.averageSize + minusOneToOne(randomEngine) * emitter->particleType.sizeVariance;
         } else {
-            particle.size.x = emitter->particleType.minSize.x + zeroToOne(randomEngine) * (emitter->particleType.maxSize.x - emitter->particleType.minSize.x);
-            particle.size.y = emitter->particleType.minSize.y + zeroToOne(randomEngine) * (emitter->particleType.maxSize.y - emitter->particleType.minSize.y);
+            particle.size.x = emitter->particleType.averageSize.x + minusOneToOne(randomEngine) * emitter->particleType.sizeVariance.x;
+            particle.size.y = emitter->particleType.averageSize.y + minusOneToOne(randomEngine) * emitter->particleType.sizeVariance.y;
         }
         
         particle.velocity.x = emitter->particleType.minVelocity.x + zeroToOne(randomEngine) * (emitter->particleType.maxVelocity.x - emitter->particleType.minVelocity.x);

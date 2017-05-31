@@ -19,9 +19,8 @@
 #include "../Hymn.hpp"
 #include <fstream>
 
-Entity::Entity(World* world, const std::string& name) {
+Entity::Entity(World* world, const std::string& name) : name ( name ) {
     this->world = world;
-    this->name = name;
 }
 
 Entity::~Entity() {
@@ -207,7 +206,7 @@ glm::mat4 Entity::GetCameraOrientation() const {
 }
 
 glm::vec3 Entity::GetDirection() const {
-    return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, 1.f, 0.f)));
+    return glm::normalize(glm::vec3(GetOrientation() * glm::vec4(0.f, 0.f, -1.f, 0.f)));
 }
 
 glm::vec3 Entity::GetWorldPosition() const {

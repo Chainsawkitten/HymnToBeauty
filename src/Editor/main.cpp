@@ -8,7 +8,6 @@
 #include <Engine/Util/Log.hpp>
 #include <Engine/Input/Input.hpp>
 #include <Engine/Manager/Managers.hpp>
-#include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Util/Profiling.hpp>
@@ -30,21 +29,18 @@ int main() {
     MainWindow* window = new MainWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), false, false, "Hymn to Beauty", EditorSettings::GetInstance().GetBool("Debug Context"));
     glewInit();
     window->Init(false);
-
+    
     Input::GetInstance().SetWindow(window->GetGLFWWindow());
-
+    
     Managers().StartUp();
-
+    
     Editor* editor = new Editor();
     
     // Setup imgui implementation.
     ImGuiImplementation::Init(window->GetGLFWWindow());
     
-    // Test debug drawing facilites.
-    Managers().debugDrawingManager->AddPoint(glm::vec3(3.f, 0.f, 0.f), glm::vec3(1.f, 0.f, 1.f), 10.f, 20.f, false);
-    
     bool profiling = false;
-
+    
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
@@ -69,10 +65,10 @@ int main() {
             
             if (editor->IsVisible()) {
                 Hymn().world.ClearKilled();
-                Hymn().Render(EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"));
+                Managers().particleManager->Update(Hymn().world, deltaTime, true);
+                Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"));
                 
-                editor->Show();
-
+                editor->Show(deltaTime);
             } else {
                 { PROFILE("Update");
                     Hymn().Update(deltaTime);

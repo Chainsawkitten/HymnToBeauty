@@ -26,6 +26,10 @@ const std::vector<Entity*>& World::GetEntities() const {
     return entities;
 }
 
+void World::CreateRoot() {
+    root = CreateEntity("Root");
+}
+
 Entity* World::GetRoot() const {
     return root;
 }
@@ -106,7 +110,7 @@ void World::Save(const std::string& filename) const {
 void World::Load(const std::string& filename) {
     Clear();
     
-    root = CreateEntity("Root");
+    CreateRoot();
     
     // Load Json document from file.
     if (FileSystem::FileExists(filename.c_str())) {

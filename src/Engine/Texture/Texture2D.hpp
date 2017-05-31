@@ -97,6 +97,12 @@ class Texture2D : public Texture {
          */
         void Load(const char* filename, bool srgb = false);
         
+        /// Get whether the texture has been loaded yet.
+        /**
+         * @return Whether the texture has been loaded yet.
+         */
+        bool IsLoaded() const;
+        
         /// The name of the texture.
         std::string name;
         
@@ -108,6 +114,7 @@ class Texture2D : public Texture {
         int width = 0;
         int height = 0;
         bool isFromFile;
+        bool loaded = false;
         
         Geometry::Rectangle* rectangle;
         

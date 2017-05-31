@@ -34,6 +34,9 @@ class World {
          */
         const std::vector<Entity*>& GetEntities() const;
         
+        /// Create root entity.
+        void CreateRoot();
+        
         /// Get the root entity.
         /**
          * @return The root entity.
@@ -95,6 +98,9 @@ class World {
         void Load(const std::string& filename);
         
     private:
+        // Copy constructor.
+        World(World& world) = delete;
+        
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
         

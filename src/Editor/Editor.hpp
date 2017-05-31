@@ -3,7 +3,10 @@
 #include "GUI/SelectHymnWindow.hpp"
 #include "GUI/InputWindow.hpp"
 #include "GUI/ResourceList.hpp"
+#include "GUI/SettingsWindow.hpp"
 #include <string>
+
+struct GLFWcursor;
 
 /// Handles the main editor.
 class Editor {
@@ -11,8 +14,14 @@ class Editor {
         /// Create new editor.
         Editor();
         
+        /// Destructor.
+        ~Editor();
+        
         /// Show the editor.
-        void Show();
+        /**
+         * @param deltaTime Time since last frame (in seconds).
+         */
+        void Show(float deltaTime);
         
         /// Save the hymn being edited.
         void Save() const;
@@ -29,6 +38,12 @@ class Editor {
          */
         void SetVisible(bool visible);
         
+        /// Get the editor camera.
+        /**
+         * @return Camera through which to render.
+         */
+        Entity* GetCamera() const;
+        
     private:
         void Play();
         void NewHymn();
@@ -40,4 +55,13 @@ class Editor {
         GUI::SelectHymnWindow selectHymnWindow;
         GUI::InputWindow inputWindow;
         GUI::ResourceList resourceList;
+        GUI::SettingsWindow settingsWindow;
+        
+        World cameraWorld;
+        Entity* cameraEntity;
+        
+        double lastX = 0.0;
+        double lastY = 0.0;
+        
+        GLFWcursor* cursors[5];
 };

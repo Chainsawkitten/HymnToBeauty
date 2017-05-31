@@ -10,9 +10,15 @@
 using namespace GUI;
 
 void TextureEditor::Show() {
-    if (ImGui::Begin(("Texture: " + texture->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(texture))).c_str(), &visible)) {
+    if (ImGui::Begin(("Texture: " + texture->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(texture))).c_str(), &visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_ShowBorders)) {
         ImGui::InputText("Name", name, 128);
         texture->name = name;
+        
+        if (texture->IsLoaded()) {
+            ImGui::Image((void*) texture->GetTextureID(), ImVec2(128, 128));
+        } else {
+            ImGui::Text("Not loaded");
+        }
         
         if (ImGui::Button("Load PNG image")) {
             fileSelector.AddExtensions("png");
