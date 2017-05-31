@@ -10,6 +10,8 @@ void FiltersWindow::Show() {
     if (ImGui::Begin("Filters", &visible, ImGuiWindowFlags_ShowBorders)) {
         // Color
         if (ImGui::CollapsingHeader("Color")) {
+            ImGui::TextWrapped("Color blending filter.");
+            
             ImGui::Checkbox("Enable##Color", &Hymn().filterSettings.color);
             
             if (Hymn().filterSettings.color) {
@@ -19,6 +21,8 @@ void FiltersWindow::Show() {
         
         // Fog
         if (ImGui::CollapsingHeader("Fog")) {
+            ImGui::TextWrapped("Screen-space fog based on the depth buffer.");
+            
             ImGui::Checkbox("Enable##Fog", &Hymn().filterSettings.fog);
             
             if (Hymn().filterSettings.fog) {
@@ -29,11 +33,15 @@ void FiltersWindow::Show() {
         
         // FXAA
         if (ImGui::CollapsingHeader("FXAA")) {
+            ImGui::TextWrapped("Cheap anti-aliasing.");
+            
             ImGui::Checkbox("Enable##FXAA", &Hymn().filterSettings.fxaa);
         }
         
         // Glow
         if (ImGui::CollapsingHeader("Glow")) {
+            ImGui::TextWrapped("Blur the glow buffer and render it using additive blending.");
+            
             ImGui::Checkbox("Enable##Glow", &Hymn().filterSettings.glow);
             
             if (Hymn().filterSettings.glow) {
