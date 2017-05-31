@@ -114,10 +114,11 @@ void Editor::Show(float deltaTime) {
             ImGui::EndMenu();
         }
         
-        // Input
+        // Hymn
         if(Hymn().GetPath() != "") {
-            if (ImGui::BeginMenu("Input")) {
-                inputWindow.SetVisible(true);
+            if (ImGui::BeginMenu("Hymn")) {
+                if (ImGui::MenuItem("Input"))
+                    inputWindow.SetVisible(true);
                 
                 ImGui::EndMenu();
             }
