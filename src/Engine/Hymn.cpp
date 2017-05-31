@@ -74,6 +74,8 @@ void ActiveHymn::Clear() {
     }
     scripts.clear();
     scriptNumber = 0U;
+    
+    filterSettings.fxaa = true;
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -132,6 +134,11 @@ void ActiveHymn::Save() const {
     Json::Value inputNode;
     inputNode.append(Input::GetInstance().Save());
     root["input"] = inputNode;
+    
+    // Filter settings.
+    Json::Value filtersNode;
+    filtersNode["fxaa"] = filterSettings.fxaa;
+    root["filters"] = filtersNode;
     
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
@@ -198,6 +205,10 @@ void ActiveHymn::Load(const string& path) {
     
     const Json::Value inputNode = root["input"];
     Input::GetInstance().Load(inputNode[0]);
+    
+    // Load filter settings.
+    Json::Value filtersNode = root["filters"];
+    filterSettings.fxaa = filtersNode["fxaa"].asBool();
     
     textureNumber = textures.size();
     modelNumber = models.size();

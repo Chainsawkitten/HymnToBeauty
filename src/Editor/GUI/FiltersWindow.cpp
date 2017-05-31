@@ -1,5 +1,6 @@
 #include "FiltersWindow.hpp"
 
+#include <Engine/Hymn.hpp>
 #include <imgui.h>
 
 using namespace GUI;
@@ -7,7 +8,9 @@ using namespace GUI;
 void FiltersWindow::Show() {
     // Configure filters.
     if (ImGui::Begin("Filters", &visible, ImGuiWindowFlags_ShowBorders)) {
-        /// @todo Configure filters.
+        if (ImGui::CollapsingHeader("FXAA")) {
+            ImGui::Checkbox("Enable", &Hymn().filterSettings.fxaa);
+        }
     }
     ImGui::End();
 }

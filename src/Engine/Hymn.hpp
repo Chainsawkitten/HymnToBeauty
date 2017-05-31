@@ -107,6 +107,15 @@ class ActiveHymn {
         /// Default glow texture.
         Texture2D* defaultGlow;
         
+        /// Filter settings.
+        struct FilterSettings {
+            /// Whether to enable FXAA.
+            bool fxaa = true;
+        };
+        
+        /// Filter settings.
+        FilterSettings filterSettings;
+        
     private:
         static ActiveHymn& GetInstance();
         

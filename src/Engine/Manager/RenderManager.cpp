@@ -39,6 +39,7 @@
 #include "../PostProcessing/GammaCorrectionFilter.hpp"
 #include "../PostProcessing/GlowFilter.hpp"
 #include "../PostProcessing/GlowBlurFilter.hpp"
+#include "../Hymn.hpp"
 
 using namespace Component;
 
@@ -161,8 +162,10 @@ void RenderManager::Render(World& world, Entity* camera) {
         deferredLighting->Render(world, camera);
         
         // Anti-aliasing.
-        fxaaFilter->SetScreenSize(screenSize);
-        postProcessing->ApplyFilter(fxaaFilter);
+        if (Hymn().filterSettings.fxaa) {
+            fxaaFilter->SetScreenSize(screenSize);
+            postProcessing->ApplyFilter(fxaaFilter);
+        }
         
         // Render particles.
         Managers().particleManager->UpdateBuffer(world);
