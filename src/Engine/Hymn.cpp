@@ -76,6 +76,9 @@ void ActiveHymn::Clear() {
     scripts.clear();
     scriptNumber = 0U;
     
+    filterSettings.color = false;
+    filterSettings.fog = false;
+    filterSettings.fogDensity = 0.001f;
     filterSettings.fxaa = true;
     filterSettings.glow = true;
     filterSettings.glowBlurAmount = 1;
@@ -140,6 +143,8 @@ void ActiveHymn::Save() const {
     
     // Filter settings.
     Json::Value filtersNode;
+    filtersNode["color"] = filterSettings.color;
+    filtersNode["colorColor"] = Json::SaveVec3(filterSettings.colorColor);
     filtersNode["fog"] = filterSettings.fog;
     filtersNode["fogDensity"] = filterSettings.fogDensity;
     filtersNode["fogColor"] = Json::SaveVec3(filterSettings.fogColor);
@@ -216,6 +221,8 @@ void ActiveHymn::Load(const string& path) {
     
     // Load filter settings.
     Json::Value filtersNode = root["filters"];
+    filterSettings.color = filtersNode["color"].asBool();
+    filterSettings.colorColor = Json::LoadVec3(filtersNode["colorColor"]);
     filterSettings.fog = filtersNode["fog"].asBool();
     filterSettings.fogDensity = filtersNode["fogDensity"].asFloat();
     filterSettings.fogColor = Json::LoadVec3(filtersNode["fogColor"]);

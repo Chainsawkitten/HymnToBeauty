@@ -109,6 +109,12 @@ class ActiveHymn {
         
         /// Filter settings.
         struct FilterSettings {
+            /// Whether to enable color.
+            bool color = false;
+            
+            /// The color to blend with.
+            glm::vec3 colorColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            
             /// Whether to enable fog.
             bool fog = false;
             

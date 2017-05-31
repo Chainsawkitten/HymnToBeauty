@@ -35,6 +35,7 @@
 #include "../MainWindow.hpp"
 #include "../RenderTarget.hpp"
 #include "../PostProcessing/PostProcessing.hpp"
+#include "../PostProcessing/ColorFilter.hpp"
 #include "../PostProcessing/FogFilter.hpp"
 #include "../PostProcessing/FXAAFilter.hpp"
 #include "../PostProcessing/GammaCorrectionFilter.hpp"
@@ -69,6 +70,7 @@ RenderManager::RenderManager() {
     
     // Init filters.
     postProcessing = new PostProcessing();
+    colorFilter = new ColorFilter(glm::vec3(1.f, 1.f, 1.f));
     fogFilter = new FogFilter(glm::vec3(1.f, 1.f, 1.f));
     fxaaFilter = new FXAAFilter();
     gammaCorrectionFilter = new GammaCorrectionFilter();
@@ -116,6 +118,7 @@ RenderManager::~RenderManager() {
     delete deferredLighting;
     
     delete postProcessing;
+    delete colorFilter;
     delete fogFilter;
     delete fxaaFilter;
     delete gammaCorrectionFilter;
@@ -193,6 +196,12 @@ void RenderManager::Render(World& world, Entity* camera) {
                 postProcessing->ApplyFilter(glowBlurFilter);
             }
             postProcessing->ApplyFilter(glowFilter);
+        }
+        
+        // Color.
+        if (Hymn().filterSettings.color) {
+            colorFilter->SetColor(Hymn().filterSettings.colorColor);
+            postProcessing->ApplyFilter(colorFilter);
         }
         
         // Gamma correction.
