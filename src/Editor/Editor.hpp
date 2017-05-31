@@ -4,6 +4,7 @@
 #include "GUI/InputWindow.hpp"
 #include "GUI/ResourceList.hpp"
 #include "GUI/SettingsWindow.hpp"
+#include "GUI/FiltersWindow.hpp"
 #include <string>
 
 struct GLFWcursor;
@@ -56,6 +57,7 @@ class Editor {
         GUI::InputWindow inputWindow;
         GUI::ResourceList resourceList;
         GUI::SettingsWindow settingsWindow;
+        GUI::FiltersWindow filtersWindow;
         
         World cameraWorld;
         Entity* cameraEntity;
