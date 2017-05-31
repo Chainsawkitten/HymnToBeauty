@@ -111,6 +111,12 @@ class ActiveHymn {
         struct FilterSettings {
             /// Whether to enable FXAA.
             bool fxaa = true;
+            
+            /// Whether to enable glow.
+            bool glow = true;
+            
+            /// How many times to blur the glow buffer.
+            int glowBlurAmount = 1;
         };
         
         /// Filter settings.

@@ -76,6 +76,8 @@ void ActiveHymn::Clear() {
     scriptNumber = 0U;
     
     filterSettings.fxaa = true;
+    filterSettings.glow = true;
+    filterSettings.glowBlurAmount = 1;
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -138,6 +140,8 @@ void ActiveHymn::Save() const {
     // Filter settings.
     Json::Value filtersNode;
     filtersNode["fxaa"] = filterSettings.fxaa;
+    filtersNode["glow"] = filterSettings.glow;
+    filtersNode["glowBlurAmount"] = filterSettings.glowBlurAmount;
     root["filters"] = filtersNode;
     
     // Save to file.
@@ -209,6 +213,8 @@ void ActiveHymn::Load(const string& path) {
     // Load filter settings.
     Json::Value filtersNode = root["filters"];
     filterSettings.fxaa = filtersNode["fxaa"].asBool();
+    filterSettings.glow = filtersNode["glow"].asBool();
+    filterSettings.glowBlurAmount = filtersNode["glowBlurAmount"].asInt();
     
     textureNumber = textures.size();
     modelNumber = models.size();

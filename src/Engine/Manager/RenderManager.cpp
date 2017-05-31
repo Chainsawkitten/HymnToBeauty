@@ -172,15 +172,16 @@ void RenderManager::Render(World& world, Entity* camera) {
         Managers().particleManager->Render(world, camera);
         
         // Glow.
-        glowBlurFilter->SetScreenSize(screenSize);
-        int blurAmount = 1;
-        for (int i = 0; i < blurAmount; ++i) {
-            glowBlurFilter->SetHorizontal(true);
-            postProcessing->ApplyFilter(glowBlurFilter);
-            glowBlurFilter->SetHorizontal(false);
-            postProcessing->ApplyFilter(glowBlurFilter);
+        if (Hymn().filterSettings.glow) {
+            glowBlurFilter->SetScreenSize(screenSize);
+            for (int i = 0; i < Hymn().filterSettings.glowBlurAmount; ++i) {
+                glowBlurFilter->SetHorizontal(true);
+                postProcessing->ApplyFilter(glowBlurFilter);
+                glowBlurFilter->SetHorizontal(false);
+                postProcessing->ApplyFilter(glowBlurFilter);
+            }
+            postProcessing->ApplyFilter(glowFilter);
         }
-        postProcessing->ApplyFilter(glowFilter);
         
         // Gamma correction.
         postProcessing->ApplyFilter(gammaCorrectionFilter);
