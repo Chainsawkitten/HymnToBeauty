@@ -11,6 +11,7 @@ class StaticRenderProgram;
 class SkinRenderProgram;
 class DeferredLighting;
 class PostProcessing;
+class FogFilter;
 class FXAAFilter;
 class GammaCorrectionFilter;
 class GlowFilter;
@@ -71,6 +72,7 @@ class RenderManager {
         
         // Post-processing.
         PostProcessing* postProcessing;
+        FogFilter* fogFilter;
         FXAAFilter* fxaaFilter;
         GammaCorrectionFilter* gammaCorrectionFilter;
         GlowFilter* glowFilter;

@@ -109,6 +109,15 @@ class ActiveHymn {
         
         /// Filter settings.
         struct FilterSettings {
+            /// Whether to enable fog.
+            bool fog = false;
+            
+            /// Fog density.
+            float fogDensity = 0.01f;
+            
+            /// Fog color.
+            glm::vec3 fogColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            
             /// Whether to enable FXAA.
             bool fxaa = true;
             

@@ -20,6 +20,7 @@
 #include "Input/Input.hpp"
 #include "Script/ScriptFile.hpp"
 #include <json/json.h>
+#include "Util/Json.hpp"
 #include <fstream>
 #include "Util/Profiling.hpp"
 
@@ -139,6 +140,9 @@ void ActiveHymn::Save() const {
     
     // Filter settings.
     Json::Value filtersNode;
+    filtersNode["fog"] = filterSettings.fog;
+    filtersNode["fogDensity"] = filterSettings.fogDensity;
+    filtersNode["fogColor"] = Json::SaveVec3(filterSettings.fogColor);
     filtersNode["fxaa"] = filterSettings.fxaa;
     filtersNode["glow"] = filterSettings.glow;
     filtersNode["glowBlurAmount"] = filterSettings.glowBlurAmount;
@@ -212,6 +216,9 @@ void ActiveHymn::Load(const string& path) {
     
     // Load filter settings.
     Json::Value filtersNode = root["filters"];
+    filterSettings.fog = filtersNode["fog"].asBool();
+    filterSettings.fogDensity = filtersNode["fogDensity"].asFloat();
+    filterSettings.fogColor = Json::LoadVec3(filtersNode["fogColor"]);
     filterSettings.fxaa = filtersNode["fxaa"].asBool();
     filterSettings.glow = filtersNode["glow"].asBool();
     filterSettings.glowBlurAmount = filtersNode["glowBlurAmount"].asInt();

@@ -35,6 +35,7 @@
 #include "../MainWindow.hpp"
 #include "../RenderTarget.hpp"
 #include "../PostProcessing/PostProcessing.hpp"
+#include "../PostProcessing/FogFilter.hpp"
 #include "../PostProcessing/FXAAFilter.hpp"
 #include "../PostProcessing/GammaCorrectionFilter.hpp"
 #include "../PostProcessing/GlowFilter.hpp"
@@ -68,6 +69,7 @@ RenderManager::RenderManager() {
     
     // Init filters.
     postProcessing = new PostProcessing();
+    fogFilter = new FogFilter(glm::vec3(1.f, 1.f, 1.f));
     fxaaFilter = new FXAAFilter();
     gammaCorrectionFilter = new GammaCorrectionFilter();
     glowFilter = new GlowFilter();
@@ -114,6 +116,7 @@ RenderManager::~RenderManager() {
     delete deferredLighting;
     
     delete postProcessing;
+    delete fogFilter;
     delete fxaaFilter;
     delete gammaCorrectionFilter;
     delete glowFilter;
@@ -165,6 +168,15 @@ void RenderManager::Render(World& world, Entity* camera) {
         if (Hymn().filterSettings.fxaa) {
             fxaaFilter->SetScreenSize(screenSize);
             postProcessing->ApplyFilter(fxaaFilter);
+        }
+        
+        // Fog.
+        if (Hymn().filterSettings.fog) {
+            fogFilter->SetCamera(camera->GetComponent<Component::Lens>());
+            fogFilter->SetScreenSize(screenSize);
+            fogFilter->SetDensity(Hymn().filterSettings.fogDensity);
+            fogFilter->SetColor(Hymn().filterSettings.fogColor);
+            postProcessing->ApplyFilter(fogFilter);
         }
         
         // Render particles.
