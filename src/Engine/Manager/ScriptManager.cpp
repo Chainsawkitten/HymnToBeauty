@@ -221,6 +221,8 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("mat4 inverse(const mat4 &in)", asFUNCTIONPR(glm::inverse, (const glm::mat4&), glm::mat4), asCALL_CDECL);
     engine->RegisterGlobalFunction("mat3 transpose(const mat3 &in)", asFUNCTIONPR(glm::transpose, (const glm::mat3&), glm::mat3), asCALL_CDECL);
     engine->RegisterGlobalFunction("mat4 transpose(const mat4 &in)", asFUNCTIONPR(glm::transpose, (const glm::mat4&), glm::mat4), asCALL_CDECL);
+    engine->RegisterGlobalFunction("float determinant(const mat3 &in)", asFUNCTIONPR(glm::determinant, (const glm::mat3&), float), asCALL_CDECL);
+    engine->RegisterGlobalFunction("float determinant(const mat4 &in)", asFUNCTIONPR(glm::determinant, (const glm::mat4&), float), asCALL_CDECL);
     
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
