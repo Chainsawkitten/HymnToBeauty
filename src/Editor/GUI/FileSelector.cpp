@@ -18,6 +18,15 @@ void FileSelector::Show() {
     }
     
     if (ImGui::Begin("Select file", &visible, ImGuiWindowFlags_ShowBorders)) {
+        char buffer[200];
+        strcpy(buffer, path.c_str());
+        if (ImGui::InputText("Path", buffer, 200)) {
+            path = buffer;
+            pathChanged = true;
+        }
+        
+        ImGui::Separator();
+        
         if (ImGui::Selectable("..")) {
             OpenParentDirectory();
         }
