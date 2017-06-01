@@ -23,7 +23,7 @@ void FileSelector::Show() {
         }
         
         for (const std::string& directory : directories) {
-            if (ImGui::Selectable(directory.c_str())) {
+            if (ImGui::Selectable(("[DIR] " + directory).c_str())) {
                 OpenDirectory(directory);
             }
         }
