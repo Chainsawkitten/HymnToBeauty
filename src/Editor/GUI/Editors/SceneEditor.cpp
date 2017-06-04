@@ -69,15 +69,16 @@ void SceneEditor::ShowEntity(Entity* entity) {
                 
                 ImGui::EndPopup();
             }
-            
-            if (entity != Hymn().world.GetRoot()) {
-                if (ImGui::Selectable("Delete")) {
-                    entity->Kill();
-                    if (entityEditor.ShowsEntity(entity))
-                        entityEditor.SetVisible(false);
-                }
+        }
+        
+        if (entity != Hymn().world.GetRoot()) {
+            if (ImGui::Selectable("Delete")) {
+                entity->Kill();
+                if (entityEditor.ShowsEntity(entity))
+                    entityEditor.SetVisible(false);
             }
         }
+        
         ImGui::EndPopup();
     }
     
