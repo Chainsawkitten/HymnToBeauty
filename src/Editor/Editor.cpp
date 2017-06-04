@@ -166,7 +166,7 @@ void Editor::Show(float deltaTime) {
         lastX = Input()->CursorX();
         lastY = Input()->CursorY();
         
-        glm::mat4 orientation = cameraEntity->GetOrientation();
+        glm::mat4 orientation = cameraEntity->GetCameraOrientation();
         glm::vec3 backward(orientation[0][2], orientation[1][2], orientation[2][2]);
         glm::vec3 right(orientation[0][0], orientation[1][0], orientation[2][0]);
         float speed = 3.0f * deltaTime;
