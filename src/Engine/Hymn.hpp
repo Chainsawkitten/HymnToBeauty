@@ -107,6 +107,36 @@ class ActiveHymn {
         /// Default glow texture.
         Texture2D* defaultGlow;
         
+        /// Filter settings.
+        struct FilterSettings {
+            /// Whether to enable color.
+            bool color = false;
+            
+            /// The color to blend with.
+            glm::vec3 colorColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            
+            /// Whether to enable fog.
+            bool fog = false;
+            
+            /// Fog density.
+            float fogDensity = 0.01f;
+            
+            /// Fog color.
+            glm::vec3 fogColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            
+            /// Whether to enable FXAA.
+            bool fxaa = true;
+            
+            /// Whether to enable glow.
+            bool glow = true;
+            
+            /// How many times to blur the glow buffer.
+            int glowBlurAmount = 1;
+        };
+        
+        /// Filter settings.
+        FilterSettings filterSettings;
+        
     private:
         static ActiveHymn& GetInstance();
         

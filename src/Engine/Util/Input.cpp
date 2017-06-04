@@ -19,6 +19,12 @@ InputHandler* InputHandler::activeInstance = nullptr;
 InputHandler::InputHandler(GLFWwindow *window) {
     this->window = window;
     
+    for (int i = 0; i < BUTTONS; i++) {
+        buttonData[i].down = false;
+        buttonData[i].released = false;
+        buttonData[i].triggered = false;
+    }
+
     // Init mouse state.
     glfwSetScrollCallback(window, scrollCallback);
     

@@ -89,5 +89,8 @@ namespace Component {
             
             /// Type of emitter.
             EmitterType emitterType = EmitterType::POINT;
+            
+            /// Whether to preview the emitter in the editor.
+            bool preview = false;
     };
 }

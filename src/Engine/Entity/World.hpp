@@ -98,6 +98,9 @@ class World {
         void Load(const std::string& filename);
         
     private:
+        // Copy constructor.
+        World(World& world) = delete;
+        
         // Add component.
         void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
         

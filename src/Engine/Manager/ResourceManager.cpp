@@ -255,7 +255,6 @@ Font* ResourceManager::CreateFontEmbedded(const char* source, int sourceLength, 
 }
 
 ResourceManager::FontFromFileKey::FontFromFileKey() {
-    filename = "";
     height = 0.f;
 }
 

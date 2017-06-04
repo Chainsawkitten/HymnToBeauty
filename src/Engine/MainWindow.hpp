@@ -81,6 +81,9 @@ class MainWindow {
         GLFWwindow* GetGLFWWindow() const;
         
     private:
+        // Copy Constructor
+        MainWindow(MainWindow& mainwindow) = delete;
+
         static MainWindow* instance;
         
         InputHandler* input;

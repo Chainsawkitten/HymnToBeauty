@@ -45,5 +45,15 @@ namespace GUI {
             ModelEditor modelEditor;
             TextureEditor textureEditor;
             SoundEditor soundEditor;
+            
+            static const int splitterSize = 2;
+            int resourceHeight = 250;
+            bool resourceResize = false;
+            
+            int sceneWidth = 250;
+            bool sceneResize = false;
+            
+            int editorWidth = 250;
+            bool editorResize = false;
     };
 }

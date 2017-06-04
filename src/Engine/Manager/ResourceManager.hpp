@@ -244,7 +244,7 @@ class ResourceManager {
         
         // Font from file
         struct FontFromFileKey {
-            std::string filename;
+            std::string filename = "";
             float height;
             
             FontFromFileKey();

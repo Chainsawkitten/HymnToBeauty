@@ -73,7 +73,7 @@ unsigned int ParticleManager::GetMaxParticleCount() const {
     return maxParticleCount;
 }
 
-void ParticleManager::Update(World& world, float time) {
+void ParticleManager::Update(World& world, float time, bool preview) {
     // Remove old particles.
     for (unsigned int i = 0; i < world.GetParticleCount(); ++i) {
         world.GetParticles()[i].life += time;
@@ -87,7 +87,7 @@ void ParticleManager::Update(World& world, float time) {
     std::uniform_real_distribution<float> minusOneToOne(-1.f, 1.f);
     std::vector<Component::ParticleEmitter*> particleEmitters = world.GetComponents<Component::ParticleEmitter>();
     for (Component::ParticleEmitter* emitter : particleEmitters) {
-        if (emitter->IsKilled())
+        if (emitter->IsKilled() || (preview && !emitter->preview))
             continue;
         
         emitter->timeToNext -= time;

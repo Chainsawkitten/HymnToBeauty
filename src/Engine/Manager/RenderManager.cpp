@@ -35,10 +35,13 @@
 #include "../MainWindow.hpp"
 #include "../RenderTarget.hpp"
 #include "../PostProcessing/PostProcessing.hpp"
+#include "../PostProcessing/ColorFilter.hpp"
+#include "../PostProcessing/FogFilter.hpp"
 #include "../PostProcessing/FXAAFilter.hpp"
 #include "../PostProcessing/GammaCorrectionFilter.hpp"
 #include "../PostProcessing/GlowFilter.hpp"
 #include "../PostProcessing/GlowBlurFilter.hpp"
+#include "../Hymn.hpp"
 
 using namespace Component;
 
@@ -67,6 +70,8 @@ RenderManager::RenderManager() {
     
     // Init filters.
     postProcessing = new PostProcessing();
+    colorFilter = new ColorFilter(glm::vec3(1.f, 1.f, 1.f));
+    fogFilter = new FogFilter(glm::vec3(1.f, 1.f, 1.f));
     fxaaFilter = new FXAAFilter();
     gammaCorrectionFilter = new GammaCorrectionFilter();
     glowFilter = new GlowFilter();
@@ -113,6 +118,8 @@ RenderManager::~RenderManager() {
     delete deferredLighting;
     
     delete postProcessing;
+    delete colorFilter;
+    delete fogFilter;
     delete fxaaFilter;
     delete gammaCorrectionFilter;
     delete glowFilter;
@@ -161,23 +168,41 @@ void RenderManager::Render(World& world, Entity* camera) {
         deferredLighting->Render(world, camera);
         
         // Anti-aliasing.
-        fxaaFilter->SetScreenSize(screenSize);
-        postProcessing->ApplyFilter(fxaaFilter);
+        if (Hymn().filterSettings.fxaa) {
+            fxaaFilter->SetScreenSize(screenSize);
+            postProcessing->ApplyFilter(fxaaFilter);
+        }
+        
+        // Fog.
+        if (Hymn().filterSettings.fog) {
+            fogFilter->SetCamera(camera->GetComponent<Component::Lens>());
+            fogFilter->SetScreenSize(screenSize);
+            fogFilter->SetDensity(Hymn().filterSettings.fogDensity);
+            fogFilter->SetColor(Hymn().filterSettings.fogColor);
+            postProcessing->ApplyFilter(fogFilter);
+        }
         
         // Render particles.
         Managers().particleManager->UpdateBuffer(world);
         Managers().particleManager->Render(world, camera);
         
         // Glow.
-        glowBlurFilter->SetScreenSize(screenSize);
-        int blurAmount = 1;
-        for (int i = 0; i < blurAmount; ++i) {
-            glowBlurFilter->SetHorizontal(true);
-            postProcessing->ApplyFilter(glowBlurFilter);
-            glowBlurFilter->SetHorizontal(false);
-            postProcessing->ApplyFilter(glowBlurFilter);
+        if (Hymn().filterSettings.glow) {
+            glowBlurFilter->SetScreenSize(screenSize);
+            for (int i = 0; i < Hymn().filterSettings.glowBlurAmount; ++i) {
+                glowBlurFilter->SetHorizontal(true);
+                postProcessing->ApplyFilter(glowBlurFilter);
+                glowBlurFilter->SetHorizontal(false);
+                postProcessing->ApplyFilter(glowBlurFilter);
+            }
+            postProcessing->ApplyFilter(glowFilter);
         }
-        postProcessing->ApplyFilter(glowFilter);
+        
+        // Color.
+        if (Hymn().filterSettings.color) {
+            colorFilter->SetColor(Hymn().filterSettings.colorColor);
+            postProcessing->ApplyFilter(colorFilter);
+        }
         
         // Gamma correction.
         postProcessing->ApplyFilter(gammaCorrectionFilter);

@@ -11,7 +11,7 @@
 using namespace GUI;
 
 void ScriptEditor::Show() {
-    if (ImGui::Begin(("Script: " + script->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(script))).c_str(), &visible)) {
+    if (ImGui::Begin(("Script: " + script->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(script))).c_str(), &visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_ShowBorders)) {
         char nameText[255];
         strcpy(nameText, script->name.c_str());
         if (ImGui::InputText("Name", nameText, 255))
