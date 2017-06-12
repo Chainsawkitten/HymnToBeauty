@@ -128,7 +128,7 @@ void Font::RenderText(const char* text, const glm::vec2& position, float wrap) {
         glDisable(GL_BLEND);
 }
 
-glm::vec3 Font::GetColor() const {
+const glm::vec3& Font::GetColor() const {
     return color;
 }
 

@@ -41,9 +41,9 @@ class Font {
         
         /// Get rendering color.
         /**
-         * @return  Color to render text as.
+         * @return Color to render text as.
          */
-        glm::vec3 GetColor() const;
+        const glm::vec3& GetColor() const;
         
         /// Set rendering color.
         /**
