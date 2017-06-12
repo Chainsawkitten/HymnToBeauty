@@ -20,6 +20,7 @@
 #include "Input/Input.hpp"
 #include "Script/ScriptFile.hpp"
 #include <json/json.h>
+#include "Util/Json.hpp"
 #include <fstream>
 #include "Util/Profiling.hpp"
 
@@ -74,6 +75,13 @@ void ActiveHymn::Clear() {
     }
     scripts.clear();
     scriptNumber = 0U;
+    
+    filterSettings.color = false;
+    filterSettings.fog = false;
+    filterSettings.fogDensity = 0.001f;
+    filterSettings.fxaa = true;
+    filterSettings.glow = true;
+    filterSettings.glowBlurAmount = 1;
 }
 
 const string& ActiveHymn::GetPath() const {
@@ -132,6 +140,18 @@ void ActiveHymn::Save() const {
     Json::Value inputNode;
     inputNode.append(Input::GetInstance().Save());
     root["input"] = inputNode;
+    
+    // Filter settings.
+    Json::Value filtersNode;
+    filtersNode["color"] = filterSettings.color;
+    filtersNode["colorColor"] = Json::SaveVec3(filterSettings.colorColor);
+    filtersNode["fog"] = filterSettings.fog;
+    filtersNode["fogDensity"] = filterSettings.fogDensity;
+    filtersNode["fogColor"] = Json::SaveVec3(filterSettings.fogColor);
+    filtersNode["fxaa"] = filterSettings.fxaa;
+    filtersNode["glow"] = filterSettings.glow;
+    filtersNode["glowBlurAmount"] = filterSettings.glowBlurAmount;
+    root["filters"] = filtersNode;
     
     // Save to file.
     ofstream file(path + FileSystem::DELIMITER + "Hymn.json");
@@ -198,6 +218,17 @@ void ActiveHymn::Load(const string& path) {
     
     const Json::Value inputNode = root["input"];
     Input::GetInstance().Load(inputNode[0]);
+    
+    // Load filter settings.
+    Json::Value filtersNode = root["filters"];
+    filterSettings.color = filtersNode["color"].asBool();
+    filterSettings.colorColor = Json::LoadVec3(filtersNode["colorColor"]);
+    filterSettings.fog = filtersNode["fog"].asBool();
+    filterSettings.fogDensity = filtersNode["fogDensity"].asFloat();
+    filterSettings.fogColor = Json::LoadVec3(filtersNode["fogColor"]);
+    filterSettings.fxaa = filtersNode["fxaa"].asBool();
+    filterSettings.glow = filtersNode["glow"].asBool();
+    filterSettings.glowBlurAmount = filtersNode["glowBlurAmount"].asInt();
     
     textureNumber = textures.size();
     modelNumber = models.size();
