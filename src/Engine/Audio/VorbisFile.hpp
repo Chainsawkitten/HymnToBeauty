@@ -14,35 +14,35 @@ namespace Audio {
              * @param filename Filename (relative or absolute) to ogg-file.
              */
             VorbisFile(const char* filename);
-    
+            
             /// Destructor.
-            ~VorbisFile();
-    
+            ~VorbisFile() final;
+            
             /// Get raw audio data.
             /**
              * @return Raw audio data.
              */
-            const char* GetData() const;
-    
+            const char* GetData() const final;
+            
             /// Get data size.
             /**
              * @return The length of the raw audio data.
              */
-            ALsizei GetSize() const;
-    
+            ALsizei GetSize() const final;
+            
             /// Get AL format.
             /**
              * 32-bit sound is not supported in OpenAL.
              * @return One of AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8 or AL_FORMAT_STEREO16.
              */
-            ALenum GetFormat() const;
-    
+            ALenum GetFormat() const final;
+            
             /// Get sample rate.
             /**
              * @return The sound file's sample rate (Hz).
              */
-            ALsizei GetSampleRate() const;
-    
+            ALsizei GetSampleRate() const final;
+            
         private:
             char* data;
             int dataSize;
