@@ -45,11 +45,11 @@ class DeferredLighting {
          * @param world World to get the lights from.
          * @param camera Camera to use.
          */
-        void Render(World& world, Entity* camera);
+        void Render(World& world, const Entity* camera);
         
     private:
         static void AttachTexture(GLuint texture, unsigned int width, unsigned int height, GLenum attachment, GLint internalFormat);
-        void BindForReading();
+        void BindForReading() const;
         
         GLuint textures[NUM_TEXTURES];
         

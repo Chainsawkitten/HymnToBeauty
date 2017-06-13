@@ -44,11 +44,6 @@ void InputWindow::Show() {
     }
 }
 
-void InputWindow::SetClosedCallback(std::function<void(const std::string&)> callback) {
-    closedCallback = callback;
-    hasClosedCallback = true;
-}
-
 bool InputWindow::IsVisible() const {
     return visible;
 }

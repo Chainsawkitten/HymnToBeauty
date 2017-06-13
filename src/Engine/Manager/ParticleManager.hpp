@@ -71,7 +71,7 @@ class ParticleManager {
          * @param world %World containing particles to render.
          * @param camera Camera through which to render.
          */
-        void Render(World& world, Entity* camera);
+        void Render(World& world, const Entity* camera);
         
         /// Get the texture atlas.
         /**

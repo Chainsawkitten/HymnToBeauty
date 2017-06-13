@@ -101,7 +101,7 @@ void DeferredLighting::ResetTarget() {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
-void DeferredLighting::Render(World& world, Entity* camera) {
+void DeferredLighting::Render(World& world, const Entity* camera) {
     // Disable depth testing
     GLboolean depthTest = glIsEnabled(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
@@ -228,7 +228,7 @@ void DeferredLighting::AttachTexture(GLuint texture, unsigned int width, unsigne
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture, 0);
 }
 
-void DeferredLighting::BindForReading() {
+void DeferredLighting::BindForReading() const {
     for (unsigned int i = 0; i < NUM_TEXTURES; i++) {
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, textures[i]);

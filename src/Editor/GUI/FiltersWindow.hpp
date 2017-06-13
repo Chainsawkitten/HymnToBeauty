@@ -1,7 +1,7 @@
 #pragma once
 
 namespace GUI {
-    /// A window where filters is configured.
+    /// A window where filters are configured.
     class FiltersWindow {
         public:
             /// Show the window
