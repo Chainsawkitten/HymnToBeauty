@@ -12,6 +12,7 @@ addons:
       - cmake-data
       - xorg-dev
       - cppcheck
+      - libgl1-mesa-dev
 
 script:
 - cd src
