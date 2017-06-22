@@ -13,6 +13,7 @@ addons:
       - xorg-dev
       - cppcheck
       - libgl1-mesa-dev
+      - libglu1-mesa-dev
 
 script:
 - cd src
