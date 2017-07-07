@@ -46,6 +46,15 @@ class DebugDrawingManager {
          */
         void AddAxisAlignedBoundingBox(const glm::vec3& minCoordinates, const glm::vec3& maxCoordinates, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
         
+        /// Add a sphere to the world.
+        /**
+         * @param center The origin of the sphere.
+         * @param raidus The radii
+         * @param duration How long the box should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddSphere(const glm::vec3& origin, const glm::vec3& color,  const float& radius = 1.f, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        
         /// Update the debug geometry.
         /**
          * @param deltaTime Time since last frame (in seconds).
@@ -109,4 +118,18 @@ class DebugDrawingManager {
         
         GLuint aabbVertexBuffer;
         GLuint aabbVertexArray;
+        
+        // Spheres
+        struct Sphere{
+            glm::vec3 origin;
+            glm::vec3 color;
+            float lineWidth;
+            float radius;
+            float duration;
+            bool depthTesting;
+        };
+        std::vector<Sphere> spheres;
+        
+        GLuint sphereVertexBuffer;
+        GLuint sphereVertexArray;
 };

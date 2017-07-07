@@ -98,6 +98,30 @@ DebugDrawingManager::DebugDrawingManager() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
     
     glBindVertexArray(0);
+    
+    // Create sphere vertex array.
+    const double X = 0.525731112119133606;
+    const double Z = 0.850650808352039932;
+    const glm::vec3 sphere[12] = {
+            {-X, 0.0, Z}, { X, 0.0, Z }, { -X, 0.0, -Z }, { X, 0.0, -Z },
+            { 0.0, Z, X }, { 0.0, Z, -X }, { 0.0, -Z, X }, { 0.0, -Z, -X },
+            { Z, X, 0.0 }, { -Z, X, 0.0 }, { Z, -X, 0.0 }, { -Z, -X, 0.0 } 
+    };
+    
+    glGenBuffers(1, &sphereVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, sphereVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(glm::vec3), sphere, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &sphereVertexArray);
+    glBindVertexArray(sphereVertexArray);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, sphereVertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), BUFFER_OFFSET(0));
+    
+    glBindVertexArray(0);
 }
 
 DebugDrawingManager::~DebugDrawingManager() {
@@ -147,6 +171,16 @@ void DebugDrawingManager::AddAxisAlignedBoundingBox(const glm::vec3& minCoordina
     aabbs.push_back(aabb);
 }
 
+void DebugDrawingManager::AddSphere(const glm::vec3& origin, const glm::vec3& color,  const float& radius, float lineWidth, float duration, bool depthTesting){
+    Sphere sphere;
+    sphere.origin = origin;
+    sphere.radius = radius;
+    sphere.color = color;
+    sphere.duration = duration;
+    sphere.depthTesting = false;
+    spheres.push_back(sphere);
+}
+
 void DebugDrawingManager::Update(float deltaTime) {
     // Points.
     for (std::size_t i=0; i < points.size(); ++i) {
@@ -178,6 +212,17 @@ void DebugDrawingManager::Update(float deltaTime) {
             --i;
         } else {
             aabbs[i].duration -= deltaTime;
+        }
+    }
+    
+    // Spheres
+    for(std::size_t i=0; i < spheres.size(); ++i) {
+        if(spheres[i].duration < 0.f){
+            spheres[i] = spheres[spheres.size() - 1];
+            spheres.pop_back();
+            --i;
+        } else {
+            spheres[i].duration -= deltaTime;
         }
     }
 }
@@ -234,6 +279,18 @@ void DebugDrawingManager::Render(World& world, Entity* camera) {
             glUniform1f(shaderProgram->GetUniformLocation("size"), 10.f);
             glLineWidth(aabb.lineWidth);
             glDrawArrays(GL_LINES, 0, 24);
+        }
+        
+        // Spheres
+        glBindVertexArray(sphereVertexArray);
+        for(const Sphere& sphere : spheres){
+            glm::mat4 model(glm::translate(glm::mat4(), sphere.origin) * glm::scale(glm::mat4(), glm::vec3(sphere.radius, sphere.radius, sphere.radius)) );
+            glUniformMatrix4fv(shaderProgram->GetUniformLocation("model"), 1, GL_FALSE, &model[0][0]);
+            sphere.depthTesting ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+            glUniform3fv(shaderProgram->GetUniformLocation("color"), 1, &sphere.color[0]);
+            glUniform1f(shaderProgram->GetUniformLocation("size"), 10.f);
+            glLineWidth(sphere.lineWidth);
+            glDrawArrays(GL_LINES, 0, 12);
         }
         
         glEnable(GL_DEPTH_TEST);
