@@ -390,7 +390,7 @@ void ScriptManager::BuildAllScripts() {
     }
 }
 
-void ScriptManager::Update(World& world) {
+void ScriptManager::Update(World& world, float deltaTime) {
     // Init.
     for (Script* script : world.GetComponents<Script>()) {
         if (!script->initialized) {
@@ -401,7 +401,7 @@ void ScriptManager::Update(World& world) {
     
     // Update.
     for (Entity* entity : world.GetUpdateEntities())
-        CallScript(entity->GetComponent<Script>(), "void Update()");
+        CallUpdate(entity, deltaTime);
     
     // Handle messages.
     while (!messages.empty()) {
@@ -489,26 +489,6 @@ void ScriptManager::CreateInstance(Component::Script* script) {
     context->Release();
 }
 
-void ScriptManager::CallScript(Component::Script* script, const std::string& functionName) {
-    currentEntity = script->entity;
-    ScriptFile* scriptFile = script->scriptFile;
-    
-    // Get class.
-    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
-    
-    // Find method to call.
-    asIScriptFunction* method = type->GetMethodByDecl(functionName.c_str());
-    
-    // Create context, prepare it and execute.
-    asIScriptContext* context = engine->CreateContext();
-    context->Prepare(method);
-    context->SetObject(script->instance);
-    ExecuteCall(context);
-    
-    // Clean up.
-    context->Release();
-}
-
 void ScriptManager::CallMessageReceived(const Message& message) {
     currentEntity = message.recipient;
     Component::Script* script = currentEntity->GetComponent<Component::Script>();
@@ -527,6 +507,29 @@ void ScriptManager::CallMessageReceived(const Message& message) {
     context->Prepare(method);
     context->SetObject(script->instance);
     context->SetArgDWord(0, message.type);
+    ExecuteCall(context);
+    
+    // Clean up.
+    context->Release();
+}
+
+void ScriptManager::CallUpdate(Entity* entity, float deltaTime) {
+    Component::Script* script = entity->GetComponent<Component::Script>();
+    ScriptFile* scriptFile = script->scriptFile;
+    
+    // Get class.
+    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    
+    // Find method to call.
+    asIScriptFunction* method = type->GetMethodByDecl("void Update(float)");
+    if (method == nullptr)
+        Log() << "Can't find method void Update(float)\n";
+    
+    // Create context, prepare it and execute.
+    asIScriptContext* context = engine->CreateContext();
+    context->Prepare(method);
+    context->SetObject(script->instance);
+    context->SetArgFloat(0, deltaTime);
     ExecuteCall(context);
     
     // Clean up.
