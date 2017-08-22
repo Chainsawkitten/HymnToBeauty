@@ -30,8 +30,9 @@ class ScriptManager {
         /// Update all script entities in the game world.
         /**
          * @param world The world to update.
+         * @param deltaTime Time since last frame (in seconds).
          */
-        void Update(World& world);
+        void Update(World& world, float deltaTime);
         
         /// Register an entity to recieve update callbacks.
         /**
@@ -65,8 +66,8 @@ class ScriptManager {
         void operator=(ScriptManager const&) = delete;
         
         void CreateInstance(Component::Script* script);
-        void CallScript(Component::Script* script, const std::string& functionName);
         void CallMessageReceived(const Message& message);
+        void CallUpdate(Entity* entity, float deltaTime);
         void LoadScriptFile(const char* fileName, std::string& script);
         void ExecuteCall(asIScriptContext* context);
         asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);

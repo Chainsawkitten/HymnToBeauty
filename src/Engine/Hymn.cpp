@@ -238,7 +238,7 @@ void ActiveHymn::Load(const string& path) {
 
 void ActiveHymn::Update(float deltaTime) {
     { PROFILE("Run scripts.");
-        Managers().scriptManager->Update(world);
+        Managers().scriptManager->Update(world, deltaTime);
     }
     
     { PROFILE("Update physics");
