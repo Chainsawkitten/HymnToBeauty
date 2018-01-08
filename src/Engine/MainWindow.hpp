@@ -32,13 +32,7 @@ class MainWindow {
         /**
          * @param showNotifications Whether to show debug messages of notification priority.
          */
-        void Init(bool showNotifications = false);
-        
-        /// Set whether vsync is enabled.
-        /**
-         * @param vsync Whether to enable vsync.
-         */
-        void SetVsync(bool vsync);
+        void Init(bool showNotifications = false) const;
 
         /// Update
         void Update();
@@ -60,7 +54,7 @@ class MainWindow {
         /**
          * @param title New window title.
          */
-        void SetTitle(const char* title);
+        void SetTitle(const char* title) const;
         
         /// Get whether the window should close.
         /**
@@ -70,15 +64,32 @@ class MainWindow {
         
         /// Close the window.
         void Close();
+
+        /// Cancel the closing of the window.
+        void CancelClose();
         
         /// Swap front- and backbuffers.
-        void SwapBuffers();
+        void SwapBuffers() const;
         
         /// Get GLFW window.
         /**
          * @return The GLFW window struct.
          */
         GLFWwindow* GetGLFWWindow() const;
+
+        /// Set window mode.
+        /**
+         * @param fullscreen Whether window should be fullscreen.
+         * @param borderless Whether window should be borderless.
+         */
+        void SetWindowMode(bool fullscreen, bool borderless) const;
+
+        /// Get window mode.
+        /**
+         * @param fullscreen Get whether window is fullscreen.
+         * @param borderless Get whether window is borderless.
+         */
+        void GetWindowMode(bool& fullscreen, bool& borderless) const;
         
     private:
         // Copy Constructor

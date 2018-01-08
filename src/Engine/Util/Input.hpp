@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <glm/detail/type_vec2.hpp>
 
 struct GLFWwindow;
 
@@ -12,15 +13,23 @@ class InputHandler {
         enum Button {
             PLAYTEST = 0, ///< Start/stop playtesting the game.
             PROFILE, ///< Show profiling information.
+            WINDOWMODE, ///< Toggle window mode.
             CONTROL, ///< Control key.
             NEW, ///< Create new hymn.
             OPEN, ///< Open existing hymn.
+            SAVE, ///< Save opened hymn.
             CAMERA, ///< Move camera.
             FORWARD, ///< Move forward.
             BACKWARD, ///< Move backward.
             LEFT, ///< Move left.
             RIGHT, ///< Move right.
-            BUTTONS, ///< Total number of inputs
+            ZOOM, ///< Zoom to entity.
+            SELECT, ///< Select object.
+            FOCUS, ///< Focus on selected object.
+            W,  ///< Key for activating the translation operation in widget.
+            E,  ///< Key for activating the rotation operation in widget.
+            R,  ///< Key for activating the scale operation in widget.
+            BUTTONS, ///< Total number of inputs.
         };
         
         /// Input device codes
@@ -34,7 +43,7 @@ class InputHandler {
         /**
          * @param window %Window to get input for.
          */
-        InputHandler(GLFWwindow* window);
+        explicit InputHandler(GLFWwindow* window);
         
         /// Get currently active input handler.
         /**
@@ -59,7 +68,13 @@ class InputHandler {
          * @return Y-position of the cursor
          */
         double GetCursorY() const;
-        
+
+        /// Get cursor's coordinates.
+        /**
+         * @return X- and Y-position of the cursor
+         */
+        glm::vec2 GetCursorXY() const;
+ 
         /// Get whether user has moved scroll wheel up.
         /**
          * @return Whether user has scrolled up
@@ -87,7 +102,7 @@ class InputHandler {
          * @param button The button to check.
          * @return Whether the button is down
          */
-        bool Pressed(Button button);
+        bool Pressed(Button button) const;
         
         /// Gets whether a button was just pressed.
         /**
@@ -95,21 +110,7 @@ class InputHandler {
          * @param button The button to check.
          * @return Whether the button was pressed
          */
-        bool Triggered(Button button);
-        
-        /// Gets whether a button was just released.
-        /**
-         * Checks whether a button was released between the last two calls to update().
-         * @param button The button to check.
-         * @return Whether the button was released
-         */
-        bool Released(Button button);
-        
-        /// Get text input since last frame.
-        /**
-         * @return Text input since last frame.
-         */
-        const std::string& GetText() const;
+        bool Triggered(Button button) const;
         
         /// GLFW character callback.
         /**

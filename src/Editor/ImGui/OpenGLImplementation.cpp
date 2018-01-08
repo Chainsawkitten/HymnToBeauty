@@ -9,6 +9,7 @@
 #define GLFW_EXPOSE_NATIVE_WGL
 #include <GLFW/glfw3native.h>
 #endif
+#include <Engine/Util/Input.hpp>
 
 namespace ImGuiImplementation {
     // Forward declarations.
@@ -105,7 +106,7 @@ namespace ImGuiImplementation {
             glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
             io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);   // Mouse position in screen coordinates (set to -1,-1 if no mouse / on another screen, etc.)
         } else {
-            io.MousePos = ImVec2(-1,-1);
+            io.MousePos = ImVec2(-1, -1);
         }
         
         for (int i = 0; i < 3; i++) {
@@ -230,6 +231,7 @@ namespace ImGuiImplementation {
     
     void ScrollCallback(GLFWwindow*, double /*xoffset*/, double yoffset) {
         g_MouseWheel += (float)yoffset; // Use fractional mouse wheel, 1.0 unit 5 lines.
+        Input()->ScrollCallback(yoffset);
     }
     
     void KeyCallback(GLFWwindow*, int key, int, int action, int mods) {
@@ -292,9 +294,9 @@ namespace ImGuiImplementation {
                 "out vec4 Frag_Color;\n"
                 "void main()\n"
                 "{\n"
-                "	Frag_UV = UV;\n"
-                "	Frag_Color = Color;\n"
-                "	gl_Position = ProjMtx * vec4(Position.xy,0,1);\n"
+                "    Frag_UV = UV;\n"
+                "    Frag_Color = Color;\n"
+                "    gl_Position = ProjMtx * vec4(Position.xy,0,1);\n"
                 "}\n";
         
         const GLchar* fragment_shader =
@@ -305,7 +307,7 @@ namespace ImGuiImplementation {
                 "out vec4 Out_Color;\n"
                 "void main()\n"
                 "{\n"
-                "	Out_Color = Frag_Color * texture( Texture, Frag_UV.st);\n"
+                "    Out_Color = Frag_Color * texture( Texture, Frag_UV.st);\n"
                 "}\n";
         
         g_ShaderHandle = glCreateProgram();

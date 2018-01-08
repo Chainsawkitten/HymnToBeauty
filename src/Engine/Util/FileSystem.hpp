@@ -80,6 +80,20 @@ namespace FileSystem {
      * @return The extension part of the filename, converted to lower case.
      */
     std::string GetExtension(const std::string& filename);
+
+    /// Get the name of the file without the extension.
+    /**
+     * @param The datapath to the file.
+     * @return The name of the file without extension.
+     */
+    std::string GetName(const std::string& filepath);
+    
+    /// Get the directory part for a path (including the final delimiter).
+    /**
+     * @param path The path to get the directory part of.
+     * @return The directory path of the path.
+     */
+    std::string GetDirectory(const std::string& path);
     
     /// Execute a program asynchronously.
     /**

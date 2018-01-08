@@ -1,8 +1,8 @@
 #include "Theme.hpp"
 
 #include <Engine/Util/FileSystem.hpp>
-#include <Engine/Util/Json.hpp>
 #include <json/json.h>
+#include "Json.hpp"
 #include <fstream>
 #include <imgui.h>
 
@@ -27,6 +27,8 @@ namespace ImGui {
         root["ScrollbarRounding"] = style.ScrollbarRounding;
         root["GrabMinSize"] = style.GrabMinSize;
         root["GrabRounding"] = style.GrabRounding;
+        root["WindowBorderSize"] = style.WindowBorderSize;
+        root["FrameBorderSize"] = style.FrameBorderSize;
         
         root["Color: Text"] = Json::SaveImVec4(style.Colors[ImGuiCol_Text]);
         root["Color: TextDisabled"] = Json::SaveImVec4(style.Colors[ImGuiCol_TextDisabled]);
@@ -46,7 +48,6 @@ namespace ImGui {
         root["Color: ScrollbarGrab"] = Json::SaveImVec4(style.Colors[ImGuiCol_ScrollbarGrab]);
         root["Color: ScrollbarGrabHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_ScrollbarGrabHovered]);
         root["Color: ScrollbarGrabActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_ScrollbarGrabActive]);
-        root["Color: ComboBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_ComboBg]);
         root["Color: CheckMark"] = Json::SaveImVec4(style.Colors[ImGuiCol_CheckMark]);
         root["Color: SliderGrab"] = Json::SaveImVec4(style.Colors[ImGuiCol_SliderGrab]);
         root["Color: SliderGrabActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_SliderGrabActive]);
@@ -99,6 +100,8 @@ namespace ImGui {
         style.ScrollbarRounding = root.get("ScrollbarRounding", 0.0f).asFloat();
         style.GrabMinSize = root.get("GrabMinSize", 0.0f).asFloat();
         style.GrabRounding = root.get("GrabRounding", 0.0f).asFloat();
+        style.WindowBorderSize = root.get("WindowBorderSize", 1.0f).asFloat();
+        style.FrameBorderSize = root.get("FrameBorderSize", 1.0f).asFloat();
         
         style.Colors[ImGuiCol_Text] = Json::LoadImVec4(root["Color: Text"]);
         style.Colors[ImGuiCol_TextDisabled] = Json::LoadImVec4(root["Color: TextDisabled"]);
@@ -118,7 +121,6 @@ namespace ImGui {
         style.Colors[ImGuiCol_ScrollbarGrab] = Json::LoadImVec4(root["Color: ScrollbarGrab"]);
         style.Colors[ImGuiCol_ScrollbarGrabHovered] = Json::LoadImVec4(root["Color: ScrollbarGrabHovered"]);
         style.Colors[ImGuiCol_ScrollbarGrabActive] = Json::LoadImVec4(root["Color: ScrollbarGrabActive"]);
-        style.Colors[ImGuiCol_ComboBg] = Json::LoadImVec4(root["Color: ComboBg"]);
         style.Colors[ImGuiCol_CheckMark] = Json::LoadImVec4(root["Color: CheckMark"]);
         style.Colors[ImGuiCol_SliderGrab] = Json::LoadImVec4(root["Color: SliderGrab"]);
         style.Colors[ImGuiCol_SliderGrabActive] = Json::LoadImVec4(root["Color: SliderGrabActive"]);
@@ -159,6 +161,8 @@ namespace ImGui {
         style.ScrollbarRounding = 9.0f;
         style.GrabMinSize = 10.0f;
         style.GrabRounding = 4.0f;
+        style.WindowBorderSize = 1.0f;
+        style.FrameBorderSize = 1.0f;
         
         style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
         style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.39f, 0.39f, 0.39f, 1.0f);
@@ -178,7 +182,6 @@ namespace ImGui {
         style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.55f, 0.72f, 0.94f, 1.0f);
         style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.61f, 0.76f, 0.94f, 1.0f);
         style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.64f, 0.78f, 0.94f, 1.0f);
-        style.Colors[ImGuiCol_ComboBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
         style.Colors[ImGuiCol_CheckMark] = ImVec4(0.47f, 0.71f, 1.0f, 1.0f);
         style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.0f, 0.0f, 0.0f, 0.3f);
         style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.5f, 0.63f, 0.8f, 1.0f);

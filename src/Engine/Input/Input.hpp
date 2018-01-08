@@ -1,8 +1,13 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
 #include <json/json.h>
 #include <vector>
+
+struct GLFWwindow;
+
+namespace Component {
+    class VRDevice;
+}
 
 /// Hold information about the hymn's inputs.
 class Input {
@@ -11,7 +16,7 @@ class Input {
         struct Button {
             /// A string describing the action, e.g "Fire".
             char action[255];
-            
+
             /// The GLFW key to press.
             int key;
             
@@ -26,10 +31,7 @@ class Input {
         /**
          * @return The input instance.
          */
-        static Input& GetInstance() {
-            static Input instance;
-            return instance;
-        }
+        static Input& GetInstance();
         
         /// Set the window to check for input against.
         /**
@@ -61,6 +63,6 @@ class Input {
         
         Input() {}
         
-        Input(Input const&);
-        void operator=(Input const&);
+        Input(Input const&) = delete;
+        void operator=(Input const&) = delete;
 };

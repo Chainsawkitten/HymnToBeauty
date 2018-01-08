@@ -17,7 +17,7 @@ namespace ImGui {
         
         if (active) {
             ImGui::SetMouseCursor(4);
-            value = ImGui::GetIO().MousePos.x;
+            value = static_cast<int>(ImGui::GetIO().MousePos.x);
         }
         
         if (value < min)
@@ -41,7 +41,7 @@ namespace ImGui {
         
         if (active) {
             ImGui::SetMouseCursor(3);
-            value = ImGui::GetIO().MousePos.y;
+            value = static_cast<int>(ImGui::GetIO().MousePos.y);
         }
         
         if (value < min)

@@ -2,18 +2,17 @@
 
 #include "SuperComponent.hpp"
 
-class Entity;
-class Texture2D;
+class TextureAsset;
 
 namespace Component {
     /// %Component providing a material to Entity.
     class Material : public SuperComponent {
         public:
             /// Create new material.
-            /**
-             * @param entity Pointer to which entity this component corresponds.
-             */
-            Material(Entity* entity);
+            Material();
+            
+            /// Destructor.
+            ~Material() override;
             
             /// Save the component.
             /**
@@ -21,25 +20,19 @@ namespace Component {
              */
             Json::Value Save() const override;
             
-            /// Load component from JSON node.
-            /**
-             * @param node JSON node to load from.
-             */
-            void Load(const Json::Value& node) override;
-            
-            /// Diffuse texture.
-            Texture2D* diffuse;
+            /// Albedo texture.
+            TextureAsset* albedo;
             
             /// Normal texture.
-            Texture2D* normal;
+            TextureAsset* normal;
             
-            /// Specular texture.
-            Texture2D* specular;
+            /// Metallic texture.
+            TextureAsset* metallic;
             
-            /// Glow texture.
-            Texture2D* glow;
+            /// Roughness texture.
+            TextureAsset* roughness;
             
         private:
-            void LoadTexture(Texture2D*& texture, const std::string& name);
+            void LoadTexture(TextureAsset*& texture, const std::string& name);
     };
 }

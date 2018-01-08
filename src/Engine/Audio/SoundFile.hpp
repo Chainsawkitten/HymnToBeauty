@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AL/al.h>
+#include <string>
 
 namespace Audio {
     /// Interface for sound files of various formats.
@@ -10,7 +11,7 @@ namespace Audio {
     class SoundFile {
         public:
             /// Destructor.
-            virtual ~SoundFile() { }
+            virtual ~SoundFile();
             
             /// Get raw audio data.
             /**
@@ -36,5 +37,29 @@ namespace Audio {
              * @return The sound file's sample rate (Hz).
              */
             virtual ALsizei GetSampleRate() const = 0;
+            
+            /// Check whether sound is loaded.
+            /**
+             * @return Whether sound is loaded or not.
+             */
+            virtual bool IsLoaded() const = 0;
+            
+            /// Save sound.
+            void Save() const;
+            
+            /// Load sound.
+            /**
+             * @param name Name of the sound file on disk.
+             */
+            void Load(const std::string& name);
+            
+            /// The name of the sound.
+            std::string name;
+            
+            /// The folder containing the sound file.
+            std::string path;
+            
+        private:
+            virtual void Load(const char* filename) = 0;
     };
 }

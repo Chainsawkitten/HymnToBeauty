@@ -2,7 +2,7 @@
 
 namespace ImGui {
     void ShowHelpMarker(const char* description, const float sameLineOffset) {
-        if(sameLineOffset > 0.0f)
+        if (sameLineOffset > 0.0f)
             ImGui::SameLine(sameLineOffset);
         
         ImGui::TextDisabled("[?]");

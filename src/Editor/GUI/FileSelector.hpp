@@ -17,8 +17,14 @@ namespace GUI {
             /**
              * @param callback Function to call.
              */
-            void SetFileSelectedCallback(std::function<void(const std::string&)> callback);
+            void SetFileSelectedCallback(const std::function<void(const std::string&)>& callback);
             
+            /// Set the initial path.
+            /**
+             * @param path Initial path.
+             */
+            void SetInitialPath(const char * path);
+
             /// Set extensions to select files of.
             /**
              * @param extensions Extensions of which files to show.

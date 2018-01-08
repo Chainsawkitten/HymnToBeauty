@@ -1,6 +1,6 @@
 #include "Input.hpp"
 
-#include "Log.hpp"
+#include <Utility/Log.hpp>
 #include <map>
 #include <GLFW/glfw3.h>
 
@@ -18,7 +18,7 @@ InputHandler* InputHandler::activeInstance = nullptr;
 
 InputHandler::InputHandler(GLFWwindow *window) {
     this->window = window;
-    
+
     for (int i = 0; i < BUTTONS; i++) {
         buttonData[i].down = false;
         buttonData[i].released = false;
@@ -86,6 +86,10 @@ double InputHandler::GetCursorY() const {
     return cursorY;
 }
 
+glm::vec2 InputHandler::GetCursorXY() const {
+    return glm::vec2(cursorX, cursorY);
+}
+
 bool InputHandler::GetScrollUp() const {
     return lastScroll > 0.0;
 }
@@ -103,20 +107,12 @@ void InputHandler::AssignButton(Button button, Device device, int index) {
     bindings.push_back(binding);
 }
 
-bool InputHandler::Pressed(Button button) {
+bool InputHandler::Pressed(Button button) const {
     return buttonData[button].down;
 }
 
-bool InputHandler::Triggered(Button button) {
+bool InputHandler::Triggered(Button button) const {
     return buttonData[button].triggered;
-}
-
-bool InputHandler::Released(Button button) {
-    return buttonData[button].released;
-}
-
-const std::string& InputHandler::GetText() const {
-    return text;
 }
 
 void InputHandler::CharacterCallback(unsigned int codePoint) {

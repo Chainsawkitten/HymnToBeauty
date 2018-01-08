@@ -7,6 +7,8 @@ Json::Value ScriptFile::Save() const {
     return script;
 }
 
-void ScriptFile::Load(const Json::Value& node) {
-    name = node.get("name", "").asString();
+void ScriptFile::Load(const std::string& name) {
+    std::size_t pos = name.find_last_of('/');
+    this->name = name.substr(pos + 1);
+    path = name.substr(0, pos + 1);
 }

@@ -8,6 +8,7 @@
 using namespace GUI;
 
 SettingsWindow::SettingsWindow() {
+    themeName[0] = '\0';
     themes.push_back("Default");
     
     // Fetch a list of all themes (JSON files in Themes directory).
@@ -17,13 +18,13 @@ SettingsWindow::SettingsWindow() {
             std::string name = themeFiles[i].substr(0, themeFiles[i].find_last_of("."));
             themes.push_back(name);
             if (name == EditorSettings::GetInstance().GetString("Theme"))
-                theme = i + 1;
+                theme = static_cast<int>(i) + 1;
         }
     }
 }
 
 void SettingsWindow::Show() {
-    if (ImGui::Begin("Settings", &visible, ImGuiWindowFlags_ShowBorders)) {
+    if (ImGui::Begin("Settings", &visible)) {
         // Show drop down list to select theme.
         if (dropDownItems != nullptr)
             delete[] dropDownItems;
@@ -33,7 +34,7 @@ void SettingsWindow::Show() {
         }
         
         int previousTheme = theme;
-        ImGui::Combo("Theme", &theme, dropDownItems, themes.size());
+        ImGui::Combo("Theme", &theme, dropDownItems, static_cast<int>(themes.size()));
         
         // If a different theme was selected, load it.
         if (theme != previousTheme) {

@@ -2,10 +2,14 @@
 
 #include <map>
 #include <vector>
-#include <typeinfo>
-#include "../Entity/World.hpp"
+#include <typeindex>
 #include <json/json.h>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include "../Component/SuperComponent.hpp"
+#include <fstream>
+
+class World;
 
 /// %Entity containing various components.
 class Entity {
@@ -32,14 +36,45 @@ class Entity {
          * @return The new entity.
          */
         Entity* AddChild(const std::string& name = "");
+
+        /// Remove child entity.
+        /**
+         * @param child The entity you want to remove.
+         * @return Did we manage to remove the child.
+         */
+        bool RemoveChild(Entity* child);
         
+        /// Set a new parent.
+        /**
+         * @param newParent The entity you want to be the new parent.
+         * @return The old parent.
+         */
+        Entity* SetParent(Entity* newParent);
+
+        /// Check if entity is a child.
+        /**
+         * @param child The entity you want to check if it is a child.
+         * @param deep True if we want to check if it's a grandchild, false if we do not.
+         * @return True if it has a child, false if it does not.
+         */
+        bool HasChild(const Entity* child, bool deep = true) const;
+
         /// Instantiate a scene as a child to this entity.
         /**
          * @param name The name of the scene to instantiate.
          * @return The created root entity of the scene.
          */
-        Entity* InstantiateScene(const std::string& name);
+        Entity* InstantiateScene(const std::string& name, const std::string& originScene);
         
+        /// Check if scene already exists in any of json files.
+        /**
+         * @param filename The name of the scene to check.
+         * @param error Set to true inside the function if it allready exists.
+         * @param originScene Name of scene you want to check.
+         * @param root The json value of root scene.
+         */
+        void CheckIfSceneExists(const std::string& filename, bool & error, const std::string& originScene, Json::Value root);
+
         /// Get all of the entity's children.
         /**
          * @return All the children.
@@ -52,7 +87,20 @@ class Entity {
          * @return The child or nullptr if none was found.
          */
         Entity* GetChild(const std::string& name) const;
-        
+
+        /// Get child based on its name.
+        /**
+         * @param name The name of the child to get.
+         * @return The child or nullptr if none was found.
+         */
+        Entity* GetChildFromIndex(int index) const;
+
+        /// Get the number of children.
+        /**
+         * @return Number of children the entity has.
+         */
+        unsigned int GetNumChildren() const;
+
         /// Get whether the entity is an instantiated scene.
         /**
          * @return Whether the entity is an instantiated scene.
@@ -100,19 +148,24 @@ class Entity {
          * @return The model matrix.
          */
         glm::mat4 GetModelMatrix() const;
-        
-        /// Get orientation matrix.
+
+        /// Get the local model matrix.
         /**
-         * @return The entity's orientation matrix.
+         * @return The local model matrix.
          */
-        glm::mat4 GetOrientation() const;
-        
-        /// Get orientation matrix (for camera).
+        glm::mat4 GetLocalMatrix() const;
+
+        /// Get the rotation of this entity.
         /**
-         * Calculates the orientation matrix as if the entity was a camera.
-         * @return The entity's orientation matrix.
+         * @return The rotation in local space.
          */
-        glm::mat4 GetCameraOrientation() const;
+        glm::quat GetLocalOrientation() const;
+        
+        /// Get orientation of the entity.
+        /**
+         * @return The rotation in world space.
+         */
+        glm::quat GetWorldOrientation() const;
         
         /// Get direction of the entity.
         /**
@@ -125,6 +178,62 @@ class Entity {
          * @return The position in the world (not relative to parent).
          */
         glm::vec3 GetWorldPosition() const;
+
+        /// Set the position of the entity in world space.
+        /**
+         * @param worldPos The world position you want the entity to have.
+         */
+        void SetWorldPosition(const glm::vec3& worldPos);
+
+        /// Set the orientation of the entity in world space.
+        /**
+         * @param worldRot New orientation.
+         */
+        void SetWorldOrientation(const glm::quat& worldRot);
+
+        /// Set the local orientation of the entity.
+        /**
+         * @param localRot The local rotation you want the entity to have.
+         */
+        void SetLocalOrientation(const glm::quat& localRot);
+
+        /// Rotates around the Y axis
+        /**
+         * @param angle The angle in radians that we want to rotate.
+         */
+        void RotateYaw(float angle);
+
+        /// Rotates around the X axis
+        /**
+         * @param angle The angle in radians that we want to rotate.
+         */
+        void RotatePitch(float angle);
+
+        /// Rotates around the Z axis
+        /**
+         * @param angle The angle in radians that we want to rotate.
+         */
+        void RotateRoll(float angle);
+
+        /// Rotates around an axis given in world space.
+        /**
+         * @param angle The angle in radians that we want to rotate.
+         * @param axis World space axis to rotate around.
+         */
+        void RotateAroundWorldAxis(float angle, const glm::vec3& axis);
+        
+        /// Set whether the entity should be enabled.
+        /**
+         * @param enabled Whether the entity should be enabled.
+         * @param recursive Whether to set all children recursively.
+         */
+        void SetEnabled(bool enabled, bool recursive = false);
+        
+        /// Get whether the entity is enabled.
+        /**
+         * @return Whether the entity is enabled.
+         */
+        bool IsEnabled() const;
         
         /// Name of the entity.
         std::string name;
@@ -141,63 +250,80 @@ class Entity {
          */
         glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f);
         
-        /// Rotation (yaw, pitch, roll in degrees).
+        /// Quaternion describing rotation and angle of entity.
         /**
-         * Default: 0.f, 0.f, 0.f
+         * Default: 0 radians around y axis.
          */
-        glm::vec3 rotation = glm::vec3(0.f, 0.f, 0.f);
+        glm::quat rotation = glm::angleAxis(0.0f, glm::vec3(0, 1, 0));
+
+        /// Get the entity's UID
+        /**
+         * @return The entity's UID
+         */
+        unsigned int GetUniqueIdentifier() const;
+           
+        /// Set the entity's UID
+        /**
+         * @param UID the entity's unique identifier to be set
+         */
+        void SetUniqueIdentifier(unsigned int UID);
+
+        /// Whether the entity is static.
+        bool isStatic = false;
+
+        /// Variables used for enabling and disabling the paint brush tool.
+        bool loadPaintModeClicked = false;
+        bool brushActive = false;
+        bool vertsLoaded = false;
+        bool painting = false;
+        bool sceneChosen = false;
+
         
     private:
         template<typename T> void Save(Json::Value& node, const std::string& name) const;
         template<typename T> void Load(const Json::Value& node, const std::string& name);
+        Component::SuperComponent* AddComponent(std::type_index componentType);
+        Component::SuperComponent* GetComponent(std::type_index componentType) const;
+        void KillComponent(std::type_index componentType);
+        void LoadComponent(std::type_index componentType, const Json::Value& node);
+        void KillHelper();
         
         World* world;
         Entity* parent = nullptr;
         std::vector<Entity*> children;
         bool scene = false;
         std::string sceneName;
-        
-        std::map<const std::type_info*, Component::SuperComponent*> components;
+
+        std::map<std::type_index, Component::SuperComponent*> components;
         
         bool killed = false;
+        bool enabled = true;
+        unsigned int uniqueIdentifier = 0;
 };
 
 template<typename T> T* Entity::AddComponent() {
-    const std::type_info* componentType = &typeid(T*);
-    if (components.find(componentType) != components.end())
-        return nullptr;
-    T* component = new T(this);
-    components[componentType] = component;
-    world->AddComponent(component, componentType);
-    return component;
+    std::type_index componentType = std::type_index(typeid(T*));
+    return static_cast<T*>(AddComponent(componentType));
 }
 
 template<typename T> T* Entity::GetComponent() const {
-    auto it = components.find(&typeid(T*));
-    if (it != components.end())
-        return static_cast<T*>(it->second);
-    else
-        return nullptr;
+    return static_cast<T*>(GetComponent(std::type_index(typeid(T*))));
 }
 
 template <typename T> void Entity::KillComponent() {
-    const std::type_info* componentType = &typeid(T*);
-    if (components.find(componentType) != components.end()) {
-        components[componentType]->Kill();
-        components.erase(componentType);
-    }
+    KillComponent(typeid(T*));
 }
 
 template<typename T> void Entity::Save(Json::Value& node, const std::string& name) const {
-    auto it = components.find(&typeid(T*));
-    if (it != components.end())
-        node[name] = it->second->Save();
+    Component::SuperComponent* component = GetComponent(std::type_index(typeid(T*)));
+    if (component != nullptr)
+        node[name] = component->Save();
 }
 
 template<typename T> void Entity::Load(const Json::Value& node, const std::string& name) {
     Json::Value componentNode = node[name];
     if (!componentNode.isNull()) {
-        T* component = AddComponent<T>();
-        component->Load(componentNode);
+        std::type_index componentType = std::type_index(typeid(T*));
+        LoadComponent(componentType, componentNode);
     }
 }

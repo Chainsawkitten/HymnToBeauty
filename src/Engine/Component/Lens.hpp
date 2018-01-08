@@ -8,22 +8,13 @@ namespace Component {
     class Lens : public SuperComponent {
         public:
             /// Create new lens.
-            /**
-             * @param entity Pointer to which entity this component corresponds.
-             */
-            Lens(Entity* entity);
+            Lens();
             
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
              */
             Json::Value Save() const override;
-            
-            /// Load component from JSON node.
-            /**
-             * @param node JSON node to load from.
-             */
-            void Load(const Json::Value& node) override;
 
             /// Get the projection matrix.
             /**
@@ -40,14 +31,15 @@ namespace Component {
             
             /// Near plane.
             /**
-             * Default: 0.5
+             * Default: 0.1
              */
-            float zNear = 0.5f;
+            float zNear = 0.1f;
             
             /// Far plane.
             /**
              * Default: 100.0
              */
             float zFar = 100.f;
+
     };
 }

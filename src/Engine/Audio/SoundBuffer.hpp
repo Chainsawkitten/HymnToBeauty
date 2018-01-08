@@ -10,14 +10,8 @@ namespace Audio {
     /// Wrapper for OpenAL buffers.
     class SoundBuffer {
         public:
-            /// Create new unloaded sound buffer.
+            /// Create new sound buffer.
             SoundBuffer();
-            
-            /// Create a sound buffer from a sound file.
-            /**
-             * @param soundFile The sound file containing the sound.
-             */
-            SoundBuffer(SoundFile* soundFile);
             
             /// Destructor.
             ~SoundBuffer();
@@ -28,28 +22,20 @@ namespace Audio {
              */
             ALuint GetBuffer() const;
             
-            /// Save the sound.
+            /// Set sound file.
             /**
-             * @return JSON value to be stored on disk.
+             * @param soundFile The %SoundFile containing the sound.
              */
-            Json::Value Save() const;
+            void SetSoundFile(SoundFile* soundFile);
             
-            /// Load sound from JSON node.
+            /// Get sound file.
             /**
-             * @param node JSON node to load from.
+             * @return The %SoundFile containing the sound.
              */
-            void Load(const Json::Value& node);
-            
-            /// Load sound buffer from a sound file.
-            /**
-             * @param soundFile The sound file containing the sound.
-             */
-            void Load(SoundFile* soundFile);
-            
-            /// The name of the sound.
-            std::string name;
+            SoundFile* GetSoundFile() const;
             
         private:
-            ALuint buffer;
+            SoundFile* soundFile = nullptr;
+            ALuint buffer = 0;
     };
 }

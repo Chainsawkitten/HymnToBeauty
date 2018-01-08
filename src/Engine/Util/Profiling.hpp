@@ -10,7 +10,7 @@ class Profiling {
         /**
          * @param name Name of the segment.
          */
-        Profiling(const std::string& name);
+        explicit Profiling(const std::string& name);
         
         /// End profiling.
         ~Profiling();

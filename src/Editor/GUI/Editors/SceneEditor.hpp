@@ -2,6 +2,7 @@
 
 #include <string>
 #include "EntityEditor.hpp"
+#include "../ResourceSelector.hpp"
 
 class Entity;
 
@@ -9,14 +10,18 @@ namespace GUI {
     /// Used to edit a scene.
     class SceneEditor {
         public:
+            /// Constructor.
+            SceneEditor();
+
             /// Show the editor.
             void Show();
             
             /// Set the scene to edit.
             /**
+             * @param path Path to the folder containing the scene.
              * @param scene Scene to edit.
              */
-            void SetScene(std::size_t scene);
+            void SetScene(const std::string& path, std::string* scene);
             
             /// Get whether the window is visible.
             /**
@@ -32,7 +37,13 @@ namespace GUI {
             
             /// Save currently open scene to file.
             void Save() const;
-            
+
+            /// Gets a Json file representing the save file.
+            /**
+             * @param filename This is where the filename will be stored.
+             */
+            Json::Value GetSaveFileJson(std::string* filename) const;
+
             /// Did we press on an entity this frame.
             bool entityPressed = false;
             
@@ -41,10 +52,15 @@ namespace GUI {
             
         private:
             void ShowEntity(Entity* entity);
+            Entity* draggedEntity = nullptr;
             
             bool visible = false;
             
-            std::size_t sceneIndex;
-            char name[128] = "";
+            std::string path;
+            std::string* scene = nullptr;
+            
+            char name[128];
+            
+            ResourceSelector sceneSelector;
     };
 }

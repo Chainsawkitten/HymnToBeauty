@@ -1,6 +1,6 @@
 #include "SoundEditor.hpp"
 
-#include <Engine/Audio/SoundBuffer.hpp>
+#include <Engine/Audio/SoundFile.hpp>
 #include <Engine/Audio/VorbisFile.hpp>
 #include "../FileSelector.hpp"
 #include <functional>
@@ -10,13 +10,24 @@
 
 using namespace GUI;
 
+SoundEditor::SoundEditor() {
+    name[0] = '\0';
+}
+
 void SoundEditor::Show() {
-    if (ImGui::Begin(("Sound: " + sound->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(sound))).c_str(), &visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_ShowBorders)) {
-        ImGui::InputText("Name", name, 128);
-        sound->name = name;
+    if (ImGui::Begin(("Sound: " + sound->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(sound))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
+        if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
+            // Rename sound file.
+            std::string path = Hymn().GetPath() + "/" + sound->path;
+            rename((path + sound->name + ".ogg").c_str(), (path + name + ".ogg").c_str());
+            rename((path + sound->name + ".json").c_str(), (path + name + ".json").c_str());
+
+            sound->name = name;
+        }
         
         if (ImGui::Button("Load Ogg Vorbis")) {
             fileSelector.AddExtensions("ogg");
+            fileSelector.SetInitialPath(Hymn().GetPath().c_str());
             fileSelector.SetFileSelectedCallback(std::bind(&SoundEditor::FileSelected, this, std::placeholders::_1));
             fileSelector.SetVisible(true);
         }
@@ -27,11 +38,11 @@ void SoundEditor::Show() {
         fileSelector.Show();
 }
 
-const Audio::SoundBuffer* SoundEditor::GetSound() const {
+const Audio::SoundFile* SoundEditor::GetSound() const {
     return sound;
 }
 
-void SoundEditor::SetSound(Audio::SoundBuffer* sound) {
+void SoundEditor::SetSound(Audio::SoundFile* sound) {
     this->sound = sound;
     
     strcpy(name, sound->name.c_str());
@@ -46,9 +57,6 @@ void SoundEditor::SetVisible(bool visible) {
 }
 
 void SoundEditor::FileSelected(const std::string& file) {
-    std::string destination = Hymn().GetPath() + FileSystem::DELIMITER + "Sounds" + FileSystem::DELIMITER + sound->name + ".ogg";
+    std::string destination = Hymn().GetPath() + "/" + sound->path + sound->name + ".ogg";
     FileSystem::Copy(file.c_str(), destination.c_str());
-    Audio::SoundFile* soundFile = new Audio::VorbisFile(file.c_str());
-    sound->Load(soundFile);
-    delete soundFile;
 }
