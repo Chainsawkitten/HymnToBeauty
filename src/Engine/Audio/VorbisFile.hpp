@@ -9,11 +9,8 @@ namespace Audio {
      */
     class VorbisFile : public SoundFile {
         public:
-            /// Loads the specified ogg-file.
-            /**
-             * @param filename Filename (relative or absolute) to ogg-file.
-             */
-            VorbisFile(const char* filename);
+            /// Constructor.
+            VorbisFile();
             
             /// Destructor.
             ~VorbisFile() final;
@@ -43,8 +40,16 @@ namespace Audio {
              */
             ALsizei GetSampleRate() const final;
             
+            /// Check whether sound is loaded.
+            /**
+             * @return Whether sound is loaded or not.
+             */
+            bool IsLoaded() const final;
+            
         private:
-            char* data;
+            void Load(const char* filename);
+            
+            char* data = nullptr;
             int dataSize;
             int sampleRate;
             ALenum format;

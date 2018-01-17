@@ -16,7 +16,15 @@
  * Particle Emitter Icons | Show particle emitter icons.     | bool   | true
  * Light Source Icons     | Show light source icons.         | bool   | true
  * Camera Icons           | Show camera icons.               | bool   | true
+ * Physics Volumes        | Show physics volumes.            | bool   | true
+ * Lighting               | Light the scene.                 | bool   | true
+ * Light Volumes          | Show light culling volumes.      | bool   | false
  * Text Editor            | Path to text editor for scripts. | string | 
+ * Grid Settings          | Whether to show grid settings.   | bool   | false
+ * Grid Size              | Size of the grid.                | long   | 100
+ * Grid Line Width        | Width of the lines in the grid.  | long   | 3
+ * Grid Snap              | Snap to grid when moving.        | bool   | false
+ * Grid Snap Size         | Size to snap to.                 | long   | 100
  */
 class EditorSettings : public Settings {
     public:

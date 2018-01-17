@@ -36,6 +36,12 @@ namespace GUI {
             void SetVisible(bool visible);
             
         private:
+            enum Status {
+                UNKNOWN,
+                SUCCESS,
+                FAILURE
+            } status = UNKNOWN;
+            
             ScriptFile* script = nullptr;
             bool visible = false;
     };

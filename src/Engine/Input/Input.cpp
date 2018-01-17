@@ -1,6 +1,12 @@
 #include "Input.hpp"
 
 #include <cstring>
+#include <GLFW/glfw3.h>
+
+Input& Input::GetInstance() {
+    static Input instance;
+    return instance;
+}
 
 void Input::SetWindow(GLFWwindow* window) {
     this->window = window;
@@ -8,7 +14,11 @@ void Input::SetWindow(GLFWwindow* window) {
 
 bool Input::CheckButton(int index) const{
     Button* button = buttons[index];
-    int state = glfwGetKey(window, button->key);
+    int state;
+    if (button->key == 420)
+        state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1);
+    else
+        state = glfwGetKey(window, button->key);
     return state == button->state;
 }
 

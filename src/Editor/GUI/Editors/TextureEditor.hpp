@@ -3,12 +3,15 @@
 #include <string>
 #include "../FileSelector.hpp"
 
-class Texture2D;
+class TextureAsset;
 
 namespace GUI {
     /// Used to edit a texture.
     class TextureEditor {
         public:
+            /// Constructor.
+            TextureEditor();
+
             /// Show the editor.
             void Show();
             
@@ -16,13 +19,13 @@ namespace GUI {
             /**
              * @return The texture being edited.
              */
-            const Texture2D* GetTexture() const;
+            const TextureAsset* GetTexture() const;
             
             /// Set the texture to edit.
             /**
              * @param texture %Texture to edit.
              */
-            void SetTexture(Texture2D* texture);
+            void SetTexture(TextureAsset* texture);
             
             /// Get whether the window is visible.
             /**
@@ -39,11 +42,14 @@ namespace GUI {
         private:
             void FileSelected(const std::string& file);
             
-            Texture2D* texture = nullptr;
+            TextureAsset* texture = nullptr;
             bool visible = false;
             
             FileSelector fileSelector;
             
-            char name[128] = "";
+            char name[128];
+            
+            std::string path;
+            int compressionType = 0;
     };
 }

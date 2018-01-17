@@ -1,7 +1,7 @@
 /*
 Skinning pass-through vertex shader - Vertex Shader
 */
-#version 400
+#version 430
 layout(location = 0) in vec3 vertexPosition;
 layout(location = 1) in vec2 vertexTexture;
 layout(location = 2) in vec3 vertexNormal;
@@ -14,13 +14,16 @@ const int MAX_BONES = 100;
 uniform mat4 viewProjection;
 uniform mat4 model;
 uniform mat3 normalMatrix;
+uniform mat4 viewMatrix;
 uniform mat4 bones[MAX_BONES];
-uniform mat3 bonesIT[MAX_BONES];
+uniform mat4 lightSpaceMatrix;
 
 out VertexData {
+    vec3 pos;
     vec3 normal;
     vec3 tangent;
     vec2 texCoords;
+    vec4 fragPosLightSpace;
 } vertexOut;
 
 void main () {
@@ -28,14 +31,17 @@ void main () {
     position += (bones[vertexBoneIDs[1]] * vec4(vertexPosition, 1.0)) * vertexWeights[1];
     position += (bones[vertexBoneIDs[2]] * vec4(vertexPosition, 1.0)) * vertexWeights[2];
     position += (bones[vertexBoneIDs[3]] * vec4(vertexPosition, 1.0)) * vertexWeights[3];
+   
+    vec4 normal = (bones[vertexBoneIDs[0]] * vec4(vertexNormal, 0.0)) * vertexWeights[0];
+    normal += (bones[vertexBoneIDs[1]] * vec4(vertexNormal, 0.0)) * vertexWeights[1];
+    normal += (bones[vertexBoneIDs[2]] * vec4(vertexNormal, 0.0)) * vertexWeights[2];
+    normal += (bones[vertexBoneIDs[3]] * vec4(vertexNormal, 0.0)) * vertexWeights[3];
     
-    vec3 normal = (bonesIT[vertexBoneIDs[0]] * vertexNormal) * vertexWeights[0];
-    normal += (bonesIT[vertexBoneIDs[1]] * vertexNormal) * vertexWeights[1];
-    normal += (bonesIT[vertexBoneIDs[2]] * vertexNormal) * vertexWeights[2];
-    normal += (bonesIT[vertexBoneIDs[3]] * vertexNormal) * vertexWeights[3];
-    
-    gl_Position = viewProjection * (model * position);
-    vertexOut.normal = normalize(normalMatrix * normal);
+    vec4 worldPosition = model * vec4(position.xyz, 1.0);
+    gl_Position = viewProjection * worldPosition;
+    vertexOut.pos = vec3(viewMatrix * worldPosition);
+    vertexOut.normal = normalize(normalMatrix * normal.xyz);
     vertexOut.tangent = vertexTangent;
     vertexOut.texCoords = vertexTexture;
+    vertexOut.fragPosLightSpace = lightSpaceMatrix * worldPosition;
 }

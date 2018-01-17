@@ -3,11 +3,10 @@
 #include <vector>
 #include <map>
 #include <typeinfo>
-#include "../Manager/ParticleManager.hpp"
 
 class Entity;
-namespace Component {
-    class SuperComponent;
+namespace Json {
+    class Value;
 }
 
 /// The game world containing all entities.
@@ -43,12 +42,6 @@ class World {
          */
         Entity* GetRoot() const;
         
-        /// Gets all components of a specific type.
-        /**
-         * @return A list of pointers to all components of the world.
-         */
-        template<typename T> std::vector<T*>& GetComponents();
-        
         /// Register an entity to receive update events.
         /**
          * @param entity %Entity to register.
@@ -67,12 +60,6 @@ class World {
         /// Removes all killed entities and components in the world.
         void ClearKilled();
         
-        /// Get all the particles in the world.
-        /**
-         * @return Array of all the particles in the world.
-         */
-        ParticleManager::Particle* GetParticles() const;
-        
         /// Get the number of particles in the world.
         /**
          * @return The number of particles in the world.
@@ -90,35 +77,33 @@ class World {
          * @param filename The name of the file.
          */
         void Save(const std::string& filename) const;
-        
+
+        /// Get a json file representing the root.
+        /**
+         * @return The json file representing the root.
+         */
+        Json::Value GetSaveJson() const;
+
         /// Load the world from file.
         /**
          * @param filename The name of the file.
          */
         void Load(const std::string& filename);
-        
+
+        /// Load the world from a json.
+        /**
+         * @param node The json containing a scene to load.
+         */
+        void Load(const Json::Value& node);
+
     private:
         // Copy constructor.
         World(World& world) = delete;
-        
-        // Add component.
-        void AddComponent(Component::SuperComponent* component, const std::type_info* componentType);
         
         // List of all entities in this world.
         std::vector<Entity*> entities;
         Entity* root = nullptr;
         
-        // Map containing list of components.
-        std::map<const std::type_info*, std::vector<Component::SuperComponent*>> components;
-        
-        // All particles in the world.
-        ParticleManager::Particle* particles;
-        unsigned int particleCount = 0;
-        
         // Entities registered for update event.
         std::vector<Entity*> updateEntities;
 };
-
-template<typename T> inline std::vector<T*>& World::GetComponents() {
-    return reinterpret_cast<std::vector<T*>&>(components[&typeid(T*)]);
-}

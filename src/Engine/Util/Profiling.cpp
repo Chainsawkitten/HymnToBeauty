@@ -6,10 +6,15 @@
 using namespace std;
 
 Profiling::Profiling(const std::string& name) {
-    result = Managers().profilingManager->StartResult(name);
-    start = glfwGetTime();
+    if (Managers().profilingManager->Active()) {
+        result = Managers().profilingManager->StartResult(name, ProfilingManager::Type::CPU_TIME);
+        start = glfwGetTime();
+    }
 }
 
 Profiling::~Profiling() {
-    Managers().profilingManager->FinishResult(result, start);
+    if (Managers().profilingManager->Active()) {
+        result->value = (glfwGetTime() - start) * 1000.0;
+        Managers().profilingManager->FinishResult(result, ProfilingManager::Type::CPU_TIME);
+    }
 }

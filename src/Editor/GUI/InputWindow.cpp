@@ -14,7 +14,7 @@ void InputWindow::Show() {
     ImGui::OpenPopup("Input");
     
     // Create new hymn.
-    if (ImGui::BeginPopupModal("Input", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_ShowBorders)) {
+    if (ImGui::BeginPopupModal("Input", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
         if (ImGui::Button("Add Button"))
             AddButton();
         

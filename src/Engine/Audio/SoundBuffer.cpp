@@ -12,32 +12,21 @@ SoundBuffer::SoundBuffer() {
     
 }
 
-SoundBuffer::SoundBuffer(SoundFile* soundFile) {
-    Load(soundFile);
-}
-
 SoundBuffer::~SoundBuffer() {
-    alDeleteBuffers(1, &buffer);
+    if (soundFile != nullptr)
+        alDeleteBuffers(1, &buffer);
 }
 
 ALuint SoundBuffer::GetBuffer() const {
     return buffer;
 }
 
-Json::Value SoundBuffer::Save() const {
-    Json::Value sound;
-    sound["name"] = name;
-    return sound;
-}
-
-void SoundBuffer::Load(const Json::Value& node) {
-    name = node.get("name", "").asString();
-    SoundFile* soundFile = new VorbisFile((Hymn().GetPath() + FileSystem::DELIMITER + "Sounds" + FileSystem::DELIMITER + name + ".ogg").c_str());
-    Load(soundFile);
-    delete soundFile;
-}
-
-void SoundBuffer::Load(SoundFile* soundFile) {
+void SoundBuffer::SetSoundFile(SoundFile* soundFile) {
+    // Remove old sound file.
+    if (this->soundFile != nullptr) {
+        alDeleteBuffers(1, &buffer);
+    }
+    
     // Create audio buffer.
     alGetError();
     alGenBuffers((ALuint)1, &buffer);
@@ -46,4 +35,8 @@ void SoundBuffer::Load(SoundFile* soundFile) {
     // Set the buffer data.
     alBufferData(buffer, soundFile->GetFormat(), soundFile->GetData(), soundFile->GetSize(), soundFile->GetSampleRate());
     SoundManager::CheckError("Couldn't set buffer data.");
+}
+
+SoundFile* SoundBuffer::GetSoundFile() const {
+    return soundFile;
 }

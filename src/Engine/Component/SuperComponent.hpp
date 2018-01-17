@@ -9,10 +9,7 @@ namespace Component {
     class SuperComponent {
         public:
             /// Create new %SuperComponent.
-            /**
-             * @param entity Pointer to which entity this component corresponds.
-             */
-            SuperComponent(Entity* entity);
+            SuperComponent();
             
             /// Destructor.
             virtual ~SuperComponent();
@@ -32,14 +29,8 @@ namespace Component {
              */
             virtual Json::Value Save() const;
             
-            /// Load component from JSON node.
-            /**
-             * @param node JSON node to load from.
-             */
-            virtual void Load(const Json::Value& node);
-            
             /// Pointer to which entity this component corresponds.
-            Entity* entity;
+            Entity* entity = nullptr;
             
         private:
             bool killed = false;

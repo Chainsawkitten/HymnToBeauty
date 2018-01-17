@@ -7,46 +7,49 @@ using namespace GUI;
 
 void FiltersWindow::Show() {
     // Configure filters.
-    if (ImGui::Begin("Filters", &visible, ImGuiWindowFlags_ShowBorders)) {
+    if (ImGui::Begin("Filters", &visible)) {
+        // Gamma
+        if (ImGui::CollapsingHeader("Gamma correction")) {
+            ImGui::TextWrapped("Gamma correction filter.");
+
+            ImGui::DragFloat("Gamma", &Hymn().filterSettings.gamma, 0.f, 1.f, 10.f);
+        }
+
         // Color
         if (ImGui::CollapsingHeader("Color")) {
             ImGui::TextWrapped("Color blending filter.");
-            
-            ImGui::Checkbox("Enable##Color", &Hymn().filterSettings.color);
-            
-            if (Hymn().filterSettings.color) {
-                ImGui::ColorEdit3("Color##Color", &Hymn().filterSettings.colorColor[0]);
+
+            ImGui::Checkbox("Enable##Color", &Hymn().filterSettings.colorFilterApply);
+
+            if (Hymn().filterSettings.colorFilterApply) {
+                ImGui::ColorEdit3("Color##Color", &Hymn().filterSettings.colorFilterColor[0]);
             }
         }
-        
+
         // Fog
         if (ImGui::CollapsingHeader("Fog")) {
             ImGui::TextWrapped("Screen-space fog based on the depth buffer.");
-            
-            ImGui::Checkbox("Enable##Fog", &Hymn().filterSettings.fog);
-            
-            if (Hymn().filterSettings.fog) {
-                ImGui::InputFloat("Density", &Hymn().filterSettings.fogDensity);
+
+            ImGui::Checkbox("Enable##Fog", &Hymn().filterSettings.fogApply);
+
+            if (Hymn().filterSettings.fogApply) {
+                ImGui::DragFloat("Density", &Hymn().filterSettings.fogDensity, 0.00001f, 0.f, 0.3f);
                 ImGui::ColorEdit3("Color##Fog", &Hymn().filterSettings.fogColor[0]);
             }
         }
-        
+
         // FXAA
         if (ImGui::CollapsingHeader("FXAA")) {
             ImGui::TextWrapped("Cheap anti-aliasing.");
-            
+
             ImGui::Checkbox("Enable##FXAA", &Hymn().filterSettings.fxaa);
         }
-        
-        // Glow
-        if (ImGui::CollapsingHeader("Glow")) {
-            ImGui::TextWrapped("Blur the glow buffer and render it using additive blending.");
-            
-            ImGui::Checkbox("Enable##Glow", &Hymn().filterSettings.glow);
-            
-            if (Hymn().filterSettings.glow) {
-                ImGui::InputInt("Blur amount", &Hymn().filterSettings.glowBlurAmount);
-            }
+
+        // Dither
+        if (ImGui::CollapsingHeader("Dither")) {
+            ImGui::TextWrapped("Preventing large-scale color patterns such as color banding.");
+
+            ImGui::Checkbox("Enable##Dither", &Hymn().filterSettings.ditherApply);
         }
     }
     ImGui::End();

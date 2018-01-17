@@ -33,3 +33,9 @@
 	path = externals/AngelScript
 	url = https://github.com/IngwiePhoenix/AngelScript.git
 	ignore = dirty
+[submodule "externals/bullet3"]
+	path = externals/bullet3
+	url = https://github.com/bulletphysics/bullet3.git
+[submodule "externals/ImGuizmo"]
+	path = externals/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

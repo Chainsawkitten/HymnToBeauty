@@ -4,8 +4,7 @@
 
 using namespace Component;
 
-SpotLight::SpotLight(Entity* entity) : SuperComponent(entity) {
-    
+SpotLight::SpotLight() {
 }
 
 Json::Value SpotLight::Save() const {
@@ -15,13 +14,7 @@ Json::Value SpotLight::Save() const {
     component["attenuation"] = attenuation;
     component["intensity"] = intensity;
     component["coneAngle"] = coneAngle;
+    component["shadow"] = shadow;
+    component["distance"] = distance;
     return component;
-}
-
-void SpotLight::Load(const Json::Value& node) {
-    color = Json::LoadVec3(node["color"]);
-    ambientCoefficient = node.get("ambientCoefficient", 0.5f).asFloat();
-    attenuation = node.get("attenuation", 1.f).asFloat();
-    intensity = node.get("intensity", 1.f).asFloat();
-    coneAngle = node.get("coneAngle", 15.f).asFloat();
 }

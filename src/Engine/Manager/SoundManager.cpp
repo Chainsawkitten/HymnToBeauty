@@ -1,16 +1,23 @@
 #include "SoundManager.hpp"
 
-#include "../Util/Log.hpp"
 #include <AL/al.h>
+#include <Utility/Log.hpp>
 #include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Listener.hpp"
+#include "../Component/Mesh.hpp"
 #include "../Component/SoundSource.hpp"
-#include "../Component/Physics.hpp"
+#include "../Audio/SoundFile.hpp"
 #include "../Audio/SoundBuffer.hpp"
+#include <Video/Geometry/Geometry3D.hpp>
+#include "Managers.hpp"
+#include "ResourceManager.hpp"
+#include <cstdint>
+#include <cstring>
+#include <algorithm>
+#include <GLFW/glfw3.h>
 
-// Scaling constant. Used to convert from our units to sound system units.
-const float soundScale = 0.2f;
+using namespace Audio;
 
 SoundManager::SoundManager() {
     // Open default audio device.
@@ -51,11 +58,10 @@ void SoundManager::CheckError(const char* message) {
     }
 }
 
-void SoundManager::Update(World& world) {
+void SoundManager::Update() {
     // Update sound sources.
-    std::vector<Component::SoundSource*> soundComponents = world.GetComponents<Component::SoundSource>();
-    for (Component::SoundSource* sound : soundComponents) {
-        if (sound->IsKilled())
+    for (Component::SoundSource* sound : soundSources.GetAll()) {
+        if (sound->IsKilled() || !sound->entity->IsEnabled())
             continue;
         
         Entity* entity = sound->entity;
@@ -73,17 +79,10 @@ void SoundManager::Update(World& world) {
         }
         
         // Set position.
-        glm::vec3 position = soundScale * glm::vec3(entity->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f));
+        glm::vec3 position = glm::vec3(entity->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f));
         alSource3f(sound->source, AL_POSITION, position.x, position.y, position.z);
         
-        // Set velocity based on physics.
-        Component::Physics* physics = entity->GetComponent<Component::Physics>();
-        if (physics != nullptr) {
-            glm::vec3 velocity = soundScale * physics->velocity;
-            alSource3f(sound->source, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
-        } else {
-            alSource3f(sound->source, AL_VELOCITY, 0.f, 0.f, 0.f);
-        }
+        /// @todo Set velocity based on physics.
         
         // Set other properties.
         alSourcef(sound->source, AL_PITCH, sound->pitch);
@@ -104,22 +103,62 @@ void SoundManager::Update(World& world) {
     }
     
     // Update listener.
-    std::vector<Component::Listener*> listeners = world.GetComponents<Component::Listener>();
-    for (Component::Listener* listener : listeners) {
+    for (Component::Listener* listener : listeners.GetAll()) {
         Entity* entity = listener->entity;
         
         // Set position
-        glm::vec3 position = soundScale * entity->position;
+        glm::vec3 position = entity->position;
         alListener3f(AL_POSITION, position.x, position.y, position.z);
         CheckError("Couldn't set listener position.");
         
         // Set orientation.
-        glm::vec4 forward = glm::inverse(entity->GetOrientation()) * glm::vec4(0.f, 0.f, -1.f, 1.f);
-        glm::vec4 up = glm::inverse(entity->GetOrientation()) * glm::vec4(0.f, 1.f, 0.f, 1.f);
+        glm::quat orientation = entity->GetWorldOrientation();
+        glm::vec3 forward = orientation * glm::vec3(0.0f, 0.0f, -1.0f);
+        glm::vec3 up = orientation * glm::vec3(0.0f, 1.0f, 0.0f);
         ALfloat listenerOri[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
         alListenerfv(AL_ORIENTATION, listenerOri);
         CheckError("Couldn't set listener orientation.");
         
         break;
     }
+}
+
+Component::SoundSource* SoundManager::CreateSoundSource() {
+    return soundSources.Create();
+}
+
+Component::SoundSource* SoundManager::CreateSoundSource(const Json::Value& node) {
+    Component::SoundSource* soundSource = soundSources.Create();
+
+    // Load values from Json node.
+    std::string name = node.get("sound", "").asString();
+    if (!name.empty())
+        soundSource->soundBuffer->SetSoundFile(Managers().resourceManager->CreateSound(name));
+    
+    soundSource->pitch = node.get("pitch", 1.f).asFloat();
+    soundSource->gain = node.get("gain", 1.f).asFloat();
+    soundSource->loop = node.get("loop", false).asBool();
+
+    return soundSource;
+}
+
+const std::vector<Component::SoundSource*>& SoundManager::GetSoundSources() const {
+    return soundSources.GetAll();
+}
+
+Component::Listener* SoundManager::CreateListener() {
+    return listeners.Create();
+}
+
+Component::Listener* SoundManager::CreateListener(const Json::Value& node) {
+    return listeners.Create();
+}
+
+const std::vector<Component::Listener*>& SoundManager::GetListeners() const {
+    return listeners.GetAll();
+}
+
+void SoundManager::ClearKilledComponents() {
+    soundSources.ClearKilled();
+    listeners.ClearKilled();
 }

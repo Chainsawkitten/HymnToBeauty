@@ -3,94 +3,82 @@
 #include <map>
 #include <GL/glew.h>
 
-class Shader;
-class ShaderProgram;
-class Texture2D;
-class Font;
+namespace Video {
+    class TexturePNG;
+    namespace Geometry {
+        class Rectangle;
+    }
+}
 namespace Geometry {
-    class Rectangle;
     class Cube;
     class Model;
 }
 namespace Audio {
-    class SoundBuffer;
+    class SoundFile;
+    class AudioMaterial;
 }
+
+namespace Animation {
+    class AnimationClip;
+    class AnimationController;
+    class Skeleton;
+}
+class TextureAsset;
+class ScriptFile;
 
 /// Handles all resources.
 class ResourceManager {
     friend class Hub;
     
     public:
-        /// Create a shader if it doesn't already exist.
+        /// Constructor
+        ResourceManager() {}
+
+        /// Create an animation clip.
         /**
-         * @param source GLSL code for the shader.
-         * @param sourceLength Length of the GLSL source code.
-         * @param shaderType %Shader type. One of GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
-         * @return The shader instance
+         * @param name Name of animation clip.
+         * @return The animation clip instance.
          */
-        Shader* CreateShader(const char* source, int sourceLength, GLenum shaderType);
-        
-        /// Free the reference to the shader.
+        Animation::AnimationClip* CreateAnimationClip(const std::string& name);
+
+        /// Free the reference to the animation clip.
         /**
-         * Deletes the instance if no more references exist.
-         * @param shader %Shader to dereference.
+         * @param animationClip %Animation clip to dereference.
          */
-        void FreeShader(Shader* shader);
-        
-        /// Create shader program if it doesn't already exist.
+        void FreeAnimationClip(Animation::AnimationClip* animationClip);
+
+        /// Create an animation controller.
         /**
-         * Link together shaders into a shader program that can be run on the GPU.
-         *
-         * Sample:
-         * \code{.cpp}
-         * Shader* vertexShader = new Shader(vertexSource, vertexSourceLength, GL_VERTEX_SHADER);
-         * Shader* geometryShader = new Shader(geometrySource, geometrySourceLength, GL_GEOMETRY_SHADER);
-         * Shader* fragmentShader = new Shader(fragmentSource, fragmentSourceLength, GL_FRAGMENT_SHADER);
-         * ShaderProgram* shaderProgram = new ResourceManager::GetInstance().CreateShaderProgram({ vertexShader, geometryShader, fragmentShader });
-         * \endcode
-         *
-         * @param shaders List of shaders to link together.
-         * @return The shader program instance
+         * @param name Name of animation controller.
+         * @return The animation controller instance.
          */
-        ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders);
-        
-        /// Free the reference to a shader program.
+        Animation::AnimationController* CreateAnimationController(const std::string& name);
+
+        /// Free the reference to the animation controller.
         /**
-         * Deletes the instance if no more references exist.
-         * @param shaderProgram %Shader program to dereference.
+         * @param animationClip %Animation controller to dereference.
          */
-        void FreeShaderProgram(ShaderProgram* shaderProgram);
-        
-        /// Create a rectangle for rendering if it doesn't already exist.
+        void FreeAnimationController(Animation::AnimationController* animationController);
+
+        /// Create a skeleton.
         /**
-         * @return The rectangle instance
+         * @param name Name of skeleton.
+         * @return The skeleton instance.
          */
-        Geometry::Rectangle* CreateRectangle();
-        
-        /// Free the reference to the rectangle.
+        Animation::Skeleton* CreateSkeleton(const std::string& name);
+
+        /// Free the reference to the skeleton.
         /**
-         * Deletes the instance if no more references exist.
+         * @param skeleton %Skeleton to dereference.
          */
-        void FreeRectangle();
-        
-        /// Create a cube for rendering if it doesn't already exist.
+        void FreeSkeleton(Animation::Skeleton* skeleton);
+
+        /// Create a model if it doesn't already exist.
         /**
-         * @return The cube instance
+         * @param name Name of model.
+         * @return The model instance
          */
-        Geometry::Cube* CreateCube();
-        
-        /// Free the reference to the cube.
-        /**
-         * Deletes the instance if no more references exist.
-         */
-        void FreeCube();
-        
-        /// Create an model for rendering if it doesn't already exist.
-        /**
-        * @param filename Filename of model file.
-        * @return The model instance
-        */
-        Geometry::Model* CreateModel(std::string filename);
+        Geometry::Model* CreateModel(const std::string& name);
 
         /// Free the reference to the model.
         /**
@@ -102,155 +90,140 @@ class ResourceManager {
         /**
          * @param data Image file data.
          * @param dataLength Length of the image file data.
-         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
-         * @return The %Texture2D instance
+         * @return The %TexturePNG instance
          */
-        Texture2D* CreateTexture2D(const char* data, int dataLength, bool srgb = false);
-        
-        /// Create a 2D texture if it doesn't already exist.
-        /**
-         * @param filename Filename of image file.
-         * @param srgb Whether the image is in SRGB space and should be converted to linear space.
-         * @return The %Texture2D instance
-         */
-        Texture2D* CreateTexture2DFromFile(std::string filename, bool srgb = false);
+        Video::TexturePNG* CreateTexturePNG(const char* data, int dataLength);
         
         /// Free the reference to the 2D texture.
         /**
          * Deletes the instance if no more references exist.
          * @param texture %Texture to dereference.
          */
-        void FreeTexture2D(Texture2D* texture);
+        void FreeTexturePNG(Video::TexturePNG* texture);
+        
+        /// Create a texture asset if it doesn't already exist.
+        /**
+         * @param name The name of the texture asset.
+         * @return The %TextureAsset instance
+         */
+        TextureAsset* CreateTextureAsset(const std::string& name);
+        
+        /// Free the reference to the texture asset.
+        /**
+         * Deletes the instance if no more references exist.
+         * @param textureAsset %TextureAsset to dereference.
+         */
+        void FreeTextureAsset(TextureAsset* textureAsset);
+        
+        /// Get the number of instances of a texture asset.
+        /**
+         * @param textureAsset The texture asset to check.
+         * @return How many instances of the texture asset currently exist.
+         */
+        int GetTextureAssetInstanceCount(TextureAsset* textureAsset);
         
         /// Create a sound if it doesn't already exist.
         /**
-         * Supported formats: Ogg Vorbis.
-         * @param filename Path to the sound file.
+         * @param name Name of the sound.
          * @return The %SoundBuffer instance.
          */
-        Audio::SoundBuffer* CreateSound(std::string filename);
+        Audio::SoundFile* CreateSound(const std::string& name);
         
         /// Free the reference to the sound.
         /**
          * Deletes the instance if no more references exist.
-         * @param soundBuffer %SoundBuffer to dereference.
+         * @param soundFile %SoundFile to dereference.
          */
-        void FreeSound(Audio::SoundBuffer* soundBuffer);
+        void FreeSound(Audio::SoundFile* soundFile);
         
-        /// Create a font if it doesn't already exist.
+        /// Create a script file if it doesn't already exist.
         /**
-         * @param source TTF source.
-         * @param sourceLength Length of the source.
-         * @param height Character height.
-         * @return The %Font instance
+         * @param name Name of the script file.
+         * @return The %ScriptFile instance.
          */
-        Font* CreateFontEmbedded(const char* source, int sourceLength, float height);
+        ScriptFile* CreateScriptFile(const std::string& name);
         
-        /// Create a font if it doesn't already exist.
-        /**
-         * @param filename Filename of the TTF file.
-         * @param height Character height.
-         * @return The %Font instance
-         */
-        Font* CreateFontFromFile(std::string filename, float height);
-        
-        /// Free the reference to the font.
+        /// Free the reference to the script file.
         /**
          * Deletes the instance if no more references exist.
-         * @param font %Font to dereference.
+         * @param scriptFile %ScriptFile to dereference.
          */
-        void FreeFont(Font* font);
+        void FreeScriptFile(ScriptFile* scriptFile);
         
     private:
-        ResourceManager();
         ResourceManager(ResourceManager const&) = delete;
         void operator=(ResourceManager const&) = delete;
         
-        // Shaders
-        struct ShaderInstance {
-            Shader* shader;
-            int count;
-        };
-        std::map<const char*, ShaderInstance> shaders;
-        std::map<Shader*, const char*> shadersInverse;
-        
-        // ShaderPrograms
-        struct ShaderProgramInstance {
-            ShaderProgram* shaderProgram;
-            int count;
-        };
-        struct ShaderProgramKey {
-            const Shader* computeShader = nullptr;
-            const Shader* vertexShader = nullptr;
-            const Shader* tessControlShader = nullptr;
-            const Shader* tessEvaluationShader = nullptr;
-            const Shader* geometryShader = nullptr;
-            const Shader* fragmentShader = nullptr;
-            
-            bool operator<(const ShaderProgramKey& other) const;
-        };
-        std::map<ShaderProgramKey, ShaderProgramInstance> shaderPrograms;
-        std::map<ShaderProgram*, ShaderProgramKey> shaderProgramsInverse;
-        
         // Rectangle
-        Geometry::Rectangle* rectangle;
+        Video::Geometry::Rectangle* rectangle = nullptr;
         int rectangleCount = 0;
         
         // Cube
-        Geometry::Cube* cube;
+        Geometry::Cube* cube = nullptr;
+
         int cubeCount = 0;
         
-        // Model
+        // Model.
         struct ModelInstance {
             Geometry::Model* model;
             int count;
         };
         std::map<std::string, ModelInstance> models;
         std::map<Geometry::Model*, std::string> modelsInverse;
-        
-        // Texture2D
-        struct Texture2DInstance {
-            Texture2D* texture;
+
+        // Animation clip.
+        struct AnimationClipInstance {
+            Animation::AnimationClip* animationClip;
             int count;
         };
-        std::map<const char*, Texture2DInstance> textures;
-        std::map<Texture2D*, const char*> texturesInverse;
+        std::map<std::string, AnimationClipInstance> animationClips;
+        std::map<Animation::AnimationClip*, std::string> animationClipsInverse;
+
+        // Animation controller.
+        struct AnimationControllerInstance {
+            Animation::AnimationController* animationController;
+            int count;
+        };
+        std::map<std::string, AnimationControllerInstance> animationControllers;
+        std::map<Animation::AnimationController*, std::string> animationControllersInverse;
+
+        // Skeleton.
+        struct SkeletonInstance {
+            Animation::Skeleton* skeleton;
+            int count;
+        };
+        std::map<std::string, SkeletonInstance> skeletons;
+        std::map<Animation::Skeleton*, std::string> skeletonsInverse;
+
+        // TexturePNG.
+        struct TexturePNGInstance {
+            Video::TexturePNG* texture;
+            int count;
+        };
+        std::map<const char*, TexturePNGInstance> textures;
+        std::map<Video::TexturePNG*, const char*> texturesInverse;
         
-        // Texture2D from file
-        std::map<std::string, Texture2DInstance> texturesFromFile;
-        std::map<Texture2D*, std::string> texturesFromFileInverse;
+        // Texture asset.
+        struct TextureAssetInstance {
+            TextureAsset* textureAsset;
+            int count;
+        };
+        std::map<std::string, TextureAssetInstance> textureAssets;
+        std::map<TextureAsset*, std::string> textureAssetsInverse;
         
-        // Sound
+        // Sound.
         struct SoundInstance {
-            Audio::SoundBuffer* soundBuffer;
+            Audio::SoundFile* sound;
             int count;
         };
         std::map<std::string, SoundInstance> sounds;
-        std::map<Audio::SoundBuffer*, std::string> soundsInverse;
+        std::map<Audio::SoundFile*, std::string> soundsInverse;
         
-        // Font
-        struct FontInstance {
-            Font* font;
+        // ScriptFile.
+        struct ScriptFileInstance {
+            ScriptFile* scriptFile;
             int count;
         };
-        struct FontKey {
-            const char* source = nullptr;
-            float height = 0.f;
-            
-            bool operator<(const FontKey& other) const;
-        };
-        std::map<FontKey, FontInstance> fonts;
-        std::map<Font*, FontKey> fontsInverse;
-        
-        // Font from file
-        struct FontFromFileKey {
-            std::string filename = "";
-            float height;
-            
-            FontFromFileKey();
-            
-            bool operator<(const FontFromFileKey& other) const;
-        };
-        std::map<FontFromFileKey, FontInstance> fontsFromFile;
-        std::map<Font*, FontFromFileKey> fontsFromFileInverse;
+        std::map<std::string, ScriptFileInstance> scriptFiles;
+        std::map<ScriptFile*, std::string> scriptFilesInverse;
 };

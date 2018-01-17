@@ -1,12 +1,12 @@
 #include "FileSystem.hpp"
 
 #include <cstdlib>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <cctype>
 #include <cstring>
 #include <fstream>
-#include "Log.hpp"
+#include <Utility/Log.hpp>
+#include <stdio.h>
 
 // Platform-dependent includes.
 #if defined(_WIN32) || defined(WIN32)
@@ -114,7 +114,7 @@ namespace FileSystem {
 #elif __linux__
         // Linux
         path = getenv("HOME");
-        path += "/.local/share/";
+        path += "/";
 #endif
         
         path += appName;
@@ -153,6 +153,26 @@ namespace FileSystem {
         return extension;
     }
     
+    std::string GetName(const std::string& filepath) {
+        std::size_t start = filepath.find_last_of(DELIMITER);
+        if (start == std::string::npos)
+            start = 0;
+
+        std::size_t length = filepath.find_last_of(".") - start;
+        
+        return filepath.substr(start + 1, length - 1);
+    }
+    
+    std::string GetDirectory(const std::string& path) {
+        std::size_t end = path.find_last_of(DELIMITER);
+        if (end == std::string::npos)
+            end = 0;
+        else
+            end++;
+        
+        return path.substr(0, end);
+    }
+
     void ExecuteProgram(const std::string& path, const std::string& arguments) {
 #if defined(_WIN32) || defined(WIN32)
         STARTUPINFO si = { 0 };

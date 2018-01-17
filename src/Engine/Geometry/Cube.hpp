@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Geometry3D.hpp"
-#include "VertexType/StaticVertex.hpp"
+#include <Video/Geometry/Geometry3D.hpp>
+#include <Video/Geometry/VertexType/StaticVertex.hpp>
 
 namespace Geometry {
     /// A cube.
-    class Cube : public Geometry3D {
+    class Cube : public Video::Geometry::Geometry3D {
         public:
             /// Create new cube.
             Cube();
@@ -17,7 +17,7 @@ namespace Geometry {
             /**
              * @return Type.
              */
-            Type GetType() const;
+            Type GetType() const override;
         
         protected:
             /// Generate vertex buffer.
@@ -27,7 +27,7 @@ namespace Geometry {
             void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
             
         private:
-            std::vector<VertexType::StaticVertex> vertices;
+            std::vector<Video::Geometry::VertexType::StaticVertex> vertices;
             std::vector<unsigned int> indices;
             std::vector<glm::vec3*> verticesPos;
     };

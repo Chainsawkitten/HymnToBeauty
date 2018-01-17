@@ -4,7 +4,7 @@
 
 using namespace Component;
 
-DirectionalLight::DirectionalLight(Entity* entity) : SuperComponent(entity) {
+DirectionalLight::DirectionalLight() {
     
 }
 
@@ -13,9 +13,4 @@ Json::Value DirectionalLight::Save() const {
     component["color"] = Json::SaveVec3(color);
     component["ambientCoefficient"] = ambientCoefficient;
     return component;
-}
-
-void DirectionalLight::Load(const Json::Value& node) {
-    color = Json::LoadVec3(node["color"]);
-    ambientCoefficient = node.get("ambientCoefficient", 0.5f).asFloat();
 }

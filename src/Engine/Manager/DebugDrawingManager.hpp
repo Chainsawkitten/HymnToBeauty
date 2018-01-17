@@ -1,13 +1,17 @@
 #pragma once
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <map>
 #include <vector>
+#include <Video/DebugDrawing.hpp>
 
-class Shader;
-class ShaderProgram;
-class World;
-class Entity;
+namespace Component {
+    class Mesh;
+}
+
+namespace Video {
+    class RenderSurface;
+}
 
 /// Debug drawing facilities.
 class DebugDrawingManager {
@@ -35,17 +39,88 @@ class DebugDrawingManager {
          */
         void AddLine(const glm::vec3& startPosition, const glm::vec3& endPosition, const glm::vec3& color, float width = 1.f, float duration = 0.f, bool depthTesting = true);
         
-        /// Add an axis-aligned bounding box to the world.
+        /// Add a cuboid to the world.
         /**
-         * @param minCoordinates The minimum coordinates of the box.
-         * @param maxCoordinates The maximum coordinates of the box.
+         * @param dimensions The dimensions of the cuboid.
+         * @param matrix Matrix used to transform the cuboid.
          * @param color Color of the lines.
          * @param lineWidth The width of the lines used to draw the box.
          * @param duration How long the box should stay in the world (in seconds).
          * @param depthTesting Whether to enable depth testing.
          */
-        void AddAxisAlignedBoundingBox(const glm::vec3& minCoordinates, const glm::vec3& maxCoordinates, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        void AddCuboid(const glm::vec3& dimensions, const glm::mat4& matrix, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
         
+        /// Add a plane to the world.
+        /**
+         * @param position Center position of the plane.
+         * @param normal Plane normal.
+         * @param size Size.
+         * @param color Color of the lines.
+         * @param lineWidth The width of the lines used to draw the plane.
+         * @param duration How long the plane should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddPlane(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& size, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        
+        /// Add a circle to the world.
+        /**
+         * @param position Center position of the circle.
+         * @param normal Circle normal.
+         * @param radius Radius.
+         * @param color Color of the lines.
+         * @param lineWidth The width of the lines used to draw the circle.
+         * @param duration How long the circle should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddCircle(const glm::vec3& position, const glm::vec3& normal, float radius, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        
+        /// Add a sphere to the world.
+        /**
+         * @param position The position of the sphere.
+         * @param radius The radius of the sphere.
+         * @param color Color of the lines.
+         * @param lineWidth The width of the lines used to draw the sphere.
+         * @param duration How long the sphere should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddSphere(const glm::vec3& position, float radius, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        
+        /// Add a cylinder to the world.
+        /**
+         * @param radius The radius of the cylinder.
+         * @param length The length of the cylinder.
+         * @param matrix Matrix used to transform the cylinder.
+         * @param color Color of the lines.
+         * @param lineWidth The width of the lines used to draw the cylinder.
+         * @param duration How long the cylinder should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddCylinder(float radius, float length, const glm::mat4& matrix, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+        
+        /// Add a cone to the world.
+        /**
+         * @param radius The radius of the cone.
+         * @param height The height of the cone.
+         * @param matrix Matrix to transform the cone with.
+         * @param color Color of the lines.
+         * @param lineWidth The width of the lines used to draw the cone.
+         * @param duration How long the cone should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddCone(float radius, float height, const glm::mat4& matrix, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+
+        /// Add a mesh to the world.
+        /**
+         * @param id The entity's UID.
+         * @param meshComponent The mesh component.
+         * @param matrix Matrix to transform the mesh with.
+         * @param color Color of the lines.
+         * @param wireFrame Whether to wireframe the mesh.
+         * @param duration How long the mesh should stay in the world (in seconds).
+         * @param depthTesting Whether to enable depth testing.
+         */
+        void AddMesh(unsigned int id, Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame = true, float duration = 0.f, bool depthTesting = true);
+
         /// Update the debug geometry.
         /**
          * @param deltaTime Time since last frame (in seconds).
@@ -54,10 +129,11 @@ class DebugDrawingManager {
         
         /// Render the debug primitives.
         /**
-         * @param world Contains a camera through which to render.
-         * @param camera Camera through which to render (or first camera in world if nullptr).
+         * @param viewMatrix The camera's view matrix.
+         * @param projectionMatrix The camera's projection matrix.
+         * @param renderSurface %RenderSurface to render to.
          */
-        void Render(World& world, Entity* camera);
+        void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Video::RenderSurface* renderSurface);
         
     private:
         DebugDrawingManager();
@@ -65,48 +141,15 @@ class DebugDrawingManager {
         DebugDrawingManager(DebugDrawingManager const&) = delete;
         void operator=(DebugDrawingManager const&) = delete;
         
-        Shader* vertexShader;
-        Shader* fragmentShader;
-        ShaderProgram* shaderProgram;
+        std::vector<Video::DebugDrawing::Point> points;
+        std::vector<Video::DebugDrawing::Line> lines;
+        std::vector<Video::DebugDrawing::Cuboid> cuboids;
+        std::vector<Video::DebugDrawing::Plane> planes;
+        std::vector<Video::DebugDrawing::Circle> circles;
+        std::vector<Video::DebugDrawing::Sphere> spheres;
+        std::vector<Video::DebugDrawing::Cylinder> cylinders;
+        std::vector<Video::DebugDrawing::Cone> cones;
+        std::map<unsigned int, Video::DebugDrawing::Mesh> meshMap;
         
-        // Points.
-        struct Point {
-            glm::vec3 position;
-            glm::vec3 color;
-            float size;
-            float duration;
-            bool depthTesting;
-        };
-        std::vector<Point> points;
-        
-        GLuint pointVertexBuffer;
-        GLuint pointVertexArray;
-        
-        // Lines.
-        struct Line {
-            glm::vec3 startPosition;
-            glm::vec3 endPosition;
-            glm::vec3 color;
-            float width;
-            float duration;
-            bool depthTesting;
-        };
-        std::vector<Line> lines;
-        
-        GLuint lineVertexBuffer;
-        GLuint lineVertexArray;
-        
-        // Axis-aligned bounding boxes.
-        struct AABB {
-            glm::vec3 minCoordinates;
-            glm::vec3 maxCoordinates;
-            glm::vec3 color;
-            float lineWidth;
-            float duration;
-            bool depthTesting;
-        };
-        std::vector<AABB> aabbs;
-        
-        GLuint aabbVertexBuffer;
-        GLuint aabbVertexArray;
+        Video::DebugDrawing* debugDrawing;
 };

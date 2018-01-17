@@ -8,6 +8,9 @@ namespace GUI {
     /// A window where a hymn can be selected.
     class SelectHymnWindow {
         public:
+            /// Constructor.
+            SelectHymnWindow();
+
             /// Scan the save directory for hymns.
             void Scan();
             
@@ -18,7 +21,7 @@ namespace GUI {
             /**
              * @param callback Function to call when window is closed.
              */
-            void SetClosedCallback(std::function<void(const std::string&)> callback);
+            void SetClosedCallback(const std::function<void(const std::string&)>& callback);
             
             /// Get whether the window is visible.
             /**
@@ -50,7 +53,7 @@ namespace GUI {
             std::function<void(const std::string&)> closedCallback;
             
             std::vector<std::string> files;
-            char name[128] = "";
+            char name[128];
             
             bool visible = false;
             
