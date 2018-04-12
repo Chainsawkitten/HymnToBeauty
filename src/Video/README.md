@@ -10,5 +10,4 @@ Contains rendering functionality. Renders meshes, particles and debug primitives
 - GLEW
 - GLM
 - JsonCpp
-- OpenVR
 - STB
