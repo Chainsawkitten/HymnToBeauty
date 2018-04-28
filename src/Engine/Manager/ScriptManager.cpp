@@ -587,13 +587,9 @@ void ScriptManager::GetBreakpoints(const ScriptFile* scriptFile) {
     int lineNumber = 1;
     while (std::getline(f, line)) {
         if (line.length() >= 8) {
-
             std::string end = line.substr(line.length() - 8, 7);
-            if (end == "//break" || end == "//Break" || end == "//BREAK") {
-
+            if (end == "//break" || end == "//Break" || end == "//BREAK")
                 breakpoints[scriptFile->name + ".as"].insert(lineNumber);
-
-            }
         }
         lineNumber++;
     }
@@ -794,9 +790,7 @@ Component::Script* ScriptManager::CreateScript(const Json::Value& node) {
         std::vector<std::string> names = propertyMapJson.getMemberNames();
 
         for (auto& name : names) {
-
             if (propertyMapJson.isMember(name)) {
-
                 Json::Value typeId_value = propertyMapJson.get(name, "");
 
                 std::vector<std::string> typeIds = typeId_value.getMemberNames();
@@ -808,7 +802,6 @@ Component::Script* ScriptManager::CreateScript(const Json::Value& node) {
 
                 script->AddToPropertyMap(name, typeId, size, data);
                 std::free(data);
-
             }
         }
     }

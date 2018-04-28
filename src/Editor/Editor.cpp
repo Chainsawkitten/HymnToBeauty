@@ -792,7 +792,6 @@ void Editor::NewHymnClosed(const std::string& hymn) {
     }
 
     selectHymnWindow.SetVisible(false);
-
 }
 
 void Editor::OpenHymn() {
