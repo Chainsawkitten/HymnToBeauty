@@ -38,11 +38,11 @@ class PhysicsManager {
          * @param deltaTime Time since last frame (in seconds).
          */
         void Update(float deltaTime);
-        
+
         /// Update transforms of entities according to positions of physics
         /// components.
         void UpdateEntityTransforms();
-        
+
         /// Set up listener for when |object| has entered |trigger|.
         /**
          * @param trigger What trigger to check against.
@@ -252,10 +252,10 @@ class PhysicsManager {
          * @return All shape components.
          */
         const std::vector<Component::Shape*>& GetShapeComponents() const;
-        
+
         /// Remove all killed components.
         void ClearKilledComponents();
-        
+
     private:
         PhysicsManager();
         ~PhysicsManager();
@@ -266,7 +266,7 @@ class PhysicsManager {
 
         ComponentContainer<Component::RigidBody> rigidBodyComponents;
         ComponentContainer<Component::Shape> shapeComponents;
-        
+
         btBroadphaseInterface* broadphase = nullptr;
         btDefaultCollisionConfiguration* collisionConfiguration = nullptr;
         btCollisionDispatcher* dispatcher = nullptr;

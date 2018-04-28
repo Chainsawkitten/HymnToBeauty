@@ -5,7 +5,7 @@
 using namespace Animation;
 
 AnimationAction::AnimationAction() {
-    
+
 }
 
 AnimationAction::~AnimationAction() {

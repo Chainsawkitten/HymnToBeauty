@@ -31,9 +31,9 @@ namespace Animation {
                 float value = 1.f;
             };
 
-            /// Default constructor. 
+            /// Default constructor.
             AnimationController() = default;
-            
+
             /// Destructor.
             ~AnimationController();
 

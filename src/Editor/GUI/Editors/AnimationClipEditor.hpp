@@ -18,7 +18,7 @@ namespace GUI {
 
             /// Returns the active animation clip.
             /**
-             * @return The active animation clip. 
+             * @return The active animation clip.
              */
             Animation::AnimationClip* GetAnimationClip();
 

@@ -8,16 +8,16 @@ template<class C> class ComponentContainer {
     public:
         /// Create new component container.
         ComponentContainer();
-        
+
         /// Destructor.
         ~ComponentContainer();
-        
+
         /// Create a new component.
         /**
          * @return The created component.
          */
         C* Create();
-        
+
         /// Clear all killed components.
         void ClearKilled();
 
@@ -28,19 +28,19 @@ template<class C> class ComponentContainer {
                 component before it is removed, passing the component itself.
          */
         void ClearKilled(const std::function<void(C*)>& preRemove);
-        
+
         /// Get all components.
         /**
          * @return All of the components in the container.
          */
         const std::vector<C*>& GetAll() const;
-        
+
     private:
         std::vector<C*> components;
 };
 
 template<class C> ComponentContainer<C>::ComponentContainer() {
-    
+
 }
 
 template<class C> ComponentContainer<C>::~ComponentContainer() {

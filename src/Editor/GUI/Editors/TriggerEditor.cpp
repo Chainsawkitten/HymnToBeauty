@@ -104,7 +104,7 @@ namespace GUI {
                     if (ImGui::IsItemHovered())
                         ImGui::SetTooltip("Time in seconds to cooldown.\nHold button to increase speed.");
 
-                    // CHARGES                
+                    // CHARGES
                     if (ImGui::InputInt("Charges", &charges)) {
 
                         if (charges < 0)
@@ -194,7 +194,7 @@ namespace GUI {
                         // Subject
                         ImGui::NextColumn();
                         int collidedEntityUID = repeat->GetCollidedEntityUID();
-                        if (ImGui::InputInt("Input UID: ", &collidedEntityUID)) {                            
+                        if (ImGui::InputInt("Input UID: ", &collidedEntityUID)) {
                             repeat->SetCollidedEntityUID(collidedEntityUID);
                             repeat->GetEventVector()->at(i).check[1] = true;
                         }

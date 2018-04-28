@@ -11,10 +11,10 @@ class Profiling {
          * @param name Name of the segment.
          */
         explicit Profiling(const std::string& name);
-        
+
         /// End profiling.
         ~Profiling();
-        
+
     private:
         ProfilingManager::Result* result;
         double start;

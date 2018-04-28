@@ -50,6 +50,6 @@ void SkeletonEditor::FileSelected(const std::string& file) {
 
     AssetConverterSkeleton con;
     con.Convert(file.c_str(), newFile.c_str(), true);
-    
+
     skeleton->name = name;
 }

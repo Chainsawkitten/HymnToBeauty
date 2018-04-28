@@ -345,7 +345,7 @@ void Entity::RotateAroundWorldAxis(float angle, const glm::vec3& axis) {
 
 void Entity::SetEnabled(bool enabled, bool recursive) {
     this->enabled = enabled;
-    
+
     if (recursive) {
         for (Entity* child : children)
             child->SetEnabled(enabled, true);

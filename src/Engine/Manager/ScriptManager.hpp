@@ -22,7 +22,7 @@ namespace Json {
 /// Handles scripting.
 class ScriptManager {
     friend class Hub;
-        
+
     public:
         /// Build a script that can later be run.
         /**
@@ -30,10 +30,10 @@ class ScriptManager {
          * @return The result, < 0 means it failed.
          */
         int BuildScript(ScriptFile* script);
-        
+
         /// Build all scripts in the hymn.
         void BuildAllScripts();
-        
+
         ///Fetches the properties from the script and fills the map.
         /**
          * @param script The script which map to update.
@@ -52,37 +52,37 @@ class ScriptManager {
          * @param deltaTime Time since last frame (in seconds).
          */
         void Update(World& world, float deltaTime);
-        
+
         /// Register an entity to recieve update callbacks.
         /**
          * @param entity %Entity to register.
          * @todo Fix so registered entities can be removed.
          */
         void RegisterUpdate(Entity* entity);
-        
+
         /// Register the input enum.
         void RegisterInput();
-        
+
         /// Send a message to an entity.
         /**
          * @param recipient The entity to receive the message.
          * @param type The type of message to send.
          */
         void SendMessage(Entity* recipient, Entity* sender, int type);
-        
+
         /// Create script component.
         /**
          * @return The created component.
          */
         Component::Script* CreateScript();
-        
+
         /// Create script component.
         /**
          * @param node Json node to load the component from.
          * @return The created component.
          */
         Component::Script* CreateScript(const Json::Value& node);
-        
+
         /// Used to get the string identifier used to check if a property is a string.
         /**
          * @return The identifier of the string declaration.
@@ -94,7 +94,7 @@ class ScriptManager {
          * @return All script components.
          */
         const std::vector<Component::Script*>& GetScripts() const;
-        
+
         /// Remove all killed components.
         void ClearKilledComponents();
 
@@ -104,7 +104,7 @@ class ScriptManager {
          * @param method Method to call.
          */
         void ExecuteScriptMethod(const Entity* entity, const std::string& method);
-        
+
         /// The entity currently being executed.
         Entity* currentEntity;
 
@@ -114,19 +114,19 @@ class ScriptManager {
          * @return Entities with script updates.
          */
         const std::vector<Entity*>& GetUpdateEntities();
-        
+
     private:
         struct Message {
             Entity* recipient;
             Entity* sender;
             int type;
         };
-        
+
         ScriptManager();
         ~ScriptManager();
         ScriptManager(ScriptManager const&) = delete;
         void operator=(ScriptManager const&) = delete;
-        
+
         void CreateInstance(Component::Script* script);
         asIScriptContext* CreateContext();
         void CallMessageReceived(const Message& message);
@@ -134,15 +134,15 @@ class ScriptManager {
         void LoadScriptFile(const char* fileName, std::string& script);
         void ExecuteCall(asIScriptContext* context, const std::string& scriptName);
         asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);
-        
+
         asIScriptEngine* engine;
-        
+
         std::vector<Entity*> updateEntities;
         std::vector<Message> messages;
 
         void GetBreakpoints(const ScriptFile* script);
         void ClearBreakpoints();
         std::map<std::string, std::set<int>> breakpoints;
-        
+
         ComponentContainer<Component::Script> scripts;
 };

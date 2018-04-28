@@ -14,7 +14,7 @@ namespace Video {
              * @param textures Vector of %ReadWriteTexture to create a frame buffer object.
              */
             explicit FrameBuffer(const std::vector<ReadWriteTexture*>& textures);
-            
+
             /// Destructor.
             ~FrameBuffer();
 

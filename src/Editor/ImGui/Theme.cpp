@@ -10,12 +10,12 @@ namespace ImGui {
     void SaveTheme(const char* name) {
         // Make sure Themes directory exists.
         FileSystem::CreateDirectory((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes").c_str());
-        
+
         // Create JSON representation of theme.
         Json::Value root;
-        
+
         ImGuiStyle& style = ImGui::GetStyle();
-        
+
         root["WindowPadding"] = Json::SaveImVec2(style.WindowPadding);
         root["WindowRounding"] = style.WindowRounding;
         root["FramePadding"] = Json::SaveImVec2(style.FramePadding);
@@ -29,7 +29,7 @@ namespace ImGui {
         root["GrabRounding"] = style.GrabRounding;
         root["WindowBorderSize"] = style.WindowBorderSize;
         root["FrameBorderSize"] = style.FrameBorderSize;
-        
+
         root["Color: Text"] = Json::SaveImVec4(style.Colors[ImGuiCol_Text]);
         root["Color: TextDisabled"] = Json::SaveImVec4(style.Colors[ImGuiCol_TextDisabled]);
         root["Color: WindowBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_WindowBg]);
@@ -72,23 +72,23 @@ namespace ImGui {
         root["Color: PlotHistogramHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotHistogramHovered]);
         root["Color: TextSelectedBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_TextSelectedBg]);
         root["Color: ModalWindowDarkening"] = Json::SaveImVec4(style.Colors[ImGuiCol_ModalWindowDarkening]);
-        
+
         // Save to file.
         std::ofstream file(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes" + FileSystem::DELIMITER + name + ".json");
         file << root;
         file.close();
     }
-    
+
     void LoadTheme(const char* name) {
         // Load Json document from file.
         Json::Value root;
         std::ifstream file(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes" + FileSystem::DELIMITER + name + ".json");
         file >> root;
         file.close();
-        
+
         // Get theme from JSON representation.
         ImGuiStyle& style = ImGui::GetStyle();
-        
+
         style.WindowPadding = Json::LoadImVec2(root["WindowPadding"]);
         style.WindowRounding = root.get("WindowRounding", 0.0f).asFloat();
         style.FramePadding = Json::LoadImVec2(root["FramePadding"]);
@@ -102,7 +102,7 @@ namespace ImGui {
         style.GrabRounding = root.get("GrabRounding", 0.0f).asFloat();
         style.WindowBorderSize = root.get("WindowBorderSize", 1.0f).asFloat();
         style.FrameBorderSize = root.get("FrameBorderSize", 1.0f).asFloat();
-        
+
         style.Colors[ImGuiCol_Text] = Json::LoadImVec4(root["Color: Text"]);
         style.Colors[ImGuiCol_TextDisabled] = Json::LoadImVec4(root["Color: TextDisabled"]);
         style.Colors[ImGuiCol_WindowBg] = Json::LoadImVec4(root["Color: WindowBg"]);
@@ -146,10 +146,10 @@ namespace ImGui {
         style.Colors[ImGuiCol_TextSelectedBg] = Json::LoadImVec4(root["Color: TextSelectedBg"]);
         style.Colors[ImGuiCol_ModalWindowDarkening] = Json::LoadImVec4(root["Color: ModalWindowDarkening"]);
     }
-    
+
     void LoadDefaultTheme() {
         ImGuiStyle& style = ImGui::GetStyle();
-        
+
         style.WindowPadding = ImVec2(8.0f, 8.0f);
         style.WindowRounding = 9.0f;
         style.FramePadding = ImVec2(4.0f, 3.0f);
@@ -163,7 +163,7 @@ namespace ImGui {
         style.GrabRounding = 4.0f;
         style.WindowBorderSize = 1.0f;
         style.FrameBorderSize = 1.0f;
-        
+
         style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
         style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.39f, 0.39f, 0.39f, 1.0f);
         style.Colors[ImGuiCol_WindowBg] = ImVec4(0.91f, 0.91f, 0.91f, 1.0f);

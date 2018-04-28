@@ -24,19 +24,19 @@ class Fish : public Example {
          * @param name The name to give the fish.
          */
         Fish(const std::string& name);
-        
+
         /// Display the name of the fish.
         /**
          * @param prefix Whether to prefix the output with 'A fish called '.
          */
         void DisplayName(bool prefix = false) const;
-        
+
         /// Get whether the fish is happy.
         /**
          * @return Whether the fish is happy.
          */
         bool GetHappy() const;
-        
+
     private:
         std::string name;
         Fish* nextFish;

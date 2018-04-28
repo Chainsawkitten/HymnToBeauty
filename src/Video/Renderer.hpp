@@ -52,7 +52,7 @@ namespace Video {
              * @param modelMatrix Model matrix.
              */
             void ShadowRenderStaticMesh(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix);
-        
+
             /// Prepare for depth rendering static meshes.
             /**
              * @param viewMatrix The camera's view matrix.
@@ -191,7 +191,7 @@ namespace Video {
 
             /// Begin rendering icons.
             /**
-             * \note 
+             * \note
              * Needs to be called before RenderIcon.
              * @param viewProjectionMatrix The camera's view projection matrix.
              * @param cameraPosition The camera's position.
@@ -201,7 +201,7 @@ namespace Video {
 
             /// Render a billboarded icon.
             /**
-             * \note 
+             * \note
              * PrepareRenderingIcons must be called before.
              * @param position World position to render at.
              * @param icon The icon to render.
@@ -210,7 +210,7 @@ namespace Video {
 
             /// Stop rendering icons.
             /**
-             * \note 
+             * \note
              * Should be called after all icons have been rendered.
              */
             void StopRenderingIcons();
@@ -327,7 +327,7 @@ namespace Video {
             GLuint vertexBuffer;
             GLuint vertexArray;
             const Texture2D* currentIcon = nullptr;
-            
+
             // Uniform locations.
             GLuint viewProjectionLocation;
             GLuint cameraPositionLocation;

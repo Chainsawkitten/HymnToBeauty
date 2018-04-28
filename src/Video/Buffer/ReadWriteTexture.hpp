@@ -15,7 +15,7 @@ namespace Video {
              * @param type Type for pixel data.
              */
             ReadWriteTexture(const glm::vec2& size, GLenum format, GLint internalFormat, GLenum type);
-            
+
             /// Destructor.
             ~ReadWriteTexture();
 

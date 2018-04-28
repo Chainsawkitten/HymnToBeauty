@@ -13,21 +13,21 @@ namespace GUI {
         if (ImGui::InputFloat("Width", &width)) {
             if (width < 0.0f)
                 width = 0.0f;
-            
+
             Apply(comp);
         }
 
         if (ImGui::InputFloat("Height", &height)) {
             if (height < 0.0f)
                 height = 0.0f;
-            
+
             Apply(comp);
         }
 
         if (ImGui::InputFloat("Depth", &depth)) {
             if (depth < 0.0f)
                 depth = 0.0f;
-            
+
             Apply(comp);
         }
 

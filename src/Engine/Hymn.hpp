@@ -13,17 +13,17 @@ class ScriptFile;
 /// A hymn to beauty.
 class ActiveHymn {
     friend ActiveHymn& Hymn();
-    
+
     public:
         /// Clear the hymn of all properties.
         void Clear();
-        
+
         /// Get the path where the hymn is saved.
         /**
          * @return The hymn's path.
          */
         const std::string& GetPath() const;
-        
+
         /// Set the path where the hymn is saved.
         /**
          * @param path New path.
@@ -38,7 +38,7 @@ class ActiveHymn {
 
         /// Save the hymn.
         void Save() const;
-        
+
         /// Load a hymn.
         /**
          * @param path Path to the saved hymn.
@@ -62,7 +62,7 @@ class ActiveHymn {
          * @param deltaTime Time since last frame (in seconds).
          */
         void Update(float deltaTime);
-        
+
         /// Render the world.
         /**
          * @param targetDisplay Display type to render.
@@ -76,7 +76,7 @@ class ActiveHymn {
          * @param lightVolumes Whether to show light culling volumes.
          */
         void Render(RenderManager::DISPLAY targetDisplay, Entity* camera = nullptr, bool soundSources = false, bool particleEmitters = false, bool lightSources = false, bool cameras = false, bool physics = false, bool lighting = true, bool lightVolumes = false);
-        
+
         /// Find entity via GUID.
         /**
          * @param GUID The Unique Identifier for what entity you want to find.
@@ -86,31 +86,31 @@ class ActiveHymn {
 
         /// Scene to start when playing the hymn.
         std::string startupScene;
-        
+
         /// The game world.
         World world;
-        
+
         /// The id of the next entity to create.
         unsigned int entityNumber = 1U;
-        
+
         /// Scripts.
         std::vector<ScriptFile*> scripts;
-    
+
         /// The id of the next script to create.
         unsigned int scriptNumber = 0U;
 
         /// Default albedo texture.
         TextureAsset* defaultAlbedo;
-        
+
         /// Default normal texture.
         TextureAsset* defaultNormal;
-        
+
         /// Default metallic texture.
         TextureAsset* defaultMetallic;
-        
+
         /// Default roughness texture.
         TextureAsset* defaultRoughness;
-        
+
         /// Filter settings.
         struct FilterSettings {
             /// Whether to enable color.
@@ -137,7 +137,7 @@ class ActiveHymn {
             /// Gamma correction value.
             float gamma = 2.2f;
         };
-        
+
         /// Filter settings.
         FilterSettings filterSettings;
 
@@ -149,17 +149,17 @@ class ActiveHymn {
 
         /// Recently saved state of the hymn.
         Json::Value saveStateHymn;
-        
+
         /// The name of the hymn.
         std::string name;
-        
+
     private:
         static ActiveHymn& GetInstance();
-        
+
         ActiveHymn();
         ActiveHymn(ActiveHymn const&) = delete;
         void operator=(ActiveHymn const&) = delete;
-        
+
         std::string path = "";
 };
 

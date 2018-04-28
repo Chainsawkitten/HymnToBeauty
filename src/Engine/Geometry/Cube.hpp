@@ -9,23 +9,23 @@ namespace Geometry {
         public:
             /// Create new cube.
             Cube();
-            
+
             /// Destructor.
             ~Cube() final;
-            
+
             /// Get geometry type.
             /**
              * @return Type.
              */
             Type GetType() const override;
-        
+
         protected:
             /// Generate vertex buffer.
             void GenerateVertexBuffer(GLuint& vertexBuffer);
-            
+
             /// Generate vertex array.
             void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
-            
+
         private:
             std::vector<Video::Geometry::VertexType::StaticVertex> vertices;
             std::vector<unsigned int> indices;

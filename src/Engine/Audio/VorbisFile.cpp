@@ -6,7 +6,7 @@
 using namespace Audio;
 
 VorbisFile::VorbisFile() {
-    
+
 }
 
 VorbisFile::~VorbisFile() {
@@ -33,13 +33,13 @@ ALsizei VorbisFile::GetSampleRate() const {
 void VorbisFile::Load(const char* filename) {
     int channels;
     dataSize = stb_vorbis_decode_filename(filename, &channels, &sampleRate, reinterpret_cast<short**>(&data));
-    
+
     if (dataSize == -1)
         Log() << "Couldn't load OGG Vorbis file: " << filename << "\n";
-    
+
     // We get size in samples, but we need it in bytes.
     dataSize *= channels * sizeof(short);
-    
+
     if (channels > 1)
         format = AL_FORMAT_STEREO16;
     else

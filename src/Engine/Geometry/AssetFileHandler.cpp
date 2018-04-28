@@ -134,7 +134,7 @@ void AssetFileHandler::SaveMesh(MeshData* meshData) {
             sizeof(Video::Geometry::VertexType::StaticVertex) * meshData->numVertices);
     }
 
-    wFile.write(reinterpret_cast<char*>(meshData->indices), 
+    wFile.write(reinterpret_cast<char*>(meshData->indices),
         sizeof(uint32_t) * meshData->numIndices);
 }
 

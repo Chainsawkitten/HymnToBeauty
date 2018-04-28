@@ -27,7 +27,7 @@ InputHandler::InputHandler(GLFWwindow *window) {
 
     // Init mouse state.
     glfwSetScrollCallback(window, scrollCallback);
-    
+
     glfwSetCharCallback(window, characterCallback);
     inputMap[window] = this;
 }
@@ -43,7 +43,7 @@ void InputHandler::SetActive() {
 void InputHandler::Update() {
     lastScroll = scroll;
     scroll = 0.0;
-    
+
     // Get button states.
     bool values[BUTTONS] = {};
     for (Binding binding : bindings) {
@@ -60,20 +60,20 @@ void InputHandler::Update() {
         default:
             break;
         }
-        
+
         if (!values[binding.button])
             values[binding.button] = value;
     }
-    
+
     // Update triggered and released.
     for (int button=0; button<BUTTONS; button++) {
         buttonData[button].triggered = !buttonData[button].down && values[button];
         buttonData[button].released = buttonData[button].down && !values[button];
         buttonData[button].down = values[button];
     }
-    
+
     glfwGetCursorPos(window, &cursorX, &cursorY);
-    
+
     text = tempText;
     tempText = "";
 }
@@ -103,7 +103,7 @@ void InputHandler::AssignButton(Button button, Device device, int index) {
     binding.button = button;
     binding.device = device;
     binding.index = index;
-    
+
     bindings.push_back(binding);
 }
 

@@ -13,13 +13,13 @@ namespace Component {
         public:
             /// Create new %Animation component.
             Animation();
-            
+
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
              */
             Json::Value Save() const override;
-            
+
             /// Rigged model to animate.
             /**
              * Default: nullptr

@@ -4,7 +4,7 @@ using namespace Video;
 using namespace Geometry;
 
 Geometry3D::Geometry3D() {
-    
+
 }
 
 Geometry3D::~Geometry3D() {
@@ -43,7 +43,7 @@ const std::vector<uint32_t>& Geometry3D::GetVertexIndexData() const {
 void Geometry3D::CreateAxisAlignedBoundingBox(const std::vector<glm::vec3*>& positions) {
     glm::vec3 minValues, maxValues, origin, dim;
     minValues = maxValues = origin = glm::vec3(0.f, 0.f, 0.f);
-    
+
     // Find minimum/maximum bounding points.
     for (std::size_t i = 0; i < positions.size(); ++i) {
         const glm::vec3& pos = *positions[i];
@@ -51,23 +51,23 @@ void Geometry3D::CreateAxisAlignedBoundingBox(const std::vector<glm::vec3*>& pos
             maxValues.x = pos.x;
         else if (pos.x < minValues.x)
             minValues.x = pos.x;
-        
+
         if (pos.y > maxValues.y)
             maxValues.y = pos.y;
         else if (pos.y < minValues.y)
             minValues.y = pos.y;
-        
+
         if (pos.z > maxValues.z)
             maxValues.z = pos.z;
         else if (pos.z < minValues.z)
             minValues.z = pos.z;
     }
-    
+
     // Set origin.
     origin.x = (minValues.x + maxValues.x) / 2.f;
     origin.y = (minValues.y + maxValues.y) / 2.f;
     origin.z = (minValues.z + maxValues.z) / 2.f;
-    
+
     // Dimensions.
     dim.x = maxValues.x - minValues.x;
     dim.y = maxValues.y - minValues.y;

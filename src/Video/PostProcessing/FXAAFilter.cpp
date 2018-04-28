@@ -13,7 +13,7 @@ FXAAFilter::FXAAFilter() {
     shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
     delete vertexShader;
     delete fragmentShader;
-    
+
     screenSizeLocation = shaderProgram->GetUniformLocation("screenSize");
     diffuseLocation = shaderProgram->GetUniformLocation("tDiffuse");
 }

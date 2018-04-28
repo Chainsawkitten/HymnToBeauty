@@ -3,11 +3,11 @@
 using namespace Animation;
 
 AnimationTransition::AnimationTransition() {
-    
+
 }
 
 AnimationTransition::~AnimationTransition() {
-    
+
 }
 
 void AnimationTransition::Save(std::ofstream* file) {

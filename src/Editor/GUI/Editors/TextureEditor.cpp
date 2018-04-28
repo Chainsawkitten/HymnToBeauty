@@ -20,16 +20,16 @@ void TextureEditor::Show() {
             // Rename texture files.
             std::string path = Hymn().GetPath() + "/" + texture->path;
             rename((path + texture->name + ".png").c_str(), (path + name + ".png").c_str());
-            
+
             texture->name = name;
         }
-        
+
         if (texture->GetTexture()->IsLoaded()) {
             ImGui::Image((void*) texture->GetTexture()->GetTextureID(), ImVec2(128, 128));
         } else {
             ImGui::Text("Not loaded");
         }
-        
+
         if (ImGui::Button("Load PNG image")) {
             fileSelector.AddExtensions("png");
             fileSelector.SetInitialPath(Hymn().GetPath().c_str());
@@ -38,7 +38,7 @@ void TextureEditor::Show() {
         }
     }
     ImGui::End();
-    
+
     if (fileSelector.IsVisible())
         fileSelector.Show();
 }
@@ -49,7 +49,7 @@ const TextureAsset* TextureEditor::GetTexture() const {
 
 void TextureEditor::SetTexture(TextureAsset* texture) {
     this->texture = texture;
-    
+
     strcpy(name, texture->name.c_str());
 }
 
@@ -63,7 +63,7 @@ void TextureEditor::SetVisible(bool visible) {
 
 void TextureEditor::FileSelected(const std::string& file) {
     path = file;
-    
+
     std::string destination = Hymn().GetPath() + "/" + texture->path + texture->name + ".png";
     FileSystem::Copy(file.c_str(), destination.c_str());
     texture->Load(texture->path + texture->name);

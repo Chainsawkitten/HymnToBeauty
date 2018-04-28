@@ -16,16 +16,16 @@ void SelectHymnWindow::Scan() {
 
 void SelectHymnWindow::Show() {
     ImGui::OpenPopup(title);
-    
+
     // Create new hymn.
     if (ImGui::BeginPopupModal(title, nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
         for (string file : files) {
             if (ImGui::Button(file.c_str()))
                 strcpy(name, file.c_str());
         }
-        
+
         ImGui::InputText("Name", name, 128);
-        
+
         if (ImGui::Button(openButtonName, ImVec2(120, 0))) {
             closedCallback(name);
             ImGui::CloseCurrentPopup();

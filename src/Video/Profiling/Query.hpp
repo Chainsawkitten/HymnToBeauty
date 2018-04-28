@@ -18,7 +18,7 @@ namespace Video {
              * @param type Specifies the type of query object.
              */
             explicit Query(Type type);
-            
+
             /// Destructor.
             ~Query();
 
@@ -39,7 +39,7 @@ namespace Video {
              * @return The result of query.
              */
             std::uint64_t Resolve() const;
-            
+
         private:
             Query(const Query & other) = delete;
 

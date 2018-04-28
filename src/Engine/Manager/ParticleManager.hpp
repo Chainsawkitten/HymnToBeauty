@@ -24,9 +24,9 @@ namespace Json {
 /// Handles particles.
 class ParticleManager {
     friend class Hub;
-    
+
     public:
-        
+
         /// Update all the system's particles, spawn new particles etc.
         /**
          * @param world World to update.
@@ -50,13 +50,13 @@ class ParticleManager {
          * @param projectionMatrix The projection matrix from the camera.
          */
         void RenderParticleSystem(const glm::mat4& viewMatrix, const glm::mat4&  projectionMatrix);
-        
+
         /// Get the texture atlas.
         /**
          * @return The particle texture atlas.
          */
         const Video::Texture2D* GetTextureAtlas() const;
-        
+
         /// Get the number of rows in the texture atlas.
         /**
          * @return The number of rows in the texture atlas.
@@ -81,10 +81,10 @@ class ParticleManager {
          * @param component Component to remove.
          */
         void RemoveParticleRenderer(Component::ParticleSystemComponent* component);
-        
+
         /// Remove all killed components.
         void ClearKilledComponents();
-        
+
     private:
         ParticleManager();
         ~ParticleManager();
@@ -93,7 +93,7 @@ class ParticleManager {
 
         // Inits the particle emitter.
         Component::ParticleSystemComponent* InitParticleSystem(Component::ParticleSystemComponent* component);
-        
+
         std::random_device randomDevice;
         std::mt19937 randomEngine;
 
@@ -106,6 +106,6 @@ class ParticleManager {
 
         // Texture atlas containing the particle textures.
         Video::TexturePNG* textureAtlas;
-        
+
         ComponentContainer<Component::ParticleSystemComponent> particleSystems;
 };

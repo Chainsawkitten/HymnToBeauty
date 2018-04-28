@@ -19,17 +19,17 @@ class AssetConverter {
         struct Material {
             /// Albedo texture (Color channel in Maya).
             std::string albedo;
-            
+
             /// Normal map (Bump Mapping channel in Maya).
             std::string normal;
-            
+
             /// Roughness (Specular color channel in Maya).
             std::string roughness;
-            
+
             /// Metallic (Reflected color channel in Maya).
             std::string metallic;
         };
-        
+
         /// Constructor.
         AssetConverter();
 
@@ -57,13 +57,13 @@ class AssetConverter {
          * @return True if successfully converted model.
          */
         bool Success() const;
-        
+
         /// String with errors and warnings.
         /**
          * @return A string with messages of what went wrong durning conversion.
          */
         std::string& GetErrorString();
-    
+
     private:
         void ConvertMeshes(const aiScene * aScene, Geometry::AssetFileHandler* file, const glm::vec3& scale, bool flipUVs, bool CPU, bool GPU);
         void ConvertMesh(aiMesh * mesh, Geometry::AssetFileHandler * file, const glm::vec3& scale, bool flipUVs, bool CPU, bool GPU);

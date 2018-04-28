@@ -7,13 +7,13 @@
 namespace FileSystem {
     /// Delimiter, '\' on Windows, '/' elsewhere.
     extern const char DELIMITER;
-    
+
     /// A file.
     extern const unsigned int FILE;
-    
+
     /// A directory.
     extern const unsigned int DIRECTORY;
-    
+
     /// Check if a file exists.
     /**
      * Works for directories as well.
@@ -21,21 +21,21 @@ namespace FileSystem {
      * @return Whether the file exists
      */
     bool FileExists(const char* filename);
-    
+
     /// Copy a file.
     /**
      * @param source Source to copy.
      * @param destination Destination to copy to.
      */
     void Copy(const char* source, const char* destination);
-    
+
     /// Create a directory if it does not already exist.
     /**
      * Permission for new directory is 0777 on Unix.
      * @param filename Filename (either absolute or relative) for the directory to create.
      */
     void CreateDirectory(const char* filename);
-    
+
     /// Get all the contents of a directory.
     /**
      * @param directoryName Path to the directory to scan.
@@ -43,7 +43,7 @@ namespace FileSystem {
      * @return A list of all the files/directories in the directory.
      */
     std::vector<std::string> DirectoryContents(const std::string& directoryName, unsigned int type = FILE | DIRECTORY);
-    
+
     /// Get save path for application data folder.
     /**
      * The application data folder is created if it does not already exist.
@@ -54,7 +54,7 @@ namespace FileSystem {
      * @return The path
      */
     std::string DataPath(const char* appName);
-    
+
     /// Get save path for application data.
     /**
      * The application data folder is created if it does not already exist.
@@ -66,14 +66,14 @@ namespace FileSystem {
      * @return The path
      */
     std::string DataPath(const char* appName, const char* filename);
-    
+
     /// Get the parent directory of a path.
     /**
      * @param path Absolute path to get the parent directory of.
      * @return Path of the parent directory.
      */
     std::string GetParentDirectory(const std::string& path);
-    
+
     /// Get the extension part of a filename.
     /**
      * @param filename The filename to check.
@@ -87,14 +87,14 @@ namespace FileSystem {
      * @return The name of the file without extension.
      */
     std::string GetName(const std::string& filepath);
-    
+
     /// Get the directory part for a path (including the final delimiter).
     /**
      * @param path The path to get the directory part of.
      * @return The directory path of the path.
      */
     std::string GetDirectory(const std::string& path);
-    
+
     /// Execute a program asynchronously.
     /**
      * @param path The path to the program to execute.

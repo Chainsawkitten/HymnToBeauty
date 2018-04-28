@@ -39,7 +39,7 @@ Renderer::Renderer() {
     delete iconVertexShader;
     delete iconGeometryShader;
     delete iconFragmentShader;
-    
+
     // Get uniform locations.
     viewProjectionLocation = iconShaderProgram->GetUniformLocation("viewProjectionMatrix");
     cameraPositionLocation = iconShaderProgram->GetUniformLocation("cameraPosition");

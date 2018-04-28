@@ -704,9 +704,9 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
             lights.push_back(light);
         }
     }
-    
+
     lightCount = lights.size();
-    
+
     // Update light buffer.
     renderer->SetLights(lights);
 }

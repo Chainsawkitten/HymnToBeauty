@@ -15,7 +15,7 @@ void AnimationClipEditor::Show() {
         if (ImGui::Button("Open animation model")) {
             // Currently only fbx is tested.
             fileSelector.AddExtensions("fbx");
-        
+
             // Set the initial path to the models directory.
             fileSelector.SetInitialPath((Hymn().GetPath()).c_str());
             fileSelector.SetFileSelectedCallback(std::bind(&AnimationClipEditor::FileSelected, this, std::placeholders::_1));

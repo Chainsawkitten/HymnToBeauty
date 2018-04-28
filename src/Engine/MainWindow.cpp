@@ -14,32 +14,32 @@ void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum
 void APIENTRY DebugMessageCallbackIgnoreNotifications(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
-    
+
     if (borderless)
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-    
+
     this->debugContext = debugContext;
     if (debugContext)
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-    
+
     GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
-    
+
     window = glfwCreateWindow(width, height, title, monitor, nullptr);
-    
+
     if (!window) {
         glfwTerminate();
         /// @todo Print error to log.
     }
-    
+
     glfwMakeContextCurrent(window);
-    
+
     // Setup error callbacks.
     glfwSetErrorCallback(ErrorCallback);
-    
+
     input = new InputHandler(window);
     input->Update();
     input->SetActive();
-    
+
     size = glm::vec2(width, height);
     instance = this;
 
@@ -58,8 +58,8 @@ MainWindow* MainWindow::GetInstance() {
 void MainWindow::Init(bool showNotifications) const {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glEnable(GL_PROGRAM_POINT_SIZE);    
-    
+    glEnable(GL_PROGRAM_POINT_SIZE);
+
     if (debugContext)
         glDebugMessageCallback(showNotifications ? DebugMessageCallback : DebugMessageCallbackIgnoreNotifications, nullptr);
 }
@@ -67,7 +67,7 @@ void MainWindow::Init(bool showNotifications) const {
 void MainWindow::Update() {
     input->Update();
     input->SetActive();
-    
+
     if (glfwWindowShouldClose(window) != GLFW_FALSE)
         shouldClose = true;
 }
@@ -113,7 +113,7 @@ void MainWindow::SetWindowMode(bool fullscreen, bool borderless) const {
     glfwGetWindowPos(window, &x, &y);
     glfwGetWindowSize(window, &width, &height);
     glfwSetWindowMonitor(window, fullscreen ? glfwGetPrimaryMonitor() : nullptr, 50, 50, width, height, GLFW_DONT_CARE);
-        
+
 }
 
 void MainWindow::GetWindowMode(bool& fullscreen, bool& borderless) const {
@@ -135,7 +135,7 @@ void ErrorCallback(int error, const char* description) {
 void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam, bool showNotifications) {
     if (!showNotifications && severity == GL_DEBUG_SEVERITY_NOTIFICATION)
         return;
-    
+
     switch (source) {
     case GL_DEBUG_SOURCE_API:
         fputs("Open GL API", stderr);
@@ -152,9 +152,9 @@ void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, 
     default:
         fputs("Other", stderr);
     }
-    
+
     fputs(": ", stderr);
-    
+
     switch (type) {
     case GL_DEBUG_TYPE_ERROR:
         fputs("Error", stderr);
@@ -183,9 +183,9 @@ void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, 
     default:
         fputs("Other", stderr);
     }
-    
+
     fputs(" (", stderr);
-    
+
     switch (severity) {
     case GL_DEBUG_SEVERITY_HIGH:
         fputs("High Priority", stderr);
@@ -200,12 +200,12 @@ void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, 
         fputs("Notification", stderr);
         break;
     }
-    
+
     fputs("):\n", stderr);
-    
+
     fputs(message, stderr);
     fputs("\n\n", stderr);
-    
+
     fflush(stderr);
 }
 

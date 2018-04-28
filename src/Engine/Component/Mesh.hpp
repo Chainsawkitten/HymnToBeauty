@@ -14,10 +14,10 @@ namespace Component {
         public:
             /// Create new mesh.
             Mesh();
-            
+
             /// Destructor.
             ~Mesh() override;
-            
+
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.

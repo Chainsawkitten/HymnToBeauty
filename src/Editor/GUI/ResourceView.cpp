@@ -144,7 +144,7 @@ void ResourceView::Show() {
         modelEditor.Show();
     if (soundEditor.IsVisible())
         soundEditor.Show();
-  
+
     ImGui::End();
 }
 
@@ -317,7 +317,7 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
             resource.sound->name = "Sound #" + std::to_string(Resources().soundNumber++);
             folder.resources.push_back(resource);
         }
-        
+
         // Remove Folder.
         else if (folder.subfolders.empty() && folder.resources.empty()) {
             if (ImGui::Selectable("Remove Folder")) {
@@ -408,10 +408,10 @@ bool ResourceView::ShowResource(ResourceList::ResourceFolder& folder, ResourceLi
             if (ImGui::Selectable("Delete")) {
                 if (animationClipEditor.GetAnimationClip() == resource.animationClip)
                     animationClipEditor.SetVisible(false);
-    
+
                 Managers().resourceManager->FreeAnimationClip(resource.animationClip);
                 ImGui::EndPopup();
-    
+
                 return true;
             }
             ImGui::EndPopup();
@@ -454,10 +454,10 @@ bool ResourceView::ShowResource(ResourceList::ResourceFolder& folder, ResourceLi
             if (ImGui::Selectable("Delete")) {
                 if (skeletonEditor.GetSkeleton() == resource.skeleton)
                     skeletonEditor.SetVisible(false);
-    
+
                 Managers().resourceManager->FreeSkeleton(resource.skeleton);
                 ImGui::EndPopup();
-    
+
                 return true;
             }
             ImGui::EndPopup();
@@ -562,7 +562,7 @@ bool ResourceView::ShowResource(ResourceList::ResourceFolder& folder, ResourceLi
             ImGui::EndPopup();
         }
     }
-    
+
     return false;
 }
 

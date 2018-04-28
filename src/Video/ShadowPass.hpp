@@ -15,7 +15,7 @@ namespace Video {
 
             /// Bind Texture to depth buffer.
             void BindBuffer();
-            
+
             /// Set the size of the shadow map.
             /**
              * @param shadowMapSize The size of the shadow map.

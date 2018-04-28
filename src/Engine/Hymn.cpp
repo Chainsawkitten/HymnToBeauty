@@ -31,13 +31,13 @@ ActiveHymn::ActiveHymn() {
     defaultNormal = new TextureAsset(DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
     defaultMetallic= new TextureAsset(DEFAULTMETALLIC_PNG, DEFAULTMETALLIC_PNG_LENGTH);
     defaultRoughness = new TextureAsset(DEFAULTROUGHNESS_PNG, DEFAULTROUGHNESS_PNG_LENGTH);
-    
+
     Clear();
 }
 
 ActiveHymn& ActiveHymn::GetInstance() {
     static ActiveHymn ActiveHymn;
-    
+
     return ActiveHymn;
 }
 
@@ -46,15 +46,15 @@ void ActiveHymn::Clear() {
     startupScene = "";
     name = "";
     world.Clear();
-    
+
     entityNumber = 1U;
-    
+
     filterSettings.gamma = 2.2f;
     filterSettings.colorFilterApply = false;
     filterSettings.fogApply = false;
     filterSettings.fogDensity = 0.001f;
     filterSettings.fxaa = true;
-    
+
     for (ScriptFile* script : scripts) {
         Managers().resourceManager->FreeScriptFile(script);
     }
@@ -86,19 +86,19 @@ void ActiveHymn::Save() const {
 void ActiveHymn::Load(const string& path) {
     Clear();
     this->path = path;
-    
+
     // Load Json document from file.
     Json::Value root;
     ifstream file(GetSavePath());
     file >> root;
     file.close();
-    
+
     FromJson(root);
 }
 
 Json::Value ActiveHymn::ToJson() const {
     Json::Value root;
-    
+
     Json::Value inputNode;
     inputNode.append(Input::GetInstance().Save());
     root["input"] = inputNode;
@@ -114,24 +114,24 @@ Json::Value ActiveHymn::ToJson() const {
     filtersNode["dither"] = filterSettings.ditherApply;
     filtersNode["fxaa"] = filterSettings.fxaa;
     root["filters"] = filtersNode;
-    
+
     // Save scripts.
     Json::Value scriptNode;
     for (ScriptFile* script : scripts) {
         scriptNode.append(script->path + script->name);
     }
     root["scripts"] = scriptNode;
-    
+
     root["startupScene"] = startupScene;
     root["name"] = name;
-    
+
     return root;
 }
 
 void ActiveHymn::FromJson(Json::Value root) {
     const Json::Value inputNode = root["input"];
     Input::GetInstance().Load(inputNode[0]);
-    
+
     // Load filter settings.
     Json::Value filtersNode = root["filters"];
     filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
@@ -142,7 +142,7 @@ void ActiveHymn::FromJson(Json::Value root) {
     filterSettings.fogColor = Json::LoadVec3(filtersNode["fogColor"]);
     filterSettings.ditherApply = filtersNode["dither"].asBool();
     filterSettings.fxaa = filtersNode["fxaa"].asBool();
-    
+
     // Load scripts.
     scripts.clear();
     const Json::Value scriptNode = root["scripts"];
@@ -150,7 +150,7 @@ void ActiveHymn::FromJson(Json::Value root) {
         scripts.push_back(Managers().resourceManager->CreateScriptFile(scriptNode[i].asString()));
     }
     scriptNumber = static_cast<unsigned int>(scripts.size());
-    
+
     startupScene = root["startupScene"].asString();
     name = root["name"].asString();
 }
@@ -161,21 +161,21 @@ void ActiveHymn::Update(float deltaTime) {
     }
 
     { PROFILE("Synchronize triggers.");
-        Managers().triggerManager->SynchronizeTriggers();    
+        Managers().triggerManager->SynchronizeTriggers();
     }
-    
+
     { PROFILE("Update physics");
         Managers().physicsManager->Update(deltaTime);
     }
-    
+
     { PROFILE("Update animations");
         Managers().renderManager->UpdateAnimations(deltaTime);
     }
-    
+
     { PROFILE("Update particles");
         Managers().particleManager->Update(world, deltaTime);
     }
-    
+
     { PROFILE("Update debug drawing");
         Managers().debugDrawingManager->Update(deltaTime);
     }
@@ -187,7 +187,7 @@ void ActiveHymn::Update(float deltaTime) {
     { PROFILE("Process triggers");
         Managers().triggerManager->ProcessTriggers();
     }
-    
+
     { PROFILE("Clear killed entities/components");
         world.ClearKilled();
     }
@@ -213,7 +213,7 @@ Entity* ActiveHymn::GetEntityByGUID(unsigned int GUID) {
     const vector<Entity*>& entities = Hymn().world.GetEntities();
     for (size_t i = 0; i < entities.size(); ++i) {
         if (entities[i]->GetUniqueIdentifier() == GUID)
-            return entities[i];        
+            return entities[i];
     }
     return nullptr;
 }

@@ -1,18 +1,18 @@
 #include "RayIntersection.hpp"
 
 RayIntersection::RayIntersection() {
-    
+
 }
 
 RayIntersection::~RayIntersection() {
-    
+
 }
 
 bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const Video::AxisAlignedBoundingBox& meshData, const glm::mat4& modelMatrix, float &outputDistance) const {
 
     float tMin = -INFINITY;
     float tMax = INFINITY;
-  
+
     glm::vec3 worldPos = glm::vec3(modelMatrix[3].x, modelMatrix[3].y, modelMatrix[3].z);
     glm::vec3 delta = worldPos - rayOrigin;
 

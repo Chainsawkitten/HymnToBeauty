@@ -43,7 +43,7 @@ void ProfilingWindow::Show() {
                 ImGui::TreePop();
             }
         }
-        
+
        ImGui::Text("Light count: %u", Managers().renderManager->GetLightCount());
     }
 

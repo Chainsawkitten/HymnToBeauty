@@ -11,7 +11,7 @@ class ProfilingManager {
     friend class Hub;
     friend class Profiling;
     friend class GPUProfiling;
-    
+
     public:
         /// The type of profiling to perform.
         enum Type {
@@ -80,26 +80,26 @@ class ProfilingManager {
          * @return The name.
          */
         static std::string TypeToString(Type type);
-        
+
     private:
         ProfilingManager();
         ~ProfilingManager();
         ProfilingManager(ProfilingManager const&) = delete;
         void operator=(ProfilingManager const&) = delete;
-        
+
         Result* StartResult(const std::string& name, Type type);
         void FinishResult(Result* result, Type type);
-        
+
         void ShowResult(Result* result);
 
         bool active;
-        
+
         Result* root[Type::COUNT];
         Result* current[Type::COUNT];
 
         std::map<Video::Query::Type, std::list<Video::Query*>> queryPool;
         std::map<Result*, Video::Query*> queryMap;
-        
+
         Video::Query* frameQuery;
         double frameStart;
         static const unsigned int frames = 100;

@@ -29,6 +29,6 @@ namespace GUI {
 
         private:
             uint32_t selectedTab = 0;
-            
+
     };
 }

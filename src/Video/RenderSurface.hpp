@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 namespace Video {
-    
+
     class FrameBuffer;
     class ReadWriteTexture;
 
@@ -15,10 +15,10 @@ namespace Video {
              * @param size Size of the new render surface.
              */
             explicit RenderSurface(const glm::vec2& size);
-            
+
             /// Destructor.
             ~RenderSurface();
-            
+
             /// Get size of the render target.
             /**
             * @return The size of the render target in pixels.
@@ -60,7 +60,7 @@ namespace Video {
 
             /// Clear all textures in RenderSurface.
             void Clear() const;
-            
+
         private:
             RenderSurface(const RenderSurface & other) = delete;
             glm::vec2 size;

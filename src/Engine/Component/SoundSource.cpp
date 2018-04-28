@@ -11,13 +11,13 @@ using namespace Component;
 
 SoundSource::SoundSource() {
     alGenSources(1, &source);
-    
+
     soundBuffer = new Audio::SoundBuffer();
 }
 
 SoundSource::~SoundSource() {
     alDeleteSources(1, &source);
-    
+
     Audio::SoundFile* soundFile = soundBuffer->GetSoundFile();
     if (soundFile)
         Managers().resourceManager->FreeSound(soundFile);
@@ -26,11 +26,11 @@ SoundSource::~SoundSource() {
 
 Json::Value SoundSource::Save() const {
     Json::Value component;
-    
+
     Audio::SoundFile* soundFile = soundBuffer->GetSoundFile();
     if (soundFile)
         component["sound"] = soundFile->path + soundFile->name;
-    
+
     component["pitch"] = pitch;
     component["gain"] = gain;
     component["loop"] = loop;

@@ -13,7 +13,7 @@ namespace GUI {
         if (ImGui::DragFloat("Radius", &radius, 0.1f, 0.0f)) {
             if (radius < 0.0f)
                 radius = 0.0f;
-            
+
             Apply(comp);
         }
 

@@ -30,16 +30,16 @@ void PostProcessing::ApplyFilter(Video::RenderSurface* renderSurface, Video::Fil
 
     // Bind shaders.
     filter->GetShaderProgram()->Use();
-    
+
     glUniform1i(filter->GetDiffuseLocation(), 0);
     renderSurface->GetColorTexture()->BindForReading(GL_TEXTURE0);
-    
+
     glBindVertexArray(rectangle->GetVertexArray());
-    
+
     filter->SetUniforms();
-    
+
     glDrawElements(GL_TRIANGLES, rectangle->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-    
+
     renderSurface->GetColorFrameBuffer()->Unbind();
 
     // Reset depth testing to standard value.

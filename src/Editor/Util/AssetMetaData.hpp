@@ -9,7 +9,7 @@
  * The extension for a meta file is .meta.
  * Current metadata support exists for:
  * Meshes
- * 
+ *
  * @todo To be implemented:
  * Materials
  * Animations

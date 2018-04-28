@@ -140,7 +140,7 @@ ProfilingManager::Result* ProfilingManager::StartResult(const std::string& name,
         queryMap[result] = query;
         query->Begin();
     }
-    
+
     return result;
 }
 

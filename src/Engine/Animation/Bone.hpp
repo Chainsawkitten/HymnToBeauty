@@ -30,10 +30,10 @@ namespace Animation {
 
         /// Keyframed rotations.
         int32_t* rotationKeys = nullptr;
-        
+
         /// Keyframe rotation values.
         glm::quat* rotations = nullptr;
-        
+
         /// The current animation index.
         uint32_t currentKeyIndex = 0;
     };

@@ -17,7 +17,7 @@
 int main(int argc, char* argv[]) {
     if (!glfwInit())
         return 1;
-    
+
     Log().SetupStreams(&std::cout, &std::cout, &std::cout, &std::cerr);
 
     Log() << "Game started - " << time(nullptr) << "\n";
@@ -27,24 +27,24 @@ int main(int argc, char* argv[]) {
     window->Init(false);
     Input::GetInstance().SetWindow(window->GetGLFWWindow());
     Input()->AssignButton(InputHandler::WINDOWMODE, InputHandler::KEYBOARD, GLFW_KEY_F4);
-    
+
     Managers().StartUp();
 
     // Load hymn from json file.
     Hymn().Load(".");
-    
+
     // Load game settings from ini file.
     GameSettings::GetInstance().Load();
     Managers().renderManager->SetTextureReduction(static_cast<uint16_t>(GameSettings::GetInstance().GetLong("Texture Reduction")));
     Managers().renderManager->SetShadowMapSize(GameSettings::GetInstance().GetLong("Shadow Map Size"));
-    
+
     // Load world.
     Hymn().world.Load(Hymn().GetPath() + "/" + Hymn().startupScene + ".json");
 
     // Compile scripts.
     Managers().scriptManager->RegisterInput();
     Managers().scriptManager->BuildAllScripts();
-    
+
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
         window->Update();
         Hymn().Update(static_cast<float>(deltaTime));
         Hymn().Render(RenderManager::MONITOR);
-        
+
         // Swap buffers and wait until next frame.
         window->SwapBuffers();
 
@@ -70,21 +70,21 @@ int main(int argc, char* argv[]) {
         if ( wait > 0 )
             std::this_thread::sleep_for(std::chrono::microseconds(wait));
         lastTimeRender = glfwGetTime();
-        
+
         // Get input.
         glfwPollEvents();
     }
-    
+
     // Save game settings.
     GameSettings::GetInstance().Save();
 
     Hymn().world.Clear();
     Managers().ShutDown();
-    
+
     delete window;
-    
+
     glfwTerminate();
-    
+
     Log() << "Game ended - " << time(nullptr) << "\n";
     return 0;
 }

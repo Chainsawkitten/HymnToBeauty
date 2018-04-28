@@ -8,7 +8,7 @@ namespace GUI {
         public:
             /// Show profiling results.
             void Show();
-        
+
         private:
             LogView logView;
             void ShowResult(ProfilingManager::Result* result);

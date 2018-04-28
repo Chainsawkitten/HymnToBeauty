@@ -13,7 +13,7 @@ namespace ImGui {
      * @param sameLineOffset If set to higher than 0.f, the help marker will be offset on the same line.
      */
     void ShowHelpMarker(const char* description, const float sameLineOffset = 0.0f);
-    
+
     /// Show widget to edit a float.
     /**
      * @param label Label describing the value being edited.
@@ -22,7 +22,7 @@ namespace ImGui {
      * @param max Maximum allowed value.
      */
     void DraggableFloat(const char* label, float& value, float min = std::numeric_limits<float>::lowest(), float max = (std::numeric_limits<float>::max)());
-    
+
     /// Show widget to edit a vec2.
     /**
      * @param label Label describing the value being edited.
@@ -31,7 +31,7 @@ namespace ImGui {
      * @param max Maximum allowed value.
      */
     void DraggableVec2(const char* label, glm::vec2& value, float min = std::numeric_limits<float>::lowest(), float max = (std::numeric_limits<float>::max)());
-    
+
     /// Show widget to edit a vec3.
     /**
      * @param label Label describing the value being edited.

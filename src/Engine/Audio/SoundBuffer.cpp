@@ -9,7 +9,7 @@
 using namespace Audio;
 
 SoundBuffer::SoundBuffer() {
-    
+
 }
 
 SoundBuffer::~SoundBuffer() {
@@ -26,12 +26,12 @@ void SoundBuffer::SetSoundFile(SoundFile* soundFile) {
     if (this->soundFile != nullptr) {
         alDeleteBuffers(1, &buffer);
     }
-    
+
     // Create audio buffer.
     alGetError();
     alGenBuffers((ALuint)1, &buffer);
     SoundManager::CheckError("Couldn't create buffers.");
-    
+
     // Set the buffer data.
     alBufferData(buffer, soundFile->GetFormat(), soundFile->GetData(), soundFile->GetSize(), soundFile->GetSampleRate());
     SoundManager::CheckError("Couldn't set buffer data.");

@@ -221,7 +221,7 @@ void Editor::Show(float deltaTime) {
         if (currentEntity != nullptr) {
             paintTimer += deltaTime;
 
-            if (currentEntity->loadPaintModeClicked && currentEntity->GetComponent<Component::Mesh>() != nullptr) 
+            if (currentEntity->loadPaintModeClicked && currentEntity->GetComponent<Component::Mesh>() != nullptr)
                 PaintBrush(currentEntity);
 
             // Widgets.
@@ -572,7 +572,7 @@ void Editor::Focus() {
 }
 
 void Editor::PaintBrush(Entity* entity) {
-    
+
     GUI::ResourceSelector rs;
 
     // Read vertex data.
@@ -614,7 +614,7 @@ void Editor::PaintBrush(Entity* entity) {
         ImGui::SliderInt("Scale randomness", paintScaleRandomness, 1, 10);
         ImGui::Checkbox("Spread randomly", &spreadRand);
 
-        // Ray-Triangle intersection test.     
+        // Ray-Triangle intersection test.
         if (entity->brushActive) {
 
             bool intersect = false;
@@ -697,7 +697,7 @@ void Editor::PaintBrush(Entity* entity) {
 }
 
 void Editor::WidgetGizmo(Entity* entity) {
-  
+
     // Widget Controller for translation, rotation  and scale.
     ImGuizmo::BeginFrame();
     ImGuizmo::Enable(true);
@@ -707,7 +707,7 @@ void Editor::WidgetGizmo(Entity* entity) {
 
     // Projection matrix.
     glm::mat4 projectionMatrix = cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
-   
+
     // View matrix.
     glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
 
