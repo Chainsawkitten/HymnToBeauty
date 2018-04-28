@@ -35,7 +35,7 @@ SkinRenderProgram::SkinRenderProgram() {
     shadowProgram = new ShaderProgram({ vertexShader, fragmentShader });
     delete vertexShader;
     delete fragmentShader;
-    
+
     // Get uniform locations.
     shadowLightSpaceLocation = shadowProgram->GetUniformLocation("lightSpaceMatrix");
     shadowModelLocation = shadowProgram->GetUniformLocation("model");
@@ -166,14 +166,14 @@ void SkinRenderProgram::Render(const Geometry::Geometry3D* geometry, const Textu
         glDepthMask(GL_FALSE);
 
         glBindVertexArray(geometry->GetVertexArray());
-        
+
         // Set texture locations.
         glUniform1i(mapAlbedoLocation, 0);
         glUniform1i(mapNormalLocation, 1);
         glUniform1i(mapMetallicLocation, 2);
         glUniform1i(mapRoughnessLocation, 3);
         glUniform1i(mapShadowLocation, 4);
-        
+
         // Textures.
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureAlbedo->GetTextureID());
@@ -186,7 +186,7 @@ void SkinRenderProgram::Render(const Geometry::Geometry3D* geometry, const Textu
         glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_2D, shadowId);
 
-        
+
         // Render model.
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &modelMatrix[0][0]);
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &viewMatrix[0][0]);
@@ -195,7 +195,7 @@ void SkinRenderProgram::Render(const Geometry::Geometry3D* geometry, const Textu
         glUniformMatrix3fv(normalLocation, 1, GL_FALSE, &glm::mat3(normalMatrix)[0][0]);
         assert(bones.size() <= 100);
         glUniformMatrix4fv(bonesLocation, static_cast<GLsizei>(bones.size()), GL_FALSE, &bones[0][0][0]);
-        
+
         glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
 
         glDepthMask(GL_TRUE);

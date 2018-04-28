@@ -3,7 +3,7 @@
 Json::Value ScriptFile::Save() const {
     Json::Value script;
     script["name"] = name;
-    
+
     return script;
 }
 

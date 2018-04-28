@@ -3,11 +3,11 @@
 using namespace Video;
 
 RenderProgram::RenderProgram() {
-    
+
 }
 
 RenderProgram::~RenderProgram() {
-    
+
 }
 
 void RenderProgram::SetGamma(float gamma) {

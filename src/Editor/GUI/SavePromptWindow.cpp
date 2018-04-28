@@ -10,7 +10,7 @@ void SavePromptWindow::Show() {
     ImGui::OpenPopup(title.c_str());
 
     if (ImGui::BeginPopupModal(title.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-    
+
         if (ImGui::Button("Save", ImVec2(120, 0))) {
             decision = 0;
             ImGui::CloseCurrentPopup();
@@ -26,7 +26,7 @@ void SavePromptWindow::Show() {
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
-        
+
     }
 
 }
@@ -40,7 +40,7 @@ int SavePromptWindow::GetDecision() const {
 void SavePromptWindow::ResetDecision() {
 
     decision = -1;
-    
+
 }
 
 void SavePromptWindow::SetTitle(const std::string& newTitle) {

@@ -15,7 +15,7 @@ World::World() {
 
 World::~World() {
     Clear();
-   
+
 }
 
 Entity* World::CreateEntity(const std::string& name) {
@@ -48,11 +48,11 @@ const std::vector<Entity*>& World::GetUpdateEntities() const {
 void World::Clear() {
     if (root != nullptr) {
         root->Kill();
-        
+
         // Clear killed components.
         Managers().ClearKilledComponents();
     }
-    
+
     // Remove all entities.
     for (Entity* entity : entities)
         delete entity;
@@ -104,7 +104,7 @@ void World::Load(const std::string& filename) {
         file.close();
 
         root->Load(rootNode);
-       
+
     }
         Managers().triggerManager->InitiateUID();
         Managers().triggerManager->InitiateVolumes();

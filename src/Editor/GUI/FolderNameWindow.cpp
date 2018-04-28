@@ -10,7 +10,7 @@ void FolderNameWindow::Show() {
 
     if (ImGui::BeginPopupModal(title, nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::InputText("Name", name, 128);
-        
+
         if (ImGui::Button("Create", ImVec2(120, 0))) {
             visible = false;
             closedCallback(name);

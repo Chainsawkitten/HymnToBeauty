@@ -24,7 +24,7 @@ SoundManager::SoundManager() {
     device = alcOpenDevice(nullptr);
     if (!device)
         Log() << "Couldn't open default audio device.\n";
-    
+
     // Create audio context.
     context = alcCreateContext(device, nullptr);
     if (!alcMakeContextCurrent(context))
@@ -63,27 +63,27 @@ void SoundManager::Update() {
     for (Component::SoundSource* sound : soundSources.GetAll()) {
         if (sound->IsKilled() || !sound->entity->IsEnabled())
             continue;
-        
+
         Entity* entity = sound->entity;
-        
+
         // Pause it.
         if (sound->shouldPause) {
             alSourcePause(sound->source);
             sound->shouldPause = false;
         }
-        
+
         // Stop it.
         if (sound->shouldStop) {
             alSourceStop(sound->source);
             sound->shouldStop = false;
         }
-        
+
         // Set position.
         glm::vec3 position = glm::vec3(entity->GetModelMatrix() * glm::vec4(0.f, 0.f, 0.f, 1.f));
         alSource3f(sound->source, AL_POSITION, position.x, position.y, position.z);
-        
+
         /// @todo Set velocity based on physics.
-        
+
         // Set other properties.
         alSourcef(sound->source, AL_PITCH, sound->pitch);
         alSourcef(sound->source, AL_GAIN, sound->gain);
@@ -92,25 +92,25 @@ void SoundManager::Update() {
             alSourcei(sound->source, AL_BUFFER, sound->soundBuffer->GetBuffer());
             sound->soundBufferSet = true;
         }
-        
+
         // Play it.
         if (sound->shouldPlay) {
             alSourcePlay(sound->source);
             sound->shouldPlay = false;
         }
-        
+
         CheckError("Something went wrong updating a sound source.");
     }
-    
+
     // Update listener.
     for (Component::Listener* listener : listeners.GetAll()) {
         Entity* entity = listener->entity;
-        
+
         // Set position
         glm::vec3 position = entity->position;
         alListener3f(AL_POSITION, position.x, position.y, position.z);
         CheckError("Couldn't set listener position.");
-        
+
         // Set orientation.
         glm::quat orientation = entity->GetWorldOrientation();
         glm::vec3 forward = orientation * glm::vec3(0.0f, 0.0f, -1.0f);
@@ -118,7 +118,7 @@ void SoundManager::Update() {
         ALfloat listenerOri[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
         alListenerfv(AL_ORIENTATION, listenerOri);
         CheckError("Couldn't set listener orientation.");
-        
+
         break;
     }
 }
@@ -134,7 +134,7 @@ Component::SoundSource* SoundManager::CreateSoundSource(const Json::Value& node)
     std::string name = node.get("sound", "").asString();
     if (!name.empty())
         soundSource->soundBuffer->SetSoundFile(Managers().resourceManager->CreateSound(name));
-    
+
     soundSource->pitch = node.get("pitch", 1.f).asFloat();
     soundSource->gain = node.get("gain", 1.f).asFloat();
     soundSource->loop = node.get("loop", false).asBool();

@@ -9,16 +9,16 @@ namespace Component {
         public:
             /// Create new point light.
             PointLight();
-            
+
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
              */
             Json::Value Save() const override;
-            
+
             /// Color.
             glm::vec3 color = glm::vec3(1.f, 1.f, 1.f);
-            
+
             /// Attenuation.
             float attenuation = 1.f;
 

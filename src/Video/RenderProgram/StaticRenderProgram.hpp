@@ -83,7 +83,7 @@ namespace Video {
             ShaderProgram* shadowProgram;
             ShaderProgram* zShaderProgram;
             ShaderProgram* shaderProgram;
-            
+
             // Uniform locations.
             GLuint shadowLightSpaceLocation;
             GLuint shadowModelLocation;
@@ -113,7 +113,7 @@ namespace Video {
             GLuint normalLocation;
 
             bool first = true;
-      
+
             glm::mat4 viewMatrix;
             glm::mat4 projectionMatrix;
             glm::mat4 viewProjectionMatrix;

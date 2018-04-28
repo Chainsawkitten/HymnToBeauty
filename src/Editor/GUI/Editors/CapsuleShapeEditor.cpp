@@ -13,14 +13,14 @@ namespace GUI {
         if (ImGui::InputFloat("Radius", &radius)) {
             if (radius < 0.0f)
                 radius = 0.0f;
-            
+
             Apply(comp);
         }
 
         if (ImGui::InputFloat("Height", &height)) {
             if (height < 0.0f)
                 height = 0.0f;
-            
+
             Apply(comp);
         }
 

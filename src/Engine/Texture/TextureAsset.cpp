@@ -22,7 +22,7 @@ TextureAsset::~TextureAsset() {
 }
 
 void TextureAsset::Save() const {
-    
+
 }
 
 void TextureAsset::Load(const std::string& name) {
@@ -30,11 +30,11 @@ void TextureAsset::Load(const std::string& name) {
     this->name = name.substr(pos + 1);
     path = name.substr(0, pos + 1);
     std::string filename = Hymn().GetPath() + "/" + name;
-    
+
     // Delete old texture.
     if (texture != nullptr)
         delete texture;
-    
+
     // Load texture from disk.
     texture = new TexturePNG((filename + ".png").c_str());
 }

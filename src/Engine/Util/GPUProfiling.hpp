@@ -13,10 +13,10 @@ class GPUProfiling {
          * @param type Type of profiling.
          */
         GPUProfiling(const std::string& name, Video::Query::Type type);
-        
+
         /// End gpu profiling.
         ~GPUProfiling();
-        
+
     private:
         ProfilingManager::Result* result;
 

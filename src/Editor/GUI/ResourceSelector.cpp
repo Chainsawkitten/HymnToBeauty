@@ -42,7 +42,7 @@ bool ResourceSelector::ShowHelper(ResourceList::Resource::Type type, const Resou
             if (ImGui::Selectable(resource.GetName().c_str())) {
                 selectedResource.resource = &resource;
                 selectedResource.path = path;
-                
+
                 return true;
             }
         }

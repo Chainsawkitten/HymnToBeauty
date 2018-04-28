@@ -9,7 +9,7 @@ namespace Component {
         public:
             /// Create new lens.
             Lens();
-            
+
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
@@ -22,19 +22,19 @@ namespace Component {
              * @return The projection matrix.
              */
             glm::mat4 GetProjection(const glm::vec2& screenSize) const;
-            
+
             /// Field of view, in degrees.
             /**
              * Default: 45.0
              */
             float fieldOfView = 45.f;
-            
+
             /// Near plane.
             /**
              * Default: 0.1
              */
             float zNear = 0.1f;
-            
+
             /// Far plane.
             /**
              * Default: 100.0

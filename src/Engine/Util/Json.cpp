@@ -8,11 +8,11 @@ namespace Json {
         node["y"] = value.y;
         return node;
     }
-    
+
     glm::vec2 LoadVec2(const Value& value) {
         return glm::vec2(value.get("x", 0.f).asFloat(), value.get("y", 0.f).asFloat());
     }
-    
+
     Value SaveVec3(const glm::vec3& value) {
         Value node;
         node["x"] = value.x;
@@ -20,7 +20,7 @@ namespace Json {
         node["z"] = value.z;
         return node;
     }
-    
+
     glm::vec3 LoadVec3(const Value& value) {
         return glm::vec3(value.get("x", 0.f).asFloat(), value.get("y", 0.f).asFloat(), value.get("z", 0.f).asFloat());
     }

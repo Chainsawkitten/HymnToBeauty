@@ -8,25 +8,25 @@ class NodeEditor {
     public:
         /// Constructor.
         NodeEditor();
-    
+
         /// Destructor.
         ~NodeEditor();
-    
+
         /// Show the editor.
         void Show();
-    
+
         /// Get whether the window is visible.
         /**
          * @return Whether the window is visible.
          */
         bool IsVisible() const;
-    
+
         /// Set whether the window should be visible.
         /**
          * @param visible Whether the window should be visible.
          */
         virtual void SetVisible(bool visible);
-    
+
     protected:
         /// Show context menu.
         virtual void ShowContextMenu() = 0;
@@ -62,18 +62,18 @@ class NodeEditor {
 
     private:
         void ShowGrid();
-    
+
         ImVec2 scrolling = ImVec2(0.0f, 0.0f);
         ImVec2 nodeWindowPadding = ImVec2(8.0f, 8.0f);
 
-        bool visible = false;    
+        bool visible = false;
         bool isDragingConnection = false;
         bool inited = false;
         bool openContextMenu = false;
         bool showGrid = true;
 
         float nodeSlotRadius = 6.0f;
-    
+
         int hoveredNodeIndex = -1;
         int dragNodeIndex = -1;
         int nodeSelected = -1;

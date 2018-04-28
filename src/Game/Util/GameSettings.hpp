@@ -17,16 +17,16 @@ class GameSettings : public Settings {
          * @return The %GameSettings instance
          */
         static GameSettings& GetInstance();
-        
+
         /// Save the settings to an INI file.
         void Save() final;
-        
+
         /// Load the settings from INI file.
         void Load();
-        
+
     private:
         GameSettings();
-        
+
         GameSettings(GameSettings const&) = delete;
         void operator=(GameSettings const&) = delete;
 };

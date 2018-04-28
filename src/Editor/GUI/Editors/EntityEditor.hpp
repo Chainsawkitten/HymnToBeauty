@@ -8,7 +8,7 @@
 #include <imgui.h>
 #include "../ResourceSelector.hpp"
 #include "Editor/GUI/Editors/CurveEditor.hpp"
-#include <Engine/Geometry/AssetFileHandler.hpp> 
+#include <Engine/Geometry/AssetFileHandler.hpp>
 
 namespace Component {
     class AnimationController;
@@ -38,13 +38,13 @@ namespace GUI {
         public:
             /// Create new entity editor.
             EntityEditor();
-            
+
             /// Destructor.
             ~EntityEditor();
-            
+
             /// Show the editor.
             void Show();
-            
+
             /// Set the entity to edit.
             /**
              * @param entity The entity to edit.
@@ -69,18 +69,18 @@ namespace GUI {
              * @return Whether the window is visible.
              */
             bool IsVisible() const;
-            
+
             /// Set whether the window should be visible.
             /**
              * @param visible Whether the window should be visible.
              */
             void SetVisible(bool visible);
-            
+
         private:
             template<typename type> void AddEditor(const std::string& name, std::function<void(type*)> editorFunction);
             template<typename type> void AddComponent(const std::string& name);
             template<typename type> void EditComponent(const std::string& name, std::function<void(type*)> editorFunction);
-            
+
             // Editors
             void AnimationControllerEditor(Component::AnimationController* animationController);
             void MeshEditor(Component::Mesh* mesh);
@@ -114,7 +114,7 @@ namespace GUI {
             std::unique_ptr<GUI::RigidBodyEditor> rigidBodyEditor;
 
             ResourceSelector resourceSelector;
-            std::unique_ptr<GUI::TriggerEditor> triggerEditor;     
+            std::unique_ptr<GUI::TriggerEditor> triggerEditor;
 
             bool albedoShow = false;
             bool normalShow = false;
@@ -142,13 +142,13 @@ template<typename type> void GUI::EntityEditor::EditComponent(const std::string&
     type* component = entity->GetComponent<type>();
     if (component != nullptr && ImGui::CollapsingHeader(name.c_str())) {
         ImGui::PushID(name.c_str());
-        
+
         editorFunction(component);
-        
+
         if (ImGui::Button("Remove"))
             entity->KillComponent<type>();
 
-        
+
         ImGui::PopID();
     }
 }

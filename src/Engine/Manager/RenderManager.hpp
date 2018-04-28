@@ -51,7 +51,7 @@ class RenderManager {
          * @param lightVolumes Whether to show light culling volumes.
          */
         void Render(World& world, DISPLAY targetDisplay, bool soundSources = true, bool particleEmitters = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
-        
+
         /// Update all the animations in the scene.
         /**
          * @param deltaTime Time between frames.
@@ -66,7 +66,7 @@ class RenderManager {
          * @return The created component.
          */
         Component::AnimationController* CreateAnimation();
-  
+
         /// Create animation component.
         /**
          * @param node Json node to load the component from.
@@ -280,25 +280,25 @@ class RenderManager {
          * @return Whether dithering is applied.
          */
         bool GetDitherApply() const;
-        
+
         /// Set the level of texture reduction to use.
         /**
          * @param textureReduction Which mip-level to start loading.
          */
         void SetTextureReduction(uint16_t textureReduction);
-        
+
         /// Get the level of texture reduction to use.
         /**
          * @return Which mip-level to start loading.
          */
         uint16_t GetTextureReduction() const;
-        
+
         /// Get the number of lights currently being rendered.
         /**
          * @return Then number of lights being rendered.
          */
         unsigned int GetLightCount() const;
-        
+
         /// Set the size of the shadow map.
         /**
          * @param shadowMapSize The size of the shadow map.
@@ -340,7 +340,7 @@ class RenderManager {
         ComponentContainer<Component::Mesh> meshes;
         ComponentContainer<Component::PointLight> pointLights;
         ComponentContainer<Component::SpotLight> spotLights;
-        
+
         uint8_t textureReduction = 0;
         unsigned int lightCount = 0;
 };

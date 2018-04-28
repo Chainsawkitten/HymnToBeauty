@@ -34,7 +34,7 @@ StaticRenderProgram::StaticRenderProgram() {
     shadowProgram = new ShaderProgram({ vertexShader, fragmentShader });
     delete vertexShader;
     delete fragmentShader;
-    
+
     // Get uniform locations.
     shadowLightSpaceLocation = shadowProgram->GetUniformLocation("lightSpaceMatrix");
     shadowModelLocation = shadowProgram->GetUniformLocation("model");
@@ -185,7 +185,7 @@ void StaticRenderProgram::Render(Geometry::Geometry3D* geometry, const Video::Te
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &viewMatrix[0][0]);
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(viewMatrix * modelMatrix));
         glUniformMatrix3fv(normalLocation, 1, GL_FALSE, &glm::mat3(normalMatrix)[0][0]);
-        
+
 
         glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
 

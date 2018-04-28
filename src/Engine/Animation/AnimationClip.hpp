@@ -23,7 +23,7 @@ namespace Animation {
             /**
              * @param name Name of animation.
              */
-            void Load(const std::string& name);       
+            void Load(const std::string& name);
 
             Animation* animation = nullptr;
 

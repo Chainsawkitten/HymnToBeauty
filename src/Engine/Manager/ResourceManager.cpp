@@ -30,7 +30,7 @@ Geometry::Model* ResourceManager::CreateModel(const std::string& name) {
 
 void ResourceManager::FreeModel(Geometry::Model* model) {
     string name = modelsInverse[model];
-    
+
     if (models[name].count-- <= 1) {
         modelsInverse.erase(model);
         delete model;
@@ -114,13 +114,13 @@ Video::TexturePNG* ResourceManager::CreateTexturePNG(const char* data, int dataL
         textures[data].count = 1;
     } else
         textures[data].count++;
-    
+
     return textures[data].texture;
 }
 
 void ResourceManager::FreeTexturePNG(Video::TexturePNG* texture) {
     const char* data = texturesInverse[texture];
-    
+
     if (textures[data].count-- <= 1) {
         texturesInverse.erase(texture);
         delete texture;
@@ -137,13 +137,13 @@ TextureAsset* ResourceManager::CreateTextureAsset(const std::string& name) {
         textureAssets[name].count = 1;
     } else
         textureAssets[name].count++;
-    
+
     return textureAssets[name].textureAsset;
 }
 
 void ResourceManager::FreeTextureAsset(TextureAsset* textureAsset) {
     std::string name = textureAssetsInverse[textureAsset];
-    
+
     if (textureAssets[name].count-- <= 1) {
         textureAssetsInverse.erase(textureAsset);
         delete textureAsset;
@@ -165,13 +165,13 @@ Audio::SoundFile* ResourceManager::CreateSound(const string& name) {
         sounds[name].count = 1;
     } else
         sounds[name].count++;
-    
+
     return sounds[name].sound;
 }
 
 void ResourceManager::FreeSound(Audio::SoundFile* soundFile) {
     string name = soundsInverse[soundFile];
-    
+
     if (sounds[name].count-- <= 1) {
         soundsInverse.erase(soundFile);
         delete soundFile;
@@ -188,13 +188,13 @@ ScriptFile* ResourceManager::CreateScriptFile(const string& name) {
         scriptFiles[name].count = 1;
     } else
         scriptFiles[name].count++;
-    
+
     return scriptFiles[name].scriptFile;
 }
 
 void ResourceManager::FreeScriptFile(ScriptFile* scriptFile) {
     string name = scriptFilesInverse[scriptFile];
-    
+
     if (scriptFiles[name].count-- <= 1) {
         scriptFilesInverse.erase(scriptFile);
         delete scriptFile;

@@ -14,7 +14,7 @@ namespace ImGui {
      * @param max The maximum allowed value.
      */
     void HorizontalSplitter(const ImVec2& position, int height, int splitterSize, int& value, bool& active, int min, int max);
-    
+
     /// Handle a vertical splitter.
     /**
      * @param position Position of the splitter.

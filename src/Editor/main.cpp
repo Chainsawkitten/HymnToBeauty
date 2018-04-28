@@ -33,26 +33,26 @@ int main() {
     }
 
     Log() << "Editor started - " << time(nullptr) << "\n";
-    
+
     if (!glfwInit())
         return 1;
-    
+
     MainWindow* window = new MainWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), false, false, "Hymn to Beauty", EditorSettings::GetInstance().GetBool("Debug Context"));
 
     glewInit();
     window->Init(false);
-    
+
     Input::GetInstance().SetWindow(window->GetGLFWWindow());
-    
+
     Managers().StartUp();
-    
+
     Editor* editor = new Editor();
     // Setup imgui implementation.
     ImGuiImplementation::Init(window->GetGLFWWindow());
-    
+
     bool profiling = false;
     GUI::ProfilingWindow profilingWindow;
-    
+
     // Main loop.
     double targetFPS = 60.0;
     double lastTime = glfwGetTime();
@@ -60,13 +60,13 @@ int main() {
     while (!window->ShouldClose() || !editor->ReadyToClose()) {
         float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
         lastTime = glfwGetTime();
-        
+
         Managers().profilingManager->SetActive(profiling);
 
         // Begin new profiling frame.
         if (Managers().profilingManager->Active())
             Managers().profilingManager->BeginFrame();
-        
+
         { PROFILE("Frame");
         { GPUPROFILE("Frame", Video::Query::Type::TIME_ELAPSED);
 
@@ -120,7 +120,7 @@ int main() {
                     Hymn().Render(RenderManager::MONITOR);
                 }
                 }
-                
+
                 if (Input()->Triggered(InputHandler::PLAYTEST)) {
                     // Rollback to the editor state.
                     editor->LoadSceneState();
@@ -131,37 +131,37 @@ int main() {
             }
         }
         }
-        
+
         if (Managers().profilingManager->Active()) {
             Managers().profilingManager->EndFrame();
             profilingWindow.Show();
         }
-        
+
         ImGui::Render();
-        
+
         // Swap buffers and wait until next frame.
         window->SwapBuffers();
-        
+
         long wait = static_cast<long>((1.0 / targetFPS + lastTimeRender - glfwGetTime()) * 1000000.0);
         if (wait > 0)
             std::this_thread::sleep_for(std::chrono::microseconds(wait));
         lastTimeRender = glfwGetTime();
     }
-    
+
     // Save editor settings.
     EditorSettings::GetInstance().Save();
-    
+
     // Shut down and cleanup.
     ImGuiImplementation::Shutdown();
     delete editor;
     Hymn().world.Clear();
 
     Managers().ShutDown();
-    
+
     delete window;
     glfwTerminate();
-    
+
     Log() << "Editor ended - " << time(nullptr) << "\n";
-    
+
     return 0;
 }

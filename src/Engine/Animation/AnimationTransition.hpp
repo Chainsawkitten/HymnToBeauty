@@ -10,10 +10,10 @@ namespace Animation {
         public:
             /// Create new animation transition.
             AnimationTransition();
-            
+
             /// Destructor.
             ~AnimationTransition() override;
-            
+
             /// Save the animation transition node.
             /**
              * @param file File to save to.

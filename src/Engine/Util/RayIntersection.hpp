@@ -26,7 +26,7 @@ class RayIntersection {
             const Video::AxisAlignedBoundingBox& meshData,
             const glm::mat4& modelMatrix,
             float &outputDistance) const;
-       
+
         /// Checks whether a ray intersects with a triangle.
         /**
          * @param rayOrigin The position the ray originates from.

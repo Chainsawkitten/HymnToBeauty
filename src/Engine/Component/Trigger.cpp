@@ -9,7 +9,7 @@ Trigger::Trigger() {
 
 Trigger::~Trigger() {
 
-    if (superTrigger != nullptr) 
+    if (superTrigger != nullptr)
         delete superTrigger;
 }
 

@@ -20,16 +20,16 @@ class Entity {
          * @param name Name of the entity.
          */
         Entity(World* world, const std::string& name);
-        
+
         /// Destructor.
         ~Entity();
-        
+
         /// Get the entity's parent entity.
         /**
          * @return The parent entity, or nullptr if none.
          */
         Entity* GetParent() const;
-        
+
         /// Add child entity.
         /**
          * @param name The name of the child entity.
@@ -43,7 +43,7 @@ class Entity {
          * @return Did we manage to remove the child.
          */
         bool RemoveChild(Entity* child);
-        
+
         /// Set a new parent.
         /**
          * @param newParent The entity you want to be the new parent.
@@ -65,7 +65,7 @@ class Entity {
          * @return The created root entity of the scene.
          */
         Entity* InstantiateScene(const std::string& name, const std::string& originScene);
-        
+
         /// Check if scene already exists in any of json files.
         /**
          * @param filename The name of the scene to check.
@@ -80,7 +80,7 @@ class Entity {
          * @return All the children.
          */
         const std::vector<Entity*>& GetChildren() const;
-        
+
         /// Get child based on its name.
         /**
          * @param name The name of the child to get.
@@ -106,43 +106,43 @@ class Entity {
          * @return Whether the entity is an instantiated scene.
          */
         bool IsScene() const;
-        
+
         /// Adds component with type T.
         /**
          * @return The created component.
          */
         template<typename T> T* AddComponent();
-        
+
         /// Gets component with type T.
         /**
          * @return The requested component (or nullptr).
          */
         template<typename T> T* GetComponent() const;
-        
+
         /// Kill component of type T.
         template <typename T> void KillComponent();
-        
+
         /// Kill the entity, will be removed at the end of the frame.
         void Kill();
-        
+
         /// Get whether entity has been killed.
         /**
          * @return Whether the entity has been killed.
          */
         bool IsKilled() const;
-        
+
         /// Save the entity.
         /**
          * @return JSON value to be stored on disk.
          */
         Json::Value Save() const;
-        
+
         /// Load entity from JSON node.
         /**
          * @param node JSON node to load from.
          */
         void Load(const Json::Value& node);
-        
+
         /// Get the model matrix.
         /**
          * @return The model matrix.
@@ -160,19 +160,19 @@ class Entity {
          * @return The rotation in local space.
          */
         glm::quat GetLocalOrientation() const;
-        
+
         /// Get orientation of the entity.
         /**
          * @return The rotation in world space.
          */
         glm::quat GetWorldOrientation() const;
-        
+
         /// Get direction of the entity.
         /**
          * @return The entity's direction.
          */
         glm::vec3 GetDirection() const;
-        
+
         /// Get the position in the world.
         /**
          * @return The position in the world (not relative to parent).
@@ -221,35 +221,35 @@ class Entity {
          * @param axis World space axis to rotate around.
          */
         void RotateAroundWorldAxis(float angle, const glm::vec3& axis);
-        
+
         /// Set whether the entity should be enabled.
         /**
          * @param enabled Whether the entity should be enabled.
          * @param recursive Whether to set all children recursively.
          */
         void SetEnabled(bool enabled, bool recursive = false);
-        
+
         /// Get whether the entity is enabled.
         /**
          * @return Whether the entity is enabled.
          */
         bool IsEnabled() const;
-        
+
         /// Name of the entity.
         std::string name;
-        
+
         /// Position relative to the parent entity.
         /**
          * Default: 0.f, 0.f, 0.f
          */
         glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
-        
+
         /// Scale.
         /**
          * Default: 1.f, 1.f, 1.f
          */
         glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f);
-        
+
         /// Quaternion describing rotation and angle of entity.
         /**
          * Default: 0 radians around y axis.
@@ -261,7 +261,7 @@ class Entity {
          * @return The entity's UID
          */
         unsigned int GetUniqueIdentifier() const;
-           
+
         /// Set the entity's UID
         /**
          * @param UID the entity's unique identifier to be set
@@ -278,7 +278,7 @@ class Entity {
         bool painting = false;
         bool sceneChosen = false;
 
-        
+
     private:
         template<typename T> void Save(Json::Value& node, const std::string& name) const;
         template<typename T> void Load(const Json::Value& node, const std::string& name);
@@ -287,7 +287,7 @@ class Entity {
         void KillComponent(std::type_index componentType);
         void LoadComponent(std::type_index componentType, const Json::Value& node);
         void KillHelper();
-        
+
         World* world;
         Entity* parent = nullptr;
         std::vector<Entity*> children;
@@ -295,7 +295,7 @@ class Entity {
         std::string sceneName;
 
         std::map<std::type_index, Component::SuperComponent*> components;
-        
+
         bool killed = false;
         bool enabled = true;
         unsigned int uniqueIdentifier = 0;

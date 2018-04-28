@@ -12,7 +12,7 @@ namespace Video {
              * @param usage How the buffers data will be accessed.
              */
             StorageBuffer(unsigned int size, GLenum usage);
-            
+
             /// Destructor.
             ~StorageBuffer();
 

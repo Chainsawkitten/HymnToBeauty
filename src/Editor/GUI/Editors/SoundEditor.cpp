@@ -24,7 +24,7 @@ void SoundEditor::Show() {
 
             sound->name = name;
         }
-        
+
         if (ImGui::Button("Load Ogg Vorbis")) {
             fileSelector.AddExtensions("ogg");
             fileSelector.SetInitialPath(Hymn().GetPath().c_str());
@@ -33,7 +33,7 @@ void SoundEditor::Show() {
         }
     }
     ImGui::End();
-    
+
     if (fileSelector.IsVisible())
         fileSelector.Show();
 }
@@ -44,7 +44,7 @@ const Audio::SoundFile* SoundEditor::GetSound() const {
 
 void SoundEditor::SetSound(Audio::SoundFile* sound) {
     this->sound = sound;
-    
+
     strcpy(name, sound->name.c_str());
 }
 

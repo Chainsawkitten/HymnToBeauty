@@ -17,7 +17,7 @@ void AnimationClip::Load(const std::string& name) {
         file.close();
         return;
     }
-    
+
     animation = new Animation;
     animation->Load(&file);
     file.close();

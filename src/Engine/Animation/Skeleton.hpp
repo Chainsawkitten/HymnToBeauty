@@ -23,9 +23,9 @@ namespace Animation {
             void Save(const std::string& name);
 
             /// Load skeleton.
-            /** 
+            /**
              * @param name Name of skeleton to load.
-             */ 
+             */
             void Load(const std::string& name);
 
             /// Bones of skeleton.

@@ -26,11 +26,11 @@ void SceneEditor::Show() {
         if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
             // Rename scene file.
             rename((Hymn().GetPath() + "/" + path + "/" + *scene + ".json").c_str(), (Hymn().GetPath() + "/" + path + "/" + name + ".json").c_str());
-            
+
             *scene = name;
             Resources().activeScene = path + "/" + name;
         }
-        
+
         // Entities.
         entityPressed = false;
         ShowEntity(Hymn().world.GetRoot());
@@ -76,7 +76,7 @@ void SceneEditor::SetScene(const std::string& path, std::string* scene) {
     entityEditor.SetVisible(false);
     this->path = path;
     this->scene = scene;
-    
+
     if (scene != nullptr)
         strcpy(name, scene->c_str());
     else
@@ -101,7 +101,7 @@ Json::Value SceneEditor::GetSaveFileJson(std::string* filename) const {
         *filename = Hymn().GetPath() + "/" + path + "/" + *scene + ".json";
         return Hymn().world.GetSaveJson();
     }
-    
+
     return Json::Value();
 }
 
@@ -116,7 +116,7 @@ void SceneEditor::ShowEntity(Entity* entity) {
 
     if (draggedItemState == DraggedItemState::ACTIVE && draggedEntity == entity && !ImGui::IsItemActive())
         draggedItemState = DraggedItemState::DEACTIVATE;
-    
+
     if (draggedItemState == DraggedItemState::DEACTIVATED_THIS_FRAME && ImGui::IsItemHovered() && draggedEntity != entity)
         draggedEntity->SetParent(entity);
 
@@ -125,15 +125,15 @@ void SceneEditor::ShowEntity(Entity* entity) {
             entityPressed = true;
             entityEditor.SetEntity(entity);
         }
-        
+
         if (!entity->IsScene()) {
-            if (ImGui::Selectable("Add child")) 
+            if (ImGui::Selectable("Add child"))
                 entity->AddChild("Entity #" + std::to_string(Hymn().entityNumber++));
-            
+
             if (ImGui::Selectable("Instantiate scene"))
                 instantiate = true;
         }
-        
+
         if (entity != Hymn().world.GetRoot()) {
             if (ImGui::Selectable("Delete")) {
                 entity->Kill();
@@ -141,31 +141,31 @@ void SceneEditor::ShowEntity(Entity* entity) {
                     entityEditor.SetVisible(false);
             }
         }
-        
+
         ImGui::EndPopup();
     }
-    
+
     std::string popupName = "Select scene##" + std::to_string(entity->GetUniqueIdentifier());
     if (instantiate)
         ImGui::OpenPopup(popupName.c_str());
-    
+
     if (ImGui::BeginPopup(popupName.c_str())) {
         ImGui::Text("Scenes");
         ImGui::Separator();
-        
+
         if (sceneSelector.Show(ResourceList::Resource::SCENE))
             entity->InstantiateScene(sceneSelector.GetSelectedResource().GetPath(), Resources().activeScene);
-        
+
         ImGui::EndPopup();
     }
-    
+
     if (opened) {
         if (!entity->IsScene()) {
             for (Entity* child : entity->GetChildren()) {
                 ShowEntity(child);
             }
         }
-        
+
         ImGui::TreePop();
     }
 }

@@ -61,7 +61,7 @@ void Component::AnimationController::UpdateAnimation(float deltaTime) {
                     break;
                 }
                 else
-                    return;                
+                    return;
             }
         } else
             return;
@@ -186,7 +186,7 @@ void AnimationController::Animate(float deltaTime, Animation::AnimationAction* a
     interpolation = glm::sin(interpolation * (glm::pi<float>() / 2.f));
     interpolation += 1.f;
     interpolation /= 2.f;
-     
+
     glm::vec3 pos1 = anim->rootPositions[anim->currentRootKeyIndex] * (1.f - interpolation);
     glm::vec3 pos2 = anim->rootPositions[anim->currentRootKeyIndex + 1] * interpolation;
     glm::vec3 skeletonPos = glm::vec3(skeleton->skeletonBones[0]->localTx[0][3], skeleton->skeletonBones[1]->localTx[0][3], skeleton->skeletonBones[2]->localTx[0][3]);

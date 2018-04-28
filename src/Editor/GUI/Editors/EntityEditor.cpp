@@ -298,7 +298,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         metallicShow = false;
         roughnessShow = false;
     }
-    
+
     ImGui::Unindent();
 
     // Normal
@@ -345,7 +345,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     }
 
     ImGui::Unindent();
-    
+
     // Select albedo.
     if (albedoShow) {
         ImGui::Begin("Textures", &albedoShow);
@@ -357,7 +357,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         }
         ImGui::End();
     }
-    
+
     // Select normal.
     if (normalShow) {
         ImGui::Begin("Textures", &normalShow);
@@ -369,7 +369,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         }
         ImGui::End();
     }
-    
+
     // Select metallic.
     if (metallicShow) {
         ImGui::Begin("Textures", &metallicShow);
@@ -381,7 +381,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         }
         ImGui::End();
     }
-    
+
     // Select roughness.
     if (roughnessShow) {
         ImGui::Begin("Textures", &roughnessShow);
@@ -460,7 +460,7 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
             for (int n = 0; n < propertyCount; n++) {
                 std::string propertyName = script->instance->GetPropertyName(n);
-                
+
                 std::string popupName = "Add entity reference##";
                 popupName += propertyName;
 
@@ -617,7 +617,7 @@ void GUI::EntityEditor::ParticleSystemEditor(Component::ParticleSystemComponent*
     ImGui::DragFloat("Speed", &particleSystem->particleType.velocityMultiplier, 1.0f, 0.01f, 100.0f);
 
     for (unsigned int i = 0; i < curveEditor.GetAllCurves().size(); i++) {
-        if (curveEditor.GetAllCurves()[i].editVelocityX) 
+        if (curveEditor.GetAllCurves()[i].editVelocityX)
             particleSystem->particleType.velocity.x = curveEditor.GetAllCurves()[i].value_you_care_about;
 
         if (curveEditor.GetAllCurves()[i].editVelocityY)

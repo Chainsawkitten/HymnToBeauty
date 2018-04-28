@@ -15,31 +15,31 @@ namespace Video {
                     STATIC = 0, ///< Default3D vertex layout (Default3D.vert).
                     SKIN ///< Skinning vertex layout (Skinning.vert).
                 };
-                
+
                 /// Default constructor.
                 Geometry3D();
-                
+
                 /// Destructor.
                 virtual ~Geometry3D();
-    
+
                 /// Get the vertex array.
                 /**
                  * @return The vertex array.
                  */
                 GLuint GetVertexArray() const;
-                
+
                 /// Get number of indices.
                 /**
                  * @return Index count.
                  */
                 unsigned int GetIndexCount() const;
-                
+
                 /// Get the axis-aligned bounding box around the geometry.
                 /**
                  * @return Local space axis-aligned bounding box around the geometry.
                  */
                 const Video::AxisAlignedBoundingBox& GetAxisAlignedBoundingBox() const;
-                
+
                 /// Get geometry type.
                 /**
                  * @return Type.
@@ -66,7 +66,7 @@ namespace Video {
                  * @param indexBuffer Index buffer.
                  */
                 void GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount, GLuint& indexBuffer);
-                
+
                 /// Create local space axis-aligned bounding box around the geometry.
                 /**
                  * @param positions Vector of vertex positions.
@@ -81,13 +81,13 @@ namespace Video {
                  * @param maxValues Vector of vertex positions.
                  */
                 void CreateAxisAlignedBoundingBox(glm::vec3 dim, glm::vec3 origin, glm::vec3 minValues, glm::vec3 maxValues);
-                
+
                 /// Vertex buffer.
                 GLuint vertexBuffer = 0;
-                
+
                 /// Index buffer.
                 GLuint indexBuffer = 0;
-                
+
                 /// Vertex array.
                 GLuint vertexArray = 0;
 
@@ -96,7 +96,7 @@ namespace Video {
 
                 /// Vertex index data.
                 std::vector<uint32_t> vertexIndexData;
-                
+
             private:
                 Video::AxisAlignedBoundingBox axisAlignedBoundingBox;
                 unsigned int indexCount = 0;

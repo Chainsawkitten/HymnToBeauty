@@ -6,7 +6,7 @@
 using namespace Component;
 
 Lens::Lens() {
-    
+
 }
 
 Json::Value Lens::Save() const {

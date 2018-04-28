@@ -43,7 +43,7 @@ ResourceList::ResourceList() {
 
 ResourceList& ResourceList::GetInstance() {
     static ResourceList resourceList;
-    
+
     return resourceList;
 }
 
@@ -56,7 +56,7 @@ void ResourceList::Save() const {
 
 Json::Value ResourceList::ToJson() const {
     Json::Value root;
-    
+
     root["activeScene"] = activeScene;
     root["resourceFolder"] = SaveFolder(resourceFolder);
     root["sceneNumber"] = sceneNumber;
@@ -67,7 +67,7 @@ Json::Value ResourceList::ToJson() const {
     root["textureNumber"] = textureNumber;
     root["soundNumber"] = soundNumber;
     root["scriptNumber"] = scriptNumber;
-    
+
     return root;
 }
 
@@ -79,7 +79,7 @@ void ResourceList::Load() {
     file.close();
 
     activeScene = root["activeScene"].asString();
-    resourceFolder = LoadFolder(root["resourceFolder"], "");    
+    resourceFolder = LoadFolder(root["resourceFolder"], "");
     sceneNumber = root["sceneNumber"].asUInt();
     animationClipNumber = root["animationClipNumber"].asUInt();
     animationControllerNumber = root["animationControllerNumber"].asUInt();
@@ -93,7 +93,7 @@ void ResourceList::Load() {
 void ResourceList::Clear() {
     ClearFolder(resourceFolder);
     resourceFolder.name = "Resources";
-    
+
     sceneNumber = 0U;
     animationClipNumber = 0U;
     animationControllerNumber = 0U;
@@ -107,20 +107,20 @@ void ResourceList::Clear() {
 Json::Value ResourceList::SaveFolder(const ResourceFolder& folder) const {
     Json::Value node;
     node["name"] = folder.name;
-    
+
     // Save subfolders.
     Json::Value subfolders;
     for (const ResourceFolder& subfolder : folder.subfolders)
         subfolders.append(SaveFolder(subfolder));
-    
+
     node["subfolders"] = subfolders;
-    
+
     // Save resources.
     Json::Value resourcesNode;
     for (const Resource& resource : folder.resources) {
         Json::Value resourceNode;
         resourceNode["type"] = resource.type;
-        
+
         switch (resource.type) {
         case Resource::SCENE:
             resourceNode["scene"] = *resource.scene;
@@ -151,11 +151,11 @@ Json::Value ResourceList::SaveFolder(const ResourceFolder& folder) const {
             resource.script->Save();
             break;
         }
-        
+
         resourcesNode.append(resourceNode);
     }
     node["resources"] = resourcesNode;
-    
+
     return node;
 }
 
@@ -163,19 +163,19 @@ ResourceList::ResourceFolder ResourceList::LoadFolder(const Json::Value& node, s
     ResourceFolder folder;
     folder.name = node["name"].asString();
     path += folder.name + "/";
-    
+
     // Load subfolders.
     Json::Value subfoldersNode = node["subfolders"];
     for (unsigned int i = 0; i < subfoldersNode.size(); ++i)
         folder.subfolders.push_back(LoadFolder(subfoldersNode[i], path));
-    
+
     // Load resources.
     Json::Value resourcesNode = node["resources"];
     for (unsigned int i = 0; i < resourcesNode.size(); ++i) {
         Json::Value resourceNode = resourcesNode[i];
         Resource resource;
         resource.type = static_cast<Resource::Type>(resourceNode["type"].asInt());
-        
+
         switch (resource.type) {
         case Resource::SCENE:
             resource.scene = new string(resourceNode["scene"].asString());
@@ -202,10 +202,10 @@ ResourceList::ResourceFolder ResourceList::LoadFolder(const Json::Value& node, s
             resource.script = Managers().resourceManager->CreateScriptFile(path + resourceNode["script"].asString());
             break;
         }
-        
+
         folder.resources.push_back(resource);
     }
-    
+
     return folder;
 }
 
@@ -213,9 +213,9 @@ void ResourceList::ClearFolder(ResourceFolder& folder) {
     // Clear subfolders.
     for (ResourceFolder& subfolder : folder.subfolders)
         ClearFolder(subfolder);
-    
+
     folder.subfolders.clear();
-    
+
     // Clear resources.
     for (const Resource& resource : folder.resources) {
         switch (resource.type) {
@@ -244,7 +244,7 @@ void ResourceList::ClearFolder(ResourceFolder& folder) {
             break;
         }
     }
-    
+
     folder.resources.clear();
 }
 

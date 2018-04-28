@@ -12,16 +12,16 @@ namespace Video {
     namespace Geometry {
         class Geometry3D;
     }
-    
+
     /// Render program to render an entity using skin shader program.
     class SkinRenderProgram : public RenderProgram {
         public:
             /// Create new skin render program.
             SkinRenderProgram();
-            
+
             /// Destructor.
             ~SkinRenderProgram() final;
-            
+
             /// Bind shadow render program.
             /**
              * @param viewMatrix The camera's view matrix.
@@ -69,7 +69,7 @@ namespace Video {
              * @param cameraFar Camera far plane distance.
              */
             void PreRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const StorageBuffer* lightBuffer, unsigned int lightCount, float cameraNear, float cameraFar);
-    
+
             /// Render skinned geometry.
             /**
              * @param geometry The geometry to render.
@@ -81,13 +81,13 @@ namespace Video {
              * @param bones Transformations of skeleton.
              */
             void Render(const Video::Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* normalTexture, const Video::Texture2D* textureMetallic, const Video::Texture2D* textureRoughness, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones) const;
-            
+
         private:
             SkinRenderProgram(const SkinRenderProgram & other) = delete;
             ShaderProgram* shadowProgram;
             ShaderProgram* zShaderProgram;
             ShaderProgram* shaderProgram;
-            
+
             // Uniform locations.
             GLuint shadowLightSpaceLocation;
             GLuint shadowModelLocation;

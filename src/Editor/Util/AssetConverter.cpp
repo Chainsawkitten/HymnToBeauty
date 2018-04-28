@@ -40,7 +40,7 @@ void AssetConverter::Convert(const char* filepath, const char* destination, cons
                 LoadMaterial(material, aiTextureType_REFLECTION, materials.metallic);
             }
         }
-    
+
         ConvertMeshes(aScene, &file, scale, flipUVs, CPU, GPU);
     }
 
@@ -105,7 +105,7 @@ void AssetConverter::ConvertMesh(aiMesh* aMesh, Geometry::AssetFileHandler* file
 
     meshData->numIndices = indexCounter;
     meshData->indices = indices;
-    
+
     CalculateAABB(meshData, meshData->numVertices);
 
     file->SaveMesh(meshData);
@@ -134,7 +134,7 @@ Video::Geometry::VertexType::StaticVertex* AssetConverter::ConvertStaticVertices
     if (aMesh->HasTextureCoords(0)) {
         for (unsigned int i = 0; i < numVertices; ++i) {
             Geometry::CpyVec(vertices[i].textureCoordinate, aMesh->mTextureCoords[0][i]);
-            if (flipUVs) 
+            if (flipUVs)
                 vertices[i].textureCoordinate.y = 1.0f - vertices[i].textureCoordinate.y;
         }
     } else {

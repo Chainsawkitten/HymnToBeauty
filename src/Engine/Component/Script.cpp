@@ -12,13 +12,13 @@
 using namespace Component;
 
 Script::Script() {
-    
+
 }
 
 Script::~Script() {
     if (instance != nullptr)
         instance->Release();
-    
+
     if (scriptFile != nullptr)
         Managers().resourceManager->FreeScriptFile(scriptFile);
 
@@ -30,7 +30,7 @@ Json::Value Script::Save() const {
     Json::Value component;
     if (scriptFile != nullptr)
         component["scriptName"] = scriptFile->path + scriptFile->name;
-    
+
     for (auto& nameProperty : propertyMap) {
 
         const std::string& name = nameProperty.first;
@@ -55,7 +55,7 @@ void Script::AddToPropertyMap(const std::string& name, int type, int size, void*
 void Script::CopyDataFromPropertyMap(const std::string& name, void* target){
 
     std::memcpy(target, propertyMap[name]->data, propertyMap[name]->size);
-    
+
 }
 
 void* Script::GetDataFromPropertyMap(const std::string& name){

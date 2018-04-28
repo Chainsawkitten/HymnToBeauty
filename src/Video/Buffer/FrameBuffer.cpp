@@ -20,7 +20,7 @@ FrameBuffer::FrameBuffer(const std::vector<ReadWriteTexture*>& textures) : textu
         }
     }
 
-    // Create and intialize draw buffers 
+    // Create and intialize draw buffers
     std::vector<GLenum> drawBuffers(textures.size());
     for (std::size_t i = 0; i < textures.size(); i++)
         drawBuffers[i] = GL_COLOR_ATTACHMENT0 + static_cast<GLenum>(i);
@@ -57,7 +57,7 @@ void FrameBuffer::BindRead() {
 
     target = GL_READ_FRAMEBUFFER;
     glBindFramebuffer(target, frameBufferObject);
-    bound = true; 
+    bound = true;
 }
 
 void FrameBuffer::Unbind() {

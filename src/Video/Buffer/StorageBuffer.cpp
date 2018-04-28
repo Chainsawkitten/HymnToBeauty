@@ -25,7 +25,7 @@ StorageBuffer::~StorageBuffer() {
 void StorageBuffer::Write(void* data, unsigned int offset, unsigned int length) {
     assert(bound);
     assert(this->size >= offset + length);
-    glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, length, data); 
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, length, data);
 }
 
 void StorageBuffer::Bind() {

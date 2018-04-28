@@ -121,7 +121,7 @@ void DebugDrawingManager::AddMesh(unsigned int id, Component::Mesh* meshComponen
         else {
             mesh.vertexArray = meshComponent->geometry->GetVertexArray();
             mesh.indexCount = meshComponent->geometry->GetIndexCount();
-        }  
+        }
         mesh.referenceCount = 0;
         meshMap[id] = mesh;
     }
@@ -145,7 +145,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             points[i].duration -= deltaTime;
     }
-    
+
     // Lines.
     for (std::size_t i=0; i < lines.size(); ++i) {
         if (lines[i].duration < 0.f) {
@@ -155,7 +155,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             lines[i].duration -= deltaTime;
     }
-    
+
     // Cuboids.
     for (std::size_t i=0; i < cuboids.size(); ++i) {
         if (cuboids[i].duration < 0.f) {
@@ -165,7 +165,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             cuboids[i].duration -= deltaTime;
     }
-    
+
     // Planes.
     for (std::size_t i=0; i < planes.size(); ++i) {
         if (planes[i].duration < 0.f) {
@@ -175,7 +175,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             planes[i].duration -= deltaTime;
     }
-    
+
     // Circles.
     for (std::size_t i=0; i < circles.size(); ++i) {
         if (circles[i].duration < 0.f) {
@@ -185,7 +185,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             circles[i].duration -= deltaTime;
     }
-    
+
     // Spheres.
     for (std::size_t i=0; i < spheres.size(); ++i) {
         if (spheres[i].duration < 0.f) {
@@ -195,7 +195,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             spheres[i].duration -= deltaTime;
     }
-    
+
     // Cylinders.
     for (std::size_t i=0; i < cylinders.size(); ++i) {
         if (cylinders[i].duration < 0.f) {
@@ -205,7 +205,7 @@ void DebugDrawingManager::Update(float deltaTime) {
         } else
             cylinders[i].duration -= deltaTime;
     }
-    
+
     // Cone.
     for (std::size_t i=0; i < cones.size(); ++i) {
         if (cones[i].duration < 0.f) {
@@ -238,35 +238,35 @@ void DebugDrawingManager::Render(const glm::mat4& viewMatrix, const glm::mat4& p
     // Bind render target.
     renderSurface->GetShadingFrameBuffer()->BindWrite();
     debugDrawing->StartDebugDrawing(projectionMatrix * viewMatrix);
-        
+
     // Points.
     for (const DebugDrawing::Point& point : points)
         debugDrawing->DrawPoint(point);
-        
+
     // Lines.
     for (const DebugDrawing::Line& line : lines)
         debugDrawing->DrawLine(line);
-        
+
     // Cuboids.
     for (const DebugDrawing::Cuboid& cuboid : cuboids)
         debugDrawing->DrawCuboid(cuboid);
-       
+
     // Planes.
     for (const DebugDrawing::Plane& plane : planes)
         debugDrawing->DrawPlane(plane);
-    
+
     // Circles.
     for (const DebugDrawing::Circle& circle : circles)
         debugDrawing->DrawCircle(circle);
-    
+
     // Spheres.
     for (const DebugDrawing::Sphere& sphere : spheres)
         debugDrawing->DrawSphere(sphere);
-    
+
     // Cylinders.
     for (const DebugDrawing::Cylinder& cylinder : cylinders)
         debugDrawing->DrawCylinder(cylinder);
-    
+
     // Cones.
     for (const DebugDrawing::Cone& cone : cones)
         debugDrawing->DrawCone(cone);
@@ -274,7 +274,7 @@ void DebugDrawingManager::Render(const glm::mat4& viewMatrix, const glm::mat4& p
     // Meshes.
     for (const std::pair<unsigned int, DebugDrawing::Mesh>& it : meshMap)
         debugDrawing->DrawMesh(it.second);
-    
+
     debugDrawing->EndDebugDrawing();
     renderSurface->GetShadingFrameBuffer()->Unbind();
 }

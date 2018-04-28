@@ -11,34 +11,34 @@ namespace Video {
              * @param filename Name of the PNG file to load.
              */
             TexturePNG(const char* filename);
-            
+
             /// Create new PNG texture from memory.
             /**
              * @param source Source string containing the image file.
              * @param sourceLength Length of the source string.
              */
             TexturePNG(const char* source, int sourceLength);
-            
+
             /// Destructor.
             ~TexturePNG() override;
-            
+
             /// Get OpenGL texture ID.
             /**
              * Used when binding a texture before draw calls.
              * @return The OpenGL texture identifier
              */
             GLuint GetTextureID() const override;
-            
+
             /// Get whether the texture has been loaded yet.
             /**
              * @return Whether the texture has been loaded yet.
              */
             bool IsLoaded() const override;
-            
+
         private:
             // Get image GL format based on color components.
             static GLenum Format(int components);
-            
+
             GLuint texID = 0;
             bool loaded = false;
     };

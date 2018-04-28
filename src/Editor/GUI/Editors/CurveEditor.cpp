@@ -236,7 +236,7 @@ namespace tween {
 
             // Modeled (originally) after the overshooting cubic y = x^3-x*sin(x*pi)
             case TYPE::BACKIN: {
-                //return p * p * p - p * sin(p * pi); 
+                //return p * p * p - p * sin(p * pi);
                 double s = 1.70158f;
                 return p * p * ((s + 1) * p - s);
             }
@@ -716,7 +716,7 @@ void CurveEditor::UpdateCurves(float deltaTime, float totalTime) {
         time = 0.0f;
         goBack = false;
     }
-    
+
     if (!goBack)
         time += deltaTime;
 
@@ -725,7 +725,7 @@ void CurveEditor::UpdateCurves(float deltaTime, float totalTime) {
 
     for (unsigned int i = 0; i < curves.size(); i++) {
         float tempValue = ImGui::CurveValue(time / totalTime, (int)totalTime, curves[i].value); // calculate value at position
-        if (tempValue < 0.5f) 
+        if (tempValue < 0.5f)
             tempValue -= 1.0f;
 
         if (tempValue <= 0.5f && tempValue >= 0.49f)

@@ -14,22 +14,22 @@ namespace Component {
         public:
             /// Create new script.
             Script();
-            
+
             /// Destructor.
             ~Script() final;
-            
+
             /// Save the component.
             /**
              * @return JSON value to be stored on disk.
              */
             Json::Value Save() const override;
-            
+
             /// Whether the script component has been initialized.
             bool initialized = false;
-            
+
             /// The script file.
             ScriptFile* scriptFile = nullptr;
-            
+
             /// The instance of the script class.
             asIScriptObject* instance = nullptr;
 
@@ -61,7 +61,7 @@ namespace Component {
              * @param name The name of the property.
              * @param type The asTypeID of the property.
              * @return Is there a property with the provided name and type in propertyMap.
-             */  
+             */
             bool IsInPropertyMap(const std::string& name, const int type);
 
             /// Clears the property map.

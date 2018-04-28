@@ -17,7 +17,7 @@ namespace Video {
              * @param shaderType %Shader type. One of GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
              */
             Shader(const char* source, int sourceLength, GLenum shaderType);
-            
+
             /// Destructor.
             ~Shader();
 
@@ -27,13 +27,13 @@ namespace Video {
              * @return Shader identifier
              */
             GLuint GetShaderID() const;
-            
+
             /// Get shader type.
             /**
              * @return %Shader type. One of GL_COMPUTE_SHADER, GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, or GL_FRAGMENT_SHADER.
              */
             GLenum GetShaderType() const;
-            
+
         private:
             GLuint shader;
             GLenum shaderType;

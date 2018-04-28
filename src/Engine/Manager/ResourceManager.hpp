@@ -29,7 +29,7 @@ class ScriptFile;
 /// Handles all resources.
 class ResourceManager {
     friend class Hub;
-    
+
     public:
         /// Constructor
         ResourceManager() {}
@@ -85,7 +85,7 @@ class ResourceManager {
         * @param model %Model to dereference.
         */
         void FreeModel(Geometry::Model* model);
-        
+
         /// Create a 2D texture if it doesn't already exist.
         /**
          * @param data Image file data.
@@ -93,76 +93,76 @@ class ResourceManager {
          * @return The %TexturePNG instance
          */
         Video::TexturePNG* CreateTexturePNG(const char* data, int dataLength);
-        
+
         /// Free the reference to the 2D texture.
         /**
          * Deletes the instance if no more references exist.
          * @param texture %Texture to dereference.
          */
         void FreeTexturePNG(Video::TexturePNG* texture);
-        
+
         /// Create a texture asset if it doesn't already exist.
         /**
          * @param name The name of the texture asset.
          * @return The %TextureAsset instance
          */
         TextureAsset* CreateTextureAsset(const std::string& name);
-        
+
         /// Free the reference to the texture asset.
         /**
          * Deletes the instance if no more references exist.
          * @param textureAsset %TextureAsset to dereference.
          */
         void FreeTextureAsset(TextureAsset* textureAsset);
-        
+
         /// Get the number of instances of a texture asset.
         /**
          * @param textureAsset The texture asset to check.
          * @return How many instances of the texture asset currently exist.
          */
         int GetTextureAssetInstanceCount(TextureAsset* textureAsset);
-        
+
         /// Create a sound if it doesn't already exist.
         /**
          * @param name Name of the sound.
          * @return The %SoundBuffer instance.
          */
         Audio::SoundFile* CreateSound(const std::string& name);
-        
+
         /// Free the reference to the sound.
         /**
          * Deletes the instance if no more references exist.
          * @param soundFile %SoundFile to dereference.
          */
         void FreeSound(Audio::SoundFile* soundFile);
-        
+
         /// Create a script file if it doesn't already exist.
         /**
          * @param name Name of the script file.
          * @return The %ScriptFile instance.
          */
         ScriptFile* CreateScriptFile(const std::string& name);
-        
+
         /// Free the reference to the script file.
         /**
          * Deletes the instance if no more references exist.
          * @param scriptFile %ScriptFile to dereference.
          */
         void FreeScriptFile(ScriptFile* scriptFile);
-        
+
     private:
         ResourceManager(ResourceManager const&) = delete;
         void operator=(ResourceManager const&) = delete;
-        
+
         // Rectangle
         Video::Geometry::Rectangle* rectangle = nullptr;
         int rectangleCount = 0;
-        
+
         // Cube
         Geometry::Cube* cube = nullptr;
 
         int cubeCount = 0;
-        
+
         // Model.
         struct ModelInstance {
             Geometry::Model* model;
@@ -202,7 +202,7 @@ class ResourceManager {
         };
         std::map<const char*, TexturePNGInstance> textures;
         std::map<Video::TexturePNG*, const char*> texturesInverse;
-        
+
         // Texture asset.
         struct TextureAssetInstance {
             TextureAsset* textureAsset;
@@ -210,7 +210,7 @@ class ResourceManager {
         };
         std::map<std::string, TextureAssetInstance> textureAssets;
         std::map<TextureAsset*, std::string> textureAssetsInverse;
-        
+
         // Sound.
         struct SoundInstance {
             Audio::SoundFile* sound;
@@ -218,7 +218,7 @@ class ResourceManager {
         };
         std::map<std::string, SoundInstance> sounds;
         std::map<Audio::SoundFile*, std::string> soundsInverse;
-        
+
         // ScriptFile.
         struct ScriptFileInstance {
             ScriptFile* scriptFile;

@@ -5,14 +5,14 @@
 EditorSettings::EditorSettings() {
     ini.SetUnicode(true);
     ini.LoadFile(FileSystem::DataPath("Hymn to Beauty", "Settings.ini").c_str());
-    
+
     AddBoolSetting("Logging", "Debug", "Logging", false);
     AddBoolSetting("Debug Context", "Debug", "Debug Context", false);
 
     AddLongSetting("Width", "Graphics", "Width", 800);
     AddLongSetting("Height", "Graphics", "Height", 600);
     AddStringSetting("Theme", "Graphics", "Theme", "Default");
-    
+
     AddBoolSetting("Sound Source Icons", "View", "Sound Source Icons", true);
     AddBoolSetting("Particle Emitter Icons", "View", "Particle Emitter Icons", true);
     AddBoolSetting("Light Source Icons", "View", "Light Source Icons", true);
@@ -20,9 +20,9 @@ EditorSettings::EditorSettings() {
     AddBoolSetting("Physics Volumes", "View", "Physics Volumes", true);
     AddBoolSetting("Lighting", "View", "Lighting", true);
     AddBoolSetting("LightVolumes", "View", "Light Volumes", false);
-    
+
     AddStringSetting("Text Editor", "Script", "Text Editor", "");
-    
+
     AddBoolSetting("Grid Settings", "View", "Grid Settings", false);
     AddLongSetting("Grid Size", "Grid", "Size", 100);
     AddLongSetting("Grid Line Width", "Grid", "Line Width", 3);
@@ -32,7 +32,7 @@ EditorSettings::EditorSettings() {
 
 EditorSettings& EditorSettings::GetInstance() {
     static EditorSettings settings;
-    
+
     return settings;
 }
 

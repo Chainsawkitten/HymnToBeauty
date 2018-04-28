@@ -16,7 +16,7 @@ void FileSelector::Show() {
         ScanDirectory();
         pathChanged = false;
     }
-    
+
     if (ImGui::Begin("Select file", &visible)) {
         char buffer[200];
         strcpy(buffer, path.c_str());
@@ -24,19 +24,19 @@ void FileSelector::Show() {
             path = buffer;
             pathChanged = true;
         }
-        
+
         ImGui::Separator();
-        
+
         if (ImGui::Selectable("..")) {
             OpenParentDirectory();
         }
-        
+
         for (const std::string& directory : directories) {
             if (ImGui::Selectable(("[DIR] " + directory).c_str())) {
                 OpenDirectory(directory);
             }
         }
-        
+
         for (const std::string& file : files) {
             if (ImGui::Selectable(file.c_str())) {
                 SelectFile(file);
@@ -80,14 +80,14 @@ void FileSelector::OpenDirectory(const string& name) {
 
 void FileSelector::SelectFile(const string& name) {
     visible = false;
-    
+
     if (hasFileSelectedCallback)
         fileSelectedCallback(path + FileSystem::DELIMITER + name);
 }
 
 void FileSelector::ScanDirectory() {
     directories = FileSystem::DirectoryContents(path, FileSystem::DIRECTORY);
-    
+
     files.clear();
     std::vector<std::string> tempFiles = FileSystem::DirectoryContents(path, FileSystem::FILE);
     for (const std::string& file : tempFiles) {
