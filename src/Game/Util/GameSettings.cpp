@@ -4,7 +4,6 @@
 #include <Engine/Hymn.hpp>
 
 GameSettings::GameSettings() {
-
 }
 
 GameSettings& GameSettings::GetInstance() {

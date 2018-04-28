@@ -6,7 +6,6 @@
 using namespace Audio;
 
 VorbisFile::VorbisFile() {
-
 }
 
 VorbisFile::~VorbisFile() {

@@ -26,7 +26,6 @@ class ParticleManager {
     friend class Hub;
 
     public:
-
         /// Update all the system's particles, spawn new particles etc.
         /**
          * @param world World to update.

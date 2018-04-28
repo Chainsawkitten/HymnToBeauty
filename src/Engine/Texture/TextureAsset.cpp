@@ -22,7 +22,6 @@ TextureAsset::~TextureAsset() {
 }
 
 void TextureAsset::Save() const {
-
 }
 
 void TextureAsset::Load(const std::string& name) {

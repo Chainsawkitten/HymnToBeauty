@@ -15,7 +15,6 @@ World::World() {
 
 World::~World() {
     Clear();
-
 }
 
 Entity* World::CreateEntity(const std::string& name) {
@@ -104,14 +103,13 @@ void World::Load(const std::string& filename) {
         file.close();
 
         root->Load(rootNode);
-
     }
-        Managers().triggerManager->InitiateUID();
-        Managers().triggerManager->InitiateVolumes();
+
+    Managers().triggerManager->InitiateUID();
+    Managers().triggerManager->InitiateVolumes();
 }
 
 void World::Load(const Json::Value& node) {
-
     Clear();
     CreateRoot();
     root->Load(node);

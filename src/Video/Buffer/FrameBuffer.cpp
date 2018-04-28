@@ -6,7 +6,6 @@
 using namespace Video;
 
 FrameBuffer::FrameBuffer(const std::vector<ReadWriteTexture*>& textures) : textures(textures), bound(false) {
-
     // Frame buffer object.
     glGenFramebuffers(1, &frameBufferObject);
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObject);

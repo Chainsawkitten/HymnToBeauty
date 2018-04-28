@@ -69,7 +69,6 @@ int main() {
 
         { PROFILE("Frame");
         { GPUPROFILE("Frame", Video::Query::Type::TIME_ELAPSED);
-
             glfwPollEvents();
 
             if (Input()->Triggered(InputHandler::WINDOWMODE)) {
@@ -107,7 +106,6 @@ int main() {
 
                 if (window->ShouldClose() && !editor->isClosing())
                     window->CancelClose();
-
             } else {
                 { PROFILE("Update");
                 { GPUPROFILE("Update", Video::Query::Type::TIME_ELAPSED);

@@ -8,7 +8,6 @@ namespace GUI {
     /// A window that asks the user if they want to save before quitting.
     class SavePromptWindow {
         public:
-
             /// Show the window and let the user decide if they want to save.
             void Show();
 
@@ -46,10 +45,8 @@ namespace GUI {
             void SetTitle(const std::string& newTitle);
 
         private:
-
             std::string title;
             bool visible = false;
             int decision = -1;
-
     };
 }

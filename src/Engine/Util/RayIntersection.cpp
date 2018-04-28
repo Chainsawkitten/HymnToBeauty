@@ -1,15 +1,12 @@
 #include "RayIntersection.hpp"
 
 RayIntersection::RayIntersection() {
-
 }
 
 RayIntersection::~RayIntersection() {
-
 }
 
 bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const Video::AxisAlignedBoundingBox& meshData, const glm::mat4& modelMatrix, float &outputDistance) const {
-
     float tMin = -INFINITY;
     float tMax = INFINITY;
 
@@ -23,13 +20,11 @@ bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec
     float maxValue[3] = { maxVec.x, maxVec.y, maxVec.z };
 
     for (int i = 0; i < 3; i++) {
-
         glm::vec3 currentAxis(i == 0, i == 1, i == 2);
         float e = glm::dot(currentAxis, delta);
         float f = glm::dot(rayDirection, currentAxis);
 
         if (fabs(f) > pow(10, -10)) {
-
             float t1 = (e + minValue[i]) / f;
             float t2 = (e + maxValue[i]) / f;
 
@@ -48,7 +43,6 @@ bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec
 
             if (tMax < 0)
                 return false;
-
         } else {
             if (-e + minValue[i] > 0.0f || -e + maxValue[i] < 0.0f)
                 return false;
@@ -63,7 +57,6 @@ bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec
 }
 
 bool RayIntersection::TriangleIntersect(glm::vec3 origin, glm::vec3 direction, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, float& distance) {
-
     glm::vec3 e1, e2;
     glm::vec3 q;
     glm::vec3 r;
@@ -74,7 +67,6 @@ bool RayIntersection::TriangleIntersect(glm::vec3 origin, glm::vec3 direction, g
     float u;
     float v;
     float t = 0;
-    bool returnValue = false;
 
     e1 = p1 - p0;
     e2 = p2 - p0;
@@ -86,16 +78,17 @@ bool RayIntersection::TriangleIntersect(glm::vec3 origin, glm::vec3 direction, g
 
     f = 1 / a;
     s = origin - p0;
-    u = f*(glm::dot(s, q));
+    u = f * glm::dot(s, q);
     if (u < 0.0)
         return false;
-    r = glm::cross(s, e1);
-    v = f*(glm::dot(direction, r));
-    if (v<0.0 || u + v>1.0)
-        return false;
-    t = f*(glm::dot(e2, r));
-    distance = t;
-    returnValue = true;
-    return returnValue;
 
+    r = glm::cross(s, e1);
+    v = f * glm::dot(direction, r);
+    if (v < 0.0 || u + v > 1.0)
+        return false;
+
+    t = f * glm::dot(e2, r);
+    distance = t;
+
+    return true;
 }

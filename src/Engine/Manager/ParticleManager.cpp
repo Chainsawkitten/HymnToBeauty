@@ -53,12 +53,10 @@ int ParticleManager::GetTextureAtlasRows() const {
 }
 
 Component::ParticleSystemComponent* ParticleManager::CreateAParticleSystem() {
-
     return InitParticleSystem(particleSystems.Create());
 }
 
 Component::ParticleSystemComponent* ParticleManager::CreateParticleSystem(const Json::Value& node) {
-
     Component::ParticleSystemComponent* particleSystem = InitParticleSystem(particleSystems.Create());
     // Load values from Json node.
     particleSystem->particleType.textureIndex = node.get("textureIndex", 0).asInt();

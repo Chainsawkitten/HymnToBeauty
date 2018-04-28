@@ -1,6 +1,6 @@
 #pragma once
-#include <cstdint>
 
+#include <cstdint>
 
 namespace Component {
     class Trigger;
@@ -11,7 +11,6 @@ namespace GUI {
     /// settings for a given trigger component.
     class TriggerEditor {
         public:
-
             enum Cases {
                 PROPERTIES = 0,
                 SUBJECTS,
@@ -29,6 +28,5 @@ namespace GUI {
 
         private:
             uint32_t selectedTab = 0;
-
     };
 }

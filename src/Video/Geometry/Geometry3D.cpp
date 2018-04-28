@@ -4,7 +4,6 @@ using namespace Video;
 using namespace Geometry;
 
 Geometry3D::Geometry3D() {
-
 }
 
 Geometry3D::~Geometry3D() {

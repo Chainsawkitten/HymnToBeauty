@@ -494,7 +494,6 @@ ScriptManager::~ScriptManager() {
 }
 
 int ScriptManager::BuildScript(ScriptFile* script) {
-
     GetBreakpoints(script);
 
     std::string filename = Hymn().GetPath() + "/" + script->path + script->name + ".as";
@@ -526,11 +525,9 @@ int ScriptManager::BuildScript(ScriptFile* script) {
     FillFunctionVector(script);
 
     return r;
-
 }
 
 void ScriptManager::BuildAllScripts() {
-
     std::string path = Hymn().GetPath() + "/";
 
     for (ScriptFile* file : Hymn().scripts) {
@@ -558,7 +555,6 @@ void ScriptManager::BuildAllScripts() {
             r = builder.BuildModule();
             if (r < 0)
                 Log() << "Compile errors.\n";
-
         } else {
             std::string script;
 
@@ -571,12 +567,10 @@ void ScriptManager::BuildAllScripts() {
         }
 
         FillFunctionVector(file);
-
     }
 }
 
 void ScriptManager::GetBreakpoints(const ScriptFile* scriptFile) {
-
     //If we already fetched the breakpoints for this file, we clear it.
     auto it = breakpoints.find(scriptFile->name + ".as");
     if (it != breakpoints.end())
@@ -606,29 +600,23 @@ void ScriptManager::GetBreakpoints(const ScriptFile* scriptFile) {
 }
 
 void ScriptManager::ClearBreakpoints() {
-
     for (auto pair : breakpoints)
         pair.second.clear();
 
     breakpoints.clear();
-
 }
 
 void ScriptManager::FillPropertyMap(Script* script) {
     int r = BuildScript(script->scriptFile);
     if (r < 0) {
-
         Log() << "Couldn't fetch properties" << "\n";
-
     } else {
-
         if (!script->initialized)
             CreateInstance(script);
 
         int propertyCount = script->instance->GetPropertyCount();
 
         for (int n = 0; n < propertyCount; n++) {
-
             std::string name = script->instance->GetPropertyName(n);
             int typeId = script->instance->GetPropertyTypeId(n);
             void* varPointer = script->instance->GetAddressOfProperty(n);
@@ -643,7 +631,6 @@ void ScriptManager::FillPropertyMap(Script* script) {
                 int size = sizeof(float);
                 script->AddToPropertyMap(name, typeId, size, varPointer);
             } else if (typeId == engine->GetTypeIdByDecl("Entity@") && name != "self") {
-
                 int size = sizeof(unsigned int);
 
                 Entity* pointer = *(Entity**)varPointer;
@@ -652,27 +639,20 @@ void ScriptManager::FillPropertyMap(Script* script) {
 
                 bool initialized = false;
                 for (std::size_t i = 0; i < entities.size(); ++i) {
-
                     if (entities[i] == pointer) {
-
                         initialized = true;
                         break;
-
                     }
-
                 }
 
                 if (initialized) {
-
                     unsigned int GUID = pointer->GetUniqueIdentifier();
                     script->AddToPropertyMap(name, typeId, size, (void*)(&GUID));
 
                 } else {
-
                     //We start with setting the GUID to 0, which means it's uninitialized.
                     unsigned int GUID = 0;
                     script->AddToPropertyMap(name, typeId, size, (void*)(&GUID));
-
                 }
             }
         }
@@ -680,24 +660,18 @@ void ScriptManager::FillPropertyMap(Script* script) {
 }
 
 void ScriptManager::FillFunctionVector(ScriptFile* scriptFile) {
-
     scriptFile->functionList.clear();
 
     asITypeInfo* scriptClass = GetClass(scriptFile->name, scriptFile->name);
     if (scriptClass != nullptr) {
-
         int functionCount = scriptClass->GetMethodCount();
         for (int n = 0; n < functionCount; n++) {
-
             asIScriptFunction* func = scriptClass->GetMethodByIndex(n);
             std::string decl = func->GetDeclaration(false);
 
             scriptFile->functionList.push_back(decl);
-
         }
-
     }
-
 }
 
 
@@ -716,15 +690,12 @@ void ScriptManager::Update(World& world, float deltaTime) {
             int propertyCount = script->instance->GetPropertyCount();
 
             for (int n = 0; n < propertyCount; n++) {
-
                 std::string name = script->instance->GetPropertyName(n);
                 int typeId = script->instance->GetPropertyTypeId(n);
                 void* varPointer = script->instance->GetAddressOfProperty(n);
 
                 if (script->IsInPropertyMap(name, typeId)) {
-
                     if (typeId == engine->GetTypeIdByDecl("Entity@")) {
-
                         unsigned int* GUID = (unsigned int*)script->GetDataFromPropertyMap(name);
 
                         //We make sure it is initialized.
@@ -732,10 +703,8 @@ void ScriptManager::Update(World& world, float deltaTime) {
                             *reinterpret_cast<Entity**>(varPointer) = Hymn().GetEntityByGUID(*GUID);
                         else
                             Log() << "Property " << name << " of script " << script->scriptFile->name << " on entity " << script->entity->name << " is not initialized" << "\n";
-
                     } else
                         script->CopyDataFromPropertyMap(name, varPointer);
-
                 }
             }
         }
@@ -848,9 +817,7 @@ Component::Script* ScriptManager::CreateScript(const Json::Value& node) {
 }
 
 int ScriptManager::GetStringDeclarationID() {
-
     return engine->GetTypeIdByDecl("string");
-
 }
 
 const std::vector<Component::Script*>& ScriptManager::GetScripts() const {
@@ -928,11 +895,9 @@ void ScriptManager::CreateInstance(Component::Script* script) {
 }
 
 asIScriptContext* ScriptManager::CreateContext() {
-
     asIScriptContext* context = engine->CreateContext();
     context->SetLineCallback(asFUNCTION(AngelScriptDebugLineCallback), &breakpoints, asCALL_CDECL);
     return context;
-
 }
 
 void ScriptManager::CallMessageReceived(const Message& message) {

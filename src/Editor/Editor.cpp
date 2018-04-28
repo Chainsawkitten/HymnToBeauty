@@ -107,7 +107,6 @@ void Editor::Show(float deltaTime) {
         if (!HasMadeChanges()) {
             savePromptAnswered = true;
         } else {
-
             // Ask the user whether they wish to save.
             if (Hymn().GetPath() != "") {
                 savePromtWindow.SetVisible(true);
@@ -206,7 +205,6 @@ void Editor::Show(float deltaTime) {
 
         if (play)
             Play();
-
     }
 
     // Set cursor.
@@ -243,7 +241,6 @@ void Editor::Save() const {
 }
 
 bool Editor::HasMadeChanges() const {
-
     {
         std::string sceneFilename;
         Json::Value sceneJson = resourceView.GetSceneJson(&sceneFilename);
@@ -309,7 +306,6 @@ bool Editor::HasMadeChanges() const {
     }
 
     return false;
-
 }
 
 bool Editor::ReadyToClose() const {
@@ -572,7 +568,6 @@ void Editor::Focus() {
 }
 
 void Editor::PaintBrush(Entity* entity) {
-
     GUI::ResourceSelector rs;
 
     // Read vertex data.
@@ -588,7 +583,6 @@ void Editor::PaintBrush(Entity* entity) {
 
         // Which scene to draw.
         if (entity->brushActive == false && entity->sceneChosen == false) {
-
             ImGui::OpenPopup("Select scene to paint with.##Scene");
 
             if (ImGui::BeginPopup("Select scene to paint with.##Scene")) {
@@ -616,7 +610,6 @@ void Editor::PaintBrush(Entity* entity) {
 
         // Ray-Triangle intersection test.
         if (entity->brushActive) {
-
             bool intersect = false;
             glm::vec3 last_p0;
             glm::vec3 last_p1;
@@ -632,14 +625,12 @@ void Editor::PaintBrush(Entity* entity) {
 
             // Loop through each triangle and check for intersection.
             for (int i = 0; i < nrOfIndices;) {
-
                 p0 = data->staticVertices[data->indices[i++]].position;
                 p1 = data->staticVertices[data->indices[i++]].position;
                 p2 = data->staticVertices[data->indices[i++]].position;
 
                 // Calculate intersection.
                 if (rayIntersector.TriangleIntersect(cameraEntity->GetWorldPosition(), mousePicker.GetCurrentRay(), p0, p1, p2, intersectT)) {
-
                     if (intersectT < lastIntersect && intersectT >= 0.0f) {
                         lastIntersect = intersectT;
                         last_p0 = p0;
@@ -661,7 +652,6 @@ void Editor::PaintBrush(Entity* entity) {
             // Paint objects (scenes).
             // Draw them when mouse pressed.
             if (Input()->Pressed(InputHandler::SELECT) && intersect &&paintTimer >= paintSpawnRate[0] && toolMenuPressed == false) {
-
                 if (entity->GetChild("foliage") == nullptr)
                     parentEntity = entity->AddChild("foliage");
 
@@ -697,7 +687,6 @@ void Editor::PaintBrush(Entity* entity) {
 }
 
 void Editor::WidgetGizmo(Entity* entity) {
-
     // Widget Controller for translation, rotation  and scale.
     ImGuizmo::BeginFrame();
     ImGuizmo::Enable(true);

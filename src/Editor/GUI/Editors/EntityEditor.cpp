@@ -250,21 +250,24 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
         }
         ImGui::EndPopup();
     }
+
     // Paint Mode. Load vertices and indices.
     if (entity->GetComponent<Component::Mesh>()->geometry != nullptr) {
-        if (entity->loadPaintModeClicked == false) {
+        if (!entity->loadPaintModeClicked) {
             if (ImGui::Button("Load paint mode.")) {
                 entity->loadPaintModeClicked = true;
                 entity->vertsLoaded = true;
             }
         }
+
         if (entity->loadPaintModeClicked) {
-            if (entity->brushActive == false) {
+            if (!entity->brushActive) {
                 if (ImGui::Button("Activate paint brush")) {
                     entity->brushActive = true;
                 }
             }
-            if (entity->brushActive == true) {
+
+            if (entity->brushActive) {
                 if (ImGui::Button("Exit paint brush")) {
                     entity->brushActive = false;
                     entity->loadPaintModeClicked = false;
@@ -470,13 +473,10 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
                 else if (typeId == asTYPEID_FLOAT)
                     ImGui::DraggableFloat(script->instance->GetPropertyName(n), *(float*)script->GetDataFromPropertyMap(propertyName), 0.0f);
                 else if (typeId == script->instance->GetEngine()->GetTypeIdByDecl("Entity@")) {
-
                     if (propertyName != "self") {
-
                         unsigned int GUID = *(unsigned int*)script->GetDataFromPropertyMap(propertyName);
 
                         if (GUID != 0) {
-
                             std::string entityGUID = std::to_string(GUID);
                             std::string entityName = Hymn().GetEntityByGUID(GUID)->name;
                             std::string propertyText;
@@ -490,10 +490,7 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
                             if (ImGui::Button(popupName.c_str()))
                                 ImGui::OpenPopup(popupName.c_str());
-
-
                         } else {
-
                             std::string entityGUID = "???";
                             std::string entityName = "Uninitialized";
                             std::string propertyText;
@@ -507,7 +504,6 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 
                             if (ImGui::Button(popupName.c_str()))
                                 ImGui::OpenPopup(popupName.c_str());
-
                         }
 
                         if (ImGui::BeginPopup(popupName.c_str())) {
@@ -624,11 +620,9 @@ void GUI::EntityEditor::ParticleSystemEditor(Component::ParticleSystemComponent*
 
         if (curveEditor.GetAllCurves()[i].editVelocityZ)
             particleSystem->particleType.velocity.z = curveEditor.GetAllCurves()[i].value_you_care_about;
-
     }
 
     ImGui::Unindent();
-
 }
 
 void EntityEditor::TriggerEditor(Component::Trigger* trigger) {

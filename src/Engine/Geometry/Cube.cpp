@@ -241,7 +241,6 @@ Cube::Cube() {
 }
 
 Cube::~Cube() {
-
 }
 
 Video::Geometry::Geometry3D::Type Cube::GetType() const {

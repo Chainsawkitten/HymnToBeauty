@@ -76,10 +76,8 @@ namespace GUI {
                     if (ImGui::InputText("Name", name.data(), name.size()))
                         repeat->SetName(name.data());
 
-
                     // DELAY
                     if (ImGui::InputFloat("Delay", &delay, 0.1f, 1.0f, 1)) {
-
                         if (delay < 0.0f)
                             delay = 0.0f;
 
@@ -92,7 +90,6 @@ namespace GUI {
 
                     // COOLDOWN
                     if (ImGui::InputFloat("Cooldown", &cooldown, 0.1f, 1.0f, 1)) {
-
                         if (cooldown < 0.0f)
                             cooldown = 0.0f;
 
@@ -106,7 +103,6 @@ namespace GUI {
 
                     // CHARGES
                     if (ImGui::InputInt("Charges", &charges)) {
-
                         if (charges < 0)
                             charges = 0;
 
@@ -126,17 +122,15 @@ namespace GUI {
                     if (ImGui::RadioButton("Yes", &startActive, 1))
                         repeat->SetStartActive(true);
 
-
                     ImGui::SameLine();
 
                     if (ImGui::RadioButton("No", &startActive, 0))
                         repeat->SetStartActive(false);
 
-
                     break;
                 }
-                case SUBJECTS: {
 
+                case SUBJECTS: {
                     // Hardcoded single event for demonstration purposes
                     if (ImGui::Button("New event", ImVec2(100, 25))) {
                         triggerEvent::EventStruct newStruct;
@@ -213,7 +207,6 @@ namespace GUI {
                             repeat->GetEventVector()->at(i).m_targetID = targetID;
 
                             for (std::size_t j = 0; j < Hymn().world.GetEntities().size(); ++j) {
-
                                 if (Hymn().world.GetEntities().at(j)->name == entityName.at(targetID)) {
                                     repeat->GetTargetEntity()->push_back(Hymn().world.GetEntities().at(j));
                                     repeat->GetEventVector()->at(i).check[2] = true;
@@ -229,11 +222,8 @@ namespace GUI {
 
                         if (!repeat->GetTargetEntity()->empty()) {
                             for (std::size_t x = 0; x < repeat->GetTargetEntity()->size(); ++x) {
-
                                 if (repeat->GetTargetEntity()->at(x)->GetComponent<Component::Script>() != nullptr && repeat->GetTargetEntity()->at(x)->name == entityName.at(targetID)) {
-
                                     for (std::size_t j = 0; j < repeat->GetTargetEntity()->at(x)->GetComponent<Component::Script>()->scriptFile->functionList.size(); ++j) {
-
                                         if (std::find(scriptVector.begin(), scriptVector.end(), repeat->GetTargetEntity()->at(x)->GetComponent<Component::Script>()->scriptFile->functionList.at(j)) == scriptVector.end())
                                             scriptVector.push_back(repeat->GetTargetEntity()->at(x)->GetComponent<Component::Script>()->scriptFile->functionList.at(j));
                                     }

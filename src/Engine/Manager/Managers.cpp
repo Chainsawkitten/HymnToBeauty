@@ -13,7 +13,6 @@
 #include "Utility/Log.hpp"
 
 Hub::Hub() {
-
 }
 
 Hub& Managers() {

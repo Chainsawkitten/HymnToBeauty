@@ -141,7 +141,6 @@ namespace tween {
             case TYPE::QUINTOUT: {
                 double f = (p - 1);
                 return f * f * f * f * f + 1;
-
             }
 
             // Modeled after the piecewise quintic
@@ -657,8 +656,7 @@ namespace ImGui {
 
         return modified;
     }
-
-};
+}
 
 CurveEditor::CurveEditor() {
     curves.clear();
@@ -670,7 +668,6 @@ CurveEditor::~CurveEditor() {
 }
 
 void CurveEditor::Show() {
-
     UpdateCurves(0.1f, 100.0f);
 
     if (ImGui::Begin("Curve editor")) {
@@ -684,7 +681,6 @@ void CurveEditor::Show() {
     }
 
     ImGui::End();
-
 }
 
 bool CurveEditor::IsVisible() const {
@@ -707,7 +703,6 @@ void CurveEditor::AddMyCurve(const std::string& curve_name, ImGuiID uniqueId, in
 }
 
 void CurveEditor::UpdateCurves(float deltaTime, float totalTime) {
-
     if (time >= totalTime) {
         time = totalTime;
         goBack = true;

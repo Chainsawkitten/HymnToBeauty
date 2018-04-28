@@ -14,7 +14,6 @@ void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum
 void APIENTRY DebugMessageCallbackIgnoreNotifications(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 MainWindow::MainWindow(int width, int height, bool fullscreen, bool borderless, const char* title, bool debugContext) {
-
     if (borderless)
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
@@ -113,7 +112,6 @@ void MainWindow::SetWindowMode(bool fullscreen, bool borderless) const {
     glfwGetWindowPos(window, &x, &y);
     glfwGetWindowSize(window, &width, &height);
     glfwSetWindowMonitor(window, fullscreen ? glfwGetPrimaryMonitor() : nullptr, 50, 50, width, height, GLFW_DONT_CARE);
-
 }
 
 void MainWindow::GetWindowMode(bool& fullscreen, bool& borderless) const {
