@@ -133,11 +133,7 @@ set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
 set(ALSOFT_TESTS OFF CACHE BOOL "Don't build OpenAL Soft tests" FORCE)
 add_subdirectory(openal-soft)
 add_library(OpenALSoft INTERFACE)
-if(WIN32)
-    target_link_libraries(OpenALSoft INTERFACE OpenAL32)
-else()
-    target_link_libraries(OpenALSoft INTERFACE openal)
-endif()
+target_link_libraries(OpenALSoft INTERFACE OpenAL)
 target_include_directories(OpenALSoft INTERFACE openal-soft/include)
 
 # STB
