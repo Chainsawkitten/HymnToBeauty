@@ -199,7 +199,6 @@ Json::Value TriggerRepeat::Save() {
         component["triggerEventStruct_Check_1"] = eventVector.front().check[1]; // ADD SUPPORT FOR VECTOR
         component["triggerEventStruct_Check_2"] = eventVector.front().check[2]; // ADD SUPPORT FOR VECTOR
         component["triggerEventStruct_Check_3"] = eventVector.front().check[3]; // ADD SUPPORT FOR VECTOR
-
     }
 
     component["triggerCollidedEntityUID"] = collidedEntityUID;

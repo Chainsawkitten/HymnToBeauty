@@ -517,9 +517,7 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
                         }
 
                         ImGui::Separator();
-
                     }
-
                 }
                 /// @todo This will be used to handle objects in the scripts
                 //else if (typeId & asTYPEID_SCRIPTOBJECT){

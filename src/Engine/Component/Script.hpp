@@ -76,7 +76,6 @@ namespace Component {
                         typeID = -1;
                         size = -1;
                         data = nullptr;
-
                     }
 
                     Property(int _typeID, int _size, void* _data) {
