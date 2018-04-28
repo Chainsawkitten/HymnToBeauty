@@ -12,8 +12,6 @@
 
 #include "Utility/Log.hpp"
 
-#include "../Component/Animation.hpp"
-
 Hub::Hub() {
 
 }

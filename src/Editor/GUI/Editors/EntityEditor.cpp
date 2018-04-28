@@ -1,7 +1,6 @@
 #include "EntityEditor.hpp"
 
 #include <Engine/Component/AnimationController.hpp>
-#include <Engine/Component/Animation.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Material.hpp>
