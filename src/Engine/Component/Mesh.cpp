@@ -7,7 +7,6 @@
 using namespace Component;
 
 Mesh::Mesh() {
-
 }
 
 Mesh::~Mesh() {

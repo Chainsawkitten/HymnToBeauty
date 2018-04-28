@@ -5,7 +5,6 @@
 using namespace Component;
 
 DirectionalLight::DirectionalLight() {
-
 }
 
 Json::Value DirectionalLight::Save() const {

@@ -36,7 +36,6 @@ void SceneEditor::Show() {
         ShowEntity(Hymn().world.GetRoot());
 
         switch (draggedItemState) {
-
         case NOT_ACTIVE:
             if (draggedEntity != nullptr)
                 draggedItemState = DraggedItemState::ACTIVATED_THIS_FRAME;
@@ -65,10 +64,9 @@ void SceneEditor::Show() {
 
         default:
             break;
-
         }
-
     }
+
     ImGui::End();
 }
 

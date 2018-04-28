@@ -27,5 +27,4 @@ class ScriptFile {
 
         /// A list containing all the functions for the script.
         std::vector<std::string> functionList;
-
 };

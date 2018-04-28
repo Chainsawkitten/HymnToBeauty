@@ -8,7 +8,6 @@ using namespace GUI;
 using namespace std;
 
 FileSelector::FileSelector() : path("Hymn to Beauty") {
-
 }
 
 void FileSelector::Show() {

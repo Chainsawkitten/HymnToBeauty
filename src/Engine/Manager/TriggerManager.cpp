@@ -11,7 +11,6 @@
 
 
 TriggerManager::TriggerManager() {
-
 }
 
 TriggerManager::~TriggerManager() {
@@ -28,7 +27,6 @@ void TriggerManager::ProcessTriggers() {
 }
 
 Component::Trigger* TriggerManager::CreateTrigger() {
-
     auto comp = triggerComponents.Create();
 
     AddTriggerRepeat(comp, std::make_shared<Physics::Shape>(Physics::Shape::Sphere(1.0f)));
@@ -37,7 +35,6 @@ Component::Trigger* TriggerManager::CreateTrigger() {
 }
 
 Component::Trigger* TriggerManager::CreateTrigger(const Json::Value& node) {
-
     auto comp = triggerComponents.Create();
     auto repeat = new TriggerRepeat;
     std::string name = node.get("trigger", "").asString();
@@ -80,7 +77,6 @@ Component::Trigger* TriggerManager::CreateTrigger(const Json::Value& node) {
 }
 
 void TriggerManager::AddTriggerRepeat(Component::Trigger* trigger, std::shared_ptr<Physics::Shape> shape) {
-
     auto triggerVolume = Managers().physicsManager->CreateTrigger(shape);
 
     delete trigger->superTrigger;
@@ -102,7 +98,6 @@ const std::vector<Component::Trigger*>& TriggerManager::GetTriggerComponents() c
 }
 
 void TriggerManager::SynchronizeTriggers() {
-
     for (auto trigger : triggerComponents.GetAll()) {
         if (trigger->IsKilled() || !trigger->entity->IsEnabled())
             continue;
@@ -121,7 +116,6 @@ void TriggerManager::InitiateUID() {
             continue;
 
         trigger->superTrigger->InitTriggerUID();
-
     }
 }
 
@@ -131,6 +125,5 @@ void TriggerManager::InitiateVolumes() {
             continue;
 
         trigger->superTrigger->InitiateVolumes();
-
     }
 }

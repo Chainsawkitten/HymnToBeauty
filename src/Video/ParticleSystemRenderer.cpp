@@ -63,7 +63,6 @@ ParticleSystemRenderer::ParticleSystemRenderer(int count) {
 }
 
 ParticleSystemRenderer::~ParticleSystemRenderer() {
-
     delete shaderProgram;
     delete computeShaderProgram;
 
@@ -213,7 +212,6 @@ void ParticleSystemRenderer::Update(float dt, ParticleSystemRenderer::EmitterSet
 }
 
 void ParticleSystemRenderer::Draw(Texture2D* textureAtlas, unsigned int textureAtlasRows, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, ParticleSystemRenderer::EmitterSettings settings) {
-
     // Blending.
     glDisable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);

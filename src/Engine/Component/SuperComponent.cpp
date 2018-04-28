@@ -3,11 +3,9 @@
 using namespace Component;
 
 SuperComponent::SuperComponent() {
-
 }
 
 SuperComponent::~SuperComponent() {
-
 }
 
 void SuperComponent::Kill() {

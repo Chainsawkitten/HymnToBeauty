@@ -8,7 +8,6 @@
 using namespace Audio;
 
 SoundFile::~SoundFile() {
-
 }
 
 void SoundFile::Save() const {

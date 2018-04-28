@@ -25,7 +25,6 @@ void MousePicking::UpdateProjectionMatrix(const glm::mat4& projection) {
 }
 
 void MousePicking::Update() {
-
     glm::mat4 viewMatrix = glm::inverse(camera->GetModelMatrix());
     this->vMatrix = viewMatrix;
     this->currentRay = CalculateRay();

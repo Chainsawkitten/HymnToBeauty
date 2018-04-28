@@ -40,7 +40,6 @@ template<class C> class ComponentContainer {
 };
 
 template<class C> ComponentContainer<C>::ComponentContainer() {
-
 }
 
 template<class C> ComponentContainer<C>::~ComponentContainer() {

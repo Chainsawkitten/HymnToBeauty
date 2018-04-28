@@ -5,7 +5,6 @@
 namespace Physics {
     TriggerObserver::TriggerObserver(btCollisionObject& body)
     : btCollisionWorld::ContactResultCallback(), rigidBody(body) {
-
     }
 
     btCollisionObject* TriggerObserver::GetBulletCollisionObject() {
@@ -115,7 +114,6 @@ namespace Physics {
     btScalar TriggerObserver::addSingleResult(btManifoldPoint& cp,
         const btCollisionObjectWrapper* colObj0, int partId0, int index0,
         const btCollisionObjectWrapper* colObj1, int partId1, int index1) {
-
         assert(colObj0->getCollisionObject() == &rigidBody || colObj1->getCollisionObject() == &rigidBody);
         didCallback = true;
 

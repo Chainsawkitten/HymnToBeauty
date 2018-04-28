@@ -3,9 +3,7 @@
 using namespace Video;
 
 Texture2D::Texture2D() {
-
 }
 
 Texture2D::~Texture2D() {
-
 }

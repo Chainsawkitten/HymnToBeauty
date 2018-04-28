@@ -84,7 +84,6 @@ namespace Component {
                         size = _size;
                         data = malloc(size);
                         memcpy(data, _data, size);
-
                     }
 
                     ~Property() {

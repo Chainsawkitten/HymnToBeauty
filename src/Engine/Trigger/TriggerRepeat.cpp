@@ -11,7 +11,6 @@
 
 
 TriggerRepeat::TriggerRepeat() {
-
 }
 
 TriggerRepeat::~TriggerRepeat() {
@@ -129,14 +128,14 @@ void TriggerRepeat::SetOwningEntity(Entity* value) {
 }
 
 void TriggerRepeat::InitTriggerUID() {
-
     if (Hymn().GetEntityByGUID(targetEntityUID) != nullptr)
         targetEntity.push_back(Hymn().GetEntityByGUID(targetEntityUID));
+
     if (Hymn().GetEntityByGUID(collidedEntityUID) != nullptr)
         collidedEntity.push_back(Hymn().GetEntityByGUID(collidedEntityUID));
+
     if (Hymn().GetEntityByGUID(owningEntityUID) != nullptr)
         owningEntity = Hymn().GetEntityByGUID(owningEntityUID);
-
 }
 
 void TriggerRepeat::Process() {
@@ -148,7 +147,6 @@ void TriggerRepeat::Process() {
 }
 
 void TriggerRepeat::Update() {
-
     if (owningEntity != nullptr) {
         Managers().physicsManager->SetPosition(triggerVolume, owningEntity->GetWorldPosition());
 
@@ -211,7 +209,6 @@ Json::Value TriggerRepeat::Save() {
         component["triggerOwner"] = owningEntity->GetUniqueIdentifier();
 
     return component;
-
 }
 
 void TriggerRepeat::SetCollidedEntityUID(int value) {

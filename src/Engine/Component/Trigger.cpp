@@ -8,7 +8,6 @@ Trigger::Trigger() {
 }
 
 Trigger::~Trigger() {
-
     if (superTrigger != nullptr)
         delete superTrigger;
 }

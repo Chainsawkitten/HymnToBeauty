@@ -83,5 +83,4 @@ std::uint64_t Query::Resolve() const {
         return results[1] - results[0];
     else
         return results[0];
-
 }

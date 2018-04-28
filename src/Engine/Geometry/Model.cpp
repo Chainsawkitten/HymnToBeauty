@@ -8,11 +8,9 @@
 using namespace Geometry;
 
 Model::Model() {
-
 }
 
 Model::~Model() {
-
 }
 
 Json::Value Model::Save() const {

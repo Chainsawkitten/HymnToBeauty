@@ -3,7 +3,6 @@
 using namespace Component;
 
 Listener::Listener() {
-
 }
 
 Json::Value Listener::Save() const {
