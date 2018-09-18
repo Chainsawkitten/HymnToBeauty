@@ -1,6 +1,6 @@
 #include "MainWindow.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Manager/Managers.hpp"
 #include "Manager/RenderManager.hpp"

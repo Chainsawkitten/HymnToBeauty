@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <random>
 #include <map>
 #include <Video/ParticleSystemRenderer.hpp>

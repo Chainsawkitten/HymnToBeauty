@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 namespace Video {
     /// Storage buffer used to store and retrieve data on the GPU.

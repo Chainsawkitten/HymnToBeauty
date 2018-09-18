@@ -56,7 +56,7 @@ set(SRCS
         Physics/TriggerObserver.cpp
         Trigger/SuperTrigger.cpp
         Trigger/TriggerRepeat.cpp
-        Trigger/TriggerOnce.cpp	
+        Trigger/TriggerOnce.cpp
         Util/FileSystem.cpp
         Util/GPUProfiling.cpp
         Util/Input.cpp
@@ -124,7 +124,7 @@ set(HEADERS
         Physics/TriggerObserver.hpp
         Trigger/SuperTrigger.hpp
         Trigger/TriggerRepeat.hpp
-        Trigger/TriggerOnce.hpp	
+        Trigger/TriggerOnce.hpp
         Util/FileSystem.hpp
         Util/GPUProfiling.hpp
         Util/Input.hpp

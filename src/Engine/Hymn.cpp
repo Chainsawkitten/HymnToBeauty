@@ -24,6 +24,11 @@
 #include "Util/GPUProfiling.hpp"
 #include "Entity/Entity.hpp"
 
+// Fix windows.h pollution.
+#ifdef _WIN32
+#undef CreateDirectory
+#endif
+
 using namespace std;
 
 ActiveHymn::ActiveHymn() {

@@ -7,7 +7,6 @@
 #include <Engine/Texture/TextureAsset.hpp>
 #include <Engine/Audio/VorbisFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
-#include <Engine/Util/FileSystem.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/MainWindow.hpp>
 #include <fstream>
@@ -17,6 +16,13 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <cstdio>
 #include <Utility/Log.hpp>
+
+// Fix windows.h pollution.
+#ifdef _WIN32
+#undef CreateDirectory
+#endif
+
+#include <Engine/Util/FileSystem.hpp>
 
 using namespace GUI;
 using namespace std;

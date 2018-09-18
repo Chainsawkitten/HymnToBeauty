@@ -1,6 +1,6 @@
 #include "Query.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <Utility/Log.hpp>
 
 using namespace Video;

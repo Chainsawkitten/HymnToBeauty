@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Engine/MainWindow.hpp>
 #include "Editor.hpp"
@@ -39,7 +39,11 @@ int main() {
 
     MainWindow* window = new MainWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), false, false, "Hymn to Beauty", EditorSettings::GetInstance().GetBool("Debug Context"));
 
-    glewInit();
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+        Log() << "Failed to initialize OpenGL context\n";
+        return -1;
+    }
+
     window->Init(false);
 
     Input::GetInstance().SetWindow(window->GetGLFWWindow());

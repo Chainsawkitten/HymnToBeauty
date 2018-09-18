@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Engine/MainWindow.hpp>
 #include <Engine/Manager/Managers.hpp>
@@ -23,7 +23,12 @@ int main(int argc, char* argv[]) {
     Log() << "Game started - " << time(nullptr) << "\n";
 
     MainWindow* window = new MainWindow(1920, 1080, true, false, "Hymn to Beauty", false);
-    glewInit();
+
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+        Log() << "Failed to initialize OpenGL context\n";
+        return -1;
+    }
+
     window->Init(false);
     Input::GetInstance().SetWindow(window->GetGLFWWindow());
     Input()->AssignButton(InputHandler::WINDOWMODE, InputHandler::KEYBOARD, GLFW_KEY_F4);
