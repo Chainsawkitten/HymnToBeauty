@@ -42,6 +42,11 @@
 #include "ResourceManager.hpp"
 #include "RenderManager.hpp"
 
+// Fix windows.h pollution.
+#ifdef _WIN32
+#undef SendMessage
+#endif
+
 using namespace Component;
 
 void AngelScriptMessageCallback(const asSMessageInfo* message, void* param) {

@@ -25,7 +25,7 @@ after_build:
         
         $env:BUILD_NAME = $BUILD_NAME
         
-        7z a -tzip $BUILD_NAME .\bin\Release\Game.exe .\bin\Release\glew32.dll .\bin\Release\Editor.exe .\bin\Release\OpenAL32.dll
+        7z a -tzip $BUILD_NAME .\bin\Release\Game.exe .\bin\Release\Editor.exe .\bin\Release\OpenAL32.dll
 
 artifacts:
   - path: $(BUILD_NAME)

@@ -38,8 +38,8 @@ void ReadWriteTexture::CreateTexture(GLuint& texture, unsigned width, unsigned h
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    if (format == GL_DEPTH_COMPONENT)
-        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+    //if (format == GL_DEPTH_COMPONENT)
+    //    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

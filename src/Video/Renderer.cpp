@@ -1,6 +1,5 @@
 #include "Renderer.hpp"
 
-#include <GL/glew.h>
 #include "RenderProgram/StaticRenderProgram.hpp"
 #include "RenderProgram/SkinRenderProgram.hpp"
 #include "RenderSurface.hpp"

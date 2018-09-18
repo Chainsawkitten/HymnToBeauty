@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 namespace Video {
     class TexturePNG;

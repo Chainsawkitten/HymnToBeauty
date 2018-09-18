@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glad/glad.h>
 #include <string>
 
 /// Run video error check.
@@ -15,6 +16,9 @@ class VideoErrorCheck {
         ~VideoErrorCheck();
 
     private:
+        void CheckError(const char* message);
+        static const char* GetErrorString(GLenum error);
+
         std::string name;
 };
 

@@ -2,7 +2,6 @@
 
 #include "Filter.hpp"
 #include <glm/glm.hpp>
-#include <GL/glew.h>
 
 namespace Video {
     /// Fast approximate anti-aliasing filter.

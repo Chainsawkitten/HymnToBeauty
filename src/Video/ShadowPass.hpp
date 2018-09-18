@@ -1,6 +1,6 @@
 #pragma once
 
-///Handles writing and creation of shadowmap.
+/// Handles writing and creation of shadowmap.
 namespace Video {
     class ShadowPass {
         public:
