@@ -10,10 +10,6 @@ namespace Component {
             /// Create new point light.
             PointLight();
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Color.

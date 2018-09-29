@@ -34,7 +34,6 @@ class EditorSettings : public Settings {
          */
         static EditorSettings& GetInstance();
 
-        /// Save the settings to an INI file.
         void Save() final;
 
     private:

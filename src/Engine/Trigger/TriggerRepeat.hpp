@@ -143,22 +143,10 @@ class TriggerRepeat : public SuperTrigger {
          */
         void SetOwningEntity(Entity* value);
 
-        /// Process the trigger in case of collision.
         void Process() override;
-
-        /// Update position for trigger volume.
         void Update() override;
-
-        /// Save the trigger.
-        /**
-         * @return JSON value to be stored on disk.
-         */
         Json::Value Save() override;
-
-        /// Initialize entity references for triggers via entity UIDs.
         void InitTriggerUID() override;
-
-        /// Initialize trigger volumes.
         void InitiateVolumes() override;
 
         /// Set UID for this triggers collided entity.

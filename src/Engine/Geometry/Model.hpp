@@ -35,10 +35,6 @@ namespace Geometry {
              */
             void Load(const char* filename);
 
-            /// Get geometry type.
-            /**
-             * @return Type.
-             */
             Type GetType() const final;
 
             /// The name of the model.

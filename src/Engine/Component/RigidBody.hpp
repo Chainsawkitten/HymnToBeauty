@@ -27,10 +27,6 @@ namespace Component {
             /// Destructor.
             ~RigidBody();
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Return a value indicating whether the rigid body is kinematic

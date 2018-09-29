@@ -19,10 +19,6 @@ namespace Component {
             /// Create new shape.
             Shape() = default;
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Get the shape this component represents.

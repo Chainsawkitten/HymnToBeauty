@@ -18,10 +18,6 @@ namespace Component {
             /// Create new animation controller component.
             AnimationController();
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Update the animation controller.

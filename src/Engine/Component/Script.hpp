@@ -18,10 +18,6 @@ namespace Component {
             /// Destructor.
             ~Script() final;
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Whether the script component has been initialized.

@@ -13,19 +13,8 @@ namespace Video {
             /// Free allocated resources.
             ~FXAAFilter();
 
-            /// Get shader program.
-            /**
-             * @return Shader program
-             */
             Video::ShaderProgram* GetShaderProgram() const final;
-
-            /// Get the location of the diffuse uniform.
-            /**
-             * @return The location of the diffuse uniform.
-             */
             GLuint GetDiffuseLocation() const final;
-
-            /// Set uniforms.
             void SetUniforms() final;
 
             /// Set the screen size used when calculating FXAA.

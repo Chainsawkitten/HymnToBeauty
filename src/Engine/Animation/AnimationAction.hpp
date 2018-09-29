@@ -18,16 +18,7 @@ namespace Animation {
             /// Destructor.
             ~AnimationAction() override;
 
-            /// Save the animation action node.
-            /**
-             * @param file File to save to.
-             */
             void Save(std::ofstream* file) override;
-
-            /// Load the animation action node.
-            /**
-             * @param file File to load from.
-             */
             void Load(std::ifstream* file) override;
 
             /// Name of animation.

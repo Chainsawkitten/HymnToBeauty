@@ -18,10 +18,6 @@ namespace Component {
             /// Destructor.
             ~Mesh() override;
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Geometry data.

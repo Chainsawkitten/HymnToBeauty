@@ -20,10 +20,6 @@ namespace Component {
             /// Destructor.
             ~SoundSource();
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Play the sound.
