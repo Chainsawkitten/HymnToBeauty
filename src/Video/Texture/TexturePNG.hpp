@@ -22,17 +22,7 @@ namespace Video {
             /// Destructor.
             ~TexturePNG() override;
 
-            /// Get OpenGL texture ID.
-            /**
-             * Used when binding a texture before draw calls.
-             * @return The OpenGL texture identifier
-             */
             GLuint GetTextureID() const override;
-
-            /// Get whether the texture has been loaded yet.
-            /**
-             * @return Whether the texture has been loaded yet.
-             */
             bool IsLoaded() const override;
 
         private:

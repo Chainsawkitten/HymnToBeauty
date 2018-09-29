@@ -85,14 +85,15 @@ namespace Physics {
             void ForgetLeave();
 
         private:
-            /// Overridden from btCollisionWorld::ContactResultCallback for
-            /// custom intersection handling.
-            virtual btScalar addSingleResult(btManifoldPoint& cp,
+            // Overridden from btCollisionWorld::ContactResultCallback for
+            // custom intersection handling.
+            btScalar addSingleResult(btManifoldPoint& cp,
                 const btCollisionObjectWrapper* colObj0, int partId0, int index0,
                 const btCollisionObjectWrapper* colObj1, int partId1, int index1) override;
 
             IntersectionPhase phase = IntersectionPhase::None;
             btCollisionObject& rigidBody;
+
             // Control value to determine whether an intersection happened
             // during this frame. This is used to determine the new phase.
             bool didCallback = false;

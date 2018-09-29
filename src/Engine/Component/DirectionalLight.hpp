@@ -10,10 +10,6 @@ namespace Component {
             /// Create new directional light.
             DirectionalLight();
 
-            /// Save the component.
-            /**
-             * @return JSON value to be stored on disk.
-             */
             Json::Value Save() const override;
 
             /// Color.

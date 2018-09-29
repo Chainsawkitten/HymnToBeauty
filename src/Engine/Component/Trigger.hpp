@@ -29,10 +29,6 @@ namespace Component {
         /// Destructor.
         ~Trigger() override;
 
-        /// Save the component.
-        /**
-         * @return JSON value to be stored on disk.
-         */
         Json::Value Save() const override;
 
         /// Get trigger of this component.

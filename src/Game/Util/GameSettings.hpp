@@ -18,7 +18,6 @@ class GameSettings : public Settings {
          */
         static GameSettings& GetInstance();
 
-        /// Save the settings to an INI file.
         void Save() final;
 
         /// Load the settings from INI file.

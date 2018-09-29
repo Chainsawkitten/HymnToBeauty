@@ -13,10 +13,6 @@ namespace Geometry {
             /// Destructor.
             ~Cube() final;
 
-            /// Get geometry type.
-            /**
-             * @return Type.
-             */
             Type GetType() const override;
 
         protected:

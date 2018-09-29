@@ -10,10 +10,6 @@ namespace Component {
         /// Create new spot light.
         SpotLight();
 
-        /// Save the component.
-        /**
-         * @return JSON value to be stored on disk.
-         */
         Json::Value Save() const override;
 
         /// Color.
