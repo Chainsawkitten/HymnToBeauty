@@ -7,7 +7,7 @@ Contains rendering functionality. Renders meshes, particles and debug primitives
 
 ### External libraries
 - Assimp
-- GLEW
+- glad
 - GLM
 - JsonCpp
 - STB
