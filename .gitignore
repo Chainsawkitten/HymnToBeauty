@@ -8,9 +8,7 @@
 *.user
 
 # Doxygen
-DocumentationEngine
-DocumentationEditor
-DocumentationGame
+docs
 
 # Precompiled Headers
 *.gch
