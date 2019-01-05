@@ -49,7 +49,8 @@ void StorageBuffer::Unbind() {
 }
 
 void StorageBuffer::BindBase(unsigned int binding) const {
-    { VIDEO_ERROR_CHECK("StorageBuffer::BindBase");
+    {
+        VIDEO_ERROR_CHECK("StorageBuffer::BindBase");
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, (GLuint)binding, ssbo);
     }
 }

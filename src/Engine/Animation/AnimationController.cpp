@@ -70,7 +70,8 @@ void AnimationController::Load(const std::string& name) {
 
     // Check if file is open, if not log and early return.
     if (!file.is_open()) {
-        Log() << "Could not load animation controller file: " << Hymn().GetPath() + "/" + name + ".asset" << "\n";
+        Log() << "Could not load animation controller file: " << Hymn().GetPath() + "/" + name + ".asset"
+              << "\n";
         file.close();
         return;
     }
@@ -80,7 +81,7 @@ void AnimationController::Load(const std::string& name) {
 
     uint32_t numNodes = 0;
     file.read(reinterpret_cast<char*>(&numNodes), sizeof(uint32_t));
-    for (unsigned int i = 0; i < numNodes; ++i)  {
+    for (unsigned int i = 0; i < numNodes; ++i) {
         NodeType nodeType;
         file.read(reinterpret_cast<char*>(&nodeType), sizeof(NodeType));
         if (nodeType == ACTION) {

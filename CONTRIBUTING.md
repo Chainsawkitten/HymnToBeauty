@@ -18,28 +18,28 @@ All non-private members need to be documented using Doxygen-style comments.
 
 /// A happy little fish.
 class Fish : public Example {
-    public:
-        /// Create new fish.
-        /**
-         * @param name The name to give the fish.
-         */
-        Fish(const std::string& name);
+  public:
+    /// Create new fish.
+    /**
+     * @param name The name to give the fish.
+     */
+    Fish(const std::string& name);
+    
+    /// Display the name of the fish.
+    /**
+     * @param prefix Whether to prefix the output with 'A fish called '.
+     */
+    void DisplayName(bool prefix = false) const;
 
-        /// Display the name of the fish.
-        /**
-         * @param prefix Whether to prefix the output with 'A fish called '.
-         */
-        void DisplayName(bool prefix = false) const;
+    /// Get whether the fish is happy.
+    /**
+     * @return Whether the fish is happy.
+     */
+    bool GetHappy() const;
 
-        /// Get whether the fish is happy.
-        /**
-         * @return Whether the fish is happy.
-         */
-        bool GetHappy() const;
-
-    private:
-        std::string name;
-        Fish* nextFish;
+  private:
+    std::string name;
+    Fish* nextFish;
 }
 
 Fish::Fish(const std::string& name) {

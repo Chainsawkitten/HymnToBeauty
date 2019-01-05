@@ -5,11 +5,9 @@
 #include <Engine/Geometry/MathFunctions.hpp>
 #include <Utility/Log.hpp>
 
-AssetConverterSkeleton::AssetConverterSkeleton() {
-}
+AssetConverterSkeleton::AssetConverterSkeleton() {}
 
-AssetConverterSkeleton::~AssetConverterSkeleton() {
-}
+AssetConverterSkeleton::~AssetConverterSkeleton() {}
 
 bool AssetConverterSkeleton::Convert(const char* filepath, const char* destination, bool isSkeleton) {
     success = true;

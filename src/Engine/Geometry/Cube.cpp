@@ -10,160 +10,40 @@ Cube::Cube() {
     verticesPos.resize(vertexCount);
 
     // Side 1
-    vertexData[0] = {
-        glm::vec3(0.5f, 0.5f, 0.5f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
-    vertexData[1] = {
-        glm::vec3(-0.5f, -0.5f, 0.5f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
-    vertexData[2] = {
-        glm::vec3(0.5f, -0.5f, 0.5f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
-    vertexData[3] = {
-        glm::vec3(-0.5f, 0.5f, 0.5f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
+    vertexData[0] = {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+    vertexData[1] = {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+    vertexData[2] = {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+    vertexData[3] = {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
 
     // Side 2
-    vertexData[4] = {
-        glm::vec3(-0.5f, 0.5f, -0.5f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f)
-    };
-    vertexData[5] = {
-        glm::vec3(-0.5f, -0.5f, -0.5f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f)
-    };
-    vertexData[6] = {
-        glm::vec3(-0.5f, -0.5f, 0.5f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f)
-    };
-    vertexData[7] = {
-        glm::vec3(-0.5f, 0.5f, 0.5f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f)
-    };
+    vertexData[4] = {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)};
+    vertexData[5] = {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)};
+    vertexData[6] = {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)};
+    vertexData[7] = {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)};
 
     // Side 3
-    vertexData[8] = {
-        glm::vec3(0.5f, 0.5f, -0.5f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-    vertexData[9] = {
-        glm::vec3(0.5f, -0.5f, -0.5f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-    vertexData[10] = {
-        glm::vec3(0.5f, -0.5f, 0.5f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-    vertexData[11] = {
-        glm::vec3(0.5f, 0.5f, 0.5f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
+    vertexData[8] = {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    vertexData[9] = {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    vertexData[10] = {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    vertexData[11] = {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     // Side 4
-    vertexData[12] = {
-        glm::vec3(0.5f, 0.5f, -0.5f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f)
-    };
-    vertexData[13] = {
-        glm::vec3(-0.5f, -0.5f, -0.5f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f)
-    };
-    vertexData[14] = {
-        glm::vec3(0.5f, -0.5f, -0.5f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f)
-    };
-    vertexData[15] = {
-        glm::vec3(-0.5f, 0.5f, -0.5f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f)
-    };
+    vertexData[12] = {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)};
+    vertexData[13] = {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)};
+    vertexData[14] = {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)};
+    vertexData[15] = {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)};
 
     // Side 5
-    vertexData[16] = {
-        glm::vec3(-0.5f, -0.5f, 0.5f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
-    vertexData[17] = {
-        glm::vec3(0.5f, -0.5f, 0.5f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
-    vertexData[18] = {
-        glm::vec3(0.5f, -0.5f, -0.5f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
-    vertexData[19] = {
-        glm::vec3(-0.5f, -0.5f, -0.5f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f)
-    };
+    vertexData[16] = {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+    vertexData[17] = {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+    vertexData[18] = {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+    vertexData[19] = {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
 
     // Side 6
-    vertexData[20] = {
-        glm::vec3(-0.5f, 0.5f, 0.5f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-    vertexData[21] = {
-        glm::vec3(0.5f, 0.5f, 0.5f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-    vertexData[22] = {
-        glm::vec3(0.5f, 0.5f, -0.5f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-    vertexData[23] = {
-        glm::vec3(-0.5f, 0.5f, -0.5f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f)
-    };
+    vertexData[20] = {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    vertexData[21] = {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    vertexData[22] = {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
+    vertexData[23] = {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)};
 
     // Store vertex positions
     for (std::size_t i = 0; i < vertices.size(); ++i) {
@@ -240,8 +120,7 @@ Cube::Cube() {
     indices.shrink_to_fit();
 }
 
-Cube::~Cube() {
-}
+Cube::~Cube() {}
 
 Video::Geometry::Geometry3D::Type Cube::GetType() const {
     return STATIC;

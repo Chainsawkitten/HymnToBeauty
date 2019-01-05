@@ -27,18 +27,18 @@
  * Grid Snap Size         | Size to snap to.                 | long   | 100
  */
 class EditorSettings : public Settings {
-    public:
-        /// Get the instance of the class.
-        /**
-         * @return The %EditorSettings instance
-         */
-        static EditorSettings& GetInstance();
+  public:
+    /// Get the instance of the class.
+    /**
+     * @return The %EditorSettings instance
+     */
+    static EditorSettings& GetInstance();
 
-        void Save() final;
+    void Save() final;
 
-    private:
-        EditorSettings();
+  private:
+    EditorSettings();
 
-        EditorSettings(EditorSettings const&) = delete;
-        void operator=(EditorSettings const&) = delete;
+    EditorSettings(EditorSettings const&) = delete;
+    void operator=(EditorSettings const&) = delete;
 };

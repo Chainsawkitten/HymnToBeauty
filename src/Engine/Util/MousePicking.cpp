@@ -5,7 +5,7 @@
 #include "../Entity/Entity.hpp"
 #include <glm/gtx/transform.hpp>
 
-MousePicking::MousePicking(Entity * cam,  const glm::mat4& projection) {
+MousePicking::MousePicking(Entity* cam, const glm::mat4& projection) {
     this->camera = cam;
     this->pMatrix = projection;
 
@@ -13,8 +13,7 @@ MousePicking::MousePicking(Entity * cam,  const glm::mat4& projection) {
     this->vMatrix = viewMatrix;
 }
 
-MousePicking::~MousePicking() {
-}
+MousePicking::~MousePicking() {}
 
 glm::vec3 MousePicking::GetCurrentRay() const {
     return this->currentRay;
@@ -43,8 +42,8 @@ glm::vec3 MousePicking::CalculateRay() const {
 }
 
 glm::vec2 MousePicking::GetNDC(double mouseX, double mouseY) {
-    double x = (2.0f*mouseX / MainWindow::GetInstance()->GetSize().x - 1.0f);
-    double y = 1.0f - (2.0f*mouseY / MainWindow::GetInstance()->GetSize().y);
+    double x = (2.0f * mouseX / MainWindow::GetInstance()->GetSize().x - 1.0f);
+    double y = 1.0f - (2.0f * mouseY / MainWindow::GetInstance()->GetSize().y);
 
     return glm::vec2(x, y);
 }

@@ -50,11 +50,16 @@ void SoundManager::CheckError(const char* message) {
     ALenum error = alGetError();
     if (error != AL_NO_ERROR) {
         Log() << message << "\n";
-        if (error == AL_INVALID_NAME) Log() << "Invalid name\n";
-        if (error == AL_INVALID_ENUM) Log() << "Invalid enum\n";
-        if (error == AL_INVALID_VALUE) Log() << "Invalid value\n";
-        if (error == AL_INVALID_OPERATION) Log() << "Invalid operation\n";
-        if (error == AL_OUT_OF_MEMORY) Log() << "Out of memory like!\n";
+        if (error == AL_INVALID_NAME)
+            Log() << "Invalid name\n";
+        if (error == AL_INVALID_ENUM)
+            Log() << "Invalid enum\n";
+        if (error == AL_INVALID_VALUE)
+            Log() << "Invalid value\n";
+        if (error == AL_INVALID_OPERATION)
+            Log() << "Invalid operation\n";
+        if (error == AL_OUT_OF_MEMORY)
+            Log() << "Out of memory like!\n";
     }
 }
 
@@ -115,7 +120,7 @@ void SoundManager::Update() {
         glm::quat orientation = entity->GetWorldOrientation();
         glm::vec3 forward = orientation * glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 up = orientation * glm::vec3(0.0f, 1.0f, 0.0f);
-        ALfloat listenerOri[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
+        ALfloat listenerOri[] = {forward.x, forward.y, forward.z, up.x, up.y, up.z};
         alListenerfv(AL_ORIENTATION, listenerOri);
         CheckError("Couldn't set listener orientation.");
 

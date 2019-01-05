@@ -3,8 +3,7 @@
 using namespace Video;
 using namespace Geometry;
 
-Geometry3D::Geometry3D() {
-}
+Geometry3D::Geometry3D() {}
 
 Geometry3D::~Geometry3D() {
     glDeleteBuffers(1, &vertexBuffer);
@@ -73,7 +72,6 @@ void Geometry3D::CreateAxisAlignedBoundingBox(const std::vector<glm::vec3*>& pos
     dim.z = maxValues.z - minValues.z;
     axisAlignedBoundingBox = Video::AxisAlignedBoundingBox(dim, origin, minValues, maxValues);
 }
-
 
 void Geometry3D::CreateAxisAlignedBoundingBox(glm::vec3 dim, glm::vec3 origin, glm::vec3 minValues, glm::vec3 maxValues) {
     axisAlignedBoundingBox = Video::AxisAlignedBoundingBox(dim, origin, minValues, maxValues);

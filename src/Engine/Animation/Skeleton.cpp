@@ -6,8 +6,7 @@
 
 using namespace Animation;
 
-Animation::Skeleton::Skeleton() {
-}
+Animation::Skeleton::Skeleton() {}
 
 void Skeleton::Save(const std::string& path) {
     // Open the file.

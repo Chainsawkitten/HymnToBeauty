@@ -34,7 +34,7 @@ Renderer::Renderer() {
     Shader* iconVertexShader = new Shader(EDITORENTITY_VERT, EDITORENTITY_VERT_LENGTH, GL_VERTEX_SHADER);
     Shader* iconGeometryShader = new Shader(EDITORENTITY_GEOM, EDITORENTITY_GEOM_LENGTH, GL_GEOMETRY_SHADER);
     Shader* iconFragmentShader = new Shader(EDITORENTITY_FRAG, EDITORENTITY_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    iconShaderProgram = new ShaderProgram({ iconVertexShader, iconGeometryShader, iconFragmentShader });
+    iconShaderProgram = new ShaderProgram({iconVertexShader, iconGeometryShader, iconFragmentShader});
     delete iconVertexShader;
     delete iconGeometryShader;
     delete iconFragmentShader;

@@ -8,13 +8,7 @@
 
 using namespace GUI;
 
-enum DraggedItemState {
-    NOT_ACTIVE = 0,
-    ACTIVATED_THIS_FRAME,
-    ACTIVE,
-    DEACTIVATE,
-    DEACTIVATED_THIS_FRAME
-};
+enum DraggedItemState { NOT_ACTIVE = 0, ACTIVATED_THIS_FRAME, ACTIVE, DEACTIVATE, DEACTIVATED_THIS_FRAME };
 DraggedItemState draggedItemState = DraggedItemState::NOT_ACTIVE;
 
 SceneEditor::SceneEditor() {
@@ -108,7 +102,7 @@ void SceneEditor::ShowEntity(Entity* entity) {
     bool opened = ImGui::TreeNodeEx(entity->name.c_str(), leaf ? ImGuiTreeNodeFlags_Leaf : 0);
     bool instantiate = false;
 
-    //If we pressed down on and started dragging on the entity.
+    // If we pressed down on and started dragging on the entity.
     if (draggedEntity == nullptr && ImGui::IsItemActive())
         draggedEntity = entity;
 

@@ -118,15 +118,15 @@ ProfilingManager::Result* ProfilingManager::StartResult(const std::string& name,
     if (type != Type::CPU_TIME) {
         Video::Query::Type queryType;
         switch (type) {
-            case ProfilingManager::Type::GPU_TIME_ELAPSED:
-                queryType = Video::Query::TIME_ELAPSED;
-                break;
-            case ProfilingManager::Type::GPU_SAMPLES_PASSED:
-                queryType = Video::Query::SAMPLES_PASSED;
-                break;
-            default:
-                assert(false);
-                break;
+        case ProfilingManager::Type::GPU_TIME_ELAPSED:
+            queryType = Video::Query::TIME_ELAPSED;
+            break;
+        case ProfilingManager::Type::GPU_SAMPLES_PASSED:
+            queryType = Video::Query::SAMPLES_PASSED;
+            break;
+        default:
+            assert(false);
+            break;
         }
         // Find available query.
         Video::Query* query;
@@ -156,6 +156,6 @@ void ProfilingManager::FinishResult(Result* result, Type type) {
     current[type] = result->parent;
 }
 
-ProfilingManager::Result::Result(const std::string& name, Result* parent) : name (name) {
+ProfilingManager::Result::Result(const std::string& name, Result* parent) : name(name) {
     this->parent = parent;
 }

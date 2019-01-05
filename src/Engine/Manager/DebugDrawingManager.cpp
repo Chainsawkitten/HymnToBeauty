@@ -137,7 +137,7 @@ void DebugDrawingManager::AddMesh(unsigned int id, Component::Mesh* meshComponen
 
 void DebugDrawingManager::Update(float deltaTime) {
     // Points.
-    for (std::size_t i=0; i < points.size(); ++i) {
+    for (std::size_t i = 0; i < points.size(); ++i) {
         if (points[i].duration < 0.f) {
             points[i] = points[points.size() - 1];
             points.pop_back();
@@ -147,7 +147,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Lines.
-    for (std::size_t i=0; i < lines.size(); ++i) {
+    for (std::size_t i = 0; i < lines.size(); ++i) {
         if (lines[i].duration < 0.f) {
             lines[i] = lines[lines.size() - 1];
             lines.pop_back();
@@ -157,7 +157,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Cuboids.
-    for (std::size_t i=0; i < cuboids.size(); ++i) {
+    for (std::size_t i = 0; i < cuboids.size(); ++i) {
         if (cuboids[i].duration < 0.f) {
             cuboids[i] = cuboids[cuboids.size() - 1];
             cuboids.pop_back();
@@ -167,7 +167,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Planes.
-    for (std::size_t i=0; i < planes.size(); ++i) {
+    for (std::size_t i = 0; i < planes.size(); ++i) {
         if (planes[i].duration < 0.f) {
             planes[i] = planes[planes.size() - 1];
             planes.pop_back();
@@ -177,7 +177,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Circles.
-    for (std::size_t i=0; i < circles.size(); ++i) {
+    for (std::size_t i = 0; i < circles.size(); ++i) {
         if (circles[i].duration < 0.f) {
             circles[i] = circles[circles.size() - 1];
             circles.pop_back();
@@ -187,7 +187,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Spheres.
-    for (std::size_t i=0; i < spheres.size(); ++i) {
+    for (std::size_t i = 0; i < spheres.size(); ++i) {
         if (spheres[i].duration < 0.f) {
             spheres[i] = spheres[spheres.size() - 1];
             spheres.pop_back();
@@ -197,7 +197,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Cylinders.
-    for (std::size_t i=0; i < cylinders.size(); ++i) {
+    for (std::size_t i = 0; i < cylinders.size(); ++i) {
         if (cylinders[i].duration < 0.f) {
             cylinders[i] = cylinders[cylinders.size() - 1];
             cylinders.pop_back();
@@ -207,7 +207,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Cone.
-    for (std::size_t i=0; i < cones.size(); ++i) {
+    for (std::size_t i = 0; i < cones.size(); ++i) {
         if (cones[i].duration < 0.f) {
             cones[i] = cones[cones.size() - 1];
             cones.pop_back();

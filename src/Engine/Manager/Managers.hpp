@@ -14,49 +14,49 @@ class TriggerManager;
 class Hub {
     friend Hub& Managers();
 
-    public:
-        /// The resource manager instance.
-        ResourceManager* resourceManager;
+  public:
+    /// The resource manager instance.
+    ResourceManager* resourceManager;
 
-        /// The render manager instance.
-        RenderManager* renderManager;
+    /// The render manager instance.
+    RenderManager* renderManager;
 
-        /// The particle manager instance.
-        ParticleManager* particleManager;
+    /// The particle manager instance.
+    ParticleManager* particleManager;
 
-        /// The physics manager instance.
-        PhysicsManager* physicsManager;
+    /// The physics manager instance.
+    PhysicsManager* physicsManager;
 
-        /// The sound manager instance.
-        SoundManager* soundManager;
+    /// The sound manager instance.
+    SoundManager* soundManager;
 
-        /// The script manager instance.
-        ScriptManager* scriptManager;
+    /// The script manager instance.
+    ScriptManager* scriptManager;
 
-        /// The debug drawing manager instance.
-        DebugDrawingManager* debugDrawingManager;
+    /// The debug drawing manager instance.
+    DebugDrawingManager* debugDrawingManager;
 
-        /// The profiling manager instance.
-        ProfilingManager* profilingManager;
+    /// The profiling manager instance.
+    ProfilingManager* profilingManager;
 
-        /// The trigger manager instance.
-        TriggerManager* triggerManager;
+    /// The trigger manager instance.
+    TriggerManager* triggerManager;
 
-        /// Initialize all subsystems.
-        void StartUp();
+    /// Initialize all subsystems.
+    void StartUp();
 
-        /// Deinitialize all subsystems.
-        void ShutDown();
+    /// Deinitialize all subsystems.
+    void ShutDown();
 
-        /// Clears the killed components of all managers.
-        void ClearKilledComponents();
+    /// Clears the killed components of all managers.
+    void ClearKilledComponents();
 
-    private:
-        Hub();
-        Hub(const Hub&) = delete;
-        void operator=(const Hub&) = delete;
+  private:
+    Hub();
+    Hub(const Hub&) = delete;
+    void operator=(const Hub&) = delete;
 
-        bool shutdown = false;
+    bool shutdown = false;
 };
 
 /// Get a hub containing all the subsystems.

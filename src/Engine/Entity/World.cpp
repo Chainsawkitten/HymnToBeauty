@@ -10,8 +10,7 @@
 #include <fstream>
 #include <ctime>
 
-World::World() {
-}
+World::World() {}
 
 World::~World() {
     Clear();
@@ -116,4 +115,3 @@ void World::Load(const Json::Value& node) {
     Managers().triggerManager->InitiateUID();
     Managers().triggerManager->InitiateVolumes();
 }
-

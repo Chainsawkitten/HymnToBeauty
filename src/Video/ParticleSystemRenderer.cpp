@@ -77,13 +77,13 @@ void ParticleSystemRenderer::Init() {
     Video::Shader* vertexShader = new Video::Shader(DEFAULTPARTICLESHADER_VERT, DEFAULTPARTICLESHADER_VERT_LENGTH, GL_VERTEX_SHADER);
     Video::Shader* geometryShader = new Video::Shader(DEFAULTPARTICLESHADER_GEOM, DEFAULTPARTICLESHADER_GEOM_LENGTH, GL_GEOMETRY_SHADER);
     Video::Shader* fragmentShader = new Video::Shader(DEFAULTPARTICLESHADER_FRAG, DEFAULTPARTICLESHADER_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new Video::ShaderProgram({ vertexShader, geometryShader, fragmentShader });
+    shaderProgram = new Video::ShaderProgram({vertexShader, geometryShader, fragmentShader});
     delete vertexShader;
     delete geometryShader;
     delete fragmentShader;
 
     Video::Shader* computeShader = new Video::Shader(COMPUTEPARTICLESHADER_COMP, COMPUTEPARTICLESHADER_COMP_LENGTH, GL_COMPUTE_SHADER);
-    computeShaderProgram = new Video::ShaderProgram({ computeShader });
+    computeShaderProgram = new Video::ShaderProgram({computeShader});
     delete computeShader;
 }
 
@@ -187,8 +187,7 @@ void ParticleSystemRenderer::Update(float dt, ParticleSystemRenderer::EmitterSet
     glm::vec3 randomVec[32];
 
     for (unsigned int i = 0; i < 32; i++) {
-        randomVec[i] = glm::normalize(glm::vec3(settings.randomVec.x + (rand() % settings.spread) - (settings.spread / 2),
-            settings.randomVec.y + ((rand() % settings.spread) - (settings.spread / 2)), settings.randomVec.z + (rand() % settings.spread) - (settings.spread / 2)));
+        randomVec[i] = glm::normalize(glm::vec3(settings.randomVec.x + (rand() % settings.spread) - (settings.spread / 2), settings.randomVec.y + ((rand() % settings.spread) - (settings.spread / 2)), settings.randomVec.z + (rand() % settings.spread) - (settings.spread / 2)));
     }
 
     glUniform3fv(computeShaderProgram->GetUniformLocation("randomVec"), 32, &randomVec[0].x);
@@ -240,7 +239,7 @@ void ParticleSystemRenderer::Draw(Texture2D* textureAtlas, unsigned int textureA
     glDisablei(GL_BLEND, 0);
     glDisablei(GL_BLEND, 1);
 
-    //Cleanup.
+    // Cleanup.
     glBindVertexArray(0);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);

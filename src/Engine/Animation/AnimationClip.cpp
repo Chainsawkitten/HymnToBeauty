@@ -13,7 +13,8 @@ void AnimationClip::Load(const std::string& name) {
 
     std::ifstream file(Hymn().GetPath() + "/" + name + ".asset", std::ios::binary);
     if (!file.is_open()) {
-        Log() << "Could not open animation file: " << Hymn().GetPath() + "/" + name + ".asset" << "\n";
+        Log() << "Could not open animation file: " << Hymn().GetPath() + "/" + name + ".asset"
+              << "\n";
         file.close();
         return;
     }

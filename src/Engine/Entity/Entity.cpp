@@ -32,8 +32,7 @@ Entity::Entity(World* world, const std::string& name) : name(name) {
     this->world = world;
 }
 
-Entity::~Entity() {
-}
+Entity::~Entity() {}
 
 Entity* Entity::GetParent() const {
     return parent;
@@ -47,9 +46,9 @@ Entity* Entity::AddChild(const std::string& name) {
 }
 
 Entity* Entity::SetParent(Entity* newParent) {
-    //We make sure we're not trying to put the root as a child.
+    // We make sure we're not trying to put the root as a child.
     if (parent != nullptr) {
-        //We make sure we're not trying to set a parent as a child to one of it's own children.
+        // We make sure we're not trying to set a parent as a child to one of it's own children.
         if (!HasChild(newParent)) {
             parent->RemoveChild(this);
             Entity* lastParent = parent;
@@ -141,8 +140,8 @@ Entity* Entity::GetChild(const std::string& name) const {
 }
 
 Entity* Entity::GetChildFromIndex(int index) const {
-        if (children.size() > index)
-            return children[index];
+    if (children.size() > index)
+        return children[index];
 
     return nullptr;
 }
@@ -400,7 +399,8 @@ Component::SuperComponent* Entity::AddComponent(std::type_index componentType) {
     else if (componentType == typeid(Component::Trigger*))
         component = Managers().triggerManager->CreateTrigger();
     else {
-        Log() << componentType.name() << " not assigned to a manager!" << "\n";
+        Log() << componentType.name() << " not assigned to a manager!"
+              << "\n";
         return nullptr;
     }
 
@@ -461,7 +461,8 @@ void Entity::LoadComponent(std::type_index componentType, const Json::Value& nod
     else if (componentType == typeid(Component::Trigger*))
         component = Managers().triggerManager->CreateTrigger(node);
     else {
-        Log() << componentType.name() << " not assigned to a manager!" << "\n";
+        Log() << componentType.name() << " not assigned to a manager!"
+              << "\n";
         return;
     }
 

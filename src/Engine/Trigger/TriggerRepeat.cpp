@@ -9,9 +9,7 @@
 #include "../Physics/Shape.hpp"
 #include "../Hymn.hpp"
 
-
-TriggerRepeat::TriggerRepeat() {
-}
+TriggerRepeat::TriggerRepeat() {}
 
 TriggerRepeat::~TriggerRepeat() {
     /// @todo: Vector support
@@ -119,7 +117,7 @@ std::vector<triggerEvent::EventStruct>* TriggerRepeat::GetEventVector() {
     return &eventVector;
 }
 
-const Entity* TriggerRepeat::GetOwningEntity() const{
+const Entity* TriggerRepeat::GetOwningEntity() const {
     return owningEntity;
 }
 
@@ -157,20 +155,11 @@ void TriggerRepeat::Update() {
 }
 
 void TriggerRepeat::InitiateVolumes() {
-    if (GetEventVector()->front().check[0] == true &&
-        GetEventVector()->front().check[1] == true &&
-        GetEventVector()->front().check[2] == true &&
-        GetEventVector()->front().check[3] == true && GetEventVector()->front().m_eventID == 0) {
+    if (GetEventVector()->front().check[0] == true && GetEventVector()->front().check[1] == true && GetEventVector()->front().check[2] == true && GetEventVector()->front().check[3] == true && GetEventVector()->front().m_eventID == 0) {
         OnEnter();
-    } else if (GetEventVector()->front().check[0] == true &&
-        GetEventVector()->front().check[1] == true &&
-        GetEventVector()->front().check[2] == true &&
-        GetEventVector()->front().check[3] == true && GetEventVector()->front().m_eventID == 1) {
+    } else if (GetEventVector()->front().check[0] == true && GetEventVector()->front().check[1] == true && GetEventVector()->front().check[2] == true && GetEventVector()->front().check[3] == true && GetEventVector()->front().m_eventID == 1) {
         OnRetain();
-    } else if (GetEventVector()->front().check[0] == true &&
-        GetEventVector()->front().check[1] == true &&
-        GetEventVector()->front().check[2] == true &&
-        GetEventVector()->front().check[3] == true && GetEventVector()->front().m_eventID == 2) {
+    } else if (GetEventVector()->front().check[0] == true && GetEventVector()->front().check[1] == true && GetEventVector()->front().check[2] == true && GetEventVector()->front().check[3] == true && GetEventVector()->front().m_eventID == 2) {
         OnLeave();
     }
 }
@@ -191,14 +180,14 @@ Json::Value TriggerRepeat::Save() {
         component["triggerTargetEntity"] = targetEntity.front()->GetUniqueIdentifier(); // ADD SUPPORT FOR VECTOR
 
     if (!eventVector.empty()) {
-        component["triggerEventStruct_EventID"] = eventVector.front().m_eventID; // ADD SUPPORT FOR VECTOR
-        component["triggerEventStruct_ShapeID"] = eventVector.front().m_shapeID; // ADD SUPPORT FOR VECTOR
+        component["triggerEventStruct_EventID"] = eventVector.front().m_eventID;   // ADD SUPPORT FOR VECTOR
+        component["triggerEventStruct_ShapeID"] = eventVector.front().m_shapeID;   // ADD SUPPORT FOR VECTOR
         component["triggerEventStruct_TargetID"] = eventVector.front().m_targetID; // ADD SUPPORT FOR VECTOR
         component["triggerEventStruct_ScriptID"] = eventVector.front().m_scriptID; // ADD SUPPORT FOR VECTOR
-        component["triggerEventStruct_Check_0"] = eventVector.front().check[0]; // ADD SUPPORT FOR VECTOR
-        component["triggerEventStruct_Check_1"] = eventVector.front().check[1]; // ADD SUPPORT FOR VECTOR
-        component["triggerEventStruct_Check_2"] = eventVector.front().check[2]; // ADD SUPPORT FOR VECTOR
-        component["triggerEventStruct_Check_3"] = eventVector.front().check[3]; // ADD SUPPORT FOR VECTOR
+        component["triggerEventStruct_Check_0"] = eventVector.front().check[0];    // ADD SUPPORT FOR VECTOR
+        component["triggerEventStruct_Check_1"] = eventVector.front().check[1];    // ADD SUPPORT FOR VECTOR
+        component["triggerEventStruct_Check_2"] = eventVector.front().check[2];    // ADD SUPPORT FOR VECTOR
+        component["triggerEventStruct_Check_3"] = eventVector.front().check[3];    // ADD SUPPORT FOR VECTOR
     }
 
     component["triggerCollidedEntityUID"] = collidedEntityUID;

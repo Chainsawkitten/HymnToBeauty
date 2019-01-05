@@ -3,8 +3,7 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Hymn.hpp>
 
-GameSettings::GameSettings() {
-}
+GameSettings::GameSettings() {}
 
 GameSettings& GameSettings::GetInstance() {
     static GameSettings settings;

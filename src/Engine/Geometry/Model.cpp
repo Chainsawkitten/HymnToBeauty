@@ -7,11 +7,9 @@
 
 using namespace Geometry;
 
-Model::Model() {
-}
+Model::Model() {}
 
-Model::~Model() {
-}
+Model::~Model() {}
 
 Json::Value Model::Save() const {
     Json::Value model;
@@ -30,7 +28,7 @@ void Model::Load(const std::string& name) {
 void Model::Load(const char* filename) {
     if (assetFile.Open(filename, AssetFileHandler::READ)) {
         assetFile.LoadMeshData(0);
-        MeshData * meshData = assetFile.GetStaticMeshData();
+        MeshData* meshData = assetFile.GetStaticMeshData();
         type = meshData->isSkinned ? SKIN : STATIC;
 
         if (meshData->CPU) {
@@ -67,13 +65,11 @@ Model::Type Model::GetType() const {
     return type;
 }
 
-void Model::GenerateVertexBuffer(GLuint& vertexBuffer,
-    Video::Geometry::VertexType::StaticVertex * vertices, unsigned int numVerticies) {
+void Model::GenerateVertexBuffer(GLuint& vertexBuffer, Video::Geometry::VertexType::StaticVertex* vertices, unsigned int numVerticies) {
     vertexBuffer = Video::Geometry::VertexType::StaticVertex::GenerateVertexBuffer(vertices, numVerticies);
 }
 
-void Model::GenerateVertexBuffer(GLuint& vertexBuffer,
-    Video::Geometry::VertexType::SkinVertex * vertices, unsigned int numVerticies) {
+void Model::GenerateVertexBuffer(GLuint& vertexBuffer, Video::Geometry::VertexType::SkinVertex* vertices, unsigned int numVerticies) {
     vertexBuffer = Video::Geometry::VertexType::SkinVertex::GenerateVertexBuffer(vertices, numVerticies);
 }
 

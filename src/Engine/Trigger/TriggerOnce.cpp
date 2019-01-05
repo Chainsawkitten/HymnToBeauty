@@ -1,19 +1,14 @@
 #include "TriggerOnce.hpp"
 
-TriggerOnce::TriggerOnce() {
-}
+TriggerOnce::TriggerOnce() {}
 
-TriggerOnce::~TriggerOnce() {
-}
+TriggerOnce::~TriggerOnce() {}
 
-void TriggerOnce::OnEnter() {
-}
+void TriggerOnce::OnEnter() {}
 
-void TriggerOnce::OnLeave() {
-}
+void TriggerOnce::OnLeave() {}
 
-void TriggerOnce::OnRemain() {
-}
+void TriggerOnce::OnRemain() {}
 
 const std::string& TriggerOnce::GetName() const {
     return name;

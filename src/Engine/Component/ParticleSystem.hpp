@@ -5,18 +5,18 @@
 #include <Video/ParticleSystemRenderer.hpp>
 
 namespace Component {
-    /// Emitter that emits particles.
-    class ParticleSystemComponent : public SuperComponent {
-        public:
-            /// Create new particle emitter.
-            ParticleSystemComponent();
+/// Emitter that emits particles.
+class ParticleSystemComponent : public SuperComponent {
+  public:
+    /// Create new particle emitter.
+    ParticleSystemComponent();
 
-            /// Destructor.
-            ~ParticleSystemComponent();
+    /// Destructor.
+    ~ParticleSystemComponent();
 
-            Json::Value Save() const override;
+    Json::Value Save() const override;
 
-            /// Particletype
-            Video::ParticleSystemRenderer::EmitterSettings particleType;
-    };
+    /// Particletype
+    Video::ParticleSystemRenderer::EmitterSettings particleType;
+};
 } // namespace Component

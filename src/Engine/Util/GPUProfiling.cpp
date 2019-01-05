@@ -11,21 +11,20 @@ GPUProfiling::GPUProfiling(const std::string& name, Video::Query::Type type) : a
 
         // Get type.
         switch (type) {
-            case Video::Query::TIME_ELAPSED:
-                this->type = ProfilingManager::Type::GPU_TIME_ELAPSED;
-                break;
-            case Video::Query::SAMPLES_PASSED:
-                this->type = ProfilingManager::Type::GPU_SAMPLES_PASSED;
-                break;
-            default:
-                assert(false);
-                break;
+        case Video::Query::TIME_ELAPSED:
+            this->type = ProfilingManager::Type::GPU_TIME_ELAPSED;
+            break;
+        case Video::Query::SAMPLES_PASSED:
+            this->type = ProfilingManager::Type::GPU_SAMPLES_PASSED;
+            break;
+        default:
+            assert(false);
+            break;
         }
 
         // Check if nested.
         if (this->type == ProfilingManager::Type::GPU_SAMPLES_PASSED) {
-            if (Managers().profilingManager->current[this->type] != Managers().profilingManager->root[this->type] &&
-                Managers().profilingManager->current[this->type]->parent == Managers().profilingManager->root[this->type]) {
+            if (Managers().profilingManager->current[this->type] != Managers().profilingManager->root[this->type] && Managers().profilingManager->current[this->type]->parent == Managers().profilingManager->root[this->type]) {
                 Log() << "Warning: GPU_SAMPLES_PASSED can't be nested! Name: " << name << "\n";
                 active = false;
             }

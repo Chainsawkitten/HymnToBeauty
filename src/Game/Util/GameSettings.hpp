@@ -11,21 +11,21 @@
  * Shadow Map Size        | Dimensions of the shadow map.    | long   | 1024
  */
 class GameSettings : public Settings {
-    public:
-        /// Get the instance of the class.
-        /**
-         * @return The %GameSettings instance
-         */
-        static GameSettings& GetInstance();
+  public:
+    /// Get the instance of the class.
+    /**
+     * @return The %GameSettings instance
+     */
+    static GameSettings& GetInstance();
 
-        void Save() final;
+    void Save() final;
 
-        /// Load the settings from INI file.
-        void Load();
+    /// Load the settings from INI file.
+    void Load();
 
-    private:
-        GameSettings();
+  private:
+    GameSettings();
 
-        GameSettings(GameSettings const&) = delete;
-        void operator=(GameSettings const&) = delete;
+    GameSettings(GameSettings const&) = delete;
+    void operator=(GameSettings const&) = delete;
 };

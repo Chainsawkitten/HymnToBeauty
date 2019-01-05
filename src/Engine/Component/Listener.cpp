@@ -2,8 +2,7 @@
 
 using namespace Component;
 
-Listener::Listener() {
-}
+Listener::Listener() {}
 
 Json::Value Listener::Save() const {
     Json::Value component;

@@ -21,8 +21,7 @@ TextureAsset::~TextureAsset() {
     delete texture;
 }
 
-void TextureAsset::Save() const {
-}
+void TextureAsset::Save() const {}
 
 void TextureAsset::Load(const std::string& name) {
     std::size_t pos = name.find_last_of('/');

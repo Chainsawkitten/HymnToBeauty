@@ -12,7 +12,7 @@ void Input::SetWindow(GLFWwindow* window) {
     this->window = window;
 }
 
-bool Input::CheckButton(int index) const{
+bool Input::CheckButton(int index) const {
     Button* button = buttons[index];
     int state;
     if (button->key == 420)
@@ -22,7 +22,7 @@ bool Input::CheckButton(int index) const{
     return state == button->state;
 }
 
-Json::Value Input::Save() const{
+Json::Value Input::Save() const {
     Json::Value buttonsNode;
 
     buttonsNode["size"] = buttons.size();

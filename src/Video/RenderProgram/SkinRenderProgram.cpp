@@ -20,19 +20,19 @@ using namespace Video;
 SkinRenderProgram::SkinRenderProgram() {
     Shader* vertexShader = new Shader(SKINNING_VERT, SKINNING_VERT_LENGTH, GL_VERTEX_SHADER);
     Shader* fragmentShader = new Shader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new ShaderProgram({ vertexShader, fragmentShader} );
+    shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
     delete fragmentShader;
 
     // Create shaders for early rejection pass
     vertexShader = new Shader(ZREJECTIONSKIN_VERT, ZREJECTIONSKIN_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = new Shader(ZREJECTION_FRAG, ZREJECTION_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    zShaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    zShaderProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
 
     // Create shaders for shadowpass
     vertexShader = new Shader(SHADOWSKIN_VERT, SHADOWSKIN_VERT_LENGTH, GL_VERTEX_SHADER);
-    shadowProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    shadowProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
     delete fragmentShader;
 
@@ -102,7 +102,6 @@ void SkinRenderProgram::ShadowRender(Geometry::Geometry3D* geometry, const glm::
         glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     }
 }
-
 
 void SkinRenderProgram::PreDepthRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
     this->zShaderProgram->Use();
@@ -185,7 +184,6 @@ void SkinRenderProgram::Render(const Geometry::Geometry3D* geometry, const Textu
         glBindTexture(GL_TEXTURE_2D, textureRoughness->GetTextureID());
         glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_2D, shadowId);
-
 
         // Render model.
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &modelMatrix[0][0]);

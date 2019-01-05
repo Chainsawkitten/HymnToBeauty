@@ -15,8 +15,7 @@ PostProcessing::PostProcessing(const Geometry::Rectangle* rectangle) {
     this->rectangle = rectangle;
 }
 
-PostProcessing::~PostProcessing() {
-}
+PostProcessing::~PostProcessing() {}
 
 void PostProcessing::ApplyFilter(Video::RenderSurface* renderSurface, Video::Filter* filter) const {
     // Always pass depth test.

@@ -4,91 +4,91 @@
 #include "../Entity/ComponentContainer.hpp"
 
 namespace Component {
-    class Listener;
-    class SoundSource;
-}
+class Listener;
+class SoundSource;
+} // namespace Component
 namespace Json {
-    class Value;
+class Value;
 }
 
 /// Handles OpenAL sound.
 class SoundManager {
     friend class Hub;
 
-    public:
-        /// Set main volume.
-        /**
-         * @param volume New volume.
-         */
-        void SetVolume(float volume);
+  public:
+    /// Set main volume.
+    /**
+     * @param volume New volume.
+     */
+    void SetVolume(float volume);
 
-        /// Get main volume.
-        /**
-         * @return The main volume.
-         */
-        float GetVolume() const;
+    /// Get main volume.
+    /**
+     * @return The main volume.
+     */
+    float GetVolume() const;
 
-        /// Check for OpenAL errors.
-        /**
-         * @param message Message to print to standard error if an error was encountered.
-         */
-        static void CheckError(const char* message);
+    /// Check for OpenAL errors.
+    /**
+     * @param message Message to print to standard error if an error was encountered.
+     */
+    static void CheckError(const char* message);
 
-        /// Moves sound sources and plays sounds.
-        void Update();
+    /// Moves sound sources and plays sounds.
+    void Update();
 
-        /// Create sound source component.
-        /**
-         * @return The created component.
-         */
-        Component::SoundSource* CreateSoundSource();
+    /// Create sound source component.
+    /**
+     * @return The created component.
+     */
+    Component::SoundSource* CreateSoundSource();
 
-        /// Create sound source component.
-        /**
-         * @param node Json node to load the component from.
-         * @return The created component.
-         */
-        Component::SoundSource* CreateSoundSource(const Json::Value& node);
+    /// Create sound source component.
+    /**
+     * @param node Json node to load the component from.
+     * @return The created component.
+     */
+    Component::SoundSource* CreateSoundSource(const Json::Value& node);
 
-        /// Get all sound source components.
-        /**
-         * @return All sound source components.
-         */
-        const std::vector<Component::SoundSource*>& GetSoundSources() const;
+    /// Get all sound source components.
+    /**
+     * @return All sound source components.
+     */
+    const std::vector<Component::SoundSource*>& GetSoundSources() const;
 
-        /// Create listener component.
-        /**
-         * @return The created component.
-         */
-        Component::Listener* CreateListener();
+    /// Create listener component.
+    /**
+     * @return The created component.
+     */
+    Component::Listener* CreateListener();
 
-        /// Create listener component.
-        /**
-         * @param node Json node to load the component from.
-         * @return The created component.
-         */
-        Component::Listener* CreateListener(const Json::Value& node);
+    /// Create listener component.
+    /**
+     * @param node Json node to load the component from.
+     * @return The created component.
+     */
+    Component::Listener* CreateListener(const Json::Value& node);
 
-        /// Get all listener components.
-        /**
-         * @return All listener components.
-         */
-        const std::vector<Component::Listener*>& GetListeners() const;
+    /// Get all listener components.
+    /**
+     * @return All listener components.
+     */
+    const std::vector<Component::Listener*>& GetListeners() const;
 
-        /// Remove all killed components.
-        void ClearKilledComponents();
+    /// Remove all killed components.
+    void ClearKilledComponents();
 
-    private:
-        SoundManager();
-        ~SoundManager();
-        SoundManager(SoundManager const&) = delete;
-        void operator=(SoundManager const&) = delete;
+  private:
+    SoundManager();
+    ~SoundManager();
+    SoundManager(SoundManager const&) = delete;
+    void operator=(SoundManager const&) = delete;
 
-        ALCdevice* device;
-        ALCcontext* context;
+    ALCdevice* device;
+    ALCcontext* context;
 
-        float volume = 1.f;
+    float volume = 1.f;
 
-        ComponentContainer<Component::SoundSource> soundSources;
-        ComponentContainer<Component::Listener> listeners;
+    ComponentContainer<Component::SoundSource> soundSources;
+    ComponentContainer<Component::Listener> listeners;
 };

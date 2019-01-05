@@ -14,11 +14,11 @@ RenderSurface::RenderSurface(const glm::vec2& size) {
     colorTexture[1] = new ReadWriteTexture(size, GL_RGBA, GL_RGBA8, GL_UNSIGNED_BYTE);
 
     // Frame buffers.
-    depthFrameBuffer = new FrameBuffer({ depthTexture });
-    colorFrameBuffer[0] = new FrameBuffer({ colorTexture[0] });
-    colorFrameBuffer[1] = new FrameBuffer({ colorTexture[1] });
-    shadingFrameBuffer[0] = new FrameBuffer({ depthTexture, colorTexture[0] });
-    shadingFrameBuffer[1] = new FrameBuffer({ depthTexture, colorTexture[1] });
+    depthFrameBuffer = new FrameBuffer({depthTexture});
+    colorFrameBuffer[0] = new FrameBuffer({colorTexture[0]});
+    colorFrameBuffer[1] = new FrameBuffer({colorTexture[1]});
+    shadingFrameBuffer[0] = new FrameBuffer({depthTexture, colorTexture[0]});
+    shadingFrameBuffer[1] = new FrameBuffer({depthTexture, colorTexture[1]});
 }
 
 RenderSurface::~RenderSurface() {

@@ -75,7 +75,7 @@ Log& Log::operator<<(const time_t value) {
 
     const unsigned int bufferLength = 24;
 
-    char buffer[bufferLength] = { '\0' };
+    char buffer[bufferLength] = {'\0'};
     strftime(buffer, bufferLength, "%Y-%m-%d %H:%M:%S", timeinfo);
     string const outString = string(buffer, bufferLength);
 
@@ -135,13 +135,6 @@ bool Log::SetupStream(const Channel channel, std::ostream* stream) {
     return true;
 }
 
-bool Log::SetupStreams(
-    std::ostream* defaultStream,
-    std::ostream* info,
-    std::ostream* warning,
-    std::ostream* error) {
-    return SetupStream(DEFAULT, defaultStream) &&
-           SetupStream(INFO, info) &&
-           SetupStream(WARNING, warning) &&
-           SetupStream(ERR, error);
+bool Log::SetupStreams(std::ostream* defaultStream, std::ostream* info, std::ostream* warning, std::ostream* error) {
+    return SetupStream(DEFAULT, defaultStream) && SetupStream(INFO, info) && SetupStream(WARNING, warning) && SetupStream(ERR, error);
 }

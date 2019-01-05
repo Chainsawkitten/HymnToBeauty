@@ -5,7 +5,7 @@
 
 /// Base node.
 class Node {
-    public:
+  public:
     /// Destructor.
     virtual ~Node();
 

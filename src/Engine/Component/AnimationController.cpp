@@ -59,8 +59,7 @@ void Component::AnimationController::UpdateAnimation(float deltaTime) {
                 if (tmpAction != nullptr) {
                     activeAction1 = tmpAction;
                     break;
-                }
-                else
+                } else
                     return;
             }
         } else

@@ -8,14 +8,14 @@ using namespace Video;
 Query::Query(Type type) : active(false) {
     this->type = type;
     switch (type) {
-        case TIME_ELAPSED:
-            target = GL_TIMESTAMP;
-            break;
-        case SAMPLES_PASSED:
-            target = GL_SAMPLES_PASSED;
-            break;
-        default:
-            assert(false);
+    case TIME_ELAPSED:
+        target = GL_TIMESTAMP;
+        break;
+    case SAMPLES_PASSED:
+        target = GL_SAMPLES_PASSED;
+        break;
+    default:
+        assert(false);
     }
 
     if (type == TIME_ELAPSED)

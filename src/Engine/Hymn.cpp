@@ -34,7 +34,7 @@ using namespace std;
 ActiveHymn::ActiveHymn() {
     defaultAlbedo = new TextureAsset(DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
     defaultNormal = new TextureAsset(DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
-    defaultMetallic= new TextureAsset(DEFAULTMETALLIC_PNG, DEFAULTMETALLIC_PNG_LENGTH);
+    defaultMetallic = new TextureAsset(DEFAULTMETALLIC_PNG, DEFAULTMETALLIC_PNG_LENGTH);
     defaultRoughness = new TextureAsset(DEFAULTROUGHNESS_PNG, DEFAULTROUGHNESS_PNG_LENGTH);
 
     Clear();
@@ -161,39 +161,48 @@ void ActiveHymn::FromJson(Json::Value root) {
 }
 
 void ActiveHymn::Update(float deltaTime) {
-    { PROFILE("Run scripts.");
+    {
+        PROFILE("Run scripts.");
         Managers().scriptManager->Update(world, deltaTime);
     }
 
-    { PROFILE("Synchronize triggers.");
+    {
+        PROFILE("Synchronize triggers.");
         Managers().triggerManager->SynchronizeTriggers();
     }
 
-    { PROFILE("Update physics");
+    {
+        PROFILE("Update physics");
         Managers().physicsManager->Update(deltaTime);
     }
 
-    { PROFILE("Update animations");
+    {
+        PROFILE("Update animations");
         Managers().renderManager->UpdateAnimations(deltaTime);
     }
 
-    { PROFILE("Update particles");
+    {
+        PROFILE("Update particles");
         Managers().particleManager->Update(world, deltaTime);
     }
 
-    { PROFILE("Update debug drawing");
+    {
+        PROFILE("Update debug drawing");
         Managers().debugDrawingManager->Update(deltaTime);
     }
 
-    { PROFILE("Synchronize transforms");
+    {
+        PROFILE("Synchronize transforms");
         Managers().physicsManager->UpdateEntityTransforms();
     }
 
-    { PROFILE("Process triggers");
+    {
+        PROFILE("Process triggers");
         Managers().triggerManager->ProcessTriggers();
     }
 
-    { PROFILE("Clear killed entities/components");
+    {
+        PROFILE("Clear killed entities/components");
         world.ClearKilled();
     }
 
@@ -207,10 +216,12 @@ void ActiveHymn::Update(float deltaTime) {
 }
 
 void ActiveHymn::Render(RenderManager::DISPLAY targetDisplay, Entity* camera, bool soundSources, bool particleEmitters, bool lightSources, bool cameras, bool physics, bool lighting, bool lightVolumes) {
-    { PROFILE("Render world");
-    { GPUPROFILE("Render world", Video::Query::Type::TIME_ELAPSED);
-        Managers().renderManager->Render(world, targetDisplay, soundSources, particleEmitters, lightSources, cameras, physics, camera, lighting, lightVolumes);
-    }
+    {
+        PROFILE("Render world");
+        {
+            GPUPROFILE("Render world", Video::Query::Type::TIME_ELAPSED);
+            Managers().renderManager->Render(world, targetDisplay, soundSources, particleEmitters, lightSources, cameras, physics, camera, lighting, lightVolumes);
+        }
     }
 }
 

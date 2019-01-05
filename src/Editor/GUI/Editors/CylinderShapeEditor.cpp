@@ -7,38 +7,38 @@
 #include <imgui.h>
 
 namespace GUI {
-    void CylinderShapeEditor::Show(Component::Shape* comp) {
-        ImGui::Indent();
+void CylinderShapeEditor::Show(Component::Shape* comp) {
+    ImGui::Indent();
 
-        if (ImGui::InputFloat("Radius", &radius)) {
-            if (radius < 0.0f)
-                radius = 0.0f;
+    if (ImGui::InputFloat("Radius", &radius)) {
+        if (radius < 0.0f)
+            radius = 0.0f;
 
-            Apply(comp);
-        }
-
-        if (ImGui::InputFloat("Length", &length)) {
-            if (length < 0.0f)
-                length = 0.0f;
-
-            Apply(comp);
-        }
-
-        ImGui::Unindent();
+        Apply(comp);
     }
 
-    void CylinderShapeEditor::Apply(Component::Shape* comp) {
-        Managers().physicsManager->SetShape(comp, std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Cylinder(radius, length))));
+    if (ImGui::InputFloat("Length", &length)) {
+        if (length < 0.0f)
+            length = 0.0f;
+
+        Apply(comp);
     }
 
-    bool CylinderShapeEditor::SetFromShape(const Physics::Shape& shape) {
-        if (shape.GetKind() == Physics::Shape::Kind::Cylinder) {
-            auto cylinderData = shape.GetCylinderData();
-            radius = cylinderData->radius;
-            length = cylinderData->length;
-            return true;
-        }
-
-        return false;
-    }
+    ImGui::Unindent();
 }
+
+void CylinderShapeEditor::Apply(Component::Shape* comp) {
+    Managers().physicsManager->SetShape(comp, std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Cylinder(radius, length))));
+}
+
+bool CylinderShapeEditor::SetFromShape(const Physics::Shape& shape) {
+    if (shape.GetKind() == Physics::Shape::Kind::Cylinder) {
+        auto cylinderData = shape.GetCylinderData();
+        radius = cylinderData->radius;
+        length = cylinderData->length;
+        return true;
+    }
+
+    return false;
+}
+} // namespace GUI
