@@ -8,14 +8,14 @@
 #include "DebugDrawing.frag.hpp"
 #include "VideoErrorCheck.hpp"
 
-#define BUFFER_OFFSET(i) ((char *)nullptr + (i))
+#define BUFFER_OFFSET(i) ((char*)nullptr + (i))
 
 using namespace Video;
 
 DebugDrawing::DebugDrawing() {
     Shader* vertexShader = new Shader(DEBUGDRAWING_VERT, DEBUGDRAWING_VERT_LENGTH, GL_VERTEX_SHADER);
     Shader* fragmentShader = new Shader(DEBUGDRAWING_FRAG, DEBUGDRAWING_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
     delete fragmentShader;
 

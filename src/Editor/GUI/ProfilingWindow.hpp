@@ -4,13 +4,13 @@
 #include <GUI/LogView.hpp>
 
 namespace GUI {
-    class ProfilingWindow {
-        public:
-            /// Show profiling results.
-            void Show();
+class ProfilingWindow {
+  public:
+    /// Show profiling results.
+    void Show();
 
-        private:
-            LogView logView;
-            void ShowResult(ProfilingManager::Result* result);
-    };
-}
+  private:
+    LogView logView;
+    void ShowResult(ProfilingManager::Result* result);
+};
+} // namespace GUI

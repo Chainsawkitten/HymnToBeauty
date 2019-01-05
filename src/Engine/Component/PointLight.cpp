@@ -4,8 +4,7 @@
 
 using namespace Component;
 
-PointLight::PointLight() {
-}
+PointLight::PointLight() {}
 
 Json::Value PointLight::Save() const {
     Json::Value component;

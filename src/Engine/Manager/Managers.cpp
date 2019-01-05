@@ -12,8 +12,7 @@
 
 #include "Utility/Log.hpp"
 
-Hub::Hub() {
-}
+Hub::Hub() {}
 
 Hub& Managers() {
     static Hub instance;

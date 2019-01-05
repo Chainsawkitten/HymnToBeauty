@@ -1,6 +1,6 @@
 #include "Geometry2D.hpp"
 
-#define BUFFER_OFFSET(i) ((char *)nullptr + (i))
+#define BUFFER_OFFSET(i) ((char*)nullptr + (i))
 
 using namespace Video;
 using namespace Geometry;

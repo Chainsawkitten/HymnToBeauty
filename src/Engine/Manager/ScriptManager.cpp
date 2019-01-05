@@ -107,7 +107,7 @@ std::string VariablesToString(asIScriptContext* ctx, asUINT stackLevel) {
     return variables;
 }
 // An example line callback
-void AngelScriptDebugLineCallback(asIScriptContext* ctx, const std::map<std::string, std::set<int>>* breakpoints){
+void AngelScriptDebugLineCallback(asIScriptContext* ctx, const std::map<std::string, std::set<int>>* breakpoints) {
     const char* scriptSection;
     int line = ctx->GetLineNumber(0, 0, &scriptSection);
 
@@ -154,9 +154,7 @@ bool IsIntersect(Entity* checker, Entity* camera) {
     mousePicker.Update();
     RayIntersection rayIntersector;
     float intersectDistance;
-    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), mousePicker.GetCurrentRay(),
-        checker->GetComponent<Component::Mesh>()->geometry->GetAxisAlignedBoundingBox(),
-        checker->GetModelMatrix(), intersectDistance)) {
+    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), mousePicker.GetCurrentRay(), checker->GetComponent<Component::Mesh>()->geometry->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
         if (intersectDistance < 10.0f)
             return true;
         return false;
@@ -189,35 +187,35 @@ void quatConstructor(float w, float x, float y, float z, void* memory) {
     *static_cast<glm::quat*>(memory) = glm::quat(w, x, y, z);
 }
 
-template<typename type> void glmConstructor(void* memory) {
+template <typename type> void glmConstructor(void* memory) {
     *static_cast<type*>(memory) = type();
 }
 
-template<typename type> type glmAdd(const type& a, const void* memory) {
+template <typename type> type glmAdd(const type& a, const void* memory) {
     return *static_cast<const type*>(memory) + a;
 }
 
-template<typename type> type glmSub(const type& a, const void* memory) {
+template <typename type> type glmSub(const type& a, const void* memory) {
     return *static_cast<const type*>(memory) - a;
 }
 
-template<typename S, typename T> S glmMul(T a, const void* memory) {
+template <typename S, typename T> S glmMul(T a, const void* memory) {
     return *static_cast<const S*>(memory) * a;
 }
 
-template<typename type> type glmMulR(float a, const void* memory) {
+template <typename type> type glmMulR(float a, const void* memory) {
     return a * *static_cast<const type*>(memory);
 }
 
-template<typename type> type glmDiv(float a, const void* memory) {
+template <typename type> type glmDiv(float a, const void* memory) {
     return *static_cast<const type*>(memory) / a;
 }
 
-template<typename type> type glmDivR(float a, const void* memory) {
+template <typename type> type glmDivR(float a, const void* memory) {
     return a / *static_cast<const type*>(memory);
 }
 
-template<typename type> type glmNeg(const void* memory) {
+template <typename type> type glmNeg(const void* memory) {
     return -*static_cast<const type*>(memory);
 }
 
@@ -255,10 +253,10 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec2", "vec2 opMul_r(float) const", asFUNCTIONPR(glmMulR, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec2", "vec2 opDiv(float) const", asFUNCTIONPR(glmDiv, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec2", "vec2 opDiv_r(float) const", asFUNCTIONPR(glmDivR, (float, const void*), glm::vec2), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("vec2", "vec2& opAddAssign(const vec2 &in) const", asMETHODPR(glm::vec2, operator+=, (const glm::vec2&), glm::vec2&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec2", "vec2& opSubAssign(const vec2 &in) const", asMETHODPR(glm::vec2, operator-=, (const glm::vec2&), glm::vec2&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec2", "vec2& opMulAssign(float) const", asMETHODPR(glm::vec2, operator*=, (float), glm::vec2&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec2", "vec2& opDivAssign(float) const", asMETHODPR(glm::vec2, operator/=, (float), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opAddAssign(const vec2 &in) const", asMETHODPR(glm::vec2, operator+=,(const glm::vec2&), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opSubAssign(const vec2 &in) const", asMETHODPR(glm::vec2, operator-=,(const glm::vec2&), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opMulAssign(float) const", asMETHODPR(glm::vec2, operator*=,(float), glm::vec2&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec2", "vec2& opDivAssign(float) const", asMETHODPR(glm::vec2, operator/=,(float), glm::vec2&), asCALL_THISCALL);
     engine->RegisterObjectMethod("vec2", "vec2 opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::vec2), asCALL_CDECL_OBJLAST);
 
     engine->RegisterObjectType("vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>());
@@ -272,10 +270,10 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec3", "vec3 opMul_r(float) const", asFUNCTIONPR(glmMulR, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opDiv(float) const", asFUNCTIONPR(glmDiv, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec3", "vec3 opDiv_r(float) const", asFUNCTIONPR(glmDivR, (float, const void*), glm::vec3), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator+=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec3", "vec3& opSubAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator-=, (const glm::vec3&), glm::vec3&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec3", "vec3& opMulAssign(float) const", asMETHODPR(glm::vec3, operator*=, (float), glm::vec3&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec3", "vec3& opDivAssign(float) const", asMETHODPR(glm::vec3, operator/=, (float), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator+=,(const glm::vec3&), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opSubAssign(const vec3 &in) const", asMETHODPR(glm::vec3, operator-=,(const glm::vec3&), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opMulAssign(float) const", asMETHODPR(glm::vec3, operator*=,(float), glm::vec3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec3", "vec3& opDivAssign(float) const", asMETHODPR(glm::vec3, operator/=,(float), glm::vec3&), asCALL_THISCALL);
     engine->RegisterObjectMethod("vec3", "vec3 opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::vec3), asCALL_CDECL_OBJLAST);
 
     engine->RegisterObjectType("vec4", sizeof(glm::vec4), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec4>());
@@ -290,10 +288,10 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("vec4", "vec4 opMul_r(float) const", asFUNCTIONPR(glmMulR, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec4", "vec4 opDiv(float) const", asFUNCTIONPR(glmDiv, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("vec4", "vec4 opDiv_r(float) const", asFUNCTIONPR(glmDivR, (float, const void*), glm::vec4), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("vec4", "vec4& opAddAssign(const vec4 &in) const", asMETHODPR(glm::vec4, operator+=, (const glm::vec4&), glm::vec4&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec4", "vec4& opSubAssign(const vec4 &in) const", asMETHODPR(glm::vec4, operator-=, (const glm::vec4&), glm::vec4&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec4", "vec4& opMulAssign(float) const", asMETHODPR(glm::vec4, operator*=, (float), glm::vec4&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("vec4", "vec4& opDivAssign(float) const", asMETHODPR(glm::vec4, operator/=, (float), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opAddAssign(const vec4 &in) const", asMETHODPR(glm::vec4, operator+=,(const glm::vec4&), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opSubAssign(const vec4 &in) const", asMETHODPR(glm::vec4, operator-=,(const glm::vec4&), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opMulAssign(float) const", asMETHODPR(glm::vec4, operator*=,(float), glm::vec4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("vec4", "vec4& opDivAssign(float) const", asMETHODPR(glm::vec4, operator/=,(float), glm::vec4&), asCALL_THISCALL);
     engine->RegisterObjectMethod("vec4", "vec4 opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::vec4), asCALL_CDECL_OBJLAST);
 
     engine->RegisterObjectType("mat3", sizeof(glm::mat3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::mat3>());
@@ -305,10 +303,10 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("mat3", "mat3 opMul(const mat3 &in) const", asFUNCTIONPR(glmMul, (const glm::mat3&, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat3", "mat3 opDiv(float) const", asFUNCTIONPR(glmDiv, (float, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat3", "mat3 opDiv_r(float) const", asFUNCTIONPR(glmDivR, (float, const void*), glm::mat3), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("mat3", "mat3& opAddAssign(const mat3 &in) const", asMETHODPR(glm::mat3, operator+=, (const glm::mat3&), glm::mat3&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("mat3", "mat3& opSubAssign(const mat3 &in) const", asMETHODPR(glm::mat3, operator-=, (const glm::mat3&), glm::mat3&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("mat3", "mat3& opMulAssign(float) const", asMETHODPR(glm::mat3, operator*=, (float), glm::mat3&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("mat3", "mat3& opDivAssign(float) const", asMETHODPR(glm::mat3, operator/=, (float), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opAddAssign(const mat3 &in) const", asMETHODPR(glm::mat3, operator+=,(const glm::mat3&), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opSubAssign(const mat3 &in) const", asMETHODPR(glm::mat3, operator-=,(const glm::mat3&), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opMulAssign(float) const", asMETHODPR(glm::mat3, operator*=,(float), glm::mat3&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat3", "mat3& opDivAssign(float) const", asMETHODPR(glm::mat3, operator/=,(float), glm::mat3&), asCALL_THISCALL);
     engine->RegisterObjectMethod("mat3", "mat3 opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::mat3), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat3", "vec3 opMul(const vec3 &in) const", asFUNCTION(mat3MulVec3), asCALL_CDECL_OBJLAST);
 
@@ -321,10 +319,10 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("mat4", "mat4 opMul(const mat4 &in) const", asFUNCTIONPR(glmMul, (const glm::mat4&, const void*), glm::mat4), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat4", "mat4 opDiv(float) const", asFUNCTIONPR(glmDiv, (float, const void*), glm::mat4), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat4", "mat4 opDiv_r(float) const", asFUNCTIONPR(glmDivR, (float, const void*), glm::mat4), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("mat4", "mat4& opAddAssign(const mat4 &in) const", asMETHODPR(glm::mat4, operator+=, (const glm::mat4&), glm::mat4&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("mat4", "mat4& opSubAssign(const mat4 &in) const", asMETHODPR(glm::mat4, operator-=, (const glm::mat4&), glm::mat4&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("mat4", "mat4& opMulAssign(float) const", asMETHODPR(glm::mat4, operator*=, (float), glm::mat4&), asCALL_THISCALL);
-    engine->RegisterObjectMethod("mat4", "mat4& opDivAssign(float) const", asMETHODPR(glm::mat4, operator/=, (float), glm::mat4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat4", "mat4& opAddAssign(const mat4 &in) const", asMETHODPR(glm::mat4, operator+=,(const glm::mat4&), glm::mat4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat4", "mat4& opSubAssign(const mat4 &in) const", asMETHODPR(glm::mat4, operator-=,(const glm::mat4&), glm::mat4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat4", "mat4& opMulAssign(float) const", asMETHODPR(glm::mat4, operator*=,(float), glm::mat4&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("mat4", "mat4& opDivAssign(float) const", asMETHODPR(glm::mat4, operator/=,(float), glm::mat4&), asCALL_THISCALL);
     engine->RegisterObjectMethod("mat4", "mat4 opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::mat4), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("mat4", "vec4 opMul(const vec4 &in) const", asFUNCTION(mat4MulVec4), asCALL_CDECL_OBJLAST);
 
@@ -334,7 +332,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("quat", "quat opMul(float) const", asFUNCTIONPR(glmMul, (float, const void*), glm::quat), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("quat", "quat opMul_r(float) const", asFUNCTIONPR(glmMulR, (float, const void*), glm::quat), asCALL_CDECL_OBJLAST);
     engine->RegisterObjectMethod("quat", "quat opMul(const quat &in) const", asFUNCTIONPR(glmMul, (const glm::quat&, const void*), glm::quat), asCALL_CDECL_OBJLAST);
-    engine->RegisterObjectMethod("quat", "quat& opMulAssign(float) const", asMETHODPR(glm::quat, operator*=, (float), glm::quat&), asCALL_THISCALL);
+    engine->RegisterObjectMethod("quat", "quat& opMulAssign(float) const", asMETHODPR(glm::quat, operator*=,(float), glm::quat&), asCALL_THISCALL);
     engine->RegisterObjectMethod("quat", "quat opNeg() const", asFUNCTIONPR(glmNeg, (const void*), glm::quat), asCALL_CDECL_OBJLAST);
 
     // Register GLM functions.
@@ -576,7 +574,7 @@ void ScriptManager::BuildAllScripts() {
 }
 
 void ScriptManager::GetBreakpoints(const ScriptFile* scriptFile) {
-    //If we already fetched the breakpoints for this file, we clear it.
+    // If we already fetched the breakpoints for this file, we clear it.
     auto it = breakpoints.find(scriptFile->name + ".as");
     if (it != breakpoints.end())
         breakpoints[scriptFile->name + ".as"].clear();
@@ -610,7 +608,8 @@ void ScriptManager::ClearBreakpoints() {
 void ScriptManager::FillPropertyMap(Script* script) {
     int r = BuildScript(script->scriptFile);
     if (r < 0) {
-        Log() << "Couldn't fetch properties" << "\n";
+        Log() << "Couldn't fetch properties"
+              << "\n";
     } else {
         if (!script->initialized)
             CreateInstance(script);
@@ -651,7 +650,7 @@ void ScriptManager::FillPropertyMap(Script* script) {
                     script->AddToPropertyMap(name, typeId, size, (void*)(&GUID));
 
                 } else {
-                    //We start with setting the GUID to 0, which means it's uninitialized.
+                    // We start with setting the GUID to 0, which means it's uninitialized.
                     unsigned int GUID = 0;
                     script->AddToPropertyMap(name, typeId, size, (void*)(&GUID));
                 }
@@ -674,7 +673,6 @@ void ScriptManager::FillFunctionVector(ScriptFile* scriptFile) {
         }
     }
 }
-
 
 void ScriptManager::Update(World& world, float deltaTime) {
     // Init.
@@ -699,11 +697,12 @@ void ScriptManager::Update(World& world, float deltaTime) {
                     if (typeId == engine->GetTypeIdByDecl("Entity@")) {
                         unsigned int* GUID = (unsigned int*)script->GetDataFromPropertyMap(name);
 
-                        //We make sure it is initialized.
+                        // We make sure it is initialized.
                         if (*GUID != 0)
                             *reinterpret_cast<Entity**>(varPointer) = Hymn().GetEntityByGUID(*GUID);
                         else
-                            Log() << "Property " << name << " of script " << script->scriptFile->name << " on entity " << script->entity->name << " is not initialized" << "\n";
+                            Log() << "Property " << name << " of script " << script->scriptFile->name << " on entity " << script->entity->name << " is not initialized"
+                                  << "\n";
                     } else
                         script->CopyDataFromPropertyMap(name, varPointer);
                 }
@@ -946,7 +945,7 @@ void ScriptManager::CallUpdate(Entity* entity, float deltaTime) {
     context->Release();
 }
 
-void ScriptManager::LoadScriptFile(const char* fileName, std::string& script){
+void ScriptManager::LoadScriptFile(const char* fileName, std::string& script) {
     // Open the file in binary mode
     FILE* f = fopen(fileName, "rb");
 

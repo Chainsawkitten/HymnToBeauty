@@ -16,7 +16,7 @@ void scrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
 
 InputHandler* InputHandler::activeInstance = nullptr;
 
-InputHandler::InputHandler(GLFWwindow *window) {
+InputHandler::InputHandler(GLFWwindow* window) {
     this->window = window;
 
     for (int i = 0; i < BUTTONS; i++) {
@@ -66,7 +66,7 @@ void InputHandler::Update() {
     }
 
     // Update triggered and released.
-    for (int button=0; button<BUTTONS; button++) {
+    for (int button = 0; button < BUTTONS; button++) {
         buttonData[button].triggered = !buttonData[button].down && values[button];
         buttonData[button].released = buttonData[button].down && !values[button];
         buttonData[button].down = values[button];

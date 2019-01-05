@@ -19,19 +19,19 @@ using namespace Video;
 StaticRenderProgram::StaticRenderProgram() {
     Shader* vertexShader = new Shader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
     Shader* fragmentShader = new Shader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
     delete fragmentShader;
 
     // Create shaders for early rejection pass
     vertexShader = new Shader(ZREJECTIONSTATIC_VERT, ZREJECTIONSTATIC_VERT_LENGTH, GL_VERTEX_SHADER);
     fragmentShader = new Shader(ZREJECTION_FRAG, ZREJECTION_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    zShaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    zShaderProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
 
     // Create shaders for shadowpass
     vertexShader = new Shader(SHADOWSTATIC_VERT, SHADOWSTATIC_VERT_LENGTH, GL_VERTEX_SHADER);
-    shadowProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    shadowProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
     delete fragmentShader;
 
@@ -97,7 +97,6 @@ void StaticRenderProgram::ShadowRender(Geometry::Geometry3D* geometry, const glm
         glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
     }
 }
-
 
 void StaticRenderProgram::PreDepthRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
     this->zShaderProgram->Use();
@@ -185,7 +184,6 @@ void StaticRenderProgram::Render(Geometry::Geometry3D* geometry, const Video::Te
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &viewMatrix[0][0]);
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(viewMatrix * modelMatrix));
         glUniformMatrix3fv(normalLocation, 1, GL_FALSE, &glm::mat3(normalMatrix)[0][0]);
-
 
         glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
 

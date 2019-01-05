@@ -80,7 +80,7 @@ void MainWindow::SetSize(int width, int height) {
     size.y = static_cast<float>(height);
 }
 
-void MainWindow::SetTitle(const char *title) const {
+void MainWindow::SetTitle(const char* title) const {
     glfwSetWindowTitle(window, title);
 }
 

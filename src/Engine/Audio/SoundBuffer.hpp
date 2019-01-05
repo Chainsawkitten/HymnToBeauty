@@ -5,37 +5,37 @@
 #include <json/json.h>
 
 namespace Audio {
-    class SoundFile;
+class SoundFile;
 
-    /// Wrapper for OpenAL buffers.
-    class SoundBuffer {
-        public:
-            /// Create new sound buffer.
-            SoundBuffer();
+/// Wrapper for OpenAL buffers.
+class SoundBuffer {
+  public:
+    /// Create new sound buffer.
+    SoundBuffer();
 
-            /// Destructor.
-            ~SoundBuffer();
+    /// Destructor.
+    ~SoundBuffer();
 
-            /// Get AL buffer.
-            /**
-             * @return The OpenAL buffer ID.
-             */
-            ALuint GetBuffer() const;
+    /// Get AL buffer.
+    /**
+     * @return The OpenAL buffer ID.
+     */
+    ALuint GetBuffer() const;
 
-            /// Set sound file.
-            /**
-             * @param soundFile The %SoundFile containing the sound.
-             */
-            void SetSoundFile(SoundFile* soundFile);
+    /// Set sound file.
+    /**
+     * @param soundFile The %SoundFile containing the sound.
+     */
+    void SetSoundFile(SoundFile* soundFile);
 
-            /// Get sound file.
-            /**
-             * @return The %SoundFile containing the sound.
-             */
-            SoundFile* GetSoundFile() const;
+    /// Get sound file.
+    /**
+     * @return The %SoundFile containing the sound.
+     */
+    SoundFile* GetSoundFile() const;
 
-        private:
-            SoundFile* soundFile = nullptr;
-            ALuint buffer = 0;
-    };
-}
+  private:
+    SoundFile* soundFile = nullptr;
+    ALuint buffer = 0;
+};
+} // namespace Audio

@@ -18,132 +18,132 @@ struct GLFWcursor;
 
 /// Handles the main editor.
 class Editor {
-    public:
-        /// Create new editor.
-        Editor();
+  public:
+    /// Create new editor.
+    Editor();
 
-        /// Destructor.
-        ~Editor();
+    /// Destructor.
+    ~Editor();
 
-        /// Show the editor.
-        /**
-         * @param deltaTime Time since last frame (in seconds).
-         */
-        void Show(float deltaTime);
+    /// Show the editor.
+    /**
+     * @param deltaTime Time since last frame (in seconds).
+     */
+    void Show(float deltaTime);
 
-        /// Show the editor.
-        /**
-         * @return Check if you have made any changes to the scene.
-         */
-        bool HasMadeChanges() const;
+    /// Show the editor.
+    /**
+     * @return Check if you have made any changes to the scene.
+     */
+    bool HasMadeChanges() const;
 
-        /// Save the hymn being edited.
-        void Save() const;
+    /// Save the hymn being edited.
+    void Save() const;
 
-        /// Loads the save editor state.
-        void LoadSceneState();
+    /// Loads the save editor state.
+    void LoadSceneState();
 
-        /// Is the editor ready to be closed, have we saved everything?
-        /**
-         * @return Are we ready to close the editor?
-         */
-        bool ReadyToClose() const;
+    /// Is the editor ready to be closed, have we saved everything?
+    /**
+     * @return Are we ready to close the editor?
+     */
+    bool ReadyToClose() const;
 
-        /// Is the editor preparing for closing down?
-        /**
-         * @return Are we closing the editor?
-         */
-        bool isClosing() const;
+    /// Is the editor preparing for closing down?
+    /**
+     * @return Are we closing the editor?
+     */
+    bool isClosing() const;
 
-        /// Close the editor.
-        void Close();
+    /// Close the editor.
+    void Close();
 
-        /// Get whether the resource list is visible.
-        /**
-         * @return Whether the resource list is visible.
-         */
-        bool IsVisible() const;
+    /// Get whether the resource list is visible.
+    /**
+     * @return Whether the resource list is visible.
+     */
+    bool IsVisible() const;
 
-        /// Set whether the resource list should be visible.
-        /**
-         * @param visible Whether the resource list should be visible.
-         */
-        void SetVisible(bool visible);
+    /// Set whether the resource list should be visible.
+    /**
+     * @param visible Whether the resource list should be visible.
+     */
+    void SetVisible(bool visible);
 
-        /// Get the editor camera.
-        /**
-         * @return Camera through which to render.
-         */
-        Entity* GetCamera() const;
+    /// Get the editor camera.
+    /**
+     * @return Camera through which to render.
+     */
+    Entity* GetCamera() const;
 
-        //Whether the vertices for the paint mode are loaded or not.
-        bool vertsLoaded = false;
+    // Whether the vertices for the paint mode are loaded or not.
+    bool vertsLoaded = false;
 
-        //Whether the paint mode is active or not.
-        bool paintModeActive = false;
+    // Whether the paint mode is active or not.
+    bool paintModeActive = false;
 
-    private:
-        void ShowMainMenuBar(bool& play);
-        void ShowGridSettings();
-        void CreateGrid(int size);
-        void ControlEditorCamera(float deltaTime);
-        void Picking();
-        void Focus();
-        void PaintBrush(Entity* entity);
-        void WidgetGizmo(Entity* entity);
+  private:
+    void ShowMainMenuBar(bool& play);
+    void ShowGridSettings();
+    void CreateGrid(int size);
+    void ControlEditorCamera(float deltaTime);
+    void Picking();
+    void Focus();
+    void PaintBrush(Entity* entity);
+    void WidgetGizmo(Entity* entity);
 
-        void Play();
-        void NewHymn();
-        void NewHymnClosed(const std::string& hymn);
-        void OpenHymn();
-        void OpenHymnClosed(const std::string& hymn);
-        void LoadActiveScene();
+    void Play();
+    void NewHymn();
+    void NewHymnClosed(const std::string& hymn);
+    void OpenHymn();
+    void OpenHymnClosed(const std::string& hymn);
+    void LoadActiveScene();
 
-        struct GridSettings {
-            int gridSize;
-            int lineWidth;
-            bool gridSnap;
-            int snapOption;
-        } gridSettings;
+    struct GridSettings {
+        int gridSize;
+        int lineWidth;
+        bool gridSnap;
+        int snapOption;
+    } gridSettings;
 
-        bool visible = true;
-        GUI::SelectHymnWindow selectHymnWindow;
-        GUI::InputWindow inputWindow;
-        GUI::ResourceView resourceView;
-        GUI::LogView logView;
-        GUI::SettingsWindow settingsWindow;
-        GUI::FiltersWindow filtersWindow;
-        GUI::SavePromptWindow savePromtWindow;
+    bool visible = true;
+    GUI::SelectHymnWindow selectHymnWindow;
+    GUI::InputWindow inputWindow;
+    GUI::ResourceView resourceView;
+    GUI::LogView logView;
+    GUI::SettingsWindow settingsWindow;
+    GUI::FiltersWindow filtersWindow;
+    GUI::SavePromptWindow savePromtWindow;
 
-        bool close;
-        bool savePromptAnswered;
-        bool showGridSettings;
-        Entity* parentEntity = nullptr;
-        Json::Value sceneState;
+    bool close;
+    bool savePromptAnswered;
+    bool showGridSettings;
+    Entity* parentEntity = nullptr;
+    Json::Value sceneState;
 
-        World cameraWorld;
-        Entity* cameraEntity;
-        Entity* currentEntity;
-        Entity* selectedEntity;
-        MousePicking mousePicker;
-        RayIntersection rayIntersector;
-        int nrOfVertices = 0;
-        int nrOfIndices = 0;
-        glm::vec3 normal;
-        float lastIntersect = INFINITY;
-        double lastX = 0.0;
-        double lastY = 0.0;
+    World cameraWorld;
+    Entity* cameraEntity;
+    Entity* currentEntity;
+    Entity* selectedEntity;
+    MousePicking mousePicker;
+    RayIntersection rayIntersector;
+    int nrOfVertices = 0;
+    int nrOfIndices = 0;
+    glm::vec3 normal;
+    float lastIntersect = INFINITY;
+    double lastX = 0.0;
+    double lastY = 0.0;
 
-        // Paint brush variables.
-        float paintTimer = 0.0f;
-        float paintSpawnRate[1] = { 0.5f };
-        float paintObjScale[1] = { 1.0f };
-        int paintScaleRandomness[1] = { 1 };
-        bool toolMenuPressed = false;
-        bool spreadRand = false;
-        std::string paintScene;
+    // Paint brush variables.
+    float paintTimer = 0.0f;
+    float paintSpawnRate[1] = {0.5f};
+    float paintObjScale[1] = {1.0f};
+    int paintScaleRandomness[1] = {1};
+    bool toolMenuPressed = false;
+    bool spreadRand = false;
+    std::string paintScene;
 
-        GLFWcursor* cursors[5];
+    GLFWcursor* cursors[5];
 
-        ImGuizmo::MODE imguizmoMode = ImGuizmo::MODE::WORLD;
+    ImGuizmo::MODE imguizmoMode = ImGuizmo::MODE::WORLD;
 };

@@ -7,8 +7,7 @@
 using namespace GUI;
 using namespace std;
 
-FileSelector::FileSelector() : path("Hymn to Beauty") {
-}
+FileSelector::FileSelector() : path("Hymn to Beauty") {}
 
 void FileSelector::Show() {
     if (pathChanged) {
@@ -50,7 +49,7 @@ void FileSelector::SetFileSelectedCallback(const std::function<void(const std::s
     hasFileSelectedCallback = true;
 }
 
-void GUI::FileSelector::SetInitialPath(const char * path) {
+void GUI::FileSelector::SetInitialPath(const char* path) {
     this->path = path;
 }
 

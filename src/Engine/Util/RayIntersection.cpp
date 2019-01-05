@@ -1,12 +1,10 @@
 #include "RayIntersection.hpp"
 
-RayIntersection::RayIntersection() {
-}
+RayIntersection::RayIntersection() {}
 
-RayIntersection::~RayIntersection() {
-}
+RayIntersection::~RayIntersection() {}
 
-bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const Video::AxisAlignedBoundingBox& meshData, const glm::mat4& modelMatrix, float &outputDistance) const {
+bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, const Video::AxisAlignedBoundingBox& meshData, const glm::mat4& modelMatrix, float& outputDistance) const {
     float tMin = -INFINITY;
     float tMax = INFINITY;
 
@@ -16,8 +14,8 @@ bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec
     glm::vec3 minVec = modelMatrix * glm::vec4(meshData.minVertex, 0.f);
     glm::vec3 maxVec = modelMatrix * glm::vec4(meshData.maxVertex, 0.f);
 
-    float minValue[3] = { minVec.x, minVec.y, minVec.z };
-    float maxValue[3] = { maxVec.x, maxVec.y, maxVec.z };
+    float minValue[3] = {minVec.x, minVec.y, minVec.z};
+    float maxValue[3] = {maxVec.x, maxVec.y, maxVec.z};
 
     for (int i = 0; i < 3; i++) {
         glm::vec3 currentAxis(i == 0, i == 1, i == 2);
@@ -29,7 +27,9 @@ bool RayIntersection::RayOBBIntersect(const glm::vec3& rayOrigin, const glm::vec
             float t2 = (e + maxValue[i]) / f;
 
             if (t1 > t2) {
-                float w = t1; t1 = t2; t2 = w;
+                float w = t1;
+                t1 = t2;
+                t2 = w;
             }
 
             if (t2 < tMax)

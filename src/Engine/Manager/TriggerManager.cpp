@@ -9,9 +9,7 @@
 #include "../Trigger/TriggerRepeat.hpp"
 #include "../Util/Json.hpp"
 
-
-TriggerManager::TriggerManager() {
-}
+TriggerManager::TriggerManager() {}
 
 TriggerManager::~TriggerManager() {
     assert(triggerComponents.GetAll().empty());
@@ -87,7 +85,6 @@ void TriggerManager::AddTriggerRepeat(Component::Trigger* trigger, std::shared_p
     trigger->superTrigger = repeat;
     trigger->triggerType = Component::Trigger::REPEAT;
 }
-
 
 TriggerRepeat* TriggerManager::GetTriggerRepeat(const Component::Trigger& trigger) const {
     return dynamic_cast<TriggerRepeat*>(trigger.superTrigger);

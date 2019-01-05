@@ -7,8 +7,7 @@
 
 using namespace GUI;
 
-AnimationClipEditor::AnimationClipEditor() {
-}
+AnimationClipEditor::AnimationClipEditor() {}
 
 void AnimationClipEditor::Show() {
     if (ImGui::Begin(("Animation clip: " + animationClip->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(animationClip))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {

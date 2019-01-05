@@ -15,8 +15,7 @@
 
 using namespace GUI;
 
-AnimationControllerEditor::AnimationControllerEditor() {
-}
+AnimationControllerEditor::AnimationControllerEditor() {}
 
 AnimationControllerEditor::~AnimationControllerEditor() {
     if (this->animationController != nullptr)

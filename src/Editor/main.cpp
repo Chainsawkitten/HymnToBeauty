@@ -26,7 +26,7 @@ int main() {
     Log().SetupStreams(&std::cout, &std::cout, &std::cout, &std::cerr);
 
     // Enable logging if requested.
-    if (EditorSettings::GetInstance().GetBool("Logging")){
+    if (EditorSettings::GetInstance().GetBool("Logging")) {
         FILE* file = freopen(FileSystem::DataPath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
         if (file == nullptr)
             Log() << "Could not open logging file!\n";
@@ -39,7 +39,7 @@ int main() {
 
     MainWindow* window = new MainWindow(EditorSettings::GetInstance().GetLong("Width"), EditorSettings::GetInstance().GetLong("Height"), false, false, "Hymn to Beauty", EditorSettings::GetInstance().GetBool("Debug Context"));
 
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         Log() << "Failed to initialize OpenGL context\n";
         return -1;
     }
@@ -71,67 +71,66 @@ int main() {
         if (Managers().profilingManager->Active())
             Managers().profilingManager->BeginFrame();
 
-        { PROFILE("Frame");
-        { GPUPROFILE("Frame", Video::Query::Type::TIME_ELAPSED);
-            glfwPollEvents();
+        {
+            PROFILE("Frame");
+            {
+                GPUPROFILE("Frame", Video::Query::Type::TIME_ELAPSED);
+                glfwPollEvents();
 
-            if (Input()->Triggered(InputHandler::WINDOWMODE)) {
-                bool fullscreen, borderless;
-                window->GetWindowMode(fullscreen, borderless);
-                window->SetWindowMode(!fullscreen, borderless);
+                if (Input()->Triggered(InputHandler::WINDOWMODE)) {
+                    bool fullscreen, borderless;
+                    window->GetWindowMode(fullscreen, borderless);
+                    window->SetWindowMode(!fullscreen, borderless);
+                }
+
+                if (Input()->Triggered(InputHandler::PROFILE))
+                    profiling = !profiling;
+
+                // Start new frame.
+                ImGuiImplementation::NewFrame();
+
+                window->Update();
+
+                if (editor->IsVisible()) {
+                    Hymn().world.ClearKilled();
+                    Managers().particleManager->Update(Hymn().world, deltaTime, true);
+
+                    Managers().debugDrawingManager->Update(deltaTime);
+                    Hymn().Render(RenderManager::MONITOR, editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"), EditorSettings::GetInstance().GetBool("Physics Volumes"), EditorSettings::GetInstance().GetBool("Lighting"), EditorSettings::GetInstance().GetBool("Light Volumes"));
+
+                    if (window->ShouldClose())
+                        editor->Close();
+
+                    editor->Show(deltaTime);
+
+                    if (window->ShouldClose() && !editor->isClosing())
+                        window->CancelClose();
+                } else {
+                    {
+                        PROFILE("Update");
+                        {
+                            GPUPROFILE("Update", Video::Query::Type::TIME_ELAPSED);
+                            Hymn().Update(deltaTime);
+                        }
+                    }
+
+                    {
+                        PROFILE("Render");
+                        {
+                            GPUPROFILE("Render", Video::Query::Type::TIME_ELAPSED);
+                            Hymn().Render(RenderManager::MONITOR);
+                        }
+                    }
+
+                    if (Input()->Triggered(InputHandler::PLAYTEST)) {
+                        // Rollback to the editor state.
+                        editor->LoadSceneState();
+
+                        // Turn editor back on.
+                        editor->SetVisible(true);
+                    }
+                }
             }
-
-            if (Input()->Triggered(InputHandler::PROFILE))
-                profiling = !profiling;
-
-            // Start new frame.
-            ImGuiImplementation::NewFrame();
-
-            window->Update();
-
-            if (editor->IsVisible()) {
-                Hymn().world.ClearKilled();
-                Managers().particleManager->Update(Hymn().world, deltaTime, true);
-
-                Managers().debugDrawingManager->Update(deltaTime);
-                Hymn().Render(RenderManager::MONITOR, editor->GetCamera(),
-                              EditorSettings::GetInstance().GetBool("Sound Source Icons"),
-                              EditorSettings::GetInstance().GetBool("Particle Emitter Icons"),
-                              EditorSettings::GetInstance().GetBool("Light Source Icons"),
-                              EditorSettings::GetInstance().GetBool("Camera Icons"),
-                              EditorSettings::GetInstance().GetBool("Physics Volumes"),
-                              EditorSettings::GetInstance().GetBool("Lighting"),
-                              EditorSettings::GetInstance().GetBool("Light Volumes"));
-
-                if (window->ShouldClose())
-                    editor->Close();
-
-                editor->Show(deltaTime);
-
-                if (window->ShouldClose() && !editor->isClosing())
-                    window->CancelClose();
-            } else {
-                { PROFILE("Update");
-                { GPUPROFILE("Update", Video::Query::Type::TIME_ELAPSED);
-                    Hymn().Update(deltaTime);
-                }
-                }
-
-                { PROFILE("Render");
-                { GPUPROFILE("Render", Video::Query::Type::TIME_ELAPSED);
-                    Hymn().Render(RenderManager::MONITOR);
-                }
-                }
-
-                if (Input()->Triggered(InputHandler::PLAYTEST)) {
-                    // Rollback to the editor state.
-                    editor->LoadSceneState();
-
-                    // Turn editor back on.
-                    editor->SetVisible(true);
-                }
-            }
-        }
         }
 
         if (Managers().profilingManager->Active()) {

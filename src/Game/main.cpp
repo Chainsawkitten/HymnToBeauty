@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
     MainWindow* window = new MainWindow(1920, 1080, true, false, "Hymn to Beauty", false);
 
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         Log() << "Failed to initialize OpenGL context\n";
         return -1;
     }
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
         window->SwapBuffers();
 
         long wait = static_cast<long>((1.0 / targetFPS + lastTimeRender - glfwGetTime()) * 1000000.0);
-        if ( wait > 0 )
+        if (wait > 0)
             std::this_thread::sleep_for(std::chrono::microseconds(wait));
         lastTimeRender = glfwGetTime();
 

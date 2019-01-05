@@ -11,8 +11,7 @@
 
 using namespace Component;
 
-Script::Script() {
-}
+Script::Script() {}
 
 Script::~Script() {
     if (instance != nullptr)
@@ -46,11 +45,11 @@ void Script::AddToPropertyMap(const std::string& name, int type, int size, void*
         propertyMap[name] = new Property(type, size, data);
 }
 
-void Script::CopyDataFromPropertyMap(const std::string& name, void* target){
+void Script::CopyDataFromPropertyMap(const std::string& name, void* target) {
     std::memcpy(target, propertyMap[name]->data, propertyMap[name]->size);
 }
 
-void* Script::GetDataFromPropertyMap(const std::string& name){
+void* Script::GetDataFromPropertyMap(const std::string& name) {
     return propertyMap[name]->data;
 }
 

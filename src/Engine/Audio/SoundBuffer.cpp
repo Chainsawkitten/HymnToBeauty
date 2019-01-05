@@ -8,8 +8,7 @@
 
 using namespace Audio;
 
-SoundBuffer::SoundBuffer() {
-}
+SoundBuffer::SoundBuffer() {}
 
 SoundBuffer::~SoundBuffer() {
     if (soundFile != nullptr)

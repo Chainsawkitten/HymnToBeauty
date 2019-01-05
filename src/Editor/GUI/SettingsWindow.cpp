@@ -13,7 +13,7 @@ SettingsWindow::SettingsWindow() {
 
     // Fetch a list of all themes (JSON files in Themes directory).
     std::vector<std::string> themeFiles = FileSystem::DirectoryContents(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes", FileSystem::FILE);
-    for (std::size_t i=0; i < themeFiles.size(); ++i) {
+    for (std::size_t i = 0; i < themeFiles.size(); ++i) {
         if (FileSystem::GetExtension(themeFiles[i]) == "json") {
             std::string name = themeFiles[i].substr(0, themeFiles[i].find_last_of("."));
             themes.push_back(name);
@@ -29,7 +29,7 @@ void SettingsWindow::Show() {
         if (dropDownItems != nullptr)
             delete[] dropDownItems;
         dropDownItems = new const char*[themes.size()];
-        for (std::size_t i=0; i < themes.size(); ++i) {
+        for (std::size_t i = 0; i < themes.size(); ++i) {
             dropDownItems[i] = themes[i].c_str();
         }
 

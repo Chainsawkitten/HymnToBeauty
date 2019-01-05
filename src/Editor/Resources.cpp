@@ -248,7 +248,7 @@ void ResourceList::ClearFolder(ResourceFolder& folder) {
     folder.resources.clear();
 }
 
-std::string ResourceList::GetSavePath() const{
+std::string ResourceList::GetSavePath() const {
     return Hymn().GetPath() + FileSystem::DELIMITER + "Resources.json";
 }
 

@@ -3,8 +3,7 @@
 #include "../Manager/Managers.hpp"
 #include "../Manager/ParticleManager.hpp"
 
-Component::ParticleSystemComponent::ParticleSystemComponent() {
-}
+Component::ParticleSystemComponent::ParticleSystemComponent() {}
 
 Component::ParticleSystemComponent::~ParticleSystemComponent() {
     Managers().particleManager->RemoveParticleRenderer(this);

@@ -5,59 +5,59 @@
 #include <string>
 
 namespace GUI {
-    /// A window where a hymn can be selected.
-    class SelectHymnWindow {
-        public:
-            /// Constructor.
-            SelectHymnWindow();
+/// A window where a hymn can be selected.
+class SelectHymnWindow {
+  public:
+    /// Constructor.
+    SelectHymnWindow();
 
-            /// Scan the save directory for hymns.
-            void Scan();
+    /// Scan the save directory for hymns.
+    void Scan();
 
-            /// Show the window and let the user select a hymn.
-            void Show();
+    /// Show the window and let the user select a hymn.
+    void Show();
 
-            /// Set function to call when closed.
-            /**
-             * @param callback Function to call when window is closed.
-             */
-            void SetClosedCallback(const std::function<void(const std::string&)>& callback);
+    /// Set function to call when closed.
+    /**
+     * @param callback Function to call when window is closed.
+     */
+    void SetClosedCallback(const std::function<void(const std::string&)>& callback);
 
-            /// Get whether the window is visible.
-            /**
-             * @return Whether the window is visible.
-             */
-            bool IsVisible() const;
+    /// Get whether the window is visible.
+    /**
+     * @return Whether the window is visible.
+     */
+    bool IsVisible() const;
 
-            /// Set whether the window should be visible.
-            /**
-             * @param visible Whether the window should be visible.
-             */
-            void SetVisible(bool visible);
+    /// Set whether the window should be visible.
+    /**
+     * @param visible Whether the window should be visible.
+     */
+    void SetVisible(bool visible);
 
-            /// Set window title.
-            /**
-             * @param title Window title.
-             */
-            void SetTitle(const char* title);
+    /// Set window title.
+    /**
+     * @param title Window title.
+     */
+    void SetTitle(const char* title);
 
-            /// Set the name of the open button.
-            /**
-             * @param openButtonName The name of the open button.
-             */
-            void SetOpenButtonName(const char* openButtonName);
+    /// Set the name of the open button.
+    /**
+     * @param openButtonName The name of the open button.
+     */
+    void SetOpenButtonName(const char* openButtonName);
 
-        private:
-            // Interaction
-            bool hasClosedCallback = false;
-            std::function<void(const std::string&)> closedCallback;
+  private:
+    // Interaction
+    bool hasClosedCallback = false;
+    std::function<void(const std::string&)> closedCallback;
 
-            std::vector<std::string> files;
-            char name[128];
+    std::vector<std::string> files;
+    char name[128];
 
-            bool visible = false;
+    bool visible = false;
 
-            const char* title;
-            const char* openButtonName;
-    };
-}
+    const char* title;
+    const char* openButtonName;
+};
+} // namespace GUI

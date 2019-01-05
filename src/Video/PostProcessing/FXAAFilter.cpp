@@ -10,7 +10,7 @@ using namespace Video;
 FXAAFilter::FXAAFilter() {
     Shader* vertexShader = new Shader(POST_VERT, POST_VERT_LENGTH, GL_VERTEX_SHADER);
     Shader* fragmentShader = new Shader(POSTFXAA_FRAG, POSTFXAA_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new ShaderProgram({ vertexShader, fragmentShader });
+    shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
     delete vertexShader;
     delete fragmentShader;
 

@@ -6,31 +6,31 @@
 class PhysicsManager;
 
 namespace Physics {
-    class Shape;
+class Shape;
 }
 
 namespace Component {
-    /// Physical shape that can be used in conjunction with rigid bodies or to
-    /// act as a trigger volume.
-    class Shape : public SuperComponent {
-        friend class ::PhysicsManager;
+/// Physical shape that can be used in conjunction with rigid bodies or to
+/// act as a trigger volume.
+class Shape : public SuperComponent {
+    friend class ::PhysicsManager;
 
-        public:
-            /// Create new shape.
-            Shape() = default;
+  public:
+    /// Create new shape.
+    Shape() = default;
 
-            Json::Value Save() const override;
+    Json::Value Save() const override;
 
-            /// Get the shape this component represents.
-            /**
-             * @return The %Shape.
-             */
-            std::shared_ptr<::Physics::Shape> GetShape() const;
+    /// Get the shape this component represents.
+    /**
+     * @return The %Shape.
+     */
+    std::shared_ptr<::Physics::Shape> GetShape() const;
 
-        private:
-            // Set the shape that this component will represent.
-            void SetShape(std::shared_ptr<::Physics::Shape> shape);
+  private:
+    // Set the shape that this component will represent.
+    void SetShape(std::shared_ptr<::Physics::Shape> shape);
 
-            std::shared_ptr<::Physics::Shape> shape = nullptr;
-    };
-}
+    std::shared_ptr<::Physics::Shape> shape = nullptr;
+};
+} // namespace Component

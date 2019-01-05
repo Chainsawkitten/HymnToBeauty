@@ -425,8 +425,7 @@ void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::Unindent();
 }
 
-void EntityEditor::ListenerEditor(Component::Listener* listener) {
-}
+void EntityEditor::ListenerEditor(Component::Listener* listener) {}
 
 void EntityEditor::RigidBodyEditor(Component::RigidBody* rigidBody) {
     rigidBodyEditor->Show(rigidBody);
@@ -520,7 +519,7 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
                     }
                 }
                 /// @todo This will be used to handle objects in the scripts
-                //else if (typeId & asTYPEID_SCRIPTOBJECT){
+                // else if (typeId & asTYPEID_SCRIPTOBJECT){
                 //    asIScriptObject *obj = (asIScriptObject*)varPointer;
                 //}
             }
@@ -537,12 +536,13 @@ void EntityEditor::ScriptEditor(Component::Script* script) {
 }
 
 void EntityEditor::ShapeEditor(Component::Shape* shape) {
-    if (ImGui::Combo("Shape", &selectedShape, [](void* data, int idx, const char** outText) -> bool {
-        IShapeEditor* editor = *(reinterpret_cast<IShapeEditor**>(data) + idx);
-        *outText = editor->Label();
-        return true;
-    },
-        shapeEditors.data(), static_cast<int>(shapeEditors.size()))) {
+    if (ImGui::Combo("Shape", &selectedShape,
+                     [](void* data, int idx, const char** outText) -> bool {
+                         IShapeEditor* editor = *(reinterpret_cast<IShapeEditor**>(data) + idx);
+                         *outText = editor->Label();
+                         return true;
+                     },
+                     shapeEditors.data(), static_cast<int>(shapeEditors.size()))) {
         shapeEditors[selectedShape]->Apply(shape);
     }
 

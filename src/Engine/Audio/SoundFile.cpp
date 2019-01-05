@@ -7,8 +7,7 @@
 
 using namespace Audio;
 
-SoundFile::~SoundFile() {
-}
+SoundFile::~SoundFile() {}
 
 void SoundFile::Save() const {
     Json::Value node;

@@ -5,8 +5,7 @@
 
 using namespace Audio;
 
-VorbisFile::VorbisFile() {
-}
+VorbisFile::VorbisFile() {}
 
 VorbisFile::~VorbisFile() {
     if (data != nullptr)

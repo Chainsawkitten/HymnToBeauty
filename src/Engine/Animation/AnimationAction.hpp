@@ -5,38 +5,38 @@
 #include "../Util/Node.hpp"
 
 namespace Animation {
-    class AnimationClip;
+class AnimationClip;
 }
 
 namespace Animation {
-    /// Animaiton action node.
-    class AnimationAction : public Node {
-        public:
-            /// Create new animation action.
-            AnimationAction();
+/// Animaiton action node.
+class AnimationAction : public Node {
+  public:
+    /// Create new animation action.
+    AnimationAction();
 
-            /// Destructor.
-            ~AnimationAction() override;
+    /// Destructor.
+    ~AnimationAction() override;
 
-            void Save(std::ofstream* file) override;
-            void Load(std::ifstream* file) override;
+    void Save(std::ofstream* file) override;
+    void Load(std::ifstream* file) override;
 
-            /// Name of animation.
-            char animationClipName[512] = {'\0'};
+    /// Name of animation.
+    char animationClipName[512] = {'\0'};
 
-            /// Can the playback speed be changed with scripting.
-            bool isPlaybackModifierStatic = true;
+    /// Can the playback speed be changed with scripting.
+    bool isPlaybackModifierStatic = true;
 
-            /// Static playback speed.
-            float playbackModifier = 1.f;
+    /// Static playback speed.
+    float playbackModifier = 1.f;
 
-            /// Dynamic playback modifier.
-            int32_t playbackModifierFloatIndex = -1;
+    /// Dynamic playback modifier.
+    int32_t playbackModifierFloatIndex = -1;
 
-            /// Shall the animation repeat?
-            bool repeat = true;
+    /// Shall the animation repeat?
+    bool repeat = true;
 
-            /// Linked animation clip.
-            AnimationClip* animationClip = nullptr;
-    };
-}
+    /// Linked animation clip.
+    AnimationClip* animationClip = nullptr;
+};
+} // namespace Animation

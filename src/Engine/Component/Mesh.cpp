@@ -6,8 +6,7 @@
 
 using namespace Component;
 
-Mesh::Mesh() {
-}
+Mesh::Mesh() {}
 
 Mesh::~Mesh() {
     Geometry::Model* model = dynamic_cast<Geometry::Model*>(geometry);

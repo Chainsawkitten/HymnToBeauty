@@ -4,8 +4,7 @@
 
 using namespace Animation;
 
-AnimationAction::AnimationAction() {
-}
+AnimationAction::AnimationAction() {}
 
 AnimationAction::~AnimationAction() {
     if (animationClip != nullptr)

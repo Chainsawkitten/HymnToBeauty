@@ -92,7 +92,7 @@ Editor::Editor() {
     gridSettings.snapOption = EditorSettings::GetInstance().GetLong("Grid Snap Size");
 
     // Ray mouse.
-    mousePicker = MousePicking(cameraEntity, cameraEntity->GetComponent < Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+    mousePicker = MousePicking(cameraEntity, cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
 }
 
 Editor::~Editor() {
@@ -232,7 +232,6 @@ void Editor::Show(float deltaTime) {
         }
     }
 }
-
 
 void Editor::Save() const {
     resourceView.SaveScene();
@@ -423,7 +422,8 @@ void Editor::ShowMainMenuBar(bool& play) {
             }
 
             // Editor Camera Coordinates
-            ImGui::SameLine(size.x - 280); ImGui::Text("X: %f, Y: %f, Z: %f", cameraEntity->GetWorldPosition().x, cameraEntity->GetWorldPosition().y, cameraEntity->GetWorldPosition().z);
+            ImGui::SameLine(size.x - 280);
+            ImGui::Text("X: %f, Y: %f, Z: %f", cameraEntity->GetWorldPosition().x, cameraEntity->GetWorldPosition().y, cameraEntity->GetWorldPosition().z);
         }
 
         ImGui::EndMainMenuBar();
@@ -505,7 +505,7 @@ void Editor::ControlEditorCamera(float deltaTime) {
 
 void Editor::Picking() {
     if (Input()->Pressed(InputHandler::CONTROL) && Input()->Triggered(InputHandler::SELECT) && !ImGui::IsMouseHoveringAnyWindow()) {
-        mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent < Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+        mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
         mousePicker.Update();
         float lastDistance = INFINITY;
 
@@ -520,12 +520,10 @@ void Editor::Picking() {
         const std::vector<Entity*>& entities = Hymn().world.GetEntities();
         for (Entity* entity : entities) {
             // Check if entity has pickable component.
-            if (entity->GetComponent<Component::SpotLight>() || entity->GetComponent<Component::DirectionalLight>() || entity->GetComponent<Component::PointLight>() ||
-                entity->GetComponent<Component::Mesh>() || entity->GetComponent<Component::Lens>() || entity->GetComponent<Component::SoundSource>()) {
+            if (entity->GetComponent<Component::SpotLight>() || entity->GetComponent<Component::DirectionalLight>() || entity->GetComponent<Component::PointLight>() || entity->GetComponent<Component::Mesh>() || entity->GetComponent<Component::Lens>() || entity->GetComponent<Component::SoundSource>()) {
                 // Get aabo.
                 Component::Mesh* mesh = entity->GetComponent<Component::Mesh>();
-                const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->geometry != nullptr ?
-                    mesh->geometry->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
+                const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->geometry != nullptr ? mesh->geometry->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
                 // Intersect with aabo.
                 if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), mousePicker.GetCurrentRay(), aabo, entity->GetModelMatrix(), intersectDistance)) {
                     if (intersectDistance < lastDistance && intersectDistance > 0.f) {
@@ -651,7 +649,7 @@ void Editor::PaintBrush(Entity* entity) {
 
             // Paint objects (scenes).
             // Draw them when mouse pressed.
-            if (Input()->Pressed(InputHandler::SELECT) && intersect &&paintTimer >= paintSpawnRate[0] && toolMenuPressed == false) {
+            if (Input()->Pressed(InputHandler::SELECT) && intersect && paintTimer >= paintSpawnRate[0] && toolMenuPressed == false) {
                 if (entity->GetChild("foliage") == nullptr)
                     parentEntity = entity->AddChild("foliage");
 
@@ -664,7 +662,7 @@ void Editor::PaintBrush(Entity* entity) {
                 }
                 Entity* entity = parentEntity->AddChild("foliage_");
                 entity->InstantiateScene("Resources/" + paintScene, "Resources/" + Hymn().world.GetRoot()->name);
-                entity->SetWorldPosition(glm::vec3(mousePos.x + randDistance*cos(randAngle), mousePos.y, mousePos.z + randDistance*sin(randAngle)));
+                entity->SetWorldPosition(glm::vec3(mousePos.x + randDistance * cos(randAngle), mousePos.y, mousePos.z + randDistance * sin(randAngle)));
                 entity->scale *= paintObjScale[0];
                 entity->scale += rand() % paintScaleRandomness[0];
 
@@ -722,26 +720,26 @@ void Editor::WidgetGizmo(Entity* entity) {
 
     if (ImGuizmo::IsUsing()) {
         switch (currentOperation) {
-            case ImGuizmo::TRANSLATE: {
-                entity->position.x = currentEntityMatrix[3][0];
-                entity->position.y = currentEntityMatrix[3][1];
-                entity->position.z = currentEntityMatrix[3][2];
-                break;
-            }
-            case ImGuizmo::ROTATE: {
-                entity->SetLocalOrientation(glm::toQuat(deltaMatrix) * entity->GetLocalOrientation());
-                break;
-            }
-            case ImGuizmo::SCALE: {
-                float translation[3];
-                float rotation[3];
-                float scale[3];
-                ImGuizmo::DecomposeMatrixToComponents(&currentEntityMatrix[0][0], translation, rotation, scale);
-                entity->scale.x = scale[0];
-                entity->scale.y = scale[1];
-                entity->scale.z = scale[2];
-                break;
-            }
+        case ImGuizmo::TRANSLATE: {
+            entity->position.x = currentEntityMatrix[3][0];
+            entity->position.y = currentEntityMatrix[3][1];
+            entity->position.z = currentEntityMatrix[3][2];
+            break;
+        }
+        case ImGuizmo::ROTATE: {
+            entity->SetLocalOrientation(glm::toQuat(deltaMatrix) * entity->GetLocalOrientation());
+            break;
+        }
+        case ImGuizmo::SCALE: {
+            float translation[3];
+            float rotation[3];
+            float scale[3];
+            ImGuizmo::DecomposeMatrixToComponents(&currentEntityMatrix[0][0], translation, rotation, scale);
+            entity->scale.x = scale[0];
+            entity->scale.y = scale[1];
+            entity->scale.z = scale[2];
+            break;
+        }
         }
     }
 }
@@ -780,7 +778,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         resourceView.SetVisible(true);
 
         // Default scene.
-        //Resources().scenes.push_back("Scene #0");
+        // Resources().scenes.push_back("Scene #0");
 
         Entity* player = Hymn().world.GetRoot()->AddChild("Player");
         player->position.z = 10.f;

@@ -5,28 +5,28 @@
 #include "../Util/Node.hpp"
 
 namespace Animation {
-    /// Animation transition node.
-    class AnimationTransition : public Node {
-        public:
-            /// Create new animation transition.
-            AnimationTransition();
+/// Animation transition node.
+class AnimationTransition : public Node {
+  public:
+    /// Create new animation transition.
+    AnimationTransition();
 
-            /// Destructor.
-            ~AnimationTransition() override;
+    /// Destructor.
+    ~AnimationTransition() override;
 
-            void Save(std::ofstream* file) override;
-            void Load(std::ifstream* file) override;
+    void Save(std::ofstream* file) override;
+    void Load(std::ifstream* file) override;
 
-            /// Is the bool static.
-            bool isStatic = true;
+    /// Is the bool static.
+    bool isStatic = true;
 
-            /// Index of the transition bool.
-            int32_t transitionBoolIndex = -1;
+    /// Index of the transition bool.
+    int32_t transitionBoolIndex = -1;
 
-            /// The transition time.
-            float transitionTime = 0.5f;
+    /// The transition time.
+    float transitionTime = 0.5f;
 
-            /// Process of the transition.
-            float transitionProcess = 0.0f;
-    };
-}
+    /// Process of the transition.
+    float transitionProcess = 0.0f;
+};
+} // namespace Animation

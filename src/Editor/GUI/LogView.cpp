@@ -60,7 +60,7 @@ void LogView::Show() {
 }
 
 void LogView::UpdateLog() {
-    //Create log output string.
+    // Create log output string.
     std::string output;
     if (!defaultStringstream.str().empty())
         output += "[Default] " + defaultStringstream.str();

@@ -3,30 +3,26 @@
 #include <cstdint>
 
 namespace Component {
-    class Trigger;
+class Trigger;
 }
 
 namespace GUI {
-    /// Editor controls for the trigger component. Displays a modal window with
-    /// settings for a given trigger component.
-    class TriggerEditor {
-        public:
-            enum Cases {
-                PROPERTIES = 0,
-                SUBJECTS,
-                NUMBER_OF_CASES
-            };
+/// Editor controls for the trigger component. Displays a modal window with
+/// settings for a given trigger component.
+class TriggerEditor {
+  public:
+    enum Cases { PROPERTIES = 0, SUBJECTS, NUMBER_OF_CASES };
 
-            /// Open the trigger editor.
-            void Open();
+    /// Open the trigger editor.
+    void Open();
 
-            /// Display the editor.
-            /**
-             * @param comp Trigger component to edit.
-             */
-            void Show(Component::Trigger& comp);
+    /// Display the editor.
+    /**
+     * @param comp Trigger component to edit.
+     */
+    void Show(Component::Trigger& comp);
 
-        private:
-            uint32_t selectedTab = 0;
-    };
-}
+  private:
+    uint32_t selectedTab = 0;
+};
+} // namespace GUI

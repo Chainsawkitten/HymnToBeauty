@@ -4,8 +4,7 @@
 
 using namespace Geometry;
 
-AssetFileHandler::AssetFileHandler() {
-}
+AssetFileHandler::AssetFileHandler() {}
 
 AssetFileHandler::AssetFileHandler(const char* filepath, Mode mode) {
     Open(filepath, mode);
@@ -87,13 +86,11 @@ void AssetFileHandler::LoadMeshData(int meshID) {
 
     if (meshData->isSkinned) {
         meshData->skinnedVertices = new Video::Geometry::VertexType::SkinVertex[meshData->numVertices];
-        rFile.read(reinterpret_cast<char*>(meshData->skinnedVertices),
-            sizeof(Video::Geometry::VertexType::SkinVertex) * meshData->numVertices);
+        rFile.read(reinterpret_cast<char*>(meshData->skinnedVertices), sizeof(Video::Geometry::VertexType::SkinVertex) * meshData->numVertices);
         meshData->staticVertices = nullptr;
     } else {
         meshData->staticVertices = new Video::Geometry::VertexType::StaticVertex[meshData->numVertices];
-        rFile.read(reinterpret_cast<char*>(meshData->staticVertices),
-            sizeof(Video::Geometry::VertexType::StaticVertex) * meshData->numVertices);
+        rFile.read(reinterpret_cast<char*>(meshData->staticVertices), sizeof(Video::Geometry::VertexType::StaticVertex) * meshData->numVertices);
         meshData->skinnedVertices = nullptr;
     }
 
@@ -123,15 +120,12 @@ void AssetFileHandler::SaveMesh(MeshData* meshData) {
 
     // Write mesh data.
     if (meshData->isSkinned) {
-        wFile.write(reinterpret_cast<char*>(meshData->skinnedVertices),
-            sizeof(Video::Geometry::VertexType::SkinVertex) * meshData->numVertices);
+        wFile.write(reinterpret_cast<char*>(meshData->skinnedVertices), sizeof(Video::Geometry::VertexType::SkinVertex) * meshData->numVertices);
     } else {
-        wFile.write(reinterpret_cast<char*>(meshData->staticVertices),
-            sizeof(Video::Geometry::VertexType::StaticVertex) * meshData->numVertices);
+        wFile.write(reinterpret_cast<char*>(meshData->staticVertices), sizeof(Video::Geometry::VertexType::StaticVertex) * meshData->numVertices);
     }
 
-    wFile.write(reinterpret_cast<char*>(meshData->indices),
-        sizeof(uint32_t) * meshData->numIndices);
+    wFile.write(reinterpret_cast<char*>(meshData->indices), sizeof(uint32_t) * meshData->numIndices);
 }
 
 void AssetFileHandler::ReadGlobalHeader() {

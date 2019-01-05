@@ -3,11 +3,9 @@
 #include <Engine/Animation/AnimationController.hpp>
 #include <Utility/Log.hpp>
 
-NodeEditor::NodeEditor() {
-}
+NodeEditor::NodeEditor() {}
 
-NodeEditor::~NodeEditor() {
-}
+NodeEditor::~NodeEditor() {}
 
 void NodeEditor::Show() {
     if (ImGui::Begin("Animation controller", &visible)) {

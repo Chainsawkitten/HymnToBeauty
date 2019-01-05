@@ -2,7 +2,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 float Geometry::DotQuat(const glm::quat& q1, const glm::quat& q2) {
-    return q1.x*q2.x + q1.y*q2.y + q1.z*q2.z + q1.w*q2.w;
+    return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
 void Geometry::NormalizeQuat(glm::quat& q) {
@@ -13,8 +13,7 @@ void Geometry::NormalizeQuat(glm::quat& q) {
         q.y *= d;
         q.z *= d;
         q.w *= d;
-    }
-    else {
+    } else {
         q.x = q.y = q.z = 0;
         q.w = 1;
     }
@@ -30,7 +29,6 @@ void Geometry::CpyVec(glm::vec2& glmVec, const aiVector3D& aiVec) {
     glmVec.x = aiVec.x;
     glmVec.y = aiVec.y;
 }
-
 
 void Geometry::CpyVec(glm::vec2& glmVec, const aiVector2D& aiVec) {
     glmVec.x = aiVec.x;

@@ -4,11 +4,9 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Geometry/MeshData.hpp>
 
-AssetConverter::AssetConverter() {
-}
+AssetConverter::AssetConverter() {}
 
-AssetConverter::~AssetConverter() {
-}
+AssetConverter::~AssetConverter() {}
 
 void AssetConverter::Convert(const char* filepath, const char* destination, const glm::vec3& scale, bool triangulate, bool importNormals, bool importTangents, bool flipUVs, bool importMaterial, Material& materials, bool CPU, bool GPU) {
     success = true;
@@ -78,8 +76,7 @@ void AssetConverter::ConvertMesh(aiMesh* aMesh, Geometry::AssetFileHandler* file
     if (aMesh->mNumBones == 0) {
         meshData->staticVertices = ConvertStaticVertices(aMesh, file, numVertices, scale, flipUVs);
         meshData->isSkinned = false;
-    }
-    else {
+    } else {
         meshData->skinnedVertices = ConvertSkinnedVertices(aMesh, file, numVertices, scale, flipUVs);
         meshData->isSkinned = true;
     }

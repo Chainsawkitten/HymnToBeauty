@@ -8,94 +8,91 @@
 #include <Video/Geometry/VertexType/SkinVertex.hpp>
 
 namespace Geometry {
-    struct MeshData;
+struct MeshData;
 }
 
 namespace Geometry {
-    /// Handler for .asset format.
+/// Handler for .asset format.
+/**
+ * Start by using the Open() function.
+ * The Open() function requries a filepath and
+ * a mode READ/WRITE.
+ * End by using the Close() function.
+ */
+class AssetFileHandler {
+  public:
+    /// Mode to use class. READ/WRITE.
+    enum Mode { READ = 0, WRITE = 1 };
+
+    /// The current version of the exporter.
+    const uint16_t CURRENT_VERSION = 1;
+
+    /// Importing is supported from version.
+    const uint16_t SUPPORTED_FROM = 1;
+
+    /// Default constructor.
+    AssetFileHandler();
+
+    /// Open a .asset file.
     /**
-     * Start by using the Open() function.
-     * The Open() function requries a filepath and
-     * a mode READ/WRITE.
-     * End by using the Close() function.
+     * @param filepath Path of the file.
+     * @param mode Use READ or WRITE.
      */
-    class AssetFileHandler {
-        public:
-            /// Mode to use class. READ/WRITE.
-            enum Mode {
-                READ = 0,
-                WRITE = 1
-            };
+    AssetFileHandler(const char* filepath, Mode mode = READ);
 
-            /// The current version of the exporter.
-            const uint16_t CURRENT_VERSION = 1;
+    /// Destructor.
+    ~AssetFileHandler();
 
-            /// Importing is supported from version.
-            const uint16_t SUPPORTED_FROM = 1;
+    /// Open a .asset file.
+    /**
+     * @param filepath Path of the file.
+     * @param mode Use READ or WRITE.
+     * @return False if failed could not be opened.
+     */
+    bool Open(const char* filepath, Mode mode = READ);
 
-            /// Default constructor.
-            AssetFileHandler();
+    /// Close the opened file and clear data.
+    void Close();
 
-            /// Open a .asset file.
-            /**
-             * @param filepath Path of the file.
-             * @param mode Use READ or WRITE.
-             */
-            AssetFileHandler(const char* filepath, Mode mode = READ);
+    /// Clear current data.
+    void Clear();
 
-            /// Destructor.
-            ~AssetFileHandler();
+    /// Load a mesh into memory.
+    /**
+     * @param Id of the mesh. Use GetNumMeshes() to get the number of meshes.
+     */
+    void LoadMeshData(int meshID);
 
-            /// Open a .asset file.
-            /**
-             * @param filepath Path of the file.
-             * @param mode Use READ or WRITE.
-             * @return False if failed could not be opened.
-             */
-            bool Open(const char* filepath, Mode mode = READ);
+    /// Get static vertex data of a mesh.
+    /**
+     * First load a mesh into memory by using LoadMeshData().
+     * @return Static mesh data.
+     */
+    MeshData* GetStaticMeshData();
 
-            /// Close the opened file and clear data.
-            void Close();
+    /// Save the meshdata.
+    /**
+     * @param meshData Static mesh data.
+     */
+    void SaveMesh(MeshData* meshData);
 
-            /// Clear current data.
-            void Clear();
+  private:
+    void ReadGlobalHeader();
+    void WriteGlobalHeader();
+    void ClearMesh();
 
-            /// Load a mesh into memory.
-            /**
-             * @param Id of the mesh. Use GetNumMeshes() to get the number of meshes.
-             */
-            void LoadMeshData(int meshID);
+    Mode mode;
 
-            /// Get static vertex data of a mesh.
-            /**
-             * First load a mesh into memory by using LoadMeshData().
-             * @return Static mesh data.
-             */
-            MeshData* GetStaticMeshData();
+    uint16_t uniqueID;
+    uint16_t numStaticMeshes;
 
-            /// Save the meshdata.
-            /**
-             * @param meshData Static mesh data.
-             */
-            void SaveMesh(MeshData* meshData);
+    MeshData* meshData = nullptr;
 
-        private:
-            void ReadGlobalHeader();
-            void WriteGlobalHeader();
-            void ClearMesh();
+    std::ifstream rFile;
+    std::ofstream wFile;
+    int fileVersion;
 
-            Mode mode;
-
-            uint16_t uniqueID;
-            uint16_t numStaticMeshes;
-
-            MeshData * meshData = nullptr;
-
-            std::ifstream rFile;
-            std::ofstream wFile;
-            int fileVersion;
-
-            std::streampos globalHeaderStart;
-            std::vector<std::streampos> staticMeshHeaderStart;
-    };
-}
+    std::streampos globalHeaderStart;
+    std::vector<std::streampos> staticMeshHeaderStart;
+};
+} // namespace Geometry

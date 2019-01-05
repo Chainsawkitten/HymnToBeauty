@@ -43,7 +43,6 @@ void ParticleManager::RenderParticleSystem(const glm::mat4& viewMatrix, const gl
     }
 }
 
-
 const Texture2D* ParticleManager::GetTextureAtlas() const {
     return textureAtlas;
 }
@@ -75,7 +74,7 @@ Component::ParticleSystemComponent* ParticleManager::CreateParticleSystem(const 
     return particleSystem;
 }
 
-void ParticleManager::RemoveParticleRenderer(Component::ParticleSystemComponent * component) {
+void ParticleManager::RemoveParticleRenderer(Component::ParticleSystemComponent* component) {
     delete particleSystemRenderers[component];
     particleSystemRenderers.erase(component);
 }

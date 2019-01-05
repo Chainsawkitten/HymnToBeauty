@@ -4,8 +4,7 @@
 
 using namespace Component;
 
-DirectionalLight::DirectionalLight() {
-}
+DirectionalLight::DirectionalLight() {}
 
 Json::Value DirectionalLight::Save() const {
     Json::Value component;

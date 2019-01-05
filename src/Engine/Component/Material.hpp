@@ -5,30 +5,30 @@
 class TextureAsset;
 
 namespace Component {
-    /// %Component providing a material to Entity.
-    class Material : public SuperComponent {
-        public:
-            /// Create new material.
-            Material();
+/// %Component providing a material to Entity.
+class Material : public SuperComponent {
+  public:
+    /// Create new material.
+    Material();
 
-            /// Destructor.
-            ~Material() override;
+    /// Destructor.
+    ~Material() override;
 
-            Json::Value Save() const override;
+    Json::Value Save() const override;
 
-            /// Albedo texture.
-            TextureAsset* albedo;
+    /// Albedo texture.
+    TextureAsset* albedo;
 
-            /// Normal texture.
-            TextureAsset* normal;
+    /// Normal texture.
+    TextureAsset* normal;
 
-            /// Metallic texture.
-            TextureAsset* metallic;
+    /// Metallic texture.
+    TextureAsset* metallic;
 
-            /// Roughness texture.
-            TextureAsset* roughness;
+    /// Roughness texture.
+    TextureAsset* roughness;
 
-        private:
-            void LoadTexture(TextureAsset*& texture, const std::string& name);
-    };
-}
+  private:
+    void LoadTexture(TextureAsset*& texture, const std::string& name);
+};
+} // namespace Component

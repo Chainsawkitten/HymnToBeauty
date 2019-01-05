@@ -1,0 +1,10 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+AllowShortFunctionsOnASingleLine: Empty
+ColumnLimit: 1000
+FixNamespaceComments: true
+IndentWidth: 4
+PointerAlignment: Left
+SortIncludes: false
+Standard: Cpp11

@@ -44,7 +44,7 @@ void ProfilingWindow::Show() {
             }
         }
 
-       ImGui::Text("Light count: %u", Managers().renderManager->GetLightCount());
+        ImGui::Text("Light count: %u", Managers().renderManager->GetLightCount());
     }
 
     /// Update log whether or not we're actually showing it.
