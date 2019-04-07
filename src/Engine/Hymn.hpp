@@ -65,7 +65,6 @@ class ActiveHymn {
 
     /// Render the world.
     /**
-     * @param targetDisplay Display type to render.
      * @param camera Camera through which to render (or first camera in the world if nullptr).
      * @param soundSources Whether to show sound sources.
      * @param particleEmitters Whether to show particle emitters.
@@ -75,7 +74,7 @@ class ActiveHymn {
      * @param lighting Whether to light the world (otherwise full ambient is used).
      * @param lightVolumes Whether to show light culling volumes.
      */
-    void Render(RenderManager::DISPLAY targetDisplay, Entity* camera = nullptr, bool soundSources = false, bool particleEmitters = false, bool lightSources = false, bool cameras = false, bool physics = false, bool lighting = true, bool lightVolumes = false);
+    void Render(Entity* camera = nullptr, bool soundSources = false, bool particleEmitters = false, bool lightSources = false, bool cameras = false, bool physics = false, bool lighting = true, bool lightVolumes = false);
 
     /// Find entity via GUID.
     /**

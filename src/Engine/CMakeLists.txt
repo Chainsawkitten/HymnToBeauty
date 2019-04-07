@@ -5,6 +5,7 @@ set(SRCS
         ../../externals/AngelScript/sdk/add_on/scriptdictionary/scriptdictionary.cpp
         ../../externals/AngelScript/sdk/add_on/scriptmath/scriptmath.cpp
         ../../externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
+        Engine.cpp
         Hymn.cpp
         MainWindow.cpp
         Animation/Animation.cpp
@@ -72,6 +73,7 @@ set(SRCS
     )
 
 set(HEADERS
+        Engine.hpp
         Hymn.hpp
         MainWindow.hpp
         Animation/Animation.hpp
