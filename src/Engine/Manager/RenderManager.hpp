@@ -31,13 +31,9 @@ class RenderManager {
     friend class Hub;
 
   public:
-    /// Types of displays to render.
-    enum DISPLAY { MONITOR, HMD };
-
     /// Render world containing entities.
     /**
      * @param world Contains a bunch of entities.
-     * @param targetDisplay Display type to render.
      * @param soundSources Whether to show sound sources.
      * @param particleEmitters Whether to show particle emitters.
      * @param lightSources Whether to show light sources.
@@ -47,7 +43,7 @@ class RenderManager {
      * @param lighting Whether to light the scene (otherwise full ambient is used).
      * @param lightVolumes Whether to show light culling volumes.
      */
-    void Render(World& world, DISPLAY targetDisplay, bool soundSources = true, bool particleEmitters = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
+    void Render(World& world, bool soundSources = true, bool particleEmitters = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
 
     /// Update all the animations in the scene.
     /**
@@ -277,18 +273,6 @@ class RenderManager {
      * @return Whether dithering is applied.
      */
     bool GetDitherApply() const;
-
-    /// Set the level of texture reduction to use.
-    /**
-     * @param textureReduction Which mip-level to start loading.
-     */
-    void SetTextureReduction(uint16_t textureReduction);
-
-    /// Get the level of texture reduction to use.
-    /**
-     * @return Which mip-level to start loading.
-     */
-    uint16_t GetTextureReduction() const;
 
     /// Get the number of lights currently being rendered.
     /**
