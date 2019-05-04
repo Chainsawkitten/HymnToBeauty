@@ -7,7 +7,7 @@
  * Available settings:
  * Name                   | Description                      | Type   | Default Value
  * ---------------------- | -------------------------------- | ------ | -------------
- * Shadow Map Size        | Dimensions of the shadow map.    | long   | 1024
+ * 
  */
 class GameSettings : public Settings {
   public:

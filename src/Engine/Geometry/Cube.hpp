@@ -8,19 +8,15 @@ namespace Geometry {
 class Cube : public Video::Geometry::Geometry3D {
   public:
     /// Create new cube.
-    Cube();
+    /**
+     * @param lowLevelRenderer The low-level renderer to use
+     */
+    explicit Cube(Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     ~Cube() final;
 
     Type GetType() const override;
-
-  protected:
-    /// Generate vertex buffer.
-    void GenerateVertexBuffer(GLuint& vertexBuffer);
-
-    /// Generate vertex array.
-    void GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
 
   private:
     std::vector<Video::Geometry::VertexType::StaticVertex> vertices;

@@ -11,8 +11,10 @@ class Model : public Video::Geometry::Geometry3D {
     /// Create new empty model.
     /**
      * The created model has to be loaded later using Load.
+     *
+     * @param lowLevelRenderer The low-level renderer to use
      */
-    Model();
+    explicit Model(Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     virtual ~Model();
@@ -29,12 +31,6 @@ class Model : public Video::Geometry::Geometry3D {
      */
     void Load(const std::string& name);
 
-    /// Load model from file.
-    /**
-     * @param filename Filename (relative or absolute) to the model file.
-     */
-    void Load(const char* filename);
-
     Type GetType() const final;
 
     /// The name of the model.
@@ -44,10 +40,7 @@ class Model : public Video::Geometry::Geometry3D {
     std::string path;
 
   private:
-    void GenerateVertexBuffer(GLuint& vertexBuffer, Video::Geometry::VertexType::StaticVertex* vertices, unsigned int numVerticies);
-    void GenerateVertexBuffer(GLuint& vertexBuffer, Video::Geometry::VertexType::SkinVertex* vertices, unsigned int numVerticies);
-    void GenerateStaticVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
-    void GenerateSkinVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray);
+    void LoadGeometry(const char* filename);
 
     AssetFileHandler assetFile;
     Type type;

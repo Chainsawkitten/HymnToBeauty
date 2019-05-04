@@ -2,7 +2,7 @@
 
 using namespace Geometry;
 
-Cube::Cube() {
+Cube::Cube(Video::LowLevelRenderer* lowLevelRenderer) : Video::Geometry::Geometry3D(lowLevelRenderer) {
     // Vertices
     std::size_t vertexCount = 24;
     vertices.resize(vertexCount);
@@ -104,9 +104,10 @@ Cube::Cube() {
     indexData[35] = 22;
 
     // Generate buffers.
-    GenerateVertexBuffer(vertexBuffer);
-    GenerateIndexBuffer(indices.data(), static_cast<unsigned int>(indices.size()), indexBuffer);
-    GenerateVertexArray(vertexBuffer, indexBuffer, vertexArray);
+    vertexBuffer = Video::Geometry::VertexType::StaticVertex::GenerateVertexBuffer(lowLevelRenderer, vertices.data(), static_cast<unsigned int>(vertices.size()));
+    vertexDescription = Video::Geometry::VertexType::StaticVertex::GenerateVertexDescription(lowLevelRenderer);
+    GenerateIndexBuffer(indices.data(), static_cast<unsigned int>(indices.size()));
+    GenerateGeometryBinding();
 
     // Generate AABB
     CreateAxisAlignedBoundingBox(verticesPos);
@@ -124,12 +125,4 @@ Cube::~Cube() {}
 
 Video::Geometry::Geometry3D::Type Cube::GetType() const {
     return STATIC;
-}
-
-void Cube::GenerateVertexBuffer(GLuint& vertexBuffer) {
-    vertexBuffer = Video::Geometry::VertexType::StaticVertex::GenerateVertexBuffer(vertices.data(), static_cast<unsigned int>(vertices.size()));
-}
-
-void Cube::GenerateVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray) {
-    vertexArray = Video::Geometry::VertexType::StaticVertex::GenerateVertexArray(vertexBuffer, indexBuffer);
 }

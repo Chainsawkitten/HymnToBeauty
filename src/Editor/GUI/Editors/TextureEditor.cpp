@@ -2,6 +2,7 @@
 
 #include <Engine/Texture/TextureAsset.hpp>
 #include <Video/Texture/TexturePNG.hpp>
+#include <Video/LowLevelRenderer/Interface/Texture.hpp>
 #include "../FileSelector.hpp"
 #include <functional>
 #include <Engine/Hymn.hpp>
@@ -25,7 +26,7 @@ void TextureEditor::Show() {
         }
 
         if (texture->GetTexture()->IsLoaded()) {
-            ImGui::Image((void*)texture->GetTexture()->GetTextureID(), ImVec2(128, 128));
+            ImGui::Image(const_cast<Video::Texture*>(texture->GetTexture()->GetTexture()), ImVec2(128, 128));
         } else {
             ImGui::Text("Not loaded");
         }

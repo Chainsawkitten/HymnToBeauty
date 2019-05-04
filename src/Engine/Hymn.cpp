@@ -3,25 +3,17 @@
 #include "Util/FileSystem.hpp"
 #include "Manager/Managers.hpp"
 #include "Manager/PhysicsManager.hpp"
-#include "Manager/ParticleManager.hpp"
 #include "Manager/ScriptManager.hpp"
 #include "Manager/SoundManager.hpp"
 #include "Manager/TriggerManager.hpp"
 #include "Manager/DebugDrawingManager.hpp"
 #include "Manager/ResourceManager.hpp"
-#include "DefaultAlbedo.png.hpp"
-#include "DefaultNormal.png.hpp"
-#include "DefaultMetallic.png.hpp"
-#include "DefaultRoughness.png.hpp"
 #include "Geometry/Model.hpp"
-#include <Video/Texture/Texture2D.hpp>
-#include "Texture/TextureAsset.hpp"
 #include "Input/Input.hpp"
 #include "Script/ScriptFile.hpp"
 #include "Util/Json.hpp"
 #include <fstream>
 #include "Util/Profiling.hpp"
-#include "Util/GPUProfiling.hpp"
 #include "Entity/Entity.hpp"
 
 // Fix windows.h pollution.
@@ -32,11 +24,6 @@
 using namespace std;
 
 ActiveHymn::ActiveHymn() {
-    defaultAlbedo = new TextureAsset(DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
-    defaultNormal = new TextureAsset(DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
-    defaultMetallic = new TextureAsset(DEFAULTMETALLIC_PNG, DEFAULTMETALLIC_PNG_LENGTH);
-    defaultRoughness = new TextureAsset(DEFAULTROUGHNESS_PNG, DEFAULTROUGHNESS_PNG_LENGTH);
-
     Clear();
 }
 
@@ -55,9 +42,6 @@ void ActiveHymn::Clear() {
     entityNumber = 1U;
 
     filterSettings.gamma = 2.2f;
-    filterSettings.colorFilterApply = false;
-    filterSettings.fogApply = false;
-    filterSettings.fogDensity = 0.001f;
     filterSettings.fxaa = true;
 
     for (ScriptFile* script : scripts) {
@@ -111,11 +95,6 @@ Json::Value ActiveHymn::ToJson() const {
     // Filter settings.
     Json::Value filtersNode;
     filtersNode["gamma"] = filterSettings.gamma;
-    filtersNode["color"] = filterSettings.colorFilterApply;
-    filtersNode["colorColor"] = Json::SaveVec3(filterSettings.colorFilterColor);
-    filtersNode["fog"] = filterSettings.fogApply;
-    filtersNode["fogDensity"] = filterSettings.fogDensity;
-    filtersNode["fogColor"] = Json::SaveVec3(filterSettings.fogColor);
     filtersNode["dither"] = filterSettings.ditherApply;
     filtersNode["fxaa"] = filterSettings.fxaa;
     root["filters"] = filtersNode;
@@ -140,11 +119,6 @@ void ActiveHymn::FromJson(Json::Value root) {
     // Load filter settings.
     Json::Value filtersNode = root["filters"];
     filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
-    filterSettings.colorFilterApply = filtersNode["color"].asBool();
-    filterSettings.colorFilterColor = Json::LoadVec3(filtersNode["colorColor"]);
-    filterSettings.fogApply = filtersNode["fog"].asBool();
-    filterSettings.fogDensity = filtersNode["fogDensity"].asFloat();
-    filterSettings.fogColor = Json::LoadVec3(filtersNode["fogColor"]);
     filterSettings.ditherApply = filtersNode["dither"].asBool();
     filterSettings.fxaa = filtersNode["fxaa"].asBool();
 
@@ -182,11 +156,6 @@ void ActiveHymn::Update(float deltaTime) {
     }
 
     {
-        PROFILE("Update particles");
-        Managers().particleManager->Update(world, deltaTime);
-    }
-
-    {
         PROFILE("Update debug drawing");
         Managers().debugDrawingManager->Update(deltaTime);
     }
@@ -215,11 +184,10 @@ void ActiveHymn::Update(float deltaTime) {
     }
 }
 
-void ActiveHymn::Render(Entity* camera, bool soundSources, bool particleEmitters, bool lightSources, bool cameras, bool physics, bool lighting, bool lightVolumes) {
+void ActiveHymn::Render(Entity* camera, bool soundSources, bool lightSources, bool cameras, bool physics, bool lighting, bool lightVolumes) {
     PROFILE("Render world");
-    GPUPROFILE("Render world", Video::Query::Type::TIME_ELAPSED);
 
-    Managers().renderManager->Render(world, soundSources, particleEmitters, lightSources, cameras, physics, camera, lighting, lightVolumes);
+    Managers().renderManager->Render(world, soundSources, lightSources, cameras, physics, camera, lighting, lightVolumes);
 }
 
 Entity* ActiveHymn::GetEntityByGUID(unsigned int GUID) {

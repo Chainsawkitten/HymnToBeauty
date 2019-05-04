@@ -1,11 +1,15 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <Video/Culling/AxisAlignedBoundingBox.hpp>
 #include <vector>
 #include <glm/glm.hpp>
 
 namespace Video {
+class LowLevelRenderer;
+class Buffer;
+class VertexDescription;
+class GeometryBinding;
+
 namespace Geometry {
 /// Renderable 3D geometry.
 class Geometry3D {
@@ -16,17 +20,20 @@ class Geometry3D {
         SKIN        ///< Skinning vertex layout (Skinning.vert).
     };
 
-    /// Default constructor.
-    Geometry3D();
+    /// Create new 3D geometry.
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     */
+    explicit Geometry3D(LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     virtual ~Geometry3D();
 
-    /// Get the vertex array.
+    /// Get the geometry binding.
     /**
-     * @return The vertex array.
+     * @return The geometry binding.
      */
-    GLuint GetVertexArray() const;
+    const GeometryBinding* GetGeometryBinding() const;
 
     /// Get number of indices.
     /**
@@ -38,7 +45,7 @@ class Geometry3D {
     /**
      * @return Local space axis-aligned bounding box around the geometry.
      */
-    const Video::AxisAlignedBoundingBox& GetAxisAlignedBoundingBox() const;
+    const AxisAlignedBoundingBox& GetAxisAlignedBoundingBox() const;
 
     /// Get geometry type.
     /**
@@ -63,9 +70,11 @@ class Geometry3D {
     /**
      * @param indexData Pointer to array of indices.
      * @param indexCount Number of indices.
-     * @param indexBuffer Index buffer.
      */
-    void GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount, GLuint& indexBuffer);
+    void GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount);
+
+    /// Generate geometry binding.
+    void GenerateGeometryBinding();
 
     /// Create local space axis-aligned bounding box around the geometry.
     /**
@@ -83,13 +92,13 @@ class Geometry3D {
     void CreateAxisAlignedBoundingBox(glm::vec3 dim, glm::vec3 origin, glm::vec3 minValues, glm::vec3 maxValues);
 
     /// Vertex buffer.
-    GLuint vertexBuffer = 0;
+    Buffer* vertexBuffer = nullptr;
 
     /// Index buffer.
-    GLuint indexBuffer = 0;
+    Buffer* indexBuffer = nullptr;
 
-    /// Vertex array.
-    GLuint vertexArray = 0;
+    /// Vertex description.
+    VertexDescription* vertexDescription = nullptr;
 
     /// Vertex position data.
     std::vector<glm::vec3> vertexPositionData;
@@ -97,9 +106,14 @@ class Geometry3D {
     /// Vertex index data.
     std::vector<uint32_t> vertexIndexData;
 
+    /// The low-level renderer used to create buffers and the vertex description.
+    LowLevelRenderer* lowLevelRenderer;
+
   private:
     Video::AxisAlignedBoundingBox axisAlignedBoundingBox;
     unsigned int indexCount = 0;
+
+    GeometryBinding* geometryBinding;
 };
 } // namespace Geometry
 } // namespace Video

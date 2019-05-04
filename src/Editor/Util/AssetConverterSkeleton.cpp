@@ -156,7 +156,7 @@ void AssetConverterSkeleton::SceneRecursive(aiNode* node, int parent) {
     if (!node)
         return;
 
-    int thisId = currentId;
+    uint32_t thisId = currentId;
 
     for (unsigned int i = 0; i < node->mNumChildren; ++i) {
         aiNode* child = node->mChildren[i];
@@ -180,7 +180,7 @@ void AssetConverterSkeleton::BoneRecursive(aiNode* node, int parent) {
     if (!node)
         return;
 
-    int thisId = currentId;
+    uint32_t thisId = currentId;
 
     for (unsigned int i = 0; i < node->mNumChildren; ++i) {
         aiNode* child = node->mChildren[i];

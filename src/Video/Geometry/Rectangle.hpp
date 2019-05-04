@@ -7,15 +7,18 @@ namespace Geometry {
 /// A renderable 2D rectangle.
 class Rectangle : public Video::Geometry::Geometry2D {
   public:
-    /// Constructor.
-    Rectangle();
+    /// Create new rectangle.
+    /**
+     * @param lowLevelRenderer The low-level renderer to use
+     */
+    Rectangle(LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     ~Rectangle() final;
 
-    Vertex* GetVertices() const final;
+    const Vertex* GetVertices() const final;
     unsigned int GetVertexCount() const final;
-    unsigned int* GetIndices() const final;
+    const unsigned int* GetIndices() const final;
     unsigned int GetIndexCount() const final;
 
   private:

@@ -23,11 +23,6 @@ void ProfilingWindow::Show() {
             ImGui::PlotLines("Frametimes in ms", Managers().profilingManager->GetCPUFrameTimes(), frames, 0, nullptr, 0.f, FLT_MAX, ImVec2(0.f, 300.f));
             ImGui::TreePop();
         }
-
-        if (ImGui::TreeNode("GPU Frametimes")) {
-            ImGui::PlotLines("Frametimes in ms", Managers().profilingManager->GetGPUFrameTimes(), frames, 0, nullptr, 0.f, FLT_MAX, ImVec2(0.f, 300.f));
-            ImGui::TreePop();
-        }
     }
 
     // Breakdown.

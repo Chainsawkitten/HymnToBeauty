@@ -7,7 +7,6 @@
 #include "Manager/RenderManager.hpp"
 #include "Entity/World.hpp"
 
-class TextureAsset;
 class ScriptFile;
 
 /// A hymn to beauty.
@@ -67,14 +66,13 @@ class ActiveHymn {
     /**
      * @param camera Camera through which to render (or first camera in the world if nullptr).
      * @param soundSources Whether to show sound sources.
-     * @param particleEmitters Whether to show particle emitters.
      * @param lightSources Whether to show light sources.
      * @param cameras Whether to show cameras.
      * @param physics Whether to show physics volumes.
      * @param lighting Whether to light the world (otherwise full ambient is used).
      * @param lightVolumes Whether to show light culling volumes.
      */
-    void Render(Entity* camera = nullptr, bool soundSources = false, bool particleEmitters = false, bool lightSources = false, bool cameras = false, bool physics = false, bool lighting = true, bool lightVolumes = false);
+    void Render(Entity* camera = nullptr, bool soundSources = false, bool lightSources = false, bool cameras = false, bool physics = false, bool lighting = true, bool lightVolumes = false);
 
     /// Find entity via GUID.
     /**
@@ -98,35 +96,8 @@ class ActiveHymn {
     /// The id of the next script to create.
     unsigned int scriptNumber = 0U;
 
-    /// Default albedo texture.
-    TextureAsset* defaultAlbedo;
-
-    /// Default normal texture.
-    TextureAsset* defaultNormal;
-
-    /// Default metallic texture.
-    TextureAsset* defaultMetallic;
-
-    /// Default roughness texture.
-    TextureAsset* defaultRoughness;
-
     /// Filter settings.
     struct FilterSettings {
-        /// Whether to enable color.
-        bool colorFilterApply = false;
-
-        /// The color to blend with.
-        glm::vec3 colorFilterColor = glm::vec3(1.0f, 1.0f, 1.0f);
-
-        /// Whether to enable fog.
-        bool fogApply = false;
-
-        /// Fog density.
-        float fogDensity = 0.01f;
-
-        /// Fog color.
-        glm::vec3 fogColor = glm::vec3(1.0f, 1.0f, 1.0f);
-
         /// Whether to enable FXAA.
         bool fxaa = true;
 

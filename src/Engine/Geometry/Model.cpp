@@ -7,7 +7,7 @@
 
 using namespace Geometry;
 
-Model::Model() {}
+Model::Model(Video::LowLevelRenderer* lowLevelRenderer) : Video::Geometry::Geometry3D(lowLevelRenderer) {}
 
 Model::~Model() {}
 
@@ -22,10 +22,14 @@ void Model::Load(const std::string& name) {
     std::size_t pos = name.find_last_of('/');
     this->name = name.substr(pos + 1);
     path = name.substr(0, pos + 1);
-    Load((Hymn().GetPath() + "/" + name + ".asset").c_str());
+    LoadGeometry((Hymn().GetPath() + "/" + name + ".asset").c_str());
 }
 
-void Model::Load(const char* filename) {
+Model::Type Model::GetType() const {
+    return type;
+}
+
+void Model::LoadGeometry(const char* filename) {
     if (assetFile.Open(filename, AssetFileHandler::READ)) {
         assetFile.LoadMeshData(0);
         MeshData* meshData = assetFile.GetStaticMeshData();
@@ -46,37 +50,18 @@ void Model::Load(const char* filename) {
 
         if (meshData->GPU) {
             if (meshData->isSkinned) {
-                GenerateVertexBuffer(vertexBuffer, meshData->skinnedVertices, meshData->numVertices);
-                GenerateIndexBuffer(meshData->indices, meshData->numIndices, indexBuffer);
-                GenerateSkinVertexArray(vertexBuffer, indexBuffer, vertexArray);
+                vertexBuffer = Video::Geometry::VertexType::SkinVertex::GenerateVertexBuffer(lowLevelRenderer, meshData->skinnedVertices, meshData->numVertices);
+                vertexDescription = Video::Geometry::VertexType::SkinVertex::GenerateVertexDescription(lowLevelRenderer);
             } else {
-                GenerateVertexBuffer(vertexBuffer, meshData->staticVertices, meshData->numVertices);
-                GenerateIndexBuffer(meshData->indices, meshData->numIndices, indexBuffer);
-                GenerateStaticVertexArray(vertexBuffer, indexBuffer, vertexArray);
+                vertexBuffer = Video::Geometry::VertexType::StaticVertex::GenerateVertexBuffer(lowLevelRenderer, meshData->staticVertices, meshData->numVertices);
+                vertexDescription = Video::Geometry::VertexType::StaticVertex::GenerateVertexDescription(lowLevelRenderer);
             }
+
+            GenerateIndexBuffer(meshData->indices, meshData->numIndices);
+            GenerateGeometryBinding();
         }
 
         CreateAxisAlignedBoundingBox(meshData->aabbDim, meshData->aabbOrigin, meshData->aabbMinpos, meshData->aabbMaxpos);
         assetFile.Close();
     }
-}
-
-Model::Type Model::GetType() const {
-    return type;
-}
-
-void Model::GenerateVertexBuffer(GLuint& vertexBuffer, Video::Geometry::VertexType::StaticVertex* vertices, unsigned int numVerticies) {
-    vertexBuffer = Video::Geometry::VertexType::StaticVertex::GenerateVertexBuffer(vertices, numVerticies);
-}
-
-void Model::GenerateVertexBuffer(GLuint& vertexBuffer, Video::Geometry::VertexType::SkinVertex* vertices, unsigned int numVerticies) {
-    vertexBuffer = Video::Geometry::VertexType::SkinVertex::GenerateVertexBuffer(vertices, numVerticies);
-}
-
-void Model::GenerateStaticVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray) {
-    vertexArray = Video::Geometry::VertexType::StaticVertex::GenerateVertexArray(vertexBuffer, indexBuffer);
-}
-
-void Model::GenerateSkinVertexArray(const GLuint vertexBuffer, const GLuint indexBuffer, GLuint& vertexArray) {
-    vertexArray = Video::Geometry::VertexType::SkinVertex::GenerateVertexArray(vertexBuffer, indexBuffer);
 }

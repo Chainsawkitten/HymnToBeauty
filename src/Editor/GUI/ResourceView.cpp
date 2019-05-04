@@ -29,7 +29,8 @@ using namespace std;
 
 extern std::string DefaultScriptBody;
 
-ResourceView::ResourceView() {
+ResourceView::ResourceView(Video::LowLevelRenderer* lowLevelRenderer) {
+    this->lowLevelRenderer = lowLevelRenderer;
     folderNameWindow.SetClosedCallback(std::bind(&ResourceView::FileNameWindowClosed, this, placeholders::_1));
     savePromptWindow.SetTitle("Save before you switch scene?");
     savePromptWindow.ResetDecision();
@@ -162,6 +163,8 @@ bool ResourceView::HasMadeChanges() const {
     Json::Value reference;
     std::ifstream file(*sceneFilename);
 
+    delete sceneFilename;
+
     if (!file.good())
         return true;
 
@@ -274,7 +277,7 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
         else if (ImGui::Selectable("Add model")) {
             ResourceList::Resource resource;
             resource.type = ResourceList::Resource::MODEL;
-            resource.model = new Geometry::Model();
+            resource.model = new Geometry::Model(lowLevelRenderer);
             resource.model->path = path + "/";
             resource.model->name = "Model #" + std::to_string(Resources().modelNumber++);
             folder.resources.push_back(resource);

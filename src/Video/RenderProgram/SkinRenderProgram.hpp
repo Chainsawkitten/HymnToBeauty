@@ -1,14 +1,20 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <vector>
+#include <list>
 #include "RenderProgram.hpp"
 
 namespace Video {
+class LowLevelRenderer;
 class Texture2D;
+class Shader;
 class ShaderProgram;
-class StorageBuffer;
+class GraphicsPipeline;
+class Buffer;
+class CommandBuffer;
+class Texture;
+class VertexDescription;
 namespace Geometry {
 class Geometry3D;
 }
@@ -17,61 +23,44 @@ class Geometry3D;
 class SkinRenderProgram : public RenderProgram {
   public:
     /// Create new skin render program.
-    SkinRenderProgram();
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     */
+    explicit SkinRenderProgram(LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     ~SkinRenderProgram() final;
 
-    /// Bind shadow render program.
-    /**
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
-     * @param shadowId The id for the shadowtexture.
-     * @param shadowMapSize The size of the shadowmap,
-     * @param depthFbo The framebufferobject containing the shadowmap.
-     */
-    void PreShadowRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, int shadowId, unsigned int shadowMapSize, int depthFbo);
-
-    /// Render shadow pass.
-    /**
-     * @param geometry The geometry to render.
-     * @param viewMatrix The lights's view matrix.
-     * @param projectionMatrix The lights's projection matrix.
-     * @param modelMatrix Model matrix.
-     * @param bones Transformations of skeleton.
-     */
-    void ShadowRender(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones) const;
-
     /// Bind depth render program.
     /**
+     * @param commandBuffer Command buffer to build commands into.
      * @param viewMatrix The camera's view matrix.
      * @param projectionMatrix The camera's projection matrix.
      */
-    void PreDepthRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+    void PreDepthRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
     /// Render depth pass.
     /**
+     * @param commandBuffer Command buffer to build commands into.
      * @param geometry The geometry to render.
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
      * @param modelMatrix Model matrix.
      * @param bones Transformations of skeleton.
      */
-    void DepthRender(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones) const;
+    void DepthRender(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones);
 
     /// Bind render program.
     /**
+     * @param commandBuffer Command buffer to build commands into.
      * @param viewMatrix The camera's view matrix.
      * @param projectionMatrix The camera's projection matrix.
-     * @param lightBuffer %StorageBuffer containing light data.
+     * @param lightBuffer Storage buffer containing light data.
      * @param lightCount Number of lights in the light buffer.
-     * @param cameraNear Camera near plane distance.
-     * @param cameraFar Camera far plane distance.
      */
-    void PreRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const StorageBuffer* lightBuffer, unsigned int lightCount, float cameraNear, float cameraFar);
+    void PreRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Buffer* lightBuffer, unsigned int lightCount);
 
     /// Render skinned geometry.
     /**
+     * @param commandBuffer Command buffer to build commands into.
      * @param geometry The geometry to render.
      * @param textureAlbedo Albedo texture.
      * @param normalTexture Normal texture.
@@ -80,52 +69,45 @@ class SkinRenderProgram : public RenderProgram {
      * @param modelMatrix Model matrix.
      * @param bones Transformations of skeleton.
      */
-    void Render(const Video::Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* normalTexture, const Video::Texture2D* textureMetallic, const Video::Texture2D* textureRoughness, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones) const;
+    void Render(CommandBuffer& commandBuffer, const Video::Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* normalTexture, const Video::Texture2D* textureMetallic, const Video::Texture2D* textureRoughness, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones);
 
   private:
     SkinRenderProgram(const SkinRenderProgram& other) = delete;
-    ShaderProgram* shadowProgram;
-    ShaderProgram* zShaderProgram;
+
+    void SwapMatricesBuffers();
+    Buffer* GetMatricesBuffer(const std::vector<glm::mat4>& bones);
+    
+    LowLevelRenderer* lowLevelRenderer;
+    VertexDescription* vertexDescription;
+
+    Shader* depthVertexShader;
+    Shader* depthFragmentShader;
+    ShaderProgram* depthShaderProgram;
+    GraphicsPipeline* depthGraphicsPipeline;
+
+    Shader* vertexShader;
+    Shader* fragmentShader;
     ShaderProgram* shaderProgram;
+    GraphicsPipeline* graphicsPipeline;
 
-    // Uniform locations.
-    GLuint shadowLightSpaceLocation;
-    GLuint shadowModelLocation;
-    GLuint shadowBonesLocation;
-    GLuint zViewProjectionLocation;
-    GLuint zModelLocation;
-    GLuint zBonesLocation;
-    GLuint viewProjectionLocation;
-    GLuint lightSpaceLocation;
-    GLuint lightCountLocation;
-    GLuint cameraNearPlaneLocation;
-    GLuint cameraFarPlaneLocation;
-    GLuint gammaLocation;
-    GLuint fogApplyLocation;
-    GLuint fogDensityLocation;
-    GLuint fogColorLocation;
-    GLuint colorFilterApplyLocation;
-    GLuint colorFilterColorLocation;
-    GLuint ditherApplyLocation;
-    GLuint timeLocation;
-    GLuint frameSizeLocation;
-    GLuint mapAlbedoLocation;
-    GLuint mapNormalLocation;
-    GLuint mapMetallicLocation;
-    GLuint mapRoughnessLocation;
-    GLuint mapShadowLocation;
-    GLuint modelLocation;
-    GLuint viewLocation;
-    GLuint normalLocation;
-    GLuint bonesLocation;
+    static const int maxBones = 100;
+    struct MatricesValues {
+        glm::mat4 viewProjectionMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 bones[maxBones];
+    };
 
-    bool first = true;
+    std::list<Buffer*> matricesBuffers[2];
+    uint8_t frame = 0;
+
+    struct FragmentUniforms {
+        int32_t lightCount;
+        float gamma;
+    };
+    Buffer* fragmentUniformBuffer;
 
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
     glm::mat4 viewProjectionMatrix;
-    glm::mat4 lightSpaceMatrix;
-
-    int shadowId = 0;
 };
 } // namespace Video

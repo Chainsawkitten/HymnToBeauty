@@ -9,12 +9,13 @@
 
 using namespace Video;
 
-TextureAsset::TextureAsset() {
-    texture = new TexturePNG(DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
+TextureAsset::TextureAsset(LowLevelRenderer* lowLevelRenderer) {
+    this->lowLevelRenderer = lowLevelRenderer;
+    texture = new TexturePNG(lowLevelRenderer, DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
 }
 
-TextureAsset::TextureAsset(const char* source, int sourceLength) {
-    texture = new TexturePNG(source, sourceLength);
+TextureAsset::TextureAsset(LowLevelRenderer* lowLevelRenderer, const char* source, int sourceLength) {
+    texture = new TexturePNG(lowLevelRenderer, source, sourceLength);
 }
 
 TextureAsset::~TextureAsset() {
@@ -27,14 +28,16 @@ void TextureAsset::Load(const std::string& name) {
     std::size_t pos = name.find_last_of('/');
     this->name = name.substr(pos + 1);
     path = name.substr(0, pos + 1);
-    std::string filename = Hymn().GetPath() + "/" + name;
+    std::string filename = Hymn().GetPath() + "/" + name + ".png";
 
-    // Delete old texture.
-    if (texture != nullptr)
-        delete texture;
+    if (FileSystem::FileExists(filename.c_str())) {
+        // Delete old texture.
+        if (texture != nullptr)
+            delete texture;
 
-    // Load texture from disk.
-    texture = new TexturePNG((filename + ".png").c_str());
+        // Load texture from disk.
+        texture = new TexturePNG(lowLevelRenderer, filename.c_str());
+    }
 }
 
 Texture2D* TextureAsset::GetTexture() const {

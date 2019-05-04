@@ -13,7 +13,6 @@
 #include "../Component/Script.hpp"
 #include "../Component/Shape.hpp"
 #include "../Component/SoundSource.hpp"
-#include "../Component/ParticleSystem.hpp"
 #include "../Component/Trigger.hpp"
 #include "../Util/Json.hpp"
 #include "../Util/FileSystem.hpp"
@@ -21,7 +20,6 @@
 #include "../Hymn.hpp"
 #include <fstream>
 #include "../Manager/Managers.hpp"
-#include "../Manager/ParticleManager.hpp"
 #include "../Manager/PhysicsManager.hpp"
 #include "../Manager/RenderManager.hpp"
 #include "../Manager/ScriptManager.hpp"
@@ -203,7 +201,6 @@ Json::Value Entity::Save() const {
         Save<Component::Script>(entity, "Script");
         Save<Component::Shape>(entity, "Shape");
         Save<Component::SoundSource>(entity, "SoundSource");
-        Save<Component::ParticleSystemComponent>(entity, "ParticleSystem");
         Save<Component::Trigger>(entity, "Trigger");
 
         // Save children.
@@ -245,7 +242,6 @@ void Entity::Load(const Json::Value& node) {
         Load<Component::Script>(node, "Script");
         Load<Component::Shape>(node, "Shape");
         Load<Component::SoundSource>(node, "SoundSource");
-        Load<Component::ParticleSystemComponent>(node, "ParticleSystem");
         Load<Component::Trigger>(node, "Trigger");
 
         // Load children.
@@ -382,8 +378,6 @@ Component::SuperComponent* Entity::AddComponent(std::type_index componentType) {
         component = Managers().renderManager->CreateMaterial();
     else if (componentType == typeid(Component::Mesh*))
         component = Managers().renderManager->CreateMesh();
-    else if (componentType == typeid(Component::ParticleSystemComponent*))
-        component = Managers().particleManager->CreateAParticleSystem();
     else if (componentType == typeid(Component::PointLight*))
         component = Managers().renderManager->CreatePointLight();
     else if (componentType == typeid(Component::RigidBody*))
@@ -444,8 +438,6 @@ void Entity::LoadComponent(std::type_index componentType, const Json::Value& nod
         component = Managers().renderManager->CreateMaterial(node);
     else if (componentType == typeid(Component::Mesh*))
         component = Managers().renderManager->CreateMesh(node);
-    else if (componentType == typeid(Component::ParticleSystemComponent*))
-        component = Managers().particleManager->CreateParticleSystem(node);
     else if (componentType == typeid(Component::PointLight*))
         component = Managers().renderManager->CreatePointLight(node);
     else if (componentType == typeid(Component::RigidBody*))

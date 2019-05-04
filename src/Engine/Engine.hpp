@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Video/Renderer.hpp>
+
 class MainWindow;
 
 /// An instance of the engine.
@@ -68,9 +70,12 @@ class Engine {
 
         /// Whether the hymn is paused.
         /**
-         * Only certain things (like previewed particles) will be updated. Used in the editor.
+         * Only certain things will be updated. Used in the editor.
          */
         bool paused = false;
+
+        /// Which graphics API to use for rendering.
+        Video::Renderer::GraphicsAPI graphicsAPI = Video::Renderer::GraphicsAPI::OPENGL;
     } configuration;
 
   private:

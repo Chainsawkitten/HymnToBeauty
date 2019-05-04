@@ -60,18 +60,6 @@ class World {
     /// Removes all killed entities and components in the world.
     void ClearKilled();
 
-    /// Get the number of particles in the world.
-    /**
-     * @return The number of particles in the world.
-     */
-    unsigned int GetParticleCount() const;
-
-    /// Set the number of particles in the world.
-    /**
-     * @param particleCount The number of particles in the world.
-     */
-    void SetParticleCount(unsigned int particleCount);
-
     /// Save the world to file.
     /**
      * @param filename The name of the file.

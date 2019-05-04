@@ -12,12 +12,19 @@
 #include "FolderNameWindow.hpp"
 #include "../Resources.hpp"
 
+namespace Video {
+class LowLevelRenderer;
+}
+
 namespace GUI {
 /// Displays all the hymn's resources.
 class ResourceView {
   public:
-    /// Constructor.
-    ResourceView();
+    /// Create new resource view.
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     */
+    explicit ResourceView(Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Show the resource list.
     void Show();
@@ -74,6 +81,8 @@ class ResourceView {
     bool ShowResourceFolder(ResourceList::ResourceFolder& folder, const std::string& path);
     bool ShowResource(ResourceList::ResourceFolder& folder, ResourceList::Resource& resource, const std::string& path);
     void FileNameWindowClosed(const std::string& name);
+
+    Video::LowLevelRenderer* lowLevelRenderer;
 
     bool visible = false;
 

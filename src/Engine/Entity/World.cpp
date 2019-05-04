@@ -3,7 +3,6 @@
 #include "../Entity/Entity.hpp"
 #include "../Component/SuperComponent.hpp"
 #include "../Manager/Managers.hpp"
-#include "../Manager/ParticleManager.hpp"
 #include "../Manager/TriggerManager.hpp"
 #include "../Util/FileSystem.hpp"
 #include "../Hymn.hpp"

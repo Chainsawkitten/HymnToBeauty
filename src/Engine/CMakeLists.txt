@@ -32,7 +32,6 @@ set(SRCS
         Component/SoundSource.cpp
         Component/SpotLight.cpp
         Component/SuperComponent.cpp
-        Component/ParticleSystem.cpp
         Component/Trigger.cpp
         Entity/Entity.cpp
         Entity/World.cpp
@@ -43,7 +42,6 @@ set(SRCS
         Geometry/Model.cpp
         Manager/Managers.cpp
         Manager/DebugDrawingManager.cpp
-        Manager/ParticleManager.cpp
         Manager/ProfilingManager.cpp
         Manager/PhysicsManager.cpp
         Manager/RenderManager.cpp
@@ -59,7 +57,6 @@ set(SRCS
         Trigger/TriggerRepeat.cpp
         Trigger/TriggerOnce.cpp
         Util/FileSystem.cpp
-        Util/GPUProfiling.cpp
         Util/Input.cpp
         Util/Json.cpp
         Util/MousePicking.cpp
@@ -100,7 +97,6 @@ set(HEADERS
         Component/SoundSource.hpp
         Component/SpotLight.hpp
         Component/SuperComponent.hpp
-        Component/ParticleSystem.hpp
         Component/Trigger.hpp
         Entity/ComponentContainer.hpp
         Entity/Entity.hpp
@@ -112,7 +108,6 @@ set(HEADERS
         Geometry/Model.hpp
         Manager/Managers.hpp
         Manager/DebugDrawingManager.hpp
-        Manager/ParticleManager.hpp
         Manager/ProfilingManager.hpp
         Manager/PhysicsManager.hpp
         Manager/RenderManager.hpp
@@ -128,7 +123,6 @@ set(HEADERS
         Trigger/TriggerRepeat.hpp
         Trigger/TriggerOnce.hpp
         Util/FileSystem.hpp
-        Util/GPUProfiling.hpp
         Util/Input.hpp
         Util/Json.hpp
         Util/MousePicking.hpp
@@ -149,8 +143,6 @@ set(EMBEDDED_INPUT
     ../../assets/DefaultMetallic.png
     ../../assets/DefaultRoughness.png
     ../../assets/Light.png
-    ../../assets/ParticleAtlas.png
-    ../../assets/ParticleEmitter.png
     ../../assets/SoundSource.png
 )
 
@@ -164,7 +156,7 @@ create_directory_groups(${SRCS} ${HEADERS})
 
 add_library(Engine STATIC ${SRCS} ${HEADERS} ${EMBEDDED_SOURCE})
 
-target_link_libraries(Engine Video angelscript bullet glfw ${GLFW_LIBRARIES} glm OpenALSoft simpleini stb)
+target_link_libraries(Engine Video angelscript bullet glm OpenALSoft simpleini stb)
 
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
