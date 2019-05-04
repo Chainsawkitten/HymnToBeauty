@@ -1,8 +1,9 @@
 #pragma once
 
+#include <Video/Renderer.hpp>
+
 class ResourceManager;
 class RenderManager;
-class ParticleManager;
 class PhysicsManager;
 class SoundManager;
 class ScriptManager;
@@ -15,14 +16,14 @@ class Hub {
     friend Hub& Managers();
 
   public:
+    // The renderer used to render things.
+    Video::Renderer* renderer;
+
     /// The resource manager instance.
     ResourceManager* resourceManager;
 
     /// The render manager instance.
     RenderManager* renderManager;
-
-    /// The particle manager instance.
-    ParticleManager* particleManager;
 
     /// The physics manager instance.
     PhysicsManager* physicsManager;
@@ -43,7 +44,10 @@ class Hub {
     TriggerManager* triggerManager;
 
     /// Initialize all subsystems.
-    void StartUp();
+    /**
+     * @param graphicsAPI Which graphics API to use for rendering.
+     */
+    void StartUp(Video::Renderer::GraphicsAPI graphicsAPI);
 
     /// Deinitialize all subsystems.
     void ShutDown();

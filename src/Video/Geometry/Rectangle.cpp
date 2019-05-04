@@ -3,7 +3,7 @@
 using namespace Video;
 using namespace Geometry;
 
-Rectangle::Rectangle() {
+Rectangle::Rectangle(LowLevelRenderer* lowLevelRenderer) : Geometry2D(lowLevelRenderer) {
     // Vertices.
     vertexNr = 4;
     vertexData = new Vertex[vertexNr];
@@ -25,7 +25,7 @@ Rectangle::Rectangle() {
     indexData[5] = 3;
 
     GenerateBuffers();
-    GenerateVertexArray();
+    GenerateGeometryBinding();
 }
 
 Rectangle::~Rectangle() {
@@ -33,7 +33,7 @@ Rectangle::~Rectangle() {
     delete[] indexData;
 }
 
-Video::Geometry::Geometry2D::Vertex* Rectangle::GetVertices() const {
+const Geometry2D::Vertex* Rectangle::GetVertices() const {
     return vertexData;
 }
 
@@ -41,7 +41,7 @@ unsigned int Rectangle::GetVertexCount() const {
     return vertexNr;
 }
 
-unsigned int* Rectangle::GetIndices() const {
+const unsigned int* Rectangle::GetIndices() const {
     return indexData;
 }
 

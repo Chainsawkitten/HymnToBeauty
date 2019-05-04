@@ -4,7 +4,7 @@ set(SRCS
         Editor.cpp
         Resources.cpp
         ImGui/Json.cpp
-        ImGui/OpenGLImplementation.cpp
+        ImGui/Implementation.cpp
         ImGui/Splitter.cpp
         ImGui/Theme.cpp
         ImGui/GuiHelpers.cpp
@@ -36,7 +36,6 @@ set(SRCS
         GUI/Editors/SoundEditor.cpp
         GUI/Editors/SphereShapeEditor.cpp
         GUI/Editors/TextureEditor.cpp
-        GUI/Editors/CurveEditor.cpp
         GUI/Editors/TriggerEditor.cpp
         Util/AssetConverter.cpp
         Util/AssetConverterSkeleton.cpp
@@ -48,7 +47,7 @@ set(HEADERS
         Editor.hpp
         Resources.hpp
         ImGui/Json.hpp
-        ImGui/OpenGLImplementation.hpp
+        ImGui/Implementation.hpp
         ImGui/Splitter.hpp
         ImGui/Theme.hpp
         ImGui/GuiHelpers.hpp
@@ -81,7 +80,6 @@ set(HEADERS
         GUI/Editors/SoundEditor.hpp
         GUI/Editors/SphereShapeEditor.hpp
         GUI/Editors/TextureEditor.hpp
-        GUI/Editors/CurveEditor.hpp
         GUI/Editors/TriggerEditor.hpp
         Util/AssetConverter.hpp
         Util/AssetConverterSkeleton.hpp
@@ -97,20 +95,29 @@ set(EMBEDDED_INPUT
     ../../assets/DefaultMetallic.png
     ../../assets/DefaultRoughness.png
     ../../assets/Light.png
-    ../../assets/ParticleAtlas.png
-    ../../assets/ParticleEmitter.png
     ../../assets/SoundSource.png
+)
+
+# Setup shaders
+set(SHADERS
+    shaders/ImGUI.vert
+    shaders/ImGUI.frag
 )
 
 foreach(item ${EMBEDDED_INPUT})
     ProcessWithHeaderize(EMBEDDED_HEADER EMBEDDED_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
 endforeach()
 
-set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
+# Process shaders.
+foreach(item ${SHADERS})
+    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
+endforeach()
+
+set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER} ${SHADER_HEADER})
 
 create_directory_groups(${SRCS} ${HEADERS})
 
-add_executable(Editor ${SRCS} ${HEADERS})
+add_executable(Editor ${SRCS} ${HEADERS} ${EMBEDDED_SOURCE} ${SHADER_SOURCE})
 target_link_libraries(Editor Engine imgui imguizmo)
 set_property(TARGET Editor PROPERTY CXX_STANDARD 11)
 set_property(TARGET Editor PROPERTY CXX_STANDARD_REQUIRED ON)

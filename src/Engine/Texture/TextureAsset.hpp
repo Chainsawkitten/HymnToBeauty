@@ -3,6 +3,7 @@
 #include <string>
 
 namespace Video {
+class LowLevelRenderer;
 class Texture2D;
 }
 
@@ -10,14 +11,18 @@ class Texture2D;
 class TextureAsset {
   public:
     /// Create new texture asset.
-    TextureAsset();
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     */
+    explicit TextureAsset(Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Create new texture asset from a PNG image.
     /**
+     * @param lowLevelRenderer The low-level renderer to use.
      * @param source Source string containing the image file.
      * @param sourceLength Length of the source string.
      */
-    TextureAsset(const char* source, int sourceLength);
+    TextureAsset(Video::LowLevelRenderer* lowLevelRenderer, const char* source, int sourceLength);
 
     /// Destructor.
     ~TextureAsset();
@@ -45,5 +50,7 @@ class TextureAsset {
 
   private:
     TextureAsset(const TextureAsset& other) = delete;
+
+    Video::LowLevelRenderer* lowLevelRenderer;
     Video::Texture2D* texture;
 };

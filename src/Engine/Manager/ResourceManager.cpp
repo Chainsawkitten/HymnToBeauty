@@ -1,5 +1,6 @@
 #include "ResourceManager.hpp"
 
+#include <Video/Renderer.hpp>
 #include "../Animation/AnimationClip.hpp"
 #include "../Animation/AnimationController.hpp"
 #include "../Animation/Skeleton.hpp"
@@ -13,11 +14,32 @@
 #include <Utility/Log.hpp>
 #include "../Audio/VorbisFile.hpp"
 
+#include "DefaultAlbedo.png.hpp"
+#include "DefaultNormal.png.hpp"
+#include "DefaultMetallic.png.hpp"
+#include "DefaultRoughness.png.hpp"
+
 using namespace std;
+
+ResourceManager::ResourceManager(Video::Renderer* renderer) {
+    this->lowLevelRenderer = renderer->GetLowLevelRenderer();
+
+    defaultAlbedo = new TextureAsset(lowLevelRenderer, DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
+    defaultNormal = new TextureAsset(lowLevelRenderer, DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
+    defaultMetallic = new TextureAsset(lowLevelRenderer, DEFAULTMETALLIC_PNG, DEFAULTMETALLIC_PNG_LENGTH);
+    defaultRoughness = new TextureAsset(lowLevelRenderer, DEFAULTROUGHNESS_PNG, DEFAULTROUGHNESS_PNG_LENGTH);
+}
+
+ResourceManager::~ResourceManager() {
+    delete defaultAlbedo;
+    delete defaultNormal;
+    delete defaultMetallic;
+    delete defaultRoughness;
+}
 
 Geometry::Model* ResourceManager::CreateModel(const std::string& name) {
     if (models.find(name) == models.end()) {
-        Geometry::Model* model = new Geometry::Model();
+        Geometry::Model* model = new Geometry::Model(lowLevelRenderer);
         model->Load(name);
         models[name].model = model;
         modelsInverse[model] = name;
@@ -109,7 +131,7 @@ void ResourceManager::FreeSkeleton(Animation::Skeleton* skeleton) {
 
 Video::TexturePNG* ResourceManager::CreateTexturePNG(const char* data, int dataLength) {
     if (textures.find(data) == textures.end()) {
-        textures[data].texture = new Video::TexturePNG(data, dataLength);
+        textures[data].texture = new Video::TexturePNG(lowLevelRenderer, data, dataLength);
         texturesInverse[textures[data].texture] = data;
         textures[data].count = 1;
     } else
@@ -130,7 +152,7 @@ void ResourceManager::FreeTexturePNG(Video::TexturePNG* texture) {
 
 TextureAsset* ResourceManager::CreateTextureAsset(const std::string& name) {
     if (textureAssets.find(name) == textureAssets.end()) {
-        TextureAsset* textureAsset = new TextureAsset();
+        TextureAsset* textureAsset = new TextureAsset(lowLevelRenderer);
         textureAsset->Load(name);
         textureAssets[name].textureAsset = textureAsset;
         textureAssetsInverse[textureAsset] = name;
@@ -200,4 +222,20 @@ void ResourceManager::FreeScriptFile(ScriptFile* scriptFile) {
         delete scriptFile;
         scriptFiles.erase(name);
     }
+}
+
+TextureAsset* ResourceManager::GetDefaultAlbedo() {
+    return defaultAlbedo;
+}
+
+TextureAsset* ResourceManager::GetDefaultNormal() {
+    return defaultNormal;
+}
+
+TextureAsset* ResourceManager::GetDefaultMetallic() {
+    return defaultMetallic;
+}
+
+TextureAsset* ResourceManager::GetDefaultRoughness() {
+    return defaultRoughness;
 }

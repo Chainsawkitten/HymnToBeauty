@@ -456,16 +456,6 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectType("RenderManager", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectMethod("RenderManager", "void SetGamma(float)", asMETHOD(RenderManager, SetGamma), asCALL_THISCALL);
     engine->RegisterObjectMethod("RenderManager", "float GetGamma()", asMETHOD(RenderManager, GetGamma), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "void SetFogApply(bool)", asMETHOD(RenderManager, SetFogApply), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "bool GetFogApply()", asMETHOD(RenderManager, GetFogApply), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "void SetFogDensity(float)", asMETHOD(RenderManager, SetFogDensity), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "float GetFogDensity()", asMETHOD(RenderManager, GetFogDensity), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "void SetFogColor(const vec3 &in)", asMETHOD(RenderManager, SetFogColor), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "vec3 GetFogColor()", asMETHOD(RenderManager, GetFogColor), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "void SetColorFilterApply(bool)", asMETHOD(RenderManager, SetColorFilterApply), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "bool GetColorFilterApply()", asMETHOD(RenderManager, GetColorFilterApply), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "void SetColorFilterColor(const vec3 &in)", asMETHOD(RenderManager, SetColorFilterColor), asCALL_THISCALL);
-    engine->RegisterObjectMethod("RenderManager", "vec3 GetColorFilterColor()", asMETHOD(RenderManager, GetColorFilterColor), asCALL_THISCALL);
     engine->RegisterObjectMethod("RenderManager", "void SetDitherApply(bool)", asMETHOD(RenderManager, SetDitherApply), asCALL_THISCALL);
     engine->RegisterObjectMethod("RenderManager", "bool GetDitherApply()", asMETHOD(RenderManager, GetDitherApply), asCALL_THISCALL);
 

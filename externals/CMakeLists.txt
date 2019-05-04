@@ -125,6 +125,26 @@ macro(ProcessWithHeaderize headervar sourcevar inputfile outdir)
     list(APPEND ${sourcevar} ${outputfile}.cpp)
 endmacro()
 
+# ShaderProcessor
+add_subdirectory(ShaderProcessor)
+macro(ProcessShader headervar sourcevar inputfile outdir)
+    if(VulkanRenderer)
+        set(vulkanargument --vulkan)
+    endif()
+    get_filename_component(basefile ${inputfile} NAME)
+    set(outputfile ${outdir}/${basefile})
+    set_source_files_properties(${outputfile} PROPERTIES HEADER_ONLY TRUE)
+    add_custom_command(
+        OUTPUT ${outputfile}.hpp ${outputfile}.cpp
+        COMMAND ShaderProcessor ${inputfile} ${outputfile} ${vulkanargument}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS ${inputfile}
+        COMMENT "Generating shader variants for ${inputfile}"
+    )
+    list(APPEND ${headervar} ${outputfile}.hpp)
+    list(APPEND ${sourcevar} ${outputfile}.cpp)
+endmacro()
+
 # OpenAL Soft
 set(ALSOFT_UTILS OFF CACHE BOOL "Don't build OpenAL Soft utility programs" FORCE)
 set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)

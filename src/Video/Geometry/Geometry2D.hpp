@@ -1,9 +1,13 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 namespace Video {
+class LowLevelRenderer;
+class Buffer;
+class VertexDescription;
+class GeometryBinding;
+
 namespace Geometry {
 /// Interface for renderable 2D geometry.
 class Geometry2D {
@@ -17,6 +21,12 @@ class Geometry2D {
         glm::vec2 textureCoordinate;
     };
 
+    /// Create new 2D geometry.
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     */
+    explicit Geometry2D(LowLevelRenderer* lowLevelRenderer);
+
     /// Destructor
     virtual ~Geometry2D();
 
@@ -24,7 +34,7 @@ class Geometry2D {
     /**
      * @return Array of vertices
      */
-    virtual Vertex* GetVertices() const = 0;
+    virtual const Vertex* GetVertices() const = 0;
 
     /// Get the number of vertices.
     /**
@@ -36,7 +46,7 @@ class Geometry2D {
     /**
      * @return Array of vertex indices
      */
-    virtual unsigned int* GetIndices() const = 0;
+    virtual const unsigned int* GetIndices() const = 0;
 
     /// Get the number of indicies.
     /**
@@ -44,23 +54,25 @@ class Geometry2D {
      */
     virtual unsigned int GetIndexCount() const = 0;
 
-    /// Get the vertex array.
+    /// Get the geometry binding.
     /**
-     * @return The vertex array
+     * @return The geometry binding.
      */
-    GLuint GetVertexArray() const;
+    const GeometryBinding* GetGeometryBinding() const;
 
   protected:
     /// Generate vertex and index buffers.
     void GenerateBuffers();
 
-    /// Generate vertex array.
-    void GenerateVertexArray();
+    /// Generate geometry binding.
+    void GenerateGeometryBinding();
 
   private:
-    GLuint vertexBuffer;
-    GLuint indexBuffer;
-    GLuint vertexArray;
+    LowLevelRenderer* lowLevelRenderer;
+    Buffer* vertexBuffer;
+    Buffer* indexBuffer;
+    VertexDescription* vertexDescription;
+    GeometryBinding* geometryBinding;
 };
 } // namespace Geometry
 } // namespace Video

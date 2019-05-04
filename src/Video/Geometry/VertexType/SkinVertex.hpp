@@ -1,9 +1,12 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 namespace Video {
+class LowLevelRenderer;
+class Buffer;
+class VertexDescription;
+
 namespace Geometry {
 namespace VertexType {
 /// Vertex type used for rigged (animated) meshes.
@@ -26,21 +29,23 @@ struct SkinVertex {
     /// Bone weights.
     glm::vec4 weights;
 
-    /// Generate vertex buffer
+    /// Generate vertex buffer.
     /**
+     * @param lowLevelRenderer The low-level renderer to use.
      * @param vertices Pointer to vertex array.
      * @param vertexCount Number of vertices.
+     *
      * @return Vertex buffer.
      */
-    static const GLuint GenerateVertexBuffer(SkinVertex* vertices, unsigned int vertexCount);
+    static Buffer* GenerateVertexBuffer(LowLevelRenderer* lowLevelRenderer, SkinVertex* vertices, unsigned int vertexCount);
 
-    /// Generate vertex buffer
+    /// Generate vertex description.
     /**
-     * @param vertexBuffer The vertex buffer.
-     * @param indexBuffer The index buffer.
-     * @return Vertex array.
+     * @param lowLevelRenderer The low-level renderer to use.
+     *
+     * @return Vertex description.
      */
-    static const GLuint GenerateVertexArray(GLuint vertexBuffer, GLuint indexBuffer);
+    static VertexDescription* GenerateVertexDescription(LowLevelRenderer* lowLevelRenderer);
 };
 } // namespace VertexType
 } // namespace Geometry

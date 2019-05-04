@@ -4,15 +4,14 @@
 #include "../Component/Mesh.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include "Managers.hpp"
-#include <Video/RenderSurface.hpp>
-#include <Video/Buffer/FrameBuffer.hpp>
+#include <Video/LowLevelRenderer/Interface/VertexDescription.hpp>
 
 #include "RenderManager.hpp"
 
 using namespace Video;
 
-DebugDrawingManager::DebugDrawingManager() {
-    debugDrawing = new DebugDrawing();
+DebugDrawingManager::DebugDrawingManager(Renderer* renderer) {
+    debugDrawing = new DebugDrawing(renderer);
 }
 
 DebugDrawingManager::~DebugDrawingManager() {
@@ -116,12 +115,11 @@ void DebugDrawingManager::AddMesh(unsigned int id, Component::Mesh* meshComponen
 
     if (meshMap.find(id) == meshMap.end()) {
         DebugDrawing::Mesh mesh;
-        if (meshComponent->geometry->GetVertexArray() == 0)
-            debugDrawing->GenerateBuffers(meshComponent->geometry->GetVertexPositionData(), meshComponent->geometry->GetVertexIndexData(), mesh);
-        else {
-            mesh.vertexArray = meshComponent->geometry->GetVertexArray();
-            mesh.indexCount = meshComponent->geometry->GetIndexCount();
-        }
+        if (meshComponent->geometry->GetGeometryBinding() == nullptr)
+            return;
+
+        mesh.geometryBinding = meshComponent->geometry->GetGeometryBinding();
+        mesh.indexCount = meshComponent->geometry->GetIndexCount();
         mesh.referenceCount = 0;
         meshMap[id] = mesh;
     }
@@ -220,9 +218,7 @@ void DebugDrawingManager::Update(float deltaTime) {
     for (auto& it : meshMap) {
         DebugDrawing::Mesh& mesh = it.second;
         if (mesh.duration <= 0.f) {
-            if (--mesh.referenceCount < 0)
-                if (mesh.vertexBuffer || mesh.indexBuffer)
-                    debugDrawing->DeleteBuffers(mesh);
+            --mesh.referenceCount;
         } else
             mesh.duration -= deltaTime;
     }
@@ -234,9 +230,8 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 }
 
-void DebugDrawingManager::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Video::RenderSurface* renderSurface) {
+void DebugDrawingManager::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
     // Bind render target.
-    renderSurface->GetShadingFrameBuffer()->BindWrite();
     debugDrawing->StartDebugDrawing(projectionMatrix * viewMatrix);
 
     // Points.
@@ -276,5 +271,4 @@ void DebugDrawingManager::Render(const glm::mat4& viewMatrix, const glm::mat4& p
         debugDrawing->DrawMesh(it.second);
 
     debugDrawing->EndDebugDrawing();
-    renderSurface->GetShadingFrameBuffer()->Unbind();
 }

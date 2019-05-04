@@ -13,7 +13,6 @@ Json::Value SpotLight::Save() const {
     component["attenuation"] = attenuation;
     component["intensity"] = intensity;
     component["coneAngle"] = coneAngle;
-    component["shadow"] = shadow;
     component["distance"] = distance;
     return component;
 }

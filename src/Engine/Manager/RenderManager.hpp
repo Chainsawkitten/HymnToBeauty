@@ -6,9 +6,8 @@
 
 namespace Video {
 class Renderer;
-class RenderSurface;
+class LowLevelRenderer;
 class TexturePNG;
-class ShadowPass;
 } // namespace Video
 class World;
 class Entity;
@@ -35,7 +34,6 @@ class RenderManager {
     /**
      * @param world Contains a bunch of entities.
      * @param soundSources Whether to show sound sources.
-     * @param particleEmitters Whether to show particle emitters.
      * @param lightSources Whether to show light sources.
      * @param cameras Whether to show cameras.
      * @param physics Whether to show physics volumes.
@@ -43,7 +41,7 @@ class RenderManager {
      * @param lighting Whether to light the scene (otherwise full ambient is used).
      * @param lightVolumes Whether to show light culling volumes.
      */
-    void Render(World& world, bool soundSources = true, bool particleEmitters = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
+    void Render(World& world, bool soundSources = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
 
     /// Update all the animations in the scene.
     /**
@@ -202,66 +200,6 @@ class RenderManager {
      */
     float GetGamma() const;
 
-    /// Set whether fog is applied.
-    /**
-     * @param fogApply Whether to apply fog.
-     */
-    void SetFogApply(bool fogApply);
-
-    /// Get whether fog is applied.
-    /**
-     * @return Whether fog is applied.
-     */
-    bool GetFogApply() const;
-
-    /// Set fog density.
-    /**
-     * @param fogDensity Density of the fog.
-     */
-    void SetFogDensity(float fogDensity);
-
-    /// Get fog density.
-    /**
-     * @return Density of the fog
-     */
-    float GetFogDensity() const;
-
-    /// Set fog color.
-    /**
-     * @param fogColor Color of the fog.
-     */
-    void SetFogColor(const glm::vec3& fogColor);
-
-    /// Get fog color.
-    /**
-     * @return Color of the fog.
-     */
-    glm::vec3 GetFogColor() const;
-
-    /// Set whether color filter is applied.
-    /**
-     * @param colorFilterApply Whether to apply color filter.
-     */
-    void SetColorFilterApply(bool colorFilterApply);
-
-    /// Get whether color filter is applied.
-    /**
-     * @return Whether color filter is applied.
-     */
-    bool GetColorFilterApply() const;
-
-    /// Set color filer color.
-    /**
-     * @param colorFilterColor Color of the color filter.
-     */
-    void SetColorFilterColor(const glm::vec3& colorFilterColor);
-
-    /// Get color filer color.
-    /**
-     * @return Color of the color filter.
-     */
-    glm::vec3 GetColorFilterColor() const;
-
     /// Set whether dithering is applied.
     /**
      * @param ditherApply Whether to apply dithering.
@@ -280,21 +218,18 @@ class RenderManager {
      */
     unsigned int GetLightCount() const;
 
-    /// Set the size of the shadow map.
-    /**
-     * @param shadowMapSize The size of the shadow map.
-     */
-    void SetShadowMapSize(unsigned int shadowMapSize);
+    /// Get the renderer.
+    Video::Renderer* GetRenderer();
 
   private:
-    RenderManager();
+    explicit RenderManager(Video::Renderer* renderer);
     ~RenderManager();
     RenderManager(RenderManager const&) = delete;
     void operator=(RenderManager const&) = delete;
 
-    void RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Video::RenderSurface* renderSurface, bool lighting, float cameraNear, float cameraFar, bool lightVolumes);
+    void RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool lightVolumes);
 
-    void RenderEditorEntities(World& world, bool soundSources, bool particleEmitters, bool lightSources, bool cameras, bool physics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Video::RenderSurface* renderSurface);
+    void RenderEditorEntities(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
     void LightWorld(const glm::mat4& viewMatrix, const glm::mat4& viewProjectionMatrix, bool lightVolumes);
     void LightAmbient();
@@ -303,12 +238,7 @@ class RenderManager {
 
     Video::Renderer* renderer;
 
-    Video::ShadowPass* shadowPass;
-
-    Video::RenderSurface* mainWindowRenderSurface;
-
     // Editor entity textures.
-    Video::TexturePNG* particleEmitterTexture;
     Video::TexturePNG* lightTexture;
     Video::TexturePNG* soundSourceTexture;
     Video::TexturePNG* cameraTexture;

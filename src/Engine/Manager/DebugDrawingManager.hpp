@@ -10,7 +10,7 @@ class Mesh;
 }
 
 namespace Video {
-class RenderSurface;
+class Renderer;
 }
 
 /// Debug drawing facilities.
@@ -131,12 +131,11 @@ class DebugDrawingManager {
     /**
      * @param viewMatrix The camera's view matrix.
      * @param projectionMatrix The camera's projection matrix.
-     * @param renderSurface %RenderSurface to render to.
      */
-    void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Video::RenderSurface* renderSurface);
+    void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
   private:
-    DebugDrawingManager();
+    DebugDrawingManager(Video::Renderer* renderer);
     ~DebugDrawingManager();
     DebugDrawingManager(DebugDrawingManager const&) = delete;
     void operator=(DebugDrawingManager const&) = delete;

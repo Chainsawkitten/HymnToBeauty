@@ -18,6 +18,4 @@ void GameSettings::Save() {
 void GameSettings::Load() {
     ini.SetUnicode(true);
     ini.LoadFile(FileSystem::DataPath(Hymn().name.c_str(), "Settings.ini").c_str());
-
-    AddLongSetting("Shadow Map Size", "Graphics", "Shadow Map Size", 1024);
 }

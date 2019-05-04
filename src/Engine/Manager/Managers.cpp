@@ -1,8 +1,8 @@
 #include "Managers.hpp"
 
+#include <Video/Renderer.hpp>
 #include "ResourceManager.hpp"
 #include "RenderManager.hpp"
-#include "ParticleManager.hpp"
 #include "PhysicsManager.hpp"
 #include "SoundManager.hpp"
 #include "ScriptManager.hpp"
@@ -10,7 +10,8 @@
 #include "ProfilingManager.hpp"
 #include "TriggerManager.hpp"
 
-#include "Utility/Log.hpp"
+#include "../MainWindow.hpp"
+#include <Utility/Log.hpp>
 
 Hub::Hub() {}
 
@@ -20,14 +21,15 @@ Hub& Managers() {
     return instance;
 }
 
-void Hub::StartUp() {
-    resourceManager = new ResourceManager();
-    renderManager = new RenderManager();
-    particleManager = new ParticleManager();
+void Hub::StartUp(Video::Renderer::GraphicsAPI graphicsAPI) {
+    renderer = new Video::Renderer(graphicsAPI, MainWindow::GetInstance()->GetGLFWWindow());
+
+    resourceManager = new ResourceManager(renderer);
+    renderManager = new RenderManager(renderer);
     physicsManager = new PhysicsManager();
     soundManager = new SoundManager();
     scriptManager = new ScriptManager();
-    debugDrawingManager = new DebugDrawingManager();
+    debugDrawingManager = new DebugDrawingManager(renderer);
     profilingManager = new ProfilingManager();
     triggerManager = new TriggerManager();
 }
@@ -39,9 +41,10 @@ void Hub::ShutDown() {
     delete scriptManager;
     delete soundManager;
     delete renderManager;
-    delete particleManager;
     delete physicsManager;
     delete resourceManager;
+
+    delete renderer;
 
     shutdown = true;
 }
@@ -50,7 +53,6 @@ void Hub::ClearKilledComponents() {
     if (!shutdown) {
         triggerManager->ClearKilledComponents();
         renderManager->ClearKilledComponents();
-        particleManager->ClearKilledComponents();
         physicsManager->ClearKilledComponents();
         soundManager->ClearKilledComponents();
         scriptManager->ClearKilledComponents();

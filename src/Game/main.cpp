@@ -16,6 +16,8 @@ int main(int argc, char* argv[]) {
 
     // Start engine.
     Engine engine;
+    engine.configuration.graphicsAPI = Video::Renderer::GraphicsAPI::OPENGL;
+    /// @todo Configure engine based on settings.
     if (!engine.Start())
         return -1;
 
@@ -24,7 +26,6 @@ int main(int argc, char* argv[]) {
 
     // Load game settings from ini file.
     GameSettings::GetInstance().Load();
-    Managers().renderManager->SetShadowMapSize(GameSettings::GetInstance().GetLong("Shadow Map Size"));
 
     // Load world.
     Hymn().world.Load(Hymn().GetPath() + "/" + Hymn().startupScene + ".json");

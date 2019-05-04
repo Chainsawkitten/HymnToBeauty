@@ -1,9 +1,10 @@
 #pragma once
 
 #include <map>
-#include <glad/glad.h>
 
 namespace Video {
+class Renderer;
+class LowLevelRenderer;
 class TexturePNG;
 namespace Geometry {
 class Rectangle;
@@ -32,7 +33,13 @@ class ResourceManager {
 
   public:
     /// Constructor
-    ResourceManager() {}
+    /**
+     * @param renderer The renderer.
+     */
+    explicit ResourceManager(Video::Renderer* renderer);
+
+    /// Destructor.
+    ~ResourceManager();
 
     /// Create an animation clip.
     /**
@@ -150,9 +157,35 @@ class ResourceManager {
      */
     void FreeScriptFile(ScriptFile* scriptFile);
 
+    /// Get the default albedo texture.
+    /**
+     * @return The default albedo texture.
+     */
+    TextureAsset* GetDefaultAlbedo();
+
+    /// Get the default normal map.
+    /**
+     * @return The default normal map.
+     */
+    TextureAsset* GetDefaultNormal();
+
+    /// Get the default metallic texture.
+    /**
+     * @return The default metallic texture.
+     */
+    TextureAsset* GetDefaultMetallic();
+
+    /// Get the default roughness texture.
+    /**
+     * @return The default roughness texture.
+     */
+    TextureAsset* GetDefaultRoughness();
+
   private:
     ResourceManager(ResourceManager const&) = delete;
     void operator=(ResourceManager const&) = delete;
+
+    Video::LowLevelRenderer* lowLevelRenderer;
 
     // Rectangle
     Video::Geometry::Rectangle* rectangle = nullptr;
@@ -226,4 +259,9 @@ class ResourceManager {
     };
     std::map<std::string, ScriptFileInstance> scriptFiles;
     std::map<ScriptFile*, std::string> scriptFilesInverse;
+
+    TextureAsset* defaultAlbedo;
+    TextureAsset* defaultNormal;
+    TextureAsset* defaultMetallic;
+    TextureAsset* defaultRoughness;
 };

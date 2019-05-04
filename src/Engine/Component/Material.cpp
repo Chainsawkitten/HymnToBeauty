@@ -8,23 +8,23 @@
 using namespace Component;
 
 Material::Material() {
-    albedo = Hymn().defaultAlbedo;
-    normal = Hymn().defaultNormal;
-    metallic = Hymn().defaultMetallic;
-    roughness = Hymn().defaultRoughness;
+    albedo = Managers().resourceManager->GetDefaultAlbedo();
+    normal = Managers().resourceManager->GetDefaultNormal();
+    metallic = Managers().resourceManager->GetDefaultMetallic();
+    roughness = Managers().resourceManager->GetDefaultRoughness();
 }
 
 Material::~Material() {
-    if (albedo != nullptr && albedo != Hymn().defaultAlbedo)
+    if (albedo != nullptr && albedo != Managers().resourceManager->GetDefaultAlbedo())
         Managers().resourceManager->FreeTextureAsset(albedo);
 
-    if (normal != nullptr && normal != Hymn().defaultNormal)
+    if (normal != nullptr && normal != Managers().resourceManager->GetDefaultNormal())
         Managers().resourceManager->FreeTextureAsset(normal);
 
-    if (metallic != nullptr && metallic != Hymn().defaultMetallic)
+    if (metallic != nullptr && metallic != Managers().resourceManager->GetDefaultMetallic())
         Managers().resourceManager->FreeTextureAsset(metallic);
 
-    if (roughness != nullptr && roughness != Hymn().defaultRoughness)
+    if (roughness != nullptr && roughness != Managers().resourceManager->GetDefaultRoughness())
         Managers().resourceManager->FreeTextureAsset(roughness);
 }
 

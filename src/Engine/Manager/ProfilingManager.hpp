@@ -4,8 +4,6 @@
 #include <list>
 #include <map>
 
-#include <Video/Profiling/Query.hpp>
-
 /// Handles profiling.
 class ProfilingManager {
     friend class Hub;
@@ -14,7 +12,7 @@ class ProfilingManager {
 
   public:
     /// The type of profiling to perform.
-    enum Type { CPU_TIME = 0, GPU_TIME_ELAPSED, GPU_SAMPLES_PASSED, COUNT };
+    enum Type { CPU_TIME = 0, COUNT };
 
     /// A profiling result.
     struct Result {
@@ -56,12 +54,6 @@ class ProfilingManager {
      */
     const float* GetCPUFrameTimes() const;
 
-    /// Get the measured GPU frame times.
-    /**
-     * @return The GPU frame times.
-     */
-    const float* GetGPUFrameTimes() const;
-
     /// Get profiling result.
     /**
      * @param type The type of profiling to get results for.
@@ -85,17 +77,11 @@ class ProfilingManager {
     Result* StartResult(const std::string& name, Type type);
     void FinishResult(Result* result, Type type);
 
-    void ShowResult(Result* result);
-
     bool active;
 
     Result* root[Type::COUNT];
     Result* current[Type::COUNT];
 
-    std::map<Video::Query::Type, std::list<Video::Query*>> queryPool;
-    std::map<Result*, Video::Query*> queryMap;
-
-    Video::Query* frameQuery;
     double frameStart;
     static const unsigned int frames = 100;
     unsigned int frame = 0;

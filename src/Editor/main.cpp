@@ -10,9 +10,8 @@
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Manager/RenderManager.hpp>
 #include <Engine/Util/Profiling.hpp>
-#include <Engine/Util/GPUProfiling.hpp>
 #include <Engine/Hymn.hpp>
-#include "ImGui/OpenGLImplementation.hpp"
+#include "ImGui/Implementation.hpp"
 #include <imgui.h>
 #include "GUI/ProfilingWindow.hpp"
 #include <iostream>
@@ -36,15 +35,18 @@ int main() {
     engine.configuration.fullscreen = false;
     engine.configuration.borderless = false;
     engine.configuration.debug = EditorSettings::GetInstance().GetBool("Debug Context");
+    if (EditorSettings::GetInstance().GetString("API") == "Vulkan") {
+        engine.configuration.graphicsAPI = Video::Renderer::GraphicsAPI::VULKAN;
+    }
 
     // Start engine.
     if (!engine.Start())
         return -1;
 
-    Editor* editor = new Editor();
+    Editor* editor = new Editor(Managers().renderManager->GetRenderer()->GetLowLevelRenderer());
     // Setup imgui implementation.
     MainWindow* window = engine.GetMainWindow();
-    ImGuiImplementation::Init(window->GetGLFWWindow());
+    ImGuiImplementation::Init(window->GetGLFWWindow(), Managers().renderManager->GetRenderer());
 
     bool profiling = false;
     GUI::ProfilingWindow profilingWindow;
@@ -59,7 +61,6 @@ int main() {
 
         {
             PROFILE("Frame");
-            GPUPROFILE("Frame", Video::Query::Type::TIME_ELAPSED);
 
             if (Input()->Triggered(InputHandler::PROFILE))
                 profiling = !profiling;
@@ -72,12 +73,12 @@ int main() {
             engine.Update();
 
             if (editor->IsVisible()) {
-                Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Particle Emitter Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"), EditorSettings::GetInstance().GetBool("Physics Volumes"), EditorSettings::GetInstance().GetBool("Lighting"), EditorSettings::GetInstance().GetBool("Light Volumes"));
+                Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"), EditorSettings::GetInstance().GetBool("Physics Volumes"), EditorSettings::GetInstance().GetBool("Lighting"), EditorSettings::GetInstance().GetBool("Light Volumes"));
 
                 if (window->ShouldClose())
                     editor->Close();
 
-                editor->Show(engine.GetDeltaTime());
+                editor->Show(static_cast<float>(engine.GetDeltaTime()));
 
                 if (window->ShouldClose() && !editor->isClosing())
                     window->CancelClose();

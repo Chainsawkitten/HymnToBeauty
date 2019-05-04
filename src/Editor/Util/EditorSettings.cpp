@@ -7,14 +7,13 @@ EditorSettings::EditorSettings() {
     ini.LoadFile(FileSystem::DataPath("Hymn to Beauty", "Settings.ini").c_str());
 
     AddBoolSetting("Logging", "Debug", "Logging", false);
-    AddBoolSetting("Debug Context", "Debug", "Debug Context", false);
 
     AddLongSetting("Width", "Graphics", "Width", 800);
     AddLongSetting("Height", "Graphics", "Height", 600);
     AddStringSetting("Theme", "Graphics", "Theme", "Default");
+    AddStringSetting("API", "Graphics", "API", "OpenGL");
 
     AddBoolSetting("Sound Source Icons", "View", "Sound Source Icons", true);
-    AddBoolSetting("Particle Emitter Icons", "View", "Particle Emitter Icons", true);
     AddBoolSetting("Light Source Icons", "View", "Light Source Icons", true);
     AddBoolSetting("Camera Icons", "View", "Camera Icons", true);
     AddBoolSetting("Physics Volumes", "View", "Physics Volumes", true);

@@ -1,12 +1,18 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include "Geometry/Geometry3D.hpp"
 
 namespace Video {
+class Renderer;
+class LowLevelRenderer;
+class Buffer;
+class Shader;
 class ShaderProgram;
+class GraphicsPipeline;
+class VertexDescription;
+class GeometryBinding;
 
 /// Draws debug primitives.
 class DebugDrawing {
@@ -211,18 +217,15 @@ class DebugDrawing {
         /// Index count.
         unsigned int indexCount = 0;
 
-        /// Vertex buffer.
-        GLuint vertexBuffer = 0;
-
-        /// Index buffer.
-        GLuint indexBuffer = 0;
-
-        /// Vertex array.
-        GLuint vertexArray = 0;
+        /// Geometry binding.
+        const GeometryBinding* geometryBinding = nullptr;
     };
 
     /// Create new debug primitive renderer.
-    DebugDrawing();
+    /**
+     * @param renderer The renderer to use.
+     */
+    explicit DebugDrawing(Renderer* renderer);
 
     /// Destructor.
     ~DebugDrawing();
@@ -288,70 +291,70 @@ class DebugDrawing {
      */
     void DrawMesh(const Mesh& mesh);
 
-    /// Generate mesh buffers.
-    /**
-     * @param vertices Vector of vertices.
-     * @param indices Vector of indices.
-     * @param mesh The mesh containing the buffers.
-     */
-    void GenerateBuffers(const std::vector<glm::vec3>& vertices, const std::vector<unsigned int>& indices, Mesh& mesh);
-
-    /// Delete mesh buffers.
-    /**
-     * @param mesh The mesh containing the buffers.
-     */
-    void DeleteBuffers(Mesh& mesh);
-
     /// Stop debug drawing.
     void EndDebugDrawing();
 
   private:
     DebugDrawing(const DebugDrawing& other) = delete;
 
-    static void CreateVertexArray(const glm::vec3* positions, unsigned int positionCount, GLuint& vertexBuffer, GLuint& vertexArray);
-    void BindVertexArray(GLuint vertexArray);
+    void CreateVertexBuffer(const glm::vec3* positions, unsigned int positionCount, Buffer*& vertexBuffer, GeometryBinding*& geometryBinding);
+    void BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline);
+    void BindGeometry(const GeometryBinding* geometryBinding);
     void CreateCircle(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
     void CreateSphere(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
     void CreateCylinder(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
     void CreateCone(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
 
-    Video::ShaderProgram* shaderProgram;
+    Renderer* renderer;
+    LowLevelRenderer* lowLevelRenderer;
+    Shader* vertexShader;
+    Shader* fragmentShader;
+    ShaderProgram* shaderProgram;
 
-    // Uniform locations.
-    GLuint viewProjectionLocation;
-    GLuint modelLocation;
-    GLuint colorLocation;
-    GLuint sizeLocation;
+    GraphicsPipeline* pointGraphicsPipeline[2];
+    GraphicsPipeline* lineGraphicsPipeline[2];
+    GraphicsPipeline* lineTriangleGraphicsPipeline[2];
+    GraphicsPipeline* fillTriangleGraphicsPipeline[2];
+
+    // Shader resources.
+    Buffer* matricesBuffer;
+    struct PushConstantData {
+        glm::mat4 modelMatrix;
+        glm::vec4 colorSize;
+    };
 
     // Geometry.
-    GLuint pointVertexBuffer;
-    GLuint pointVertexArray;
+    Buffer* pointVertexBuffer;
+    GeometryBinding* pointGeometryBinding;
 
-    GLuint lineVertexBuffer;
-    GLuint lineVertexArray;
+    Buffer* lineVertexBuffer;
+    GeometryBinding* lineGeometryBinding;
 
-    GLuint cuboidVertexBuffer;
-    GLuint cuboidVertexArray;
+    Buffer* cuboidVertexBuffer;
+    GeometryBinding* cuboidGeometryBinding;
 
-    GLuint planeVertexBuffer;
-    GLuint planeVertexArray;
+    Buffer* planeVertexBuffer;
+    GeometryBinding* planeGeometryBinding;
 
-    GLuint sphereVertexBuffer;
-    GLuint sphereVertexArray;
+    Buffer* sphereVertexBuffer;
+    GeometryBinding* sphereGeometryBinding;
     unsigned int sphereVertexCount;
 
-    GLuint circleVertexBuffer;
-    GLuint circleVertexArray;
+    Buffer* circleVertexBuffer;
+    GeometryBinding* circleGeometryBinding;
     unsigned int circleVertexCount;
 
-    GLuint cylinderVertexBuffer;
-    GLuint cylinderVertexArray;
+    Buffer* cylinderVertexBuffer;
+    GeometryBinding* cylinderGeometryBinding;
     unsigned int cylinderVertexCount;
 
-    GLuint coneVertexBuffer;
-    GLuint coneVertexArray;
+    Buffer* coneVertexBuffer;
+    GeometryBinding* coneGeometryBinding;
     unsigned int coneVertexCount;
 
-    GLuint boundVertexArray = 0;
+    VertexDescription* vertexDescription;
+    VertexDescription* meshVertexDescription;
+    GraphicsPipeline* boundGraphicsPipeline = nullptr;
+    const GeometryBinding* boundGeometry = nullptr;
 };
 } // namespace Video

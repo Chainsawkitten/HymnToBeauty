@@ -27,9 +27,6 @@ class SpotLight : public SuperComponent {
     /// Angle of the cone (in degrees).
     float coneAngle = 15.f;
 
-    /// Whether the light should create shadows.
-    bool shadow = false;
-
     /// Distance.
     float distance = 1.f;
 };

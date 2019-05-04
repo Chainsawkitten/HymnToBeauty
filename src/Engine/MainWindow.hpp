@@ -15,9 +15,9 @@ class MainWindow {
      * @param fullscreen Whether to start in fullscreen mode.
      * @param borderless Whether to use a borderless window.
      * @param title Window title.
-     * @param debugContext Whether to activate OpenGL debug context.
+     * @param noAPI Create window without any specific API.
      */
-    MainWindow(int width, int height, bool fullscreen = false, bool borderless = false, const char* title = "", bool debugContext = false);
+    MainWindow(unsigned int width, unsigned int height, bool fullscreen = false, bool borderless = false, const char* title = "", bool noAPI = false);
 
     /// Destructor.
     ~MainWindow();
@@ -28,12 +28,6 @@ class MainWindow {
      */
     static MainWindow* GetInstance();
 
-    /// Initialize components.
-    /**
-     * @param showNotifications Whether to show debug messages of notification priority.
-     */
-    void Init(bool showNotifications = false) const;
-
     /// Update
     void Update();
 
@@ -41,14 +35,14 @@ class MainWindow {
     /**
      * @return The size of the window in pixels.
      */
-    const glm::vec2& GetSize() const;
+    const glm::uvec2& GetSize() const;
 
     /// Set the size of the window.
     /**
      * @param width The width of the window in pixels.
      * @param height The height of the window in pixels.
      */
-    void SetSize(int width, int height);
+    void SetSize(unsigned int width, unsigned int height);
 
     /// Set window title.
     /**
@@ -67,9 +61,6 @@ class MainWindow {
 
     /// Cancel the closing of the window.
     void CancelClose();
-
-    /// Swap front- and backbuffers.
-    void SwapBuffers() const;
 
     /// Get GLFW window.
     /**
@@ -99,8 +90,7 @@ class MainWindow {
 
     InputHandler* input;
     GLFWwindow* window;
-    bool debugContext;
-    glm::vec2 size;
+    glm::uvec2 size;
 
     bool shouldClose = false;
 };

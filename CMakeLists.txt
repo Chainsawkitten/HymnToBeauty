@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.7.0)
 
 project(HymnToBeauty)
 
@@ -18,6 +18,9 @@ if(UNIX OR MINGW)
 elseif(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
+
+option(OpenGLRenderer "OpenGL Renderer" ON)
+option(VulkanRenderer "Vulkan Renderer" OFF)
 
 # Externals
 add_subdirectory(externals)
@@ -66,3 +69,9 @@ endif()
 
 # Source files
 add_subdirectory(src)
+
+# Tests
+option(HTB_TESTS "Build tests" ON)
+if (HTB_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -1,193 +1,135 @@
 #include "StaticRenderProgram.hpp"
 
+#include "../LowLevelRenderer/Interface/LowLevelRenderer.hpp"
 #include "../Geometry/Geometry3D.hpp"
+#include "../Geometry/VertexType/StaticVertex.hpp"
 #include "../Texture/Texture2D.hpp"
-#include "../Culling/Frustum.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include "../Shader/Shader.hpp"
-#include "../Shader/ShaderProgram.hpp"
+#include "../LowLevelRenderer/Interface/CommandBuffer.hpp"
+#include "../LowLevelRenderer/Interface/Shader.hpp"
+#include "../LowLevelRenderer/Interface/ShaderProgram.hpp"
+#include "../LowLevelRenderer/Interface/Texture.hpp"
+#include "../LowLevelRenderer/Interface/Buffer.hpp"
+
 #include "Default3D.vert.hpp"
 #include "Default3D.frag.hpp"
-#include "ZrejectionStatic.vert.hpp"
-#include "Zrejection.frag.hpp"
-#include "ShadowStatic.vert.hpp"
-#include "../Buffer/StorageBuffer.hpp"
-#include <chrono>
+#include "DepthPrePassStatic.vert.hpp"
+#include "DepthPrePass.frag.hpp"
 
 using namespace Video;
 
-StaticRenderProgram::StaticRenderProgram() {
-    Shader* vertexShader = new Shader(DEFAULT3D_VERT, DEFAULT3D_VERT_LENGTH, GL_VERTEX_SHADER);
-    Shader* fragmentShader = new Shader(DEFAULT3D_FRAG, DEFAULT3D_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
-    delete vertexShader;
-    delete fragmentShader;
+StaticRenderProgram::StaticRenderProgram(LowLevelRenderer* lowLevelRenderer) {
+    vertexShader = lowLevelRenderer->CreateShader(DEFAULT3D_VERT, Shader::Type::VERTEX_SHADER);
+    fragmentShader = lowLevelRenderer->CreateShader(DEFAULT3D_FRAG, Shader::Type::FRAGMENT_SHADER);
+    shaderProgram = lowLevelRenderer->CreateShaderProgram({vertexShader, fragmentShader});
 
     // Create shaders for early rejection pass
-    vertexShader = new Shader(ZREJECTIONSTATIC_VERT, ZREJECTIONSTATIC_VERT_LENGTH, GL_VERTEX_SHADER);
-    fragmentShader = new Shader(ZREJECTION_FRAG, ZREJECTION_FRAG_LENGTH, GL_FRAGMENT_SHADER);
-    zShaderProgram = new ShaderProgram({vertexShader, fragmentShader});
-    delete vertexShader;
+    depthVertexShader = lowLevelRenderer->CreateShader(DEPTHPREPASSSTATIC_VERT, Shader::Type::VERTEX_SHADER);
+    depthFragmentShader = lowLevelRenderer->CreateShader(DEPTHPREPASS_FRAG, Shader::Type::FRAGMENT_SHADER);
+    depthShaderProgram = lowLevelRenderer->CreateShaderProgram({depthVertexShader, depthFragmentShader});
 
-    // Create shaders for shadowpass
-    vertexShader = new Shader(SHADOWSTATIC_VERT, SHADOWSTATIC_VERT_LENGTH, GL_VERTEX_SHADER);
-    shadowProgram = new ShaderProgram({vertexShader, fragmentShader});
-    delete vertexShader;
-    delete fragmentShader;
+    // Create graphics pipelines.
+    vertexDescription = Geometry::VertexType::StaticVertex::GenerateVertexDescription(lowLevelRenderer);
 
-    // Get uniform locations.
-    shadowLightSpaceLocation = shadowProgram->GetUniformLocation("lightSpaceMatrix");
-    shadowModelLocation = shadowProgram->GetUniformLocation("model");
-    zViewProjectionLocation = zShaderProgram->GetUniformLocation("viewProjection");
-    zModelLocation = zShaderProgram->GetUniformLocation("model");
-    viewProjectionLocation = shaderProgram->GetUniformLocation("viewProjection");
-    lightSpaceLocation = shaderProgram->GetUniformLocation("lightSpaceMatrix");
-    lightCountLocation = shaderProgram->GetUniformLocation("lightCount");
-    cameraNearPlaneLocation = shaderProgram->GetUniformLocation("cameraNear");
-    cameraFarPlaneLocation = shaderProgram->GetUniformLocation("cameraFar");
-    gammaLocation = shaderProgram->GetUniformLocation("gamma");
-    fogApplyLocation = shaderProgram->GetUniformLocation("fogApply");
-    fogDensityLocation = shaderProgram->GetUniformLocation("fogDensity");
-    fogColorLocation = shaderProgram->GetUniformLocation("fogColor");
-    colorFilterApplyLocation = shaderProgram->GetUniformLocation("colorFilterApply");
-    colorFilterColorLocation = shaderProgram->GetUniformLocation("colorFilterColor");
-    ditherApplyLocation = shaderProgram->GetUniformLocation("ditherApply");
-    timeLocation = shaderProgram->GetUniformLocation("time");
-    frameSizeLocation = shaderProgram->GetUniformLocation("frameSize");
-    mapAlbedoLocation = shaderProgram->GetUniformLocation("mapAlbedo");
-    mapNormalLocation = shaderProgram->GetUniformLocation("mapNormal");
-    mapMetallicLocation = shaderProgram->GetUniformLocation("mapMetallic");
-    mapRoughnessLocation = shaderProgram->GetUniformLocation("mapRoughness");
-    mapShadowLocation = shaderProgram->GetUniformLocation("mapShadow");
-    modelLocation = shaderProgram->GetUniformLocation("model");
-    viewLocation = shaderProgram->GetUniformLocation("viewMatrix");
-    normalLocation = shaderProgram->GetUniformLocation("normalMatrix");
+    GraphicsPipeline::Configuration configuration = {};
+    configuration.primitiveType = PrimitiveType::TRIANGLE;
+    configuration.polygonMode = PolygonMode::FILL;
+    configuration.cullFace = CullFace::BACK;
+    configuration.blendMode = BlendMode::NONE;
+    configuration.depthMode = DepthMode::TEST;
+    configuration.depthComparison = DepthComparison::LESS_EQUAL;
+
+    graphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, vertexDescription);
+
+    configuration.depthComparison = DepthComparison::LESS;
+    configuration.depthMode = DepthMode::TEST_WRITE;
+    depthGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(depthShaderProgram, configuration, vertexDescription);
+
+    // Create uniform buffers.
+    depthMatricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4));
+    matricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(MatricesValues));
+    fragmentUniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(FragmentUniforms));
 }
 
 StaticRenderProgram::~StaticRenderProgram() {
+    delete depthMatricesBuffer;
+    delete matricesBuffer;
+    delete fragmentUniformBuffer;
+
+    delete graphicsPipeline;
+    delete depthGraphicsPipeline;
+
     delete shaderProgram;
-    delete zShaderProgram;
-    delete shadowProgram;
+    delete depthShaderProgram;
+
+    delete vertexShader;
+    delete fragmentShader;
+    delete depthVertexShader;
+    delete depthFragmentShader;
+
+    delete vertexDescription;
 }
 
-void StaticRenderProgram::PreShadowRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, int shadowId, unsigned int shadowMapSize, int depthFbo) {
-    // Cull front faces to avoid peter panning.
-    glCullFace(GL_FRONT);
-    glViewport(0, 0, shadowMapSize, shadowMapSize);
-    glBindFramebuffer(GL_FRAMEBUFFER, depthFbo);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    this->shadowProgram->Use();
+void StaticRenderProgram::PreDepthRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+    commandBuffer.BindGraphicsPipeline(depthGraphicsPipeline);
 
     this->viewMatrix = viewMatrix;
     this->projectionMatrix = projectionMatrix;
-    this->lightSpaceMatrix = projectionMatrix * viewMatrix;
-    this->viewProjectionMatrix = projectionMatrix * viewMatrix;
-    this->shadowId = shadowId;
-
-    glUniformMatrix4fv(shadowLightSpaceLocation, 1, GL_FALSE, &lightSpaceMatrix[0][0]);
-}
-
-void StaticRenderProgram::ShadowRender(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix) const {
-    Frustum frustum(viewProjectionMatrix * modelMatrix);
-    if (frustum.Collide(geometry->GetAxisAlignedBoundingBox())) {
-        glBindVertexArray(geometry->GetVertexArray());
-
-        glUniformMatrix4fv(shadowModelLocation, 1, GL_FALSE, &modelMatrix[0][0]);
-
-        glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-    }
-}
-
-void StaticRenderProgram::PreDepthRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    this->zShaderProgram->Use();
-
-    this->viewMatrix = viewMatrix;
-    this->projectionMatrix = projectionMatrix;
-    this->viewProjectionMatrix = projectionMatrix * viewMatrix;
-
-    glUniformMatrix4fv(zViewProjectionLocation, 1, GL_FALSE, &viewProjectionMatrix[0][0]);
-}
-
-void StaticRenderProgram::DepthRender(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix) const {
-    Frustum frustum(viewProjectionMatrix * modelMatrix);
-    if (frustum.Collide(geometry->GetAxisAlignedBoundingBox())) {
-        glBindVertexArray(geometry->GetVertexArray());
-
-        glUniformMatrix4fv(zModelLocation, 1, GL_FALSE, &modelMatrix[0][0]);
-
-        glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
-    }
-}
-
-void StaticRenderProgram::PreRender(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const StorageBuffer* lightBuffer, unsigned int lightCount, float cameraNear, float cameraFar) {
-    this->shaderProgram->Use();
-    this->viewMatrix = viewMatrix;
-    this->projectionMatrix = projectionMatrix;
-    this->viewProjectionMatrix = projectionMatrix * viewMatrix;
+    viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     // Matrices.
-    glUniformMatrix4fv(viewProjectionLocation, 1, GL_FALSE, &viewProjectionMatrix[0][0]);
-    glUniformMatrix4fv(lightSpaceLocation, 1, GL_FALSE, &lightSpaceMatrix[0][0]);
-
-    // Lights.
-    glUniform1i(lightCountLocation, lightCount);
-    lightBuffer->BindBase(5);
-
-    // Image processing.
-    glUniform1fv(cameraNearPlaneLocation, 1, &cameraNear);
-    glUniform1fv(cameraFarPlaneLocation, 1, &cameraFar);
-    glUniform1fv(gammaLocation, 1, &gamma);
-
-    glUniform1iv(fogApplyLocation, 1, &fogApply);
-    glUniform1fv(fogDensityLocation, 1, &fogDensity);
-    glUniform3fv(fogColorLocation, 1, &fogColor[0]);
-
-    glUniform1iv(colorFilterApplyLocation, 1, &colorFilterApply);
-    glUniform3fv(colorFilterColorLocation, 1, &colorFilterColor[0]);
-
-    float time = static_cast<float>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() % 30000000000 / 1000000000.0);
-    glUniform1iv(ditherApplyLocation, 1, &ditherApply);
-
-    glUniform1fv(timeLocation, 1, &time);
-    glUniform2fv(frameSizeLocation, 1, &frameSize[0]);
+    depthMatricesBuffer->Write(&viewProjectionMatrix);
+    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::MATRICES, depthMatricesBuffer);
 }
 
-void StaticRenderProgram::Render(Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* normalTexture, const Video::Texture2D* textureMetallic, const Video::Texture2D* textureRoughness, const glm::mat4& modelMatrix) const {
-    Frustum frustum(viewProjectionMatrix * modelMatrix);
-    if (frustum.Collide(geometry->GetAxisAlignedBoundingBox())) {
-        glDepthFunc(GL_LEQUAL);
-        glDepthMask(GL_FALSE);
+void StaticRenderProgram::DepthRender(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, const glm::mat4& modelMatrix) const {
+    commandBuffer.BindGeometry(geometry->GetGeometryBinding());
+    commandBuffer.PushConstants(&modelMatrix);
+    commandBuffer.DrawIndexed(geometry->GetIndexCount());
+}
 
-        glBindVertexArray(geometry->GetVertexArray());
+void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Buffer* lightBuffer, unsigned int lightCount) {
+    commandBuffer.BindGraphicsPipeline(graphicsPipeline);
+    this->viewMatrix = viewMatrix;
+    this->projectionMatrix = projectionMatrix;
+    viewProjectionMatrix = projectionMatrix * viewMatrix;
 
-        // Set texture locations
-        glUniform1i(mapAlbedoLocation, 0);
-        glUniform1i(mapNormalLocation, 1);
-        glUniform1i(mapMetallicLocation, 2);
-        glUniform1i(mapRoughnessLocation, 3);
-        glUniform1i(mapShadowLocation, 4);
+    // Matrices.
+    MatricesValues matricesValues;
+    matricesValues.viewProjectionMatrix = viewProjectionMatrix;
+    matricesValues.viewMatrix = viewMatrix;
 
-        // Textures
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureAlbedo->GetTextureID());
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, normalTexture->GetTextureID());
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, textureMetallic->GetTextureID());
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_2D, textureRoughness->GetTextureID());
-        glActiveTexture(GL_TEXTURE4);
-        glBindTexture(GL_TEXTURE_2D, shadowId);
+    matricesBuffer->Write(&matricesValues);
+    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::MATRICES, matricesBuffer);
 
-        // Render model.
-        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &modelMatrix[0][0]);
-        glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &viewMatrix[0][0]);
-        glm::mat4 normalMatrix = glm::transpose(glm::inverse(viewMatrix * modelMatrix));
-        glUniformMatrix3fv(normalLocation, 1, GL_FALSE, &glm::mat3(normalMatrix)[0][0]);
+    // Fragment uniforms.
+    FragmentUniforms fragmentUniforms;
+    fragmentUniforms.lightCount = lightCount;
+    fragmentUniforms.gamma = gamma;
 
-        glDrawElements(GL_TRIANGLES, geometry->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+    fragmentUniformBuffer->Write(&fragmentUniforms);
+    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::FRAGMENT_UNIFORMS, fragmentUniformBuffer);
 
-        glDepthMask(GL_TRUE);
-        glDepthFunc(GL_LESS);
-    }
+    // Light storage buffer.
+    commandBuffer.BindStorageBuffer(lightBuffer);
+}
+
+void StaticRenderProgram::Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* textureNormal, const Video::Texture2D* textureMetallic, const Video::Texture2D* textureRoughness, const glm::mat4& modelMatrix) const {
+    commandBuffer.BindGeometry(geometry->GetGeometryBinding());
+
+    // Textures
+    commandBuffer.BindMaterial({ textureAlbedo->GetTexture(), textureNormal->GetTexture(), textureMetallic->GetTexture(), textureRoughness->GetTexture() });
+
+    // Render model.
+    struct PushConstants {
+        glm::mat4 modelMatrix;
+        glm::mat4 normalMatrix;
+    } pushConstants;
+
+    pushConstants.modelMatrix = modelMatrix;
+    pushConstants.normalMatrix = glm::transpose(glm::inverse(viewMatrix * modelMatrix));
+
+    commandBuffer.PushConstants(&pushConstants);
+
+    commandBuffer.DrawIndexed(geometry->GetIndexCount());
 }

@@ -31,7 +31,7 @@
 #include <Utility/Log.hpp>
 
 ImGuizmo::OPERATION currentOperation = ImGuizmo::TRANSLATE;
-Editor::Editor() {
+Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLevelRenderer) {
     // Create Hymns directory.
     FileSystem::CreateDirectory((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns").c_str());
 
@@ -81,7 +81,7 @@ Editor::Editor() {
     cursors[4] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
 
     savePromptAnswered = false;
-    savePromtWindow.SetTitle("Save before you quit?");
+    savePromptWindow.SetTitle("Save before you quit?");
     close = false;
 
     // Load settings.
@@ -109,10 +109,10 @@ void Editor::Show(float deltaTime) {
         } else {
             // Ask the user whether they wish to save.
             if (Hymn().GetPath() != "") {
-                savePromtWindow.SetVisible(true);
-                savePromtWindow.Show();
+                savePromptWindow.SetVisible(true);
+                savePromptWindow.Show();
 
-                switch (savePromtWindow.GetDecision()) {
+                switch (savePromptWindow.GetDecision()) {
                 case 0:
                     Save();
                     savePromptAnswered = true;
@@ -125,7 +125,7 @@ void Editor::Show(float deltaTime) {
                 case 2:
                     savePromptAnswered = false;
                     close = false;
-                    savePromtWindow.ResetDecision();
+                    savePromptWindow.ResetDecision();
                     break;
 
                 default:
@@ -135,6 +135,9 @@ void Editor::Show(float deltaTime) {
                 savePromptAnswered = true;
             }
         }
+
+        if (savePromptAnswered)
+            Resources().Clear();
     } else {
         bool play = false;
 
@@ -365,10 +368,6 @@ void Editor::ShowMainMenuBar(bool& play) {
             static bool soundSources = EditorSettings::GetInstance().GetBool("Sound Source Icons");
             ImGui::MenuItem("Sound Sources", "", &soundSources);
             EditorSettings::GetInstance().SetBool("Sound Source Icons", soundSources);
-
-            static bool particleEmitters = EditorSettings::GetInstance().GetBool("Particle Emitter Icons");
-            ImGui::MenuItem("Particle Emitters", "", &particleEmitters);
-            EditorSettings::GetInstance().SetBool("Particle Emitter Icons", particleEmitters);
 
             static bool lightSources = EditorSettings::GetInstance().GetBool("Light Source Icons");
             ImGui::MenuItem("Light Sources", "", &lightSources);

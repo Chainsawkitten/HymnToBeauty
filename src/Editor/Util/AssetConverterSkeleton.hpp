@@ -47,9 +47,9 @@ class AssetConverterSkeleton {
 
     std::vector<std::string> bones;
     std::vector<std::string> children;
-    std::vector<int> parents;
-    std::vector<int> ids;
-    unsigned int currentId = 0;
+    std::vector<uint32_t> parents;
+    std::vector<uint32_t> ids;
+    uint32_t currentId = 0;
 
     bool success = true;
     std::string errorString;

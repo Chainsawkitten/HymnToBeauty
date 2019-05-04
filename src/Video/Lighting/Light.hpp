@@ -23,9 +23,6 @@ struct Light {
     /// Angle of the cone (in degrees).
     float coneAngle;
 
-    /// Whether the light should cast shadows.
-    float shadow;
-
     /// Distance.
     float distance;
 

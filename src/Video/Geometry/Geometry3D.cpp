@@ -1,29 +1,28 @@
 #include "Geometry3D.hpp"
 
+#include "../LowLevelRenderer/Interface/LowLevelRenderer.hpp"
+#include "../LowLevelRenderer/Interface/Buffer.hpp"
+
 using namespace Video;
 using namespace Geometry;
 
-Geometry3D::Geometry3D() {}
-
-Geometry3D::~Geometry3D() {
-    glDeleteBuffers(1, &vertexBuffer);
-    glDeleteBuffers(1, &indexBuffer);
+Geometry3D::Geometry3D(LowLevelRenderer* lowLevelRenderer) {
+    this->lowLevelRenderer = lowLevelRenderer;
 }
 
-GLuint Geometry3D::GetVertexArray() const {
-    return vertexArray;
+Geometry3D::~Geometry3D() {
+    delete vertexBuffer;
+    delete indexBuffer;
+    delete geometryBinding;
+    delete vertexDescription;
+}
+
+const GeometryBinding* Geometry3D::GetGeometryBinding() const {
+    return geometryBinding;
 }
 
 unsigned int Geometry3D::GetIndexCount() const {
     return indexCount;
-}
-
-void Geometry3D::GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount, GLuint& indexBuffer) {
-    this->indexCount = indexCount;
-    glBindVertexArray(0);
-    glGenBuffers(1, &indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indexData, GL_STATIC_DRAW);
 }
 
 const Video::AxisAlignedBoundingBox& Geometry3D::GetAxisAlignedBoundingBox() const {
@@ -36,6 +35,15 @@ const std::vector<glm::vec3>& Geometry3D::GetVertexPositionData() const {
 
 const std::vector<uint32_t>& Geometry3D::GetVertexIndexData() const {
     return vertexIndexData;
+}
+
+void Geometry3D::GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount) {
+    this->indexCount = indexCount;
+    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER_STATIC, indexCount * sizeof(unsigned int), indexData);
+}
+
+void Geometry3D::GenerateGeometryBinding() {
+    geometryBinding = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer, Video::GeometryBinding::IndexType::INT, indexBuffer);
 }
 
 void Geometry3D::CreateAxisAlignedBoundingBox(const std::vector<glm::vec3*>& positions) {

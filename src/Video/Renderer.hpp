@@ -1,57 +1,74 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include "Lighting/Light.hpp"
+#include "PostProcessing/PostProcessing.hpp"
+
+struct GLFWwindow;
 
 namespace Video {
 class StaticRenderProgram;
 class SkinRenderProgram;
 class Texture2D;
-class PostProcessing;
-class FXAAFilter;
+class Shader;
 class ShaderProgram;
-class RenderSurface;
-class StorageBuffer;
+class RenderPass;
+class Buffer;
+class VertexDescription;
+class GeometryBinding;
+class LowLevelRenderer;
+class CommandBuffer;
+class Texture;
 namespace Geometry {
 class Geometry3D;
-class Rectangle;
 } // namespace Geometry
 
-/// Handles rendering using OpenGL.
+/// Handles rendering using a low-level renderer.
 class Renderer {
   public:
+    /// The supported graphics APIs.
+    enum class GraphicsAPI {
+        OPENGL, ///< OpenGL
+        VULKAN  ///< Vulkan
+    };
+
     /// Create new renderer.
-    Renderer();
+    /**
+     * @param graphicsAPI Which graphics API to use for rendering.
+     * @param window Window to render to.
+     */
+    Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window);
 
     /// Destructor.
     ~Renderer();
 
-    /// Start rendering the frame.
+    /// Get the low-level renderer.
     /**
-     * @param renderSurface %RenderSurface to render to.
+     * @return The low-level renderer.
      */
-    void StartRendering(RenderSurface* renderSurface);
+    LowLevelRenderer* GetLowLevelRenderer();
 
-    /// Prepare for shadow rendering static meshes.
+    /// Set the size of the render surface.
     /**
-     * @param lightView The lights view matrix
-     * @param lightProjection the Lights projection matrix
-     * @param shadowId the texture ID for the shadowMap
-     * @param shadowMapSize The size of the shadow map.
-     * @param depthFbo framebuffer object for shadowMap
+     * @param size The size of the render surface.
      */
-    void PrepareStaticShadowRendering(const glm::mat4 lightView, glm::mat4 lightProjection, int shadowId, unsigned int shadowMapSize, int dephtFbo);
+    void SetRenderSurfaceSize(const glm::uvec2& size);
 
-    /// Render a static shadow mesh.
+    /// Get the size of the render surface.
     /**
-     * @param geometry The geometry to render.
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
-     * @param modelMatrix Model matrix.
+     * @return The size of the render surface.
      */
-    void ShadowRenderStaticMesh(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix);
+    const glm::uvec2& GetRenderSurfaceSize() const;
+
+    /// Begin new frame.
+    void BeginFrame();
+
+    /// Start depth pre-pass.
+    void StartDepthPrePass();
+
+    /// Start the main forward shading pass.
+    void StartMainPass();
 
     /// Prepare for depth rendering static meshes.
     /**
@@ -63,11 +80,9 @@ class Renderer {
     /// Render a static mesh.
     /**
      * @param geometry The geometry to render.
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
      * @param modelMatrix Model matrix.
      */
-    void DepthRenderStaticMesh(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix);
+    void DepthRenderStaticMesh(Geometry::Geometry3D* geometry, const glm::mat4& modelMatrix);
 
     /// Prepare for rendering static meshes.
     /**
@@ -89,16 +104,6 @@ class Renderer {
      */
     void RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* metallic, const Texture2D* roughness, const glm::mat4 modelMatrix);
 
-    /// Prepare for shadow rendering skin meshes.
-    /**
-     * @param lightView The lights view matrix
-     * @param lightProjection the Lights projection matrix
-     * @param shadowId the texture ID for the shadowMap
-     * @param shadowMapSize The size of the shadow map.
-     * @param depthFbo framebuffer object for shadowMap
-     */
-    void PrepareSkinShadowRendering(const glm::mat4 lightView, glm::mat4 lightProjection, int shadowId, unsigned int shadowMapSize, int dephtFbo);
-
     /// Prepare for depth rendering skin meshes.
     /**
      * @param viewMatrix The camera's view matrix.
@@ -109,12 +114,10 @@ class Renderer {
     /// Render a skin mesh.
     /**
      * @param geometry The geometry to render.
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
      * @param modelMatrix Model matrix.
      * @param bones Bones array.
      */
-    void DepthRenderSkinMesh(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones);
+    void DepthRenderSkinMesh(Geometry::Geometry3D* geometry, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones);
 
     /// Prepare for rendering skin meshes.
     /**
@@ -124,16 +127,6 @@ class Renderer {
      * @param cameraFar Camera far plane distance.
      */
     void PrepareSkinMeshRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float cameraNear, float cameraFar);
-
-    /// Render a skin shadow mesh.
-    /**
-     * @param geometry The geometry to render.
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
-     * @param modelMatrix Model matrix.
-     * @param bones Bones array.
-     */
-    void ShadowRenderSkinMesh(Geometry::Geometry3D* geometry, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones);
 
     /// Render a skin mesh.
     /**
@@ -151,43 +144,20 @@ class Renderer {
     /**
      * @param lights Vector of lights to push to the light buffer.
      */
-    void SetLights(const std::vector<Video::Light>& lights);
+    void SetLights(const std::vector<Light>& lights);
 
-    /// Anti-alias using FXAA.
-    /**
-     * @param renderSurface %RenderSurface to apply filter to.
-     */
-    void AntiAlias(RenderSurface* renderSurface);
+    /// Apply post-processing.
+    void ApplyPostProcessing();
 
-    /// Render fog.
-    /**
-     * @param renderSurface %RenderSurface to apply filter to.
-     * @param projectionMatrix The camera's projection matrix.
-     * @param density The density of the fog.
-     * @param color Color.
-     */
-    void RenderFog(RenderSurface* renderSurface, const glm::mat4& projectionMatrix, float density, const glm::vec3& color);
+    /// Display the rendered results to back buffer and swap back and front buffers.
+    void Present();
 
-    /// Apply glow effect.
-    /**
-     * @param renderSurface %RenderSurface to apply filter to.
-     * @param blurAmount How many times to blur the glow buffer.
+    /// Wait until rendering and presentation is done.
+    /** 
+     * \note
+     * Needs to be done before destroying render resources or they could still be in use.
      */
-    void ApplyGlow(RenderSurface* renderSurface, int blurAmount);
-
-    /// Apply a color filter.
-    /**
-     * @param renderSurface %RenderSurface to apply filter to.
-     * @param color Color.
-     */
-    void ApplyColorFilter(RenderSurface* renderSurface, const glm::vec3& color);
-
-    /// Display the rendered results to back buffer.
-    /**
-     * @param renderSurface RenderSurface to present to back buffer.
-     * @param targetSize Size of the back buffer in pixels.
-     */
-    void Present(RenderSurface* renderSurface, const glm::vec2& targetSize);
+    void WaitForRender();
 
     /// Begin rendering icons.
     /**
@@ -208,12 +178,11 @@ class Renderer {
      */
     void RenderIcon(const glm::vec3& position, const Texture2D* icon);
 
-    /// Stop rendering icons.
+    /// Configure the post-processing.
     /**
-     * \note
-     * Should be called after all icons have been rendered.
+     * @param configuration The configuration.
      */
-    void StopRenderingIcons();
+    void ConfigurePostProcessing(const PostProcessing::Configuration& configuration);
 
     /// Gamma correction.
     /**
@@ -227,114 +196,52 @@ class Renderer {
      */
     float GetGamma() const;
 
-    /// Set whether fog is applied.
+    /// Get the command buffer where commands are being recorded.
     /**
-     * @param fogApply Whether to apply fog.
+     * @return The command buffer to record into.
      */
-    void SetFogApply(bool fogApply);
-
-    /// Get whether fog is applied.
-    /**
-     * @return Whether fog is applied.
-     */
-    bool GetFogApply() const;
-
-    /// Set fog density.
-    /**
-     * @param fogDensity Density of the fog.
-     */
-    void SetFogDensity(float fogDensity);
-
-    /// get fog density.
-    /**
-     * @return Density of the fog
-     */
-    float GetFogDensity() const;
-
-    /// Set fog color.
-    /**
-     * @param fogColor Color of the fog.
-     */
-    void SetFogColor(const glm::vec3& fogColor);
-
-    /// Get fog color.
-    /**
-     * @return Color of the fog.
-     */
-    glm::vec3 GetFogColor() const;
-
-    /// Set whether color filter is applied.
-    /**
-     * @param colorFilterApply Whether to apply color filter.
-     */
-    void SetColorFilterApply(bool colorFilterApply);
-
-    /// Get whether color filter is applied.
-    /**
-     * @return Whether color filter is applied.
-     */
-    bool GetColorFilterApply() const;
-
-    /// Set color filer color.
-    /**
-     * @param colorFilterColor Color of the color filter.
-     */
-    void SetColorFilterColor(const glm::vec3& colorFilterColor);
-
-    /// Get color filer color.
-    /**
-     * @return Color of the color filter.
-     */
-    glm::vec3 GetColorFilterColor() const;
-
-    /// Set whether dithering is applied.
-    /**
-     * @param ditherApply Whether to apply dithering.
-     */
-    void SetDitherApply(bool ditherApply);
-
-    /// Get whether dithering is applied.
-    /**
-     * @return Whether dithering is applied.
-     */
-    bool GetDitherApply() const;
-
-    /// Set size of the current frame to be rendered in pixels.
-    /**
-     * @param frameSize Size of the frame in pixels.
-     */
-    void SetFrameSize(const glm::vec2& frameSize);
-
-    /// Get size of the current frame to be rendered in pixels.
-    /**
-     * @return Size of the frame in pixels.
-     */
-    glm::vec2 GetFrameSize() const;
+    CommandBuffer* GetCommandBuffer();
 
   private:
     Renderer(const Renderer& other) = delete;
+
+    void CreateRenderTextures();
+    void FreeRenderTextures();
+
+    LowLevelRenderer* lowLevelRenderer;
+
+    glm::uvec2 renderSurfaceSize;
+    Texture* colorTexture;
+    Texture* depthTexture;
+    Texture* postProcessingTexture;
+    RenderPass* depthRenderPass;
+    RenderPass* mainRenderPass;
+    RenderPass* iconRenderPass;
+    CommandBuffer* commandBuffer;
+
     StaticRenderProgram* staticRenderProgram;
     SkinRenderProgram* skinRenderProgram;
 
+    static const uint32_t MAX_LIGHTS = 100;
     unsigned int lightCount;
-    StorageBuffer* lightBuffer;
+    Buffer* lightBuffer;
+    Light lightData[MAX_LIGHTS];
 
     PostProcessing* postProcessing;
-    FXAAFilter* fxaaFilter;
 
     // Icon rendering.
+    Shader* iconVertexShader;
+    Shader* iconFragmentShader;
     ShaderProgram* iconShaderProgram;
-    GLuint vertexBuffer;
-    GLuint vertexArray;
+    GraphicsPipeline* iconGraphicsPipeline;
+
+    Buffer* iconVertexBuffer;
+    VertexDescription* iconVertexDescription;
+    GeometryBinding* iconGeometryBinding;
     const Texture2D* currentIcon = nullptr;
+    Buffer* iconMatricesBuffer;
 
-    // Uniform locations.
-    GLuint viewProjectionLocation;
-    GLuint cameraPositionLocation;
-    GLuint cameraUpLocation;
-    GLuint baseImageLocation;
-    GLuint positionLocation;
-
-    Geometry::Rectangle* rectangle;
+    glm::vec3 cameraPosition;
+    glm::vec3 cameraUp;
 };
 } // namespace Video

@@ -12,7 +12,6 @@
 #include <Engine/Component/Script.hpp>
 #include <Engine/Component/Shape.hpp>
 #include <Engine/Component/SoundSource.hpp>
-#include <Engine/Component/ParticleSystem.hpp>
 #include <Engine/Animation/AnimationController.hpp>
 #include <Engine/Component/Trigger.hpp>
 #include <Engine/Geometry/Model.hpp>
@@ -24,11 +23,11 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
-#include <Engine/Manager/ParticleManager.hpp>
 #include <Engine/Manager/PhysicsManager.hpp>
 #include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Hymn.hpp>
 #include <angelscript.h>
+#include <Video/LowLevelRenderer/Interface/Texture.hpp>
 
 #include "../../Util/EditorSettings.hpp"
 #include "../FileSelector.hpp"
@@ -62,7 +61,6 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Script>("Script", std::bind(&EntityEditor::ScriptEditor, this, std::placeholders::_1));
     AddEditor<Component::Shape>("Shape", std::bind(&EntityEditor::ShapeEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
-    AddEditor<Component::ParticleSystemComponent>("Particle System", std::bind(&EntityEditor::ParticleSystemEditor, this, std::placeholders::_1));
     AddEditor<Component::Trigger>("Trigger", std::bind(&EntityEditor::TriggerEditor, this, std::placeholders::_1));
 
     shapeEditors.push_back(new SphereShapeEditor());
@@ -72,8 +70,6 @@ EntityEditor::EntityEditor() {
     shapeEditors.push_back(new ConeShapeEditor());
     shapeEditors.push_back(new CapsuleShapeEditor());
     selectedShape = 0;
-
-    curveEditor.SetVisible(false);
 
     rigidBodyEditor.reset(new GUI::RigidBodyEditor);
     triggerEditor.reset(new GUI::TriggerEditor);
@@ -157,10 +153,6 @@ void EntityEditor::Show() {
     }
 
     ImGui::End();
-
-    // Show external editors.
-    if (curveEditor.IsVisible())
-        curveEditor.Show();
 }
 
 void EntityEditor::SetEntity(Entity* entity) {
@@ -292,7 +284,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     ImGui::Text("Albedo");
     ImGui::Indent();
     if (material->albedo->GetTexture()->IsLoaded())
-        ImGui::Image((void*)material->albedo->GetTexture()->GetTextureID(), ImVec2(128, 128));
+        ImGui::Image((void*)material->albedo->GetTexture()->GetTexture(), ImVec2(128, 128));
 
     if (ImGui::Button("Select albedo texture")) {
         albedoShow = true;
@@ -307,7 +299,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     ImGui::Text("Normal");
     ImGui::Indent();
     if (material->normal->GetTexture()->IsLoaded())
-        ImGui::Image((void*)material->normal->GetTexture()->GetTextureID(), ImVec2(128, 128));
+        ImGui::Image((void*)material->normal->GetTexture()->GetTexture(), ImVec2(128, 128));
 
     if (ImGui::Button("Select normal texture")) {
         albedoShow = false;
@@ -322,7 +314,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     ImGui::Text("Metallic");
     ImGui::Indent();
     if (material->metallic->GetTexture()->IsLoaded())
-        ImGui::Image((void*)material->metallic->GetTexture()->GetTextureID(), ImVec2(128, 128));
+        ImGui::Image((void*)material->metallic->GetTexture()->GetTexture(), ImVec2(128, 128));
 
     if (ImGui::Button("Select metallic texture")) {
         albedoShow = false;
@@ -337,7 +329,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     ImGui::Text("Roughness");
     ImGui::Indent();
     if (material->roughness->GetTexture()->IsLoaded())
-        ImGui::Image((void*)material->roughness->GetTexture()->GetTextureID(), ImVec2(128, 128));
+        ImGui::Image((void*)material->roughness->GetTexture()->GetTexture(), ImVec2(128, 128));
 
     if (ImGui::Button("Select roughness texture")) {
         albedoShow = false;
@@ -352,7 +344,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     if (albedoShow) {
         ImGui::Begin("Textures", &albedoShow);
         if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
-            if (material->albedo != Hymn().defaultAlbedo)
+            if (material->albedo != Managers().resourceManager->GetDefaultAlbedo())
                 Managers().resourceManager->FreeTextureAsset(material->albedo);
 
             material->albedo = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
@@ -364,7 +356,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     if (normalShow) {
         ImGui::Begin("Textures", &normalShow);
         if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
-            if (material->normal != Hymn().defaultNormal)
+            if (material->normal != Managers().resourceManager->GetDefaultNormal())
                 Managers().resourceManager->FreeTextureAsset(material->normal);
 
             material->normal = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
@@ -376,7 +368,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     if (metallicShow) {
         ImGui::Begin("Textures", &metallicShow);
         if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
-            if (material->metallic != Hymn().defaultMetallic)
+            if (material->metallic != Managers().resourceManager->GetDefaultMetallic())
                 Managers().resourceManager->FreeTextureAsset(material->metallic);
 
             material->metallic = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
@@ -388,7 +380,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     if (roughnessShow) {
         ImGui::Begin("Textures", &roughnessShow);
         if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
-            if (material->roughness != Hymn().defaultRoughness)
+            if (material->roughness != Managers().resourceManager->GetDefaultRoughness())
                 Managers().resourceManager->FreeTextureAsset(material->roughness);
 
             material->roughness = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
@@ -420,7 +412,6 @@ void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::DraggableFloat("Attenuation", spotLight->attenuation, 0.0f);
     ImGui::DraggableFloat("Intensity", spotLight->intensity, 0.0f);
     ImGui::DraggableFloat("Cone angle", spotLight->coneAngle, 0.0f, 180.f);
-    ImGui::Checkbox("Gives shadows", &spotLight->shadow);
     ImGui::DraggableFloat("Distance", spotLight->distance, 0.0f);
     ImGui::Unindent();
 }
@@ -583,43 +574,6 @@ void EntityEditor::SoundSourceEditor(Component::SoundSource* soundSource) {
     ImGui::DraggableFloat("Pitch", soundSource->pitch, 0.0f);
     ImGui::DraggableFloat("Gain", soundSource->gain, 0.0f);
     ImGui::Checkbox("Loop", &soundSource->loop);
-    ImGui::Unindent();
-}
-
-void GUI::EntityEditor::ParticleSystemEditor(Component::ParticleSystemComponent* particleSystem) {
-    ImGui::Text("Particle System");
-    ImGui::Indent();
-    if (ImGui::Button("Curve editor"))
-        curveEditor.SetVisible(!curveEditor.IsVisible());
-
-    int rows = Managers().particleManager->GetTextureAtlasRows();
-    float column = static_cast<float>(particleSystem->particleType.textureIndex % rows);
-    float row = static_cast<float>(particleSystem->particleType.textureIndex / rows);
-    ImGui::Image((void*)Managers().particleManager->GetTextureAtlas()->GetTextureID(), ImVec2(128, 128), ImVec2(column / rows, row / rows), ImVec2((column + 1.f) / rows, (row + 1.f) / rows));
-    ImGui::InputInt("Texture index", &particleSystem->particleType.textureIndex);
-    ImGui::DragInt("Number of particles", &particleSystem->particleType.nr_particles, 1.0f, 1, 32768);
-    ImGui::InputInt("Emit amount", &particleSystem->particleType.nr_new_particles);
-    ImGui::DragFloat("Rate", &particleSystem->particleType.rate, 0.3f, 0.0001f, 10.0f);
-    ImGui::DragFloat("Lifetime", &particleSystem->particleType.lifetime, 1.0f, 0.01f, 1000.0f);
-    ImGui::DragFloat("Scale", &particleSystem->particleType.scale, 0.2f, 0.1f, 5.0f);
-    ImGui::DragFloat3("Velocity", &particleSystem->particleType.velocity[0], 1.0f, -1.0f, 1.0f);
-    ImGui::DragFloat("Alpha Control", &particleSystem->particleType.alpha_control, 1.0f, 0.1f, 10.0f);
-    ImGui::DragFloat("Mass", &particleSystem->particleType.mass, 0.001f, 0.001f, 1.0f);
-    ImGui::DragInt("Spread", &particleSystem->particleType.spread, 1.0f, 1, 100);
-    ImGui::DragFloat3("Random Velocity", &particleSystem->particleType.randomVec[0], 1.0f, -10.0f, 10.0f);
-    ImGui::DragFloat("Speed", &particleSystem->particleType.velocityMultiplier, 1.0f, 0.01f, 100.0f);
-
-    for (unsigned int i = 0; i < curveEditor.GetAllCurves().size(); i++) {
-        if (curveEditor.GetAllCurves()[i].editVelocityX)
-            particleSystem->particleType.velocity.x = curveEditor.GetAllCurves()[i].value_you_care_about;
-
-        if (curveEditor.GetAllCurves()[i].editVelocityY)
-            particleSystem->particleType.velocity.y = curveEditor.GetAllCurves()[i].value_you_care_about;
-
-        if (curveEditor.GetAllCurves()[i].editVelocityZ)
-            particleSystem->particleType.velocity.z = curveEditor.GetAllCurves()[i].value_you_care_about;
-    }
-
     ImGui::Unindent();
 }
 

@@ -15,12 +15,18 @@
 #include <ImGuizmo.h>
 
 struct GLFWcursor;
+namespace Video {
+class LowLevelRenderer;
+}
 
 /// Handles the main editor.
 class Editor {
   public:
     /// Create new editor.
-    Editor();
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     */
+    explicit Editor(Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     ~Editor();
@@ -113,7 +119,7 @@ class Editor {
     GUI::LogView logView;
     GUI::SettingsWindow settingsWindow;
     GUI::FiltersWindow filtersWindow;
-    GUI::SavePromptWindow savePromtWindow;
+    GUI::SavePromptWindow savePromptWindow;
 
     bool close;
     bool savePromptAnswered;
