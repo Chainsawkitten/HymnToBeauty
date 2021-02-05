@@ -93,13 +93,15 @@ add_library(glm INTERFACE)
 target_include_directories(glm INTERFACE glm)
 
 # Imgui
-add_library(imgui STATIC imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp)
+add_library(imgui STATIC imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp)
 target_include_directories(imgui INTERFACE imgui)
 
 # Imguizmo
 add_library(imguizmo STATIC ImGuizmo/ImGuizmo.cpp)
 target_link_libraries(imguizmo imgui)
 target_include_directories(imguizmo INTERFACE ImGuizmo)
+set_property(TARGET imguizmo PROPERTY CXX_STANDARD 11)
+set_property(TARGET imguizmo PROPERTY CXX_STANDARD_REQUIRED ON)
 
 # JsonCpp
 set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Don't build JsonCpp tests" FORCE)

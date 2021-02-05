@@ -1,5 +1,8 @@
 #include "GuiHelpers.hpp"
 
+#include <imgui.h>
+#include <cmath>
+
 namespace ImGui {
 void ShowHelpMarker(const char* description, const float sameLineOffset) {
     if (sameLineOffset > 0.0f)
@@ -64,5 +67,10 @@ void DraggableVec3(const char* label, glm::vec3& value, float min, float max) {
         value.y = max;
     if (value.z > max)
         value.z = max;
+}
+
+void SetNextWindowPosCenter() {
+    ImGuiIO& io = GetIO();
+    SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), 0, ImVec2(0.5f, 0.5f));
 }
 } // namespace ImGui

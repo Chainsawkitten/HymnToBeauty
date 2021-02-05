@@ -33,7 +33,7 @@ void SaveTheme(const char* name) {
     root["Color: Text"] = Json::SaveImVec4(style.Colors[ImGuiCol_Text]);
     root["Color: TextDisabled"] = Json::SaveImVec4(style.Colors[ImGuiCol_TextDisabled]);
     root["Color: WindowBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_WindowBg]);
-    root["Color: ChildWindowBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_ChildWindowBg]);
+    root["Color: ChildBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_ChildBg]);
     root["Color: PopupBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_PopupBg]);
     root["Color: Border"] = Json::SaveImVec4(style.Colors[ImGuiCol_Border]);
     root["Color: BorderShadow"] = Json::SaveImVec4(style.Colors[ImGuiCol_BorderShadow]);
@@ -57,21 +57,18 @@ void SaveTheme(const char* name) {
     root["Color: Header"] = Json::SaveImVec4(style.Colors[ImGuiCol_Header]);
     root["Color: HeaderHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_HeaderHovered]);
     root["Color: HeaderActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_HeaderActive]);
-    root["Color: Column"] = Json::SaveImVec4(style.Colors[ImGuiCol_Column]);
-    root["Color: ColumnHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_ColumnHovered]);
-    root["Color: ColumnActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_ColumnActive]);
+    root["Color: Separator"] = Json::SaveImVec4(style.Colors[ImGuiCol_Separator]);
+    root["Color: SeparatorHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_SeparatorHovered]);
+    root["Color: SeparatorActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_SeparatorActive]);
     root["Color: ResizeGrip"] = Json::SaveImVec4(style.Colors[ImGuiCol_ResizeGrip]);
     root["Color: ResizeGripHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_ResizeGripHovered]);
     root["Color: ResizeGripActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_ResizeGripActive]);
-    root["Color: CloseButton"] = Json::SaveImVec4(style.Colors[ImGuiCol_CloseButton]);
-    root["Color: CloseButtonHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_CloseButtonHovered]);
-    root["Color: CloseButtonActive"] = Json::SaveImVec4(style.Colors[ImGuiCol_CloseButtonActive]);
     root["Color: PlotLines"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotLines]);
     root["Color: PlotLinesHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotLinesHovered]);
     root["Color: PlotHistogram"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotHistogram]);
     root["Color: PlotHistogramHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotHistogramHovered]);
     root["Color: TextSelectedBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_TextSelectedBg]);
-    root["Color: ModalWindowDarkening"] = Json::SaveImVec4(style.Colors[ImGuiCol_ModalWindowDarkening]);
+    root["Color: ModalWindowDimBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_ModalWindowDimBg]);
 
     // Save to file.
     std::ofstream file(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Themes" + FileSystem::DELIMITER + name + ".json");
@@ -106,7 +103,7 @@ void LoadTheme(const char* name) {
     style.Colors[ImGuiCol_Text] = Json::LoadImVec4(root["Color: Text"]);
     style.Colors[ImGuiCol_TextDisabled] = Json::LoadImVec4(root["Color: TextDisabled"]);
     style.Colors[ImGuiCol_WindowBg] = Json::LoadImVec4(root["Color: WindowBg"]);
-    style.Colors[ImGuiCol_ChildWindowBg] = Json::LoadImVec4(root["Color: ChildWindowBg"]);
+    style.Colors[ImGuiCol_ChildBg] = Json::LoadImVec4(root["Color: ChildBg"]);
     style.Colors[ImGuiCol_PopupBg] = Json::LoadImVec4(root["Color: PopupBg"]);
     style.Colors[ImGuiCol_Border] = Json::LoadImVec4(root["Color: Border"]);
     style.Colors[ImGuiCol_BorderShadow] = Json::LoadImVec4(root["Color: BorderShadow"]);
@@ -130,21 +127,18 @@ void LoadTheme(const char* name) {
     style.Colors[ImGuiCol_Header] = Json::LoadImVec4(root["Color: Header"]);
     style.Colors[ImGuiCol_HeaderHovered] = Json::LoadImVec4(root["Color: HeaderHovered"]);
     style.Colors[ImGuiCol_HeaderActive] = Json::LoadImVec4(root["Color: HeaderActive"]);
-    style.Colors[ImGuiCol_Column] = Json::LoadImVec4(root["Color: Column"]);
-    style.Colors[ImGuiCol_ColumnHovered] = Json::LoadImVec4(root["Color: ColumnHovered"]);
-    style.Colors[ImGuiCol_ColumnActive] = Json::LoadImVec4(root["Color: ColumnActive"]);
+    style.Colors[ImGuiCol_Separator] = Json::LoadImVec4(root["Color: Separator"]);
+    style.Colors[ImGuiCol_SeparatorHovered] = Json::LoadImVec4(root["Color: SeparatorHovered"]);
+    style.Colors[ImGuiCol_SeparatorActive] = Json::LoadImVec4(root["Color: SeparatorActive"]);
     style.Colors[ImGuiCol_ResizeGrip] = Json::LoadImVec4(root["Color: ResizeGrip"]);
     style.Colors[ImGuiCol_ResizeGripHovered] = Json::LoadImVec4(root["Color: ResizeGripHovered"]);
     style.Colors[ImGuiCol_ResizeGripActive] = Json::LoadImVec4(root["Color: ResizeGripActive"]);
-    style.Colors[ImGuiCol_CloseButton] = Json::LoadImVec4(root["Color: CloseButton"]);
-    style.Colors[ImGuiCol_CloseButtonHovered] = Json::LoadImVec4(root["Color: CloseButtonHovered"]);
-    style.Colors[ImGuiCol_CloseButtonActive] = Json::LoadImVec4(root["Color: CloseButtonActive"]);
     style.Colors[ImGuiCol_PlotLines] = Json::LoadImVec4(root["Color: PlotLines"]);
     style.Colors[ImGuiCol_PlotLinesHovered] = Json::LoadImVec4(root["Color: PlotLinesHovered"]);
     style.Colors[ImGuiCol_PlotHistogram] = Json::LoadImVec4(root["Color: PlotHistogram"]);
     style.Colors[ImGuiCol_PlotHistogramHovered] = Json::LoadImVec4(root["Color: PlotHistogramHovered"]);
     style.Colors[ImGuiCol_TextSelectedBg] = Json::LoadImVec4(root["Color: TextSelectedBg"]);
-    style.Colors[ImGuiCol_ModalWindowDarkening] = Json::LoadImVec4(root["Color: ModalWindowDarkening"]);
+    style.Colors[ImGuiCol_ModalWindowDimBg] = Json::LoadImVec4(root["Color: ModalWindowDimBg"]);
 }
 
 void LoadDefaultTheme() {
@@ -167,7 +161,7 @@ void LoadDefaultTheme() {
     style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.39f, 0.39f, 0.39f, 1.0f);
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.91f, 0.91f, 0.91f, 1.0f);
-    style.Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
     style.Colors[ImGuiCol_PopupBg] = ImVec4(0.86f, 0.86f, 0.86f, 1.0f);
     style.Colors[ImGuiCol_Border] = ImVec4(0.27f, 0.34f, 0.44f, 0.3f);
     style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -191,20 +185,17 @@ void LoadDefaultTheme() {
     style.Colors[ImGuiCol_Header] = ImVec4(0.61f, 0.78f, 1.0f, 1.0f);
     style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.66f, 0.81f, 1.0f, 1.0f);
     style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.73f, 0.85f, 1.0f, 1.0f);
-    style.Colors[ImGuiCol_Column] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-    style.Colors[ImGuiCol_ColumnHovered] = ImVec4(0.6f, 0.64f, 0.7f, 1.0f);
-    style.Colors[ImGuiCol_ColumnActive] = ImVec4(0.7f, 0.79f, 0.9f, 1.0f);
+    style.Colors[ImGuiCol_Separator] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+    style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.6f, 0.64f, 0.7f, 1.0f);
+    style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.7f, 0.79f, 0.9f, 1.0f);
     style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.0f, 0.0f, 0.0f, 0.3f);
     style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
     style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.0f, 0.0f, 0.0f, 0.9f);
-    style.Colors[ImGuiCol_CloseButton] = ImVec4(0.25f, 0.53f, 0.88f, 0.58f);
-    style.Colors[ImGuiCol_CloseButtonHovered] = ImVec4(0.76f, 0.87f, 1.0f, 0.73f);
-    style.Colors[ImGuiCol_CloseButtonActive] = ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
     style.Colors[ImGuiCol_PlotLines] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.0f, 0.6f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.0f, 0.45f, 1.0f, 0.35f);
-    style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.2f, 0.2f, 0.2f, 0.35f);
+    style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.2f, 0.2f, 0.2f, 0.35f);
 }
 } // namespace ImGui

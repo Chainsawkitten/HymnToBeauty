@@ -145,10 +145,8 @@ void Editor::Show(float deltaTime) {
         ShowMainMenuBar(play);
 
         // Show hymn selection window.
-        if (selectHymnWindow.IsVisible()) {
-            ImGui::SetNextWindowPosCenter();
+        if (selectHymnWindow.IsVisible())
             selectHymnWindow.Show();
-        }
 
         if (inputWindow.IsVisible())
             inputWindow.Show();
@@ -180,14 +178,14 @@ void Editor::Show(float deltaTime) {
 
         // Scroll zoom.
         if (Input()->GetScrollDown()) {
-            if (!ImGui::IsMouseHoveringAnyWindow()) {
+            if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
                 glm::vec3 backward = cameraEntity->GetWorldOrientation() * glm::vec3(0, 0, 1);
                 float speed = 2.0f * deltaTime * glm::length(cameraEntity->position);
                 cameraEntity->position += speed * backward;
             }
         }
         if (Input()->GetScrollUp()) {
-            if (!ImGui::IsMouseHoveringAnyWindow()) {
+            if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
                 glm::vec3 backward = cameraEntity->GetWorldOrientation() * glm::vec3(0, 0, 1);
                 float speed = 2.0f * deltaTime * glm::length(cameraEntity->position);
                 cameraEntity->position += speed * -backward;
@@ -503,7 +501,7 @@ void Editor::ControlEditorCamera(float deltaTime) {
 }
 
 void Editor::Picking() {
-    if (Input()->Pressed(InputHandler::CONTROL) && Input()->Triggered(InputHandler::SELECT) && !ImGui::IsMouseHoveringAnyWindow()) {
+    if (Input()->Pressed(InputHandler::CONTROL) && Input()->Triggered(InputHandler::SELECT) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
         mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
         mousePicker.Update();
         float lastDistance = INFINITY;
@@ -595,7 +593,7 @@ void Editor::PaintBrush(Entity* entity) {
         }
         // Brush tool settings.
         toolMenuPressed = false;
-        if (ImGui::IsMouseHoveringWindow())
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             toolMenuPressed = true;
 
         ImGui::BeginPopupContextWindow("Paint Brush Tool");

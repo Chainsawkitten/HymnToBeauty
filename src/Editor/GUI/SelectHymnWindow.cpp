@@ -2,6 +2,7 @@
 
 #include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
+#include "../ImGui/GuiHelpers.hpp"
 
 using namespace GUI;
 using namespace std;
@@ -15,6 +16,7 @@ void SelectHymnWindow::Scan() {
 }
 
 void SelectHymnWindow::Show() {
+    ImGui::SetNextWindowPosCenter();
     ImGui::OpenPopup(title);
 
     // Create new hymn.

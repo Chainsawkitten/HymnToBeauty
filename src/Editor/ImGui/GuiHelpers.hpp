@@ -1,9 +1,7 @@
 #pragma once
 
-#include <imgui.h>
 #include <limits>
 #include <glm/glm.hpp>
-#include <cmath>
 
 namespace ImGui {
 /// Helper function that inserts a help marker that displays a tooltip.
@@ -39,4 +37,7 @@ void DraggableVec2(const char* label, glm::vec2& value, float min = std::numeric
  * @param max Maximum allowed value.
  */
 void DraggableVec3(const char* label, glm::vec3& value, float min = std::numeric_limits<float>::lowest(), float max = (std::numeric_limits<float>::max)());
+
+/// Set the next window to be centered.
+void SetNextWindowPosCenter();
 } // namespace ImGui

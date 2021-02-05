@@ -23,7 +23,6 @@
 
 namespace ImGuiImplementation {
 // Forward declarations.
-static void RenderDrawLists(ImDrawData* draw_data);
 static const char* GetClipboardText(void* userData);
 static void SetClipboardText(void* userData, const char* text);
 static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
@@ -61,6 +60,8 @@ void Init(GLFWwindow* window, Video::Renderer* renderer) {
     g_Renderer = renderer;
     g_LowLevelRenderer = renderer->GetLowLevelRenderer();
 
+    ImGui::CreateContext();
+
     ImGuiIO& io = ImGui::GetIO();
     // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
     io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
@@ -83,8 +84,7 @@ void Init(GLFWwindow* window, Video::Renderer* renderer) {
     io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
     io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-    // Alternatively you can set this to NULL and call ImGui::GetDrawData() after ImGui::Render() to get the same ImDrawData pointer.
-    io.RenderDrawListsFn = RenderDrawLists;
+    // Set callbacks.
     io.SetClipboardTextFn = SetClipboardText;
     io.GetClipboardTextFn = GetClipboardText;
     io.ClipboardUserData = g_Window;
@@ -100,7 +100,7 @@ void Init(GLFWwindow* window, Video::Renderer* renderer) {
 
 void Shutdown() {
     InvalidateDeviceObjects();
-    ImGui::Shutdown();
+    ImGui::DestroyContext();
 }
 
 void NewFrame() {
@@ -147,10 +147,10 @@ void NewFrame() {
     ImGui::NewFrame();
 }
 
-// This is the main rendering function that you have to implement and provide to ImGui (via setting up 'RenderDrawListsFn' in the ImGuiIO structure)
-// If text or lines are blurry when integrating ImGui in your engine:
-// - in your Render function, try translating your projection matrix by (0.5f,0.5f) or (0.375f,0.375f)
-void RenderDrawLists(ImDrawData* draw_data) {
+void Render() {
+    ImGui::Render();
+    ImDrawData* draw_data = ImGui::GetDrawData();
+
     // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO& io = ImGui::GetIO();
     int fbWidth = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
