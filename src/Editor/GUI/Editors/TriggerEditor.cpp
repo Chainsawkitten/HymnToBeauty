@@ -14,6 +14,7 @@
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Script/ScriptFile.hpp>
 #include <imgui.h>
+#include "../../ImGui/GuiHelpers.hpp"
 
 // This is necessary to use std::string in ImGui::Combo(). Taken from https://github.com/ocornut/imgui/issues/1180
 namespace ImGui {
@@ -79,7 +80,7 @@ void TriggerEditor::Show(Component::Trigger& comp) {
                 repeat->SetName(name.data());
 
             // DELAY
-            if (ImGui::InputFloat("Delay", &delay, 0.1f, 1.0f, 1)) {
+            if (ImGui::InputFloat("Delay", &delay, 0.1f, 1.0f, "%.1f")) {
                 if (delay < 0.0f)
                     delay = 0.0f;
 
@@ -91,7 +92,7 @@ void TriggerEditor::Show(Component::Trigger& comp) {
                 ImGui::SetTooltip("Time in seconds to delay.\nHold button to increase speed.");
 
             // COOLDOWN
-            if (ImGui::InputFloat("Cooldown", &cooldown, 0.1f, 1.0f, 1)) {
+            if (ImGui::InputFloat("Cooldown", &cooldown, 0.1f, 1.0f, "%.1f")) {
                 if (cooldown < 0.0f)
                     cooldown = 0.0f;
 

@@ -55,7 +55,7 @@ void NodeEditor::Show() {
             ImVec2 outPos = ImVec2(node->pos.x + offset.x + node->size.x, node->pos.y + offset.y + (node->size.y / 2));
             ImVec2 p2 = ImGui::GetIO().MousePos;
             ImVec2 p2Offset = ImVec2(p2.x - 100.0f, p2.y);
-            drawList->AddBezierCurve(outPos, ImVec2(outPos.x + 100.0f, outPos.y), p2Offset, p2, ImColor(40, 40, 40), 2.0f);
+            drawList->AddBezierCubic(outPos, ImVec2(outPos.x + 100.0f, outPos.y), p2Offset, p2, ImColor(40, 40, 40), 2.0f);
         }
 
         for (unsigned int id = 0; id < GetNumNodes(); ++id) {
@@ -67,7 +67,7 @@ void NodeEditor::Show() {
                 Node* connectionNode = GetNodeArray()[action->outputIndex[connections]];
                 ImVec2 p2 = ImVec2(connectionNode->pos.x + offset.x, connectionNode->pos.y + offset.y + (connectionNode->size.y / 2));
                 ImVec2 p2Offset = ImVec2(p2.x - 100.0f, p2.y);
-                drawList->AddBezierCurve(p1, p1Offset, p2Offset, p2, ImColor(80, 80, 80), 2.0f);
+                drawList->AddBezierCubic(p1, p1Offset, p2Offset, p2, ImColor(80, 80, 80), 2.0f);
             }
         }
 

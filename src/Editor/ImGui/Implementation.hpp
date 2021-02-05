@@ -19,4 +19,7 @@ void Shutdown();
 
 /// Start a new frame.
 void NewFrame();
+
+/// Render the GUI.
+void Render();
 } // namespace ImGuiImplementation

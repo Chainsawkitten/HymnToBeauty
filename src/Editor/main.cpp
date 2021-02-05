@@ -43,10 +43,11 @@ int main() {
     if (!engine.Start())
         return -1;
 
-    Editor* editor = new Editor(Managers().renderManager->GetRenderer()->GetLowLevelRenderer());
     // Setup imgui implementation.
     MainWindow* window = engine.GetMainWindow();
     ImGuiImplementation::Init(window->GetGLFWWindow(), Managers().renderManager->GetRenderer());
+
+    Editor* editor = new Editor(Managers().renderManager->GetRenderer()->GetLowLevelRenderer());
 
     bool profiling = false;
     GUI::ProfilingWindow profilingWindow;
@@ -100,7 +101,7 @@ int main() {
             profilingWindow.Show();
         }
 
-        ImGui::Render();
+        ImGuiImplementation::Render();
 
         engine.Present();
     }

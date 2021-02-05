@@ -51,7 +51,7 @@ void ProfilingWindow::Show() {
 }
 
 void ProfilingWindow::ShowResult(ProfilingManager::Result* result) {
-    ImGui::AlignFirstTextHeightToWidgets();
+    ImGui::AlignTextToFramePadding();
     int flags = result->children.empty() ? ImGuiTreeNodeFlags_Leaf : 0;
     bool expanded = ImGui::TreeNodeEx(result->name.c_str(), flags);
 

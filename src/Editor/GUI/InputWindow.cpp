@@ -5,6 +5,7 @@
 #include <Engine/Input/Input.hpp>
 
 #include <imgui.h>
+#include "../ImGui/GuiHelpers.hpp"
 
 using namespace GUI;
 using namespace std;

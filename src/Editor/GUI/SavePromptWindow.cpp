@@ -2,11 +2,13 @@
 
 #include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
+#include "../ImGui/GuiHelpers.hpp"
 
 using namespace GUI;
 using namespace std;
 
 void SavePromptWindow::Show() {
+    ImGui::SetNextWindowPosCenter();
     ImGui::OpenPopup(title.c_str());
 
     if (ImGui::BeginPopupModal(title.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -22,7 +24,7 @@ void SavePromptWindow::Show() {
         }
 
         ImGui::SameLine();
-        if (ImGui::Button("cancel", ImVec2(120, 0))) {
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
             decision = 2;
             ImGui::CloseCurrentPopup();
         }
