@@ -77,7 +77,7 @@ Log& Log::operator<<(const time_t value) {
 
     char buffer[bufferLength] = {'\0'};
     strftime(buffer, bufferLength, "%Y-%m-%d %H:%M:%S", timeinfo);
-    string const outString = string(buffer, bufferLength);
+    string const outString = string(buffer);
 
     *streams[currentChannel] << outString;
 #ifdef USINGDOUBLELOGGING

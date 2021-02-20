@@ -163,6 +163,10 @@ void Editor::Show(float deltaTime) {
         if (settingsWindow.IsVisible())
             settingsWindow.Show();
 
+        // Show profiling window.
+        if (profilingWindow.IsVisible())
+            profilingWindow.Show();
+
         // Show grid settings window.
         ShowGridSettings();
         CreateGrid(gridSettings.gridSize);
@@ -409,7 +413,17 @@ void Editor::ShowMainMenuBar(bool& play) {
 
                 ImGui::EndMenu();
             }
+        }
 
+        // Debug menu.
+        if (ImGui::BeginMenu("Debug")) {
+            if (ImGui::MenuItem("Profiling"))
+                profilingWindow.SetVisible(true);
+
+            ImGui::EndMenu();
+        }
+
+        if (Hymn().GetPath() != "") {
             if (Input()->Triggered(InputHandler::ZOOM)) {
                 if (resourceView.GetScene().entityEditor.GetEntity() != nullptr) {
                     const glm::vec3 tempPos = resourceView.GetScene().entityEditor.GetEntity()->GetWorldPosition();

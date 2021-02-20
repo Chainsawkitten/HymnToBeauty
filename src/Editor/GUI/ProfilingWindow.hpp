@@ -2,6 +2,7 @@
 
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <GUI/LogView.hpp>
+#include "FileSelector.hpp"
 
 namespace GUI {
 class ProfilingWindow {
@@ -9,8 +10,49 @@ class ProfilingWindow {
     /// Show profiling results.
     void Show();
 
+    /// Get whether the window is visible.
+    /**
+     * @return Whether the window is visible.
+     */
+    bool IsVisible() const;
+
+    /// Set whether the window should be visible.
+    /**
+     * @param visible Whether the window should be visible.
+     */
+    void SetVisible(bool visible);
+
   private:
+    struct ThreadView {
+        std::string name;
+        unsigned int lines;
+        std::vector<std::vector<Profiling::Event>> events;
+    };
+
     LogView logView;
-    void ShowResult(ProfilingManager::Result* result);
+
+    void LoadLatest();
+    void FileSelected(const std::string& filename);
+
+    void ParseTimeline();
+    void ParseEvent(ThreadView& threadView, const Profiling::Event& event, unsigned int line);
+
+    void ShowTimeline();
+    void ShowRuler();
+    void ShowThreadNames();
+    void ShowThreads();
+
+    bool visible = false;
+
+    FileSelector fileSelector;
+
+    Profiling::Timeline timeline;
+    double earliestTime;
+    float scale = 100.0f;
+    double pixelsPerSecond;
+    const float rulerHeight = 24.0f;
+    bool resetScroll = false;
+
+    std::vector<ThreadView> threadViews;
 };
 } // namespace GUI

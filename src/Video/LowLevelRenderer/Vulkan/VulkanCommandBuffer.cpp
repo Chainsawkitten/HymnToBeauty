@@ -52,7 +52,7 @@ VulkanCommandBuffer::~VulkanCommandBuffer() {
     delete[] commandBuffer;
 }
 
-void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass) {
+void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::string& name) {
     assert(!inRenderPass);
     assert(renderPass != nullptr);
 
@@ -121,6 +121,16 @@ void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass) {
         Log(Log::ERR) << "Failed to begin command buffer.\n";
     }
 
+    // Queries.
+    if (vulkanRenderer->IsProfiling()) {
+        Timing timing;
+        timing.name = name;
+        timing.startQuery = vulkanRenderer->GetFreeQuery();
+        timing.endQuery = vulkanRenderer->GetFreeQuery();
+
+        timings.push_back(timing);
+    }
+
     inRenderPass = true;
 }
 
@@ -129,9 +139,17 @@ void VulkanCommandBuffer::EndRenderPass() {
 
     vkEndCommandBuffer(renderPassCommandBuffer);
 
+    if (vulkanRenderer->IsProfiling()) {
+        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
+    }
+
     vkCmdBeginRenderPass(commandBuffer[currentFrame], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS);
     vkCmdExecuteCommands(commandBuffer[currentFrame], 1, &renderPassCommandBuffer);
     vkCmdEndRenderPass(commandBuffer[currentFrame]);
+
+    if (vulkanRenderer->IsProfiling()) {
+        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
+    }
 
     inRenderPass = false;
 }
@@ -313,6 +331,7 @@ void VulkanCommandBuffer::End() {
     assert(!inRenderPass);
 
     ResetImageLayouts();
+    timings.clear();
 
     if (!ended) {
         if (vkEndCommandBuffer(commandBuffer[currentFrame]) != VK_SUCCESS) {
@@ -343,6 +362,10 @@ void VulkanCommandBuffer::NextFrame() {
 
 bool VulkanCommandBuffer::ContainsBlitToSwapChain() const {
     return containsBlitToSwapChain;
+}
+
+const std::vector<VulkanCommandBuffer::Timing>& VulkanCommandBuffer::GetTimings() const {
+    return timings;
 }
 
 void VulkanCommandBuffer::Begin() {

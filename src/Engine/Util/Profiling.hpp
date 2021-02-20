@@ -4,20 +4,20 @@
 #include "../Manager/ProfilingManager.hpp"
 
 /// Run profiling.
-class Profiling {
+class ProfilingScope {
   public:
     /// Start profiling.
     /**
      * @param name Name of the segment.
      */
-    explicit Profiling(const std::string& name);
+    explicit ProfilingScope(const std::string& name);
 
     /// End profiling.
-    ~Profiling();
+    ~ProfilingScope();
 
   private:
-    ProfilingManager::Result* result;
+    Profiling::Event* event;
     double start;
 };
 
-#define PROFILE(name) Profiling __profileInstance(name)
+#define PROFILE(name) ProfilingScope __profileInstance(name)

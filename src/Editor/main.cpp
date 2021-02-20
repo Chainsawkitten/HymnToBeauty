@@ -49,56 +49,38 @@ int main() {
 
     Editor* editor = new Editor(Managers().renderManager->GetRenderer()->GetLowLevelRenderer());
 
-    bool profiling = false;
-    GUI::ProfilingWindow profilingWindow;
-
     // Main loop.
     while (!engine.ShouldClose() || !editor->ReadyToClose()) {
-        Managers().profilingManager->SetActive(profiling);
-
-        // Begin new profiling frame.
-        if (Managers().profilingManager->Active())
-            Managers().profilingManager->BeginFrame();
-
-        {
-            PROFILE("Frame");
-
-            if (Input()->Triggered(InputHandler::PROFILE))
-                profiling = !profiling;
-
-            // Start new frame.
-            ImGuiImplementation::NewFrame();
-
-            // Update engine.
-            engine.configuration.paused = editor->IsVisible();
-            engine.Update();
-
-            if (editor->IsVisible()) {
-                Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"), EditorSettings::GetInstance().GetBool("Physics Volumes"), EditorSettings::GetInstance().GetBool("Lighting"), EditorSettings::GetInstance().GetBool("Light Volumes"));
-
-                if (window->ShouldClose())
-                    editor->Close();
-
-                editor->Show(static_cast<float>(engine.GetDeltaTime()));
-
-                if (window->ShouldClose() && !editor->isClosing())
-                    window->CancelClose();
-            } else {
-                engine.Render();
-
-                if (Input()->Triggered(InputHandler::PLAYTEST)) {
-                    // Rollback to the editor state.
-                    editor->LoadSceneState();
-
-                    // Turn editor back on.
-                    editor->SetVisible(true);
-                }
-            }
+        if (Input()->Triggered(InputHandler::PROFILE)) {
+            Managers().profilingManager->SetActive(!Managers().profilingManager->Active());
         }
 
-        if (Managers().profilingManager->Active()) {
-            Managers().profilingManager->EndFrame();
-            profilingWindow.Show();
+        // Update engine.
+        engine.configuration.paused = editor->IsVisible();
+        engine.Update();
+
+        ImGuiImplementation::NewFrame();
+
+        if (editor->IsVisible()) {
+            Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"), EditorSettings::GetInstance().GetBool("Physics Volumes"), EditorSettings::GetInstance().GetBool("Lighting"), EditorSettings::GetInstance().GetBool("Light Volumes"));
+
+            if (window->ShouldClose())
+                editor->Close();
+
+            editor->Show(static_cast<float>(engine.GetDeltaTime()));
+
+            if (window->ShouldClose() && !editor->isClosing())
+                window->CancelClose();
+        } else {
+            engine.Render();
+
+            if (Input()->Triggered(InputHandler::PLAYTEST)) {
+                // Rollback to the editor state.
+                editor->LoadSceneState();
+
+                // Turn editor back on.
+                editor->SetVisible(true);
+            }
         }
 
         ImGuiImplementation::Render();

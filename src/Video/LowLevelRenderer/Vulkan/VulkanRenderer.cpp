@@ -33,6 +33,7 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
     CreateCommandPool();
     CreateBakedDescriptorSetLayouts();
     CreateDescriptorPool();
+    CreateQueries();
 
     for (unsigned int i = 0; i < bakedMaterialDescriptorSetLayouts; ++i) {
         currentMaterialDescriptorSet[i] = 0;
@@ -40,6 +41,19 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
 }
 
 VulkanRenderer::~VulkanRenderer() {
+    for (VkQueryPool queryPool : queryPools) {
+        vkDestroyQueryPool(device, queryPool, nullptr);
+    }
+    delete[] queryCommandBuffers;
+
+    for (std::size_t i = 0; i < swapChainImages.size(); ++i) {
+        vkDestroySemaphore(device, queryResetSemaphores[i], nullptr);
+    }
+    delete[] queryResetSemaphores;
+    delete[] needQueryWait;
+    delete[] submittedTimings;
+    delete[] submissionTimes;
+
     vkDestroyDescriptorPool(device, descriptorPool, nullptr);
     for (unsigned int i = 0; i < ShaderProgram::BindingType::BINDING_TYPES; ++i) {
         vkDestroyDescriptorSetLayout(device, bufferDescriptorSetLayouts[i], nullptr);
@@ -81,38 +95,97 @@ void VulkanRenderer::BeginFrame() {
     for (unsigned int i = 0; i < bakedMaterialDescriptorSetLayouts; ++i) {
         currentMaterialDescriptorSet[i] = 0;
     }
+
+    // Handle queries.
+    if (currentQuery[currentFrame] > 0) {
+        finishedEvents.clear();
+
+        // Read results.
+        vkGetQueryPoolResults(device, queryPools[currentFrame], 0, currentQuery[currentFrame], sizeof(uint64_t) * maxQueries, results, sizeof(uint64_t), VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT);
+
+        uint64_t firstTime;
+        bool firstTimeSet = false;
+
+        for (const VulkanCommandBuffer::Timing& timing : submittedTimings[currentFrame]) {
+            uint64_t start = results[timing.startQuery];
+            uint64_t end = results[timing.endQuery];
+
+            if (!firstTimeSet) {
+                firstTime = start;
+                firstTimeSet = true;
+            }
+
+            // Write event info.
+            Profiling::Event event(timing.name);
+            event.time = submissionTimes[currentFrame] + static_cast<double>(start - firstTime) * timestampPeriod / 1000000000.0;
+            event.duration = static_cast<double>(end - start) * timestampPeriod / 1000000000.0;
+
+            finishedEvents.push_back(event);
+        }
+
+        // Reset query pool.
+        ResetQueries(currentFrame);
+
+        submittedTimings[currentFrame].clear();
+        currentQuery[currentFrame] = 0;
+    }
+
+    firstSubmission = true;
 }
 
 void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
     // End command buffer.
     VulkanCommandBuffer* vulkanCommandBuffer = static_cast<VulkanCommandBuffer*>(commandBuffer);
+
+    // Handle timings.
+    const std::vector<VulkanCommandBuffer::Timing>& timings = vulkanCommandBuffer->GetTimings();
+    for (const VulkanCommandBuffer::Timing& timing : timings) {
+        submittedTimings[currentFrame].push_back(timing);
+    }
+
     vulkanCommandBuffer->End();
 
-    // Submit command buffer to queue.
-    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT};
+    // Synchronization.
     VkCommandBuffer vkCommandBuffer = vulkanCommandBuffer->GetCommandBuffer();
+    std::vector<VkPipelineStageFlags> waitStages;
+    std::vector<VkSemaphore> waitSemaphores;
+    std::vector<VkSemaphore> signalSemaphores;
+    VkFence fence = VK_NULL_HANDLE;
 
+    if (firstSubmission) {
+        if (needQueryWait[currentFrame]) {
+            waitStages.push_back(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
+            waitSemaphores.push_back(queryResetSemaphores[currentFrame]);
+            needQueryWait[currentFrame] = false;
+        }
+
+        submissionTimes[currentFrame] = glfwGetTime();
+    }
+
+    if (vulkanCommandBuffer->ContainsBlitToSwapChain()) {
+        waitStages.push_back(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
+        waitSemaphores.push_back(imageAvailableSemaphores[currentFrame]);
+        signalSemaphores.push_back(renderFinishedSemaphores[currentFrame]);
+        fence = renderFinishedFences[currentFrame];
+    }
+
+    // Submit command buffer to queue.
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &vkCommandBuffer;
-
-    VkFence fence = VK_NULL_HANDLE;
-
-    if (vulkanCommandBuffer->ContainsBlitToSwapChain()) {
-        submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = &imageAvailableSemaphores[currentFrame];
-        submitInfo.pWaitDstStageMask = waitStages;
-        submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = &renderFinishedSemaphores[currentFrame];
-        fence = renderFinishedFences[currentFrame];
-    }
+    submitInfo.waitSemaphoreCount = waitSemaphores.size();
+    submitInfo.pWaitSemaphores = waitSemaphores.data();
+    submitInfo.pWaitDstStageMask = waitStages.data();
+    submitInfo.signalSemaphoreCount = signalSemaphores.size();
+    submitInfo.pSignalSemaphores = signalSemaphores.data();
 
     if (vkQueueSubmit(queue, 1, &submitInfo, fence) != VK_SUCCESS) {
         Log(Log::ERR) << "Could not submit command buffer to queue.\n";
     }
 
     vulkanCommandBuffer->NextFrame();
+    firstSubmission = false;
 }
 
 void VulkanRenderer::Present() {
@@ -227,6 +300,10 @@ char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
     delete commandBuffer;
 
     return data;
+}
+
+const std::vector<Profiling::Event>& VulkanRenderer::GetTimeline() const {
+    return finishedEvents;
 }
 
 VkImage VulkanRenderer::GetCurrentSwapChainImage() const {
@@ -365,6 +442,14 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<const Tex
 
 bool VulkanRenderer::IsWideLinesSupported() const {
     return wideLines;
+}
+
+VkQueryPool VulkanRenderer::GetQueryPool() {
+    return queryPools[currentFrame];
+}
+
+uint32_t VulkanRenderer::GetFreeQuery() {
+    return currentQuery[currentFrame]++;
 }
 
 void VulkanRenderer::CreateInstance() {
@@ -650,6 +735,14 @@ VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
     wideLines = supportedFeatures.wideLines;
     enabledFeatures.wideLines = wideLines;
 
+    // Check limits.
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
+
+    timestampsSupported = deviceProperties.limits.timestampComputeAndGraphics;
+    assert(timestampsSupported); /// @todo Disable GPU profiling when not supported.
+    timestampPeriod = deviceProperties.limits.timestampPeriod;
+
     return enabledFeatures;
 }
 
@@ -934,6 +1027,91 @@ void VulkanRenderer::CreateDescriptorPool() {
     }
 }
 
+void VulkanRenderer::CreateQueries() {
+    // Create command buffers for resetting query pools.
+    queryCommandBuffers = new VkCommandBuffer[swapChainImages.size()];
+
+    VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
+    commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    commandBufferAllocateInfo.commandPool = commandPool;
+    commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    commandBufferAllocateInfo.commandBufferCount = swapChainImages.size();
+
+    if (vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, queryCommandBuffers) != VK_SUCCESS) {
+        Log(Log::ERR) << "Failed to create command buffers for resetting queries.\n";
+    }
+
+    // Create semaphores for resetting query pools.
+    queryResetSemaphores = new VkSemaphore[swapChainImages.size()];
+    needQueryWait = new bool[swapChainImages.size()];
+
+    VkSemaphoreCreateInfo semaphoreCreateInfo = {};
+    semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    for (std::size_t i = 0; i < swapChainImages.size(); i++) {
+        if (vkCreateSemaphore(device, &semaphoreCreateInfo, nullptr, &queryResetSemaphores[i]) != VK_SUCCESS) {
+            Log(Log::ERR) << "Could not create semaphore.\n";
+        }
+
+        needQueryWait[i] = false;
+    }
+
+    // Create query pools.
+    VkQueryPoolCreateInfo poolCreateInfo = {};
+    poolCreateInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
+    poolCreateInfo.queryType = VK_QUERY_TYPE_TIMESTAMP;
+    poolCreateInfo.queryCount = maxQueries;
+
+    for (std::size_t i = 0; i < swapChainImages.size(); i++) {
+        VkQueryPool queryPool;
+        if (vkCreateQueryPool(device, &poolCreateInfo, nullptr, &queryPool) != VK_SUCCESS) {
+            Log(Log::ERR) << "Could not create query pool.\n";
+        }
+        queryPools.push_back(queryPool);
+
+        currentQuery.push_back(0);
+
+        ResetQueries(i);
+    }
+
+    submittedTimings = new std::vector<VulkanCommandBuffer::Timing>[swapChainImages.size()];
+    submissionTimes = new double[swapChainImages.size()];
+}
+
+void VulkanRenderer::ResetQueries(uint32_t queryPool) {
+    vkResetCommandBuffer(queryCommandBuffers[queryPool], 0);
+
+    // Begin command buffer.
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    if (vkBeginCommandBuffer(queryCommandBuffers[queryPool], &beginInfo) != VK_SUCCESS) {
+        Log(Log::ERR) << "Failed to begin command buffer.\n";
+    }
+
+    // Reset queries.
+    vkCmdResetQueryPool(queryCommandBuffers[queryPool], queryPools[queryPool], 0, maxQueries);
+
+    // Submit.
+    vkEndCommandBuffer(queryCommandBuffers[queryPool]);
+
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT};
+
+    VkSubmitInfo submitInfo = {};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &queryCommandBuffers[queryPool];
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = &queryResetSemaphores[queryPool];
+
+    if (vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+        Log(Log::ERR) << "Could not submit command buffer to queue.\n";
+    }
+
+    needQueryWait[queryPool] = true;
+}
+
 void VulkanRenderer::AcquireSwapChainImage() {
     currentFrame = (currentFrame + 1) % swapChainImages.size();
 
@@ -945,7 +1123,7 @@ void VulkanRenderer::AcquireSwapChainImage() {
     VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
         // Swap chain has changed, recreate it.
-        Log() << "!";
+        Log(Log::INFO) << "Recreating swap chain.\n";
         RecreateSwapChain();
 
         VkSemaphore semaphore = VK_NULL_HANDLE;

@@ -1,20 +1,15 @@
 #include "Profiling.hpp"
 
-#include <GLFW/glfw3.h>
 #include "../Manager/Managers.hpp"
 
-using namespace std;
-
-Profiling::Profiling(const std::string& name) {
+ProfilingScope::ProfilingScope(const std::string& name) {
     if (Managers().profilingManager->Active()) {
-        result = Managers().profilingManager->StartResult(name, ProfilingManager::Type::CPU_TIME);
-        start = glfwGetTime();
+        event = Managers().profilingManager->StartEvent(name);
     }
 }
 
-Profiling::~Profiling() {
+ProfilingScope::~ProfilingScope() {
     if (Managers().profilingManager->Active()) {
-        result->value = (glfwGetTime() - start) * 1000.0;
-        Managers().profilingManager->FinishResult(result, ProfilingManager::Type::CPU_TIME);
+        Managers().profilingManager->FinishEvent(event);
     }
 }

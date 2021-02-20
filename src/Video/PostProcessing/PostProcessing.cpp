@@ -93,7 +93,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
     bool hasFxaaPass = configuration.fxaa.enabled || configuration.dither.enabled;
 
     // Uber.
-    commandBuffer.BeginRenderPass(hasFxaaPass ? tempRenderPass : outputRenderPass);
+    commandBuffer.BeginRenderPass(hasFxaaPass ? tempRenderPass : outputRenderPass, "Uber post-processing");
     commandBuffer.BindGraphicsPipeline(uberPipeline);
     commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::FRAGMENT_UNIFORMS, uberUniformBuffer);
@@ -104,7 +104,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
     if (hasFxaaPass) {
         commandBuffer.EndRenderPass();
 
-        commandBuffer.BeginRenderPass(outputRenderPass);
+        commandBuffer.BeginRenderPass(outputRenderPass, "FXAA");
         commandBuffer.BindGraphicsPipeline(fxaaPipeline);
         commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
         commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::FRAGMENT_UNIFORMS, fxaaUniformBuffer);

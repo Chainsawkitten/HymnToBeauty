@@ -15,6 +15,18 @@ class VulkanTexture;
 /// Vulkan implementation of CommandBuffer.
 class VulkanCommandBuffer : public CommandBuffer {
   public:
+    /// Timing for a block of work.
+    struct Timing {
+        /// Name of the block of work.
+        std::string name;
+
+        /// The timestamp at the start of the block of work.
+        uint32_t startQuery;
+
+        /// The timestamp at the end of the block of work.
+        uint32_t endQuery;
+    };
+
     /// Create new Vulkan command buffer.
     /**
      * @param vulkanRenderer The Vulkan renderer.
@@ -26,7 +38,7 @@ class VulkanCommandBuffer : public CommandBuffer {
     /// Destructor.
     ~VulkanCommandBuffer() final;
 
-    void BeginRenderPass(RenderPass* renderPass) final;
+    void BeginRenderPass(RenderPass* renderPass, const std::string& name) final;
     void EndRenderPass() final;
     void BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) final;
     void SetViewport(const glm::uvec2& origin, const glm::uvec2& size) final;
@@ -59,6 +71,12 @@ class VulkanCommandBuffer : public CommandBuffer {
      */
     bool ContainsBlitToSwapChain() const;
 
+    /// Get the all timings in the command buffer.
+    /**
+     * @return All recorded timings.
+     */
+    const std::vector<Timing>& GetTimings() const;
+
   private:
     VulkanCommandBuffer(const VulkanCommandBuffer& other) = delete;
 
@@ -88,6 +106,8 @@ class VulkanCommandBuffer : public CommandBuffer {
     VulkanGraphicsPipeline* currentGraphicsPipeline = nullptr;
 
     std::map<const VulkanTexture*, VkImageLayout> renderTextureStates;
+
+    std::vector<Timing> timings;
 };
 
 } // namespace Video

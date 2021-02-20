@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <initializer_list>
 #include <vector>
+#include <Utility/Profiling/Event.hpp>
 
 struct ShaderSource;
 
@@ -142,8 +143,32 @@ class LowLevelRenderer {
      */
     virtual char* ReadImage(RenderPass* renderPass) = 0;
 
+    /// Set whether to profile.
+    /**
+     * @param profiling Whether to profile.
+     */
+    void SetProfiling(bool profiling) {
+        this->profiling = profiling;
+    }
+
+    /// Get whether profiling is active.
+    /**
+     * @return Whether profiling is active.
+     */
+    bool IsProfiling() const {
+        return profiling;
+    }
+
+    /// Get profiling timeline.
+    /**
+     * @return A list of events that have occurred since the last time fetching the timeline.
+     */
+    virtual const std::vector<Profiling::Event>& GetTimeline() const = 0;
+
   private:
     LowLevelRenderer(const LowLevelRenderer& other) = delete;
+
+    bool profiling = false;
 };
 
 } // namespace Video

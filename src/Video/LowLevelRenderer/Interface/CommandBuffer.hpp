@@ -27,7 +27,7 @@ class CommandBuffer {
     /**
      * @param renderPass The render pass to begin.
      */
-    virtual void BeginRenderPass(RenderPass* renderPass) = 0;
+    virtual void BeginRenderPass(RenderPass* renderPass, const std::string& name = "Untitled render pass") = 0;
 
     /// End render pass.
     virtual void EndRenderPass() = 0;
