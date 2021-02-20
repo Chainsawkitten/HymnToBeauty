@@ -4,26 +4,18 @@
 #include <list>
 #include <map>
 
+#include <Utility/Profiling/Timeline.hpp>
+
+namespace Video {
+class LowLevelRenderer;
+}
+
 /// Handles profiling.
 class ProfilingManager {
     friend class Hub;
-    friend class Profiling;
-    friend class GPUProfiling;
+    friend class ProfilingScope;
 
   public:
-    /// The type of profiling to perform.
-    enum Type { CPU_TIME = 0, COUNT };
-
-    /// A profiling result.
-    struct Result {
-        std::string name;
-        double value = 0.0;
-        std::list<Result> children;
-        Result* parent;
-
-        Result(const std::string& name, Result* parent);
-    };
-
     /// Begin profiling a frame.
     void BeginFrame();
 
@@ -54,19 +46,14 @@ class ProfilingManager {
      */
     const float* GetCPUFrameTimes() const;
 
-    /// Get profiling result.
-    /**
-     * @param type The type of profiling to get results for.
-     * @return The measured result.
-     */
-    Result* GetResult(Type type) const;
+    /// Get GPU timeline from the render manager.
+    void FetchGPUTimeline();
 
-    /// Get the name of a type of profiling.
+    /// Get the timeline.
     /**
-     * @param type The type of profiling.
-     * @return The name.
+     * @return The timeline.
      */
-    static std::string TypeToString(Type type);
+    const Profiling::Timeline& GetTimeline() const;
 
   private:
     ProfilingManager();
@@ -74,13 +61,20 @@ class ProfilingManager {
     ProfilingManager(ProfilingManager const&) = delete;
     void operator=(ProfilingManager const&) = delete;
 
-    Result* StartResult(const std::string& name, Type type);
-    void FinishResult(Result* result, Type type);
+    Profiling::Event* StartEvent(const std::string& name);
+    void FinishEvent(Profiling::Event* event);
 
     bool active;
 
-    Result* root[Type::COUNT];
-    Result* current[Type::COUNT];
+    Profiling::Timeline timeline;
+    Profiling::Thread* mainThread;
+    Profiling::Event* currentEvent;
+    Profiling::Event* currentFrameEvent;
+
+    Video::LowLevelRenderer* lowLevelRenderer;
+    Profiling::Thread* gpuThread;
+
+    unsigned int currentFrame = 0;
 
     double frameStart;
     static const unsigned int frames = 100;

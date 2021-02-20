@@ -140,12 +140,12 @@ void Renderer::BeginFrame() {
 }
 
 void Renderer::StartDepthPrePass() {
-    commandBuffer->BeginRenderPass(depthRenderPass);
+    commandBuffer->BeginRenderPass(depthRenderPass, "Depth pre-pass");
 }
 
 void Renderer::StartMainPass() {
     commandBuffer->EndRenderPass();
-    commandBuffer->BeginRenderPass(mainRenderPass);
+    commandBuffer->BeginRenderPass(mainRenderPass, "Main pass");
 }
 
 void Renderer::PrepareStaticMeshDepthRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {

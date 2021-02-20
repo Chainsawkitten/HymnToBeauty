@@ -4,6 +4,7 @@
 #include <imgui.h>
 
 #include <Engine/Util/Input.hpp>
+#include <Engine/Util/Profiling.hpp>
 #include <Video/Renderer.hpp>
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
 #include <Video/LowLevelRenderer/Interface/CommandBuffer.hpp>
@@ -148,6 +149,8 @@ void NewFrame() {
 }
 
 void Render() {
+    PROFILE("Render ImGui");
+
     ImGui::Render();
     ImDrawData* draw_data = ImGui::GetDrawData();
 

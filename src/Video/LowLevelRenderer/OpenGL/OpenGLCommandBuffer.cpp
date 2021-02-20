@@ -15,13 +15,13 @@
 
 namespace Video {
 
-OpenGLCommandBuffer::OpenGLCommandBuffer(const OpenGLRenderer& openGLRenderer) {
+OpenGLCommandBuffer::OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer) : openGLRenderer(openGLRenderer) {
     blitShaderProgram = openGLRenderer.GetBlitShaderProgram();
 }
 
 OpenGLCommandBuffer::~OpenGLCommandBuffer() {}
 
-void OpenGLCommandBuffer::BeginRenderPass(RenderPass* renderPass) {
+void OpenGLCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::string& name) {
     assert(!inRenderPass);
     assert(renderPass != nullptr);
 
@@ -32,8 +32,18 @@ void OpenGLCommandBuffer::BeginRenderPass(RenderPass* renderPass) {
 
     command.beginRenderPassCommand.frameBuffer = static_cast<OpenGLRenderPass*>(renderPass)->GetFrameBuffer();
     command.beginRenderPassCommand.clearMask = static_cast<OpenGLRenderPass*>(renderPass)->GetClearMask();
+    command.beginRenderPassCommand.timingIndex = timings.size();
 
     AddCommand(command);
+
+    // Timing.
+    if (openGLRenderer.IsProfiling()) {
+        Timing timing;
+        timing.name = name;
+        timing.startQuery = openGLRenderer.GetFreeQuery();
+        timing.endQuery = openGLRenderer.GetFreeQuery();
+        timings.push_back(timing);
+    }
 
     inRenderPass = true;
 }
@@ -326,6 +336,11 @@ void OpenGLCommandBuffer::Submit() {
     }
 
     commands.clear();
+    timings.clear();
+}
+
+const std::vector<OpenGLCommandBuffer::Timing>& OpenGLCommandBuffer::GetTimings() const {
+    return timings;
 }
 
 void OpenGLCommandBuffer::SetUniformInteger(unsigned int location, int value) {
@@ -405,6 +420,10 @@ void OpenGLCommandBuffer::AddCommand(const Command& command) {
 void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     switch (command.type) {
     case Command::Type::BEGIN_RENDER_PASS: {
+        if (openGLRenderer.IsProfiling()) {
+            timingIndex = command.beginRenderPassCommand.timingIndex;
+            glQueryCounter(timings[timingIndex].startQuery, GL_TIMESTAMP);
+        }
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, command.beginRenderPassCommand.frameBuffer);
         if (command.beginRenderPassCommand.clearMask != 0) {
             glDisable(GL_SCISSOR_TEST);
@@ -416,6 +435,8 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     }
     case Command::Type::END_RENDER_PASS: {
         glBindVertexArray(0);
+        if (openGLRenderer.IsProfiling())
+            glQueryCounter(timings[timingIndex].endQuery, GL_TIMESTAMP);
         break;
     }
     case Command::Type::BIND_GRAPHICS_PIPELINE: {

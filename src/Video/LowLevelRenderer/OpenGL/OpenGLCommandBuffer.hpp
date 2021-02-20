@@ -13,16 +13,28 @@ class OpenGLShaderProgram;
 /// OpenGL implementation of CommandBuffer.
 class OpenGLCommandBuffer : public CommandBuffer {
   public:
+    /// Timing for a block of work.
+    struct Timing {
+        /// The name of the block of work.
+        std::string name;
+
+        /// The timestamp for starting the block of work.
+        GLuint startQuery;
+
+        /// The timestamp for ending the block of work.
+        GLuint endQuery;
+    };
+
     /// Create new OpenGL command buffer.
     /**
      * @param openGLRenderer The OpenGL renderer.
      */
-    explicit OpenGLCommandBuffer(const OpenGLRenderer& openGLRenderer);
+    explicit OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer);
 
     /// Destructor.
     ~OpenGLCommandBuffer() final;
 
-    void BeginRenderPass(RenderPass* renderPass) final;
+    void BeginRenderPass(RenderPass* renderPass, const std::string& name) final;
     void EndRenderPass() final;
     void BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) final;
     void SetViewport(const glm::uvec2& origin, const glm::uvec2& size) final;
@@ -40,12 +52,19 @@ class OpenGLCommandBuffer : public CommandBuffer {
     /// Submit the commands in the command buffer to the GPU.
     void Submit();
 
+    /// Get the all timings in the command buffer.
+    /**
+     * @return All recorded timings.
+     */
+    const std::vector<Timing>& GetTimings() const;
+
   private:
     OpenGLCommandBuffer(const OpenGLCommandBuffer& other) = delete;
 
     struct BeginRenderPassCommand {
         GLuint frameBuffer;
         GLbitfield clearMask;
+        unsigned int timingIndex;
     };
 
     struct BindGraphicsPipelineCommand {
@@ -205,6 +224,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void AddCommand(const Command& command);
     void SubmitCommand(const Command& command);
 
+    OpenGLRenderer& openGLRenderer;
+
     std::vector<Command> commands;
     GLenum primitiveType;
     GLenum indexType;
@@ -216,6 +237,9 @@ class OpenGLCommandBuffer : public CommandBuffer {
     const OpenGLShaderProgram* currentShaderProgram = nullptr;
 
     const OpenGLShaderProgram* blitShaderProgram;
+
+    std::vector<Timing> timings;
+    unsigned int timingIndex;
 };
 
 } // namespace Video

@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include "../Interface/ShaderProgram.hpp"
+#include "VulkanCommandBuffer.hpp"
 
 struct GLFWwindow;
 
@@ -39,6 +40,7 @@ class VulkanRenderer : public LowLevelRenderer {
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     void Wait() final;
     char* ReadImage(RenderPass* renderPass) final;
+    const std::vector<Profiling::Event>& GetTimeline() const final;
 
     /// Get current swap chain image.
     /**
@@ -94,6 +96,18 @@ class VulkanRenderer : public LowLevelRenderer {
      */
     bool IsWideLinesSupported() const;
 
+    /// Get the current frame's query pool.
+    /**
+     * @return The current frame's query pool.
+     */
+    VkQueryPool GetQueryPool();
+
+    /// Get a free query from the current frame's pool.
+    /**
+     * @return The query.
+     */
+    uint32_t GetFreeQuery();
+
   private:
     VulkanRenderer(const VulkanRenderer& other) = delete;
 
@@ -132,6 +146,9 @@ class VulkanRenderer : public LowLevelRenderer {
     void CreateBakedDescriptorSetLayouts();
     void CreateDescriptorPool();
 
+    void CreateQueries();
+    void ResetQueries(uint32_t queryPool);
+
     void AcquireSwapChainImage();
 
     VkInstance instance;
@@ -168,6 +185,20 @@ class VulkanRenderer : public LowLevelRenderer {
     std::map<ShaderProgram::BindingType, std::map<VkBuffer, VkDescriptorSet>> bufferDescriptorSetCache;
 
     bool wideLines;
+    bool timestampsSupported;
+    
+    double timestampPeriod;
+    static const unsigned int maxQueries = 2 * 50;
+    std::vector<VkQueryPool> queryPools;
+    std::vector<Profiling::Event> finishedEvents;
+    std::vector<uint32_t> currentQuery;
+    VkCommandBuffer* queryCommandBuffers;
+    VkSemaphore* queryResetSemaphores;
+    bool firstSubmission;
+    bool* needQueryWait;
+    std::vector<VulkanCommandBuffer::Timing>* submittedTimings;
+    uint64_t results[maxQueries];
+    double* submissionTimes;
 };
 
 } // namespace Video

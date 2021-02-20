@@ -1,10 +1,9 @@
 #include "OpenGLRenderer.hpp"
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Utility/Log.hpp>
+#include <thread>
 
-#include "OpenGLCommandBuffer.hpp"
 #include "OpenGLBuffer.hpp"
 #include "OpenGLVertexDescription.hpp"
 #include "OpenGLGeometryBinding.hpp"
@@ -44,12 +43,24 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
     blitVertexShader = CreateShader(POSTPROCESSING_VERT, Shader::Type::VERTEX_SHADER);
     blitFragmentShader = CreateShader(SAMPLETEXTURE_FRAG, Shader::Type::FRAGMENT_SHADER);
     blitShaderProgram = CreateShaderProgram({ blitVertexShader, blitFragmentShader });
+
+    // Generate queries.
+    glGenQueries(maxQueries, queries);
+    for (unsigned int i = 0; i < maxQueries; ++i) {
+        freeQueries.push_back(queries[i]);
+    }
+
+    GLint precision;
+    glGetQueryiv(GL_TIMESTAMP, GL_QUERY_COUNTER_BITS, &precision);
+    assert(precision > 0); /// @todo Disable GPU profiling if not supported.
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
     delete blitShaderProgram;
     delete blitVertexShader;
     delete blitFragmentShader;
+
+    glDeleteQueries(maxQueries, queries);
 }
 
 CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
@@ -57,15 +68,67 @@ CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
 }
 
 void OpenGLRenderer::BeginFrame() {
-
+    firstSubmission = true;
 }
 
 void OpenGLRenderer::Submit(CommandBuffer* commandBuffer) {
-    static_cast<OpenGLCommandBuffer*>(commandBuffer)->Submit();
+    OpenGLCommandBuffer* openGLCommandBuffer = static_cast<OpenGLCommandBuffer*>(commandBuffer);
+
+    // Get submitted queries.
+    const std::vector<OpenGLCommandBuffer::Timing>& timings = openGLCommandBuffer->GetTimings();
+    for (const OpenGLCommandBuffer::Timing& timing : timings) {
+        submittedTimings[currentFrame].push_back(timing);
+    }
+
+    if (firstSubmission) {
+        submissionTimes[currentFrame] = glfwGetTime();
+        firstSubmission = false;
+    }
+
+    openGLCommandBuffer->Submit();
 }
 
 void OpenGLRenderer::Present() {
     glfwSwapBuffers(window);
+    currentFrame = (currentFrame + 1) % buffering;
+
+    // Handle queries.
+    finishedEvents.clear();
+    bool firstTimeSet = false;
+    GLuint64 firstTime;
+
+    for (const OpenGLCommandBuffer::Timing& timing : submittedTimings[currentFrame]) {
+        // Queries should be available now.
+        GLuint64 startAvailable = 0;
+        GLuint64 endAvailable = 0;
+        while (!startAvailable || !endAvailable) {
+            glGetQueryObjectui64v(timing.startQuery, GL_QUERY_RESULT_AVAILABLE, &startAvailable);
+            glGetQueryObjectui64v(timing.endQuery, GL_QUERY_RESULT_AVAILABLE, &endAvailable);
+            std::this_thread::yield();
+        }
+            
+        // Get query results.
+        GLuint64 start, end;
+        glGetQueryObjectui64v(timing.startQuery, GL_QUERY_RESULT, &start);
+        glGetQueryObjectui64v(timing.endQuery, GL_QUERY_RESULT, &end);
+
+        freeQueries.push_back(timing.startQuery);
+        freeQueries.push_back(timing.endQuery);
+
+        // Align with CPU timeline.
+        if (!firstTimeSet) {
+            firstTime = start;
+            firstTimeSet = true;
+        }
+
+        // Write event info.
+        Profiling::Event event(timing.name);
+        event.time = submissionTimes[currentFrame] + static_cast<double>(start - firstTime) / 1000000000.0;
+        event.duration = static_cast<double>(end - start) / 1000000000.0;
+
+        finishedEvents.push_back(event);
+    }
+    submittedTimings[currentFrame].clear();
 }
 
 Buffer* OpenGLRenderer::CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data) {
@@ -131,8 +194,20 @@ char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
     return data;
 }
 
+const std::vector<Profiling::Event>& OpenGLRenderer::GetTimeline() const {
+    return finishedEvents;
+}
+
 const OpenGLShaderProgram* OpenGLRenderer::GetBlitShaderProgram() const {
     return static_cast<OpenGLShaderProgram*>(blitShaderProgram);
+}
+
+GLuint OpenGLRenderer::GetFreeQuery() {
+    assert(!freeQueries.empty());
+
+    GLuint query = freeQueries.back();
+    freeQueries.pop_back();
+    return query;
 }
 
 void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam, bool showNotifications) {

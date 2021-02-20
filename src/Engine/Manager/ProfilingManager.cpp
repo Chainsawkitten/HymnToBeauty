@@ -2,32 +2,35 @@
 
 #include <GLFW/glfw3.h>
 #include <Utility/Log.hpp>
+#include "RenderManager.hpp"
+#include "Managers.hpp"
+#include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
+#include <fstream>
+#include <Engine/Util/FileSystem.hpp>
+#include <chrono>
 
 ProfilingManager::ProfilingManager() : active(false) {
-    for (int i = 0; i < Type::COUNT; ++i) {
-        root[i] = new Result("Root: " + TypeToString((Type)i), nullptr);
-        root[i]->parent = nullptr;
-    }
+    // Add threads to the timeline.
+    mainThread = timeline.AddThread("Main thread");
+    gpuThread = timeline.AddThread("GPU");
+
+    lowLevelRenderer = Managers().renderManager->GetRenderer()->GetLowLevelRenderer();
 }
 
 ProfilingManager::~ProfilingManager() {
-    for (int i = 0; i < Type::COUNT; ++i) {
-        delete root[i];
-    }
+    
 }
 
 void ProfilingManager::BeginFrame() {
-    if (!active) {
-        Log() << "ProfilingManager::BeginFrame warning: Not active.\n";
-        return;
-    }
-
-    // Clear previous results.
-    for (int i = 0; i < Type::COUNT; ++i) {
-        root[i]->children.clear();
-        current[i] = root[i];
-    }
     frameStart = glfwGetTime();
+
+    if (active) {
+        // Add new frame node to main thread.
+        currentFrameEvent = mainThread->AddEvent("Frame " + std::to_string(currentFrame));
+        currentFrameEvent->time = glfwGetTime();
+        currentFrameEvent->duration = 0.0;
+        currentEvent = currentFrameEvent;
+    }
 }
 
 void ProfilingManager::EndFrame() {
@@ -36,6 +39,13 @@ void ProfilingManager::EndFrame() {
 
     if (++frame >= frames)
         frame = 0;
+
+    if (active) {
+        // Get main thread time of the frame.
+        currentFrameEvent->duration = glfwGetTime() - currentFrameEvent->time;
+    }
+
+    currentFrame++;
 }
 
 bool ProfilingManager::Active() const {
@@ -44,6 +54,35 @@ bool ProfilingManager::Active() const {
 
 void ProfilingManager::SetActive(bool active) {
     this->active = active;
+    lowLevelRenderer->SetProfiling(active);
+
+    if (active) {
+        // Clear previous results when beginning profiling.
+        for (Profiling::Thread& thread : timeline.threads) {
+            thread.events.clear();
+        }
+
+        Log(Log::INFO) << "Profiling started.\n";
+    } else {
+        FileSystem::CreateDirectory(FileSystem::DataPath("Hymn to Beauty", "Profiling").c_str());
+
+        // Save timeline to file.
+        time_t today = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        struct tm* timeinfo = localtime(&today);
+
+        const unsigned int bufferLength = 24;
+
+        char buffer[bufferLength] = {'\0'};
+        strftime(buffer, bufferLength, "%Y-%m-%d %H-%M-%S", timeinfo);
+        const std::string dateString = std::string(buffer);
+
+        std::string path = FileSystem::DataPath("Hymn to Beauty", ("Profiling/" + dateString + ".json").c_str());
+        std::ofstream file(path);
+        file << timeline.ToJson();
+        file.close();
+
+        Log(Log::INFO) << "Profiling results written to " << path << "\n";
+    }
 }
 
 unsigned int ProfilingManager::GetFrameCount() const {
@@ -54,41 +93,34 @@ const float* ProfilingManager::GetCPUFrameTimes() const {
     return frameTimes[0];
 }
 
-ProfilingManager::Result* ProfilingManager::GetResult(Type type) const {
-    return root[type];
-}
+void ProfilingManager::FetchGPUTimeline() {
+    const std::vector<Profiling::Event>& gpuEvents = lowLevelRenderer->GetTimeline();
 
-std::string ProfilingManager::TypeToString(ProfilingManager::Type type) {
-    switch (type) {
-    case ProfilingManager::CPU_TIME:
-        return "CPU time (ms)";
-        break;
-    default:
-        assert(false);
-        return "ProfilingWindow::TypeToString warning: No valid type to string";
-        break;
+    for (const Profiling::Event& event : gpuEvents) {
+        gpuThread->events.push_back(event);
     }
 }
 
-ProfilingManager::Result* ProfilingManager::StartResult(const std::string& name, Type type) {
-    assert(active);
-    assert(type != COUNT);
-
-    current[type]->children.push_back(ProfilingManager::Result(name, current[type]));
-    Result* result = &current[type]->children.back();
-    current[type] = result;
-
-    return result;
+const Profiling::Timeline& ProfilingManager::GetTimeline() const {
+    return timeline;
 }
 
-void ProfilingManager::FinishResult(Result* result, Type type) {
+Profiling::Event* ProfilingManager::StartEvent(const std::string& name) {
     assert(active);
-    assert(type != COUNT);
-    assert(result == current[type]);
 
-    current[type] = result->parent;
+    currentEvent->children.push_back(Profiling::Event(name));
+    Profiling::Event* event = &currentEvent->children.back();
+    event->parent = currentEvent;
+    event->time = glfwGetTime();
+    currentEvent = event;
+
+    return event;
 }
 
-ProfilingManager::Result::Result(const std::string& name, Result* parent) : name(name) {
-    this->parent = parent;
+void ProfilingManager::FinishEvent(Profiling::Event* event) {
+    assert(active);
+    assert(event != nullptr);
+
+    currentEvent->duration = glfwGetTime() - currentEvent->time;
+    currentEvent = currentEvent->parent;
 }

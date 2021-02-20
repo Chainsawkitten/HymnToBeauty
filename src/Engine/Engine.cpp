@@ -39,28 +39,32 @@ bool Engine::ShouldClose() const {
 }
 
 void Engine::Update() {
-    PROFILE("Update");
+    Managers().profilingManager->BeginFrame();
 
-    deltaTime = glfwGetTime() - lastTime;
-    lastTime = glfwGetTime();
+    {
+        PROFILE("Update");
 
-    // Switch between fullscreen and window mode.
-    if (Input()->Triggered(InputHandler::WINDOWMODE)) {
-        bool fullscreen, borderless;
-        window->GetWindowMode(fullscreen, borderless);
-        window->SetWindowMode(!fullscreen, borderless);
-    }
+        deltaTime = glfwGetTime() - lastTime;
+        lastTime = glfwGetTime();
 
-    // Update input.
-    glfwPollEvents();
-    window->Update();
+        // Switch between fullscreen and window mode.
+        if (Input()->Triggered(InputHandler::WINDOWMODE)) {
+            bool fullscreen, borderless;
+            window->GetWindowMode(fullscreen, borderless);
+            window->SetWindowMode(!fullscreen, borderless);
+        }
 
-    // Update hymn.
-    if (!configuration.paused) {
-        Hymn().Update(static_cast<float>(deltaTime));
-    } else {
-        Hymn().world.ClearKilled();
-        Managers().debugDrawingManager->Update(static_cast<float>(deltaTime));
+        // Update input.
+        glfwPollEvents();
+        window->Update();
+
+        // Update hymn.
+        if (!configuration.paused) {
+            Hymn().Update(static_cast<float>(deltaTime));
+        } else {
+            Hymn().world.ClearKilled();
+            Managers().debugDrawingManager->Update(static_cast<float>(deltaTime));
+        }
     }
 }
 
@@ -75,15 +79,23 @@ void Engine::Render() {
 }
 
 void Engine::Present() {
-    // Swap buffers and wait until next frame.
-    if (window->GetSize().x > 0 && window->GetSize().y > 0)
-        Managers().renderer->Present();
+    {
+        PROFILE("Present");
 
-    // Wait for next frame.
-    long wait = static_cast<long>((1.0 / configuration.targetFPS + lastTimeRender - glfwGetTime()) * 1000000.0);
-    if (wait > 0)
-        std::this_thread::sleep_for(std::chrono::microseconds(wait));
-    lastTimeRender = glfwGetTime();
+        // Swap buffers and wait until next frame.
+        if (window->GetSize().x > 0 && window->GetSize().y > 0) {
+            Managers().renderer->Present();
+            Managers().profilingManager->FetchGPUTimeline();
+        }
+
+        // Wait for next frame.
+        long wait = static_cast<long>((1.0 / configuration.targetFPS + lastTimeRender - glfwGetTime()) * 1000000.0);
+        if (wait > 0)
+            std::this_thread::sleep_for(std::chrono::microseconds(wait));
+        lastTimeRender = glfwGetTime();
+    }
+
+    Managers().profilingManager->EndFrame();
 }
 
 void Engine::Shutdown() {

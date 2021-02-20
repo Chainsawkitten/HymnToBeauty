@@ -2,6 +2,9 @@
 
 #include "../Interface/LowLevelRenderer.hpp"
 
+#include "OpenGLCommandBuffer.hpp"
+#include <glad/glad.h>
+
 struct GLFWwindow;
 
 namespace Video {
@@ -34,12 +37,19 @@ class OpenGLRenderer : public LowLevelRenderer {
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     void Wait() final;
     char* ReadImage(RenderPass* renderPass) final;
+    const std::vector<Profiling::Event>& GetTimeline() const final;
 
     /// Get the shader program used for blitting.
     /**
      * @return The blit shader program.
      */
     const OpenGLShaderProgram* GetBlitShaderProgram() const;
+
+    /// Get a free query.
+    /**
+     * @return The query object.
+     */
+    GLuint GetFreeQuery();
 
   private:
     OpenGLRenderer(const OpenGLRenderer& other) = delete;
@@ -50,6 +60,17 @@ class OpenGLRenderer : public LowLevelRenderer {
     Shader* blitVertexShader;
     Shader* blitFragmentShader;
     ShaderProgram* blitShaderProgram;
+
+    static const unsigned int buffering = 3;
+    std::vector<Profiling::Event> finishedEvents;
+    unsigned int currentFrame = 0;
+    static const unsigned int maxQueries = buffering * 2 * 50;
+    GLuint queries[maxQueries];
+    std::vector<GLuint> freeQueries;
+    std::vector<OpenGLCommandBuffer::Timing> submittedTimings[buffering];
+
+    bool firstSubmission;
+    double submissionTimes[buffering];
 };
 
 } // namespace Video

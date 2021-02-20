@@ -6,6 +6,7 @@
 #include "GUI/SettingsWindow.hpp"
 #include "GUI/FiltersWindow.hpp"
 #include "GUI/SavePromptWindow.hpp"
+#include "GUI/ProfilingWindow.hpp"
 #include "GUI/LogView.hpp"
 #include <Engine/Entity/World.hpp>
 #include <Engine/Util/MousePicking.hpp>
@@ -120,6 +121,7 @@ class Editor {
     GUI::SettingsWindow settingsWindow;
     GUI::FiltersWindow filtersWindow;
     GUI::SavePromptWindow savePromptWindow;
+    GUI::ProfilingWindow profilingWindow;
 
     bool close;
     bool savePromptAnswered;
