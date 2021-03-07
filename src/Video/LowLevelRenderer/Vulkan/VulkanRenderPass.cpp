@@ -155,6 +155,15 @@ VulkanRenderPass::VulkanRenderPass(VkDevice device, Texture* colorAttachment, Re
     if (vkCreateFramebuffer(device, &framebufferCreateInfo, nullptr, &framebuffer) != VK_SUCCESS) {
         Log(Log::ERR) << "Failed to create framebuffer.\n";
     }
+
+    // Compatiblity information.
+    compatibility.hasColorAttachment = hasColorAttachment;
+    if (hasColorAttachment)
+        compatibility.colorAttachmentFormat = vulkanColorAttachment->GetFormat();
+
+    compatibility.hasDepthAttachment = hasDepthAttachment;
+    if (hasDepthAttachment)
+        compatibility.depthAttachmentFormat = vulkanDepthAttachment->GetFormat();
 }
 
 VulkanRenderPass::~VulkanRenderPass() {
@@ -192,6 +201,10 @@ VulkanTexture* VulkanRenderPass::GetDepthAttachment() const {
     assert(hasDepthAttachment);
 
     return depthAttachment;
+}
+
+const VulkanRenderPass::Compatibility& VulkanRenderPass::GetCompatiblity() const {
+    return compatibility;
 }
 
 }

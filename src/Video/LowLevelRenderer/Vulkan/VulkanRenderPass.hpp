@@ -13,6 +13,24 @@ class VulkanTexture;
 /// Vulkan implementation of RenderPass.
 class VulkanRenderPass : public RenderPass {
   public:
+    /// Compatibility information about the render pass.
+    /**
+     * Two render passes with the same compatibility informations are compatible.
+     */
+    struct Compatibility {
+        /// Whether the render pass has a color attachment.
+        bool hasColorAttachment;
+
+        /// The format of the render pass' color attachment.
+        VkFormat colorAttachmentFormat;
+
+        /// Whether the render pass has a depth attachment.
+        bool hasDepthAttachment;
+
+        /// The format of the render pass' depth attachment.
+        VkFormat depthAttachmentFormat;
+    };
+
     /// Create new Vulkan render pass.
     /**
      * @param device The Vulkan device.
@@ -64,6 +82,12 @@ class VulkanRenderPass : public RenderPass {
      */
     VulkanTexture* GetDepthAttachment() const;
 
+    /// Get the render pass' compatibility information.
+    /**
+     * @return The compatibility information.
+     */
+    const Compatibility& GetCompatiblity() const;
+
   private:
     VulkanRenderPass(const VulkanRenderPass& other) = delete;
 
@@ -77,6 +101,7 @@ class VulkanRenderPass : public RenderPass {
     VulkanTexture* depthAttachment;
 
     glm::uvec2 size;
+    Compatibility compatibility;
 };
 
 } // namespace Video

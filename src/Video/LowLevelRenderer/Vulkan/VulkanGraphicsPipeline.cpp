@@ -222,7 +222,7 @@ VulkanGraphicsPipeline::~VulkanGraphicsPipeline() {
 }
 
 VkPipeline VulkanGraphicsPipeline::GetPipeline(const VulkanRenderPass* renderPass) {
-    auto it = pipelines.find(renderPass);
+    auto it = pipelines.find(renderPass->GetCompatiblity());
     if (it != pipelines.end()) {
         // Use compatible pipeline.
         return it->second;
@@ -236,7 +236,7 @@ VkPipeline VulkanGraphicsPipeline::GetPipeline(const VulkanRenderPass* renderPas
             Log(Log::ERR) << "Failed to create graphics pipeline.\n";
         }
 
-        pipelines[renderPass] = pipeline;
+        pipelines[renderPass->GetCompatiblity()] = pipeline;
         return pipeline;
     }
 }
