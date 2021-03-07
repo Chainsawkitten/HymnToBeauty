@@ -75,20 +75,20 @@ class VulkanGraphicsPipeline : public GraphicsPipeline {
 
     // Pipeline cache.
     struct RenderPassCompare {
-        bool operator()(const VulkanRenderPass* a, const VulkanRenderPass* b) const {
-            if (a->HasColorAttachment() != b->HasColorAttachment()) {
-                return a->HasColorAttachment() < b->HasColorAttachment();
-            } else if (a->HasColorAttachment() && b->HasColorAttachment()) {
-                if (a->GetColorAttachment()->GetFormat() != b->GetColorAttachment()->GetFormat()) {
-                    return a->GetColorAttachment()->GetFormat() < b->GetColorAttachment()->GetFormat();
+        bool operator()(const VulkanRenderPass::Compatibility& a, const VulkanRenderPass::Compatibility& b) const {
+            if (a.hasColorAttachment != b.hasColorAttachment) {
+                return a.hasColorAttachment < b.hasColorAttachment;
+            } else if (a.hasColorAttachment && b.hasColorAttachment) {
+                if (a.colorAttachmentFormat != b.colorAttachmentFormat) {
+                    return a.colorAttachmentFormat < b.colorAttachmentFormat;
                 }
             }
 
-            if (a->HasDepthAttachment() != b->HasDepthAttachment()) {
-                return a->HasDepthAttachment() < b->HasDepthAttachment();
-            } else if (a->HasDepthAttachment() && b->HasDepthAttachment()) {
-                if (a->GetDepthAttachment()->GetFormat() != b->GetDepthAttachment()->GetFormat()) {
-                    return a->GetDepthAttachment()->GetFormat() < b->GetDepthAttachment()->GetFormat();
+            if (a.hasDepthAttachment != b.hasDepthAttachment) {
+                return a.hasDepthAttachment < b.hasDepthAttachment;
+            } else if (a.hasDepthAttachment && b.hasDepthAttachment) {
+                if (a.depthAttachmentFormat != b.depthAttachmentFormat) {
+                    return a.depthAttachmentFormat < b.depthAttachmentFormat;
                 }
             }
 
@@ -96,7 +96,7 @@ class VulkanGraphicsPipeline : public GraphicsPipeline {
         }
     };
 
-    std::map<const VulkanRenderPass*, VkPipeline, RenderPassCompare> pipelines;
+    std::map<VulkanRenderPass::Compatibility, VkPipeline, RenderPassCompare> pipelines;
 };
 
 }
