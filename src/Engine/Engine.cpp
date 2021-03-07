@@ -87,11 +87,15 @@ void Engine::Present() {
             Managers().renderer->Present();
             Managers().profilingManager->FetchGPUTimeline();
         }
+    }
+
+    {
+        PROFILE("Wait");
 
         // Wait for next frame.
-        long wait = static_cast<long>((1.0 / configuration.targetFPS + lastTimeRender - glfwGetTime()) * 1000000.0);
-        if (wait > 0)
-            std::this_thread::sleep_for(std::chrono::microseconds(wait));
+        /// @todo Make limiting FPS optional.
+        while (glfwGetTime() < lastTimeRender + 1.0 / configuration.targetFPS)
+            std::this_thread::yield();
         lastTimeRender = glfwGetTime();
     }
 
