@@ -41,6 +41,12 @@ Frustum::Frustum(const glm::mat4& matrix) {
     planes[5].y = glm::row(matrix, 3).y - glm::row(matrix, 2).y;
     planes[5].z = glm::row(matrix, 3).z - glm::row(matrix, 2).z;
     planes[5].w = glm::row(matrix, 3).w - glm::row(matrix, 2).w;
+
+    // Normalize plane equations.
+	for (int i = 0; i < 6; i++) {
+        glm::vec3 normal = glm::vec3(planes[i]);
+		planes[i] = planes[i] / glm::length(normal);
+	}
 }
 
 bool Frustum::Collide(const AxisAlignedBoundingBox& aabb) const {

@@ -7,7 +7,6 @@ namespace Video {
 namespace Geometry {
 namespace VertexType {
 struct StaticVertex;
-struct SkinVertex;
 } // namespace VertexType
 } // namespace Geometry
 } // namespace Video
@@ -38,14 +37,8 @@ struct MeshData {
     /// Maximum position of axis aligned bound box.
     glm::vec3 aabbMaxpos;
 
-    /// Is skinned.
-    bool isSkinned = false;
-
     /// Static vertices.
     Video::Geometry::VertexType::StaticVertex* staticVertices = nullptr;
-
-    /// Skinned vertices.
-    Video::Geometry::VertexType::SkinVertex* skinnedVertices = nullptr;
 
     /// Array of indices.
     uint32_t* indices = nullptr;

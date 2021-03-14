@@ -1,6 +1,5 @@
 #include "EntityEditor.hpp"
 
-#include <Engine/Component/AnimationController.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/Lens.hpp>
 #include <Engine/Component/Material.hpp>
@@ -12,7 +11,6 @@
 #include <Engine/Component/Script.hpp>
 #include <Engine/Component/Shape.hpp>
 #include <Engine/Component/SoundSource.hpp>
-#include <Engine/Animation/AnimationController.hpp>
 #include <Engine/Component/Trigger.hpp>
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Texture/TextureAsset.hpp>
@@ -49,7 +47,6 @@ using namespace GUI;
 EntityEditor::EntityEditor() {
     name[0] = '\0';
 
-    AddEditor<Component::AnimationController>("Animation controller", std::bind(&EntityEditor::AnimationControllerEditor, this, std::placeholders::_1));
     AddEditor<Component::Mesh>("Mesh", std::bind(&EntityEditor::MeshEditor, this, std::placeholders::_1));
     AddEditor<Component::Lens>("Lens", std::bind(&EntityEditor::LensEditor, this, std::placeholders::_1));
     AddEditor<Component::Material>("Material", std::bind(&EntityEditor::MaterialEditor, this, std::placeholders::_1));
@@ -186,45 +183,6 @@ void EntityEditor::SetVisible(bool visible) {
     this->visible = visible;
 }
 
-void EntityEditor::AnimationControllerEditor(Component::AnimationController* animationController) {
-    ImGui::Indent();
-    if (ImGui::Button("Select animation controller##Animation"))
-        ImGui::OpenPopup("Select animation controller##Animation");
-
-    if (ImGui::BeginPopup("Select animation controller##Animation")) {
-        ImGui::Text("Animation controllers");
-        ImGui::Separator();
-
-        if (resourceSelector.Show(ResourceList::Resource::Type::ANIMATION_CONTROLLER)) {
-            if (animationController->controller != nullptr)
-                Managers().resourceManager->FreeAnimationController(animationController->controller);
-
-            animationController->controller = Managers().resourceManager->CreateAnimationController(resourceSelector.GetSelectedResource().GetPath());
-        }
-
-        ImGui::EndPopup();
-    }
-
-    if (ImGui::Button("Select skeleton##Skeleton"))
-        ImGui::OpenPopup("Select skeleton##Skeleton");
-
-    if (ImGui::BeginPopup("Select skeleton##Skeleton")) {
-        ImGui::Text("Skeletons");
-        ImGui::Separator();
-
-        if (resourceSelector.Show(ResourceList::Resource::Type::SKELETON)) {
-            if (animationController->skeleton != nullptr)
-                Managers().resourceManager->FreeSkeleton(animationController->skeleton);
-
-            animationController->skeleton = Managers().resourceManager->CreateSkeleton(resourceSelector.GetSelectedResource().GetPath());
-        }
-
-        ImGui::EndPopup();
-    }
-
-    ImGui::Unindent();
-}
-
 void EntityEditor::MeshEditor(Component::Mesh* mesh) {
     ImGui::Indent();
     if (ImGui::Button("Select model##Mesh"))
@@ -289,8 +247,7 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     if (ImGui::Button("Select albedo texture")) {
         albedoShow = true;
         normalShow = false;
-        metallicShow = false;
-        roughnessShow = false;
+        roughnessMetallicShow = false;
     }
 
     ImGui::Unindent();
@@ -304,38 +261,23 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
     if (ImGui::Button("Select normal texture")) {
         albedoShow = false;
         normalShow = true;
-        metallicShow = false;
-        roughnessShow = false;
+        roughnessMetallicShow = false;
     }
 
     ImGui::Unindent();
-
-    // Metallic
-    ImGui::Text("Metallic");
-    ImGui::Indent();
-    if (material->metallic->GetTexture()->IsLoaded())
-        ImGui::Image((void*)material->metallic->GetTexture()->GetTexture(), ImVec2(128, 128));
-
-    if (ImGui::Button("Select metallic texture")) {
-        albedoShow = false;
-        normalShow = false;
-        metallicShow = true;
-        roughnessShow = false;
-    }
 
     ImGui::Unindent();
 
     // Roughness
-    ImGui::Text("Roughness");
+    ImGui::Text("Roughness-metallic");
     ImGui::Indent();
-    if (material->roughness->GetTexture()->IsLoaded())
-        ImGui::Image((void*)material->roughness->GetTexture()->GetTexture(), ImVec2(128, 128));
+    if (material->roughnessMetallic->GetTexture()->IsLoaded())
+        ImGui::Image((void*)material->roughnessMetallic->GetTexture()->GetTexture(), ImVec2(128, 128));
 
     if (ImGui::Button("Select roughness texture")) {
         albedoShow = false;
         normalShow = false;
-        metallicShow = false;
-        roughnessShow = true;
+        roughnessMetallicShow = true;
     }
 
     ImGui::Unindent();
@@ -364,26 +306,14 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
         ImGui::End();
     }
 
-    // Select metallic.
-    if (metallicShow) {
-        ImGui::Begin("Textures", &metallicShow);
-        if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
-            if (material->metallic != Managers().resourceManager->GetDefaultMetallic())
-                Managers().resourceManager->FreeTextureAsset(material->metallic);
-
-            material->metallic = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
-        }
-        ImGui::End();
-    }
-
     // Select roughness.
-    if (roughnessShow) {
-        ImGui::Begin("Textures", &roughnessShow);
+    if (roughnessMetallicShow) {
+        ImGui::Begin("Textures", &roughnessMetallicShow);
         if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
-            if (material->roughness != Managers().resourceManager->GetDefaultRoughness())
-                Managers().resourceManager->FreeTextureAsset(material->roughness);
+            if (material->roughnessMetallic != Managers().resourceManager->GetDefaultRoughnessMetallic())
+                Managers().resourceManager->FreeTextureAsset(material->roughnessMetallic);
 
-            material->roughness = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
+            material->roughnessMetallic = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
         }
         ImGui::End();
     }

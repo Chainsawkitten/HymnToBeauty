@@ -2,7 +2,6 @@
 
 #include <Video/Geometry/Geometry3D.hpp>
 #include <json/json.h>
-#include "AssetFileHandler.hpp"
 
 namespace Geometry {
 /// Interface of a model loaded from a file.
@@ -31,8 +30,6 @@ class Model : public Video::Geometry::Geometry3D {
      */
     void Load(const std::string& name);
 
-    Type GetType() const final;
-
     /// The name of the model.
     std::string name;
 
@@ -41,8 +38,5 @@ class Model : public Video::Geometry::Geometry3D {
 
   private:
     void LoadGeometry(const char* filename);
-
-    AssetFileHandler assetFile;
-    Type type;
 };
 } // namespace Geometry

@@ -19,10 +19,10 @@ void SceneEditor::Show() {
     if (ImGui::Begin(("Scene: " + *scene + "###Scene").c_str(), &visible, ImGuiWindowFlags_NoResize)) {
         if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
             // Rename scene file.
-            rename((Hymn().GetPath() + "/" + path + "/" + *scene + ".json").c_str(), (Hymn().GetPath() + "/" + path + "/" + name + ".json").c_str());
+            rename((Hymn().GetPath() + "/" + path + "/" + *scene).c_str(), (Hymn().GetPath() + "/" + path + "/" + name + ".scn").c_str());
 
-            *scene = name;
-            Resources().activeScene = path + "/" + name;
+            *scene = std::string(name) + ".scn";
+            Resources().activeScene = path + "/" + name + ".scn";
         }
 
         // Entities.
@@ -69,10 +69,14 @@ void SceneEditor::SetScene(const std::string& path, std::string* scene) {
     this->path = path;
     this->scene = scene;
 
-    if (scene != nullptr)
-        strcpy(name, scene->c_str());
-    else
+    if (scene != nullptr) {
+        std::size_t pos = scene->find_last_of('.');
+        std::string nameWithoutExtension = scene->substr(0, pos);
+
+        strcpy(name, nameWithoutExtension.c_str());
+    } else {
         SetVisible(false);
+    }
 }
 
 bool SceneEditor::IsVisible() const {
@@ -85,12 +89,12 @@ void SceneEditor::SetVisible(bool visible) {
 
 void SceneEditor::Save() const {
     if (scene != nullptr)
-        Hymn().world.Save(Hymn().GetPath() + "/" + path + "/" + *scene + ".json");
+        Hymn().world.Save(Hymn().GetPath() + "/" + path + "/" + *scene);
 }
 
 Json::Value SceneEditor::GetSaveFileJson(std::string* filename) const {
     if (scene != nullptr) {
-        *filename = Hymn().GetPath() + "/" + path + "/" + *scene + ".json";
+        *filename = Hymn().GetPath() + "/" + path + "/" + *scene;
         return Hymn().world.GetSaveJson();
     }
 

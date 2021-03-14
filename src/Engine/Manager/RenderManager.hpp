@@ -7,12 +7,11 @@
 namespace Video {
 class Renderer;
 class LowLevelRenderer;
-class TexturePNG;
+class Texture2D;
 } // namespace Video
 class World;
 class Entity;
 namespace Component {
-class AnimationController;
 class DirectionalLight;
 class Lens;
 class Material;
@@ -43,33 +42,8 @@ class RenderManager {
      */
     void Render(World& world, bool soundSources = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
 
-    /// Update all the animations in the scene.
-    /**
-     * @param deltaTime Time between frames.
-     */
-    void UpdateAnimations(float deltaTime);
-
     /// Updates the buffers to fit the current screen size.
     void UpdateBufferSize();
-
-    /// Create animation component.
-    /**
-     * @return The created component.
-     */
-    Component::AnimationController* CreateAnimation();
-
-    /// Create animation component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::AnimationController* CreateAnimation(const Json::Value& node);
-
-    /// Get all animation controller components.
-    /**
-     * @return All animation controller components.
-     */
-    const std::vector<Component::AnimationController*>& GetAnimations() const;
 
     /// Create directional light component.
     /**
@@ -239,12 +213,11 @@ class RenderManager {
     Video::Renderer* renderer;
 
     // Editor entity textures.
-    Video::TexturePNG* lightTexture;
-    Video::TexturePNG* soundSourceTexture;
-    Video::TexturePNG* cameraTexture;
+    Video::Texture2D* lightTexture;
+    Video::Texture2D* soundSourceTexture;
+    Video::Texture2D* cameraTexture;
 
     // Components.
-    ComponentContainer<Component::AnimationController> animationControllers;
     ComponentContainer<Component::DirectionalLight> directionalLights;
     ComponentContainer<Component::Lens> lenses;
     ComponentContainer<Component::Material> materials;

@@ -37,9 +37,9 @@ const std::vector<uint32_t>& Geometry3D::GetVertexIndexData() const {
     return vertexIndexData;
 }
 
-void Geometry3D::GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount) {
+void Geometry3D::GenerateIndexBuffer(uint32_t* indexData, unsigned int indexCount) {
     this->indexCount = indexCount;
-    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER_STATIC, indexCount * sizeof(unsigned int), indexData);
+    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER_STATIC, indexCount * sizeof(uint32_t), indexData);
 }
 
 void Geometry3D::GenerateGeometryBinding() {

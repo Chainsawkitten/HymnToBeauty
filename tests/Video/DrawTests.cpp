@@ -12,7 +12,7 @@
 #include <Video/LowLevelRenderer/Interface/GeometryBinding.hpp>
 #include <Video/LowLevelRenderer/Interface/GraphicsPipeline.hpp>
 #include <Video/LowLevelRenderer/Interface/CommandBuffer.hpp>
-#include <Video/Texture/TexturePNG.hpp>
+#include <Video/Texture/Texture2D.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -272,8 +272,8 @@ bool DrawTexturedTriangle(void* data) {
     GeometryBinding* geometryBinding = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer);
 
     // Create texture.
-    Texture2D* texture = new TexturePNG(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
-    Texture2D* texture2 = new TexturePNG(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
+    Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
+    Texture2D* texture2 = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
@@ -929,7 +929,7 @@ bool DrawMipmappedTriangle(void* data) {
     GeometryBinding* geometryBinding = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer);
 
     // Create texture.
-    Texture2D* texture = new TexturePNG(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
+    Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();

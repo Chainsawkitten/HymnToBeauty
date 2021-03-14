@@ -579,8 +579,10 @@ void Editor::Focus() {
 void Editor::PaintBrush(Entity* entity) {
     GUI::ResourceSelector rs;
 
+    /// @todo Reimplement paint tool.
+
     // Read vertex data.
-    Geometry::Model* model = dynamic_cast<Geometry::Model*>(entity->GetComponent<Component::Mesh>()->geometry);
+    /*Geometry::Model* model = dynamic_cast<Geometry::Model*>(entity->GetComponent<Component::Mesh>()->geometry);
     if (model != nullptr) {
         std::string modelPath = Hymn().GetPath() + FileSystem::DELIMITER + model->path + model->name + ".asset";
         Geometry::AssetFileHandler handler;
@@ -692,7 +694,7 @@ void Editor::PaintBrush(Entity* entity) {
             lastIntersect = INFINITY;
         }
         handler.Close();
-    }
+    }*/
 }
 
 void Editor::WidgetGizmo(Entity* entity) {
@@ -831,5 +833,5 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
 
 void Editor::LoadActiveScene() {
     // Load active scene.
-    Hymn().world.Load(Hymn().GetPath() + "/" + Resources().activeScene + ".json");
+    Hymn().world.Load(Hymn().GetPath() + "/" + Resources().activeScene);
 }

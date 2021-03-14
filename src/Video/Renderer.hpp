@@ -9,7 +9,6 @@ struct GLFWwindow;
 
 namespace Video {
 class StaticRenderProgram;
-class SkinRenderProgram;
 class Texture2D;
 class Shader;
 class ShaderProgram;
@@ -98,47 +97,10 @@ class Renderer {
      * @param geometry The geometry to render.
      * @param albedo Albedo texture.
      * @param normal Normal map.
-     * @param metallic Metallic map.
-     * @param roughness Roughness texture.
+     * @param roughnessMetallic Roughness-metallic texture.
      * @param modelMatrix Model matrix.
      */
-    void RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* metallic, const Texture2D* roughness, const glm::mat4 modelMatrix);
-
-    /// Prepare for depth rendering skin meshes.
-    /**
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
-     */
-    void PrepareSkinMeshDepthRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
-
-    /// Render a skin mesh.
-    /**
-     * @param geometry The geometry to render.
-     * @param modelMatrix Model matrix.
-     * @param bones Bones array.
-     */
-    void DepthRenderSkinMesh(Geometry::Geometry3D* geometry, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones);
-
-    /// Prepare for rendering skin meshes.
-    /**
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
-     * @param cameraNear Camera near plane distance.
-     * @param cameraFar Camera far plane distance.
-     */
-    void PrepareSkinMeshRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float cameraNear, float cameraFar);
-
-    /// Render a skin mesh.
-    /**
-     * @param geometry The geometry to render.
-     * @param albedo Albedo texture.
-     * @param normal Normal map.
-     * @param metallic Metallic map.
-     * @param roughness Roughness texture.
-     * @param modelMatrix Model matrix.
-     * @param bones Bones array.
-     */
-    void RenderSkinMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* metallic, const Texture2D* roughness, const glm::mat4 modelMatrix, const std::vector<glm::mat4>& bones);
+    void RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* roughnessMetallic, const glm::mat4 modelMatrix);
 
     /// Update light buffer.
     /**
@@ -220,7 +182,6 @@ class Renderer {
     CommandBuffer* commandBuffer;
 
     StaticRenderProgram* staticRenderProgram;
-    SkinRenderProgram* skinRenderProgram;
 
     static const uint32_t MAX_LIGHTS = 100;
     unsigned int lightCount;

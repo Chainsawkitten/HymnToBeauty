@@ -151,11 +151,6 @@ void ActiveHymn::Update(float deltaTime) {
     }
 
     {
-        PROFILE("Update animations");
-        Managers().renderManager->UpdateAnimations(deltaTime);
-    }
-
-    {
         PROFILE("Update debug drawing");
         Managers().debugDrawingManager->Update(deltaTime);
     }

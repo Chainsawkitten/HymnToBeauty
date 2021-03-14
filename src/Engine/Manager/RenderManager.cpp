@@ -7,7 +7,6 @@
 #include "PhysicsManager.hpp"
 #include "DebugDrawingManager.hpp"
 #include "../Entity/Entity.hpp"
-#include "../Component/AnimationController.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
@@ -30,7 +29,7 @@
 #include "../Util/Json.hpp"
 #include <Utility/Log.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <Video/Texture/TexturePNG.hpp>
+#include <Video/Texture/Texture2D.hpp>
 #include "Light.png.hpp"
 #include "SoundSource.png.hpp"
 #include "Camera.png.hpp"
@@ -42,15 +41,15 @@ RenderManager::RenderManager(Video::Renderer* renderer) {
     this->renderer = renderer;
 
     // Init textures.
-    lightTexture = Managers().resourceManager->CreateTexturePNG(LIGHT_PNG, LIGHT_PNG_LENGTH);
-    soundSourceTexture = Managers().resourceManager->CreateTexturePNG(SOUNDSOURCE_PNG, SOUNDSOURCE_PNG_LENGTH);
-    cameraTexture = Managers().resourceManager->CreateTexturePNG(CAMERA_PNG, CAMERA_PNG_LENGTH);
+    lightTexture = Managers().resourceManager->CreateTexture2D(LIGHT_PNG, LIGHT_PNG_LENGTH);
+    soundSourceTexture = Managers().resourceManager->CreateTexture2D(SOUNDSOURCE_PNG, SOUNDSOURCE_PNG_LENGTH);
+    cameraTexture = Managers().resourceManager->CreateTexture2D(CAMERA_PNG, CAMERA_PNG_LENGTH);
 }
 
 RenderManager::~RenderManager() {
-    Managers().resourceManager->FreeTexturePNG(lightTexture);
-    Managers().resourceManager->FreeTexturePNG(soundSourceTexture);
-    Managers().resourceManager->FreeTexturePNG(cameraTexture);
+    Managers().resourceManager->FreeTexture2D(lightTexture);
+    Managers().resourceManager->FreeTexture2D(soundSourceTexture);
+    Managers().resourceManager->FreeTexture2D(cameraTexture);
 }
 
 void RenderManager::Render(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, Entity* camera, bool lighting, bool lightVolumes) {
@@ -140,7 +139,6 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
 
     // Get list of entities to render.
     std::vector<Entity*> staticEntities;
-    std::vector<Entity*> skinnedEntities;
 
     for (Mesh* mesh : meshComponents) {
         Entity* entity = mesh->entity;
@@ -157,11 +155,7 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
         if (!frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox()))
             continue;
 
-        if (mesh->geometry->GetType() == Video::Geometry::Geometry3D::STATIC) {
-            staticEntities.push_back(entity);
-        } else {
-            skinnedEntities.push_back(entity);
-        }
+        staticEntities.push_back(entity);
     }
 
     // Depth pre-pass.
@@ -175,15 +169,6 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
 
             for (Entity* entity : staticEntities) {
                 renderer->DepthRenderStaticMesh(entity->GetComponent<Mesh>()->geometry, entity->GetModelMatrix());
-            }
-        }
-
-        // Skinned meshes.
-        if (!skinnedEntities.empty()) {
-            renderer->PrepareSkinMeshDepthRendering(viewMatrix, projectionMatrix);
-
-            for (Entity* entity : skinnedEntities) {
-                renderer->DepthRenderSkinMesh(entity->GetComponent<Mesh>()->geometry, entity->GetModelMatrix(), entity->GetComponent<AnimationController>()->bones);
             }
         }
     }
@@ -212,30 +197,9 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
             for (Entity* entity : staticEntities) {
                 Material* material = entity->GetComponent<Material>();
 
-                renderer->RenderStaticMesh(entity->GetComponent<Mesh>()->geometry, material->albedo->GetTexture(), material->normal->GetTexture(), material->metallic->GetTexture(), material->roughness->GetTexture(), entity->GetModelMatrix());
+                renderer->RenderStaticMesh(entity->GetComponent<Mesh>()->geometry, material->albedo->GetTexture(), material->normal->GetTexture(), material->roughnessMetallic->GetTexture(), entity->GetModelMatrix());
             }
         }
-
-        // Skinned meshes.
-        if (!skinnedEntities.empty()) {
-            renderer->PrepareSkinMeshRendering(viewMatrix, projectionMatrix, cameraNear, cameraFar);
-
-            for (Entity* entity : skinnedEntities) {
-                Material* material = entity->GetComponent<Material>();
-
-                renderer->RenderSkinMesh(entity->GetComponent<Mesh>()->geometry, material->albedo->GetTexture(), material->normal->GetTexture(), material->metallic->GetTexture(), material->roughness->GetTexture(), entity->GetModelMatrix(), entity->GetComponent<AnimationController>()->bones);
-            }
-        }
-    }
-}
-
-void RenderManager::UpdateAnimations(float deltaTime) {
-    // Update all enabled animation controllers.
-    for (Component::AnimationController* animationController : animationControllers.GetAll()) {
-        if (animationController->IsKilled() || !animationController->entity->IsEnabled())
-            continue;
-
-        animationController->UpdateAnimation(deltaTime);
     }
 }
 
@@ -298,28 +262,6 @@ void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool l
     }
 }
 
-Component::AnimationController* RenderManager::CreateAnimation() {
-    return animationControllers.Create();
-}
-
-Component::AnimationController* RenderManager::CreateAnimation(const Json::Value& node) {
-    Component::AnimationController* animationController = animationControllers.Create();
-
-    std::string skeletonName = node.get("skeleton", "").asString();
-    if (!skeletonName.empty())
-        animationController->skeleton = Managers().resourceManager->CreateSkeleton(skeletonName);
-
-    std::string controllerName = node.get("animationController", "").asString();
-    if (!controllerName.empty())
-        animationController->controller = Managers().resourceManager->CreateAnimationController(controllerName);
-
-    return animationController;
-}
-
-const std::vector<Component::AnimationController*>& RenderManager::GetAnimations() const {
-    return animationControllers.GetAll();
-}
-
 Component::DirectionalLight* RenderManager::CreateDirectionalLight() {
     return directionalLights.Create();
 }
@@ -367,8 +309,7 @@ Component::Material* RenderManager::CreateMaterial(const Json::Value& node) {
     // Load values from Json node.
     LoadTexture(material->albedo, node.get("albedo", "").asString());
     LoadTexture(material->normal, node.get("normal", "").asString());
-    LoadTexture(material->metallic, node.get("metallic", "").asString());
-    LoadTexture(material->roughness, node.get("roughness", "").asString());
+    LoadTexture(material->roughnessMetallic, node.get("roughnessMetallic", "").asString());
 
     return material;
 }
@@ -438,7 +379,6 @@ const std::vector<Component::SpotLight*>& RenderManager::GetSpotLights() const {
 }
 
 void RenderManager::ClearKilledComponents() {
-    animationControllers.ClearKilled();
     directionalLights.ClearKilled();
     lenses.ClearKilled();
     materials.ClearKilled();

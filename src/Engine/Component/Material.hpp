@@ -22,11 +22,11 @@ class Material : public SuperComponent {
     /// Normal texture.
     TextureAsset* normal;
 
-    /// Metallic texture.
-    TextureAsset* metallic;
-
-    /// Roughness texture.
-    TextureAsset* roughness;
+    /// Roughness-metallic texture.
+    /**
+     * Roughness in green channel. Metallic in blue channel.
+     */
+    TextureAsset* roughnessMetallic;
 
   private:
     void LoadTexture(TextureAsset*& texture, const std::string& name);

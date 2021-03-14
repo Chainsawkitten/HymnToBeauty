@@ -13,12 +13,6 @@ namespace Audio {
 class SoundFile;
 }
 
-namespace Animation {
-class AnimationClip;
-class AnimationController;
-class Skeleton;
-} // namespace Animation
-
 namespace Json {
 class Value;
 }
@@ -36,23 +30,17 @@ class ResourceList {
          */
         std::string GetName() const;
 
+        /// The filename.
+        std::string filename;
+
         /// The type of resource.
-        enum Type { SCENE = 0, MODEL, TEXTURE, SOUND, SCRIPT, ANIMATION_CLIP, ANIMATION_CONTROLLER, SKELETON } type;
+        enum Type { SCENE = 0, MODEL, TEXTURE, SOUND, SCRIPT, GLTF, INVALID } type;
 
         /// Scene name.
         std::string* scene;
 
         /// Model.
         Geometry::Model* model;
-
-        /// Animation clip.
-        Animation::AnimationClip* animationClip;
-
-        /// Animation controller.
-        Animation::AnimationController* animationController;
-
-        /// Skeleton.
-        Animation::Skeleton* skeleton;
 
         /// Texture.
         TextureAsset* texture;
@@ -103,24 +91,6 @@ class ResourceList {
     /// The id of the next model to create.
     unsigned int modelNumber = 0U;
 
-    /// Animation clips.
-    std::vector<Animation::AnimationClip*> animationClips;
-
-    /// The id of the next animation clip to create.
-    unsigned int animationClipNumber = 0U;
-
-    /// Animation controllers.
-    std::vector<Animation::AnimationController*> animationControllers;
-
-    /// The id of the next animation controller to create.
-    unsigned int animationControllerNumber = 0U;
-
-    /// Skeletons.
-    std::vector<Animation::Skeleton*> skeletons;
-
-    /// The id of the next skeleton to create.
-    unsigned int skeletonNumber = 0U;
-
     /// The id of the next texture to create.
     unsigned int textureNumber = 0U;
 
@@ -136,11 +106,17 @@ class ResourceList {
      */
     std::string GetSavePath() const;
 
+    /// Convert extension to type.
+    /**
+     * @param extension The file extension.
+     * @return The type of resource.
+     */
+    static Resource::Type ExtensionToType(const std::string& extension);
+
   private:
     static ResourceList& GetInstance();
 
-    Json::Value SaveFolder(const ResourceFolder& folder) const;
-    ResourceFolder LoadFolder(const Json::Value& node, std::string path);
+    ResourceFolder LoadFolder(const std::string& name, std::string path);
     void ClearFolder(ResourceFolder& folder);
 
     ResourceList();

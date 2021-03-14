@@ -1,7 +1,7 @@
 #include "TextureEditor.hpp"
 
 #include <Engine/Texture/TextureAsset.hpp>
-#include <Video/Texture/TexturePNG.hpp>
+#include <Video/Texture/Texture2D.hpp>
 #include <Video/LowLevelRenderer/Interface/Texture.hpp>
 #include "../FileSelector.hpp"
 #include <functional>
@@ -20,9 +20,9 @@ void TextureEditor::Show() {
         if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
             // Rename texture files.
             std::string path = Hymn().GetPath() + "/" + texture->path;
-            rename((path + texture->name + ".png").c_str(), (path + name + ".png").c_str());
+            rename((path + texture->name).c_str(), (path + name + extension).c_str());
 
-            texture->name = name;
+            texture->name = name + extension;
         }
 
         if (texture->GetTexture()->IsLoaded()) {
@@ -51,7 +51,11 @@ const TextureAsset* TextureEditor::GetTexture() const {
 void TextureEditor::SetTexture(TextureAsset* texture) {
     this->texture = texture;
 
-    strcpy(name, texture->name.c_str());
+    std::size_t pos = texture->name.find_last_of('.');
+    extension = texture->name.substr(pos);
+    std::string nameWithoutExtension = texture->name.substr(0, pos);
+
+    strcpy(name, nameWithoutExtension.c_str());
 }
 
 bool TextureEditor::IsVisible() const {
@@ -65,7 +69,7 @@ void TextureEditor::SetVisible(bool visible) {
 void TextureEditor::FileSelected(const std::string& file) {
     path = file;
 
-    std::string destination = Hymn().GetPath() + "/" + texture->path + texture->name + ".png";
+    std::string destination = Hymn().GetPath() + "/" + texture->path + texture->name;
     FileSystem::Copy(file.c_str(), destination.c_str());
     texture->Load(texture->path + texture->name);
 }

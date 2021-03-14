@@ -28,8 +28,7 @@ struct Light {
 // --- RESOURCES ---
 MATERIAL(0, mapAlbedo)
 MATERIAL(1, mapNormal)
-MATERIAL(2, mapMetallic)
-MATERIAL(3, mapRoughness)
+MATERIAL(2, mapRoughnessMetallic)
 
 FRAGMENT_UNIFORMS
 {
@@ -176,12 +175,11 @@ void main() {
     vec3 albedo = texture(mapAlbedo, vertexIn.texCoords).rgb;
     albedo = pow(albedo, vec3(uniforms.gamma)); // Apply if texture not in sRGB
     vec3 normal = calculateNormal(vertexIn.normal, vertexIn.tangent, texture(mapNormal, vertexIn.texCoords).rgb);
-    float metallic = texture(mapMetallic, vertexIn.texCoords).r;
-    float roughness = texture(mapRoughness, vertexIn.texCoords).r;
+    vec2 roughnessMetallic = texture(mapRoughnessMetallic, vertexIn.texCoords).gb;
     vec3 pos = vertexIn.pos;
 
     // Shade fragment.
-    vec3 color = ApplyLights(albedo, normal, metallic, roughness, pos);
+    vec3 color = ApplyLights(albedo, normal, roughnessMetallic.r, roughnessMetallic.g, pos);
 
     outColor = vec4(color, 1.0f);
 }

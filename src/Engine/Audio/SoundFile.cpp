@@ -14,7 +14,7 @@ void SoundFile::Save() const {
     node["name"] = name;
 
     // Save properties to meta file.
-    std::string filename = Hymn().GetPath() + "/" + path + name + ".json";
+    std::string filename = Hymn().GetPath() + "/" + path + name + ".meta";
     std::ofstream file(filename);
     file << node;
     file.close();
@@ -26,19 +26,19 @@ void SoundFile::Load(const std::string& name) {
     path = name.substr(0, pos + 1);
 
     std::string filename = Hymn().GetPath() + "/" + name;
-    Load(std::string(filename + ".ogg").c_str());
+    Load(filename.c_str());
 
     // Get properties from meta file.
     Json::Value node;
-    if (!FileSystem::FileExists(std::string(filename + ".json").c_str())) {
+    if (!FileSystem::FileExists(std::string(filename + ".meta").c_str())) {
         node["name"] = name;
 
         // Save properties to meta file.
-        std::ofstream file(filename + ".json");
+        std::ofstream file(filename + ".meta");
         file << node;
         file.close();
     } else {
-        std::ifstream file(filename + ".json");
+        std::ifstream file(filename + ".meta");
         file >> node;
         file.close();
     }

@@ -23,7 +23,6 @@
 #include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
 #include "../Component/Script.hpp"
-#include "../Component/AnimationController.hpp"
 #include "../Component/DirectionalLight.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Listener.hpp"
@@ -395,11 +394,6 @@ ScriptManager::ScriptManager() {
     // Register components.
     engine->SetDefaultNamespace("Component");
 
-    engine->RegisterObjectType("AnimationController", 0, asOBJ_REF | asOBJ_NOCOUNT);
-    engine->RegisterObjectMethod("AnimationController", "void SetBool(const string& in, bool)", asMETHOD(AnimationController, SetBool), asCALL_THISCALL);
-    engine->RegisterObjectMethod("AnimationController", "void SetFloat(const string& in, float)", asMETHOD(AnimationController, SetFloat), asCALL_THISCALL);
-    engine->RegisterObjectMethod("AnimationController", "bool GetBool(const string& in)", asMETHOD(AnimationController, GetBool), asCALL_THISCALL);
-    engine->RegisterObjectMethod("AnimationController", "float GetFloat(const string& in)", asMETHOD(AnimationController, GetFloat), asCALL_THISCALL);
     engine->RegisterObjectType("DirectionalLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("DirectionalLight", "vec3 color", asOFFSET(DirectionalLight, color));
     engine->RegisterObjectProperty("DirectionalLight", "float ambientCoefficient", asOFFSET(DirectionalLight, ambientCoefficient));
@@ -434,7 +428,6 @@ ScriptManager::ScriptManager() {
     engine->SetDefaultNamespace("");
 
     // Register getting components.
-    engine->RegisterObjectMethod("Entity", "Component::AnimationController@ GetAnimationController()", asMETHODPR(Entity, GetComponent, () const, AnimationController*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ GetDirectionalLight()", asMETHODPR(Entity, GetComponent, () const, DirectionalLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Lens@ GetLens()", asMETHODPR(Entity, GetComponent, () const, Lens*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Listener@ GetListener()", asMETHODPR(Entity, GetComponent, () const, Listener*), asCALL_THISCALL);
@@ -489,7 +482,7 @@ ScriptManager::~ScriptManager() {
 int ScriptManager::BuildScript(ScriptFile* script) {
     GetBreakpoints(script);
 
-    std::string filename = Hymn().GetPath() + "/" + script->path + script->name + ".as";
+    std::string filename = Hymn().GetPath() + "/" + script->path + script->name;
     if (!FileSystem::FileExists(filename.c_str())) {
         Log() << "Script file does not exist: " << filename << "\n";
         return -1;
@@ -497,9 +490,9 @@ int ScriptManager::BuildScript(ScriptFile* script) {
 
     // Create and build script module.
     CScriptBuilder builder;
-    int r = builder.StartNewModule(engine, script->name.c_str());
+    int r = builder.StartNewModule(engine, script->module.c_str());
     if (r < 0) {
-        Log() << "Couldn't start new module: " << script->name << ".\n";
+        Log() << "Couldn't start new module: " << script->module << ".\n";
         return r;
     }
 
@@ -524,7 +517,7 @@ void ScriptManager::BuildAllScripts() {
     std::string path = Hymn().GetPath() + "/";
 
     for (ScriptFile* file : Hymn().scripts) {
-        std::string filename = path + file->path + file->name + ".as";
+        std::string filename = path + file->path + file->name;
         if (!FileSystem::FileExists(filename.c_str())) {
             Log() << "Script file does not exist: " << filename << "\n";
             return;
@@ -535,11 +528,11 @@ void ScriptManager::BuildAllScripts() {
 
         // Create and build script module.
         CScriptBuilder builder;
-        asIScriptModule* module = engine->GetModule(file->name.c_str());
+        asIScriptModule* module = engine->GetModule(file->module.c_str());
         if (module == nullptr) {
-            int r = builder.StartNewModule(engine, file->name.c_str());
+            int r = builder.StartNewModule(engine, file->module.c_str());
             if (r < 0)
-                Log() << "Couldn't start new module: " << file->name << ".\n";
+                Log() << "Couldn't start new module: " << file->module << ".\n";
 
             r = builder.AddSectionFromFile(filename.c_str());
             if (r < 0)
@@ -565,12 +558,12 @@ void ScriptManager::BuildAllScripts() {
 
 void ScriptManager::GetBreakpoints(const ScriptFile* scriptFile) {
     // If we already fetched the breakpoints for this file, we clear it.
-    auto it = breakpoints.find(scriptFile->name + ".as");
+    auto it = breakpoints.find(scriptFile->name);
     if (it != breakpoints.end())
-        breakpoints[scriptFile->name + ".as"].clear();
+        breakpoints[scriptFile->name].clear();
 
     std::string path = Hymn().GetPath() + "/";
-    std::string filePath = path + scriptFile->path + scriptFile->name + ".as";
+    std::string filePath = path + scriptFile->path + scriptFile->name;
 
     std::string scriptLines;
     LoadScriptFile(filePath.c_str(), scriptLines);
@@ -582,7 +575,7 @@ void ScriptManager::GetBreakpoints(const ScriptFile* scriptFile) {
         if (line.length() >= 8) {
             std::string end = line.substr(line.length() - 8, 7);
             if (end == "//break" || end == "//Break" || end == "//BREAK")
-                breakpoints[scriptFile->name + ".as"].insert(lineNumber);
+                breakpoints[scriptFile->name].insert(lineNumber);
         }
         lineNumber++;
     }
@@ -652,7 +645,7 @@ void ScriptManager::FillPropertyMap(Script* script) {
 void ScriptManager::FillFunctionVector(ScriptFile* scriptFile) {
     scriptFile->functionList.clear();
 
-    asITypeInfo* scriptClass = GetClass(scriptFile->name, scriptFile->name);
+    asITypeInfo* scriptClass = GetClass(scriptFile->module, scriptFile->module);
     if (scriptClass != nullptr) {
         int functionCount = scriptClass->GetMethodCount();
         for (int n = 0; n < functionCount; n++) {
@@ -824,7 +817,7 @@ void ScriptManager::ExecuteScriptMethod(const Entity* entity, const std::string&
     ScriptFile* scriptFile = script->scriptFile;
 
     // Get class.
-    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    asITypeInfo* type = GetClass(scriptFile->module, scriptFile->module);
 
     // Find method to call.
     std::string methodDecl;
@@ -852,17 +845,17 @@ void ScriptManager::CreateInstance(Component::Script* script) {
         return;
 
     // Find the class to instantiate.
-    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    asITypeInfo* type = GetClass(scriptFile->module, scriptFile->module);
 
     // Skip if no class is found.
     if (!type)
         return;
 
     // Find factory function / constructor.
-    std::string factoryName = scriptFile->name + "@ " + scriptFile->name + "(Entity@)";
+    std::string factoryName = scriptFile->module + "@ " + scriptFile->module + "(Entity@)";
     asIScriptFunction* factoryFunction = type->GetFactoryByDecl(factoryName.c_str());
     if (factoryFunction == nullptr)
-        Log() << "Couldn't find the factory function for " << scriptFile->name << ".\n";
+        Log() << "Couldn't find the factory function for " << scriptFile->module << ".\n";
 
     // Create context, prepare it and execute.
     asIScriptContext* context = CreateContext();
@@ -893,7 +886,7 @@ void ScriptManager::CallMessageReceived(const Message& message) {
     ScriptFile* scriptFile = script->scriptFile;
 
     // Get class.
-    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    asITypeInfo* type = GetClass(scriptFile->module, scriptFile->module);
 
     // Find method to call.
     asIScriptFunction* method = type->GetMethodByDecl("void ReceiveMessage(Entity@, int)");
@@ -917,7 +910,7 @@ void ScriptManager::CallUpdate(Entity* entity, float deltaTime) {
     ScriptFile* scriptFile = script->scriptFile;
 
     // Get class.
-    asITypeInfo* type = GetClass(scriptFile->name, scriptFile->name);
+    asITypeInfo* type = GetClass(scriptFile->module, scriptFile->module);
 
     // Find method to call.
     asIScriptFunction* method = type->GetMethodByDecl("void Update(float)");

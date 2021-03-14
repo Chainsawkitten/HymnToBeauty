@@ -10,7 +10,7 @@
 #include <Video/LowLevelRenderer/Interface/GeometryBinding.hpp>
 #include <Video/LowLevelRenderer/Interface/GraphicsPipeline.hpp>
 #include <Video/LowLevelRenderer/Interface/CommandBuffer.hpp>
-#include <Video/Texture/TexturePNG.hpp>
+#include <Video/Texture/Texture2D.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -88,7 +88,7 @@ bool MultipleFrames(void* data) {
     uniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4));
 
     // Create texture.
-    Texture2D* texture = new TexturePNG(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
+    Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();

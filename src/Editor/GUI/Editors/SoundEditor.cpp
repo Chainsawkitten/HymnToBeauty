@@ -19,10 +19,10 @@ void SoundEditor::Show() {
         if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
             // Rename sound file.
             std::string path = Hymn().GetPath() + "/" + sound->path;
-            rename((path + sound->name + ".ogg").c_str(), (path + name + ".ogg").c_str());
-            rename((path + sound->name + ".json").c_str(), (path + name + ".json").c_str());
+            rename((path + sound->name + "").c_str(), (path + name + ".ogg").c_str());
+            rename((path + sound->name + ".meta").c_str(), (path + name + ".ogg.meta").c_str());
 
-            sound->name = name;
+            sound->name = std::string(name) + ".ogg";
         }
 
         if (ImGui::Button("Load Ogg Vorbis")) {
@@ -45,7 +45,10 @@ const Audio::SoundFile* SoundEditor::GetSound() const {
 void SoundEditor::SetSound(Audio::SoundFile* sound) {
     this->sound = sound;
 
-    strcpy(name, sound->name.c_str());
+    std::size_t pos = sound->name.find_last_of('.');
+    std::string nameWithoutExtension = sound->name.substr(0, pos);
+
+    strcpy(name, nameWithoutExtension.c_str());
 }
 
 bool SoundEditor::IsVisible() const {
