@@ -1,7 +1,6 @@
 #include "Entity.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include "../Component/AnimationController.hpp"
 #include "../Component/Lens.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
@@ -74,14 +73,15 @@ Entity* Entity::InstantiateScene(const std::string& name, const std::string& ori
     Json::Value root;
     Entity* child = AddChild();
     bool error = false;
-    std::string filename = Hymn().GetPath() + "/" + name + ".json";
+    std::string filename = Hymn().GetPath() + "/" + name;
 
     // Checks if file exists.
     if (FileSystem::FileExists(filename.c_str())) {
         std::ifstream file1(filename);
         file1 >> root;
 
-        CheckIfSceneExists(filename, error, originScene, root);
+        if (!originScene.empty())
+            CheckIfSceneExists(filename, error, originScene, root);
 
         if (error == false) {
             std::ifstream file(filename);
@@ -189,7 +189,6 @@ Json::Value Entity::Save() const {
         entity["sceneName"] = sceneName;
     } else {
         // Save components.
-        Save<Component::AnimationController>(entity, "AnimationController");
         Save<Component::Lens>(entity, "Lens");
         Save<Component::Mesh>(entity, "Mesh");
         Save<Component::Material>(entity, "Material");
@@ -220,7 +219,7 @@ void Entity::Load(const Json::Value& node) {
         sceneName = node["sceneName"].asString();
 
         // Load scene.
-        std::string filename = Hymn().GetPath() + "/" + sceneName + ".json";
+        std::string filename = Hymn().GetPath() + "/" + sceneName;
         Json::Value root;
         std::ifstream file(filename);
         file >> root;
@@ -230,7 +229,6 @@ void Entity::Load(const Json::Value& node) {
         scene = true;
     } else {
         // Load components.
-        Load<Component::AnimationController>(node, "AnimationController");
         Load<Component::Lens>(node, "Lens");
         Load<Component::Mesh>(node, "Mesh");
         Load<Component::Material>(node, "Material");
@@ -366,9 +364,7 @@ Component::SuperComponent* Entity::AddComponent(std::type_index componentType) {
     Component::SuperComponent* component;
 
     // Create a component in the correct manager.
-    if (componentType == typeid(Component::AnimationController*))
-        component = Managers().renderManager->CreateAnimation();
-    else if (componentType == typeid(Component::DirectionalLight*))
+    if (componentType == typeid(Component::DirectionalLight*))
         component = Managers().renderManager->CreateDirectionalLight();
     else if (componentType == typeid(Component::Lens*))
         component = Managers().renderManager->CreateLens();
@@ -426,9 +422,7 @@ void Entity::LoadComponent(std::type_index componentType, const Json::Value& nod
     Component::SuperComponent* component;
 
     // Create a component in the correct manager.
-    if (componentType == typeid(Component::AnimationController*))
-        component = Managers().renderManager->CreateAnimation(node);
-    else if (componentType == typeid(Component::DirectionalLight*))
+    if (componentType == typeid(Component::DirectionalLight*))
         component = Managers().renderManager->CreateDirectionalLight(node);
     else if (componentType == typeid(Component::Lens*))
         component = Managers().renderManager->CreateLens(node);

@@ -114,11 +114,11 @@ void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
     commandBuffer.BindStorageBuffer(lightBuffer);
 }
 
-void StaticRenderProgram::Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* textureNormal, const Video::Texture2D* textureMetallic, const Video::Texture2D* textureRoughness, const glm::mat4& modelMatrix) const {
+void StaticRenderProgram::Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* textureNormal, const Video::Texture2D* textureRoughnessMetallic, const glm::mat4& modelMatrix) const {
     commandBuffer.BindGeometry(geometry->GetGeometryBinding());
 
     // Textures
-    commandBuffer.BindMaterial({ textureAlbedo->GetTexture(), textureNormal->GetTexture(), textureMetallic->GetTexture(), textureRoughness->GetTexture() });
+    commandBuffer.BindMaterial({ textureAlbedo->GetTexture(), textureNormal->GetTexture(), textureRoughnessMetallic->GetTexture() });
 
     // Render model.
     struct PushConstants {

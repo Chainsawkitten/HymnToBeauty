@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     GameSettings::GetInstance().Load();
 
     // Load world.
-    Hymn().world.Load(Hymn().GetPath() + "/" + Hymn().startupScene + ".json");
+    Hymn().world.Load(Hymn().GetPath() + "/" + Hymn().startupScene);
 
     // Compile scripts.
     Managers().scriptManager->RegisterInput();

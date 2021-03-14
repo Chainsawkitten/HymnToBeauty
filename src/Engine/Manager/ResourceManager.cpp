@@ -1,13 +1,10 @@
 #include "ResourceManager.hpp"
 
 #include <Video/Renderer.hpp>
-#include "../Animation/AnimationClip.hpp"
-#include "../Animation/AnimationController.hpp"
-#include "../Animation/Skeleton.hpp"
 #include <Video/Geometry/Rectangle.hpp>
 #include "../Geometry/Cube.hpp"
 #include "../Geometry/Model.hpp"
-#include <Video/Texture/TexturePNG.hpp>
+#include <Video/Texture/Texture2D.hpp>
 #include "../Audio/SoundBuffer.hpp"
 #include "../Texture/TextureAsset.hpp"
 #include "../Script/ScriptFile.hpp"
@@ -16,8 +13,7 @@
 
 #include "DefaultAlbedo.png.hpp"
 #include "DefaultNormal.png.hpp"
-#include "DefaultMetallic.png.hpp"
-#include "DefaultRoughness.png.hpp"
+#include "DefaultRoughnessMetallic.png.hpp"
 
 using namespace std;
 
@@ -26,15 +22,13 @@ ResourceManager::ResourceManager(Video::Renderer* renderer) {
 
     defaultAlbedo = new TextureAsset(lowLevelRenderer, DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
     defaultNormal = new TextureAsset(lowLevelRenderer, DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
-    defaultMetallic = new TextureAsset(lowLevelRenderer, DEFAULTMETALLIC_PNG, DEFAULTMETALLIC_PNG_LENGTH);
-    defaultRoughness = new TextureAsset(lowLevelRenderer, DEFAULTROUGHNESS_PNG, DEFAULTROUGHNESS_PNG_LENGTH);
+    defaultRoughnessMetallic = new TextureAsset(lowLevelRenderer, DEFAULTROUGHNESSMETALLIC_PNG, DEFAULTROUGHNESSMETALLIC_PNG_LENGTH);
 }
 
 ResourceManager::~ResourceManager() {
     delete defaultAlbedo;
     delete defaultNormal;
-    delete defaultMetallic;
-    delete defaultRoughness;
+    delete defaultRoughnessMetallic;
 }
 
 Geometry::Model* ResourceManager::CreateModel(const std::string& name) {
@@ -60,78 +54,9 @@ void ResourceManager::FreeModel(Geometry::Model* model) {
     }
 }
 
-Animation::AnimationClip* ResourceManager::CreateAnimationClip(const std::string& name) {
-    if (animationClips.find(name) == animationClips.end()) {
-        Animation::AnimationClip* animationClip = new Animation::AnimationClip();
-        animationClip->Load(name);
-        animationClips[name].animationClip = animationClip;
-        animationClipsInverse[animationClip] = name;
-        animationClips[name].count = 1;
-    } else
-        animationClips[name].count++;
-
-    return animationClips[name].animationClip;
-}
-
-void ResourceManager::FreeAnimationClip(Animation::AnimationClip* animationClip) {
-    std::string name = animationClipsInverse[animationClip];
-
-    if (animationClips[name].count-- <= 1) {
-        animationClipsInverse.erase(animationClip);
-        delete animationClip;
-        animationClips.erase(name);
-    }
-}
-
-Animation::AnimationController* ResourceManager::CreateAnimationController(const std::string& name) {
-    if (animationControllers.find(name) == animationControllers.end()) {
-        Animation::AnimationController* animationController = new Animation::AnimationController();
-        animationController->Load(name);
-        animationControllers[name].animationController = animationController;
-        animationControllersInverse[animationController] = name;
-        animationControllers[name].count = 1;
-    } else
-        animationControllers[name].count++;
-
-    return animationControllers[name].animationController;
-}
-
-void ResourceManager::FreeAnimationController(Animation::AnimationController* animationController) {
-    std::string name = animationControllersInverse[animationController];
-
-    if (animationControllers[name].count-- <= 1) {
-        animationControllersInverse.erase(animationController);
-        delete animationController;
-        animationControllers.erase(name);
-    }
-}
-
-Animation::Skeleton* ResourceManager::CreateSkeleton(const std::string& name) {
-    if (skeletons.find(name) == skeletons.end()) {
-        Animation::Skeleton* skeleton = new Animation::Skeleton;
-        skeleton->Load(name);
-        skeletons[name].skeleton = skeleton;
-        skeletonsInverse[skeleton] = name;
-        skeletons[name].count = 1;
-    } else
-        skeletons[name].count++;
-
-    return skeletons[name].skeleton;
-}
-
-void ResourceManager::FreeSkeleton(Animation::Skeleton* skeleton) {
-    std::string name = skeletonsInverse[skeleton];
-
-    if (skeletons[name].count-- <= 1) {
-        skeletonsInverse.erase(skeleton);
-        delete skeleton;
-        skeletons.erase(name);
-    }
-}
-
-Video::TexturePNG* ResourceManager::CreateTexturePNG(const char* data, int dataLength) {
+Video::Texture2D* ResourceManager::CreateTexture2D(const char* data, int dataLength) {
     if (textures.find(data) == textures.end()) {
-        textures[data].texture = new Video::TexturePNG(lowLevelRenderer, data, dataLength);
+        textures[data].texture = new Video::Texture2D(lowLevelRenderer, data, dataLength);
         texturesInverse[textures[data].texture] = data;
         textures[data].count = 1;
     } else
@@ -140,7 +65,7 @@ Video::TexturePNG* ResourceManager::CreateTexturePNG(const char* data, int dataL
     return textures[data].texture;
 }
 
-void ResourceManager::FreeTexturePNG(Video::TexturePNG* texture) {
+void ResourceManager::FreeTexture2D(Video::Texture2D* texture) {
     const char* data = texturesInverse[texture];
 
     if (textures[data].count-- <= 1) {
@@ -232,10 +157,6 @@ TextureAsset* ResourceManager::GetDefaultNormal() {
     return defaultNormal;
 }
 
-TextureAsset* ResourceManager::GetDefaultMetallic() {
-    return defaultMetallic;
-}
-
-TextureAsset* ResourceManager::GetDefaultRoughness() {
-    return defaultRoughness;
+TextureAsset* ResourceManager::GetDefaultRoughnessMetallic() {
+    return defaultRoughnessMetallic;
 }

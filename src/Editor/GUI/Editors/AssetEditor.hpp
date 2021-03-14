@@ -1,33 +1,33 @@
 #pragma once
 
 #include <string>
-#include "../FileSelector.hpp"
+#include <glm/glm.hpp>
 
-namespace Audio {
-class SoundFile;
+namespace Geometry {
+class Model;
 }
 
 namespace GUI {
-/// Used to edit a sound.
-class SoundEditor {
+/// Used to edit models.
+class AssetEditor {
   public:
     /// Constructor.
-    SoundEditor();
+    AssetEditor();
 
     /// Show the editor.
     void Show();
 
-    /// Get the sound being edited.
+    /// Get the model being edited.
     /**
-     * @return The sound being edited.
+     * @return The model being edited.
      */
-    const Audio::SoundFile* GetSound() const;
+    const Geometry::Model* GetModel() const;
 
-    /// Set the sound to edit.
+    /// Set the model to edit.
     /**
-     * @param sound Sound to edit.
+     * @param model Model to edit.
      */
-    void SetSound(Audio::SoundFile* sound);
+    void SetModel(Geometry::Model* model);
 
     /// Get whether the window is visible.
     /**
@@ -42,13 +42,11 @@ class SoundEditor {
     void SetVisible(bool visible);
 
   private:
-    void FileSelected(const std::string& file);
-
-    Audio::SoundFile* sound = nullptr;
+    Geometry::Model* model = nullptr;
     bool visible = false;
 
-    FileSelector fileSelector;
-
     char name[128];
+
+    std::string destination;
 };
 } // namespace GUI

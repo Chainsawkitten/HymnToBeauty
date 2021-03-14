@@ -12,13 +12,11 @@ using namespace GUI;
 
 void ScriptEditor::Show() {
     if (ImGui::Begin(("Script: " + script->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(script))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
-        char nameText[255];
-        strcpy(nameText, script->name.c_str());
-        if (ImGui::InputText("Name", nameText, 255, ImGuiInputTextFlags_EnterReturnsTrue)) {
+        if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
             // Rename script file.
-            rename((Hymn().GetPath() + "/" + script->path + script->name + ".as").c_str(), (Hymn().GetPath() + "/" + script->path + nameText + ".as").c_str());
+            rename((Hymn().GetPath() + "/" + script->path + script->name).c_str(), (Hymn().GetPath() + "/" + script->path + name + ".as").c_str());
 
-            script->name = nameText;
+            script->name = std::string(name) + ".as";
         }
 
         if (ImGui::Button("Edit Script")) {
@@ -56,6 +54,11 @@ const ScriptFile* ScriptEditor::GetScript() const {
 void ScriptEditor::SetScript(ScriptFile* script) {
     this->script = script;
     status = UNKNOWN;
+
+    std::size_t pos = script->name.find_last_of('.');
+    std::string nameWithoutExtension = script->name.substr(0, pos);
+
+    strcpy(name, nameWithoutExtension.c_str());
 }
 
 bool ScriptEditor::IsVisible() const {

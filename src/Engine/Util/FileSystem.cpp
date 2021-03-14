@@ -149,12 +149,11 @@ std::string GetExtension(const std::string& filename) {
 
 std::string GetName(const std::string& filepath) {
     std::size_t start = filepath.find_last_of(DELIMITER);
-    if (start == std::string::npos)
-        start = 0;
+    start = (start == std::string::npos) ? 0 : start + 1;
 
     std::size_t length = filepath.find_last_of(".") - start;
 
-    return filepath.substr(start + 1, length - 1);
+    return filepath.substr(start, length);
 }
 
 std::string GetDirectory(const std::string& path) {

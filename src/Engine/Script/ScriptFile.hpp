@@ -25,6 +25,9 @@ class ScriptFile {
     /// The folder containing the script file.
     std::string path;
 
+    /// The name of the module.
+    std::string module = "";
+
     /// A list containing all the functions for the script.
     std::vector<std::string> functionList;
 };

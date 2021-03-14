@@ -10,8 +10,7 @@ using namespace Component;
 Material::Material() {
     albedo = Managers().resourceManager->GetDefaultAlbedo();
     normal = Managers().resourceManager->GetDefaultNormal();
-    metallic = Managers().resourceManager->GetDefaultMetallic();
-    roughness = Managers().resourceManager->GetDefaultRoughness();
+    roughnessMetallic = Managers().resourceManager->GetDefaultRoughnessMetallic();
 }
 
 Material::~Material() {
@@ -21,11 +20,8 @@ Material::~Material() {
     if (normal != nullptr && normal != Managers().resourceManager->GetDefaultNormal())
         Managers().resourceManager->FreeTextureAsset(normal);
 
-    if (metallic != nullptr && metallic != Managers().resourceManager->GetDefaultMetallic())
-        Managers().resourceManager->FreeTextureAsset(metallic);
-
-    if (roughness != nullptr && roughness != Managers().resourceManager->GetDefaultRoughness())
-        Managers().resourceManager->FreeTextureAsset(roughness);
+    if (roughnessMetallic != nullptr && roughnessMetallic != Managers().resourceManager->GetDefaultRoughnessMetallic())
+        Managers().resourceManager->FreeTextureAsset(roughnessMetallic);
 }
 
 Json::Value Material::Save() const {
@@ -37,11 +33,8 @@ Json::Value Material::Save() const {
     if (normal != nullptr)
         component["normal"] = normal->path + normal->name;
 
-    if (metallic != nullptr)
-        component["metallic"] = metallic->path + metallic->name;
-
-    if (roughness != nullptr)
-        component["roughness"] = roughness->path + roughness->name;
+    if (roughnessMetallic != nullptr)
+        component["roughnessMetallic"] = roughnessMetallic->path + roughnessMetallic->name;
 
     return component;
 }

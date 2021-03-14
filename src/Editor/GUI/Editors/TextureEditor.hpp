@@ -50,6 +50,7 @@ class TextureEditor {
     char name[128];
 
     std::string path;
+    std::string extension;
     int compressionType = 0;
 };
 } // namespace GUI

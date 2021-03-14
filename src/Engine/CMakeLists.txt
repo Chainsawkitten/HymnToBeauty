@@ -8,18 +8,9 @@ set(SRCS
         Engine.cpp
         Hymn.cpp
         MainWindow.cpp
-        Animation/Animation.cpp
-        Animation/AnimationAction.cpp
-        Animation/AnimationClip.cpp
-        Animation/AnimationController.cpp
-        Animation/AnimationTransition.cpp
-        Animation/Bone.cpp
-        Animation/Skeleton.cpp
-        Animation/SkeletonBone.cpp
         Audio/SoundBuffer.cpp
         Audio/SoundFile.cpp
         Audio/VorbisFile.cpp
-        Component/AnimationController.cpp
         Component/DirectionalLight.cpp
         Component/Lens.cpp
         Component/Listener.cpp
@@ -35,7 +26,6 @@ set(SRCS
         Component/Trigger.cpp
         Entity/Entity.cpp
         Entity/World.cpp
-        Geometry/AssetFileHandler.cpp
         Geometry/Cube.cpp
         Geometry/MathFunctions.cpp
         Geometry/MeshData.cpp
@@ -60,7 +50,6 @@ set(SRCS
         Util/Input.cpp
         Util/Json.cpp
         Util/MousePicking.cpp
-        Util/Node.cpp
         Util/RayIntersection.cpp
         Util/Profiling.cpp
         Util/Settings.cpp
@@ -73,18 +62,9 @@ set(HEADERS
         Engine.hpp
         Hymn.hpp
         MainWindow.hpp
-        Animation/Animation.hpp
-        Animation/AnimationAction.hpp
-        Animation/AnimationClip.hpp
-        Animation/AnimationController.hpp
-        Animation/AnimationTransition.hpp
-        Animation/Bone.hpp
-        Animation/Skeleton.hpp
-        Animation/SkeletonBone.hpp
         Audio/SoundBuffer.hpp
         Audio/SoundFile.hpp
         Audio/VorbisFile.hpp
-        Component/AnimationController.hpp
         Component/DirectionalLight.hpp
         Component/Lens.hpp
         Component/Listener.hpp
@@ -101,7 +81,6 @@ set(HEADERS
         Entity/ComponentContainer.hpp
         Entity/Entity.hpp
         Entity/World.hpp
-        Geometry/AssetFileHandler.hpp
         Geometry/Cube.hpp
         Geometry/MathFunctions.hpp
         Geometry/MeshData.hpp
@@ -126,7 +105,6 @@ set(HEADERS
         Util/Input.hpp
         Util/Json.hpp
         Util/MousePicking.hpp
-        Util/Node.hpp
         Util/RayIntersection.hpp
         Util/Profiling.hpp
         Util/Settings.hpp
@@ -140,8 +118,7 @@ set(EMBEDDED_INPUT
     ../../assets/Camera.png
     ../../assets/DefaultAlbedo.png
     ../../assets/DefaultNormal.png
-    ../../assets/DefaultMetallic.png
-    ../../assets/DefaultRoughness.png
+    ../../assets/DefaultRoughnessMetallic.png
     ../../assets/Light.png
     ../../assets/SoundSource.png
 )

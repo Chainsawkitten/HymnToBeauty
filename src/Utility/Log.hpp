@@ -48,6 +48,13 @@ class Log {
      */
     Log& operator<<(const unsigned int value);
 
+    /// Output an unsigned long to stderr.
+    /**
+     * @param value Value to output.
+     * @return The %Log instance.
+     */
+    Log& operator<<(const uint64_t value);
+
     /// Output a float to stderr.
     /**
      * @param value Value to output.

@@ -1,7 +1,6 @@
 #include "Renderer.hpp"
 
 #include "RenderProgram/StaticRenderProgram.hpp"
-#include "RenderProgram/SkinRenderProgram.hpp"
 #include "PostProcessing/PostProcessing.hpp"
 #include "Texture/Texture2D.hpp"
 #include "LowLevelRenderer/Interface/CommandBuffer.hpp"
@@ -48,7 +47,6 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
     commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     staticRenderProgram = new StaticRenderProgram(lowLevelRenderer);
-    skinRenderProgram = new SkinRenderProgram(lowLevelRenderer);
 
     postProcessing = new PostProcessing(lowLevelRenderer, postProcessingTexture);
 
@@ -94,7 +92,6 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 
 Renderer::~Renderer() {
     delete staticRenderProgram;
-    delete skinRenderProgram;
 
     delete postProcessing;
 
@@ -162,26 +159,8 @@ void Renderer::PrepareStaticMeshRendering(const glm::mat4& viewMatrix, const glm
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 }
 
-void Renderer::RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* metallic, const Texture2D* roughness, const glm::mat4 modelMatrix) {
-    staticRenderProgram->Render(*commandBuffer, geometry, albedo, normal, metallic, roughness, modelMatrix);
-}
-
-void Renderer::PrepareSkinMeshDepthRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    skinRenderProgram->PreDepthRender(*commandBuffer, viewMatrix, projectionMatrix);
-    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
-}
-
-void Renderer::DepthRenderSkinMesh(Geometry::Geometry3D* geometry, const glm::mat4& modelMatrix, const std::vector<glm::mat4>& bones) {
-    skinRenderProgram->DepthRender(*commandBuffer, geometry, modelMatrix, bones);
-}
-
-void Renderer::PrepareSkinMeshRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float cameraNear, float cameraFar) {
-    skinRenderProgram->PreRender(*commandBuffer, viewMatrix, projectionMatrix, lightBuffer, lightCount);
-    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
-}
-
-void Renderer::RenderSkinMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* metallic, const Texture2D* roughness, const glm::mat4 modelMatrix, const std::vector<glm::mat4>& bones) {
-    skinRenderProgram->Render(*commandBuffer, geometry, albedo, normal, metallic, roughness, modelMatrix, bones);
+void Renderer::RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* roughnessMetallic, const glm::mat4 modelMatrix) {
+    staticRenderProgram->Render(*commandBuffer, geometry, albedo, normal, roughnessMetallic, modelMatrix);
 }
 
 void Renderer::SetLights(const std::vector<Light>& lights) {
@@ -259,11 +238,9 @@ void Renderer::ConfigurePostProcessing(const PostProcessing::Configuration& conf
 
 void Renderer::SetGamma(float gamma) {
     staticRenderProgram->SetGamma(gamma);
-    skinRenderProgram->SetGamma(gamma);
 }
 
 float Renderer::GetGamma() const {
-    assert(staticRenderProgram->GetGamma() == skinRenderProgram->GetGamma());
     return staticRenderProgram->GetGamma();
 }
 

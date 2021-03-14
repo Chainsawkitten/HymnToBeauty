@@ -6,14 +6,11 @@ set(SRCS
     Geometry/Geometry2D.cpp
     Geometry/Geometry3D.cpp
     Geometry/Rectangle.cpp
-    Geometry/VertexType/SkinVertex.cpp
     Geometry/VertexType/StaticVertex.cpp
     PostProcessing/PostProcessing.cpp
     RenderProgram/RenderProgram.cpp
-    RenderProgram/SkinRenderProgram.cpp
     RenderProgram/StaticRenderProgram.cpp
     Texture/Texture2D.cpp
-    Texture/TexturePNG.cpp
 )
 
 set(HEADERS
@@ -24,15 +21,12 @@ set(HEADERS
     Geometry/Geometry2D.hpp
     Geometry/Geometry3D.hpp
     Geometry/Rectangle.hpp
-    Geometry/VertexType/SkinVertex.hpp
     Geometry/VertexType/StaticVertex.hpp
     Lighting/Light.hpp
     PostProcessing/PostProcessing.hpp
     RenderProgram/RenderProgram.hpp
-    RenderProgram/SkinRenderProgram.hpp
     RenderProgram/StaticRenderProgram.hpp
     Texture/Texture2D.hpp
-    Texture/TexturePNG.hpp
     LowLevelRenderer/Interface/LowLevelRenderer.hpp
     LowLevelRenderer/Interface/Buffer.hpp
     LowLevelRenderer/Interface/CommandBuffer.hpp
@@ -133,14 +127,12 @@ set(SHADERS
     shaders/Default3D.vert
     shaders/Default3D.frag
     shaders/DepthPrePass.frag
-    shaders/DepthPrePassSkin.vert
     shaders/DepthPrePassStatic.vert
     shaders/EditorEntity.vert
     shaders/EditorEntity.frag
     shaders/FXAA.frag
     shaders/PostProcessing.vert
     shaders/SampleTexture.frag
-    shaders/Skinning.vert
     shaders/UberPostProcessing.frag
 )
 
@@ -154,7 +146,7 @@ set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${SHADER_HEADER})
 create_directory_groups(${SRCS} ${HEADERS})
 
 add_library(Video STATIC ${SRCS} ${HEADERS} ${SHADER_SOURCE})
-target_link_libraries(Video Utility assimp ${API_LIBRARIES} glfw ${GLFW_LIBRARIES} glm jsoncpp_lib_static stb ShaderSource)
+target_link_libraries(Video Utility ${API_LIBRARIES} glfw ${GLFW_LIBRARIES} glm jsoncpp_lib_static stb ShaderSource)
 
 set_property(TARGET Video PROPERTY CXX_STANDARD 11)
 set_property(TARGET Video PROPERTY CXX_STANDARD_REQUIRED ON)

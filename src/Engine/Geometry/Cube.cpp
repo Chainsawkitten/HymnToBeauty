@@ -122,7 +122,3 @@ Cube::Cube(Video::LowLevelRenderer* lowLevelRenderer) : Video::Geometry::Geometr
 }
 
 Cube::~Cube() {}
-
-Video::Geometry::Geometry3D::Type Cube::GetType() const {
-    return STATIC;
-}

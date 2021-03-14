@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Editors/AnimationClipEditor.hpp"
-#include "Editors/AnimationControllerEditor.hpp"
-#include "Editors/SkeletonEditor.hpp"
-#include "Editors/ModelEditor.hpp"
+#include "Editors/GLTFEditor.hpp"
 #include "Editors/SceneEditor.hpp"
 #include "Editors/SoundEditor.hpp"
 #include "Editors/ScriptEditor.hpp"
@@ -86,12 +83,9 @@ class ResourceView {
 
     bool visible = false;
 
-    AnimationClipEditor animationClipEditor;
-    AnimationControllerEditor animationControllerEditor;
-    SkeletonEditor skeletonEditor;
     ScriptEditor scriptEditor;
     SceneEditor sceneEditor;
-    ModelEditor modelEditor;
+    GLTFEditor gltfEditor;
     TextureEditor textureEditor;
     SoundEditor soundEditor;
 
@@ -113,12 +107,9 @@ class ResourceView {
     int editorWidth = 250;
     bool editorResize = false;
 
-    bool animationClipPressed;
-    bool animationControllerPressed;
-    bool skeletonPressed;
     bool scriptPressed;
     bool texturePressed;
-    bool modelPressed;
+    bool gltfPressed;
     bool soundPressed;
 };
 } // namespace GUI

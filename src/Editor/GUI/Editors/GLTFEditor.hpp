@@ -1,27 +1,24 @@
 #pragma once
 
 #include <string>
-
-class ScriptFile;
+#include <Editor/Util/GLTFImporter.hpp>
 
 namespace GUI {
-/// Used to edit a script.
-class ScriptEditor {
+/// Used to import GLTF models.
+class GLTFEditor {
   public:
+    /// Constructor.
+    GLTFEditor();
+
     /// Show the editor.
     void Show();
 
-    /// Get the script file being edited
+    /// Set file to import.
     /**
-     * @return The script file being edited.
+     * @param path Path.
+     * @param filename Filename.
      */
-    const ScriptFile* GetScript() const;
-
-    /// Set the script file to edit.
-    /**
-     * @param script %Script file to edit.
-     */
-    void SetScript(ScriptFile* script);
+    void SetFile(const std::string& path, const std::string& filename);
 
     /// Get whether the window is visible.
     /**
@@ -36,11 +33,10 @@ class ScriptEditor {
     void SetVisible(bool visible);
 
   private:
-    enum Status { UNKNOWN, SUCCESS, FAILURE } status = UNKNOWN;
-
-    ScriptFile* script = nullptr;
     bool visible = false;
+    std::string path;
+    std::string filename;
 
-    char name[128];
+    GLTFImporter gltfImporter;
 };
 } // namespace GUI

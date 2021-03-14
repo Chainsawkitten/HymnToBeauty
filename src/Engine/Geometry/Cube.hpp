@@ -16,8 +16,6 @@ class Cube : public Video::Geometry::Geometry3D {
     /// Destructor.
     ~Cube() final;
 
-    Type GetType() const override;
-
   private:
     std::vector<Video::Geometry::VertexType::StaticVertex> vertices;
     std::vector<unsigned int> indices;

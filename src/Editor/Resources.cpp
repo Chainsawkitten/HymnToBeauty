@@ -1,9 +1,7 @@
 #include "Resources.hpp"
 
+#include <fstream>
 #include <Engine/Texture/TextureAsset.hpp>
-#include <Engine/Animation/AnimationClip.hpp>
-#include <Engine/Animation/AnimationController.hpp>
-#include <Engine/Animation/Skeleton.hpp>
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Audio/SoundFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
@@ -18,12 +16,6 @@ string ResourceList::Resource::GetName() const {
     switch (type) {
     case Type::SCENE:
         return *scene;
-    case Type::ANIMATION_CLIP:
-        return animationClip->name;
-    case Type::ANIMATION_CONTROLLER:
-        return animationController->name;
-    case Type::SKELETON:
-        return skeleton->name;
     case Type::MODEL:
         return model->name;
     case Type::TEXTURE:
@@ -32,6 +24,8 @@ string ResourceList::Resource::GetName() const {
         return sound->name;
     case Type::SCRIPT:
         return script->name;
+    case Type::GLTF:
+        return filename;
     default:
         return "";
     }
@@ -58,11 +52,7 @@ Json::Value ResourceList::ToJson() const {
     Json::Value root;
 
     root["activeScene"] = activeScene;
-    root["resourceFolder"] = SaveFolder(resourceFolder);
     root["sceneNumber"] = sceneNumber;
-    root["animationClipNumber"] = animationClipNumber;
-    root["animationControllerNumber"] = animationControllerNumber;
-    root["skeletonNumber"] = skeletonNumber;
     root["modelNumber"] = modelNumber;
     root["textureNumber"] = textureNumber;
     root["soundNumber"] = soundNumber;
@@ -79,11 +69,8 @@ void ResourceList::Load() {
     file.close();
 
     activeScene = root["activeScene"].asString();
-    resourceFolder = LoadFolder(root["resourceFolder"], "");
+    resourceFolder = LoadFolder("Resources", "");
     sceneNumber = root["sceneNumber"].asUInt();
-    animationClipNumber = root["animationClipNumber"].asUInt();
-    animationControllerNumber = root["animationControllerNumber"].asUInt();
-    skeletonNumber = root["skeletonNumber"].asUInt();
     modelNumber = root["modelNumber"].asUInt();
     textureNumber = root["textureNumber"].asUInt();
     soundNumber = root["soundNumber"].asUInt();
@@ -95,115 +82,53 @@ void ResourceList::Clear() {
     resourceFolder.name = "Resources";
 
     sceneNumber = 0U;
-    animationClipNumber = 0U;
-    animationControllerNumber = 0U;
-    skeletonNumber = 0U;
     modelNumber = 0U;
     textureNumber = 0U;
     soundNumber = 0U;
     scriptNumber = 0U;
 }
 
-Json::Value ResourceList::SaveFolder(const ResourceFolder& folder) const {
-    Json::Value node;
-    node["name"] = folder.name;
-
-    // Save subfolders.
-    Json::Value subfolders;
-    for (const ResourceFolder& subfolder : folder.subfolders)
-        subfolders.append(SaveFolder(subfolder));
-
-    node["subfolders"] = subfolders;
-
-    // Save resources.
-    Json::Value resourcesNode;
-    for (const Resource& resource : folder.resources) {
-        Json::Value resourceNode;
-        resourceNode["type"] = resource.type;
-
-        switch (resource.type) {
-        case Resource::SCENE:
-            resourceNode["scene"] = *resource.scene;
-            break;
-        case Resource::ANIMATION_CLIP:
-            resourceNode["animationClip"] = resource.animationClip->name;
-            break;
-        case Resource::ANIMATION_CONTROLLER:
-            resourceNode["animationController"] = resource.animationController->name;
-            break;
-        case Resource::SKELETON:
-            resourceNode["skeleton"] = resource.skeleton->name;
-            break;
-        case Resource::MODEL:
-            resourceNode["model"] = resource.model->name;
-            resource.model->Save();
-            break;
-        case Resource::TEXTURE:
-            resourceNode["texture"] = resource.texture->name;
-            resource.texture->Save();
-            break;
-        case Resource::SOUND:
-            resourceNode["sound"] = resource.sound->name;
-            resource.sound->Save();
-            break;
-        case Resource::SCRIPT:
-            resourceNode["script"] = resource.script->name;
-            resource.script->Save();
-            break;
-        }
-
-        resourcesNode.append(resourceNode);
-    }
-    node["resources"] = resourcesNode;
-
-    return node;
-}
-
-ResourceList::ResourceFolder ResourceList::LoadFolder(const Json::Value& node, std::string path) {
+ResourceList::ResourceFolder ResourceList::LoadFolder(const string& name, std::string path) {
     ResourceFolder folder;
-    folder.name = node["name"].asString();
+    folder.name = name;
     path += folder.name + "/";
 
     // Load subfolders.
-    Json::Value subfoldersNode = node["subfolders"];
-    for (unsigned int i = 0; i < subfoldersNode.size(); ++i)
-        folder.subfolders.push_back(LoadFolder(subfoldersNode[i], path));
+    std::vector<std::string> subfolders = FileSystem::DirectoryContents(Hymn().GetPath() + FileSystem::DELIMITER + path, FileSystem::DIRECTORY);
+    for (const std::string& dir : subfolders) {
+        folder.subfolders.push_back(LoadFolder(dir, path));
+    }
 
     // Load resources.
-    Json::Value resourcesNode = node["resources"];
-    for (unsigned int i = 0; i < resourcesNode.size(); ++i) {
-        Json::Value resourceNode = resourcesNode[i];
+    std::vector<std::string> files = FileSystem::DirectoryContents(Hymn().GetPath() + FileSystem::DELIMITER + path, FileSystem::FILE);
+    for (const std::string& file : files) {
         Resource resource;
-        resource.type = static_cast<Resource::Type>(resourceNode["type"].asInt());
+        resource.filename = file;
+        std::string extension = file.substr(file.find_last_of(".") + 1);
+        resource.type = ExtensionToType(extension);
 
         switch (resource.type) {
         case Resource::SCENE:
-            resource.scene = new string(resourceNode["scene"].asString());
-            break;
-        case Resource::ANIMATION_CLIP:
-            resource.animationClip = Managers().resourceManager->CreateAnimationClip(path + resourceNode["animationClip"].asString());
-            break;
-        case Resource::ANIMATION_CONTROLLER:
-            resource.animationController = Managers().resourceManager->CreateAnimationController(path + resourceNode["animationController"].asString());
-            break;
-        case Resource::SKELETON:
-            resource.skeleton = Managers().resourceManager->CreateSkeleton(path + resourceNode["skeleton"].asString());
+            resource.scene = new std::string(file);
             break;
         case Resource::MODEL:
-            resource.model = Managers().resourceManager->CreateModel(path + resourceNode["model"].asString());
+            resource.model = Managers().resourceManager->CreateModel(path + file);
             break;
         case Resource::TEXTURE:
-            resource.texture = Managers().resourceManager->CreateTextureAsset(path + resourceNode["texture"].asString());
+            resource.texture = Managers().resourceManager->CreateTextureAsset(path + file);
             break;
         case Resource::SOUND:
-            resource.sound = Managers().resourceManager->CreateSound(path + resourceNode["sound"].asString());
+            resource.sound = Managers().resourceManager->CreateSound(path + file);
             break;
         case Resource::SCRIPT:
-            resource.script = Managers().resourceManager->CreateScriptFile(path + resourceNode["script"].asString());
+            resource.script = Managers().resourceManager->CreateScriptFile(path + file);
+            break;
+        default:
             break;
         }
 
-        folder.resources.push_back(resource);
+        if (resource.type != Resource::INVALID)
+            folder.resources.push_back(resource);
     }
 
     return folder;
@@ -219,15 +144,6 @@ void ResourceList::ClearFolder(ResourceFolder& folder) {
     // Clear resources.
     for (const Resource& resource : folder.resources) {
         switch (resource.type) {
-        case Resource::Type::ANIMATION_CLIP:
-            Managers().resourceManager->FreeAnimationClip(resource.animationClip);
-            break;
-        case Resource::Type::ANIMATION_CONTROLLER:
-            Managers().resourceManager->FreeAnimationController(resource.animationController);
-            break;
-        case Resource::Type::SKELETON:
-            Managers().resourceManager->FreeAnimationController(resource.animationController);
-            break;
         case Resource::Type::MODEL:
             Managers().resourceManager->FreeModel(resource.model);
             break;
@@ -250,6 +166,24 @@ void ResourceList::ClearFolder(ResourceFolder& folder) {
 
 std::string ResourceList::GetSavePath() const {
     return Hymn().GetPath() + FileSystem::DELIMITER + "Resources.json";
+}
+
+ResourceList::Resource::Type ResourceList::ExtensionToType(const std::string& extension) {
+    if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+        return Resource::TEXTURE;
+    } else if (extension == "mesh") {
+        return Resource::MODEL;
+    } else if (extension == "scn") {
+        return Resource::SCENE;
+    } else if (extension == "as") {
+        return Resource::SCRIPT;
+    } else if (extension == "ogg") {
+        return Resource::SOUND;
+    } else if (extension == "gltf") {
+        return Resource::GLTF;
+    }
+
+    return Resource::INVALID;
 }
 
 ResourceList& Resources() {

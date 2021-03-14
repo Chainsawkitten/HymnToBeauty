@@ -5,7 +5,7 @@
 namespace Video {
 class Renderer;
 class LowLevelRenderer;
-class TexturePNG;
+class Texture2D;
 namespace Geometry {
 class Rectangle;
 }
@@ -19,11 +19,6 @@ class SoundFile;
 class AudioMaterial;
 } // namespace Audio
 
-namespace Animation {
-class AnimationClip;
-class AnimationController;
-class Skeleton;
-} // namespace Animation
 class TextureAsset;
 class ScriptFile;
 
@@ -40,45 +35,6 @@ class ResourceManager {
 
     /// Destructor.
     ~ResourceManager();
-
-    /// Create an animation clip.
-    /**
-     * @param name Name of animation clip.
-     * @return The animation clip instance.
-     */
-    Animation::AnimationClip* CreateAnimationClip(const std::string& name);
-
-    /// Free the reference to the animation clip.
-    /**
-     * @param animationClip %Animation clip to dereference.
-     */
-    void FreeAnimationClip(Animation::AnimationClip* animationClip);
-
-    /// Create an animation controller.
-    /**
-     * @param name Name of animation controller.
-     * @return The animation controller instance.
-     */
-    Animation::AnimationController* CreateAnimationController(const std::string& name);
-
-    /// Free the reference to the animation controller.
-    /**
-     * @param animationClip %Animation controller to dereference.
-     */
-    void FreeAnimationController(Animation::AnimationController* animationController);
-
-    /// Create a skeleton.
-    /**
-     * @param name Name of skeleton.
-     * @return The skeleton instance.
-     */
-    Animation::Skeleton* CreateSkeleton(const std::string& name);
-
-    /// Free the reference to the skeleton.
-    /**
-     * @param skeleton %Skeleton to dereference.
-     */
-    void FreeSkeleton(Animation::Skeleton* skeleton);
 
     /// Create a model if it doesn't already exist.
     /**
@@ -97,16 +53,16 @@ class ResourceManager {
     /**
      * @param data Image file data.
      * @param dataLength Length of the image file data.
-     * @return The %TexturePNG instance
+     * @return The %Texture2D instance
      */
-    Video::TexturePNG* CreateTexturePNG(const char* data, int dataLength);
+    Video::Texture2D* CreateTexture2D(const char* data, int dataLength);
 
     /// Free the reference to the 2D texture.
     /**
      * Deletes the instance if no more references exist.
      * @param texture %Texture to dereference.
      */
-    void FreeTexturePNG(Video::TexturePNG* texture);
+    void FreeTexture2D(Video::Texture2D* texture);
 
     /// Create a texture asset if it doesn't already exist.
     /**
@@ -169,17 +125,11 @@ class ResourceManager {
      */
     TextureAsset* GetDefaultNormal();
 
-    /// Get the default metallic texture.
+    /// Get the default roughness-metallic texture.
     /**
-     * @return The default metallic texture.
+     * @return The default roughness-metallic texture.
      */
-    TextureAsset* GetDefaultMetallic();
-
-    /// Get the default roughness texture.
-    /**
-     * @return The default roughness texture.
-     */
-    TextureAsset* GetDefaultRoughness();
+    TextureAsset* GetDefaultRoughnessMetallic();
 
   private:
     ResourceManager(ResourceManager const&) = delete;
@@ -204,37 +154,13 @@ class ResourceManager {
     std::map<std::string, ModelInstance> models;
     std::map<Geometry::Model*, std::string> modelsInverse;
 
-    // Animation clip.
-    struct AnimationClipInstance {
-        Animation::AnimationClip* animationClip;
+    // Texture2D.
+    struct Texture2DInstance {
+        Video::Texture2D* texture;
         int count;
     };
-    std::map<std::string, AnimationClipInstance> animationClips;
-    std::map<Animation::AnimationClip*, std::string> animationClipsInverse;
-
-    // Animation controller.
-    struct AnimationControllerInstance {
-        Animation::AnimationController* animationController;
-        int count;
-    };
-    std::map<std::string, AnimationControllerInstance> animationControllers;
-    std::map<Animation::AnimationController*, std::string> animationControllersInverse;
-
-    // Skeleton.
-    struct SkeletonInstance {
-        Animation::Skeleton* skeleton;
-        int count;
-    };
-    std::map<std::string, SkeletonInstance> skeletons;
-    std::map<Animation::Skeleton*, std::string> skeletonsInverse;
-
-    // TexturePNG.
-    struct TexturePNGInstance {
-        Video::TexturePNG* texture;
-        int count;
-    };
-    std::map<const char*, TexturePNGInstance> textures;
-    std::map<Video::TexturePNG*, const char*> texturesInverse;
+    std::map<const char*, Texture2DInstance> textures;
+    std::map<Video::Texture2D*, const char*> texturesInverse;
 
     // Texture asset.
     struct TextureAssetInstance {
@@ -262,6 +188,5 @@ class ResourceManager {
 
     TextureAsset* defaultAlbedo;
     TextureAsset* defaultNormal;
-    TextureAsset* defaultMetallic;
-    TextureAsset* defaultRoughness;
+    TextureAsset* defaultRoughnessMetallic;
 };

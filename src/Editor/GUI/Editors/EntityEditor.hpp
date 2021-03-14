@@ -7,10 +7,8 @@
 #include <Engine/Entity/Entity.hpp>
 #include <imgui.h>
 #include "../ResourceSelector.hpp"
-#include <Engine/Geometry/AssetFileHandler.hpp>
 
 namespace Component {
-class AnimationController;
 class Mesh;
 class Lens;
 class Material;
@@ -79,7 +77,6 @@ class EntityEditor {
     template <typename type> void EditComponent(const std::string& name, std::function<void(type*)> editorFunction);
 
     // Editors
-    void AnimationControllerEditor(Component::AnimationController* animationController);
     void MeshEditor(Component::Mesh* mesh);
     void LensEditor(Component::Lens* lens);
     void MaterialEditor(Component::Material* material);
@@ -113,8 +110,7 @@ class EntityEditor {
 
     bool albedoShow = false;
     bool normalShow = false;
-    bool metallicShow = false;
-    bool roughnessShow = false;
+    bool roughnessMetallicShow = false;
 };
 } // namespace GUI
 

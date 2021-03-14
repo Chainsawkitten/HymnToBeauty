@@ -14,12 +14,6 @@ namespace Geometry {
 /// Renderable 3D geometry.
 class Geometry3D {
   public:
-    /// Type of layout of vertex points.
-    enum Type {
-        STATIC = 0, ///< Default3D vertex layout (Default3D.vert).
-        SKIN        ///< Skinning vertex layout (Skinning.vert).
-    };
-
     /// Create new 3D geometry.
     /**
      * @param lowLevelRenderer The low-level renderer to use.
@@ -47,12 +41,6 @@ class Geometry3D {
      */
     const AxisAlignedBoundingBox& GetAxisAlignedBoundingBox() const;
 
-    /// Get geometry type.
-    /**
-     * @return Type.
-     */
-    virtual Type GetType() const = 0;
-
     /// Get vertex position vector.
     /**
      * @return Vertex positions.
@@ -71,7 +59,7 @@ class Geometry3D {
      * @param indexData Pointer to array of indices.
      * @param indexCount Number of indices.
      */
-    void GenerateIndexBuffer(unsigned int* indexData, unsigned int indexCount);
+    void GenerateIndexBuffer(uint32_t* indexData, unsigned int indexCount);
 
     /// Generate geometry binding.
     void GenerateGeometryBinding();
