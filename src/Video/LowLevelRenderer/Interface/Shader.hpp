@@ -11,6 +11,7 @@ class Shader {
     enum class Type {
         VERTEX_SHADER, ///< Vertex shader.
         FRAGMENT_SHADER, ///< Fragment shader.
+        COMPUTE_SHADER, ///< Compute shader.
     };
 
     /// Create a new shader.

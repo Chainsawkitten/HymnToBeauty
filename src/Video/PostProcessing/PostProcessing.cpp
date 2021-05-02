@@ -96,7 +96,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
     commandBuffer.BeginRenderPass(hasFxaaPass ? tempRenderPass : outputRenderPass, "Uber post-processing");
     commandBuffer.BindGraphicsPipeline(uberPipeline);
     commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
-    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::FRAGMENT_UNIFORMS, uberUniformBuffer);
+    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, uberUniformBuffer);
     commandBuffer.BindMaterial({inputTexture});
     commandBuffer.Draw(3);
 
@@ -107,7 +107,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
         commandBuffer.BeginRenderPass(outputRenderPass, "FXAA");
         commandBuffer.BindGraphicsPipeline(fxaaPipeline);
         commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
-        commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::FRAGMENT_UNIFORMS, fxaaUniformBuffer);
+        commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fxaaUniformBuffer);
         commandBuffer.BindMaterial({tempTexture});
         commandBuffer.Draw(3);
     }

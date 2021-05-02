@@ -12,6 +12,7 @@
 #include "OpenGLTexture.hpp"
 #include "OpenGLRenderPass.hpp"
 #include "OpenGLGraphicsPipeline.hpp"
+#include "OpenGLComputePipeline.hpp"
 
 #include "PostProcessing.vert.hpp"
 #include "SampleTexture.frag.hpp"
@@ -161,6 +162,10 @@ RenderPass* OpenGLRenderer::CreateRenderPass(Texture* colorAttachment, RenderPas
 
 GraphicsPipeline* OpenGLRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
     return new OpenGLGraphicsPipeline(shaderProgram, configuration);
+}
+
+ComputePipeline* OpenGLRenderer::CreateComputePipeline(const ShaderProgram* shaderProgram) {
+    return new OpenGLComputePipeline(shaderProgram);
 }
 
 void OpenGLRenderer::Wait() {

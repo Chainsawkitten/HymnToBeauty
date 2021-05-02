@@ -7,7 +7,7 @@ layout(location = 0) out vec4 outColor;
 
 MATERIAL(0, colorSampler)
 
-FRAGMENT_UNIFORMS
+UNIFORMS
 {
     float gamma;
 } uniforms;

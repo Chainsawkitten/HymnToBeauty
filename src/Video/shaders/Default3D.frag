@@ -30,7 +30,7 @@ MATERIAL(0, mapAlbedo)
 MATERIAL(1, mapNormal)
 MATERIAL(2, mapRoughnessMetallic)
 
-FRAGMENT_UNIFORMS
+UNIFORMS
 {
     int lightCount;
     float gamma;

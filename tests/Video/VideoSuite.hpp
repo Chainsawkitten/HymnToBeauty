@@ -131,3 +131,11 @@ bool DrawLines(void* data);
  * @return Whether the test was successful.
  */
 bool MultipleFrames(void* data);
+
+/// Test setting buffer contents in a compute shader.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool ComputeSetBuffer(void* data);

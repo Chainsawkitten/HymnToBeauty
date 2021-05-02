@@ -108,7 +108,7 @@ void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
     fragmentUniforms.gamma = gamma;
 
     fragmentUniformBuffer->Write(&fragmentUniforms);
-    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::FRAGMENT_UNIFORMS, fragmentUniformBuffer);
+    commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fragmentUniformBuffer);
 
     // Light storage buffer.
     commandBuffer.BindStorageBuffer(lightBuffer);

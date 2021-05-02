@@ -50,7 +50,7 @@ class VulkanShaderProgram : public ShaderProgram {
     void AddUniformBuffer(BindingType bindingType);
     void AddStorageBuffer();
     void AddMaterial(unsigned int textures);
-    void AddPushConstants(unsigned int pushConstantCount, ShaderSource::ReflectionInfo::PushConstant* pushConstants);
+    void AddPushConstants(unsigned int pushConstantCount, ShaderSource::ReflectionInfo::PushConstant* pushConstants, bool isComputeShader);
 
     VulkanRenderer* vulkanRenderer;
 

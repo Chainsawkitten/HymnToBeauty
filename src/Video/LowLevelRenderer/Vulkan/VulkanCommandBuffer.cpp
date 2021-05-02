@@ -5,6 +5,7 @@
 #include "VulkanRenderPass.hpp"
 #include "VulkanBuffer.hpp"
 #include "VulkanGraphicsPipeline.hpp"
+#include "VulkanComputePipeline.hpp"
 #include "VulkanGeometryBinding.hpp"
 #include "VulkanShaderProgram.hpp"
 #include "VulkanTexture.hpp"
@@ -132,6 +133,7 @@ void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::str
     }
 
     inRenderPass = true;
+    currentComputePipeline = nullptr;
 }
 
 void VulkanCommandBuffer::EndRenderPass() {
@@ -152,6 +154,7 @@ void VulkanCommandBuffer::EndRenderPass() {
     }
 
     inRenderPass = false;
+    currentGraphicsPipeline = nullptr;
 }
 
 void VulkanCommandBuffer::BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) {
@@ -226,22 +229,32 @@ void VulkanCommandBuffer::BindGeometry(const GeometryBinding* geometryBinding) {
 }
 
 void VulkanCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) {
-    assert(inRenderPass);
-    assert(currentGraphicsPipeline != nullptr);
     assert(uniformBuffer != nullptr && uniformBuffer->GetBufferUsage() == Buffer::BufferUsage::UNIFORM_BUFFER);
-    assert(bindingType == ShaderProgram::BindingType::MATRICES || bindingType == ShaderProgram::BindingType::FRAGMENT_UNIFORMS);
+    assert(bindingType == ShaderProgram::BindingType::MATRICES || bindingType == ShaderProgram::BindingType::UNIFORMS);
 
     VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(bindingType, static_cast<VulkanBuffer*>(uniformBuffer));
-    vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), bindingType, 1, &descriptorSet, 0, nullptr);
+
+    if (inRenderPass) {
+        assert(currentGraphicsPipeline != nullptr);
+        vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), bindingType, 1, &descriptorSet, 0, nullptr);
+    } else {
+        assert(currentComputePipeline != nullptr);
+        vkCmdBindDescriptorSets(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipelineLayout(), bindingType, 1, &descriptorSet, 0, nullptr);
+    }
 }
 
 void VulkanCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
-    assert(inRenderPass);
-    assert(currentGraphicsPipeline != nullptr);
     assert(storageBuffer != nullptr && storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER);
 
     VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(ShaderProgram::BindingType::STORAGE_BUFFER, static_cast<VulkanBuffer*>(storageBuffer));
-    vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), ShaderProgram::BindingType::STORAGE_BUFFER, 1, &descriptorSet, 0, nullptr);
+
+    if (inRenderPass) {
+        assert(currentGraphicsPipeline != nullptr);
+        vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), ShaderProgram::BindingType::STORAGE_BUFFER, 1, &descriptorSet, 0, nullptr);
+    } else {
+        assert(currentComputePipeline != nullptr);
+        vkCmdBindDescriptorSets(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipelineLayout(), ShaderProgram::BindingType::STORAGE_BUFFER, 1, &descriptorSet, 0, nullptr);
+    }
 }
 
 void VulkanCommandBuffer::BindMaterial(std::initializer_list<const Texture*> textures) {
@@ -259,13 +272,21 @@ void VulkanCommandBuffer::BindMaterial(std::initializer_list<const Texture*> tex
 }
 
 void VulkanCommandBuffer::PushConstants(const void* data) {
-    assert(inRenderPass);
     assert(data != nullptr);
 
-    const VkPushConstantRange* pushConstantRange = currentGraphicsPipeline->GetShaderProgram()->GetPushConstantRange();
-    assert(pushConstantRange != nullptr);
+    if (inRenderPass) {
+        assert(currentGraphicsPipeline != nullptr);
+        const VkPushConstantRange* pushConstantRange = currentGraphicsPipeline->GetShaderProgram()->GetPushConstantRange();
+        assert(pushConstantRange != nullptr);
 
-    vkCmdPushConstants(renderPassCommandBuffer, currentGraphicsPipeline->GetPipelineLayout(), VK_SHADER_STAGE_ALL_GRAPHICS, pushConstantRange->offset, pushConstantRange->size, data);
+        vkCmdPushConstants(renderPassCommandBuffer, currentGraphicsPipeline->GetPipelineLayout(), VK_SHADER_STAGE_ALL_GRAPHICS, pushConstantRange->offset, pushConstantRange->size, data);
+    } else {
+        assert(currentComputePipeline != nullptr);
+        const VkPushConstantRange* pushConstantRange = currentComputePipeline->GetShaderProgram()->GetPushConstantRange();
+        assert(pushConstantRange != nullptr);
+
+        vkCmdPushConstants(commandBuffer[currentFrame], currentComputePipeline->GetPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, pushConstantRange->offset, pushConstantRange->size, data);
+    }
 }
 
 void VulkanCommandBuffer::Draw(unsigned int vertexCount, unsigned int firstVertex) {
@@ -323,6 +344,33 @@ void VulkanCommandBuffer::BlitToSwapChain(Texture* texture) {
     containsBlitToSwapChain = true;
 }
 
+void VulkanCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) {
+    assert(!inRenderPass);
+    assert(computePipeline != nullptr);
+
+    currentComputePipeline = static_cast<VulkanComputePipeline*>(computePipeline);
+
+    vkCmdBindPipeline(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipeline());
+}
+
+void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
+    assert(!inRenderPass);
+
+    /// @todo Resource tracking so we can have less conservative barriers.
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+
+    vkCmdPipelineBarrier(commandBuffer[currentFrame], VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+
+    vkCmdDispatch(commandBuffer[currentFrame], numGroups.x, numGroups.y, numGroups.z);
+
+    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+    memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+    vkCmdPipelineBarrier(commandBuffer[currentFrame], VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+}
+
 VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const {
     return commandBuffer[currentFrame];
 }
@@ -376,6 +424,9 @@ void VulkanCommandBuffer::Begin() {
     if (vkBeginCommandBuffer(commandBuffer[currentFrame], &beginInfo) != VK_SUCCESS) {
         Log(Log::ERR) << "Failed to begin command buffer.\n";
     }
+
+    currentGraphicsPipeline = nullptr;
+    currentComputePipeline = nullptr;
 }
 
 void VulkanCommandBuffer::TransitionTexture(const VulkanTexture* texture, VkImageLayout destinationImageLayout) {

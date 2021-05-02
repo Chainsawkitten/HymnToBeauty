@@ -12,6 +12,7 @@
 #include "VulkanTexture.hpp"
 #include "VulkanRenderPass.hpp"
 #include "VulkanGraphicsPipeline.hpp"
+#include "VulkanComputePipeline.hpp"
 #include "VulkanUtility.hpp"
 
 #include <glfw/glfw3.h>
@@ -233,6 +234,10 @@ GraphicsPipeline* VulkanRenderer::CreateGraphicsPipeline(const ShaderProgram* sh
     return new VulkanGraphicsPipeline(*this, device, shaderProgram, configuration, vertexDescription);
 }
 
+ComputePipeline* VulkanRenderer::CreateComputePipeline(const ShaderProgram* shaderProgram) {
+    return new VulkanComputePipeline(device, shaderProgram);
+}
+
 void VulkanRenderer::Wait() {
     vkDeviceWaitIdle(device);
 }
@@ -362,7 +367,7 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(ShaderProgram::BindingType bind
         VkDescriptorType descriptorType;
         switch (bindingType) {
         case ShaderProgram::BindingType::MATRICES:
-        case ShaderProgram::BindingType::FRAGMENT_UNIFORMS:
+        case ShaderProgram::BindingType::UNIFORMS:
             descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             break;
         case ShaderProgram::BindingType::STORAGE_BUFFER:
@@ -928,14 +933,14 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
 
         bufferDescriptorSetLayouts[ShaderProgram::BindingType::MATRICES] = descriptorSetLayout;
 
-        // FRAGMENT_UNIFORMS
-        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        // UNIFORMS
+        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
         
         if (vkCreateDescriptorSetLayout(device, &layoutCreateInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
             Log(Log::ERR) << "Failed to create descriptor set layout.\n";
         }
 
-        bufferDescriptorSetLayouts[ShaderProgram::BindingType::FRAGMENT_UNIFORMS] = descriptorSetLayout;
+        bufferDescriptorSetLayouts[ShaderProgram::BindingType::UNIFORMS] = descriptorSetLayout;
     }
 
     // STORAGE_BUFFER
@@ -944,7 +949,7 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
         ssboLayoutBinding.binding = 0;
         ssboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         ssboLayoutBinding.descriptorCount = 1;
-        ssboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        ssboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
 
         layoutCreateInfo.pBindings = &ssboLayoutBinding;
         

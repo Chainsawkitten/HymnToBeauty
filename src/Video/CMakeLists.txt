@@ -30,6 +30,7 @@ set(HEADERS
     LowLevelRenderer/Interface/LowLevelRenderer.hpp
     LowLevelRenderer/Interface/Buffer.hpp
     LowLevelRenderer/Interface/CommandBuffer.hpp
+    LowLevelRenderer/Interface/ComputePipeline.hpp
     LowLevelRenderer/Interface/GeometryBinding.hpp
     LowLevelRenderer/Interface/GraphicsPipeline.hpp
     LowLevelRenderer/Interface/RenderPass.hpp
@@ -56,6 +57,7 @@ if(OpenGLRenderer)
         LowLevelRenderer/OpenGL/OpenGLRenderer.cpp
         LowLevelRenderer/OpenGL/OpenGLBuffer.cpp
         LowLevelRenderer/OpenGL/OpenGLCommandBuffer.cpp
+        LowLevelRenderer/OpenGL/OpenGLComputePipeline.cpp
         LowLevelRenderer/OpenGL/OpenGLGeometryBinding.cpp
         LowLevelRenderer/OpenGL/OpenGLGraphicsPipeline.cpp
         LowLevelRenderer/OpenGL/OpenGLRenderPass.cpp
@@ -70,6 +72,7 @@ if(OpenGLRenderer)
         LowLevelRenderer/OpenGL/OpenGLRenderer.hpp
         LowLevelRenderer/OpenGL/OpenGLBuffer.hpp
         LowLevelRenderer/OpenGL/OpenGLCommandBuffer.hpp
+        LowLevelRenderer/OpenGL/OpenGLComputePipeline.hpp
         LowLevelRenderer/OpenGL/OpenGLGeometryBinding.hpp
         LowLevelRenderer/OpenGL/OpenGLGraphicsPipeline.hpp
         LowLevelRenderer/OpenGL/OpenGLRenderPass.hpp
@@ -94,6 +97,7 @@ if(VulkanRenderer)
         LowLevelRenderer/Vulkan/VulkanRenderer.cpp
         LowLevelRenderer/Vulkan/VulkanBuffer.cpp
         LowLevelRenderer/Vulkan/VulkanCommandBuffer.cpp
+        LowLevelRenderer/Vulkan/VulkanComputePipeline.cpp
         LowLevelRenderer/Vulkan/VulkanGeometryBinding.cpp
         LowLevelRenderer/Vulkan/VulkanGraphicsPipeline.cpp
         LowLevelRenderer/Vulkan/VulkanRenderPass.cpp
@@ -109,6 +113,7 @@ if(VulkanRenderer)
         LowLevelRenderer/Vulkan/VulkanRenderer.hpp
         LowLevelRenderer/Vulkan/VulkanBuffer.hpp
         LowLevelRenderer/Vulkan/VulkanCommandBuffer.hpp
+        LowLevelRenderer/Vulkan/VulkanComputePipeline.hpp
         LowLevelRenderer/Vulkan/VulkanGeometryBinding.hpp
         LowLevelRenderer/Vulkan/VulkanGraphicsPipeline.hpp
         LowLevelRenderer/Vulkan/VulkanRenderPass.hpp
