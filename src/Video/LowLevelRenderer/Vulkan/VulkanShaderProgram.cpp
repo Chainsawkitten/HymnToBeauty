@@ -18,15 +18,16 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
     }
 
     for (const Shader* shader : shaders) {
-        this->shaders.push_back(static_cast<const VulkanShader*>(shader));
+        const VulkanShader* vulkanShader = static_cast<const VulkanShader*>(shader);
+        this->shaders.push_back(vulkanShader);
 
-        ShaderSource::ReflectionInfo reflectionInfo = static_cast<const VulkanShader*>(shader)->GetReflectionInfo();
+        ShaderSource::ReflectionInfo reflectionInfo = vulkanShader->GetReflectionInfo();
         if (reflectionInfo.hasMatrices) {
             AddUniformBuffer(BindingType::MATRICES);
         }
 
-        if (reflectionInfo.hasFragmentUniforms) {
-            AddUniformBuffer(BindingType::FRAGMENT_UNIFORMS);
+        if (reflectionInfo.hasUniforms) {
+            AddUniformBuffer(BindingType::UNIFORMS);
         }
 
         if (reflectionInfo.hasStorageBuffer) {
@@ -38,7 +39,7 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
         }
 
         if (reflectionInfo.pushConstantCount > 0) {
-            AddPushConstants(reflectionInfo.pushConstantCount, reflectionInfo.pushConstants);
+            AddPushConstants(reflectionInfo.pushConstantCount, reflectionInfo.pushConstants, vulkanShader->GetShaderStage() == VK_SHADER_STAGE_COMPUTE_BIT);
         }
     }
 }
@@ -60,7 +61,7 @@ const VkPushConstantRange* VulkanShaderProgram::GetPushConstantRange() const {
 }
 
 void VulkanShaderProgram::AddUniformBuffer(BindingType bindingType) {
-    assert(bindingType == BindingType::MATRICES || bindingType == BindingType::FRAGMENT_UNIFORMS);
+    assert(bindingType == BindingType::MATRICES || bindingType == BindingType::UNIFORMS);
 
     /// @todo Check that we're not adding things twice.
 
@@ -77,11 +78,11 @@ void VulkanShaderProgram::AddMaterial(unsigned int textures) {
     descriptorSetLayouts[BindingType::MATERIAL] = vulkanRenderer->GetMaterialDescriptorSetLayout(textures);
 }
 
-void VulkanShaderProgram::AddPushConstants(unsigned int pushConstantCount, ShaderSource::ReflectionInfo::PushConstant* pushConstants) {
+void VulkanShaderProgram::AddPushConstants(unsigned int pushConstantCount, ShaderSource::ReflectionInfo::PushConstant* pushConstants, bool isComputeShader) {
     assert(pushConstantCount > 0 && pushConstants != nullptr);
     assert(!usesPushConstants);
 
-    pushConstantRange.stageFlags = VK_SHADER_STAGE_ALL_GRAPHICS;
+    pushConstantRange.stageFlags = (isComputeShader ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS);
     pushConstantRange.offset = 0;
     pushConstantRange.size = 0;
 

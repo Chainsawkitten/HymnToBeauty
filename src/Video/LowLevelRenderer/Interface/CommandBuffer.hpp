@@ -13,6 +13,7 @@ class Texture;
 class Buffer;
 class RenderPass;
 class GraphicsPipeline;
+class ComputePipeline;
 
 /// A buffer into which rendering commands are recorded.
 class CommandBuffer {
@@ -119,6 +120,18 @@ class CommandBuffer {
      * @param texture The texture to copy to the swap chain.
      */
     virtual void BlitToSwapChain(Texture* texture) = 0;
+
+    /// Bind compute pipeline.
+    /**
+     * @param computePipeline The compute pipeline to bind.
+     */
+    virtual void BindComputePipeline(ComputePipeline* computePipeline) = 0;
+
+    /// Dispatch compute shader.
+    /**
+     * @param numGroups The number of groups in each dimension.
+     */
+    virtual void Dispatch(const glm::uvec3& numGroups) = 0;
 
   private:
     CommandBuffer(const CommandBuffer& other) = delete;

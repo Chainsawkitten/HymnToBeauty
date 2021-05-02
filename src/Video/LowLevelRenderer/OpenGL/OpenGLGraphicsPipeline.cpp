@@ -1,7 +1,6 @@
 #include "OpenGLGraphicsPipeline.hpp"
 
 #include <assert.h>
-#include <Utility/Log.hpp>
 #include "OpenGLShaderProgram.hpp"
 
 namespace Video {

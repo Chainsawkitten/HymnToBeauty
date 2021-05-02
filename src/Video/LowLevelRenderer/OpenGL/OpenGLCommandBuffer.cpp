@@ -12,6 +12,7 @@
 #include "OpenGLBuffer.hpp"
 #include "OpenGLRenderPass.hpp"
 #include "OpenGLGraphicsPipeline.hpp"
+#include "OpenGLComputePipeline.hpp"
 
 namespace Video {
 
@@ -227,7 +228,7 @@ void OpenGLCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
     case ShaderProgram::BindingType::MATRICES:
         command.bindUniformBufferCommand.index = 0;
         break;
-    case ShaderProgram::BindingType::FRAGMENT_UNIFORMS:
+    case ShaderProgram::BindingType::UNIFORMS:
         command.bindUniformBufferCommand.index = 1;
         break;
     default:
@@ -269,6 +270,7 @@ void OpenGLCommandBuffer::BindMaterial(std::initializer_list<const Texture*> tex
 
 void OpenGLCommandBuffer::PushConstants(const void* data) {
     assert(data != nullptr);
+    assert(currentShaderProgram != nullptr);
 
     const std::vector<OpenGLShaderProgram::PushConstant>& pushConstants = currentShaderProgram->GetPushConstants();
     assert(pushConstants.size() > 0);
@@ -326,6 +328,34 @@ void OpenGLCommandBuffer::BlitToSwapChain(Texture* texture) {
     command.type = Command::Type::BLIT_TO_SWAP_CHAIN;
 
     command.blitToSwapChainCommand.texture = static_cast<OpenGLTexture*>(texture)->GetID();
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) {
+    assert(!inRenderPass);
+    assert(computePipeline != nullptr);
+
+    OpenGLComputePipeline* openGLComputePipeline = static_cast<OpenGLComputePipeline*>(computePipeline);
+    currentShaderProgram = openGLComputePipeline->GetShaderProgram();
+
+    Command command = {};
+    command.type = Command::Type::BIND_COMPUTE_PIPELINE;
+
+    command.bindComputePipelineCommand.program = currentShaderProgram->GetID();
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
+    assert(!inRenderPass);
+
+    Command command = {};
+    command.type = Command::Type::DISPATCH;
+
+    command.dispatchCommand.groupsX = numGroups.x;
+    command.dispatchCommand.groupsY = numGroups.y;
+    command.dispatchCommand.groupsZ = numGroups.z;
 
     AddCommand(command);
 }
@@ -550,6 +580,15 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         glBindTexture(GL_TEXTURE_2D, command.blitToSwapChainCommand.texture);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glEnable(GL_SCISSOR_TEST);
+        break;
+    }
+    case Command::Type::BIND_COMPUTE_PIPELINE: {
+        glUseProgram(command.bindComputePipelineCommand.program);
+        break;
+    }
+    case Command::Type::DISPATCH: {
+        glDispatchCompute(command.dispatchCommand.groupsX, command.dispatchCommand.groupsY, command.dispatchCommand.groupsZ);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
         break;
     }
     }

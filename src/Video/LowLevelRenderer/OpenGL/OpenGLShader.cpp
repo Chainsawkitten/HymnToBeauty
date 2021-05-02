@@ -18,6 +18,9 @@ OpenGLShader::OpenGLShader(const ShaderSource& shaderSource, Type type) {
     case Type::FRAGMENT_SHADER:
         shaderType = GL_FRAGMENT_SHADER;
         break;
+    case Type::COMPUTE_SHADER:
+        shaderType = GL_COMPUTE_SHADER;
+        break;
     default:
         assert(false);
     }

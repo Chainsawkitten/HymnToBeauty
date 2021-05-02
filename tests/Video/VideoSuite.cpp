@@ -28,6 +28,8 @@ VideoSuite::VideoSuite(Video::Renderer::GraphicsAPI graphicsAPI) : TestSuite("Vi
     AddTest("DrawLines", DrawLines, &lowLevelRenderer);
 
     AddTest("MultipleFrames", MultipleFrames, &lowLevelRenderer);
+
+    AddTest("ComputeSetBuffer", ComputeSetBuffer, &lowLevelRenderer);
 }
 
 void VideoSuite::Init() {

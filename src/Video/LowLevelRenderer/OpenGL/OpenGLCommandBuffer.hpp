@@ -48,6 +48,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;
     void BlitToSwapChain(Texture* texture) final;
+    void BindComputePipeline(ComputePipeline* computePipeline) final;
+    void Dispatch(const glm::uvec3& numGroups) final;
 
     /// Submit the commands in the command buffer to the GPU.
     void Submit();
@@ -166,6 +168,16 @@ class OpenGLCommandBuffer : public CommandBuffer {
         GLuint texture;
     };
 
+    struct BindComputePipelineCommand {
+        GLuint program;
+    };
+
+    struct DispatchCommand {
+        GLuint groupsX;
+        GLuint groupsY;
+        GLuint groupsZ;
+    };
+
     struct Command {
         union {
             BeginRenderPassCommand beginRenderPassCommand;
@@ -187,6 +199,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
             DrawCommand drawCommand;
             DrawIndexedCommand drawIndexedCommand;
             BlitToSwapChainCommand blitToSwapChainCommand;
+            BindComputePipelineCommand bindComputePipelineCommand;
+            DispatchCommand dispatchCommand;
         };
 
         enum class Type {
@@ -209,7 +223,9 @@ class OpenGLCommandBuffer : public CommandBuffer {
             BIND_STORAGE_BUFFER,
             DRAW,
             DRAW_INDEXED,
-            BLIT_TO_SWAP_CHAIN
+            BLIT_TO_SWAP_CHAIN,
+            BIND_COMPUTE_PIPELINE,
+            DISPATCH
         } type;
     };
 

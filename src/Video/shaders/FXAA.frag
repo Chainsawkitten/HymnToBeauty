@@ -10,7 +10,7 @@ precision mediump float;
 
 MATERIAL(0, colorSampler)
 
-FRAGMENT_UNIFORMS
+UNIFORMS
 {
     highp vec2 screenSize;
     highp float time;

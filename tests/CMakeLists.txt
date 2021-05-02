@@ -1,6 +1,7 @@
 set(SRCS
     main.cpp
     Framework/TestSuite.cpp
+    Video/ComputeTests.cpp
     Video/DrawTests.cpp
     Video/ImageVerification.cpp
     Video/SwapChainTests.cpp
@@ -28,11 +29,14 @@ set(SHADERS
     Video/shaders/InvertColors.frag
     Video/shaders/MultipleFrames.vert
     Video/shaders/MultipleFrames.frag
+    Video/shaders/SetBuffer.comp
+    Video/shaders/StorageBuffer.frag
 )
 
 # Setup images.
 set(IMAGES
     Video/textures/Test.png
+    Video/references/ComputeSetBuffer.png
     Video/references/DepthPrePass.png
     Video/references/DrawLines.png
     Video/references/DrawMipmappedTriangle.png

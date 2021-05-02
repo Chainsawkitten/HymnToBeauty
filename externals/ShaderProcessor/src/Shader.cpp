@@ -106,8 +106,9 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
             outFile << "0, nullptr, ";
         }
         outFile << (reflectionInfo.hasMatrices ? "true" : "false") << ", ";
-        outFile << (reflectionInfo.hasFragmentUniforms ? "true" : "false") << ", ";
+        outFile << (reflectionInfo.hasUniforms ? "true" : "false") << ", ";
         outFile << (reflectionInfo.hasStorageBuffer ? "true" : "false") << ", ";
+        outFile << (reflectionInfo.storageBufferReadWrite ? "true" : "false") << ", ";
         outFile << reflectionInfo.materialCount << ", ";
         outFile << reflectionInfo.pushConstantCount << ", ";
         outFile << (reflectionInfo.pushConstantCount > 0 ? "pushConstants" : "nullptr") << ", ";
@@ -242,12 +243,16 @@ ShaderSource::ReflectionInfo Shader::GetReflectionInfo() const {
                 reflectionInfo.hasMatrices = true;
             }
 
-            if (line.find("FRAGMENT_UNIFORMS") == 0) {
-                reflectionInfo.hasFragmentUniforms = true;
+            if (line.find("UNIFORMS") == 0) {
+                reflectionInfo.hasUniforms = true;
             }
 
-            if (line.find("STORAGE_BUFFER") == 0) {
+            if (line.find("STORAGE_BUFFER_RW") == 0) {
                 reflectionInfo.hasStorageBuffer = true;
+                reflectionInfo.storageBufferReadWrite = true;
+            } else if (line.find("STORAGE_BUFFER") == 0) {
+                reflectionInfo.hasStorageBuffer = true;
+                reflectionInfo.storageBufferReadWrite = false;
             }
 
             if (line.find("MATERIAL") == 0) {
@@ -277,8 +282,9 @@ string Shader::GetDefaultGlslInclude() {
     string glsl = "#define VertexIndex gl_VertexID\n";
     glsl += "#define InstanceIndex gl_InstanceID\n";
     glsl += "#define MATRICES layout(std140, binding = 0) uniform MatrixBlock\n";
-    glsl += "#define FRAGMENT_UNIFORMS layout(std140, binding = 1) uniform FragmentUniformBlock\n";
+    glsl += "#define UNIFORMS layout(std140, binding = 1) uniform FragmentUniformBlock\n";
     glsl += "#define STORAGE_BUFFER layout(std430, binding = 0) readonly buffer StorageBufferBlock\n";
+    glsl += "#define STORAGE_BUFFER_RW layout(std430, binding = 0) buffer StorageBufferBlock\n";
     glsl += "#define PUSH_CONSTANTS uniform struct PushConstants\n";
     glsl += "#define FixPosition() \n";
     glsl += "#define FixFramebufferCoordinates(TEX_COORDS) TEX_COORDS.y = 1.0 - TEX_COORDS.y;\n";
@@ -291,8 +297,9 @@ string Shader::GetDefaultSpirvInclude() {
     string glsl = "#define VertexIndex gl_VertexIndex\n";
     glsl += "#define InstanceIndex gl_InstanceIndex\n";
     glsl += "#define MATRICES layout(std140, set = 0, binding = 0) uniform MatrixBlock\n";
-    glsl += "#define FRAGMENT_UNIFORMS layout(std140, set = 2, binding = 0) uniform FragmentUniformBlock\n";
+    glsl += "#define UNIFORMS layout(std140, set = 2, binding = 0) uniform FragmentUniformBlock\n";
     glsl += "#define STORAGE_BUFFER layout(std430, set = 3, binding = 0) readonly buffer StorageBufferBlock\n";
+    glsl += "#define STORAGE_BUFFER_RW layout(std430, set = 3, binding = 0) buffer StorageBufferBlock\n";
     glsl += "#define PUSH_CONSTANTS layout(push_constant) uniform PushConstants\n";
     glsl += "#define FixPosition() gl_Position.y = -gl_Position.y; gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;\n";
     glsl += "#define FixFramebufferCoordinates(TEX_COORDS)\n";

@@ -35,6 +35,7 @@ class OpenGLRenderer : public LowLevelRenderer {
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
     RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
+    ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;
     char* ReadImage(RenderPass* renderPass) final;
     const std::vector<Profiling::Event>& GetTimeline() const final;

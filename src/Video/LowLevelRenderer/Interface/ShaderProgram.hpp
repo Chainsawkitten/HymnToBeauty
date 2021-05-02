@@ -14,7 +14,7 @@ class ShaderProgram {
     enum BindingType {
         MATRICES, ///< Uniform buffer with matrices for vertex shader.
         MATERIAL, ///< Samplers used in fragment shader.
-        FRAGMENT_UNIFORMS, ///< Uniform buffer used in fragment shader.
+        UNIFORMS, ///< Uniform buffer.
         STORAGE_BUFFER, ///< Storage buffer.
         BINDING_TYPES ///< Total number of binding types.
     };

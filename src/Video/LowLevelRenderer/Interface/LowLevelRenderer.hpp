@@ -20,6 +20,7 @@ namespace Video {
 class CommandBuffer;
 class ShaderProgram;
 class Texture;
+class ComputePipeline;
 
 /// Low level renderer abstracting the underlaying graphics API (OpenGL or Vulkan).
 class LowLevelRenderer {
@@ -131,6 +132,12 @@ class LowLevelRenderer {
      * @param vertexDescription The description of the vertex input to the pipeline.
      */
     virtual GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) = 0;
+
+    /// Create a compute pipeline.
+    /**
+     * @param shaderProgram The shader program to use.
+     */
+    virtual ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) = 0;
 
     /// Wait for all rendering to finish.
     virtual void Wait() = 0;

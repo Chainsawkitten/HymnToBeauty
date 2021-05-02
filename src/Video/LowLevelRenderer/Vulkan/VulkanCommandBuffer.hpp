@@ -10,6 +10,7 @@ namespace Video {
 class VulkanRenderer;
 class VulkanRenderPass;
 class VulkanGraphicsPipeline;
+class VulkanComputePipeline;
 class VulkanTexture;
 
 /// Vulkan implementation of CommandBuffer.
@@ -52,6 +53,8 @@ class VulkanCommandBuffer : public CommandBuffer {
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;
     void BlitToSwapChain(Texture* texture) final;
+    void BindComputePipeline(ComputePipeline* computePipeline) final;
+    void Dispatch(const glm::uvec3& numGroups) final;
 
     /// Get command buffer.
     /**
@@ -104,6 +107,7 @@ class VulkanCommandBuffer : public CommandBuffer {
 
     const VulkanRenderPass* currentRenderPass = nullptr;
     VulkanGraphicsPipeline* currentGraphicsPipeline = nullptr;
+    VulkanComputePipeline* currentComputePipeline = nullptr;
 
     std::map<const VulkanTexture*, VkImageLayout> renderTextureStates;
 

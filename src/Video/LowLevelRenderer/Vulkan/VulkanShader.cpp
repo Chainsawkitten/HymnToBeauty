@@ -21,6 +21,11 @@ VulkanShader::VulkanShader(VkDevice device, const ShaderSource& shaderSource, Ty
     case Type::FRAGMENT_SHADER:
         shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
         break;
+    case Type::COMPUTE_SHADER:
+        shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
+        break;
+    default:
+        assert(false);
     }
 
     // Create shader module.
