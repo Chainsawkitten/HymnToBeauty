@@ -242,7 +242,7 @@ void OpenGLCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
 
 void OpenGLCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
     assert(storageBuffer != nullptr);
-    assert(storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER);
+    assert(storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || storageBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
 
     Command command = {};
     command.type = Command::Type::BIND_STORAGE_BUFFER;
@@ -588,7 +588,7 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     }
     case Command::Type::DISPATCH: {
         glDispatchCompute(command.dispatchCommand.groupsX, command.dispatchCommand.groupsY, command.dispatchCommand.groupsZ);
-        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
         break;
     }
     }

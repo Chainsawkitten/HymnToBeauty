@@ -36,6 +36,10 @@ OpenGLBuffer::OpenGLBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, c
         target = GL_SHADER_STORAGE_BUFFER;
         usage = GL_DYNAMIC_DRAW;
         break;
+    case BufferUsage::VERTEX_STORAGE_BUFFER:
+        target = GL_SHADER_STORAGE_BUFFER;
+        usage = GL_DYNAMIC_DRAW;
+        break;
     }
 
     // Create buffer.

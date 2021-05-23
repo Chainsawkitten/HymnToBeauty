@@ -139,3 +139,11 @@ bool MultipleFrames(void* data);
  * @return Whether the test was successful.
  */
 bool ComputeSetBuffer(void* data);
+
+/// Test writing vertex buffer contents in a compute shader.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool ComputeVertexBuffer(void* data);

@@ -244,7 +244,8 @@ void VulkanCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
 }
 
 void VulkanCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
-    assert(storageBuffer != nullptr && storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER);
+    assert(storageBuffer != nullptr);
+    assert(storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || storageBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
 
     VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(ShaderProgram::BindingType::STORAGE_BUFFER, static_cast<VulkanBuffer*>(storageBuffer));
 
@@ -359,7 +360,7 @@ void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
     /// @todo Resource tracking so we can have less conservative barriers.
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
     memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
 
     vkCmdPipelineBarrier(commandBuffer[currentFrame], VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
@@ -367,7 +368,7 @@ void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
     vkCmdDispatch(commandBuffer[currentFrame], numGroups.x, numGroups.y, numGroups.z);
 
     memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
-    memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+    memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
     vkCmdPipelineBarrier(commandBuffer[currentFrame], VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
 }
 

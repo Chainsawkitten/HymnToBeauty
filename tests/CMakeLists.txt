@@ -16,6 +16,9 @@ set(HEADERS
 
 # Setup shaders
 set(SHADERS
+    Video/shaders/ComputeSetBuffer.comp
+    Video/shaders/ComputeVertexBuffer.comp
+    Video/shaders/ComputeVertexBuffer.vert
     Video/shaders/FullscreenTriangle.vert
     Video/shaders/DrawMipmappedTriangle.frag
     Video/shaders/DrawPushTriangles.vert
@@ -29,7 +32,6 @@ set(SHADERS
     Video/shaders/InvertColors.frag
     Video/shaders/MultipleFrames.vert
     Video/shaders/MultipleFrames.frag
-    Video/shaders/SetBuffer.comp
     Video/shaders/StorageBuffer.frag
 )
 

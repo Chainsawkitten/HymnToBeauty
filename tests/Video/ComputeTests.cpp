@@ -20,8 +20,13 @@
 
 #include "FullscreenTriangle.vert.hpp"
 #include "StorageBuffer.frag.hpp"
-#include "SetBuffer.comp.hpp"
+#include "ComputeSetBuffer.comp.hpp"
 #include "ComputeSetBuffer.png.hpp"
+
+#include "ComputeVertexBuffer.comp.hpp"
+#include "ComputeVertexBuffer.vert.hpp"
+#include "DrawTriangle.frag.hpp"
+#include "DrawTriangle.png.hpp"
 
 using namespace Video;
 
@@ -43,7 +48,7 @@ bool ComputeSetBuffer(void* data) {
     Shader* fragmentShader = lowLevelRenderer->CreateShader(STORAGEBUFFER_FRAG, Shader::Type::FRAGMENT_SHADER);
     ShaderProgram* graphicsShaderProgram = lowLevelRenderer->CreateShaderProgram({ vertexShader, fragmentShader });
 
-    Shader* computeShader = lowLevelRenderer->CreateShader(SETBUFFER_COMP, Shader::Type::COMPUTE_SHADER);
+    Shader* computeShader = lowLevelRenderer->CreateShader(COMPUTESETBUFFER_COMP, Shader::Type::COMPUTE_SHADER);
     ShaderProgram* computeShaderProgram = lowLevelRenderer->CreateShaderProgram({ computeShader });
 
     // Create graphics pipeline.
@@ -104,6 +109,109 @@ bool ComputeSetBuffer(void* data) {
     delete commandBuffer;
     delete storageBuffer;
     delete uniformBuffer;
+    delete graphicsPipeline;
+    delete computePipeline;
+    delete renderPass;
+    delete colorTexture;
+    delete graphicsShaderProgram;
+    delete vertexShader;
+    delete fragmentShader;
+    delete computeShaderProgram;
+    delete computeShader;
+
+    return result;
+}
+
+bool ComputeVertexBuffer(void* data) {
+    assert(data != nullptr);
+
+    LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
+
+    // Create render textures.
+    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+
+    // Create renderpass.
+    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
+
+    // Create shaders.
+    Shader* vertexShader = lowLevelRenderer->CreateShader(COMPUTEVERTEXBUFFER_VERT, Shader::Type::VERTEX_SHADER);
+    Shader* fragmentShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_FRAG, Shader::Type::FRAGMENT_SHADER);
+    ShaderProgram* graphicsShaderProgram = lowLevelRenderer->CreateShaderProgram({ vertexShader, fragmentShader });
+
+    Shader* computeShader = lowLevelRenderer->CreateShader(COMPUTEVERTEXBUFFER_COMP, Shader::Type::COMPUTE_SHADER);
+    ShaderProgram* computeShaderProgram = lowLevelRenderer->CreateShaderProgram({ computeShader });
+
+    // Create vertex description.
+    VertexDescription* vertexDescription;
+    {
+        // Position.
+        VertexDescription::Attribute attributes[2];
+        attributes[0].size = 4;
+        attributes[0].type = VertexDescription::AttributeType::FLOAT;
+        attributes[0].normalized = false;
+
+        // Color.
+        attributes[1].size = 4;
+        attributes[1].type = VertexDescription::AttributeType::FLOAT;
+        attributes[1].normalized = false;
+
+        vertexDescription = lowLevelRenderer->CreateVertexDescription(2, attributes);
+    }
+
+    // Create graphics pipeline.
+    GraphicsPipeline::Configuration configuration = {};
+    configuration.primitiveType = PrimitiveType::TRIANGLE;
+    configuration.polygonMode = PolygonMode::FILL;
+    configuration.cullFace = CullFace::BACK;
+    configuration.blendMode = BlendMode::NONE;
+    configuration.depthMode = DepthMode::NONE;
+    configuration.depthComparison = DepthComparison::ALWAYS;
+
+    GraphicsPipeline* graphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(graphicsShaderProgram, configuration, vertexDescription);
+
+    // Create compute pipeline.
+    ComputePipeline* computePipeline = lowLevelRenderer->CreateComputePipeline(computeShaderProgram);
+
+    // Create vertex/storage buffer.
+    Buffer* storageBuffer = lowLevelRenderer->CreateBuffer(Video::Buffer::BufferUsage::VERTEX_STORAGE_BUFFER, sizeof(glm::vec4) * 6);
+
+    // Create geometry binding.
+    GeometryBinding* geometryBinding = lowLevelRenderer->CreateGeometryBinding(vertexDescription, storageBuffer);
+
+    // Create command buffer.
+    CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
+
+    // Set buffer contents.
+    commandBuffer->BindComputePipeline(computePipeline);
+    commandBuffer->BindStorageBuffer(storageBuffer);
+    commandBuffer->Dispatch(glm::uvec3(1, 1, 1));
+
+    // Draw triangle using the vertex buffer written to by the compute pass.
+    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BindGraphicsPipeline(graphicsPipeline);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
+    commandBuffer->BindGeometry(geometryBinding);
+    commandBuffer->Draw(3);
+    commandBuffer->EndRenderPass();
+
+    // Submit the command buffer.
+    lowLevelRenderer->Submit(commandBuffer);
+
+    // Wait for rendering to finish.
+    lowLevelRenderer->Wait();
+
+    // Image verification.
+    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    bool result = imageVerification.Compare(DRAWTRIANGLE_PNG, DRAWTRIANGLE_PNG_LENGTH);
+    if (!result) {
+        imageVerification.WritePNG("ComputeVertexBuffer.png");
+    }
+
+    // Cleanup
+    delete commandBuffer;
+    delete geometryBinding;
+    delete vertexDescription;
+    delete storageBuffer;
     delete graphicsPipeline;
     delete computePipeline;
     delete renderPass;
