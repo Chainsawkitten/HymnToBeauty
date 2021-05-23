@@ -45,6 +45,10 @@ VulkanBuffer::VulkanBuffer(VulkanRenderer& vulkanRenderer, VkDevice device, VkPh
         usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
         memoryPropertyFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
         break;
+    case BufferUsage::VERTEX_STORAGE_BUFFER:
+        usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        memoryPropertyFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        break;
     }
 
     usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
@@ -97,7 +101,7 @@ VulkanBuffer::~VulkanBuffer() {
 }
 
 void VulkanBuffer::Write(const void* data) {
-    assert(GetBufferUsage() == BufferUsage::VERTEX_BUFFER_DYNAMIC || GetBufferUsage() == BufferUsage::INDEX_BUFFER_DYNAMIC || GetBufferUsage() == BufferUsage::UNIFORM_BUFFER || GetBufferUsage() == BufferUsage::STORAGE_BUFFER);
+    assert(GetBufferUsage() == BufferUsage::VERTEX_BUFFER_DYNAMIC || GetBufferUsage() == BufferUsage::INDEX_BUFFER_DYNAMIC || GetBufferUsage() == BufferUsage::UNIFORM_BUFFER || GetBufferUsage() == BufferUsage::STORAGE_BUFFER || GetBufferUsage() == BufferUsage::VERTEX_STORAGE_BUFFER);
 
     currentFrame = (currentFrame + 1) % swapChainImages;
 

@@ -30,6 +30,7 @@ VideoSuite::VideoSuite(Video::Renderer::GraphicsAPI graphicsAPI) : TestSuite("Vi
     AddTest("MultipleFrames", MultipleFrames, &lowLevelRenderer);
 
     AddTest("ComputeSetBuffer", ComputeSetBuffer, &lowLevelRenderer);
+    AddTest("ComputeVertexBuffer", ComputeVertexBuffer, &lowLevelRenderer);
 }
 
 void VideoSuite::Init() {

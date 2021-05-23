@@ -12,7 +12,8 @@ class Buffer {
         INDEX_BUFFER_STATIC, ///< The buffer will be used as an index buffer and only written to once.
         INDEX_BUFFER_DYNAMIC, ///< The buffer will be used as an index buffer and written to many times.
         UNIFORM_BUFFER, ///< The buffer will be used as a uniform buffer.
-        STORAGE_BUFFER ///< The buffer will be used as a storage buffer.
+        STORAGE_BUFFER, ///< The buffer will be used as a storage buffer.
+        VERTEX_STORAGE_BUFFER ///< The buffer will be used as both vertex and storage buffer.
     };
 
     /// Access specified when mapping a buffer.
