@@ -8,17 +8,11 @@ struct Light {
     /// Position.
     glm::vec4 position;
 
-    /// Intensity.
-    glm::vec3 intensities;
+    /// Intensity and attenuation.
+    glm::vec4 intensitiesAttenuation;
 
-    /// Attenuation.
-    float attenuation;
-
-    /// Direction.
-    glm::vec3 direction;
-
-    /// Ambient coefficient.
-    float ambientCoefficient;
+    /// Direction and ambient coefficient.
+    glm::vec4 directionAmbientCoefficient;
 
     /// Angle of the cone (in degrees).
     float coneAngle;
@@ -27,6 +21,9 @@ struct Light {
     float distance;
 
     /// Padding.
-    float padding;
+    float padding1;
+
+    /// Padding.
+    float padding2;
 };
 } // namespace Video
