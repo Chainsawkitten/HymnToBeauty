@@ -414,7 +414,7 @@ Video::Renderer* RenderManager::GetRenderer() {
 void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& viewProjectionMatrix, bool lightVolumes) {
     std::vector<Video::Light> lights;
 
-    Video::AxisAlignedBoundingBox aabb(glm::vec3(2.f, 2.f, 2.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    Video::AxisAlignedBoundingBox aabb(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
     // Add all directional lights.
     for (Component::DirectionalLight* directionalLight : directionalLights.GetAll()) {
@@ -425,11 +425,9 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
         glm::vec4 direction(glm::vec4(lightEntity->GetDirection(), 0.f));
         Video::Light light;
         light.position = viewMatrix * -direction;
-        light.intensities = directionalLight->color;
-        light.attenuation = 1.f;
-        light.ambientCoefficient = directionalLight->ambientCoefficient;
+        light.intensitiesAttenuation = glm::vec4(directionalLight->color, 1.0f);
+        light.directionAmbientCoefficient = glm::vec4(0.0f, 0.0f, 0.0f, directionalLight->ambientCoefficient);
         light.coneAngle = 0.f;
-        light.direction = glm::vec3(0.f, 0.f, 0.f);
         light.distance = 0.f;
         lights.push_back(light);
     }
@@ -440,7 +438,7 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
             continue;
 
         Entity* lightEntity = spotLight->entity;
-        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.f, 1.f, 1.f) * spotLight->distance);
+        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.0f, 1.0f, 1.0f) * spotLight->distance);
 
         // TMPTODO
         Video::Frustum frustum(viewProjectionMatrix * modelMat);
@@ -448,15 +446,13 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
             if (lightVolumes)
                 Managers().debugDrawingManager->AddSphere(lightEntity->GetWorldPosition(), spotLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
 
-            glm::vec4 direction(viewMatrix * glm::vec4(lightEntity->GetDirection(), 0.f));
+            glm::vec4 direction(viewMatrix * glm::vec4(lightEntity->GetDirection(), 0.0f));
             glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
             Video::Light light;
-            light.position = viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0));
-            light.intensities = spotLight->color * spotLight->intensity;
-            light.attenuation = spotLight->attenuation;
-            light.ambientCoefficient = spotLight->ambientCoefficient;
+            light.position = viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f));
+            light.intensitiesAttenuation = glm::vec4(spotLight->color * spotLight->intensity, spotLight->attenuation);
+            light.directionAmbientCoefficient = glm::vec4(direction.x, direction.y, direction.z, spotLight->ambientCoefficient);
             light.coneAngle = spotLight->coneAngle;
-            light.direction = glm::vec3(direction);
             light.distance = spotLight->distance;
             lights.push_back(light);
         }
@@ -468,7 +464,7 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
             continue;
 
         Entity* lightEntity = pointLight->entity;
-        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.f, 1.f, 1.f) * pointLight->distance);
+        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.0f, 1.0f, 1.0f) * pointLight->distance);
 
         Video::Frustum frustum(viewProjectionMatrix * modelMat);
         if (frustum.Collide(aabb)) {
@@ -477,12 +473,10 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
 
             glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
             Video::Light light;
-            light.position = viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0));
-            light.intensities = pointLight->color * pointLight->intensity;
-            light.attenuation = pointLight->attenuation;
-            light.ambientCoefficient = 0.f;
-            light.coneAngle = 180.f;
-            light.direction = glm::vec3(1.f, 0.f, 0.f);
+            light.position = viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f));
+            light.intensitiesAttenuation = glm::vec4(pointLight->color * pointLight->intensity, pointLight->attenuation);
+            light.directionAmbientCoefficient = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+            light.coneAngle = 180.0f;
             light.distance = pointLight->distance;
             lights.push_back(light);
         }
@@ -499,12 +493,10 @@ void RenderManager::LightAmbient() {
 
     Video::Light light;
     light.position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    light.intensities = glm::vec3(0.0f, 0.0f, 0.0f);
-    light.attenuation = 1.f;
-    light.ambientCoefficient = 1.0f;
-    light.coneAngle = 0.f;
-    light.direction = glm::vec3(0.f, 0.f, 0.f);
-    light.distance = 0.f;
+    light.intensitiesAttenuation = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    light.directionAmbientCoefficient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    light.coneAngle = 0.0f;
+    light.distance = 0.0f;
     lights.push_back(light);
 
     // Update light buffer.

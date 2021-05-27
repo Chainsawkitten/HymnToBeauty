@@ -16,13 +16,12 @@ layout(location = 0) out vec4 outColor;
 // --- STRUCTS ---
 struct Light {
     vec4 position;
-    vec3 intensities;
-    float attenuation;
-    vec3 direction;
-    float ambientCoefficient;
+    vec4 intensitiesAttenuation;
+    vec4 directionAmbientCoefficient;
     float coneAngle;
     float distance;
-    float padding;
+    float padding1;
+    float padding2;
 };
 
 // --- RESOURCES ---
@@ -118,7 +117,7 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
             vec3 toLight = lightBuffer.lights[i].position.xyz - pos;
             surfaceToLight = normalize(toLight);
             float lightDist = toLight.x * toLight.x + toLight.y * toLight.y + toLight.z * toLight.z;
-            attenuation = 1.0 / (1.0 + lightBuffer.lights[i].attenuation * lightDist);
+            attenuation = 1.0 / (1.0 + lightBuffer.lights[i].intensitiesAttenuation.w * lightDist);
             
             // Fade-out close to cutoff distance.
             lightDist = sqrt(lightDist) / lightBuffer.lights[i].distance;
@@ -128,7 +127,7 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
             
             // Spot light.
             if (lightBuffer.lights[i].coneAngle < 179.0) {
-                float lightToSurfaceAngle = degrees(acos(clamp(dot(-surfaceToLight, normalize(lightBuffer.lights[i].direction)), -1.0, 1.0)));
+                float lightToSurfaceAngle = degrees(acos(clamp(dot(-surfaceToLight, normalize(lightBuffer.lights[i].directionAmbientCoefficient.xyz)), -1.0, 1.0)));
                 float fadeLength = 10.0;
                 if (lightToSurfaceAngle > lightBuffer.lights[i].coneAngle - fadeLength) {
                     attenuation *= 1.0 - clamp(lightToSurfaceAngle - (lightBuffer.lights[i].coneAngle - fadeLength), 0.0, fadeLength) / fadeLength;
@@ -139,7 +138,7 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
         vec3 H = normalize(V + surfaceToLight);
 
         // Calculate radiance of the light.
-        vec3 radiance = lightBuffer.lights[i].intensities * attenuation;
+        vec3 radiance = lightBuffer.lights[i].intensitiesAttenuation.xyz * attenuation;
         
         // Cook-torrance brdf.
         float NDF = DistributionGGX(N, H, roughness);
@@ -164,7 +163,7 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
         Lo += (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
         
         // Add ambient.
-        Lo += lightBuffer.lights[i].ambientCoefficient * albedo;
+        Lo += lightBuffer.lights[i].directionAmbientCoefficient.w * albedo;
     }
 
     return Lo;
