@@ -17,7 +17,7 @@ Geometry3D::~Geometry3D() {
     delete vertexDescription;
 }
 
-const GeometryBinding* Geometry3D::GetGeometryBinding() const {
+GeometryBinding* Geometry3D::GetGeometryBinding() {
     return geometryBinding;
 }
 

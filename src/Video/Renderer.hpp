@@ -100,7 +100,7 @@ class Renderer {
      * @param roughnessMetallic Roughness-metallic texture.
      * @param modelMatrix Model matrix.
      */
-    void RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* roughnessMetallic, const glm::mat4 modelMatrix);
+    void RenderStaticMesh(Geometry::Geometry3D* geometry, Texture2D* albedo, Texture2D* normal, Texture2D* roughnessMetallic, const glm::mat4 modelMatrix);
 
     /// Update light buffer.
     /**
@@ -138,7 +138,7 @@ class Renderer {
      * @param position World position to render at.
      * @param icon The icon to render.
      */
-    void RenderIcon(const glm::vec3& position, const Texture2D* icon);
+    void RenderIcon(const glm::vec3& position, Texture2D* icon);
 
     /// Configure the post-processing.
     /**

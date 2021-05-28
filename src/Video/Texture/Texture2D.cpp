@@ -52,7 +52,7 @@ Texture2D::~Texture2D() {
         delete texture;
 }
 
-const Texture* Texture2D::GetTexture() const {
+Texture* Texture2D::GetTexture() {
     return texture;
 }
 

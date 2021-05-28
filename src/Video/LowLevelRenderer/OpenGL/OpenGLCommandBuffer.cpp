@@ -57,6 +57,13 @@ void OpenGLCommandBuffer::EndRenderPass() {
 
     AddCommand(command);
 
+    // Add a memory barrier if any of the shaders have written to a storage buffer.
+    if (writesStorageBuffer) {
+        command.type = Command::Type::MEMORY_BARRIER;
+        AddCommand(command);
+        writesStorageBuffer = false;
+    }
+
     inRenderPass = false;
 }
 
@@ -73,6 +80,9 @@ void OpenGLCommandBuffer::BindGraphicsPipeline(GraphicsPipeline* graphicsPipelin
 
     currentShaderProgram = openGLGraphicsPipeline->GetShaderProgram();
     command.bindGraphicsPipelineCommand.program = currentShaderProgram->GetID();
+
+    if (currentShaderProgram->WritesToStorageBuffer())
+        writesStorageBuffer = true;
 
     // The type of primitives to render.
     switch (configuration.primitiveType) {
@@ -193,7 +203,7 @@ void OpenGLCommandBuffer::SetLineWidth(float width) {
     AddCommand(command);
 }
 
-void OpenGLCommandBuffer::BindGeometry(const GeometryBinding* geometryBinding) {
+void OpenGLCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
     assert(inRenderPass);
     assert(geometryBinding != nullptr);
 
@@ -253,7 +263,7 @@ void OpenGLCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
     AddCommand(command);
 }
 
-void OpenGLCommandBuffer::BindMaterial(std::initializer_list<const Texture*> textures) {
+void OpenGLCommandBuffer::BindMaterial(std::initializer_list<Texture*> textures) {
     Command command = {};
     command.type = Command::Type::BIND_TEXTURE;
 
@@ -357,6 +367,10 @@ void OpenGLCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
     command.dispatchCommand.groupsY = numGroups.y;
     command.dispatchCommand.groupsZ = numGroups.z;
 
+    AddCommand(command);
+
+    // Memory barrier.
+    command.type = Command::Type::MEMORY_BARRIER;
     AddCommand(command);
 }
 
@@ -588,6 +602,9 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     }
     case Command::Type::DISPATCH: {
         glDispatchCompute(command.dispatchCommand.groupsX, command.dispatchCommand.groupsY, command.dispatchCommand.groupsZ);
+        break;
+    }
+    case Command::Type::MEMORY_BARRIER: {
         glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
         break;
     }

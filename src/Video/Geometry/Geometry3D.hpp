@@ -27,7 +27,7 @@ class Geometry3D {
     /**
      * @return The geometry binding.
      */
-    const GeometryBinding* GetGeometryBinding() const;
+    GeometryBinding* GetGeometryBinding();
 
     /// Get number of indices.
     /**

@@ -369,7 +369,7 @@ void DebugDrawing::BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) {
     }
 }
 
-void DebugDrawing::BindGeometry(const GeometryBinding* geometryBinding) {
+void DebugDrawing::BindGeometry(GeometryBinding* geometryBinding) {
     if (boundGeometry != geometryBinding) {
         if (geometryBinding != nullptr) {
             CommandBuffer* commandBuffer = renderer->GetCommandBuffer();

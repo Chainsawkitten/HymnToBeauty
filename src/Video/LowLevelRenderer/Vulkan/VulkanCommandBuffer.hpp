@@ -2,11 +2,11 @@
 
 #include "../Interface/CommandBuffer.hpp"
 #include <vulkan/vulkan.h>
-#include <map>
 #include <vector>
 
 namespace Video {
 
+class VulkanBuffer;
 class VulkanRenderer;
 class VulkanRenderPass;
 class VulkanGraphicsPipeline;
@@ -45,10 +45,10 @@ class VulkanCommandBuffer : public CommandBuffer {
     void SetViewport(const glm::uvec2& origin, const glm::uvec2& size) final;
     void SetScissor(const glm::uvec2& origin, const glm::uvec2& size) final;
     void SetLineWidth(float width) final;
-    void BindGeometry(const GeometryBinding* geometryBinding) final;
+    void BindGeometry(GeometryBinding* geometryBinding) final;
     void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) final;
     void BindStorageBuffer(Buffer* storageBuffer) final;
-    void BindMaterial(std::initializer_list<const Texture*> textures) final;
+    void BindMaterial(std::initializer_list<Texture*> textures) final;
     void PushConstants(const void* data) final;
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;
@@ -85,8 +85,8 @@ class VulkanCommandBuffer : public CommandBuffer {
 
     void Begin();
 
-    void TransitionTexture(const VulkanTexture* texture, VkImageLayout destinationImageLayout);
-    void ResetImageLayouts();
+    void TransitionTexture(VulkanTexture* texture, VkImageLayout destinationImageLayout);
+    void BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFlags stages, bool write);
 
     VulkanRenderer* vulkanRenderer;
     VkDevice device;
@@ -108,8 +108,6 @@ class VulkanCommandBuffer : public CommandBuffer {
     const VulkanRenderPass* currentRenderPass = nullptr;
     VulkanGraphicsPipeline* currentGraphicsPipeline = nullptr;
     VulkanComputePipeline* currentComputePipeline = nullptr;
-
-    std::map<const VulkanTexture*, VkImageLayout> renderTextureStates;
 
     std::vector<Timing> timings;
 };

@@ -119,4 +119,24 @@ VkBuffer VulkanBuffer::GetBuffer() const {
     return buffer[currentFrame];
 }
 
+VkPipelineStageFlags VulkanBuffer::GetReadMask() const {
+    return readMask;
+}
+
+void VulkanBuffer::SetReadMaskStage(VkPipelineStageFlags pipelineStage) {
+    readMask |= pipelineStage;
+}
+
+void VulkanBuffer::ClearReadMask() {
+    readMask = 0;
+}
+
+VkPipelineStageFlags VulkanBuffer::GetLastWriteStage() const {
+    return lastWrite;
+}
+
+void VulkanBuffer::SetLastWriteStage(VkPipelineStageFlags pipelineStage) {
+    lastWrite = pipelineStage;
+}
+
 } // namespace Video

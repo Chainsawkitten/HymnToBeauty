@@ -210,7 +210,7 @@ VertexDescription* VulkanRenderer::CreateVertexDescription(unsigned int attribut
     return new VulkanVertexDescription(attributeCount, attributes);
 }
 
-GeometryBinding* VulkanRenderer::CreateGeometryBinding(const VertexDescription* vertexDescription, const Buffer* vertexBuffer, GeometryBinding::IndexType indexType, const Buffer* indexBuffer) {
+GeometryBinding* VulkanRenderer::CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType, const Buffer* indexBuffer) {
     return new VulkanGeometryBinding(vertexBuffer, indexType, indexBuffer);
 }
 
@@ -394,7 +394,7 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(ShaderProgram::BindingType bind
     }
 }
 
-VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<const Texture*> textures) {
+VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<Texture*> textures) {
     /// @todo Have some material object keep track of this instead of treating textures individually.
 
     VkDescriptorSetLayout descriptorSetLayout = GetMaterialDescriptorSetLayout(textures.size());

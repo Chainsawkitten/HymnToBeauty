@@ -174,12 +174,12 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
 
     if (type == Texture::Type::RENDER_COLOR || type == Texture::Type::RENDER_DEPTH) {
         // Transition to attachment layout.
-        VkImageLayout layout = (type == Texture::Type::RENDER_DEPTH ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        currentLayout = (type == Texture::Type::RENDER_DEPTH ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
         CommandBuffer* commandBuffer = vulkanRenderer.CreateCommandBuffer();
         VulkanCommandBuffer* vulkanCommandBuffer = static_cast<VulkanCommandBuffer*>(commandBuffer);
 
-        Utility::TransitionImage(vulkanCommandBuffer->GetCommandBuffer(), image, VK_IMAGE_LAYOUT_UNDEFINED, layout);
+        Utility::TransitionImage(vulkanCommandBuffer->GetCommandBuffer(), image, VK_IMAGE_LAYOUT_UNDEFINED, currentLayout);
 
         vulkanRenderer.Submit(commandBuffer);
         vulkanRenderer.Wait();
@@ -209,6 +209,14 @@ VkImageView VulkanTexture::GetImageView() const {
 
 VkSampler VulkanTexture::GetSampler() const {
     return sampler;
+}
+
+VkImageLayout VulkanTexture::GetImageLayout() const {
+    return currentLayout;
+}
+
+void VulkanTexture::SetImageLayout(VkImageLayout layout) {
+    currentLayout = layout;
 }
 
 void VulkanTexture::GenerateMipMaps(VulkanRenderer& vulkanRenderer, VkPhysicalDevice physicalDevice, const glm::uvec2& size, uint32_t mipLevels, VkFormat format) {

@@ -7,6 +7,7 @@
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanComputePipeline.hpp"
 #include "VulkanGeometryBinding.hpp"
+#include "VulkanShader.hpp"
 #include "VulkanShaderProgram.hpp"
 #include "VulkanTexture.hpp"
 #include "VulkanUtility.hpp"
@@ -199,15 +200,22 @@ void VulkanCommandBuffer::SetLineWidth(float width) {
     }
 }
 
-void VulkanCommandBuffer::BindGeometry(const GeometryBinding* geometryBinding) {
+void VulkanCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
     assert(inRenderPass);
     assert(geometryBinding != nullptr);
 
-    const VulkanGeometryBinding* vulkanGeometryBinding = static_cast<const VulkanGeometryBinding*>(geometryBinding);
+    VulkanGeometryBinding* vulkanGeometryBinding = static_cast<VulkanGeometryBinding*>(geometryBinding);
 
-    const VkBuffer vertexBuffer = vulkanGeometryBinding->GetVertexBuffer();
+    VulkanBuffer* vertexBuffer = vulkanGeometryBinding->GetVertexBuffer();
+    const VkBuffer vulkanVertexBuffer = vertexBuffer->GetBuffer();
+
+    // Barrier for vertex/storage buffers.
+    if (vertexBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER) {
+        BufferBarrier(vertexBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, false);
+    }
+
     const VkDeviceSize offset = 0;
-    vkCmdBindVertexBuffers(renderPassCommandBuffer, 0, 1, &vertexBuffer, &offset);
+    vkCmdBindVertexBuffers(renderPassCommandBuffer, 0, 1, &vulkanVertexBuffer, &offset);
 
     GeometryBinding::IndexType indexType = vulkanGeometryBinding->GetIndexType();
     if (indexType != GeometryBinding::IndexType::NONE) {
@@ -247,7 +255,13 @@ void VulkanCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
     assert(storageBuffer != nullptr);
     assert(storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || storageBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
 
-    VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(ShaderProgram::BindingType::STORAGE_BUFFER, static_cast<VulkanBuffer*>(storageBuffer));
+    // Synchronization.
+    VulkanBuffer* vulkanStorageBuffer = static_cast<VulkanBuffer*>(storageBuffer);
+    const VulkanShaderProgram* shaderProgram = (inRenderPass ? currentGraphicsPipeline->GetShaderProgram() : currentComputePipeline->GetShaderProgram());
+    BufferBarrier(vulkanStorageBuffer, shaderProgram->GetStorageBufferPipelineStages(), shaderProgram->WritesToStorageBuffer());
+
+    // Bind descriptor set.
+    VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(ShaderProgram::BindingType::STORAGE_BUFFER, vulkanStorageBuffer);
 
     if (inRenderPass) {
         assert(currentGraphicsPipeline != nullptr);
@@ -258,13 +272,13 @@ void VulkanCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
     }
 }
 
-void VulkanCommandBuffer::BindMaterial(std::initializer_list<const Texture*> textures) {
+void VulkanCommandBuffer::BindMaterial(std::initializer_list<Texture*> textures) {
     assert(inRenderPass);
 
-    for (const Texture* texture : textures) {
+    for (Texture* texture : textures) {
         assert(texture->GetType() != Texture::Type::RENDER_DEPTH);
         if (texture->GetType() == Texture::Type::RENDER_COLOR) {
-            TransitionTexture(static_cast<const VulkanTexture*>(texture), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            TransitionTexture(static_cast<VulkanTexture*>(texture), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }
 
@@ -356,20 +370,7 @@ void VulkanCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) 
 
 void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
     assert(!inRenderPass);
-
-    /// @todo Resource tracking so we can have less conservative barriers.
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
-    memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
-
-    vkCmdPipelineBarrier(commandBuffer[currentFrame], VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
-
     vkCmdDispatch(commandBuffer[currentFrame], numGroups.x, numGroups.y, numGroups.z);
-
-    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
-    memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
-    vkCmdPipelineBarrier(commandBuffer[currentFrame], VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
 }
 
 VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const {
@@ -379,7 +380,6 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const {
 void VulkanCommandBuffer::End() {
     assert(!inRenderPass);
 
-    ResetImageLayouts();
     timings.clear();
 
     if (!ended) {
@@ -403,7 +403,6 @@ void VulkanCommandBuffer::NextFrame() {
     }
 
     containsBlitToSwapChain = false;
-    renderTextureStates.clear();
     ended = false;
 
     Begin();
@@ -430,51 +429,55 @@ void VulkanCommandBuffer::Begin() {
     currentComputePipeline = nullptr;
 }
 
-void VulkanCommandBuffer::TransitionTexture(const VulkanTexture* texture, VkImageLayout destinationImageLayout) {
+void VulkanCommandBuffer::TransitionTexture(VulkanTexture* texture, VkImageLayout destinationImageLayout) {
     // Find the previous layout of the render texture.
-    VkImageLayout oldLayout;
-    auto it = renderTextureStates.find(texture);
-    if (it != renderTextureStates.end()) {
-        oldLayout = it->second;
-    } else {
-        // Assume the image is in the default layout for its type.
-        switch (texture->GetType()) {
-        case Texture::Type::RENDER_COLOR:
-            oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            break;
-        case Texture::Type::RENDER_DEPTH:
-            oldLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            break;
-        default:
-            assert(0);
-        }
-    }
+    VkImageLayout oldLayout = texture->GetImageLayout();
     
     // Transition to the desired layout (if it's not already in that layout).
     if (oldLayout != destinationImageLayout) {
         Utility::TransitionImage(commandBuffer[currentFrame], texture->GetImage(), oldLayout, destinationImageLayout);
-        renderTextureStates[texture] = destinationImageLayout;
+        texture->SetImageLayout(destinationImageLayout);
     }
 }
 
-void VulkanCommandBuffer::ResetImageLayouts() {
-    // Transition all render textures back to their default layouts. 
-    for (auto it : renderTextureStates) {
-        VkImageLayout desiredLayout;
-        switch (it.first->GetType()) {
-        case Texture::Type::RENDER_COLOR:
-            desiredLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            break;
-        case Texture::Type::RENDER_DEPTH:
-            desiredLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            break;
-        default:
-            assert(0);
-        }
+void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFlags stages, bool write) {
+    VkPipelineStageFlags sourceStages = 0;
+    VkPipelineStageFlags readStages = buffer->GetReadMask();
+    VkAccessFlags sourceAccess = 0;
+    VkAccessFlags destinationAccess = 0;
 
-        if (it.second != desiredLayout) {
-            TransitionTexture(it.first, desiredLayout);
-        }
+    // Read barrier.
+    if (buffer->GetLastWriteStage() != 0 && (readStages & stages) != stages) {
+        sourceStages |= buffer->GetLastWriteStage();
+        sourceAccess |= VK_ACCESS_SHADER_WRITE_BIT;
+        if (stages & ~VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
+            destinationAccess |= VK_ACCESS_SHADER_READ_BIT;
+        if (stages & VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
+            destinationAccess |= VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+        buffer->SetReadMaskStage(stages);
+    }
+
+    // Write barrier.
+    if (write) {
+        sourceStages |= readStages;
+        if (sourceStages & ~VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
+            sourceAccess |= VK_ACCESS_SHADER_READ_BIT;
+        if (sourceStages & VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
+            sourceAccess |= VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+        destinationAccess |= VK_ACCESS_SHADER_WRITE_BIT;
+        buffer->ClearReadMask();
+        buffer->SetLastWriteStage(stages);
+    }
+
+    if (sourceStages != 0) {
+        VkBufferMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask = sourceAccess;
+        memoryBarrier.dstAccessMask = destinationAccess;
+        memoryBarrier.buffer = buffer->GetBuffer();
+        memoryBarrier.size = VK_WHOLE_SIZE;
+
+        vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, stages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
     }
 }
 

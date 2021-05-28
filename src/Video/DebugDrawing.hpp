@@ -218,7 +218,7 @@ class DebugDrawing {
         unsigned int indexCount = 0;
 
         /// Geometry binding.
-        const GeometryBinding* geometryBinding = nullptr;
+        GeometryBinding* geometryBinding = nullptr;
     };
 
     /// Create new debug primitive renderer.
@@ -299,7 +299,7 @@ class DebugDrawing {
 
     void CreateVertexBuffer(const glm::vec3* positions, unsigned int positionCount, Buffer*& vertexBuffer, GeometryBinding*& geometryBinding);
     void BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline);
-    void BindGeometry(const GeometryBinding* geometryBinding);
+    void BindGeometry(GeometryBinding* geometryBinding);
     void CreateCircle(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
     void CreateSphere(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
     void CreateCylinder(glm::vec3*& positions, unsigned int& vertexCount, unsigned int detail);
