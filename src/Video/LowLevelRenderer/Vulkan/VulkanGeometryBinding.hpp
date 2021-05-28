@@ -18,7 +18,7 @@ class VulkanGeometryBinding : public GeometryBinding {
      * @param indexType The type of values in the index buffer.
      * @param indexBuffer Index buffer.
      */
-    VulkanGeometryBinding(const Buffer* vertexBuffer, IndexType indexType = IndexType::NONE, const Buffer* indexBuffer = nullptr);
+    VulkanGeometryBinding(Buffer* vertexBuffer, IndexType indexType = IndexType::NONE, const Buffer* indexBuffer = nullptr);
 
     /// Destructor.
     ~VulkanGeometryBinding() final;
@@ -27,7 +27,7 @@ class VulkanGeometryBinding : public GeometryBinding {
     /**
      * @return The vertex buffer.
      */
-    VkBuffer GetVertexBuffer() const;
+    VulkanBuffer* GetVertexBuffer();
 
     /// Get the type of values in the index buffer.
     /**
@@ -44,7 +44,7 @@ class VulkanGeometryBinding : public GeometryBinding {
   private:
     VulkanGeometryBinding(const VulkanGeometryBinding& other) = delete;
 
-    const VulkanBuffer* vertexBuffer;
+    VulkanBuffer* vertexBuffer;
     const VulkanBuffer* indexBuffer;
     IndexType indexType;
 };

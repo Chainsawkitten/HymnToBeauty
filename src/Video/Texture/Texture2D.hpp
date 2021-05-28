@@ -30,7 +30,7 @@ class Texture2D {
     /**
      * @return The low-level texture.
      */
-    const Texture* GetTexture() const;
+    Texture* GetTexture();
 
     /// Get whether the texture has been loaded yet.
     /**

@@ -16,6 +16,9 @@ class GraphicsPipeline;
 class ComputePipeline;
 
 /// A buffer into which rendering commands are recorded.
+/**
+ * Command buffers have to be recorded in the same order as they are submitted.
+ */
 class CommandBuffer {
   public:
     /// Create a new command buffer.
@@ -73,7 +76,7 @@ class CommandBuffer {
     /**
      * @param geometryBinding The geometry to bind.
      */
-    virtual void BindGeometry(const GeometryBinding* geometryBinding) = 0;
+    virtual void BindGeometry(GeometryBinding* geometryBinding) = 0;
 
     /// Bind uniform buffer for use in a shader.
     /**
@@ -92,7 +95,7 @@ class CommandBuffer {
     /**
      * @param textures The textures to bind to the graphics pipeline.
      */
-    virtual void BindMaterial(std::initializer_list<const Texture*> textures) = 0;
+    virtual void BindMaterial(std::initializer_list<Texture*> textures) = 0;
 
     /// Update push constants.
     /**

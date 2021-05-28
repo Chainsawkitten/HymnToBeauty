@@ -6,11 +6,11 @@
 
 namespace Video {
 
-VulkanGeometryBinding::VulkanGeometryBinding(const Buffer* vertexBuffer, IndexType indexType, const Buffer* indexBuffer) {
+VulkanGeometryBinding::VulkanGeometryBinding(Buffer* vertexBuffer, IndexType indexType, const Buffer* indexBuffer) {
     assert(vertexBuffer != nullptr);
     assert(indexType == IndexType::NONE || indexBuffer != nullptr);
 
-    this->vertexBuffer = static_cast<const VulkanBuffer*>(vertexBuffer);
+    this->vertexBuffer = static_cast<VulkanBuffer*>(vertexBuffer);
     this->indexType = indexType;
     if (indexType != IndexType::NONE) {
         this->indexBuffer = static_cast<const VulkanBuffer*>(indexBuffer);
@@ -23,8 +23,8 @@ VulkanGeometryBinding::~VulkanGeometryBinding() {
 
 }
 
-VkBuffer VulkanGeometryBinding::GetVertexBuffer() const {
-    return vertexBuffer->GetBuffer();
+VulkanBuffer* VulkanGeometryBinding::GetVertexBuffer() {
+    return vertexBuffer;
 }
 
 GeometryBinding::IndexType VulkanGeometryBinding::GetIndexType() const {

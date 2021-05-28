@@ -78,7 +78,7 @@ class LowLevelRenderer {
      *
      * @return The created geometry binding.
      */
-    virtual GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, const Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) = 0;
+    virtual GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) = 0;
 
     /// Create a shader.
     /**

@@ -40,10 +40,10 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void SetViewport(const glm::uvec2& origin, const glm::uvec2& size) final;
     void SetScissor(const glm::uvec2& origin, const glm::uvec2& size) final;
     void SetLineWidth(float width) final;
-    void BindGeometry(const GeometryBinding* geometryBinding) final;
+    void BindGeometry(GeometryBinding* geometryBinding) final;
     void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) final;
     void BindStorageBuffer(Buffer* storageBuffer) final;
-    void BindMaterial(std::initializer_list<const Texture*> textures) final;
+    void BindMaterial(std::initializer_list<Texture*> textures) final;
     void PushConstants(const void* data) final;
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;
@@ -225,7 +225,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
             DRAW_INDEXED,
             BLIT_TO_SWAP_CHAIN,
             BIND_COMPUTE_PIPELINE,
-            DISPATCH
+            DISPATCH,
+            MEMORY_BARRIER
         } type;
     };
 
@@ -253,6 +254,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
     const OpenGLShaderProgram* currentShaderProgram = nullptr;
 
     const OpenGLShaderProgram* blitShaderProgram;
+
+    bool writesStorageBuffer = false;
 
     std::vector<Timing> timings;
     unsigned int timingIndex;

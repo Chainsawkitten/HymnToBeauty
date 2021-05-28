@@ -64,7 +64,7 @@ class StaticRenderProgram : public RenderProgram {
      * @param textureRoughnessMetallic Roughness-metallic texture.
      * @param modelMatrix Model matrix.
      */
-    void Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, const Video::Texture2D* textureAlbedo, const Video::Texture2D* textureNormal, const Video::Texture2D* textureRoughnessMetallic, const glm::mat4& modelMatrix) const;
+    void Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, Video::Texture2D* textureAlbedo, Video::Texture2D* textureNormal, Video::Texture2D* textureRoughnessMetallic, const glm::mat4& modelMatrix) const;
 
   private:
     StaticRenderProgram(const StaticRenderProgram& other) = delete;

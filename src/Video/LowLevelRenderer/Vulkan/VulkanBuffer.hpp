@@ -34,6 +34,33 @@ class VulkanBuffer : public Buffer {
      */
     VkBuffer GetBuffer() const;
 
+    /// Get which pipeline stages have read the buffer since the last write.
+    /**
+     * @return A mask of all pipeline stages which have read the buffer.
+     */
+    VkPipelineStageFlags GetReadMask() const;
+
+    /// Set a pipeline stage having read the buffer since the last write.
+    /**
+     * @param pipelineStage The pipeline stage reading the buffer.
+     */
+    void SetReadMaskStage(VkPipelineStageFlags pipelineStage);
+
+    /// Clear the read mask.
+    void ClearReadMask();
+
+    /// Get the shader stage which last wrote to the buffer.
+    /**
+     * @return The last shader stage which wrote to the buffer (or 0 if none).
+     */
+    VkPipelineStageFlags GetLastWriteStage() const;
+
+    /// Set which pipeline stage last wrote to the buffer.
+    /**
+     * @param pipelineStage The pipeline stage writing to the buffer.
+     */
+    void SetLastWriteStage(VkPipelineStageFlags pipelineStage);
+
   private:
     VulkanBuffer(const VulkanBuffer& other) = delete;
 
@@ -44,6 +71,9 @@ class VulkanBuffer : public Buffer {
 
     uint32_t currentFrame = 0;
     uint32_t swapChainImages;
+
+    VkPipelineStageFlags readMask = 0;
+    VkPipelineStageFlags lastWrite = 0;
 };
 
 }

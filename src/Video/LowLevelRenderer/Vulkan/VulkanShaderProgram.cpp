@@ -21,6 +21,7 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
         const VulkanShader* vulkanShader = static_cast<const VulkanShader*>(shader);
         this->shaders.push_back(vulkanShader);
 
+        // Resource info.
         ShaderSource::ReflectionInfo reflectionInfo = vulkanShader->GetReflectionInfo();
         if (reflectionInfo.hasMatrices) {
             AddUniformBuffer(BindingType::MATRICES);
@@ -32,6 +33,20 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
 
         if (reflectionInfo.hasStorageBuffer) {
             AddStorageBuffer();
+
+            switch (vulkanShader->GetShaderStage()) {
+            case VK_SHADER_STAGE_VERTEX_BIT:
+                storageBufferPipelineStages |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+                break;
+            case VK_SHADER_STAGE_FRAGMENT_BIT:
+                storageBufferPipelineStages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+                break;
+            case VK_SHADER_STAGE_COMPUTE_BIT:
+                storageBufferPipelineStages |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+                break;
+            }
+
+            writesToStorageBuffer = reflectionInfo.storageBufferReadWrite;
         }
 
         if (reflectionInfo.materialCount > 0) {
@@ -58,6 +73,14 @@ const VkDescriptorSetLayout* VulkanShaderProgram::GetDescriptorSetLayouts() cons
 
 const VkPushConstantRange* VulkanShaderProgram::GetPushConstantRange() const {
     return usesPushConstants ? &pushConstantRange : nullptr;
+}
+
+VkPipelineStageFlags VulkanShaderProgram::GetStorageBufferPipelineStages() const {
+    return storageBufferPipelineStages;
+}
+
+bool VulkanShaderProgram::WritesToStorageBuffer() const {
+    return writesToStorageBuffer;
 }
 
 void VulkanShaderProgram::AddUniformBuffer(BindingType bindingType) {

@@ -44,6 +44,18 @@ class VulkanShaderProgram : public ShaderProgram {
      */
     const VkPushConstantRange* GetPushConstantRange() const;
 
+    /// Get the pipeline stages the storage buffer is used in.
+    /**
+     * @return The shader pipeline stages.
+     */
+    VkPipelineStageFlags GetStorageBufferPipelineStages() const;
+
+    /// Get whether the shader program writes to a storage buffer.
+    /**
+     * @return Whether the shader program writes to a storage buffer.
+     */
+    bool WritesToStorageBuffer() const;
+
   private:
     VulkanShaderProgram(const VulkanShaderProgram& other) = delete;
 
@@ -59,6 +71,9 @@ class VulkanShaderProgram : public ShaderProgram {
 
     bool usesPushConstants = false;
     VkPushConstantRange pushConstantRange;
+
+    VkPipelineStageFlags storageBufferPipelineStages = 0;
+    bool writesToStorageBuffer = false;
 };
 
 } // namespace Video

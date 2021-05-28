@@ -32,7 +32,7 @@ class VulkanRenderer : public LowLevelRenderer {
     void Present() final;
     Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) final;
     VertexDescription* CreateVertexDescription(unsigned int attributeCount, const VertexDescription::Attribute* attributes, bool indexBuffer = false) final;
-    GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, const Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) final;
+    GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) final;
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
@@ -89,7 +89,7 @@ class VulkanRenderer : public LowLevelRenderer {
      *
      * @return The descriptor set.
      */
-    VkDescriptorSet GetDescriptorSet(std::initializer_list<const Texture*> textures);
+    VkDescriptorSet GetDescriptorSet(std::initializer_list<Texture*> textures);
 
     /// Get whether wide lines are supported.
     /**

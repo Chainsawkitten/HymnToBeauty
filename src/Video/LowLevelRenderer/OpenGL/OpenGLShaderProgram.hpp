@@ -29,7 +29,7 @@ class OpenGLShaderProgram : public ShaderProgram {
     /**
      * @param shaders List of shaders to link together.
      */
-    OpenGLShaderProgram(std::initializer_list<const Shader*> shaders);
+    explicit OpenGLShaderProgram(std::initializer_list<const Shader*> shaders);
 
     /// Destructor.
     ~OpenGLShaderProgram() final;
@@ -47,6 +47,12 @@ class OpenGLShaderProgram : public ShaderProgram {
      */
     const std::vector<PushConstant>& GetPushConstants() const;
 
+    /// Get whether the shader program writes to a storage buffer.
+    /**
+     * @return Whether the shader program writes to a storage buffer.
+     */
+    bool WritesToStorageBuffer() const;
+
   private:
     OpenGLShaderProgram(const OpenGLShaderProgram& other) = delete;
 
@@ -54,6 +60,8 @@ class OpenGLShaderProgram : public ShaderProgram {
 
     GLuint shaderProgram;
     std::vector<PushConstant> pushConstants;
+
+    bool writesToStorageBuffer = false;
 };
 
 }

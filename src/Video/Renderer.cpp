@@ -159,7 +159,7 @@ void Renderer::PrepareStaticMeshRendering(const glm::mat4& viewMatrix, const glm
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 }
 
-void Renderer::RenderStaticMesh(Geometry::Geometry3D* geometry, const Texture2D* albedo, const Texture2D* normal, const Texture2D* roughnessMetallic, const glm::mat4 modelMatrix) {
+void Renderer::RenderStaticMesh(Geometry::Geometry3D* geometry, Texture2D* albedo, Texture2D* normal, Texture2D* roughnessMetallic, const glm::mat4 modelMatrix) {
     staticRenderProgram->Render(*commandBuffer, geometry, albedo, normal, roughnessMetallic, modelMatrix);
 }
 
@@ -211,7 +211,7 @@ void Renderer::PrepareRenderingIcons(const glm::mat4& viewProjectionMatrix, cons
     this->cameraUp = cameraUp;
 }
 
-void Renderer::RenderIcon(const glm::vec3& position, const Texture2D* icon) {
+void Renderer::RenderIcon(const glm::vec3& position, Texture2D* icon) {
     if (currentIcon != icon) {
         currentIcon = icon;
         commandBuffer->BindMaterial({icon->GetTexture()});

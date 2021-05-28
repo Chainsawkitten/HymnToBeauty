@@ -140,7 +140,7 @@ VertexDescription* OpenGLRenderer::CreateVertexDescription(unsigned int attribut
     return new OpenGLVertexDescription(attributeCount, attributes, indexBuffer);
 }
 
-GeometryBinding* OpenGLRenderer::CreateGeometryBinding(const VertexDescription* vertexDescription, const Buffer* vertexBuffer, GeometryBinding::IndexType indexType, const Buffer* indexBuffer) {
+GeometryBinding* OpenGLRenderer::CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType, const Buffer* indexBuffer) {
     return new OpenGLGeometryBinding(vertexDescription, vertexBuffer, indexType, indexBuffer);
 }
 

@@ -29,13 +29,16 @@ OpenGLShaderProgram::OpenGLShaderProgram(std::initializer_list<const Shader*> sh
         Log() << std::string(infoLog.begin(), infoLog.end());
     }
 
-    // Detach shaders so that they can later be deleted.
-    for (const Shader* shader : shaders)
+    for (const Shader* shader : shaders) {
+        // Detach shaders so that they can later be deleted.
         glDetachShader(shaderProgram, static_cast<const OpenGLShader*>(shader)->GetShaderID());
 
-    // Get information about push constants.
-    for (const Shader* shader : shaders) {
-        AddPushConstants(static_cast<const OpenGLShader*>(shader)->GetReflectionInfo());
+        // Get reflection information.
+        const ShaderSource::ReflectionInfo& reflectionInfo = static_cast<const OpenGLShader*>(shader)->GetReflectionInfo();
+        AddPushConstants(reflectionInfo);
+
+        if (reflectionInfo.storageBufferReadWrite)
+            writesToStorageBuffer = true;
     }
 }
 
@@ -49,6 +52,10 @@ unsigned int OpenGLShaderProgram::GetID() const {
 
 const std::vector<OpenGLShaderProgram::PushConstant>& OpenGLShaderProgram::GetPushConstants() const {
     return pushConstants;
+}
+
+bool OpenGLShaderProgram::WritesToStorageBuffer() const {
+    return writesToStorageBuffer;
 }
 
 void OpenGLShaderProgram::AddPushConstants(const ShaderSource::ReflectionInfo& reflectionInfo) {
