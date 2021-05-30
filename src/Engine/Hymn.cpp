@@ -97,6 +97,10 @@ Json::Value ActiveHymn::ToJson() const {
     filtersNode["gamma"] = filterSettings.gamma;
     filtersNode["dither"] = filterSettings.ditherApply;
     filtersNode["fxaa"] = filterSettings.fxaa;
+    filtersNode["bloom"] = filterSettings.bloom;
+    filtersNode["bloomIntensity"] = filterSettings.bloomIntensity;
+    filtersNode["bloomThreshold"] = filterSettings.bloomThreshold;
+    filtersNode["bloomScatter"] = filterSettings.bloomScatter;
     root["filters"] = filtersNode;
 
     // Save scripts.
@@ -121,6 +125,10 @@ void ActiveHymn::FromJson(Json::Value root) {
     filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
     filterSettings.ditherApply = filtersNode["dither"].asBool();
     filterSettings.fxaa = filtersNode["fxaa"].asBool();
+    filterSettings.bloom = filtersNode["bloom"].asBool();
+    filterSettings.bloomIntensity = filtersNode.get("bloomIntensity", 1.0f).asFloat();
+    filterSettings.bloomThreshold = filtersNode.get("bloomThreshold", 1.0f).asFloat();
+    filterSettings.bloomScatter = filtersNode.get("bloomScatter", 0.7f).asFloat();
 
     // Load scripts.
     scripts.clear();

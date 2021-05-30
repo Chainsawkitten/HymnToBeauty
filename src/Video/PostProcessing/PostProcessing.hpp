@@ -28,6 +28,13 @@ class PostProcessing {
         struct Dither {
             bool enabled = false;
         } dither;
+
+        struct Bloom {
+            bool enabled = false;
+            float intensity = 1.0f;
+            float threshold = 1.0f;
+            float scatter = 0.7f;
+        } bloom;
     };
 
     /// Create new post-processing handler.
@@ -67,6 +74,10 @@ class PostProcessing {
     void CreateRenderPasses(Texture* outputTexture);
     void FreeRenderPasses();
 
+    void CreateBloomResources();
+    void FreeBloomResources();
+    void GenerateBloomTexture(CommandBuffer& commandBuffer, Texture* inputTexture);
+
     LowLevelRenderer* lowLevelRenderer;
 
     Configuration configuration;
@@ -77,6 +88,29 @@ class PostProcessing {
     RenderPass* tempRenderPass;
     RenderPass* outputRenderPass;
 
+    Texture* dummyTexture;
+
+    // Bloom.
+    struct BloomData {
+        Texture* textures[2];
+        RenderPass* renderPasses[2];
+    };
+    BloomData* bloomPasses;
+    uint32_t bloomPassCount;
+    Shader* bloomThresholdShader;
+    ShaderProgram* bloomThresholdShaderProgram;
+    GraphicsPipeline* bloomThresholdPipeline;
+    Shader* bloomDownscaleShader;
+    ShaderProgram* bloomDownscaleShaderProgram;
+    GraphicsPipeline* bloomDownscalePipeline;
+    Shader* bloomUpscaleShader;
+    ShaderProgram* bloomUpscaleShaderProgram;
+    GraphicsPipeline* bloomUpscalePipeline;
+    Shader* bloomBlurShader;
+    ShaderProgram* bloomBlurShaderProgram;
+    GraphicsPipeline* bloomBlurPipeline;
+    bool bloomResourcesCreated = false;
+
     // Uber.
     Shader* uberShader;
     ShaderProgram* uberShaderProgram;
@@ -85,6 +119,7 @@ class PostProcessing {
 
     struct UberUniforms {
         float gamma;
+        float bloomIntensity;
     };
 
     // FXAA + dither.

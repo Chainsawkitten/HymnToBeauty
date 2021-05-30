@@ -110,6 +110,10 @@ void RenderManager::Render(World& world, bool soundSources, bool lightSources, b
             configuration.gamma = Hymn().filterSettings.gamma;
             configuration.fxaa.enabled = Hymn().filterSettings.fxaa;
             configuration.dither.enabled = Hymn().filterSettings.ditherApply;
+            configuration.bloom.enabled = Hymn().filterSettings.bloom;
+            configuration.bloom.intensity = Hymn().filterSettings.bloomIntensity;
+            configuration.bloom.threshold = Hymn().filterSettings.bloomThreshold;
+            configuration.bloom.scatter = Hymn().filterSettings.bloomScatter;
             renderer->ConfigurePostProcessing(configuration);
 
             // Apply.

@@ -289,6 +289,12 @@ void OpenGLCommandBuffer::PushConstants(const void* data) {
         void* value = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(data) + pushConstant.offset);
 
         switch (pushConstant.type) {
+        case ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT:
+            SetUniformFloat(pushConstant.uniformLocation, *reinterpret_cast<const float*>(value));
+            break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::VEC2:
+            SetUniformVector2(pushConstant.uniformLocation, *reinterpret_cast<const glm::vec2*>(value));
+            break;
         case ShaderSource::ReflectionInfo::PushConstant::Type::VEC3:
             SetUniformVector3(pushConstant.uniformLocation, *reinterpret_cast<const glm::vec3*>(value));
             break;

@@ -127,6 +127,10 @@ endif()
 
 # Setup shaders
 set(SHADERS
+    shaders/BloomBlur.frag
+    shaders/BloomDownscale.frag
+    shaders/BloomThreshold.frag
+    shaders/BloomUpscale.frag
     shaders/DebugDrawing.vert
     shaders/DebugDrawing.frag
     shaders/Default3D.vert

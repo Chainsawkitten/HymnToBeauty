@@ -309,7 +309,11 @@ string Shader::GetDefaultSpirvInclude() {
 }
 
 ShaderSource::ReflectionInfo::PushConstant::Type Shader::StringToPushConstantType(const string& text) {
-    if (text == "vec3") {
+    if (text == "float") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT;
+    } else if (text == "vec2") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::VEC2;
+    } else if (text == "vec3") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::VEC3;
     } else if (text == "vec4") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::VEC4;
@@ -325,6 +329,12 @@ string Shader::PushConstantTypeToString(ShaderSource::ReflectionInfo::PushConsta
     string text = "ShaderSource::ReflectionInfo::PushConstant::Type::";
 
     switch (type) {
+    case ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT:
+        text += "FLOAT";
+        break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::VEC2:
+        text += "VEC2";
+        break;
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC3:
         text += "VEC3";
         break;
