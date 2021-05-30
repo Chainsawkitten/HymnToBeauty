@@ -53,6 +53,11 @@ OpenGLTexture::OpenGLTexture(const glm::uvec2 size, Texture::Type type, Texture:
         glGenerateMipmap(GL_TEXTURE_2D);
         break;
     case Texture::Type::RENDER_COLOR:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        break;
     case Texture::Type::RENDER_DEPTH:
         // Set texture parameters.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

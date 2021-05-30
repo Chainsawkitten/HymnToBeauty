@@ -157,6 +157,13 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
             samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
             break;
         case Texture::Type::RENDER_COLOR:
+            samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
+            samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
+            samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+            samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+            break;
         case Texture::Type::RENDER_DEPTH:
             samplerCreateInfo.magFilter = VK_FILTER_NEAREST;
             samplerCreateInfo.minFilter = VK_FILTER_NEAREST;
