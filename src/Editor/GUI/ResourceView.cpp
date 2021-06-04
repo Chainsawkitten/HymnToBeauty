@@ -256,17 +256,12 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
             resource.type = ResourceList::Resource::SCRIPT;
             resource.script = new ScriptFile();
             resource.script->path = path + "/";
-            resource.script->name = "Script #" + std::to_string(Hymn().scriptNumber++);
+            resource.script->name = "Script #" + std::to_string(Hymn().scriptNumber++) + ".as";
             Hymn().scripts.push_back(resource.script);
             folder.resources.push_back(resource);
 
             // Save the file with default contents.
-            std::string filePath;
-            filePath.append(Hymn().GetPath());
-            filePath.append("/");
-            filePath.append(resource.script->path);
-            filePath.append(resource.script->name);
-            filePath.append(".as");
+            const std::string filePath = Hymn().GetPath() + "/" + resource.script->path + resource.script->name;
             if (!FileSystem::FileExists(filePath.c_str())) {
                 std::ofstream file(filePath);
                 file << DefaultScriptBody;

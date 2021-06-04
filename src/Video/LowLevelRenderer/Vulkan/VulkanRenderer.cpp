@@ -36,6 +36,10 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
     CreateDescriptorPool();
     CreateQueries();
 
+    for (unsigned int i = 0; i < bakedStorageBufferDescriptorSetLayouts; ++i) {
+        currentStorageBufferDescriptorSet[i] = 0;
+    }
+
     for (unsigned int i = 0; i < bakedMaterialDescriptorSetLayouts; ++i) {
         currentMaterialDescriptorSet[i] = 0;
     }
@@ -60,6 +64,9 @@ VulkanRenderer::~VulkanRenderer() {
         vkDestroyDescriptorSetLayout(device, bufferDescriptorSetLayouts[i], nullptr);
     }
     vkDestroyDescriptorSetLayout(device, emptyDescriptorSetLayout, nullptr);
+    for (unsigned int i = 0; i < bakedStorageBufferDescriptorSetLayouts; ++i) {
+        vkDestroyDescriptorSetLayout(device, storageBufferDescriptorSetLayouts[i], nullptr);
+    }
     for (unsigned int i = 0; i < bakedMaterialDescriptorSetLayouts; ++i) {
         vkDestroyDescriptorSetLayout(device, materialDescriptorSetLayouts[i], nullptr);
     }
@@ -93,6 +100,10 @@ CommandBuffer* VulkanRenderer::CreateCommandBuffer() {
 
 void VulkanRenderer::BeginFrame() {
     AcquireSwapChainImage();
+    for (unsigned int i = 0; i < bakedStorageBufferDescriptorSetLayouts; ++i) {
+        currentStorageBufferDescriptorSet[i] = 0;
+    }
+
     for (unsigned int i = 0; i < bakedMaterialDescriptorSetLayouts; ++i) {
         currentMaterialDescriptorSet[i] = 0;
     }
@@ -329,6 +340,12 @@ VkDescriptorSetLayout VulkanRenderer::GetBufferDescriptorSetLayout(ShaderProgram
     return bufferDescriptorSetLayouts[bindingType];
 }
 
+VkDescriptorSetLayout VulkanRenderer::GetStorageBufferDescriptorSetLayout(unsigned int buffers) const {
+    assert(buffers <= bakedStorageBufferDescriptorSetLayouts);
+
+    return storageBufferDescriptorSetLayouts[buffers];
+}
+
 VkDescriptorSetLayout VulkanRenderer::GetMaterialDescriptorSetLayout(unsigned int textures) const {
     assert(textures <= bakedMaterialDescriptorSetLayouts);
 
@@ -336,6 +353,8 @@ VkDescriptorSetLayout VulkanRenderer::GetMaterialDescriptorSetLayout(unsigned in
 }
 
 VkDescriptorSet VulkanRenderer::GetDescriptorSet(ShaderProgram::BindingType bindingType, VulkanBuffer* buffer) {
+    assert(bindingType == ShaderProgram::BindingType::MATRICES || bindingType == ShaderProgram::BindingType::UNIFORMS);
+
     std::map<VkBuffer, VkDescriptorSet>& cache = bufferDescriptorSetCache[bindingType];
     VkBuffer vkBuffer = buffer->GetBuffer();
     auto it = cache.find(vkBuffer);
@@ -370,9 +389,6 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(ShaderProgram::BindingType bind
         case ShaderProgram::BindingType::UNIFORMS:
             descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             break;
-        case ShaderProgram::BindingType::STORAGE_BUFFER:
-            descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-            break;
         default:
             assert(false);
         }
@@ -392,6 +408,55 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(ShaderProgram::BindingType bind
 
         return descriptorSet;
     }
+}
+
+VkDescriptorSet VulkanRenderer::GetStorageBufferDescriptorSet(std::initializer_list<Buffer*> buffers) {
+    VkDescriptorSetLayout descriptorSetLayout = GetStorageBufferDescriptorSetLayout(buffers.size());
+
+    std::vector<VkDescriptorSet>& cache = storageBufferDescriptorSetCache[currentFrame][descriptorSetLayout];
+
+    if (currentStorageBufferDescriptorSet[buffers.size()] >= cache.size()) {
+        // Allocate descriptor set.
+        VkDescriptorSetAllocateInfo allocateInfo = {};
+        allocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        allocateInfo.descriptorPool = descriptorPool;
+        allocateInfo.descriptorSetCount = 1;
+        allocateInfo.pSetLayouts = &descriptorSetLayout;
+
+        VkDescriptorSet descriptorSet;
+        if (vkAllocateDescriptorSets(device, &allocateInfo, &descriptorSet) != VK_SUCCESS) {
+            Log(Log::ERR) << "Failed to allocate descriptor set.\n";
+        }
+
+        cache.push_back(descriptorSet);
+    }
+
+    VkDescriptorSet descriptorSet = cache[currentStorageBufferDescriptorSet[buffers.size()]++];
+
+    // Write data.
+    VkDescriptorBufferInfo* descriptorBufferInfos = new VkDescriptorBufferInfo[buffers.size()];
+    unsigned int i = 0;
+    for (const Buffer* buffer : buffers) {
+        descriptorBufferInfos[i].buffer = static_cast<const VulkanBuffer*>(buffer)->GetBuffer();
+        descriptorBufferInfos[i].offset = 0;
+        descriptorBufferInfos[i].range = buffer->GetSize();
+        ++i;
+    }
+
+    VkWriteDescriptorSet descriptorWrite = {};
+    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    descriptorWrite.dstSet = descriptorSet;
+    descriptorWrite.dstBinding = 0;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorCount = buffers.size();
+    descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    descriptorWrite.pBufferInfo = descriptorBufferInfos;
+
+    vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
+
+    delete[] descriptorBufferInfos;
+
+    return descriptorSet;
 }
 
 VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<Texture*> textures) {
@@ -943,22 +1008,25 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
         bufferDescriptorSetLayouts[ShaderProgram::BindingType::UNIFORMS] = descriptorSetLayout;
     }
 
-    // STORAGE_BUFFER
-    {
-        VkDescriptorSetLayoutBinding ssboLayoutBinding = {};
-        ssboLayoutBinding.binding = 0;
-        ssboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-        ssboLayoutBinding.descriptorCount = 1;
-        ssboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
+    // Storage buffers.
+    VkDescriptorSetLayoutBinding storageBufferLayoutBindings[bakedStorageBufferDescriptorSetLayouts];
+    layoutCreateInfo.pBindings = storageBufferLayoutBindings;
+    for (unsigned int i = 0; i < bakedStorageBufferDescriptorSetLayouts; ++i) {
+        storageBufferLayoutBindings[i].binding = i;
+        storageBufferLayoutBindings[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        storageBufferLayoutBindings[i].descriptorCount = 1;
+        storageBufferLayoutBindings[i].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
 
-        layoutCreateInfo.pBindings = &ssboLayoutBinding;
-        
+        layoutCreateInfo.bindingCount = i + 1;
+
         if (vkCreateDescriptorSetLayout(device, &layoutCreateInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
             Log(Log::ERR) << "Failed to create descriptor set layout.\n";
         }
 
-        bufferDescriptorSetLayouts[ShaderProgram::BindingType::STORAGE_BUFFER] = descriptorSetLayout;
+        storageBufferDescriptorSetLayouts[i] = descriptorSetLayout;
     }
+
+    storageBufferDescriptorSetCache.resize(swapChainImages.size());
 
     // Empty descriptor set layout.
     layoutCreateInfo.bindingCount = 0;

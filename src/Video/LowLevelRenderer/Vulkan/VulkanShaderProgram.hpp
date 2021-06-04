@@ -15,6 +15,15 @@ class VulkanRenderer;
 /// Vulkan implementation of ShaderProgram.
 class VulkanShaderProgram : public ShaderProgram {
   public:
+    /// Informationa bout a storage buffer used in the shader program.
+    struct StorageBufferInfo {
+        /// Which pipeline stages the buffer is used in.
+        VkPipelineStageFlags pipelineStages;
+
+        /// Whether the buffer is written to.
+        bool readWrite;
+    };
+
     /// Create new Vulkan shader program.
     /**
      * @param vulkanRenderer The Vulkan renderer.
@@ -44,23 +53,18 @@ class VulkanShaderProgram : public ShaderProgram {
      */
     const VkPushConstantRange* GetPushConstantRange() const;
 
-    /// Get the pipeline stages the storage buffer is used in.
+    /// Get reflection info about a storage buffer used in the shader.
     /**
-     * @return The shader pipeline stages.
+     * @param binding Which binding to get information about.
+     *
+     * @return Information about the storage buffer.
      */
-    VkPipelineStageFlags GetStorageBufferPipelineStages() const;
-
-    /// Get whether the shader program writes to a storage buffer.
-    /**
-     * @return Whether the shader program writes to a storage buffer.
-     */
-    bool WritesToStorageBuffer() const;
+    const StorageBufferInfo& GetStorageBufferInfo(uint32_t binding) const;
 
   private:
     VulkanShaderProgram(const VulkanShaderProgram& other) = delete;
 
     void AddUniformBuffer(BindingType bindingType);
-    void AddStorageBuffer();
     void AddMaterial(unsigned int textures);
     void AddPushConstants(unsigned int pushConstantCount, ShaderSource::ReflectionInfo::PushConstant* pushConstants, bool isComputeShader);
 
@@ -72,8 +76,7 @@ class VulkanShaderProgram : public ShaderProgram {
     bool usesPushConstants = false;
     VkPushConstantRange pushConstantRange;
 
-    VkPipelineStageFlags storageBufferPipelineStages = 0;
-    bool writesToStorageBuffer = false;
+    std::vector<StorageBufferInfo> storageBufferInfo;
 };
 
 } // namespace Video

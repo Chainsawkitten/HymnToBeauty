@@ -35,7 +35,7 @@ UNIFORMS
     float gamma;
 } uniforms;
 
-STORAGE_BUFFER
+STORAGE_BUFFER(0)
 {
     Light lights[];
 } lightBuffer;

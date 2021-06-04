@@ -66,6 +66,14 @@ class VulkanRenderer : public LowLevelRenderer {
      */
     VkDescriptorSetLayout GetBufferDescriptorSetLayout(ShaderProgram::BindingType bindingType) const;
 
+    /// Get the descriptor set layout for a storage buffer binding.
+    /**
+     * @param buffers The number of buffers to bind.
+     *
+     * @return The descriptor set layout.
+     */
+    VkDescriptorSetLayout GetStorageBufferDescriptorSetLayout(unsigned int buffers) const;
+
     /// Get the descriptor set layout for a material binding.
     /**
      * @param textures The number of textures to bind.
@@ -82,6 +90,14 @@ class VulkanRenderer : public LowLevelRenderer {
      * @return The descriptor set.
      */
     VkDescriptorSet GetDescriptorSet(ShaderProgram::BindingType bindingType, VulkanBuffer* buffer);
+
+    /// Get a descriptor set for a given binding of storage buffers.
+    /**
+     * @param buffers The buffers to bind.
+     *
+     * @return The descriptor set.
+     */
+    VkDescriptorSet GetStorageBufferDescriptorSet(std::initializer_list<Buffer*> buffers);
 
     /// Get a descriptor set for a given binding of textures.
     /**
@@ -177,6 +193,12 @@ class VulkanRenderer : public LowLevelRenderer {
 
     VkDescriptorSetLayout emptyDescriptorSetLayout;
     VkDescriptorSetLayout bufferDescriptorSetLayouts[ShaderProgram::BindingType::BINDING_TYPES];
+
+    static const unsigned int bakedStorageBufferDescriptorSetLayouts = 16;
+    VkDescriptorSetLayout storageBufferDescriptorSetLayouts[bakedStorageBufferDescriptorSetLayouts];
+    std::vector<std::map<VkDescriptorSetLayout, std::vector<VkDescriptorSet>>> storageBufferDescriptorSetCache;
+    unsigned int currentStorageBufferDescriptorSet[bakedStorageBufferDescriptorSetLayouts];
+
     static const unsigned int bakedMaterialDescriptorSetLayouts = 16;
     VkDescriptorSetLayout materialDescriptorSetLayouts[bakedMaterialDescriptorSetLayouts];
     std::vector<std::map<VkDescriptorSetLayout, std::vector<VkDescriptorSet>>> materialDescriptorSetCache;

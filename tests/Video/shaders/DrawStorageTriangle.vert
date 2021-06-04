@@ -1,6 +1,6 @@
 layout(location = 0) out vec3 color;
 
-STORAGE_BUFFER
+STORAGE_BUFFER(0)
 {
     vec4 colors[3];
     vec2 positions[3];

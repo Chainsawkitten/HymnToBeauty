@@ -699,7 +699,7 @@ bool DrawStorageTriangle(void* data) {
     commandBuffer->BeginRenderPass(renderPass);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
-    commandBuffer->BindStorageBuffer(storageBuffer);
+    commandBuffer->BindStorageBuffers({ storageBuffer });
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 

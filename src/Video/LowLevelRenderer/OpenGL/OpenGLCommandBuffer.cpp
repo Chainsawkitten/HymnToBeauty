@@ -250,17 +250,20 @@ void OpenGLCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
     AddCommand(command);
 }
 
-void OpenGLCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
-    assert(storageBuffer != nullptr);
-    assert(storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || storageBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
-
+void OpenGLCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buffers) {
     Command command = {};
     command.type = Command::Type::BIND_STORAGE_BUFFER;
 
-    command.bindStorageBufferCommand.index = 0;
-    command.bindStorageBufferCommand.storageBuffer = static_cast<OpenGLBuffer*>(storageBuffer)->GetBufferID();
+    uint32_t index = 0;
+    for (Buffer* buffer : buffers) {
+        assert(buffer != nullptr);
+        assert(buffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || buffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
 
-    AddCommand(command);
+        command.bindStorageBufferCommand.index = index++;
+        command.bindStorageBufferCommand.storageBuffer = static_cast<OpenGLBuffer*>(buffer)->GetBufferID();
+
+        AddCommand(command);
+    }
 }
 
 void OpenGLCommandBuffer::BindMaterial(std::initializer_list<Texture*> textures) {
