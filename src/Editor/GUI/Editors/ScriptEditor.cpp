@@ -20,7 +20,7 @@ void ScriptEditor::Show() {
         }
 
         if (ImGui::Button("Edit Script")) {
-            std::string filename = Hymn().GetPath() + "/" + script->path + script->name + ".as";
+            std::string filename = Hymn().GetPath() + "/" + script->path + script->name;
             FileSystem::ExecuteProgram(EditorSettings::GetInstance().GetString("Text Editor"), "\"" + filename + "\"");
         }
 

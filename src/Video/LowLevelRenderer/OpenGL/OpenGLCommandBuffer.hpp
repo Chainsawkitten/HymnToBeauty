@@ -42,7 +42,7 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void SetLineWidth(float width) final;
     void BindGeometry(GeometryBinding* geometryBinding) final;
     void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) final;
-    void BindStorageBuffer(Buffer* storageBuffer) final;
+    void BindStorageBuffers(std::initializer_list<Buffer*> buffers) final;
     void BindMaterial(std::initializer_list<Texture*> textures) final;
     void PushConstants(const void* data) final;
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;

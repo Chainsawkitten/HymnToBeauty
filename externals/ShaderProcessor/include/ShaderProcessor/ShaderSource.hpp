@@ -37,17 +37,26 @@ struct ShaderSource {
             std::string name;
         };
 
+        /// Information about a storage buffer used in the shader.
+        struct StorageBuffer {
+            /// The binding within the descriptor set.
+            uint32_t binding;
+
+            /// Whether the storage buffer is read/write (otherwise read only).
+            bool readWrite;
+        };
+
         /// Whether a matrix uniform buffer is used.
         bool hasMatrices;
 
         /// Whether a uniform buffer is used.
         bool hasUniforms;
 
-        /// Whether a storage buffer is used.
-        bool hasStorageBuffer;
+        /// The number of storage buffers used.
+        unsigned int storageBufferCount;
 
-        /// Whether the storage buffer is read/write (otherwise read only).
-        bool storageBufferReadWrite;
+        /// The storage buffers.
+        StorageBuffer* storageBuffers;
         
         /// The number of samplers used.
         unsigned int materialCount;

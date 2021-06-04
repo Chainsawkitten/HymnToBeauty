@@ -85,11 +85,11 @@ class CommandBuffer {
      */
     virtual void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) = 0;
 
-    /// Bind storage buffer for use in a shader.
+    /// Bind storage buffers.
     /**
-     * @param storageBuffer The buffer to bind.
+     * @param buffers The buffers to bind.
      */
-    virtual void BindStorageBuffer(Buffer* storageBuffer) = 0;
+    virtual void BindStorageBuffers(std::initializer_list<Buffer*> buffers) = 0;
 
     /// Bind a material.
     /**

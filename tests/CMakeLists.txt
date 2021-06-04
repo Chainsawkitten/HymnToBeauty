@@ -16,6 +16,7 @@ set(HEADERS
 
 # Setup shaders
 set(SHADERS
+    Video/shaders/ComputeCopyBuffer.comp
     Video/shaders/ComputeSetBuffer.comp
     Video/shaders/ComputeVertexBuffer.comp
     Video/shaders/ComputeVertexBuffer.vert

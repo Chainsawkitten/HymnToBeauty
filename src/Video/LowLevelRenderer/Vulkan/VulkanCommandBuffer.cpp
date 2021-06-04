@@ -251,17 +251,21 @@ void VulkanCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
     }
 }
 
-void VulkanCommandBuffer::BindStorageBuffer(Buffer* storageBuffer) {
-    assert(storageBuffer != nullptr);
-    assert(storageBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || storageBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
+void VulkanCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buffers) {
+    const VulkanShaderProgram* shaderProgram = (inRenderPass ? currentGraphicsPipeline->GetShaderProgram() : currentComputePipeline->GetShaderProgram());
 
     // Synchronization.
-    VulkanBuffer* vulkanStorageBuffer = static_cast<VulkanBuffer*>(storageBuffer);
-    const VulkanShaderProgram* shaderProgram = (inRenderPass ? currentGraphicsPipeline->GetShaderProgram() : currentComputePipeline->GetShaderProgram());
-    BufferBarrier(vulkanStorageBuffer, shaderProgram->GetStorageBufferPipelineStages(), shaderProgram->WritesToStorageBuffer());
+    uint32_t index = 0;
+    for (Buffer* buffer : buffers) {
+        assert(buffer != nullptr);
+        assert(buffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || buffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
+
+        const VulkanShaderProgram::StorageBufferInfo& storageBufferInfo = shaderProgram->GetStorageBufferInfo(index++);
+        BufferBarrier(static_cast<VulkanBuffer*>(buffer), storageBufferInfo.pipelineStages, storageBufferInfo.readWrite);
+    }
 
     // Bind descriptor set.
-    VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(ShaderProgram::BindingType::STORAGE_BUFFER, vulkanStorageBuffer);
+    VkDescriptorSet descriptorSet = vulkanRenderer->GetStorageBufferDescriptorSet(buffers);
 
     if (inRenderPass) {
         assert(currentGraphicsPipeline != nullptr);

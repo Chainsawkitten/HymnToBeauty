@@ -96,6 +96,19 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
             delete[] reflectionInfo.pushConstants;
         }
 
+        // Storage buffers.
+        if (reflectionInfo.storageBufferCount > 0) {
+            outFile << "static ShaderSource::ReflectionInfo::StorageBuffer storageBuffers[" << reflectionInfo.storageBufferCount << "] = {\n";
+
+            for (unsigned int i = 0; i < reflectionInfo.storageBufferCount; ++i) {
+                outFile << "    { " << reflectionInfo.storageBuffers[i].binding << ", \"" << (reflectionInfo.storageBuffers[i].readWrite ? "true" : "false") << "\" },\n";
+            }
+
+            outFile << "};\n";
+
+            delete[] reflectionInfo.storageBuffers;
+        }
+
         // ShaderSource struct.
         outFile << "const ShaderSource " << variableName << " = { ";
 
@@ -107,8 +120,8 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
         }
         outFile << (reflectionInfo.hasMatrices ? "true" : "false") << ", ";
         outFile << (reflectionInfo.hasUniforms ? "true" : "false") << ", ";
-        outFile << (reflectionInfo.hasStorageBuffer ? "true" : "false") << ", ";
-        outFile << (reflectionInfo.storageBufferReadWrite ? "true" : "false") << ", ";
+        outFile << reflectionInfo.storageBufferCount << ", ";
+        outFile << (reflectionInfo.storageBufferCount > 0 ? "storageBuffers" : "nullptr") << ", ";
         outFile << reflectionInfo.materialCount << ", ";
         outFile << reflectionInfo.pushConstantCount << ", ";
         outFile << (reflectionInfo.pushConstantCount > 0 ? "pushConstants" : "nullptr") << ", ";
@@ -209,6 +222,7 @@ ShaderSource::ReflectionInfo Shader::GetReflectionInfo() const {
     stringstream lineParser(parseSource);
     bool inPushConstantBlock = false;
     vector<ShaderSource::ReflectionInfo::PushConstant> pushConstants;
+    vector<ShaderSource::ReflectionInfo::StorageBuffer> storageBuffers;
     while (getline(lineParser, line)) {
         // Remove leading whitespace.
         size_t firstNonWhitespace = line.find_first_not_of(" \t");
@@ -247,12 +261,12 @@ ShaderSource::ReflectionInfo Shader::GetReflectionInfo() const {
                 reflectionInfo.hasUniforms = true;
             }
 
-            if (line.find("STORAGE_BUFFER_RW") == 0) {
-                reflectionInfo.hasStorageBuffer = true;
-                reflectionInfo.storageBufferReadWrite = true;
-            } else if (line.find("STORAGE_BUFFER") == 0) {
-                reflectionInfo.hasStorageBuffer = true;
-                reflectionInfo.storageBufferReadWrite = false;
+            if (line.find("STORAGE_BUFFER") == 0) {
+                ShaderSource::ReflectionInfo::StorageBuffer storageBuffer;
+                size_t firstBracket = line.find('(');
+                storageBuffer.binding = stoul(line.substr(firstBracket + 1, line.find(')') - firstBracket));
+                storageBuffer.readWrite = (line.find("STORAGE_BUFFER_RW") == 0);
+                storageBuffers.push_back(storageBuffer);
             }
 
             if (line.find("MATERIAL") == 0) {
@@ -263,6 +277,12 @@ ShaderSource::ReflectionInfo Shader::GetReflectionInfo() const {
                 inPushConstantBlock = true;
             }
         }
+    }
+
+    reflectionInfo.storageBufferCount = storageBuffers.size();
+    reflectionInfo.storageBuffers = new ShaderSource::ReflectionInfo::StorageBuffer[storageBuffers.size()];
+    for (size_t i = 0; i < storageBuffers.size(); ++i) {
+        reflectionInfo.storageBuffers[i] = storageBuffers[i];
     }
 
     reflectionInfo.pushConstantCount = pushConstants.size();
@@ -283,8 +303,8 @@ string Shader::GetDefaultGlslInclude() {
     glsl += "#define InstanceIndex gl_InstanceID\n";
     glsl += "#define MATRICES layout(std140, binding = 0) uniform MatrixBlock\n";
     glsl += "#define UNIFORMS layout(std140, binding = 1) uniform FragmentUniformBlock\n";
-    glsl += "#define STORAGE_BUFFER layout(std430, binding = 0) readonly buffer StorageBufferBlock\n";
-    glsl += "#define STORAGE_BUFFER_RW layout(std430, binding = 0) buffer StorageBufferBlock\n";
+    glsl += "#define STORAGE_BUFFER(INDEX) layout(std430, binding = INDEX) readonly buffer StorageBufferBlock##INDEX\n";
+    glsl += "#define STORAGE_BUFFER_RW(INDEX) layout(std430, binding = INDEX) buffer StorageBufferBlock##INDEX\n";
     glsl += "#define PUSH_CONSTANTS uniform struct PushConstants\n";
     glsl += "#define FixPosition() \n";
     glsl += "#define FixFramebufferCoordinates(TEX_COORDS) TEX_COORDS.y = 1.0 - TEX_COORDS.y;\n";
@@ -298,8 +318,8 @@ string Shader::GetDefaultSpirvInclude() {
     glsl += "#define InstanceIndex gl_InstanceIndex\n";
     glsl += "#define MATRICES layout(std140, set = 0, binding = 0) uniform MatrixBlock\n";
     glsl += "#define UNIFORMS layout(std140, set = 2, binding = 0) uniform FragmentUniformBlock\n";
-    glsl += "#define STORAGE_BUFFER layout(std430, set = 3, binding = 0) readonly buffer StorageBufferBlock\n";
-    glsl += "#define STORAGE_BUFFER_RW layout(std430, set = 3, binding = 0) buffer StorageBufferBlock\n";
+    glsl += "#define STORAGE_BUFFER(INDEX) layout(std430, set = 3, binding = INDEX) readonly buffer StorageBufferBlock##INDEX\n";
+    glsl += "#define STORAGE_BUFFER_RW(INDEX) layout(std430, set = 3, binding = INDEX) buffer StorageBufferBlock##INDEX\n";
     glsl += "#define PUSH_CONSTANTS layout(push_constant) uniform PushConstants\n";
     glsl += "#define FixPosition() gl_Position.y = -gl_Position.y; gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;\n";
     glsl += "#define FixFramebufferCoordinates(TEX_COORDS)\n";

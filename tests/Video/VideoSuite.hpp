@@ -147,3 +147,11 @@ bool ComputeSetBuffer(void* data);
  * @return Whether the test was successful.
  */
 bool ComputeVertexBuffer(void* data);
+
+/// Test using multiple storage buffers in a compute shaders.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool ComputeMultipleBuffers(void* data);

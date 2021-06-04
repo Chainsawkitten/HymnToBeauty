@@ -37,8 +37,10 @@ OpenGLShaderProgram::OpenGLShaderProgram(std::initializer_list<const Shader*> sh
         const ShaderSource::ReflectionInfo& reflectionInfo = static_cast<const OpenGLShader*>(shader)->GetReflectionInfo();
         AddPushConstants(reflectionInfo);
 
-        if (reflectionInfo.storageBufferReadWrite)
-            writesToStorageBuffer = true;
+        for (uint32_t i = 0; i < reflectionInfo.storageBufferCount; i++) {
+            if (reflectionInfo.storageBuffers[i].readWrite)
+                writesToStorageBuffer = true;
+        }
     }
 }
 

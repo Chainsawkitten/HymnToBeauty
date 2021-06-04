@@ -31,22 +31,27 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
             AddUniformBuffer(BindingType::UNIFORMS);
         }
 
-        if (reflectionInfo.hasStorageBuffer) {
-            AddStorageBuffer();
-
-            switch (vulkanShader->GetShaderStage()) {
-            case VK_SHADER_STAGE_VERTEX_BIT:
-                storageBufferPipelineStages |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
-                break;
-            case VK_SHADER_STAGE_FRAGMENT_BIT:
-                storageBufferPipelineStages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-                break;
-            case VK_SHADER_STAGE_COMPUTE_BIT:
-                storageBufferPipelineStages |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-                break;
+        if (reflectionInfo.storageBufferCount > 0) {
+            if (reflectionInfo.storageBufferCount > storageBufferInfo.size()) {
+                StorageBufferInfo clear = { 0, false };
+                storageBufferInfo.resize(reflectionInfo.storageBufferCount, clear);
             }
 
-            writesToStorageBuffer = reflectionInfo.storageBufferReadWrite;
+            for (uint32_t i = 0; i < reflectionInfo.storageBufferCount; i++) {
+                uint32_t binding = reflectionInfo.storageBuffers[i].binding;
+                switch (vulkanShader->GetShaderStage()) {
+                case VK_SHADER_STAGE_VERTEX_BIT:
+                    storageBufferInfo[i].pipelineStages |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+                    break;
+                case VK_SHADER_STAGE_FRAGMENT_BIT:
+                    storageBufferInfo[i].pipelineStages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+                    break;
+                case VK_SHADER_STAGE_COMPUTE_BIT:
+                    storageBufferInfo[i].pipelineStages |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+                    break;
+                }
+                storageBufferInfo[i].readWrite = storageBufferInfo[i].readWrite || reflectionInfo.storageBuffers[i].readWrite;
+            }
         }
 
         if (reflectionInfo.materialCount > 0) {
@@ -57,6 +62,9 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
             AddPushConstants(reflectionInfo.pushConstantCount, reflectionInfo.pushConstants, vulkanShader->GetShaderStage() == VK_SHADER_STAGE_COMPUTE_BIT);
         }
     }
+
+    if (storageBufferInfo.size() > 0)
+        descriptorSetLayouts[BindingType::STORAGE_BUFFER] = vulkanRenderer->GetStorageBufferDescriptorSetLayout(storageBufferInfo.size());
 }
 
 VulkanShaderProgram::~VulkanShaderProgram() {
@@ -75,12 +83,10 @@ const VkPushConstantRange* VulkanShaderProgram::GetPushConstantRange() const {
     return usesPushConstants ? &pushConstantRange : nullptr;
 }
 
-VkPipelineStageFlags VulkanShaderProgram::GetStorageBufferPipelineStages() const {
-    return storageBufferPipelineStages;
-}
+const VulkanShaderProgram::StorageBufferInfo& VulkanShaderProgram::GetStorageBufferInfo(uint32_t binding) const {
+    assert(binding < storageBufferInfo.size());
 
-bool VulkanShaderProgram::WritesToStorageBuffer() const {
-    return writesToStorageBuffer;
+    return storageBufferInfo[binding];
 }
 
 void VulkanShaderProgram::AddUniformBuffer(BindingType bindingType) {
@@ -89,10 +95,6 @@ void VulkanShaderProgram::AddUniformBuffer(BindingType bindingType) {
     /// @todo Check that we're not adding things twice.
 
     descriptorSetLayouts[bindingType] = vulkanRenderer->GetBufferDescriptorSetLayout(bindingType);
-}
-
-void VulkanShaderProgram::AddStorageBuffer() {
-    descriptorSetLayouts[BindingType::STORAGE_BUFFER] = vulkanRenderer->GetBufferDescriptorSetLayout(BindingType::STORAGE_BUFFER);
 }
 
 void VulkanShaderProgram::AddMaterial(unsigned int textures) {

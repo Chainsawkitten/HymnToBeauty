@@ -111,7 +111,7 @@ void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fragmentUniformBuffer);
 
     // Light storage buffer.
-    commandBuffer.BindStorageBuffer(lightBuffer);
+    commandBuffer.BindStorageBuffers({ lightBuffer });
 }
 
 void StaticRenderProgram::Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, Video::Texture2D* textureAlbedo, Video::Texture2D* textureNormal, Video::Texture2D* textureRoughnessMetallic, const glm::mat4& modelMatrix) const {
