@@ -20,6 +20,12 @@ class OpenGLRenderPass : public RenderPass {
      */
     OpenGLRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation);
 
+    /// Create new attachmentless OpenGL render pass.
+    /**
+     * @param size The size of the framebuffer.
+     */
+    explicit OpenGLRenderPass(const glm::uvec2& size);
+
     /// Destructor.
     ~OpenGLRenderPass() final;
 

@@ -241,6 +241,10 @@ RenderPass* VulkanRenderer::CreateRenderPass(Texture* colorAttachment, RenderPas
     return new VulkanRenderPass(device, colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
 }
 
+RenderPass* VulkanRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size) {
+    return new VulkanRenderPass(device, size);
+}
+
 GraphicsPipeline* VulkanRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
     return new VulkanGraphicsPipeline(*this, device, shaderProgram, configuration, vertexDescription);
 }
@@ -799,7 +803,8 @@ VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
 
     // Enabled mandatory features.
     VkPhysicalDeviceFeatures enabledFeatures = {};
-    enabledFeatures.fillModeNonSolid = true;
+    enabledFeatures.fillModeNonSolid = VK_TRUE;
+    enabledFeatures.fragmentStoresAndAtomics = VK_TRUE;
 
     // Enable optional features.
     wideLines = supportedFeatures.wideLines;

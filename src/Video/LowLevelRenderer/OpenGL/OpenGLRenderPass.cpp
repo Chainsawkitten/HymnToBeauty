@@ -48,6 +48,29 @@ OpenGLRenderPass::OpenGLRenderPass(Texture* colorAttachment, RenderPass::LoadOpe
         clearMask |= GL_DEPTH_BUFFER_BIT;
 }
 
+OpenGLRenderPass::OpenGLRenderPass(const glm::uvec2& size) {
+    assert(size.x > 0 && size.y > 0);
+
+    // Frame buffer object.
+    glGenFramebuffers(1, &frameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, size.x);
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, size.y);
+
+    this->size = size;
+
+    // Check if framebuffer was created correctly
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        Log(Log::ERR) << "Framebuffer creation failed\n";
+    }
+
+    // Default framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    clearMask = 0;
+}
+
 OpenGLRenderPass::~OpenGLRenderPass() {
     glDeleteFramebuffers(1, &frameBuffer);
 }

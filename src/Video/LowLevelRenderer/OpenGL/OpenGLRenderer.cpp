@@ -160,6 +160,10 @@ RenderPass* OpenGLRenderer::CreateRenderPass(Texture* colorAttachment, RenderPas
     return new OpenGLRenderPass(colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
 }
 
+RenderPass* OpenGLRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size) {
+    return new OpenGLRenderPass(size);
+}
+
 GraphicsPipeline* OpenGLRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
     return new OpenGLGraphicsPipeline(shaderProgram, configuration);
 }

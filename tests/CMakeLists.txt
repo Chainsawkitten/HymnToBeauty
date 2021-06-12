@@ -16,6 +16,8 @@ set(HEADERS
 
 # Setup shaders
 set(SHADERS
+    Video/shaders/AttachmentlessRead.frag
+    Video/shaders/AttachmentlessWrite.frag
     Video/shaders/ComputeCopyBuffer.comp
     Video/shaders/ComputeSetBuffer.comp
     Video/shaders/ComputeVertexBuffer.comp
@@ -39,6 +41,7 @@ set(SHADERS
 # Setup images.
 set(IMAGES
     Video/textures/Test.png
+    Video/references/Attachmentless.png
     Video/references/ComputeSetBuffer.png
     Video/references/DepthPrePass.png
     Video/references/DrawLines.png

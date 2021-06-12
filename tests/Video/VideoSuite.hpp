@@ -124,6 +124,14 @@ bool DepthPrePass(void* data);
  */
 bool DrawLines(void* data);
 
+/// Test attachmentless rendering.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool Attachmentless(void* data);
+
 /// Test rendering multiple frames.
 /**
  * @param data The low-level renderer.

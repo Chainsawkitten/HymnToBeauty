@@ -26,6 +26,7 @@ VideoSuite::VideoSuite(Video::Renderer::GraphicsAPI graphicsAPI) : TestSuite("Vi
     AddTest("DrawMipmappedTriangle", DrawMipmappedTriangle, &lowLevelRenderer);
     AddTest("DepthPrePass", DepthPrePass, &lowLevelRenderer);
     AddTest("DrawLines", DrawLines, &lowLevelRenderer);
+    AddTest("Attachmentless", Attachmentless, &lowLevelRenderer);
 
     AddTest("MultipleFrames", MultipleFrames, &lowLevelRenderer);
 
