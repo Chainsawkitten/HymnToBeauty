@@ -49,6 +49,10 @@
 
 #include "DrawLines.png.hpp"
 
+#include "AttachmentlessWrite.frag.hpp"
+#include "AttachmentlessRead.frag.hpp"
+#include "Attachmentless.png.hpp"
+
 using namespace Video;
 
 static const unsigned int imageSize = 64;
@@ -1190,6 +1194,91 @@ bool DrawLines(void* data) {
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
+
+    return result;
+}
+
+bool Attachmentless(void* data) {
+    assert(data != nullptr);
+
+    LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
+
+    // Create render texture.
+    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+
+    // Create renderpass.
+    RenderPass* attachmentlessRenderPass = lowLevelRenderer->CreateAttachmentlessRenderPass(renderTexture->GetSize());
+    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
+
+    // Create shaders.
+    Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
+    Shader* writeFragmentShader = lowLevelRenderer->CreateShader(ATTACHMENTLESSWRITE_FRAG, Shader::Type::FRAGMENT_SHADER);
+    ShaderProgram* writeShaderProgram = lowLevelRenderer->CreateShaderProgram({ vertexShader, writeFragmentShader });
+
+    Shader* readFragmentShader = lowLevelRenderer->CreateShader(ATTACHMENTLESSREAD_FRAG, Shader::Type::FRAGMENT_SHADER);
+    ShaderProgram* readShaderProgram = lowLevelRenderer->CreateShaderProgram({ vertexShader, readFragmentShader });
+
+    // Create graphics pipeline.
+    GraphicsPipeline::Configuration configuration = {};
+    configuration.primitiveType = PrimitiveType::TRIANGLE;
+    configuration.polygonMode = PolygonMode::FILL;
+    configuration.cullFace = CullFace::NONE;
+    configuration.blendMode = BlendMode::NONE;
+    configuration.depthMode = DepthMode::NONE;
+
+    GraphicsPipeline* writeGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(writeShaderProgram, configuration);
+    GraphicsPipeline* readGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(readShaderProgram, configuration);
+
+    // Create storage buffer.
+    Buffer* storageBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(glm::vec4) * imageSize * imageSize);
+
+    // Create command buffer.
+    CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
+
+    // Record command buffer.
+    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BindGraphicsPipeline(writeGraphicsPipeline);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
+    const glm::uvec2 screenSize(imageSize, imageSize);
+    commandBuffer->PushConstants(&screenSize);
+    commandBuffer->BindStorageBuffers({ storageBuffer });
+    commandBuffer->Draw(3);
+    commandBuffer->EndRenderPass();
+
+    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BindGraphicsPipeline(readGraphicsPipeline);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
+    commandBuffer->PushConstants(&screenSize);
+    commandBuffer->BindStorageBuffers({ storageBuffer });
+    commandBuffer->Draw(3);
+    commandBuffer->EndRenderPass();
+
+    // Submit the command buffer.
+    lowLevelRenderer->Submit(commandBuffer);
+
+    // Wait for rendering to finish.
+    lowLevelRenderer->Wait();
+
+    // Image verification.
+    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    bool result = imageVerification.Compare(ATTACHMENTLESS_PNG, ATTACHMENTLESS_PNG_LENGTH, 1);
+    if (!result) {
+        imageVerification.WritePNG("Attachmentless.png");
+    }
+
+    // Cleanup
+    delete commandBuffer;
+    delete writeGraphicsPipeline;
+    delete readGraphicsPipeline;
+    delete attachmentlessRenderPass;
+    delete renderPass;
+    delete renderTexture;
+    delete writeShaderProgram;
+    delete readShaderProgram;
+    delete vertexShader;
+    delete writeFragmentShader;
+    delete readFragmentShader;
+    delete storageBuffer;
 
     return result;
 }

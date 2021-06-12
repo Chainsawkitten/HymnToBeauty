@@ -166,6 +166,43 @@ VulkanRenderPass::VulkanRenderPass(VkDevice device, Texture* colorAttachment, Re
         compatibility.depthAttachmentFormat = vulkanDepthAttachment->GetFormat();
 }
 
+VulkanRenderPass::VulkanRenderPass(VkDevice device, const glm::uvec2& size) {
+    assert(size.x > 0 && size.y > 0);
+
+    this->device = device;
+    this->size = size;
+
+    // Subpass.
+    VkSubpassDescription subpass = {};
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+
+    // Create render pass.
+    VkRenderPassCreateInfo renderPassCreateInfo = {};
+    renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassCreateInfo.subpassCount = 1;
+    renderPassCreateInfo.pSubpasses = &subpass;
+
+    if (vkCreateRenderPass(device, &renderPassCreateInfo, nullptr, &renderPass) != VK_SUCCESS) {
+        Log(Log::ERR) << "Failed to create render pass.\n";
+    }
+
+    // Create framebuffer.
+    VkFramebufferCreateInfo framebufferCreateInfo = {};
+    framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferCreateInfo.renderPass = renderPass;
+    framebufferCreateInfo.width = size.x;
+    framebufferCreateInfo.height = size.y;
+    framebufferCreateInfo.layers = 1;
+
+    if (vkCreateFramebuffer(device, &framebufferCreateInfo, nullptr, &framebuffer) != VK_SUCCESS) {
+        Log(Log::ERR) << "Failed to create framebuffer.\n";
+    }
+
+    // Compatiblity information.
+    compatibility.hasColorAttachment = false;
+    compatibility.hasDepthAttachment = false;
+}
+
 VulkanRenderPass::~VulkanRenderPass() {
     vkDestroyFramebuffer(device, framebuffer, nullptr);
     vkDestroyRenderPass(device, renderPass, nullptr);

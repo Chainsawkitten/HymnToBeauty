@@ -37,6 +37,7 @@ class VulkanRenderer : public LowLevelRenderer {
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
     RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) final;
+    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;

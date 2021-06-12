@@ -125,6 +125,12 @@ class LowLevelRenderer {
      */
     virtual RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation = RenderPass::LoadOperation::CLEAR, Texture* depthAttachment = nullptr, RenderPass::LoadOperation depthLoadOperation = RenderPass::LoadOperation::CLEAR) = 0;
 
+    /// Create an attachmentless render pass.
+    /**
+     * @param size The framebuffer size.
+     */
+    virtual RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size) = 0;
+
     /// Create a graphics pipeline.
     /**
      * @param shaderProgram The shader program to use.

@@ -41,6 +41,13 @@ class VulkanRenderPass : public RenderPass {
      */
     VulkanRenderPass(VkDevice device, Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation);
 
+    /// Create new attachmentless Vulkan render pass.
+    /**
+     * @param device The Vulkan device.
+     * @param size The size of the framebuffer.
+     */
+    VulkanRenderPass(VkDevice device, const glm::uvec2& size);
+
     /// Destructor.
     ~VulkanRenderPass() final;
 
