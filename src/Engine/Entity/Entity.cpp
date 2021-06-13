@@ -69,6 +69,10 @@ bool Entity::HasChild(const Entity* check_child, bool deep) const {
     return false;
 }
 
+Entity* Entity::InstantiateScene(const std::string& name) {
+    return InstantiateScene(name, "");
+}
+
 Entity* Entity::InstantiateScene(const std::string& name, const std::string& originScene) {
     Json::Value root;
     Entity* child = AddChild();
@@ -95,12 +99,12 @@ Entity* Entity::InstantiateScene(const std::string& name, const std::string& ori
         }
     } else {
         child->name = "Error loading scene";
-        Log() << "Couldn't find scene to load.";
+        Log() << "Couldn't find scene to load: " << filename;
     }
 
     if (error) {
         child->name = "Error loading scene";
-        Log() << "Scene is added in continous loop.";
+        Log() << "Scene is added in continous loop: " << filename;
     }
 
     return child;

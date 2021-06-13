@@ -373,7 +373,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("Entity", "void SetEnabled(bool, bool)", asMETHOD(Entity, SetEnabled), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "bool IsEnabled() const", asMETHOD(Entity, IsEnabled), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Entity@ GetParent() const", asMETHOD(Entity, GetParent), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "Entity@ InstantiateScene(const string &in)", asMETHOD(Entity, InstantiateScene), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Entity@ InstantiateScene(const string &in)", asMETHODPR(Entity, InstantiateScene, (const std::string&), Entity*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "bool IsScene() const", asMETHOD(Entity, IsScene), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Entity@ GetChild(const string &in) const", asMETHOD(Entity, GetChild), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Entity@ GetChildFromIndex(int) const", asMETHOD(Entity, GetChildFromIndex), asCALL_THISCALL);
