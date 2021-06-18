@@ -163,6 +163,12 @@ void OpenGLCommandBuffer::BindGraphicsPipeline(GraphicsPipeline* graphicsPipelin
         break;
     }
 
+    // Depth clamp.
+    command.bindGraphicsPipelineCommand.depthClampEnabled = configuration.depthClamp;
+
+    // Conservative rasterization.
+    command.bindGraphicsPipelineCommand.conservativeRasterizationEnabled = configuration.conservativeRasterization;
+
     AddCommand(command);
 }
 
@@ -292,6 +298,12 @@ void OpenGLCommandBuffer::PushConstants(const void* data) {
         void* value = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(data) + pushConstant.offset);
 
         switch (pushConstant.type) {
+        case ShaderSource::ReflectionInfo::PushConstant::Type::INT:
+            SetUniformInteger(pushConstant.uniformLocation, *reinterpret_cast<const int*>(value));
+            break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::UINT:
+            SetUniformUnsignedInteger(pushConstant.uniformLocation, *reinterpret_cast<const uint32_t*>(value));
+            break;
         case ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT:
             SetUniformFloat(pushConstant.uniformLocation, *reinterpret_cast<const float*>(value));
             break;
@@ -339,6 +351,22 @@ void OpenGLCommandBuffer::DrawIndexed(unsigned int indexCount, unsigned int firs
     AddCommand(command);
 }
 
+void OpenGLCommandBuffer::DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount, unsigned int firstIndex, unsigned int baseVertex) {
+    assert(inRenderPass);
+
+    Command command = {};
+    command.type = Command::Type::DRAW_INDEXED_INSTANCED;
+
+    command.drawIndexedInstancedCommand.mode = primitiveType;
+    command.drawIndexedInstancedCommand.instanceCount = instanceCount;
+    command.drawIndexedInstancedCommand.type = indexType;
+    command.drawIndexedInstancedCommand.indices = reinterpret_cast<GLvoid*>(static_cast<uintptr_t>(firstIndex) * indexSize);
+    command.drawIndexedInstancedCommand.count = indexCount;
+    command.drawIndexedInstancedCommand.baseVertex = baseVertex;
+
+    AddCommand(command);
+}
+
 void OpenGLCommandBuffer::BlitToSwapChain(Texture* texture) {
     assert(!inRenderPass);
     assert(texture != nullptr);
@@ -366,7 +394,7 @@ void OpenGLCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) 
     AddCommand(command);
 }
 
-void OpenGLCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
+void OpenGLCommandBuffer::Dispatch(const glm::uvec3& numGroups, const std::string& name) {
     assert(!inRenderPass);
 
     Command command = {};
@@ -375,11 +403,36 @@ void OpenGLCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
     command.dispatchCommand.groupsX = numGroups.x;
     command.dispatchCommand.groupsY = numGroups.y;
     command.dispatchCommand.groupsZ = numGroups.z;
+    command.dispatchCommand.timingIndex = timings.size();
 
     AddCommand(command);
 
+    // Timing.
+    if (openGLRenderer.IsProfiling()) {
+        Timing timing;
+        timing.name = name;
+        timing.startQuery = openGLRenderer.GetFreeQuery();
+        timing.endQuery = openGLRenderer.GetFreeQuery();
+        timings.push_back(timing);
+    }
+
     // Memory barrier.
     command.type = Command::Type::MEMORY_BARRIER;
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::ClearBuffer(Buffer* buffer) {
+    assert(!inRenderPass);
+    assert(buffer != nullptr);
+
+    Command command = {};
+    command.type = Command::Type::CLEAR_BUFFER;
+
+    OpenGLBuffer* openGLBuffer = static_cast<OpenGLBuffer*>(buffer);
+
+    command.clearBufferCommand.target = openGLBuffer->GetTarget();
+    command.clearBufferCommand.buffer = openGLBuffer->GetBufferID();
+
     AddCommand(command);
 }
 
@@ -396,12 +449,22 @@ const std::vector<OpenGLCommandBuffer::Timing>& OpenGLCommandBuffer::GetTimings(
     return timings;
 }
 
-void OpenGLCommandBuffer::SetUniformInteger(unsigned int location, int value) {
+void OpenGLCommandBuffer::SetUniformInteger(unsigned int location, int32_t value) {
     Command command = {};
     command.type = Command::Type::SET_UNIFORM_INTEGER;
 
     command.setUniformIntegerCommand.location = location;
     command.setUniformIntegerCommand.value = value;
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::SetUniformUnsignedInteger(unsigned int location, uint32_t value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_UNSIGNED_INTEGER;
+
+    command.setUniformUnsignedIntegerCommand.location = location;
+    command.setUniformUnsignedIntegerCommand.value = value;
 
     AddCommand(command);
 }
@@ -525,6 +588,22 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         } else {
             glDisable(GL_BLEND);
         }
+
+        // Depth clamp.
+        if (command.bindGraphicsPipelineCommand.depthClampEnabled) {
+            glEnable(GL_DEPTH_CLAMP);
+        } else {
+            glDisable(GL_DEPTH_CLAMP);
+        }
+
+        // Conservative rasterization.
+        if (openGLRenderer.GetOptionalFeatures().conservativeRasterization) {
+            if (command.bindGraphicsPipelineCommand.conservativeRasterizationEnabled) {
+                glEnable(GL_CONSERVATIVE_RASTERIZATION_NV);
+            } else {
+                glDisable(GL_CONSERVATIVE_RASTERIZATION_NV);
+            }
+        }
         break;
     }
     case Command::Type::SET_VIEWPORT: {
@@ -545,6 +624,10 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     }
     case Command::Type::SET_UNIFORM_INTEGER: {
         glUniform1i(command.setUniformIntegerCommand.location, command.setUniformIntegerCommand.value);
+        break;
+    }
+    case Command::Type::SET_UNIFORM_UNSIGNED_INTEGER: {
+        glUniform1ui(command.setUniformUnsignedIntegerCommand.location, command.setUniformUnsignedIntegerCommand.value);
         break;
     }
     case Command::Type::SET_UNIFORM_FLOAT: {
@@ -592,12 +675,20 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         glDrawElementsBaseVertex(command.drawIndexedCommand.mode, command.drawIndexedCommand.count, command.drawIndexedCommand.type, command.drawIndexedCommand.indices, command.drawIndexedCommand.baseVertex);
         break;
     }
+    case Command::Type::DRAW_INDEXED_INSTANCED: {
+        glDrawElementsInstancedBaseVertex(command.drawIndexedInstancedCommand.mode, command.drawIndexedInstancedCommand.count, command.drawIndexedInstancedCommand.type, command.drawIndexedInstancedCommand.indices, command.drawIndexedInstancedCommand.instanceCount, command.drawIndexedInstancedCommand.baseVertex);
+        break;
+    }
     case Command::Type::BLIT_TO_SWAP_CHAIN: {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_SCISSOR_TEST);
         glDisable(GL_BLEND);
+        glDisable(GL_DEPTH_CLAMP);
+        if (openGLRenderer.GetOptionalFeatures().conservativeRasterization) {
+            glDisable(GL_CONSERVATIVE_RASTERIZATION_NV);
+        }
         glUseProgram(blitShaderProgram->GetID());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, command.blitToSwapChainCommand.texture);
@@ -610,7 +701,21 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         break;
     }
     case Command::Type::DISPATCH: {
+        unsigned int index = command.dispatchCommand.timingIndex;
+        if (openGLRenderer.IsProfiling())
+            glQueryCounter(timings[index].startQuery, GL_TIMESTAMP);
+
         glDispatchCompute(command.dispatchCommand.groupsX, command.dispatchCommand.groupsY, command.dispatchCommand.groupsZ);
+
+        if (openGLRenderer.IsProfiling())
+            glQueryCounter(timings[index].endQuery, GL_TIMESTAMP);
+        break;
+    }
+    case Command::Type::CLEAR_BUFFER: {
+        glBindBuffer(command.clearBufferCommand.target, command.clearBufferCommand.buffer);
+        GLuint zero = 0;
+        glClearBufferData(command.clearBufferCommand.target, GL_R32UI, GL_RED, GL_UNSIGNED_INT, &zero);
+        glBindBuffer(command.clearBufferCommand.target, 0);
         break;
     }
     case Command::Type::MEMORY_BARRIER: {

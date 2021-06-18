@@ -30,6 +30,7 @@ class CommandBuffer {
     /// Begin render pass.
     /**
      * @param renderPass The render pass to begin.
+     * @param name The name of the render pass (displayed in profiling).
      */
     virtual void BeginRenderPass(RenderPass* renderPass, const std::string& name = "Untitled render pass") = 0;
 
@@ -118,6 +119,15 @@ class CommandBuffer {
      */
     virtual void DrawIndexed(unsigned int indexCount, unsigned int firstIndex = 0, unsigned int baseVertex = 0) = 0;
 
+    /// Draw indexed instanced geometry.
+    /**
+     * @param indexCount The number of indices to render.
+     * @param instanceCount The number of instances to render.
+     * @param firstIndex The index to start rendering at.
+     * @param baseVertex Constant that should be added to each value in the index buffer.
+     */
+    virtual void DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount = 1, unsigned int firstIndex = 0, unsigned int baseVertex = 0) = 0;
+
     /// Blit a texture to the current swap chain image.
     /**
      * @param texture The texture to copy to the swap chain.
@@ -133,8 +143,15 @@ class CommandBuffer {
     /// Dispatch compute shader.
     /**
      * @param numGroups The number of groups in each dimension.
+     * @param name The name of the dispatch (displayed in profiling).
      */
-    virtual void Dispatch(const glm::uvec3& numGroups) = 0;
+    virtual void Dispatch(const glm::uvec3& numGroups, const std::string& name = "Untitled dispatch") = 0;
+
+    /// Clear a buffer (fill with 0).
+    /**
+     * @param buffer The buffer to clear.
+     */
+    virtual void ClearBuffer(Buffer* buffer) = 0;
 
   private:
     CommandBuffer(const CommandBuffer& other) = delete;

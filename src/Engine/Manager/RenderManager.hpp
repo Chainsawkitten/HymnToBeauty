@@ -205,8 +205,8 @@ class RenderManager {
 
     void RenderEditorEntities(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
-    void LightWorld(const glm::mat4& viewMatrix, const glm::mat4& viewProjectionMatrix, bool lightVolumes);
-    void LightAmbient();
+    void LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool lightVolumes);
+    void LightAmbient(const glm::mat4& projectionMatrix, float zNear, float zFar);
 
     void LoadTexture(TextureAsset*& texture, const std::string& name);
 

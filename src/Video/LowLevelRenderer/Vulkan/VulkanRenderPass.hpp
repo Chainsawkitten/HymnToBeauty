@@ -29,6 +29,9 @@ class VulkanRenderPass : public RenderPass {
 
         /// The format of the render pass' depth attachment.
         VkFormat depthAttachmentFormat;
+
+        /// MSAA sample count when doing attachmentless rendering.
+        uint32_t attachmentlessMsaa;
     };
 
     /// Create new Vulkan render pass.
@@ -45,8 +48,9 @@ class VulkanRenderPass : public RenderPass {
     /**
      * @param device The Vulkan device.
      * @param size The size of the framebuffer.
+     * @param msaaSamples The number of MSAA samples.
      */
-    VulkanRenderPass(VkDevice device, const glm::uvec2& size);
+    VulkanRenderPass(VkDevice device, const glm::uvec2& size, uint32_t msaaSamples);
 
     /// Destructor.
     ~VulkanRenderPass() final;

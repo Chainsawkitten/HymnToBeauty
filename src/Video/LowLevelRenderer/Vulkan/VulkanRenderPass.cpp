@@ -164,9 +164,11 @@ VulkanRenderPass::VulkanRenderPass(VkDevice device, Texture* colorAttachment, Re
     compatibility.hasDepthAttachment = hasDepthAttachment;
     if (hasDepthAttachment)
         compatibility.depthAttachmentFormat = vulkanDepthAttachment->GetFormat();
+
+    compatibility.attachmentlessMsaa = 1;
 }
 
-VulkanRenderPass::VulkanRenderPass(VkDevice device, const glm::uvec2& size) {
+VulkanRenderPass::VulkanRenderPass(VkDevice device, const glm::uvec2& size, uint32_t msaaSamples) {
     assert(size.x > 0 && size.y > 0);
 
     this->device = device;
@@ -199,8 +201,11 @@ VulkanRenderPass::VulkanRenderPass(VkDevice device, const glm::uvec2& size) {
     }
 
     // Compatiblity information.
+    hasColorAttachment = false;
+    hasDepthAttachment = false;
     compatibility.hasColorAttachment = false;
     compatibility.hasDepthAttachment = false;
+    compatibility.attachmentlessMsaa = msaaSamples;
 }
 
 VulkanRenderPass::~VulkanRenderPass() {

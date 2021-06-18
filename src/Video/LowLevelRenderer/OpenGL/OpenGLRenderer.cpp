@@ -34,6 +34,7 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
     glEnable(GL_CULL_FACE);
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_SCISSOR_TEST);
+    glEnable(GL_MULTISAMPLE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 #ifndef NDEBUG
@@ -51,9 +52,20 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
         freeQueries.push_back(queries[i]);
     }
 
+    // Get optional features.
     GLint precision;
     glGetQueryiv(GL_TIMESTAMP, GL_QUERY_COUNTER_BITS, &precision);
-    assert(precision > 0); /// @todo Disable GPU profiling if not supported.
+
+    optionalFeatures = {};
+    optionalFeatures.wideLines = true;
+    optionalFeatures.timestamps = precision > 0;
+    optionalFeatures.conservativeRasterization = GLAD_GL_NV_conservative_raster;
+
+    assert(optionalFeatures.timestamps); /// @todo Disable GPU profiling if not supported.
+
+    GLint maxSamples;
+    glGetIntegerv(GL_MAX_FRAMEBUFFER_SAMPLES, &maxSamples);
+    optionalFeatures.attachmentlessMsaaSamples = (static_cast<uint32_t>(maxSamples) << 1u) - 1u;
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
@@ -160,8 +172,8 @@ RenderPass* OpenGLRenderer::CreateRenderPass(Texture* colorAttachment, RenderPas
     return new OpenGLRenderPass(colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
 }
 
-RenderPass* OpenGLRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size) {
-    return new OpenGLRenderPass(size);
+RenderPass* OpenGLRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) {
+    return new OpenGLRenderPass(size, msaaSamples);
 }
 
 GraphicsPipeline* OpenGLRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
@@ -176,7 +188,7 @@ void OpenGLRenderer::Wait() {
     glFinish();
 }
 
-char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
+unsigned char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
     OpenGLRenderPass* openGLRenderPass = static_cast<OpenGLRenderPass*>(renderPass);
 
     // Calculate buffer size.
@@ -184,7 +196,7 @@ char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
     const uint32_t bufferSize = size.x * size.y * 4 * 1;
 
     // Read frame buffer contents.
-    char* data = new char[bufferSize];
+    unsigned char* data = new unsigned char[bufferSize];
     glBindFramebuffer(GL_READ_FRAMEBUFFER, openGLRenderPass->GetFrameBuffer());
     glReadPixels(0, 0, size.x, size.y, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -193,7 +205,7 @@ char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
     for (uint32_t y = 0; y < size.y / 2; ++y) {
         for (uint32_t x = 0; x < size.x; ++x) {
             for (uint32_t component = 0; component < 4; ++component) {
-                char temp = data[(y * size.x + x) * 4 + component];
+                unsigned char temp = data[(y * size.x + x) * 4 + component];
                 data[(y * size.x + x) * 4 + component] = data[((size.y - y - 1) * size.x + x) * 4 + component];
                 data[((size.y - y - 1) * size.x + x) * 4 + component] = temp;
             }
@@ -205,6 +217,10 @@ char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
 
 const std::vector<Profiling::Event>& OpenGLRenderer::GetTimeline() const {
     return finishedEvents;
+}
+
+const OpenGLRenderer::OptionalFeatures& OpenGLRenderer::GetOptionalFeatures() const {
+    return optionalFeatures;
 }
 
 const OpenGLShaderProgram* OpenGLRenderer::GetBlitShaderProgram() const {

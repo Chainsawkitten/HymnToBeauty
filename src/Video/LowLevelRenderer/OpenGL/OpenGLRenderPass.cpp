@@ -48,7 +48,7 @@ OpenGLRenderPass::OpenGLRenderPass(Texture* colorAttachment, RenderPass::LoadOpe
         clearMask |= GL_DEPTH_BUFFER_BIT;
 }
 
-OpenGLRenderPass::OpenGLRenderPass(const glm::uvec2& size) {
+OpenGLRenderPass::OpenGLRenderPass(const glm::uvec2& size, uint32_t msaaSamples) {
     assert(size.x > 0 && size.y > 0);
 
     // Frame buffer object.
@@ -57,6 +57,7 @@ OpenGLRenderPass::OpenGLRenderPass(const glm::uvec2& size) {
 
     glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, size.x);
     glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, size.y);
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, msaaSamples);
 
     this->size = size;
 

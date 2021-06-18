@@ -53,6 +53,8 @@
 #include "AttachmentlessRead.frag.hpp"
 #include "Attachmentless.png.hpp"
 
+#include "ConservativeRasterization.png.hpp"
+
 using namespace Video;
 
 static const unsigned int imageSize = 64;
@@ -1178,7 +1180,7 @@ bool DrawLines(void* data) {
 
     // Image verification.
     ImageVerification imageVerification(lowLevelRenderer, renderPass);
-    bool result = imageVerification.Compare(DRAWLINES_PNG, DRAWLINES_PNG_LENGTH, 1);
+    bool result = imageVerification.Compare(DRAWLINES_PNG, DRAWLINES_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawLines.png");
     }
@@ -1261,7 +1263,7 @@ bool Attachmentless(void* data) {
 
     // Image verification.
     ImageVerification imageVerification(lowLevelRenderer, renderPass);
-    bool result = imageVerification.Compare(ATTACHMENTLESS_PNG, ATTACHMENTLESS_PNG_LENGTH, 1);
+    bool result = imageVerification.Compare(ATTACHMENTLESS_PNG, ATTACHMENTLESS_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("Attachmentless.png");
     }
@@ -1279,6 +1281,72 @@ bool Attachmentless(void* data) {
     delete writeFragmentShader;
     delete readFragmentShader;
     delete storageBuffer;
+
+    return result;
+}
+
+bool ConservativeRasterization(void* data) {
+    assert(data != nullptr);
+
+    LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
+
+    // This is an optional feature.
+    if (!lowLevelRenderer->GetOptionalFeatures().conservativeRasterization)
+        return true;
+
+    // Create render texture.
+    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+
+    // Create renderpass.
+    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
+
+    // Create shaders.
+    Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
+    Shader* fragmentShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_FRAG, Shader::Type::FRAGMENT_SHADER);
+    ShaderProgram* shaderProgram = lowLevelRenderer->CreateShaderProgram({ vertexShader, fragmentShader });
+
+    // Create graphics pipeline.
+    GraphicsPipeline::Configuration configuration = {};
+    configuration.primitiveType = PrimitiveType::TRIANGLE;
+    configuration.polygonMode = PolygonMode::FILL;
+    configuration.cullFace = CullFace::BACK;
+    configuration.blendMode = BlendMode::NONE;
+    configuration.depthMode = DepthMode::NONE;
+    configuration.conservativeRasterization = true;
+
+    GraphicsPipeline* graphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration);
+
+    // Create command buffer.
+    CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
+
+    // Record command buffer.
+    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BindGraphicsPipeline(graphicsPipeline);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
+    commandBuffer->Draw(3);
+    commandBuffer->EndRenderPass();
+
+    // Submit the command buffer.
+    lowLevelRenderer->Submit(commandBuffer);
+
+    // Wait for rendering to finish.
+    lowLevelRenderer->Wait();
+
+    // Image verification.
+    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    bool result = imageVerification.Compare(CONSERVATIVERASTERIZATION_PNG, CONSERVATIVERASTERIZATION_PNG_LENGTH);
+    if (!result) {
+        imageVerification.WritePNG("ConservativeRasterization.png");
+    }
+
+    // Cleanup
+    delete commandBuffer;
+    delete graphicsPipeline;
+    delete renderPass;
+    delete renderTexture;
+    delete shaderProgram;
+    delete vertexShader;
+    delete fragmentShader;
 
     return result;
 }

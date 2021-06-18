@@ -7,6 +7,8 @@ set(SRCS
     Geometry/Geometry3D.cpp
     Geometry/Rectangle.cpp
     Geometry/VertexType/StaticVertex.cpp
+    Lighting/Isocahedron.cpp
+    Lighting/ZBinning.cpp
     PostProcessing/PostProcessing.cpp
     RenderProgram/RenderProgram.cpp
     RenderProgram/StaticRenderProgram.cpp
@@ -22,7 +24,9 @@ set(HEADERS
     Geometry/Geometry3D.hpp
     Geometry/Rectangle.hpp
     Geometry/VertexType/StaticVertex.hpp
+    Lighting/Isocahedron.hpp
     Lighting/Light.hpp
+    Lighting/ZBinning.hpp
     PostProcessing/PostProcessing.hpp
     RenderProgram/RenderProgram.hpp
     RenderProgram/StaticRenderProgram.hpp
@@ -140,6 +144,9 @@ set(SHADERS
     shaders/EditorEntity.vert
     shaders/EditorEntity.frag
     shaders/FXAA.frag
+    shaders/LightBinning.comp
+    shaders/LightTiling.vert
+    shaders/LightTiling.frag
     shaders/PostProcessing.vert
     shaders/SampleTexture.frag
     shaders/UberPostProcessing.frag

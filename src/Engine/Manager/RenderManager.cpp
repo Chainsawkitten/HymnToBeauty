@@ -141,25 +141,41 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
     const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
     const std::vector<Mesh*>& meshComponents = meshes.GetAll();
 
+    // Lights.
+    {
+        PROFILE("Update lights");
+
+        if (lighting) {
+            // Cull lights and update light list.
+            LightWorld(viewMatrix, projectionMatrix, cameraNear, cameraFar, lightVolumes);
+        } else {
+            // Use full ambient light and ignore lights in the scene.
+            LightAmbient(projectionMatrix, cameraNear, cameraFar);
+        }
+    }
+
     // Get list of entities to render.
     std::vector<Entity*> staticEntities;
+    {
+        PROFILE("Frustum culling");
 
-    for (Mesh* mesh : meshComponents) {
-        Entity* entity = mesh->entity;
-        if (entity->IsKilled() || !entity->IsEnabled())
-            continue;
+        for (Mesh* mesh : meshComponents) {
+            Entity* entity = mesh->entity;
+            if (entity->IsKilled() || !entity->IsEnabled())
+                continue;
 
-        if (mesh->geometry == nullptr || mesh->geometry->GetIndexCount() == 0)
-            continue;
+            if (mesh->geometry == nullptr || mesh->geometry->GetIndexCount() == 0)
+                continue;
 
-        if (entity->GetComponent<Material>() == nullptr)
-            continue;
+            if (entity->GetComponent<Material>() == nullptr)
+                continue;
 
-        Video::Frustum frustum(viewProjectionMatrix * entity->GetModelMatrix());
-        if (!frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox()))
-            continue;
+            Video::Frustum frustum(viewProjectionMatrix * entity->GetModelMatrix());
+            if (!frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox()))
+                continue;
 
-        staticEntities.push_back(entity);
+            staticEntities.push_back(entity);
+        }
     }
 
     // Depth pre-pass.
@@ -175,18 +191,6 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
                 renderer->DepthRenderStaticMesh(entity->GetComponent<Mesh>()->geometry, entity->GetModelMatrix());
             }
         }
-    }
-
-    // Lights.
-    {
-        PROFILE("Update lights");
-
-        if (lighting)
-            // Cull lights and update light list.
-            LightWorld(viewMatrix, viewProjectionMatrix, lightVolumes);
-        else
-            // Use full ambient light and ignore lights in the scene.
-            LightAmbient();
     }
 
     // Render meshes.
@@ -415,10 +419,13 @@ Video::Renderer* RenderManager::GetRenderer() {
     return renderer;
 }
 
-void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& viewProjectionMatrix, bool lightVolumes) {
-    std::vector<Video::Light> lights;
+void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool lightVolumes) {
 
     Video::AxisAlignedBoundingBox aabb(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
+
+    std::vector<Video::DirectionalLight> directionalLightStructs;
+    std::vector<Video::Light> lights;
 
     // Add all directional lights.
     for (Component::DirectionalLight* directionalLight : directionalLights.GetAll()) {
@@ -427,16 +434,14 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
 
         Entity* lightEntity = directionalLight->entity;
         glm::vec4 direction(glm::vec4(lightEntity->GetDirection(), 0.f));
-        Video::Light light;
-        light.position = viewMatrix * -direction;
-        light.intensitiesAttenuation = glm::vec4(directionalLight->color, 1.0f);
-        light.directionAmbientCoefficient = glm::vec4(0.0f, 0.0f, 0.0f, directionalLight->ambientCoefficient);
-        light.coneAngle = 0.f;
-        light.distance = 0.f;
-        lights.push_back(light);
+        Video::DirectionalLight light;
+        light.direction = viewMatrix * -direction;
+        light.intensitiesAmbientCoefficient = glm::vec4(directionalLight->color, directionalLight->ambientCoefficient);
+        directionalLightStructs.push_back(light);
     }
 
     // Add all spot lights.
+    /// @todo More accurate frustum culling.
     for (Component::SpotLight* spotLight : spotLights.GetAll()) {
         if (spotLight->IsKilled() || !spotLight->entity->IsEnabled())
             continue;
@@ -444,7 +449,6 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
         Entity* lightEntity = spotLight->entity;
         glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.0f, 1.0f, 1.0f) * spotLight->distance);
 
-        // TMPTODO
         Video::Frustum frustum(viewProjectionMatrix * modelMat);
         if (frustum.Collide(aabb)) {
             if (lightVolumes)
@@ -452,17 +456,17 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
 
             glm::vec4 direction(viewMatrix * glm::vec4(lightEntity->GetDirection(), 0.0f));
             glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
+            glm::vec4 position(viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f)));
             Video::Light light;
-            light.position = viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f));
+            light.positionDistance = glm::vec4(position.x, position.y, position.z, spotLight->distance);
             light.intensitiesAttenuation = glm::vec4(spotLight->color * spotLight->intensity, spotLight->attenuation);
-            light.directionAmbientCoefficient = glm::vec4(direction.x, direction.y, direction.z, spotLight->ambientCoefficient);
-            light.coneAngle = spotLight->coneAngle;
-            light.distance = spotLight->distance;
+            light.directionConeAngle = glm::vec4(direction.x, direction.y, direction.z, spotLight->coneAngle);
             lights.push_back(light);
         }
     }
 
     // Add all point lights.
+    /// @todo More accurate frustum culling.
     for (Component::PointLight* pointLight : pointLights.GetAll()) {
         if (pointLight->IsKilled() || !pointLight->entity->IsEnabled())
             continue;
@@ -476,12 +480,11 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
                 Managers().debugDrawingManager->AddSphere(lightEntity->GetWorldPosition(), pointLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
 
             glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
+            glm::vec4 position(viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f)));
             Video::Light light;
-            light.position = viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f));
+            light.positionDistance = glm::vec4(position.x, position.y, position.z, pointLight->distance);
             light.intensitiesAttenuation = glm::vec4(pointLight->color * pointLight->intensity, pointLight->attenuation);
-            light.directionAmbientCoefficient = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-            light.coneAngle = 180.0f;
-            light.distance = pointLight->distance;
+            light.directionConeAngle = glm::vec4(1.0f, 0.0f, 0.0f, 180.0f);
             lights.push_back(light);
         }
     }
@@ -489,22 +492,21 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& vie
     lightCount = lights.size();
 
     // Update light buffer.
-    renderer->SetLights(lights);
+    renderer->SetLights(directionalLightStructs, lights, projectionMatrix, zNear, zFar);
 }
 
-void RenderManager::LightAmbient() {
+void RenderManager::LightAmbient(const glm::mat4& projectionMatrix, float zNear, float zFar) {
+    std::vector<Video::DirectionalLight> directionalLightStructs;
     std::vector<Video::Light> lights;
 
-    Video::Light light;
-    light.position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    light.intensitiesAttenuation = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    light.directionAmbientCoefficient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    light.coneAngle = 0.0f;
-    light.distance = 0.0f;
-    lights.push_back(light);
+    Video::DirectionalLight light;
+    light.direction = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    light.intensitiesAmbientCoefficient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+    directionalLightStructs.push_back(light);
 
     // Update light buffer.
-    renderer->SetLights(lights);
+    renderer->SetLights(directionalLightStructs, lights, projectionMatrix, zNear, zFar);
 }
 
 void RenderManager::LoadTexture(TextureAsset*& texture, const std::string& name) {

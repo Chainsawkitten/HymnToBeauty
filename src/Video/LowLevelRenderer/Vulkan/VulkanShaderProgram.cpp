@@ -32,25 +32,26 @@ VulkanShaderProgram::VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::in
         }
 
         if (reflectionInfo.storageBufferCount > 0) {
-            if (reflectionInfo.storageBufferCount > storageBufferInfo.size()) {
-                StorageBufferInfo clear = { 0, false };
-                storageBufferInfo.resize(reflectionInfo.storageBufferCount, clear);
-            }
-
             for (uint32_t i = 0; i < reflectionInfo.storageBufferCount; i++) {
                 uint32_t binding = reflectionInfo.storageBuffers[i].binding;
+
+                if (binding >= storageBufferInfo.size()) {
+                    StorageBufferInfo clear = { 0, false };
+                    storageBufferInfo.resize(binding + 1, clear);
+                }
+
                 switch (vulkanShader->GetShaderStage()) {
                 case VK_SHADER_STAGE_VERTEX_BIT:
-                    storageBufferInfo[i].pipelineStages |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+                    storageBufferInfo[binding].pipelineStages |= VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
                     break;
                 case VK_SHADER_STAGE_FRAGMENT_BIT:
-                    storageBufferInfo[i].pipelineStages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+                    storageBufferInfo[binding].pipelineStages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
                     break;
                 case VK_SHADER_STAGE_COMPUTE_BIT:
-                    storageBufferInfo[i].pipelineStages |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+                    storageBufferInfo[binding].pipelineStages |= VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
                     break;
                 }
-                storageBufferInfo[i].readWrite = storageBufferInfo[i].readWrite || reflectionInfo.storageBuffers[i].readWrite;
+                storageBufferInfo[binding].readWrite = storageBufferInfo[binding].readWrite || reflectionInfo.storageBuffers[i].readWrite;
             }
         }
 

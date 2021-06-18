@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 
 #include "RenderProgram/StaticRenderProgram.hpp"
+#include "Lighting/ZBinning.hpp"
 #include "PostProcessing/PostProcessing.hpp"
 #include "Texture/Texture2D.hpp"
 #include "LowLevelRenderer/Interface/CommandBuffer.hpp"
@@ -48,10 +49,9 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 
     staticRenderProgram = new StaticRenderProgram(lowLevelRenderer);
 
-    postProcessing = new PostProcessing(lowLevelRenderer, postProcessingTexture);
+    zBinning = new ZBinning(lowLevelRenderer, renderSurfaceSize);
 
-    lightCount = 0;
-    lightBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * MAX_LIGHTS);
+    postProcessing = new PostProcessing(lowLevelRenderer, postProcessingTexture);
 
     // Create icon geometry.
     glm::vec2 vertex[6];
@@ -77,7 +77,7 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
     iconFragmentShader = lowLevelRenderer->CreateShader(EDITORENTITY_FRAG, Shader::Type::FRAGMENT_SHADER);
     iconShaderProgram = lowLevelRenderer->CreateShaderProgram({iconVertexShader, iconFragmentShader});
 
-    GraphicsPipeline::Configuration configuration;
+    GraphicsPipeline::Configuration configuration = {};
     configuration.primitiveType = PrimitiveType::TRIANGLE;
     configuration.polygonMode = PolygonMode::FILL;
     configuration.cullFace = CullFace::NONE;
@@ -93,9 +93,8 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 Renderer::~Renderer() {
     delete staticRenderProgram;
 
+    delete zBinning;
     delete postProcessing;
-
-    delete lightBuffer;
 
     // Icon rendering.
     delete iconGraphicsPipeline;
@@ -126,6 +125,8 @@ void Renderer::SetRenderSurfaceSize(const glm::uvec2& size) {
     FreeRenderTextures();
     CreateRenderTextures();
     postProcessing->SetOutputTexture(postProcessingTexture);
+
+    zBinning->SetRenderSurfaceSize(size);
 }
 
 const glm::uvec2& Renderer::GetRenderSurfaceSize() const {
@@ -155,7 +156,7 @@ void Renderer::DepthRenderStaticMesh(Geometry::Geometry3D* geometry, const glm::
 }
 
 void Renderer::PrepareStaticMeshRendering(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float cameraNear, float cameraFar) {
-    staticRenderProgram->PreRender(*commandBuffer, viewMatrix, projectionMatrix, lightBuffer, lightCount);
+    staticRenderProgram->PreRender(*commandBuffer, viewMatrix, projectionMatrix, zBinning->GetLightInfo());
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 }
 
@@ -163,19 +164,8 @@ void Renderer::RenderStaticMesh(Geometry::Geometry3D* geometry, Texture2D* albed
     staticRenderProgram->Render(*commandBuffer, geometry, albedo, normal, roughnessMetallic, modelMatrix);
 }
 
-void Renderer::SetLights(const std::vector<Light>& lights) {
-    lightCount = static_cast<unsigned int>(lights.size());
-
-    // Skip if no lights.
-    if (lightCount == 0)
-        return;
-
-    // Update light buffer.
-    for (uint32_t i = 0; i < lightCount; ++i) {
-        lightData[i] = lights[i];
-    }
-
-    lightBuffer->Write(lightData);
+void Renderer::SetLights(const std::vector<DirectionalLight>& directionalLights, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, float zNear, float zFar) {
+    zBinning->BinLights(*commandBuffer, directionalLights, lights, projectionMatrix, zNear, zFar);
 }
 
 void Renderer::ApplyPostProcessing() {

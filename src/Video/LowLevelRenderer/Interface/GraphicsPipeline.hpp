@@ -29,6 +29,12 @@ class GraphicsPipeline {
 
         /// How to perform depth comparisons.
         DepthComparison depthComparison;
+
+        /// Depth clamping (disable near and far plane clipping).
+        bool depthClamp;
+
+        /// Conservative rasterization (overestimation).
+        bool conservativeRasterization;
     };
 
     /// Create a new graphics pipeline.

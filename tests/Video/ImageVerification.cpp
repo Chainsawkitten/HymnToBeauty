@@ -32,7 +32,7 @@ void ImageVerification::WritePNG(const char* filename) const {
 bool ImageVerification::Compare(const char* imageData, unsigned int imageDataLength, int maxDifference) const {
     // Load reference image.
     int components, width, height;
-    char* referenceData = reinterpret_cast<char*>(stbi_load_from_memory(reinterpret_cast<const unsigned char*>(imageData), imageDataLength, &width, &height, &components, 0));
+    unsigned char* referenceData = reinterpret_cast<unsigned char*>(stbi_load_from_memory(reinterpret_cast<const unsigned char*>(imageData), imageDataLength, &width, &height, &components, 0));
 
     if (referenceData == NULL)
         Log() << "Couldn't load headerized image.\n";

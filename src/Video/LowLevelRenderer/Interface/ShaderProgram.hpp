@@ -34,6 +34,10 @@ class ShaderProgram {
      */
     static uint32_t PushConstantTypeToSize(ShaderSource::ReflectionInfo::PushConstant::Type type) {
         switch (type) {
+        case ShaderSource::ReflectionInfo::PushConstant::Type::INT:
+            return sizeof(int32_t);
+        case ShaderSource::ReflectionInfo::PushConstant::Type::UINT:
+            return sizeof(uint32_t);
         case ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT:
             return sizeof(float);
         case ShaderSource::ReflectionInfo::PushConstant::Type::VEC2:

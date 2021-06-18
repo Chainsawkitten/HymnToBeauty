@@ -37,12 +37,13 @@ class VulkanRenderer : public LowLevelRenderer {
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
     RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) final;
-    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size) final;
+    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;
-    char* ReadImage(RenderPass* renderPass) final;
+    unsigned char* ReadImage(RenderPass* renderPass) final;
     const std::vector<Profiling::Event>& GetTimeline() const final;
+    const OptionalFeatures& GetOptionalFeatures() const final;
 
     /// Get current swap chain image.
     /**
@@ -108,12 +109,6 @@ class VulkanRenderer : public LowLevelRenderer {
      */
     VkDescriptorSet GetDescriptorSet(std::initializer_list<Texture*> textures);
 
-    /// Get whether wide lines are supported.
-    /**
-     * @return Whether Wide lines are supported.
-     */
-    bool IsWideLinesSupported() const;
-
     /// Get the current frame's query pool.
     /**
      * @return The current frame's query pool.
@@ -146,6 +141,7 @@ class VulkanRenderer : public LowLevelRenderer {
     bool CheckDeviceExtensionsSupported(VkPhysicalDevice device, const std::vector<const char*>& extensions) const;
     uint32_t GetQueueFamily(VkPhysicalDevice device) const;
     SwapChainSupport GetSwapChainSupport(VkPhysicalDevice device) const;
+    const std::vector<const char*> GetEnabledExtensions(const std::vector<const char*>& mandatoryExtensions);
     VkPhysicalDeviceFeatures GetEnabledFeatures();
 
     void CreateSwapChain(const SwapChainSupport& swapChainSupport);
@@ -208,8 +204,7 @@ class VulkanRenderer : public LowLevelRenderer {
     VkDescriptorPool descriptorPool;
     std::map<ShaderProgram::BindingType, std::map<VkBuffer, VkDescriptorSet>> bufferDescriptorSetCache;
 
-    bool wideLines;
-    bool timestampsSupported;
+    OptionalFeatures optionalFeatures;
     
     double timestampPeriod;
     static const unsigned int maxQueries = 2 * 50;

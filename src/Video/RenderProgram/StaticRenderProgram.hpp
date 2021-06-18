@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include "RenderProgram.hpp"
+#include "../Lighting/ZBinning.hpp"
 
 namespace Video {
 class LowLevelRenderer;
@@ -50,10 +51,9 @@ class StaticRenderProgram : public RenderProgram {
      * @param commandBuffer Command buffer to build commands into.
      * @param viewMatrix The camera's view matrix.
      * @param projectionMatrix The camera's projection matrix.
-     * @param lightBuffer Storage buffer containing light data.
-     * @param lightCount Number of lights in the light buffer.
+     * @param lightInfo Information about the lights in the scene.
      */
-    void PreRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Buffer* lightBuffer, unsigned int lightCount);
+    void PreRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const ZBinning::LightInfo& lightInfo);
 
     /// Render mesh.
     /**
@@ -90,8 +90,15 @@ class StaticRenderProgram : public RenderProgram {
     Buffer* matricesBuffer;
 
     struct FragmentUniforms {
-        int32_t lightCount;
+        uint32_t directionalLightCount;
+        uint32_t lightCount;
+        uint32_t maskCount;
+        uint32_t zBins;
+        uint32_t tileSize;
+        uint32_t tilesX;
         float gamma;
+        float zNear;
+        float zFar;
     };
     Buffer* fragmentUniformBuffer;
 

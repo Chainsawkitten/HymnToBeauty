@@ -14,14 +14,15 @@ layout(location = 0) in VertexData {
 layout(location = 0) out vec4 outColor;
 
 // --- STRUCTS ---
+struct DirectionalLight {
+    vec4 direction;
+    vec4 intensitiesAmbientCoefficient;
+};
+
 struct Light {
-    vec4 position;
+    vec4 positionDistance;
     vec4 intensitiesAttenuation;
-    vec4 directionAmbientCoefficient;
-    float coneAngle;
-    float distance;
-    float padding1;
-    float padding2;
+    vec4 directionConeAngle;
 };
 
 // --- RESOURCES ---
@@ -31,14 +32,36 @@ MATERIAL(2, mapRoughnessMetallic)
 
 UNIFORMS
 {
-    int lightCount;
+    uint directionalLightCount;
+    uint lightCount;
+    uint maskCount;
+    uint zBins;
+    uint tileSize;
+    uint tilesX;
     float gamma;
+    float zNear;
+    float zFar;
 } uniforms;
 
 STORAGE_BUFFER(0)
 {
+    DirectionalLight lights[];
+} directionalLightBuffer;
+
+STORAGE_BUFFER(1)
+{
     Light lights[];
 } lightBuffer;
+
+STORAGE_BUFFER(2)
+{
+    highp uint masks[];
+} zMaskBuffer;
+
+STORAGE_BUFFER(3)
+{
+    highp uint masks[];
+} tileMaskBuffer;
 
 // --- CONSTANTS ---
 const float PI = 3.14159265359f;
@@ -55,7 +78,7 @@ vec3 calculateNormal(in vec3 normal, in vec3 tangent, in vec3 normalFromMap) {
     
     vec3 mn = 2.0 * normalFromMap - vec3(1.0, 1.0, 1.0);
     mat3 TBN = mat3(t, b, n);
-    return TBN * mn;
+    return normalize(TBN * mn);
 }
 
 //Calc ratio between specular and diffuse reflection, surface reflections
@@ -96,74 +119,101 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
     return clamp((ggx1 * ggx2), 0.f, 1.0f);
 }
 
+vec3 ApplyLight(vec3 surfaceToLight, vec3 cameraToPos, vec3 radiance, vec3 albedo, vec3 normal, float metallic, float roughness, vec3 F0) {
+    vec3 H = normalize(cameraToPos + surfaceToLight);
+    
+    // Cook-torrance brdf.
+    float NDF = DistributionGGX(normal, H, roughness);
+    float G = GeometrySmith(normal, cameraToPos, surfaceToLight, roughness);
+    vec3 F = FresnelSchlick(max(dot(H, cameraToPos), 0.0), F0);
+    
+    // Calculate specular.
+    vec3 nominator = NDF * G * F;
+    float denominator = 4.0 * max(dot(normal, cameraToPos), 0.0) * max(dot(normal, surfaceToLight), 0.0) + 0.001;
+    vec3 specular = (nominator / denominator);
+    
+    // Energy of light that gets reflected.
+    vec3 kS = F;
+    
+    // Energy of light that gets refracted (no refraction occurs when metallic).
+    vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
+    
+    // Calculate light contribution.
+    float NdotL = max(dot(normal, surfaceToLight), 0.0f);
+    
+    // Add refraction.
+    return (kD * albedo / PI + specular) * radiance * NdotL; // TODO Add shadow here.
+}
+
+vec3 ApplyDirectionalLight(uint i, vec3 cameraToPos, vec3 albedo, vec3 normal, float metallic, float roughness, vec3 F0) {
+    vec3 surfaceToLight = normalize(directionalLightBuffer.lights[i].direction.xyz);
+
+    // Calculate radiance of the light.
+    vec3 radiance = directionalLightBuffer.lights[i].intensitiesAmbientCoefficient.xyz;
+    
+    // Add refraction.
+    vec3 Lo = ApplyLight(surfaceToLight, cameraToPos, radiance, albedo, normal, metallic, roughness, F0);
+    
+    // Add ambient.
+    Lo += directionalLightBuffer.lights[i].intensitiesAmbientCoefficient.w * albedo;
+    
+    return Lo;
+}
+
+vec3 ApplySpotPointLight(uint i, vec3 cameraToPos, vec3 albedo, vec3 normal, float metallic, float roughness, vec3 pos, vec3 F0) {
+    // Point light
+    const vec3 toLight = lightBuffer.lights[i].positionDistance.xyz - pos;
+    vec3 surfaceToLight = normalize(toLight);
+    float lightDist = toLight.x * toLight.x + toLight.y * toLight.y + toLight.z * toLight.z;
+    float attenuation = 1.0 / (1.0 + lightBuffer.lights[i].intensitiesAttenuation.w * lightDist);
+    
+    // Fade-out close to cutoff distance.
+    lightDist = sqrt(lightDist) / lightBuffer.lights[i].positionDistance.w;
+    const float curveTransition = 0.7;
+    const float k = 1.0 / (1.0 - curveTransition);
+    attenuation *= clamp(k - k * lightDist, 0.0, 1.0);
+    
+    // Spot light.
+    if (lightBuffer.lights[i].directionConeAngle.w < 179.0) {
+        float lightToSurfaceAngle = degrees(acos(clamp(dot(-surfaceToLight, normalize(lightBuffer.lights[i].directionConeAngle.xyz)), -1.0, 1.0)));
+        float fadeLength = 10.0;
+        if (lightToSurfaceAngle > lightBuffer.lights[i].directionConeAngle.w - fadeLength) {
+            attenuation *= 1.0 - clamp(lightToSurfaceAngle - (lightBuffer.lights[i].directionConeAngle.w - fadeLength), 0.0, fadeLength) / fadeLength;
+        }
+    }
+
+    // Calculate radiance of the light.
+    vec3 radiance = lightBuffer.lights[i].intensitiesAttenuation.xyz * attenuation;
+    
+    // Add refraction.
+    return ApplyLight(surfaceToLight, cameraToPos, radiance, albedo, normal, metallic, roughness, F0);
+}
+
 vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 pos) {
-    vec3 Lo = vec3(0.0f);
-    vec3 N = normalize(normal);
-    vec3 V = normalize(-pos);
+    vec3 Lo = vec3(0.0);
+    vec3 cameraToPos = normalize(-pos);
     
     vec3 F0 = mix(vec3(0.04f), albedo, metallic);
     
-    for(int i = 0; i < uniforms.lightCount; i++) {
-        vec3 surfaceToLight;
-        float attenuation;
-        float shadow = 0.0;
-
-        if (lightBuffer.lights[i].position.w == 0.0f) {
-            //Directional light.
-            surfaceToLight = normalize(lightBuffer.lights[i].position.xyz);
-            attenuation = 1.0f;
-        } else {
-            // Point light
-            vec3 toLight = lightBuffer.lights[i].position.xyz - pos;
-            surfaceToLight = normalize(toLight);
-            float lightDist = toLight.x * toLight.x + toLight.y * toLight.y + toLight.z * toLight.z;
-            attenuation = 1.0 / (1.0 + lightBuffer.lights[i].intensitiesAttenuation.w * lightDist);
-            
-            // Fade-out close to cutoff distance.
-            lightDist = sqrt(lightDist) / lightBuffer.lights[i].distance;
-            const float curveTransition = 0.7;
-            const float k = 1.0 / (1.0 - curveTransition);
-            attenuation *= clamp(k - k * lightDist, 0.0, 1.0);
-            
-            // Spot light.
-            if (lightBuffer.lights[i].coneAngle < 179.0) {
-                float lightToSurfaceAngle = degrees(acos(clamp(dot(-surfaceToLight, normalize(lightBuffer.lights[i].directionAmbientCoefficient.xyz)), -1.0, 1.0)));
-                float fadeLength = 10.0;
-                if (lightToSurfaceAngle > lightBuffer.lights[i].coneAngle - fadeLength) {
-                    attenuation *= 1.0 - clamp(lightToSurfaceAngle - (lightBuffer.lights[i].coneAngle - fadeLength), 0.0, fadeLength) / fadeLength;
-                }
-            }
-        }
-
-        vec3 H = normalize(V + surfaceToLight);
-
-        // Calculate radiance of the light.
-        vec3 radiance = lightBuffer.lights[i].intensitiesAttenuation.xyz * attenuation;
+    // Directional lights.
+    for(int i = 0; i < uniforms.directionalLightCount; i++) {
+        Lo += ApplyDirectionalLight(i, cameraToPos, albedo, normal, metallic, roughness, F0);
+    }
+    
+    // Spot and point lights.
+    const uvec2 tile = uvec2(gl_FragCoord.xy) / uniforms.tileSize;
+    const uint tileIndex = tile.x + tile.y * uniforms.tilesX;
+    const uint z = min(uint(sqrt(max((-pos.z - uniforms.zNear) / (uniforms.zFar - uniforms.zNear), 0.0)) * float(uniforms.zBins)), uniforms.zBins - 1);
+    for (uint i = 0; i < uniforms.maskCount; ++i) {
+        const highp uint maskTile = tileMaskBuffer.masks[tileIndex * uniforms.maskCount + i];
+        const highp uint maskZ = zMaskBuffer.masks[z * uniforms.maskCount + i];
+		highp uint mask = maskTile & maskZ;
         
-        // Cook-torrance brdf.
-        float NDF = DistributionGGX(N, H, roughness);
-        float G = GeometrySmith(N, V, surfaceToLight, roughness);
-        vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
-        
-        // Calculate specular.
-        vec3 nominator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, surfaceToLight), 0.0) + 0.001;
-        vec3 specular = (nominator / denominator);
-        
-        // Energy of light that gets reflected.
-        vec3 kS = F;
-        
-        // Energy of light that gets refracted (no refraction occurs when metallic).
-        vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
-        
-        // Calculate light contribution.
-        float NdotL = max(dot(N, surfaceToLight), 0.0f);
-        
-        // Add refraction.
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
-        
-        // Add ambient.
-        Lo += lightBuffer.lights[i].directionAmbientCoefficient.w * albedo;
+        while (mask != 0u) {
+			highp uint bitIndex = findLSB(mask);
+			Lo += ApplySpotPointLight(i * 32u + bitIndex, cameraToPos, albedo, normal, metallic, roughness, pos, F0);
+			mask ^= (1u << bitIndex);
+		}
     }
 
     return Lo;
