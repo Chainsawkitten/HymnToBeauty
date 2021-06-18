@@ -101,7 +101,7 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
             outFile << "static ShaderSource::ReflectionInfo::StorageBuffer storageBuffers[" << reflectionInfo.storageBufferCount << "] = {\n";
 
             for (unsigned int i = 0; i < reflectionInfo.storageBufferCount; ++i) {
-                outFile << "    { " << reflectionInfo.storageBuffers[i].binding << ", \"" << (reflectionInfo.storageBuffers[i].readWrite ? "true" : "false") << "\" },\n";
+                outFile << "    { " << reflectionInfo.storageBuffers[i].binding << ", " << (reflectionInfo.storageBuffers[i].readWrite ? "true" : "false") << " },\n";
             }
 
             outFile << "};\n";
@@ -329,7 +329,11 @@ string Shader::GetDefaultSpirvInclude() {
 }
 
 ShaderSource::ReflectionInfo::PushConstant::Type Shader::StringToPushConstantType(const string& text) {
-    if (text == "float") {
+    if (text == "int") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::INT;
+    } else if (text == "uint") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::UINT;
+    } else if (text == "float") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT;
     } else if (text == "vec2") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::VEC2;
@@ -349,6 +353,12 @@ string Shader::PushConstantTypeToString(ShaderSource::ReflectionInfo::PushConsta
     string text = "ShaderSource::ReflectionInfo::PushConstant::Type::";
 
     switch (type) {
+    case ShaderSource::ReflectionInfo::PushConstant::Type::INT:
+        text += "INT";
+        break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UINT:
+        text += "UINT";
+        break;
     case ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT:
         text += "FLOAT";
         break;

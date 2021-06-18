@@ -47,9 +47,11 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void PushConstants(const void* data) final;
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;
+    void DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount, unsigned int firstIndex, unsigned int baseVertex) final;
     void BlitToSwapChain(Texture* texture) final;
     void BindComputePipeline(ComputePipeline* computePipeline) final;
-    void Dispatch(const glm::uvec3& numGroups) final;
+    void Dispatch(const glm::uvec3& numGroups, const std::string& name) final;
+    void ClearBuffer(Buffer* buffer) final;
 
     /// Submit the commands in the command buffer to the GPU.
     void Submit();
@@ -80,6 +82,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
         bool depthTestEnabled;
         GLboolean depthMaskEnabled;
         GLenum depthFunction;
+        bool depthClampEnabled;
+        bool conservativeRasterizationEnabled;
     };
 
     struct SetViewportCommand {
@@ -102,7 +106,12 @@ class OpenGLCommandBuffer : public CommandBuffer {
 
     struct SetUniformIntegerCommand {
         unsigned int location;
-        int value;
+        int32_t value;
+    };
+
+    struct SetUniformUnsignedIntegerCommand {
+        unsigned int location;
+        uint32_t value;
     };
 
     struct SetUniformFloatCommand {
@@ -164,6 +173,15 @@ class OpenGLCommandBuffer : public CommandBuffer {
         GLint baseVertex;
     };
 
+    struct DrawIndexedInstancedCommand {
+        GLenum mode;
+        GLsizei count;
+        GLenum type;
+        GLvoid* indices;
+        GLsizei instanceCount;
+        GLint baseVertex;
+    };
+
     struct BlitToSwapChainCommand {
         GLuint texture;
     };
@@ -176,6 +194,12 @@ class OpenGLCommandBuffer : public CommandBuffer {
         GLuint groupsX;
         GLuint groupsY;
         GLuint groupsZ;
+        unsigned int timingIndex;
+    };
+
+    struct ClearBufferCommand {
+        GLenum target;
+        GLuint buffer;
     };
 
     struct Command {
@@ -187,6 +211,7 @@ class OpenGLCommandBuffer : public CommandBuffer {
             SetLineWidthCommand setLineWidthCommand;
             BindGeometryCommand bindGeometryCommand;
             SetUniformIntegerCommand setUniformIntegerCommand;
+            SetUniformUnsignedIntegerCommand setUniformUnsignedIntegerCommand;
             SetUniformFloatCommand setUniformFloatCommand;
             SetUniformVector2Command setUniformVector2Command;
             SetUniformVector3Command setUniformVector3Command;
@@ -198,9 +223,11 @@ class OpenGLCommandBuffer : public CommandBuffer {
             BindStorageBufferCommand bindStorageBufferCommand;
             DrawCommand drawCommand;
             DrawIndexedCommand drawIndexedCommand;
+            DrawIndexedInstancedCommand drawIndexedInstancedCommand;
             BlitToSwapChainCommand blitToSwapChainCommand;
             BindComputePipelineCommand bindComputePipelineCommand;
             DispatchCommand dispatchCommand;
+            ClearBufferCommand clearBufferCommand;
         };
 
         enum class Type {
@@ -212,6 +239,7 @@ class OpenGLCommandBuffer : public CommandBuffer {
             SET_LINE_WIDTH,
             BIND_GEOMETRY,
             SET_UNIFORM_INTEGER,
+            SET_UNIFORM_UNSIGNED_INTEGER,
             SET_UNIFORM_FLOAT,
             SET_UNIFORM_VECTOR2,
             SET_UNIFORM_VECTOR3,
@@ -223,14 +251,17 @@ class OpenGLCommandBuffer : public CommandBuffer {
             BIND_STORAGE_BUFFER,
             DRAW,
             DRAW_INDEXED,
+            DRAW_INDEXED_INSTANCED,
             BLIT_TO_SWAP_CHAIN,
             BIND_COMPUTE_PIPELINE,
             DISPATCH,
+            CLEAR_BUFFER,
             MEMORY_BARRIER
         } type;
     };
 
-    void SetUniformInteger(unsigned int location, int value);
+    void SetUniformInteger(unsigned int location, int32_t value);
+    void SetUniformUnsignedInteger(unsigned int location, uint32_t value);
     void SetUniformFloat(unsigned int location, float value);
     void SetUniformVector2(unsigned int location, const glm::vec2& value);
     void SetUniformVector3(unsigned int location, const glm::vec3& value);

@@ -35,7 +35,7 @@ DebugDrawing::DebugDrawing(Renderer* renderer) {
     meshVertexDescription = Geometry::VertexType::StaticVertex::GenerateVertexDescription(lowLevelRenderer);
 
     // Create graphics pipelines.
-    GraphicsPipeline::Configuration configuration;
+    GraphicsPipeline::Configuration configuration = {};
     configuration.cullFace = CullFace::NONE;
     configuration.blendMode = BlendMode::NONE;
     configuration.depthComparison = DepthComparison::LESS;

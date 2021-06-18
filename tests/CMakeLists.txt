@@ -43,6 +43,7 @@ set(IMAGES
     Video/textures/Test.png
     Video/references/Attachmentless.png
     Video/references/ComputeSetBuffer.png
+    Video/references/ConservativeRasterization.png
     Video/references/DepthPrePass.png
     Video/references/DrawLines.png
     Video/references/DrawMipmappedTriangle.png

@@ -27,7 +27,13 @@ class OpenGLBuffer : public Buffer {
     /**
      * @return ID to use with OpenGL commands.
      */
-    unsigned int GetBufferID() const;
+    GLuint GetBufferID() const;
+
+    /// Get the OpenGL target.
+    /**
+     * @return The target to which the buffer is bound.
+     */
+    GLenum GetTarget() const;
 
   private:
     OpenGLBuffer(const OpenGLBuffer& other) = delete;

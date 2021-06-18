@@ -92,7 +92,7 @@ VulkanGraphicsPipeline::VulkanGraphicsPipeline(const VulkanRenderer& renderer, V
     // Rasterizer.
     rasterizationStateCreateInfo = {};
     rasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    rasterizationStateCreateInfo.depthClampEnable = VK_FALSE;
+    rasterizationStateCreateInfo.depthClampEnable = configuration.depthClamp;
     rasterizationStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
     rasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
     rasterizationStateCreateInfo.depthBiasEnable = VK_FALSE;
@@ -117,6 +117,15 @@ VulkanGraphicsPipeline::VulkanGraphicsPipeline(const VulkanRenderer& renderer, V
     case CullFace::FRONT:
         rasterizationStateCreateInfo.cullMode = VK_CULL_MODE_FRONT_BIT;
         break;
+    }
+
+    // Conservative rasterization.
+    conservativeRasterizationInfo = {};
+    if (configuration.conservativeRasterization) {
+        conservativeRasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT;
+        conservativeRasterizationInfo.conservativeRasterizationMode = VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT;
+
+        rasterizationStateCreateInfo.pNext = &conservativeRasterizationInfo;
     }
 
     // Multisampling.
@@ -187,7 +196,7 @@ VulkanGraphicsPipeline::VulkanGraphicsPipeline(const VulkanRenderer& renderer, V
     uint32_t dynamicStateCount = 0;
     dynamicState[dynamicStateCount++] = VK_DYNAMIC_STATE_VIEWPORT;
     dynamicState[dynamicStateCount++] = VK_DYNAMIC_STATE_SCISSOR;
-    if ((configuration.primitiveType == PrimitiveType::LINE || configuration.polygonMode == PolygonMode::LINE) && renderer.IsWideLinesSupported()) {
+    if ((configuration.primitiveType == PrimitiveType::LINE || configuration.polygonMode == PolygonMode::LINE) && renderer.GetOptionalFeatures().wideLines) {
         dynamicState[dynamicStateCount++] = VK_DYNAMIC_STATE_LINE_WIDTH;
     }
 
@@ -222,12 +231,15 @@ VulkanGraphicsPipeline::~VulkanGraphicsPipeline() {
 }
 
 VkPipeline VulkanGraphicsPipeline::GetPipeline(const VulkanRenderPass* renderPass) {
-    auto it = pipelines.find(renderPass->GetCompatiblity());
+    const VulkanRenderPass::Compatibility compatibility = renderPass->GetCompatiblity();
+
+    auto it = pipelines.find(compatibility);
     if (it != pipelines.end()) {
         // Use compatible pipeline.
         return it->second;
     } else {
         // Create pipeline.
+        multisampleStateCreateInfo.rasterizationSamples = static_cast<VkSampleCountFlagBits>(compatibility.attachmentlessMsaa);
         pipelineCreateInfo.renderPass = renderPass->GetRenderPass();
 
         VkPipeline pipeline;
@@ -236,7 +248,7 @@ VkPipeline VulkanGraphicsPipeline::GetPipeline(const VulkanRenderPass* renderPas
             Log(Log::ERR) << "Failed to create graphics pipeline.\n";
         }
 
-        pipelines[renderPass->GetCompatiblity()] = pipeline;
+        pipelines[compatibility] = pipeline;
         return pipeline;
     }
 }

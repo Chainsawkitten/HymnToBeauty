@@ -24,7 +24,7 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outp
 
     vertexShader = lowLevelRenderer->CreateShader(POSTPROCESSING_VERT, Shader::Type::VERTEX_SHADER);
 
-    GraphicsPipeline::Configuration configuration;
+    GraphicsPipeline::Configuration configuration = {};
     configuration.primitiveType = PrimitiveType::TRIANGLE;
     configuration.polygonMode = PolygonMode::FILL;
     configuration.cullFace = CullFace::NONE;

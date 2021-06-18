@@ -23,6 +23,8 @@
 namespace Video {
 
 VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
+    optionalFeatures = {};
+
     CreateInstance();
     CreateSurface(window);
 
@@ -241,8 +243,8 @@ RenderPass* VulkanRenderer::CreateRenderPass(Texture* colorAttachment, RenderPas
     return new VulkanRenderPass(device, colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
 }
 
-RenderPass* VulkanRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size) {
-    return new VulkanRenderPass(device, size);
+RenderPass* VulkanRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) {
+    return new VulkanRenderPass(device, size, msaaSamples);
 }
 
 GraphicsPipeline* VulkanRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
@@ -257,7 +259,7 @@ void VulkanRenderer::Wait() {
     vkDeviceWaitIdle(device);
 }
 
-char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
+unsigned char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
     VulkanRenderPass* vulkanRenderPass = static_cast<VulkanRenderPass*>(renderPass);
 
     // Calculate buffer size.
@@ -305,10 +307,10 @@ char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
     Wait();
 
     // Map image memory and copy data.
-    char* memory;
+    unsigned char* memory;
     vkMapMemory(device, deviceMemory, 0, bufferSize, 0, reinterpret_cast<void**>(&memory));
 
-    char* data = new char[bufferSize];
+    unsigned char* data = new unsigned char[bufferSize];
     memcpy(data, memory, bufferSize);
 
     vkUnmapMemory(device, deviceMemory);
@@ -324,6 +326,10 @@ char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
 
 const std::vector<Profiling::Event>& VulkanRenderer::GetTimeline() const {
     return finishedEvents;
+}
+
+const VulkanRenderer::OptionalFeatures& VulkanRenderer::GetOptionalFeatures() const {
+    return optionalFeatures;
 }
 
 VkImage VulkanRenderer::GetCurrentSwapChainImage() const {
@@ -514,10 +520,6 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<Texture*>
     return descriptorSet;
 }
 
-bool VulkanRenderer::IsWideLinesSupported() const {
-    return wideLines;
-}
-
 VkQueryPool VulkanRenderer::GetQueryPool() {
     return queryPools[currentFrame];
 }
@@ -610,10 +612,10 @@ void VulkanRenderer::CreateSurface(GLFWwindow* window) {
 
 void VulkanRenderer::CreateDevice(SwapChainSupport& swapChainSupport) {
     // The device extensions we require.
-    const std::vector<const char*> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+    const std::vector<const char*> mandatoryDeviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 
     // Pick the best physical device.
-    physicalDevice = PickPhysicalDevice(deviceExtensions);
+    physicalDevice = PickPhysicalDevice(mandatoryDeviceExtensions);
     if (physicalDevice == VK_NULL_HANDLE) {
         Log(Log::ERR) << "Could not find suitable device.\n";
     }
@@ -633,6 +635,8 @@ void VulkanRenderer::CreateDevice(SwapChainSupport& swapChainSupport) {
     deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     deviceCreateInfo.queueCreateInfoCount = 1;
     deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
+
+    const std::vector<const char*> deviceExtensions = GetEnabledExtensions(mandatoryDeviceExtensions);
     deviceCreateInfo.enabledExtensionCount = deviceExtensions.size();
     deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
@@ -689,7 +693,7 @@ uint32_t VulkanRenderer::GetDeviceScore(VkPhysicalDevice device, const std::vect
        Otherwise return a score of 0. */
 
     // Check that all required features are supported.
-    if (!deviceFeatures.fillModeNonSolid)
+    if (!deviceFeatures.fillModeNonSolid || !deviceFeatures.fragmentStoresAndAtomics || !deviceFeatures.depthClamp)
         return 0;
 
     // Check that the required extensions are supported.
@@ -796,6 +800,35 @@ VulkanRenderer::SwapChainSupport VulkanRenderer::GetSwapChainSupport(VkPhysicalD
     return support;
 }
 
+const std::vector<const char*> VulkanRenderer::GetEnabledExtensions(const std::vector<const char*>& mandatoryExtensions) {
+    std::vector<const char*> extensions;
+
+    // Enable mandatory extensions.
+    for (const char* extension : mandatoryExtensions) {
+        extensions.push_back(extension);
+    }
+
+    // Get available extensions.
+    uint32_t extensionCount;
+    vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
+
+    VkExtensionProperties* extensionProperties = new VkExtensionProperties[extensionCount];
+    vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, extensionProperties);
+
+    // Check if optional extensions are supported.
+    for (uint32_t extension = 0; extension < extensionCount; ++extension) {
+        // Conservative rasterization.
+        if (strcmp(VK_EXT_CONSERVATIVE_RASTERIZATION_EXTENSION_NAME, extensionProperties[extension].extensionName) == 0) {
+            extensions.push_back(VK_EXT_CONSERVATIVE_RASTERIZATION_EXTENSION_NAME);
+            optionalFeatures.conservativeRasterization = true;
+        }
+    }
+
+    delete[] extensionProperties;
+
+    return extensions;
+}
+
 VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
     // Get all supported features.
     VkPhysicalDeviceFeatures supportedFeatures;
@@ -805,18 +838,21 @@ VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
     VkPhysicalDeviceFeatures enabledFeatures = {};
     enabledFeatures.fillModeNonSolid = VK_TRUE;
     enabledFeatures.fragmentStoresAndAtomics = VK_TRUE;
+    enabledFeatures.depthClamp = VK_TRUE;
 
     // Enable optional features.
-    wideLines = supportedFeatures.wideLines;
-    enabledFeatures.wideLines = wideLines;
+    optionalFeatures.wideLines = supportedFeatures.wideLines;
+    enabledFeatures.wideLines = supportedFeatures.wideLines;
 
     // Check limits.
     VkPhysicalDeviceProperties deviceProperties;
     vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
 
-    timestampsSupported = deviceProperties.limits.timestampComputeAndGraphics;
-    assert(timestampsSupported); /// @todo Disable GPU profiling when not supported.
+    optionalFeatures.timestamps = deviceProperties.limits.timestampComputeAndGraphics;
+    assert(optionalFeatures.timestamps); /// @todo Disable GPU profiling when not supported.
     timestampPeriod = deviceProperties.limits.timestampPeriod;
+
+    optionalFeatures.attachmentlessMsaaSamples = deviceProperties.limits.framebufferNoAttachmentsSampleCounts;
 
     return enabledFeatures;
 }
@@ -1065,7 +1101,7 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
 }
 
 void VulkanRenderer::CreateDescriptorPool() {
-    const uint32_t maxSets = 500;
+    const uint32_t maxSets = 1000;
 
     std::vector<VkDescriptorPoolSize> poolSizes;
 
@@ -1089,7 +1125,7 @@ void VulkanRenderer::CreateDescriptorPool() {
     {
         VkDescriptorPoolSize poolSize = {};
         poolSize.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSize.descriptorCount = maxSets;
+        poolSize.descriptorCount = maxSets * 3;
         poolSizes.push_back(poolSize);
     }
 

@@ -52,9 +52,11 @@ class VulkanCommandBuffer : public CommandBuffer {
     void PushConstants(const void* data) final;
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;
+    void DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount, unsigned int firstIndex, unsigned int baseVertex) final;
     void BlitToSwapChain(Texture* texture) final;
     void BindComputePipeline(ComputePipeline* computePipeline) final;
-    void Dispatch(const glm::uvec3& numGroups) final;
+    void Dispatch(const glm::uvec3& numGroups, const std::string& name) final;
+    void ClearBuffer(Buffer* buffer) final;
 
     /// Get command buffer.
     /**

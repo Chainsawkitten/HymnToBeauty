@@ -19,6 +19,7 @@ class GeometryBinding;
 class LowLevelRenderer;
 class CommandBuffer;
 class Texture;
+class ZBinning;
 namespace Geometry {
 class Geometry3D;
 } // namespace Geometry
@@ -104,9 +105,13 @@ class Renderer {
 
     /// Update light buffer.
     /**
+     * @param directionalLights Vector of directional lights to push to the directional light buffer.
      * @param lights Vector of lights to push to the light buffer.
+     * @param projectionMatrix Projection matrix.
+     * @param zNear Near field.
+     * @param zFar Far field.
      */
-    void SetLights(const std::vector<Light>& lights);
+    void SetLights(const std::vector<DirectionalLight>& directionalLights, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, float zNear, float zFar);
 
     /// Apply post-processing.
     void ApplyPostProcessing();
@@ -183,10 +188,7 @@ class Renderer {
 
     StaticRenderProgram* staticRenderProgram;
 
-    static const uint32_t MAX_LIGHTS = 100;
-    unsigned int lightCount;
-    Buffer* lightBuffer;
-    Light lightData[MAX_LIGHTS];
+    ZBinning* zBinning;
 
     PostProcessing* postProcessing;
 

@@ -34,12 +34,13 @@ class OpenGLRenderer : public LowLevelRenderer {
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
     RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) final;
-    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size) final;
+    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;
-    char* ReadImage(RenderPass* renderPass) final;
+    unsigned char* ReadImage(RenderPass* renderPass) final;
     const std::vector<Profiling::Event>& GetTimeline() const final;
+    const OptionalFeatures& GetOptionalFeatures() const final;
 
     /// Get the shader program used for blitting.
     /**
@@ -62,6 +63,8 @@ class OpenGLRenderer : public LowLevelRenderer {
     Shader* blitVertexShader;
     Shader* blitFragmentShader;
     ShaderProgram* blitShaderProgram;
+
+    OptionalFeatures optionalFeatures;
 
     static const unsigned int buffering = 3;
     std::vector<Profiling::Event> finishedEvents;

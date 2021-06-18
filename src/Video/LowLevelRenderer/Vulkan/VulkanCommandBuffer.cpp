@@ -195,7 +195,7 @@ void VulkanCommandBuffer::SetScissor(const glm::uvec2& origin, const glm::uvec2&
 
 void VulkanCommandBuffer::SetLineWidth(float width) {
     /// @todo Clamp line width to supported values.
-    if (vulkanRenderer->IsWideLinesSupported()) {
+    if (vulkanRenderer->GetOptionalFeatures().wideLines) {
         vkCmdSetLineWidth(renderPassCommandBuffer, width);
     }
 }
@@ -320,6 +320,12 @@ void VulkanCommandBuffer::DrawIndexed(unsigned int indexCount, unsigned int firs
     vkCmdDrawIndexed(renderPassCommandBuffer, indexCount, 1, firstIndex, baseVertex, 0);
 }
 
+void VulkanCommandBuffer::DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount, unsigned int firstIndex, unsigned int baseVertex) {
+    assert(inRenderPass);
+
+    vkCmdDrawIndexed(renderPassCommandBuffer, indexCount, instanceCount, firstIndex, baseVertex, 0);
+}
+
 void VulkanCommandBuffer::BlitToSwapChain(Texture* texture) {
     assert(!inRenderPass);
     assert(texture != nullptr);
@@ -372,9 +378,39 @@ void VulkanCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) 
     vkCmdBindPipeline(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipeline());
 }
 
-void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups) {
+void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups, const std::string& name) {
     assert(!inRenderPass);
+
+    if (vulkanRenderer->IsProfiling()) {
+        Timing timing;
+        timing.name = name;
+        timing.startQuery = vulkanRenderer->GetFreeQuery();
+        timing.endQuery = vulkanRenderer->GetFreeQuery();
+
+        timings.push_back(timing);
+
+        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
+    }
+
     vkCmdDispatch(commandBuffer[currentFrame], numGroups.x, numGroups.y, numGroups.z);
+
+    if (vulkanRenderer->IsProfiling()) {
+        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
+    }
+}
+
+void VulkanCommandBuffer::ClearBuffer(Buffer* buffer) {
+    assert(!inRenderPass);
+    assert(buffer != nullptr);
+
+    VulkanBuffer* vulkanBuffer = static_cast<VulkanBuffer*>(buffer);
+
+    // Synchronization.
+    if (vulkanBuffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || vulkanBuffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER) {
+        BufferBarrier(vulkanBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, true);
+    }
+
+    vkCmdFillBuffer(commandBuffer[currentFrame], vulkanBuffer->GetBuffer(), 0, VK_WHOLE_SIZE, 0);
 }
 
 VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const {
@@ -446,6 +482,7 @@ void VulkanCommandBuffer::TransitionTexture(VulkanTexture* texture, VkImageLayou
 
 void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFlags stages, bool write) {
     VkPipelineStageFlags sourceStages = 0;
+	VkPipelineStageFlags destinationStages = 0;
     VkPipelineStageFlags readStages = buffer->GetReadMask();
     VkAccessFlags sourceAccess = 0;
     VkAccessFlags destinationAccess = 0;
@@ -453,27 +490,35 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
     // Read barrier.
     if (buffer->GetLastWriteStage() != 0 && (readStages & stages) != stages) {
         sourceStages |= buffer->GetLastWriteStage();
-        sourceAccess |= VK_ACCESS_SHADER_WRITE_BIT;
-        if (stages & ~VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
+        if (sourceStages & (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT))
+            sourceAccess |= VK_ACCESS_SHADER_WRITE_BIT;
+        if (sourceStages & VK_PIPELINE_STAGE_TRANSFER_BIT)
+            sourceAccess |= VK_ACCESS_TRANSFER_WRITE_BIT;
+        if (stages & (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT))
             destinationAccess |= VK_ACCESS_SHADER_READ_BIT;
         if (stages & VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
             destinationAccess |= VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
         buffer->SetReadMaskStage(stages);
+		destinationStages |= stages & ~readStages;
     }
 
     // Write barrier.
     if (write) {
         sourceStages |= readStages;
-        if (sourceStages & ~VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
+        if (sourceStages & (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT))
             sourceAccess |= VK_ACCESS_SHADER_READ_BIT;
         if (sourceStages & VK_PIPELINE_STAGE_VERTEX_INPUT_BIT)
             sourceAccess |= VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
-        destinationAccess |= VK_ACCESS_SHADER_WRITE_BIT;
+        if (stages & (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT))
+            destinationAccess |= VK_ACCESS_SHADER_WRITE_BIT;
+        if (stages & VK_PIPELINE_STAGE_TRANSFER_BIT)
+            destinationAccess |= VK_ACCESS_TRANSFER_WRITE_BIT;
         buffer->ClearReadMask();
         buffer->SetLastWriteStage(stages);
+		destinationStages |= stages;
     }
 
-    if (sourceStages != 0) {
+    if (sourceStages != 0 && destinationStages != 0) {
         VkBufferMemoryBarrier memoryBarrier = {};
         memoryBarrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
         memoryBarrier.srcAccessMask = sourceAccess;
@@ -481,7 +526,7 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
         memoryBarrier.buffer = buffer->GetBuffer();
         memoryBarrier.size = VK_WHOLE_SIZE;
 
-        vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, stages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
+        vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, destinationStages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
     }
 }
 

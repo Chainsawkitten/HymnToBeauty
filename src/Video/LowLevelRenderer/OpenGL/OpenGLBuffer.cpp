@@ -67,8 +67,12 @@ unsigned int OpenGLBuffer::GetSize() const {
     return size;
 }
 
-unsigned int OpenGLBuffer::GetBufferID() const {
+GLuint OpenGLBuffer::GetBufferID() const {
     return buffer;
+}
+
+GLenum OpenGLBuffer::GetTarget() const {
+    return target;
 }
 
 }

@@ -88,7 +88,7 @@ void StaticRenderProgram::DepthRender(CommandBuffer& commandBuffer, Geometry::Ge
     commandBuffer.DrawIndexed(geometry->GetIndexCount());
 }
 
-void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, Buffer* lightBuffer, unsigned int lightCount) {
+void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const ZBinning::LightInfo& lightInfo) {
     commandBuffer.BindGraphicsPipeline(graphicsPipeline);
     this->viewMatrix = viewMatrix;
     this->projectionMatrix = projectionMatrix;
@@ -104,14 +104,21 @@ void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
 
     // Fragment uniforms.
     FragmentUniforms fragmentUniforms;
-    fragmentUniforms.lightCount = lightCount;
+    fragmentUniforms.directionalLightCount = lightInfo.directionalLightCount;
+    fragmentUniforms.lightCount = lightInfo.lightCount;
+    fragmentUniforms.maskCount = lightInfo.maskCount;
+    fragmentUniforms.zBins = lightInfo.zBins;
+    fragmentUniforms.tileSize = lightInfo.tileSize;
+    fragmentUniforms.tilesX = lightInfo.tiles.x;
     fragmentUniforms.gamma = gamma;
+    fragmentUniforms.zNear = lightInfo.zNear;
+    fragmentUniforms.zFar = lightInfo.zFar;
 
     fragmentUniformBuffer->Write(&fragmentUniforms);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fragmentUniformBuffer);
 
     // Light storage buffer.
-    commandBuffer.BindStorageBuffers({ lightBuffer });
+    commandBuffer.BindStorageBuffers({ lightInfo.directionalLightBuffer, lightInfo.lightBuffer, lightInfo.zMaskBuffer, lightInfo.tileMaskBuffer });
 }
 
 void StaticRenderProgram::Render(CommandBuffer& commandBuffer, Geometry::Geometry3D* geometry, Video::Texture2D* textureAlbedo, Video::Texture2D* textureNormal, Video::Texture2D* textureRoughnessMetallic, const glm::mat4& modelMatrix) const {

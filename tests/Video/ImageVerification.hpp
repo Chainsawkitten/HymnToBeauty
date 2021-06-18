@@ -34,9 +34,9 @@ class ImageVerification {
      *
      * @return Whether the output matches the reference image.
      */
-    bool Compare(const char* imageData, unsigned int imageDataLength, int maxDifference = 0) const;
+    bool Compare(const char* imageData, unsigned int imageDataLength, int maxDifference = 1) const;
 
   private:
-    char* data;
+    unsigned char* data;
     glm::uvec2 size;
 };

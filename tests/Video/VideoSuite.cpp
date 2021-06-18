@@ -27,6 +27,7 @@ VideoSuite::VideoSuite(Video::Renderer::GraphicsAPI graphicsAPI) : TestSuite("Vi
     AddTest("DepthPrePass", DepthPrePass, &lowLevelRenderer);
     AddTest("DrawLines", DrawLines, &lowLevelRenderer);
     AddTest("Attachmentless", Attachmentless, &lowLevelRenderer);
+    AddTest("ConservativeRasterization", ConservativeRasterization, &lowLevelRenderer);
 
     AddTest("MultipleFrames", MultipleFrames, &lowLevelRenderer);
 

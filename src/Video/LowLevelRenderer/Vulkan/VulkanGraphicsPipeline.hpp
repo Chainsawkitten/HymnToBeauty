@@ -65,6 +65,7 @@ class VulkanGraphicsPipeline : public GraphicsPipeline {
     VkPipelineInputAssemblyStateCreateInfo inputAssemblyCreateInfo;
     VkPipelineViewportStateCreateInfo viewportStateCreateInfo;
     VkPipelineRasterizationStateCreateInfo rasterizationStateCreateInfo;
+    VkPipelineRasterizationConservativeStateCreateInfoEXT conservativeRasterizationInfo;
     VkPipelineMultisampleStateCreateInfo multisampleStateCreateInfo;
     VkPipelineDepthStencilStateCreateInfo depthStencilState;
     VkPipelineColorBlendAttachmentState blendAttachmentState;
@@ -90,6 +91,10 @@ class VulkanGraphicsPipeline : public GraphicsPipeline {
                 if (a.depthAttachmentFormat != b.depthAttachmentFormat) {
                     return a.depthAttachmentFormat < b.depthAttachmentFormat;
                 }
+            }
+
+            if (a.attachmentlessMsaa != b.attachmentlessMsaa) {
+                return a.attachmentlessMsaa < b.attachmentlessMsaa;
             }
 
             return false;

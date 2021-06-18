@@ -132,6 +132,14 @@ bool DrawLines(void* data);
  */
 bool Attachmentless(void* data);
 
+/// Test conservative rasterization.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool ConservativeRasterization(void* data);
+
 /// Test rendering multiple frames.
 /**
  * @param data The low-level renderer.

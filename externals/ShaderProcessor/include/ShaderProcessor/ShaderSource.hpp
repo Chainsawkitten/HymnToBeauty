@@ -23,6 +23,8 @@ struct ShaderSource {
         struct PushConstant {
             /// The GLSL data type.
             enum class Type {
+                INT, ///< Scalar int.
+                UINT, ///< Scalar unsigned int.
                 FLOAT, ///< Scalar float.
                 VEC2, ///< 2 component vector.
                 VEC3, ///< 3 component vector.

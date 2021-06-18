@@ -25,6 +25,21 @@ class ComputePipeline;
 /// Low level renderer abstracting the underlaying graphics API (OpenGL or Vulkan).
 class LowLevelRenderer {
   public:
+    /// Optional features.
+    struct OptionalFeatures {
+        /// Whether wide lines are supported.
+        bool wideLines;
+
+        /// Whether timestamps are supported.
+        bool timestamps;
+
+        /// Whether conservative rasterization is supported.
+        bool conservativeRasterization;
+
+        /// Bitmask of the number of MSAA samples supported for attachmentless rendering.
+        uint32_t attachmentlessMsaaSamples;
+    };
+
     /// Create a new low-level renderer.
     LowLevelRenderer() {}
 
@@ -128,8 +143,9 @@ class LowLevelRenderer {
     /// Create an attachmentless render pass.
     /**
      * @param size The framebuffer size.
+     * @param msaaSamples Number of MSAA samples.
      */
-    virtual RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size) = 0;
+    virtual RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples = 1) = 0;
 
     /// Create a graphics pipeline.
     /**
@@ -154,7 +170,7 @@ class LowLevelRenderer {
      *
      * @return The color image as a char-array.
      */
-    virtual char* ReadImage(RenderPass* renderPass) = 0;
+    virtual unsigned char* ReadImage(RenderPass* renderPass) = 0;
 
     /// Set whether to profile.
     /**
@@ -177,6 +193,12 @@ class LowLevelRenderer {
      * @return A list of events that have occurred since the last time fetching the timeline.
      */
     virtual const std::vector<Profiling::Event>& GetTimeline() const = 0;
+
+    /// Get which optional features are supported.
+    /**
+     * @return Which optional features are supported.
+     */
+    virtual const OptionalFeatures& GetOptionalFeatures() const = 0;
 
   private:
     LowLevelRenderer(const LowLevelRenderer& other) = delete;

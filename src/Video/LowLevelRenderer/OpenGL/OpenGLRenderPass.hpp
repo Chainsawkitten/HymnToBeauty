@@ -23,8 +23,9 @@ class OpenGLRenderPass : public RenderPass {
     /// Create new attachmentless OpenGL render pass.
     /**
      * @param size The size of the framebuffer.
+     * @param msaaSamples The number of MSAA samples.
      */
-    explicit OpenGLRenderPass(const glm::uvec2& size);
+    OpenGLRenderPass(const glm::uvec2& size, uint32_t msaaSamples);
 
     /// Destructor.
     ~OpenGLRenderPass() final;
