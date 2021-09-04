@@ -53,7 +53,14 @@ class Log {
      * @param value Value to output.
      * @return The %Log instance.
      */
-    Log& operator<<(const uint64_t value);
+    Log& operator<<(const unsigned long value);
+
+    /// Output an unsigned long long to stderr.
+    /**
+     * @param value Value to output.
+     * @return The %Log instance.
+     */
+    Log& operator<<(const unsigned long long value);
 
     /// Output a float to stderr.
     /**

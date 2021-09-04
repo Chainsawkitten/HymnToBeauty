@@ -48,7 +48,18 @@ Log& Log::operator<<(const unsigned int value) {
     return *this;
 }
 
-Log& Log::operator<<(const uint64_t value) {
+Log& Log::operator<<(const unsigned long value) {
+    *streams[currentChannel] << value;
+
+#ifdef USINGDOUBLELOGGING
+    if (currentChannel != INFO)
+        std::cout << value;
+#endif
+
+    return *this;
+}
+
+Log& Log::operator<<(const unsigned long long value) {
     *streams[currentChannel] << value;
 
 #ifdef USINGDOUBLELOGGING

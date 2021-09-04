@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <typeinfo>
+#include <string>
 
 class Entity;
 namespace Json {

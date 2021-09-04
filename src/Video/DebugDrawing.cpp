@@ -180,8 +180,6 @@ DebugDrawing::~DebugDrawing() {
 }
 
 void DebugDrawing::StartDebugDrawing(const glm::mat4& viewProjectionMatrix) {
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
-
     matricesBuffer->Write(&viewProjectionMatrix);
 }
 
@@ -350,8 +348,6 @@ void DebugDrawing::DrawMesh(const Mesh& mesh) {
 }
 
 void DebugDrawing::EndDebugDrawing() {
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
-
     BindGeometry(nullptr);
     BindGraphicsPipeline(nullptr);
 }

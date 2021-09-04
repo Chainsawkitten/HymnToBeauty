@@ -1,6 +1,7 @@
 #include "OpenGLBuffer.hpp"
 
 #include <assert.h>
+#include <cstddef>
 
 namespace Video {
 

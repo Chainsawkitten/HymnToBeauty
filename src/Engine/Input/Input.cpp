@@ -25,7 +25,7 @@ bool Input::CheckButton(int index) const {
 Json::Value Input::Save() const {
     Json::Value buttonsNode;
 
-    buttonsNode["size"] = buttons.size();
+    buttonsNode["size"] = static_cast<Json::UInt>(buttons.size());
     for (std::size_t i = 0; i < buttons.size(); ++i) {
         buttonsNode[std::to_string(i)]["action"] = buttons[i]->action;
         buttonsNode[std::to_string(i)]["key"] = buttons[i]->key;

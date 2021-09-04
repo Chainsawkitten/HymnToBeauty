@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <vector>
+#include <string>
 
 namespace GUI {
 /// A window where a file can be selected.
