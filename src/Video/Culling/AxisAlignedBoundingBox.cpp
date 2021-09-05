@@ -11,6 +11,6 @@ AxisAlignedBoundingBox::AxisAlignedBoundingBox(const glm::vec3& dimensions, cons
     this->maxVertex = maxVertex;
 }
 
-bool AxisAlignedBoundingBox::Collide(const Frustum& frustum) const {
-    return frustum.Collide(*this);
+bool AxisAlignedBoundingBox::Intersects(const Frustum& frustum) const {
+    return frustum.Intersects(*this);
 }

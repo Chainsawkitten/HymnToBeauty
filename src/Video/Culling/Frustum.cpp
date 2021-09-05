@@ -1,6 +1,7 @@
 #include "Frustum.hpp"
 
 #include "AxisAlignedBoundingBox.hpp"
+#include "Sphere.hpp"
 #include <glm/gtc/matrix_access.hpp>
 
 using namespace Video;
@@ -49,7 +50,7 @@ Frustum::Frustum(const glm::mat4& matrix) {
 	}
 }
 
-bool Frustum::Collide(const AxisAlignedBoundingBox& aabb) const {
+bool Frustum::Intersects(const AxisAlignedBoundingBox& aabb) const {
     // Define the AABB's vertices.
     glm::vec3 vertices[8];
     vertices[0] = aabb.minVertex;
@@ -76,6 +77,15 @@ bool Frustum::Collide(const AxisAlignedBoundingBox& aabb) const {
             return false;
     }
     return true;
+}
+
+bool Frustum::Intersects(const Sphere& sphere) const {
+    for (int plane = 0; plane < 6; plane++) {
+		if (DistanceToPoint(planes[plane], sphere.origin) < -sphere.radius) {
+			return false;
+		}
+	}
+	return true;
 }
 
 float Frustum::DistanceToPoint(const glm::vec4& plane, const glm::vec3& point) {
