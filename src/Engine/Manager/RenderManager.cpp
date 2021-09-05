@@ -21,7 +21,7 @@
 #include "../Texture/TextureAsset.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <Video/Culling/Frustum.hpp>
-#include <Video/Culling/AxisAlignedBoundingBox.hpp>
+#include <Video/Culling/Sphere.hpp>
 #include "../MainWindow.hpp"
 #include <Video/Lighting/Light.hpp>
 #include "../Hymn.hpp"
@@ -171,7 +171,7 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
                 continue;
 
             Video::Frustum frustum(viewProjectionMatrix * entity->GetModelMatrix());
-            if (!frustum.Collide(mesh->geometry->GetAxisAlignedBoundingBox()))
+            if (!frustum.Intersects(mesh->geometry->GetAxisAlignedBoundingBox()))
                 continue;
 
             staticEntities.push_back(entity);
@@ -420,9 +420,8 @@ Video::Renderer* RenderManager::GetRenderer() {
 }
 
 void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool lightVolumes) {
-
-    Video::AxisAlignedBoundingBox aabb(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
+    const Video::Frustum frustum(viewProjectionMatrix);
 
     std::vector<Video::DirectionalLight> directionalLightStructs;
     std::vector<Video::Light> lights;
@@ -447,16 +446,15 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& pro
             continue;
 
         Entity* lightEntity = spotLight->entity;
-        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.0f, 1.0f, 1.0f) * spotLight->distance);
+        glm::vec3 worldPosition = lightEntity->GetWorldPosition();
+        Video::Sphere sphere(worldPosition, spotLight->distance);
 
-        Video::Frustum frustum(viewProjectionMatrix * modelMat);
-        if (frustum.Collide(aabb)) {
+        if (frustum.Intersects(sphere)) {
             if (lightVolumes)
-                Managers().debugDrawingManager->AddSphere(lightEntity->GetWorldPosition(), spotLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
+                Managers().debugDrawingManager->AddSphere(worldPosition, spotLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
 
             glm::vec4 direction(viewMatrix * glm::vec4(lightEntity->GetDirection(), 0.0f));
-            glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
-            glm::vec4 position(viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f)));
+            glm::vec4 position(viewMatrix * (glm::vec4(worldPosition, 1.0f)));
             Video::Light light;
             light.positionDistance = glm::vec4(position.x, position.y, position.z, spotLight->distance);
             light.intensitiesAttenuation = glm::vec4(spotLight->color * spotLight->intensity, spotLight->attenuation);
@@ -472,15 +470,14 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& pro
             continue;
 
         Entity* lightEntity = pointLight->entity;
-        glm::mat4 modelMat = glm::translate(glm::mat4(), lightEntity->GetWorldPosition()) * glm::scale(glm::mat4(), glm::vec3(1.0f, 1.0f, 1.0f) * pointLight->distance);
+        glm::vec3 worldPosition = lightEntity->GetWorldPosition();
+        Video::Sphere sphere(worldPosition, pointLight->distance);
 
-        Video::Frustum frustum(viewProjectionMatrix * modelMat);
-        if (frustum.Collide(aabb)) {
+        if (frustum.Intersects(sphere)) {
             if (lightVolumes)
-                Managers().debugDrawingManager->AddSphere(lightEntity->GetWorldPosition(), pointLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
+                Managers().debugDrawingManager->AddSphere(worldPosition, pointLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
 
-            glm::mat4 modelMatrix(lightEntity->GetModelMatrix());
-            glm::vec4 position(viewMatrix * (glm::vec4(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]), 1.0f)));
+            glm::vec4 position(viewMatrix * (glm::vec4(worldPosition, 1.0f)));
             Video::Light light;
             light.positionDistance = glm::vec4(position.x, position.y, position.z, pointLight->distance);
             light.intensitiesAttenuation = glm::vec4(pointLight->color * pointLight->intensity, pointLight->attenuation);

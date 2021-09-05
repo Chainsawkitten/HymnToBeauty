@@ -4,6 +4,7 @@
 
 namespace Video {
 class AxisAlignedBoundingBox;
+class Sphere;
 
 /// A viewing frustum.
 /**
@@ -17,12 +18,19 @@ class Frustum {
      */
     explicit Frustum(const glm::mat4& matrix);
 
-    /// Check collision between frustum and an axis-aligned bounding box.
+    /// Check intersection between frustum and an axis-aligned bounding box.
     /**
-     * @param aabb The axis-aligned bounding box to check collision against.
-     * @return Whether there was a collision
+     * @param aabb The axis-aligned bounding box to check intersection against.
+     * @return Whether the bounding volumes intersect.
      */
-    bool Collide(const AxisAlignedBoundingBox& aabb) const;
+    bool Intersects(const AxisAlignedBoundingBox& aabb) const;
+
+    /// Check intersection between frustum and a sphere.
+    /**
+     * @param sphere The sphere to check intersection against.
+     * @return Whether the bounding volumes intersect.
+     */
+    bool Intersects(const Sphere& sphere) const;
 
   private:
     glm::vec4 planes[6];

@@ -3,6 +3,7 @@ set(SRCS
     Renderer.cpp
     Culling/AxisAlignedBoundingBox.cpp
     Culling/Frustum.cpp
+    Culling/Sphere.cpp
     Geometry/Geometry2D.cpp
     Geometry/Geometry3D.cpp
     Geometry/Rectangle.cpp
@@ -20,6 +21,7 @@ set(HEADERS
     Renderer.hpp
     Culling/AxisAlignedBoundingBox.hpp
     Culling/Frustum.hpp
+    Culling/Sphere.hpp
     Geometry/Geometry2D.hpp
     Geometry/Geometry3D.hpp
     Geometry/Rectangle.hpp
