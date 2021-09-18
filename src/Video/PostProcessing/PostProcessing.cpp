@@ -42,7 +42,7 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outp
 
     uberUniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(UberUniforms));
 
-    // FXAA + dither.
+    // FXAA.
     fxaaShader = lowLevelRenderer->CreateShader(FXAA_FRAG, Shader::Type::FRAGMENT_SHADER);
     fxaaShaderProgram = lowLevelRenderer->CreateShaderProgram({vertexShader, fxaaShader});
     fxaaPipeline = lowLevelRenderer->CreateGraphicsPipeline(fxaaShaderProgram, configuration);
@@ -121,26 +121,31 @@ void PostProcessing::SetOutputTexture(Texture* outputTexture) {
 void PostProcessing::Configure(const Configuration& configuration) {
     this->configuration = configuration;
 
+    float time = static_cast<float>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() % 30000000000 / 1000000000.0);
+
     // Update uber uniform buffer.
     UberUniforms uberUniforms;
     uberUniforms.gamma = configuration.gamma;
     uberUniforms.bloomIntensity = configuration.bloom.enabled ? configuration.bloom.intensity : 0.0f;
+    uberUniforms.time = time;
+    // Perform dither in uber pass if there is no FXAA pass.
+    uberUniforms.ditherEnable = configuration.dither.enabled && !configuration.fxaa.enabled;
 
     uberUniformBuffer->Write(&uberUniforms);
 
     // Update FXAA uniform buffer.
-    FXAAUniforms fxaaUniforms;
-    fxaaUniforms.screenSize = screenSize;
-    float time = static_cast<float>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() % 30000000000 / 1000000000.0);
-    fxaaUniforms.time = time;
-    fxaaUniforms.fxaaEnable = configuration.fxaa.enabled;
-    fxaaUniforms.ditherEnable = configuration.dither.enabled;
+    if (configuration.fxaa.enabled) {
+        FXAAUniforms fxaaUniforms;
+        fxaaUniforms.screenSize = screenSize;
+        fxaaUniforms.time = time;
+        fxaaUniforms.ditherEnable = configuration.dither.enabled;
 
-    fxaaUniformBuffer->Write(&fxaaUniforms);
+        fxaaUniformBuffer->Write(&fxaaUniforms);
+    }
 }
 
 void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* inputTexture) {
-    bool hasFxaaPass = configuration.fxaa.enabled || configuration.dither.enabled;
+    bool hasFxaaPass = configuration.fxaa.enabled;
     Texture* bloomTexture = dummyTexture;
 
     // Bloom.
@@ -160,7 +165,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
     commandBuffer.BindMaterial({inputTexture, bloomTexture});
     commandBuffer.Draw(3);
 
-    // FXAA + dither.
+    // FXAA.
     if (hasFxaaPass) {
         commandBuffer.EndRenderPass();
 

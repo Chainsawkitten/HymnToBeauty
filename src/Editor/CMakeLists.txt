@@ -99,14 +99,12 @@ endforeach()
 
 # Process shaders.
 foreach(item ${SHADERS})
-    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
+    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR} "")
 endforeach()
-
-set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER} ${SHADER_HEADER})
 
 create_directory_groups(${SRCS} ${HEADERS})
 
-add_executable(Editor ${SRCS} ${HEADERS} ${EMBEDDED_SOURCE} ${SHADER_SOURCE})
+add_executable(Editor ${SRCS} ${HEADERS} ${EMBEDDED_SOURCE} ${EMBEDDED_HEADER} ${SHADER_SOURCE} ${SHADER_HEADER})
 target_link_libraries(Editor Engine imgui imguizmo)
 set_property(TARGET Editor PROPERTY CXX_STANDARD 11)
 set_property(TARGET Editor PROPERTY CXX_STANDARD_REQUIRED ON)
