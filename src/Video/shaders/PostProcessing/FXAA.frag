@@ -14,14 +14,14 @@ UNIFORMS
 {
     highp vec2 screenSize;
     highp float time;
-    highp uint fxaaEnable;
     highp uint ditherEnable;
 } uniforms;
+
+#include "Dither.glsl"
 
 const float FXAA_SPAN_MAX = 8.0f;
 const float FXAA_REDUCE_MUL = 1.0f/8.0f;
 const float FXAA_REDUCE_MIN = 1.0f/128.0f;
-const float PI = 3.14159265359f;
 
 vec3 fxaa() {
     highp vec2 invScreenSize = 1.0f / uniforms.screenSize;
@@ -61,28 +61,13 @@ vec3 fxaa() {
         return result2;
 }
 
-highp float rand(vec2 co) {
-    highp float a = 12.9898f;
-    highp float b = 78.233f;
-    highp float c = 43758.5453f;
-    highp float dt = dot(co.xy, vec2(a,b));
-    highp float sn = mod(dt, PI);
-    return fract(sin(sn) * c);
-}
-
 void main () {
     // FXAA.
-    vec3 color;
-    if (uniforms.fxaaEnable != 0) {
-        color = fxaa();
-    } else {
-        color = texture(colorSampler, inTexCoords).rgb;
-    }
+    vec3 color = fxaa();
 
 	// Dither.
 	if (uniforms.ditherEnable != 0) {
-		float dither = rand(gl_FragCoord.xy / uniforms.screenSize + vec2(uniforms.time, 0.0f)) / 255.0f;
-		color = color + vec3(dither);
+		color = dither(color, inTexCoords, uniforms.time);
 	}
     
     outColor = vec4(color, 1.0);

@@ -8,16 +8,11 @@
 using namespace std;
 
 bool Shader::Open(const string& filename) {
-    // Read file.
-    ifstream inFile(filename.c_str());
-    stringstream buffer;
-    buffer << inFile.rdbuf();
-
-    source = buffer.str();
-
     // Get variable name and extension.
     variableName = VariableName(filename);
     extension = filename.substr(filename.find_last_of('.'));
+
+    source = GetSource(filename);
 
     /// @todo Handle includes.
 
@@ -140,7 +135,7 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
 string Shader::VariableName(string inputName) {
     // Get base filename.
     size_t found = inputName.find_last_of("/\\");
-    inputName = inputName.substr(found+1);
+    inputName = (found != string::npos) ? inputName.substr(found+1) : inputName;
     
     // Convert to upper case and replace . with _.
     for (string::size_type i=0; i<inputName.length(); i++) {
@@ -150,6 +145,57 @@ string Shader::VariableName(string inputName) {
     }
     
     return inputName;
+}
+
+string Shader::GetSource(const string& filename) {
+    // Read source.
+    ifstream inFile(filename.c_str());
+    stringstream buffer;
+    buffer << inFile.rdbuf();
+
+    string source = buffer.str();
+
+    // Remove multi-line comments.
+    size_t commentStart = source.find("/*");
+    while (commentStart != string::npos) {
+        size_t commentEnd = source.find("*/", commentStart + 2);
+        if (commentEnd == string::npos)
+            break;
+    
+        source = source.erase(commentStart, commentEnd + 2 - commentStart);
+        commentStart = source.find("/*");
+    }
+
+    // Get directory name.
+    size_t found = filename.find_last_of("/\\");
+    string directoryName = (found != string::npos) ? filename.substr(0, found + 1) : "";
+
+    // Parse includes.
+    string processedSource = "";
+    string line;
+    stringstream lineParser(source);
+
+    while (getline(lineParser, line)) {
+        // Remove leading whitespace.
+        string parseLine = line;
+        size_t firstNonWhitespace = parseLine.find_first_not_of(" \t");
+        if (firstNonWhitespace != string::npos) {
+            parseLine = parseLine.substr(firstNonWhitespace);
+        }
+
+        if (parseLine.find("#include") == 0) {
+            size_t startPos = parseLine.find("\"", 8) + 1;
+            size_t endPos = parseLine.find("\"", startPos);
+            if (startPos == string::npos || endPos == string::npos) {
+                cerr << "Invalid #include.\n";
+            }
+            processedSource += GetSource(directoryName + parseLine.substr(startPos, endPos - startPos));
+        } else {
+            processedSource += line + "\n";
+        }
+    }
+
+    return processedSource;
 }
 
 string Shader::GetGlslSource() const {
@@ -202,24 +248,10 @@ vector<char> Shader::GetSpirvSource(bool vulkan) const {
 }
 
 ShaderSource::ReflectionInfo Shader::GetReflectionInfo() const {
-    /// @todo More proper lexing.
-
-    // Remove multi-line comments.
-    string parseSource = source;
-    size_t commentStart = parseSource.find("/*");
-    while (commentStart != string::npos) {
-        size_t commentEnd = parseSource.find("*/", commentStart + 2);
-        if (commentEnd == string::npos)
-            break;
-
-        parseSource = parseSource.erase(commentStart, commentEnd - commentStart);
-        commentStart = parseSource.find("/*");
-    }
-
     // Parse for resource definitions.
     ShaderSource::ReflectionInfo reflectionInfo = {};
     string line;
-    stringstream lineParser(parseSource);
+    stringstream lineParser(source);
     bool inPushConstantBlock = false;
     vector<ShaderSource::ReflectionInfo::PushConstant> pushConstants;
     vector<ShaderSource::ReflectionInfo::StorageBuffer> storageBuffers;

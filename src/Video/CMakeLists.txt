@@ -132,11 +132,11 @@ if(VulkanRenderer)
 endif()
 
 # Setup shaders
+set(SHADER_INCLUDES
+    shaders/PostProcessing/Dither.glsl
+)
+
 set(SHADERS
-    shaders/BloomBlur.frag
-    shaders/BloomDownscale.frag
-    shaders/BloomThreshold.frag
-    shaders/BloomUpscale.frag
     shaders/DebugDrawing.vert
     shaders/DebugDrawing.frag
     shaders/Default3D.vert
@@ -145,25 +145,27 @@ set(SHADERS
     shaders/DepthPrePassStatic.vert
     shaders/EditorEntity.vert
     shaders/EditorEntity.frag
-    shaders/FXAA.frag
     shaders/LightBinning.comp
     shaders/LightTiling.vert
     shaders/LightTiling.frag
-    shaders/PostProcessing.vert
     shaders/SampleTexture.frag
-    shaders/UberPostProcessing.frag
+    shaders/PostProcessing/BloomBlur.frag
+    shaders/PostProcessing/BloomDownscale.frag
+    shaders/PostProcessing/BloomThreshold.frag
+    shaders/PostProcessing/BloomUpscale.frag
+    shaders/PostProcessing/FXAA.frag
+    shaders/PostProcessing/PostProcessing.vert
+    shaders/PostProcessing/UberPostProcessing.frag
 )
 
 # Process shaders.
 foreach(item ${SHADERS})
-    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
+    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR} ${SHADER_INCLUDES})
 endforeach()
-
-set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${SHADER_HEADER})
 
 create_directory_groups(${SRCS} ${HEADERS})
 
-add_library(Video STATIC ${SRCS} ${HEADERS} ${SHADER_SOURCE})
+add_library(Video STATIC ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${SHADER_HEADER})
 target_link_libraries(Video Utility ${API_LIBRARIES} glfw ${GLFW_LIBRARIES} glm jsoncpp_lib_static stb ShaderSource)
 
 set_property(TARGET Video PROPERTY CXX_STANDARD 11)

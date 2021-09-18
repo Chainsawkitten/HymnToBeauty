@@ -120,6 +120,8 @@ class PostProcessing {
     struct UberUniforms {
         float gamma;
         float bloomIntensity;
+        float time;
+        uint32_t ditherEnable;
     };
 
     // FXAA + dither.
@@ -131,7 +133,6 @@ class PostProcessing {
     struct FXAAUniforms {
         glm::vec2 screenSize;
         float time;
-        uint32_t fxaaEnable;
         uint32_t ditherEnable;
     };
 };

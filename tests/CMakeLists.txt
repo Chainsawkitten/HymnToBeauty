@@ -57,15 +57,13 @@ set(IMAGES
 
 # Process shaders.
 foreach(item ${SHADERS})
-    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR} ON)
+    ProcessShader(SHADER_HEADER SHADER_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR} "")
 endforeach()
 
 # Process images.
 foreach(item ${IMAGES})
     ProcessWithHeaderize(IMAGES_HEADER IMAGES_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
 endforeach()
-
-set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${SHADER_HEADER} ${IMAGES_HEADER})
 
 if(OpenGLRenderer)
     add_definitions(-DOPENGL_SUPPORT)
@@ -77,7 +75,7 @@ endif()
 create_directory_groups(${SRCS} ${HEADERS})
 
 include_directories(../src)
-add_executable(Tests ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${IMAGES_SOURCE})
+add_executable(Tests ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${SHADER_HEADER} ${IMAGES_SOURCE} ${IMAGES_HEADER})
 target_link_libraries(Tests Video)
 
 set_property(TARGET Tests PROPERTY CXX_STANDARD 11)
