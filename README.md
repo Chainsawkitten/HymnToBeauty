@@ -18,6 +18,7 @@ Hymn to Beauty uses several third party libraries with their own licenses:
 | [AngelScript](https://github.com/IngwiePhoenix/AngelScript) | zlib |
 | [assimp](https://github.com/assimp/assimp) | Modified BSD |
 | [Bullet](https://github.com/bulletphysics/bullet3) | zlib |
+| [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) | MIT |
 | [glad](https://github.com/Dav1dde/glad) | Public domain (generated code) |
 | [GLFW](https://github.com/glfw/glfw) | zlib / libpng |
 | [GLM](https://github.com/g-truc/glm) | Modified MIT / MIT |

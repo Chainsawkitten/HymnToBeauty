@@ -1,16 +1,16 @@
-# Contributing
+\page CodingStandards Coding Standards
 
-### Naming
+## Naming
 * Namespaces, Classes, Functions: `PascalCase`
 * Variables: `camelCase`
 
-### Indentation
+## Indentation
 Use 4 spaces for indentation, not tabs.
 
-### Documentation
+## Documentation
 All non-private members need to be documented using Doxygen-style comments.
 
-### Example
+## Example
 ```cpp
 #include <string>
 #include <iostream>
