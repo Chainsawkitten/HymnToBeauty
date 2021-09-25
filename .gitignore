@@ -8,7 +8,7 @@
 *.user
 
 # Doxygen
-docs
+docs/html
 
 # Precompiled Headers
 *.gch

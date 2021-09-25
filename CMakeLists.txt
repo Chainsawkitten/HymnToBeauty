@@ -42,23 +42,12 @@ function(create_directory_groups)
 endfunction()
 
 # Doxygen documentation
-option(HymnToBeautyBuildDocs "Build the doxygen documentation" OFF)
 find_package(Doxygen)
-if(DOXYGEN_FOUND AND HymnToBeautyBuildDocs)
-    add_custom_target(EngineDoc ALL
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EngineDoxyfile
+if(DOXYGEN_FOUND)
+    add_custom_target(docs
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-    )
-    add_custom_target(EditorDoc ALL
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EditorDoxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-    )
-    add_custom_target(GameDoc ALL
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/GameDoxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
+        COMMENT "Generating documentation with Doxygen" VERBATIM
     )
 endif()
 
