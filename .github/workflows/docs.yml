@@ -1,0 +1,30 @@
+name: Docs
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  Deploy:
+    runs-on:
+      ubuntu-latest
+
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build documentation
+      uses: mattnotmitt/doxygen-action@v1
+      with:
+        doxyfile-path: 'docs/Doxyfile'
+    
+    - name: Create .nojekyll file
+      run: sudo touch ${{github.workspace}}/docs/html/.nojekyll
+
+    - name: Publish documentation to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.5
+      with:
+        branch: gh-pages
+        folder: docs/html

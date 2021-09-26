@@ -1,12 +1,6 @@
 # Hymn to Beauty
 
-C++ 3D Engine with OpenGL and Vulkan backends. See the [wiki](https://github.com/Chainsawkitten/HymnToBeauty/wiki) for usage.
-
-## Building
-1. Clone the GitHub repository.
-2. Run `git submodule update --init`
-3. Use CMake to generate make/project files for Hymn to Beauty.
-4. Build Hymn to Beauty.
+C++ 3D Engine with OpenGL and Vulkan backends. See the [docs](https://chainsawkitten.github.io/HymnToBeauty/) for usage.
 
 ## License
 Released under the [MIT license](LICENSE).
