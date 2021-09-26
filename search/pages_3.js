@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getting_20started_3053',['Getting Started',['../_getting_started.html',1,'index']]]
+  ['function_20reference_3058',['Function Reference',['../_function_reference.html',1,'ScriptingReference']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rigid_20body_3059',['Rigid body',['../_component_rigid_body.html',1,'Components']]]
+  ['point_20light_3064',['Point light',['../_component_point_light.html',1,'Components']]]
 ];
