@@ -4,5 +4,6 @@ Hymn to Beauty is a free, open source 3D game engine. It is available for Window
 
 ## Subpages
  - \subpage GettingStarted
+ - \subpage Components
  - \subpage ScriptingReference
  - \subpage Development

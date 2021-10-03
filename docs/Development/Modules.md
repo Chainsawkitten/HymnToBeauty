@@ -1,4 +1,4 @@
-\page Modules
+\page Modules Modules
 
 Hymn to Beauty consists of several modules, each implemented as a static library. Two applications are built on top of these modules: Game and %Editor.
 
