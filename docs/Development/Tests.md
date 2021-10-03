@@ -1,4 +1,4 @@
-\page Tests
+\page Tests Tests
 
 Hymn to Beauty uses unit tests to test its low-level renderer. This is to catch regressions and to verify that it behaves the same across all platforms and backends. Note that these tests require a GPU, and as such are not run as part of the CI.
 

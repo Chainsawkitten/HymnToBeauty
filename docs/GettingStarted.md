@@ -2,4 +2,4 @@
 
 ## Subpages
  - \subpage Building
- - \subpage ScenesEntities
+ - \subpage YourFirstHymn
