@@ -786,12 +786,11 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         resourceView.ResetScene();
         Hymn().Clear();
         Resources().Clear();
-        Hymn().world.CreateRoot();
         Hymn().SetPath(FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns" + FileSystem::DELIMITER + hymn);
         resourceView.SetVisible(true);
 
         // Default scene.
-        // Resources().scenes.push_back("Scene #0");
+        Hymn().world.CreateRoot();
 
         Entity* player = Hymn().world.GetRoot()->AddChild("Player");
         player->position.z = 10.f;
@@ -800,6 +799,14 @@ void Editor::NewHymnClosed(const std::string& hymn) {
 
         Entity* sun = Hymn().world.GetRoot()->AddChild("Sun");
         sun->AddComponent<Component::DirectionalLight>();
+
+        Hymn().world.Save(Hymn().GetPath() + "/Resources/Scene.scn");
+        Hymn().world.Clear();
+
+        Hymn().Save();
+
+        Resources().Save();
+        Resources().Refresh();
     }
 
     selectHymnWindow.SetVisible(false);
@@ -833,5 +840,9 @@ void Editor::OpenHymnClosed(const std::string& hymn) {
 
 void Editor::LoadActiveScene() {
     // Load active scene.
-    Hymn().world.Load(Hymn().GetPath() + "/" + Resources().activeScene);
+    if (!Resources().activeScene.empty()) {
+        Hymn().world.Load(Hymn().GetPath() + "/" + Resources().activeScene);
+    } else {
+        Hymn().world.Clear();
+    }
 }
