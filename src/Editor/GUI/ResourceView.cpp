@@ -49,8 +49,7 @@ void ResourceView::Show() {
     // Refresh button.
     if (ImGui::Button("Refresh")) {
         HideEditors();
-        Resources().Clear();
-        Resources().Load();
+        Resources().Refresh();
     }
 
     // Show resources.

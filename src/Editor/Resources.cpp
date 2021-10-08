@@ -88,6 +88,11 @@ void ResourceList::Clear() {
     scriptNumber = 0U;
 }
 
+void ResourceList::Refresh() {
+    ClearFolder(resourceFolder);
+    resourceFolder = LoadFolder("Resources", "");
+}
+
 ResourceList::ResourceFolder ResourceList::LoadFolder(const string& name, std::string path) {
     ResourceFolder folder;
     folder.name = name;
