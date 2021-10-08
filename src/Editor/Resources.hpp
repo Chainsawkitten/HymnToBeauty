@@ -79,6 +79,9 @@ class ResourceList {
     /// Clear resources.
     void Clear();
 
+    /// Refresh resources.
+    void Refresh();
+
     /// Resources.
     ResourceFolder resourceFolder;
 
