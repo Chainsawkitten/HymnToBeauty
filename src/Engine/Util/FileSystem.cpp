@@ -15,6 +15,7 @@
 #undef CreateDirectory
 #else
 #include <dirent.h>
+#include <unistd.h>
 #endif
 
 namespace FileSystem {
@@ -59,6 +60,16 @@ void CreateDirectory(const char* filename) {
 #else
     // MacOS and Linux
     mkdir(filename, ACCESSPERMS);
+#endif
+}
+
+bool DeleteDirectory(const char* filename) {
+#if defined(_WIN32) || defined(WIN32)
+    // Windows
+    return RemoveDirectoryA(filename);
+#else
+    // MacOS and Linux
+    return rmdir(filename) == 0;
 #endif
 }
 
