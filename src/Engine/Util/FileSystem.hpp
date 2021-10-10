@@ -36,6 +36,13 @@ void Copy(const char* source, const char* destination);
  */
 void CreateDirectory(const char* filename);
 
+/// Delete a directory if it is empty.
+/**
+ * @param filename The path of the directory to remove.
+ * @return Whether the directory was deleted successfully.
+ */
+bool DeleteDirectory(const char* filename);
+
 /// Get all the contents of a directory.
 /**
  * @param directoryName Path to the directory to scan.

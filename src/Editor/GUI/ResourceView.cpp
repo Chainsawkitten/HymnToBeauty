@@ -262,7 +262,7 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
 
         // Remove Folder.
         else if (folder.subfolders.empty() && folder.resources.empty()) {
-            if (ImGui::Selectable("Remove Folder")) {
+            if (ImGui::Selectable("Remove folder")) {
                 ImGui::EndPopup();
                 if (opened)
                     ImGui::TreePop();
@@ -276,7 +276,11 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
         // Show subfolders.
         for (auto it = folder.subfolders.begin(); it != folder.subfolders.end(); ++it) {
             if (ShowResourceFolder(*it, path + "/" + it->name)) {
-                folder.subfolders.erase(it);
+                // Delete directory.
+                const std::string fullPath = Hymn().GetPath() + "/" + path + "/" + it->name;
+                if (FileSystem::DeleteDirectory(fullPath.c_str())) {
+                    folder.subfolders.erase(it);
+                }
                 ImGui::TreePop();
                 return false;
             }
