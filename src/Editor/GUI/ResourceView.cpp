@@ -226,7 +226,7 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
         else if (ImGui::Selectable("Add scene")) {
             ResourceList::Resource resource;
             resource.type = ResourceList::Resource::SCENE;
-            resource.scene = new string("Scene #" + std::to_string(Resources().sceneNumber++));
+            resource.scene = new string("Scene #" + std::to_string(Resources().sceneNumber++) + ".scn");
             folder.resources.push_back(resource);
         }
 
