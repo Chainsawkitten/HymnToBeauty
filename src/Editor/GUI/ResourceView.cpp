@@ -230,25 +230,6 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
             folder.resources.push_back(resource);
         }
 
-        // Add model.
-        else if (ImGui::Selectable("Add model")) {
-            ResourceList::Resource resource;
-            resource.type = ResourceList::Resource::MODEL;
-            resource.model = new Geometry::Model(lowLevelRenderer);
-            resource.model->path = path + "/";
-            resource.model->name = "Model #" + std::to_string(Resources().modelNumber++);
-            folder.resources.push_back(resource);
-        }
-
-        // Add texture.
-        else if (ImGui::Selectable("Add texture")) {
-            ResourceList::Resource resource;
-            resource.type = ResourceList::Resource::TEXTURE;
-            string name = path + "/Texture #" + std::to_string(Resources().textureNumber++);
-            resource.texture = Managers().resourceManager->CreateTextureAsset(name);
-            folder.resources.push_back(resource);
-        }
-
         // Add script.
         else if (ImGui::Selectable("Add script")) {
             ResourceList::Resource resource;
