@@ -37,6 +37,7 @@ void ScriptEditor::Show() {
         }
 
         if (ImGui::Button("Build Script")) {
+            Managers().scriptManager->RegisterInput();
             int r = Managers().scriptManager->BuildScript(script);
             status = r < 0 ? FAILURE : SUCCESS;
         }
