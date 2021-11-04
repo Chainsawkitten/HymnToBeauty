@@ -97,6 +97,7 @@ void GLTFImporter::ReadAccessors(GLTF& gltf) {
     for (uint32_t i = 0; i < accessorsNode.size(); ++i) {
         Accessor accessor;
         accessor.bufferView = accessorsNode[i]["bufferView"].asUInt();
+        accessor.byteOffset = accessorsNode[i]["byteOffset"].asUInt();
         accessor.count = accessorsNode[i]["count"].asUInt();
         accessor.componentType = static_cast<Accessor::ComponentType>(accessorsNode[i]["componentType"].asUInt());
 
@@ -111,11 +112,6 @@ void GLTFImporter::ReadAccessors(GLTF& gltf) {
             accessor.type = Accessor::Type::VEC4;
         } else {
             Log(Log::ERR) << "Matrix types not supported.\n";
-            assert(false);
-        }
-
-        if (accessorsNode[i]["byteOffset"].asUInt() != 0) {
-            Log(Log::ERR) << "Accessor byteOffset not supported.\n";
             assert(false);
         }
 
@@ -427,10 +423,10 @@ GLTFImporter::Primitive GLTFImporter::LoadPrimitive(const GLTF& gltf, const Json
     const Buffer* tangentBuffer = calculateTangents ? nullptr : &gltf.buffers[tangentBufferView->buffer];
 
     // Read vertex buffer data.
-    const char* positionValue = positionBuffer.data + positionBufferView.offset;
-    const char* texCoordValue = texCoordBuffer.data + texCoordBufferView.offset;
-    const char* normalValue = normalBuffer.data + normalBufferView.offset;
-    const char* tangentValue = calculateTangents ? nullptr : tangentBuffer->data + tangentBufferView->offset;
+    const char* positionValue = positionBuffer.data + positionBufferView.offset + positionAccessor.byteOffset;
+    const char* texCoordValue = texCoordBuffer.data + texCoordBufferView.offset + texCoordAccessor.byteOffset;
+    const char* normalValue = normalBuffer.data + normalBufferView.offset + normalAccessor.byteOffset;
+    const char* tangentValue = calculateTangents ? nullptr : (tangentBuffer->data + tangentBufferView->offset + tangentAccessor.byteOffset);
 
     for (uint32_t i = 0; i < primitive.vertexCount; ++i) {
         primitive.vertices[i].position.x = *reinterpret_cast<const float*>(positionValue);

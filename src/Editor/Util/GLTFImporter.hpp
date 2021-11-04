@@ -36,6 +36,7 @@ class GLTFImporter {
 
     struct Accessor {
         uint32_t bufferView;
+        uint32_t byteOffset;
         uint32_t count;
         enum ComponentType { BYTE = 5120, UNSIGNED_BYTE, SHORT, UNSIGNED_SHORT, UNSIGNED_INT = 5125, FLOAT } componentType;
         enum class Type { SCALAR, VEC2, VEC3, VEC4 } type; /// @todo Matrices.
