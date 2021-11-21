@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['scenes_20and_20entities_3068',['Scenes and Entities',['../_scenes_entities.html',1,'GettingStarted']]],
-  ['scripting_20reference_3069',['Scripting Reference',['../_scripting_reference.html',1,'index']]],
-  ['shape_3070',['Shape',['../_component_shape.html',1,'Components']]],
-  ['sound_20source_3071',['Sound source',['../_component_sound_source.html',1,'Components']]],
-  ['spot_20light_3072',['Spot light',['../_component_spot_light.html',1,'Components']]]
+  ['player_20_25input_3095',['Player %Input',['../_your_first_hymn__player_input.html',1,'YourFirstHymn']]],
+  ['point_20light_3096',['Point light',['../_component_point_light.html',1,'Components']]]
 ];

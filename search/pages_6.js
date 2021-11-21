@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['material_3064',['Material',['../_component_material.html',1,'Components']]],
-  ['mesh_3065',['Mesh',['../_component_mesh.html',1,'Components']]]
+  ['importing_20a_203d_20model_3088',['Importing a 3D model',['../_your_first_hymn__importing3_d_model.html',1,'YourFirstHymn']]]
 ];

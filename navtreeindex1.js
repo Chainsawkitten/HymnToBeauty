@@ -37,7 +37,7 @@ var NAVTREEINDEX1 =
 "_model_8cpp.html":[7,0,1,1,3,6],
 "_model_8hpp.html":[7,0,1,1,3,7],
 "_model_8hpp_source.html":[7,0,1,1,3,7],
-"_modules.html":[2,1],
+"_modules.html":[3,1],
 "_mouse_picking_8cpp.html":[7,0,1,1,10,6],
 "_mouse_picking_8hpp.html":[7,0,1,1,10,7],
 "_mouse_picking_8hpp_source.html":[7,0,1,1,10,7],
@@ -157,7 +157,6 @@ var NAVTREEINDEX1 =
 "_scene_editor_8cpp.html#aa29e936caf6dc29e6a83747fb6518d4d":[7,0,1,0,0,0,19,1],
 "_scene_editor_8hpp.html":[7,0,1,0,0,0,20],
 "_scene_editor_8hpp_source.html":[7,0,1,0,0,0,20],
-"_scenes_entities.html":[0,1],
 "_script_8cpp.html":[7,0,1,1,1,14],
 "_script_8hpp.html":[7,0,1,1,1,15],
 "_script_8hpp_source.html":[7,0,1,1,1,15],
@@ -195,7 +194,7 @@ var NAVTREEINDEX1 =
 "_script_manager_8cpp.html#afc5d263273748ee8034af273748daeb0":[7,0,1,1,5,12,15],
 "_script_manager_8hpp.html":[7,0,1,1,5,13],
 "_script_manager_8hpp_source.html":[7,0,1,1,5,13],
-"_scripting_reference.html":[1],
+"_scripting_reference.html":[2],
 "_select_hymn_window_8cpp.html":[7,0,1,0,0,19],
 "_select_hymn_window_8hpp.html":[7,0,1,0,0,20],
 "_select_hymn_window_8hpp_source.html":[7,0,1,0,0,20],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "_super_component_8cpp.html":[7,0,1,1,1,22],
 "_super_component_8hpp.html":[7,0,1,1,1,23],
 "_super_component_8hpp_source.html":[7,0,1,1,1,23],
-"_super_trigger_8cpp.html":[7,0,1,1,9,0]
+"_super_trigger_8cpp.html":[7,0,1,1,9,0],
+"_super_trigger_8hpp.html":[7,0,1,1,9,1]
 };
