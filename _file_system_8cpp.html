@@ -101,6 +101,7 @@ $(document).ready(function(){initNavTree('_file_system_8cpp.html',''); initResiz
 <code>#include &lt;<a class="el" href="_log_8hpp_source.html">Utility/Log.hpp</a>&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;dirent.h&gt;</code><br />
+<code>#include &lt;unistd.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -119,6 +120,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aa72dd3a2277fc7b37b84d0558ae5c295"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_file_system.html#aa72dd3a2277fc7b37b84d0558ae5c295">FileSystem::CreateDirectory</a> (const char *filename)</td></tr>
 <tr class="memdesc:aa72dd3a2277fc7b37b84d0558ae5c295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a directory if it does not already exist.  <a href="namespace_file_system.html#aa72dd3a2277fc7b37b84d0558ae5c295">More...</a><br /></td></tr>
 <tr class="separator:aa72dd3a2277fc7b37b84d0558ae5c295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3209e759ebe5ef33019137ee6dc71250"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_file_system.html#a3209e759ebe5ef33019137ee6dc71250">FileSystem::DeleteDirectory</a> (const char *filename)</td></tr>
+<tr class="memdesc:a3209e759ebe5ef33019137ee6dc71250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete a directory if it is empty.  <a href="namespace_file_system.html#a3209e759ebe5ef33019137ee6dc71250">More...</a><br /></td></tr>
+<tr class="separator:a3209e759ebe5ef33019137ee6dc71250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6af6e837f39f11a20b9c74fe444e311c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_file_system.html#a6af6e837f39f11a20b9c74fe444e311c">FileSystem::DirectoryContents</a> (const std::string &amp;directoryName, unsigned int type=FILE|DIRECTORY)</td></tr>
 <tr class="memdesc:a6af6e837f39f11a20b9c74fe444e311c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all the contents of a directory.  <a href="namespace_file_system.html#a6af6e837f39f11a20b9c74fe444e311c">More...</a><br /></td></tr>
 <tr class="separator:a6af6e837f39f11a20b9c74fe444e311c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,7 +166,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_3072bc1f55ed1280fe4fbe6b21c78379.html">Engine</a></li><li class="navelem"><a class="el" href="dir_ffaac3aa99bbfe6503a02d1a48067399.html">Util</a></li><li class="navelem"><a class="el" href="_file_system_8cpp.html">FileSystem.cpp</a></li>
-    <li class="footer">Generated on Sun Nov 21 2021 17:20:44 for Hymn to Beauty by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Nov 21 2021 17:34:53 for Hymn to Beauty by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

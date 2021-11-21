@@ -4,6 +4,7 @@ var _file_system_8cpp =
     [ "CreateDirectory", "_file_system_8cpp.html#aa72dd3a2277fc7b37b84d0558ae5c295", null ],
     [ "DataPath", "_file_system_8cpp.html#ab9653b8cd88d72c1c7149ac5d6646e68", null ],
     [ "DataPath", "_file_system_8cpp.html#a6bc75941c5bfb3ca476d8fe42a376aa9", null ],
+    [ "DeleteDirectory", "_file_system_8cpp.html#a3209e759ebe5ef33019137ee6dc71250", null ],
     [ "DirectoryContents", "_file_system_8cpp.html#a6af6e837f39f11a20b9c74fe444e311c", null ],
     [ "ExecuteProgram", "_file_system_8cpp.html#a661e6c204f0f2d2bdb51b8d14a623ab1", null ],
     [ "FileExists", "_file_system_8cpp.html#ae070c693bb9fb0e4503fc39f6fd5d240", null ],

@@ -5,6 +5,7 @@ var class_resource_list =
     [ "Clear", "class_resource_list.html#a1ef1e357398406b045e13584c1c4db9c", null ],
     [ "GetSavePath", "class_resource_list.html#a588a65c3339e8a4ca9fc964797129224", null ],
     [ "Load", "class_resource_list.html#a3318c7f495babe40c1eaacc4cc63f495", null ],
+    [ "Refresh", "class_resource_list.html#a6565316383ad37760c19444752d90df9", null ],
     [ "Save", "class_resource_list.html#ad8c2bafa0c2d7528a12010bae80f5a59", null ],
     [ "ToJson", "class_resource_list.html#a25cb449b836c1264c55802d9326528c7", null ],
     [ "Resources", "class_resource_list.html#aef2f906996916c32830701c6afbf956c", null ],

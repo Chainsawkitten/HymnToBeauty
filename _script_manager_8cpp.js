@@ -2,7 +2,7 @@ var _script_manager_8cpp =
 [
     [ "AngelScriptDebugLineCallback", "_script_manager_8cpp.html#a3da49b77e484c2d1673ce6559b7d7ba1", null ],
     [ "AngelScriptMessageCallback", "_script_manager_8cpp.html#a95393351d1fccb0e79538749cc7163b7", null ],
-    [ "ButtonInput", "_script_manager_8cpp.html#a1044aed1a011e50b6069fb55641e925c", null ],
+    [ "ButtonInput", "_script_manager_8cpp.html#a43de5a5d01d9ec5e6b1a445a781b84cf", null ],
     [ "CallstackToString", "_script_manager_8cpp.html#a910a9e741053127f529aafb82bad2fe8", null ],
     [ "GetCursorXY", "_script_manager_8cpp.html#abd2616d92388db4b677a42d9a271a58c", null ],
     [ "glmAdd", "_script_manager_8cpp.html#aa6ca7216911ee410b70d3c7b5420c3bb", null ],
