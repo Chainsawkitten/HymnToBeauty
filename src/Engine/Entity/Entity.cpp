@@ -1,7 +1,7 @@
 #include "Entity.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include "../Component/Lens.hpp"
+#include "../Component/Camera.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
 #include "../Component/DirectionalLight.hpp"
@@ -193,7 +193,7 @@ Json::Value Entity::Save() const {
         entity["sceneName"] = sceneName;
     } else {
         // Save components.
-        Save<Component::Lens>(entity, "Lens");
+        Save<Component::Camera>(entity, "Camera");
         Save<Component::Mesh>(entity, "Mesh");
         Save<Component::Material>(entity, "Material");
         Save<Component::DirectionalLight>(entity, "DirectionalLight");
@@ -233,7 +233,7 @@ void Entity::Load(const Json::Value& node) {
         scene = true;
     } else {
         // Load components.
-        Load<Component::Lens>(node, "Lens");
+        Load<Component::Camera>(node, "Camera");
         Load<Component::Mesh>(node, "Mesh");
         Load<Component::Material>(node, "Material");
         Load<Component::DirectionalLight>(node, "DirectionalLight");
@@ -370,8 +370,8 @@ Component::SuperComponent* Entity::AddComponent(std::type_index componentType) {
     // Create a component in the correct manager.
     if (componentType == typeid(Component::DirectionalLight*))
         component = Managers().renderManager->CreateDirectionalLight();
-    else if (componentType == typeid(Component::Lens*))
-        component = Managers().renderManager->CreateLens();
+    else if (componentType == typeid(Component::Camera*))
+        component = Managers().renderManager->CreateCamera();
     else if (componentType == typeid(Component::Listener*))
         component = Managers().soundManager->CreateListener();
     else if (componentType == typeid(Component::Material*))
@@ -428,8 +428,8 @@ void Entity::LoadComponent(std::type_index componentType, const Json::Value& nod
     // Create a component in the correct manager.
     if (componentType == typeid(Component::DirectionalLight*))
         component = Managers().renderManager->CreateDirectionalLight(node);
-    else if (componentType == typeid(Component::Lens*))
-        component = Managers().renderManager->CreateLens(node);
+    else if (componentType == typeid(Component::Camera*))
+        component = Managers().renderManager->CreateCamera(node);
     else if (componentType == typeid(Component::Listener*))
         component = Managers().soundManager->CreateListener(node);
     else if (componentType == typeid(Component::Material*))

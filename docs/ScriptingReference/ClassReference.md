@@ -63,8 +63,8 @@ Get the entity's animation controller component, if it has any. Otherwise return
 `Component::DirectionalLight@ GetDirectionalLight()`  
 Get the entity's directional light component, if it has any. Otherwise returns null.
 
-`Component::Lens@ GetLens()`  
-Get the entity's lens component, if it has any. Otherwise returns null.
+`Component::Camera@ GetCamera()`  
+Get the entity's camera component, if it has any. Otherwise returns null.
 
 `Component::Listener@ GetListener()`  
 Get the entity's listener component, if it has any. Otherwise returns null.
@@ -104,7 +104,7 @@ The light color.
 `float ambientCoefficient`  
 Coefficient of ambient lighting (between 0.0 and 1.0).
 
-\section Lens Component::Lens
+\section Camera Component::Camera
 A camera through which the world can be rendered.
 
 ## Properties

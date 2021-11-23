@@ -7,7 +7,7 @@
 #include "PhysicsManager.hpp"
 #include "DebugDrawingManager.hpp"
 #include "../Entity/Entity.hpp"
-#include "../Component/Lens.hpp"
+#include "../Component/Camera.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/Material.hpp"
 #include "../Component/DirectionalLight.hpp"
@@ -52,22 +52,22 @@ RenderManager::~RenderManager() {
     Managers().resourceManager->FreeTexture2D(cameraTexture);
 }
 
-void RenderManager::Render(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, Entity* camera, bool lighting, bool lightVolumes) {
+void RenderManager::Render(World& world, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics, Entity* cameraEntity, bool lighting, bool showLightVolumes) {
     const glm::uvec2 windowSize = MainWindow::GetInstance()->GetSize();
     if (windowSize.x == 0 || windowSize.y == 0)
         return;
 
     // Find camera entity.
-    if (camera == nullptr) {
-        for (Lens* lens : lenses.GetAll()) {
-            if (lens->entity->IsEnabled())
-                camera = lens->entity;
+    if (cameraEntity == nullptr) {
+        for (Camera* camera : cameras.GetAll()) {
+            if (camera->entity->IsEnabled())
+                cameraEntity = camera->entity;
         }
     }
 
     renderer->BeginFrame();
 
-    if (camera == nullptr) {
+    if (cameraEntity == nullptr) {
         renderer->StartDepthPrePass();
         renderer->StartMainPass();
 
@@ -84,16 +84,16 @@ void RenderManager::Render(World& world, bool soundSources, bool lightSources, b
     // Render main window.
     {
         PROFILE("Render main window");
-        Lens* lens = camera->GetComponent<Lens>();
-        const glm::mat4 projectionMatrix = lens->GetProjection(windowSize);
-        const glm::mat4 viewMatrix = glm::inverse(camera->GetModelMatrix());
-        const glm::vec3 position = camera->GetWorldPosition();
+        Camera* camera = cameraEntity->GetComponent<Camera>();
+        const glm::mat4 projectionMatrix = camera->GetProjection(windowSize);
+        const glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
+        const glm::vec3 position = cameraEntity->GetWorldPosition();
         const glm::vec3 up(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
 
         {
             PROFILE("Render world entities");
 
-            RenderWorldEntities(world, viewMatrix, projectionMatrix, lighting, lens->zNear, lens->zFar, lightVolumes);
+            RenderWorldEntities(world, viewMatrix, projectionMatrix, lighting, camera->zNear, camera->zFar, showLightVolumes);
         }
 
         {
@@ -120,10 +120,10 @@ void RenderManager::Render(World& world, bool soundSources, bool lightSources, b
             renderer->ApplyPostProcessing();
         }
 
-        if (soundSources || lightSources || cameras || physics) {
+        if (showSoundSources || showLightSources || showCameras || showPhysics) {
             PROFILE("Render editor entities");
 
-            RenderEditorEntities(world, soundSources, lightSources, cameras, physics, position, up, viewMatrix, projectionMatrix);
+            RenderEditorEntities(world, showSoundSources, showLightSources, showCameras, showPhysics, position, up, viewMatrix, projectionMatrix);
         }
     }
 }
@@ -132,7 +132,7 @@ void RenderManager::UpdateBufferSize() {
     renderer->SetRenderSurfaceSize(MainWindow::GetInstance()->GetSize());
 }
 
-void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool lightVolumes) {
+void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool showLightVolumes) {
     // Render from camera.
     glm::mat4 lightViewMatrix;
     glm::mat4 lightProjection;
@@ -147,7 +147,7 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
 
         if (lighting) {
             // Cull lights and update light list.
-            LightWorld(viewMatrix, projectionMatrix, cameraNear, cameraFar, lightVolumes);
+            LightWorld(viewMatrix, projectionMatrix, cameraNear, cameraFar, showLightVolumes);
         } else {
             // Use full ambient light and ignore lights in the scene.
             LightAmbient(projectionMatrix, cameraNear, cameraFar);
@@ -211,19 +211,19 @@ void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatri
     }
 }
 
-void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+void RenderManager::RenderEditorEntities(World& world, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
     const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     renderer->PrepareRenderingIcons(viewProjectionMatrix, position, up);
 
     // Render sound sources.
-    if (soundSources) {
+    if (showSoundSources) {
         for (SoundSource* soundSource : Managers().soundManager->GetSoundSources())
             renderer->RenderIcon(soundSource->entity->GetWorldPosition(), soundSourceTexture);
     }
 
     // Render light sources.
-    if (lightSources) {
+    if (showLightSources) {
         for (DirectionalLight* light : directionalLights.GetAll())
             renderer->RenderIcon(light->entity->GetWorldPosition(), lightTexture);
 
@@ -235,13 +235,13 @@ void RenderManager::RenderEditorEntities(World& world, bool soundSources, bool l
     }
 
     // Render cameras.
-    if (cameras) {
-        for (Lens* lens : lenses.GetAll())
-            renderer->RenderIcon(lens->entity->GetWorldPosition(), cameraTexture);
+    if (showCameras) {
+        for (Camera* camera : cameras.GetAll())
+            renderer->RenderIcon(camera->entity->GetWorldPosition(), cameraTexture);
     }
 
     // Render physics.
-    if (physics) {
+    if (showPhysics) {
         for (Component::Shape* shapeComp : Managers().physicsManager->GetShapeComponents()) {
             const ::Physics::Shape& shape = *shapeComp->GetShape();
             if (shape.GetKind() == ::Physics::Shape::Kind::Sphere) {
@@ -288,23 +288,23 @@ const std::vector<Component::DirectionalLight*>& RenderManager::GetDirectionalLi
     return directionalLights.GetAll();
 }
 
-Component::Lens* RenderManager::CreateLens() {
-    return lenses.Create();
+Component::Camera* RenderManager::CreateCamera() {
+    return cameras.Create();
 }
 
-Component::Lens* RenderManager::CreateLens(const Json::Value& node) {
-    Component::Lens* lens = lenses.Create();
+Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
+    Component::Camera* camera = cameras.Create();
 
     // Load values from Json node.
-    lens->fieldOfView = node.get("fieldOfView", 45.f).asFloat();
-    lens->zNear = node.get("zNear", 0.1f).asFloat();
-    lens->zFar = node.get("zFar", 100.f).asFloat();
+    camera->fieldOfView = node.get("fieldOfView", 45.f).asFloat();
+    camera->zNear = node.get("zNear", 0.1f).asFloat();
+    camera->zFar = node.get("zFar", 100.f).asFloat();
 
-    return lens;
+    return camera;
 }
 
-const std::vector<Component::Lens*>& RenderManager::GetLenses() const {
-    return lenses.GetAll();
+const std::vector<Component::Camera*>& RenderManager::GetCameras() const {
+    return cameras.GetAll();
 }
 
 Component::Material* RenderManager::CreateMaterial() {
@@ -388,7 +388,7 @@ const std::vector<Component::SpotLight*>& RenderManager::GetSpotLights() const {
 
 void RenderManager::ClearKilledComponents() {
     directionalLights.ClearKilled();
-    lenses.ClearKilled();
+    cameras.ClearKilled();
     materials.ClearKilled();
     meshes.ClearKilled();
     pointLights.ClearKilled();
@@ -419,7 +419,7 @@ Video::Renderer* RenderManager::GetRenderer() {
     return renderer;
 }
 
-void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool lightVolumes) {
+void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool showLightVolumes) {
     const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
     const Video::Frustum frustum(viewProjectionMatrix);
 
@@ -450,7 +450,7 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& pro
         Video::Sphere sphere(worldPosition, spotLight->distance);
 
         if (frustum.Intersects(sphere)) {
-            if (lightVolumes)
+            if (showLightVolumes)
                 Managers().debugDrawingManager->AddSphere(worldPosition, spotLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
 
             glm::vec4 direction(viewMatrix * glm::vec4(lightEntity->GetDirection(), 0.0f));
@@ -474,7 +474,7 @@ void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& pro
         Video::Sphere sphere(worldPosition, pointLight->distance);
 
         if (frustum.Intersects(sphere)) {
-            if (lightVolumes)
+            if (showLightVolumes)
                 Managers().debugDrawingManager->AddSphere(worldPosition, pointLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
 
             glm::vec4 position(viewMatrix * (glm::vec4(worldPosition, 1.0f)));

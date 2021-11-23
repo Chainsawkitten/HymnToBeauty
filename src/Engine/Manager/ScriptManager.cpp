@@ -24,7 +24,7 @@
 #include "../Entity/Entity.hpp"
 #include "../Component/Script.hpp"
 #include "../Component/DirectionalLight.hpp"
-#include "../Component/Lens.hpp"
+#include "../Component/Camera.hpp"
 #include "../Component/Listener.hpp"
 #include "../Component/Mesh.hpp"
 #include "../Component/PointLight.hpp"
@@ -149,7 +149,7 @@ void RestartScene() {
 }
 
 bool IsIntersect(Entity* checker, Entity* camera) {
-    MousePicking mousePicker = MousePicking(camera, camera->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+    MousePicking mousePicker = MousePicking(camera, camera->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
     mousePicker.Update();
     RayIntersection rayIntersector;
     float intersectDistance;
@@ -398,10 +398,10 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("DirectionalLight", "vec3 color", asOFFSET(DirectionalLight, color));
     engine->RegisterObjectProperty("DirectionalLight", "float ambientCoefficient", asOFFSET(DirectionalLight, ambientCoefficient));
 
-    engine->RegisterObjectType("Lens", 0, asOBJ_REF | asOBJ_NOCOUNT);
-    engine->RegisterObjectProperty("Lens", "float fieldOfView", asOFFSET(Lens, fieldOfView));
-    engine->RegisterObjectProperty("Lens", "float zNear", asOFFSET(Lens, zNear));
-    engine->RegisterObjectProperty("Lens", "float zFar", asOFFSET(Lens, zFar));
+    engine->RegisterObjectType("Camera", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Camera", "float fieldOfView", asOFFSET(Camera, fieldOfView));
+    engine->RegisterObjectProperty("Camera", "float zNear", asOFFSET(Camera, zNear));
+    engine->RegisterObjectProperty("Camera", "float zFar", asOFFSET(Camera, zFar));
 
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
 
@@ -429,7 +429,7 @@ ScriptManager::ScriptManager() {
 
     // Register getting components.
     engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ GetDirectionalLight()", asMETHODPR(Entity, GetComponent, () const, DirectionalLight*), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "Component::Lens@ GetLens()", asMETHODPR(Entity, GetComponent, () const, Lens*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Camera@ GetCamera()", asMETHODPR(Entity, GetComponent, () const, Camera*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Listener@ GetListener()", asMETHODPR(Entity, GetComponent, () const, Listener*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::PointLight@ GetPointLight()", asMETHODPR(Entity, GetComponent, () const, PointLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::RigidBody@ GetRigidBody()", asMETHODPR(Entity, GetComponent, () const, RigidBody*), asCALL_THISCALL);

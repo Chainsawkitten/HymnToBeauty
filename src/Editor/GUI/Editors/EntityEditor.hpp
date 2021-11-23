@@ -10,7 +10,7 @@
 
 namespace Component {
 class Mesh;
-class Lens;
+class Camera;
 class Material;
 class DirectionalLight;
 class PointLight;
@@ -78,7 +78,7 @@ class EntityEditor {
 
     // Editors
     void MeshEditor(Component::Mesh* mesh);
-    void LensEditor(Component::Lens* lens);
+    void CameraEditor(Component::Camera* camera);
     void MaterialEditor(Component::Material* material);
     void DirectionalLightEditor(Component::DirectionalLight* directionalLight);
     void PointLightEditor(Component::PointLight* pointLight);
