@@ -12,7 +12,7 @@ set(SRCS
         Audio/SoundFile.cpp
         Audio/VorbisFile.cpp
         Component/DirectionalLight.cpp
-        Component/Lens.cpp
+        Component/Camera.cpp
         Component/Listener.cpp
         Component/Material.cpp
         Component/Mesh.cpp
@@ -66,7 +66,7 @@ set(HEADERS
         Audio/SoundFile.hpp
         Audio/VorbisFile.hpp
         Component/DirectionalLight.hpp
-        Component/Lens.hpp
+        Component/Camera.hpp
         Component/Listener.hpp
         Component/Material.hpp
         Component/Mesh.hpp

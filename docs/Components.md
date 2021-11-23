@@ -1,7 +1,7 @@
 \page Components Components
 
  - \subpage ComponentMesh
- - \subpage ComponentLens
+ - \subpage ComponentCamera
  - \subpage ComponentMaterial
  - \subpage ComponentDirectionalLight
  - \subpage ComponentPointLight

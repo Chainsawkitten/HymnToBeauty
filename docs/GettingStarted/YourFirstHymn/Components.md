@@ -1,6 +1,6 @@
 \page YourFirstHymn_Components Components
 
-Entities by themselves only contain a name and positional information. All functionality that entities can have come from adding components to them. A camera, for example, is nothing more than an entity containing a Lens component. A renderable 3D object is an entity containing Mesh and Material components. Add a %Physics component to it and it can move around in the game world.
+Entities by themselves only contain a name and positional information. All functionality that entities can have come from adding components to them. A renderable 3D object is an entity containing Mesh and Material components. Add a %Physics component to it and it can move around in the game world.
 
 \section AddComponent Adding a component
 

@@ -1,13 +1,13 @@
-#include "Lens.hpp"
+#include "Camera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
 using namespace Component;
 
-Lens::Lens() {}
+Camera::Camera() {}
 
-Json::Value Lens::Save() const {
+Json::Value Camera::Save() const {
     Json::Value component;
     component["fieldOfView"] = fieldOfView;
     component["zNear"] = zNear;
@@ -15,6 +15,6 @@ Json::Value Lens::Save() const {
     return component;
 }
 
-glm::mat4 Lens::GetProjection(const glm::vec2& screenSize) const {
+glm::mat4 Camera::GetProjection(const glm::vec2& screenSize) const {
     return glm::perspective(glm::radians(fieldOfView), screenSize.x / screenSize.y, zNear, zFar);
 }

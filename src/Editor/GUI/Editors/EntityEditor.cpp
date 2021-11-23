@@ -1,7 +1,7 @@
 #include "EntityEditor.hpp"
 
 #include <Engine/Component/Mesh.hpp>
-#include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Camera.hpp>
 #include <Engine/Component/Material.hpp>
 #include <Engine/Component/DirectionalLight.hpp>
 #include <Engine/Component/PointLight.hpp>
@@ -48,7 +48,7 @@ EntityEditor::EntityEditor() {
     name[0] = '\0';
 
     AddEditor<Component::Mesh>("Mesh", std::bind(&EntityEditor::MeshEditor, this, std::placeholders::_1));
-    AddEditor<Component::Lens>("Lens", std::bind(&EntityEditor::LensEditor, this, std::placeholders::_1));
+    AddEditor<Component::Camera>("Camera", std::bind(&EntityEditor::CameraEditor, this, std::placeholders::_1));
     AddEditor<Component::Material>("Material", std::bind(&EntityEditor::MaterialEditor, this, std::placeholders::_1));
     AddEditor<Component::DirectionalLight>("Directional light", std::bind(&EntityEditor::DirectionalLightEditor, this, std::placeholders::_1));
     AddEditor<Component::PointLight>("Point light", std::bind(&EntityEditor::PointLightEditor, this, std::placeholders::_1));
@@ -229,11 +229,11 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
     ImGui::Unindent();
 }
 
-void EntityEditor::LensEditor(Component::Lens* lens) {
+void EntityEditor::CameraEditor(Component::Camera* camera) {
     ImGui::Indent();
-    ImGui::DraggableFloat("Field of view", lens->fieldOfView, 0.0f, 180.f);
-    ImGui::DraggableFloat("Z near", lens->zNear, 0.0f);
-    ImGui::DraggableFloat("Z far", lens->zFar, 0.0f);
+    ImGui::DraggableFloat("Field of view", camera->fieldOfView, 0.0f, 180.f);
+    ImGui::DraggableFloat("Z near", camera->zNear, 0.0f);
+    ImGui::DraggableFloat("Z far", camera->zFar, 0.0f);
     ImGui::Unindent();
 }
 

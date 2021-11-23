@@ -4,11 +4,11 @@
 #include <glm/glm.hpp>
 
 namespace Component {
-/// %Component handling a camera lens.
-class Lens : public SuperComponent {
+/// %Component handling a camera through which the world can be rendered.
+class Camera : public SuperComponent {
   public:
-    /// Create new lens.
-    Lens();
+    /// Create new camera.
+    Camera();
 
     Json::Value Save() const override;
 

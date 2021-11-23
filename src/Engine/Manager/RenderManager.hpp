@@ -13,7 +13,7 @@ class World;
 class Entity;
 namespace Component {
 class DirectionalLight;
-class Lens;
+class Camera;
 class Material;
 class Mesh;
 class PointLight;
@@ -32,15 +32,15 @@ class RenderManager {
     /// Render world containing entities.
     /**
      * @param world Contains a bunch of entities.
-     * @param soundSources Whether to show sound sources.
-     * @param lightSources Whether to show light sources.
-     * @param cameras Whether to show cameras.
-     * @param physics Whether to show physics volumes.
-     * @param camera Camera through which to render (or first camera in the world if nullptr).
+     * @param showSoundSources Whether to show sound sources.
+     * @param showLightSources Whether to show light sources.
+     * @param showCameras Whether to show cameras.
+     * @param showPhysics Whether to show physics volumes.
+     * @param cameraEntity Camera through which to render (or first camera in the world if nullptr).
      * @param lighting Whether to light the scene (otherwise full ambient is used).
      * @param lightVolumes Whether to show light culling volumes.
      */
-    void Render(World& world, bool soundSources = true, bool lightSources = true, bool cameras = true, bool physics = true, Entity* camera = nullptr, bool lighting = true, bool lightVolumes = false);
+    void Render(World& world, bool showSoundSources = true, bool showLightSources = true, bool showCameras = true, bool showPhysics = true, Entity* cameraEntity = nullptr, bool lighting = true, bool lightVolumes = false);
 
     /// Updates the buffers to fit the current screen size.
     void UpdateBufferSize();
@@ -64,24 +64,24 @@ class RenderManager {
      */
     const std::vector<Component::DirectionalLight*>& GetDirectionalLights() const;
 
-    /// Create lens component.
+    /// Create camera component.
     /**
      * @return The created component.
      */
-    Component::Lens* CreateLens();
+    Component::Camera* CreateCamera();
 
-    /// Create lens component.
+    /// Create camera component.
     /**
      * @param node Json node to load the component from.
      * @return The created component.
      */
-    Component::Lens* CreateLens(const Json::Value& node);
+    Component::Camera* CreateCamera(const Json::Value& node);
 
-    /// Get all lens components.
+    /// Get all camera components.
     /**
-     * @return All lens components.
+     * @return All camera components.
      */
-    const std::vector<Component::Lens*>& GetLenses() const;
+    const std::vector<Component::Camera*>& GetCameras() const;
 
     /// Create material component.
     /**
@@ -201,7 +201,7 @@ class RenderManager {
     RenderManager(RenderManager const&) = delete;
     void operator=(RenderManager const&) = delete;
 
-    void RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool lightVolumes);
+    void RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool showLightVolumes);
 
     void RenderEditorEntities(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
@@ -219,7 +219,7 @@ class RenderManager {
 
     // Components.
     ComponentContainer<Component::DirectionalLight> directionalLights;
-    ComponentContainer<Component::Lens> lenses;
+    ComponentContainer<Component::Camera> cameras;
     ComponentContainer<Component::Material> materials;
     ComponentContainer<Component::Mesh> meshes;
     ComponentContainer<Component::PointLight> pointLights;

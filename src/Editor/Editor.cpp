@@ -13,7 +13,7 @@
 #include <Engine/Util/FileSystem.hpp>
 #include <Engine/MainWindow.hpp>
 #include <Engine/Component/DirectionalLight.hpp>
-#include <Engine/Component/Lens.hpp>
+#include <Engine/Component/Camera.hpp>
 #include <Engine/Component/Listener.hpp>
 #include <Engine/Component/Mesh.hpp>
 #include <Engine/Component/SoundSource.hpp>
@@ -67,9 +67,9 @@ Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLeve
     // Create editor camera.
     cameraEntity = cameraWorld.CreateEntity("Editor Camera");
     cameraEntity->SetEnabled(false);
-    cameraEntity->AddComponent<Component::Lens>();
+    cameraEntity->AddComponent<Component::Camera>();
     cameraEntity->position.z = 10.0f;
-    cameraEntity->GetComponent<Component::Lens>()->zFar = 1000.f;
+    cameraEntity->GetComponent<Component::Camera>()->zFar = 1000.f;
 
     currentEntity = nullptr;
 
@@ -92,7 +92,7 @@ Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLeve
     gridSettings.snapOption = EditorSettings::GetInstance().GetLong("Grid Snap Size");
 
     // Ray mouse.
-    mousePicker = MousePicking(cameraEntity, cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+    mousePicker = MousePicking(cameraEntity, cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
 }
 
 Editor::~Editor() {
@@ -516,7 +516,7 @@ void Editor::ControlEditorCamera(float deltaTime) {
 
 void Editor::Picking() {
     if (Input()->Pressed(InputHandler::CONTROL) && Input()->Triggered(InputHandler::SELECT) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-        mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+        mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
         mousePicker.Update();
         float lastDistance = INFINITY;
 
@@ -531,7 +531,7 @@ void Editor::Picking() {
         const std::vector<Entity*>& entities = Hymn().world.GetEntities();
         for (Entity* entity : entities) {
             // Check if entity has pickable component.
-            if (entity->GetComponent<Component::SpotLight>() || entity->GetComponent<Component::DirectionalLight>() || entity->GetComponent<Component::PointLight>() || entity->GetComponent<Component::Mesh>() || entity->GetComponent<Component::Lens>() || entity->GetComponent<Component::SoundSource>()) {
+            if (entity->GetComponent<Component::SpotLight>() || entity->GetComponent<Component::DirectionalLight>() || entity->GetComponent<Component::PointLight>() || entity->GetComponent<Component::Mesh>() || entity->GetComponent<Component::Camera>() || entity->GetComponent<Component::SoundSource>()) {
                 // Get aabo.
                 Component::Mesh* mesh = entity->GetComponent<Component::Mesh>();
                 const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->geometry != nullptr ? mesh->geometry->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
@@ -630,7 +630,7 @@ void Editor::PaintBrush(Entity* entity) {
             glm::vec3 p2;
 
             mousePicker.Update();
-            mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+            mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
 
             float intersectT = INFINITY;
 
@@ -706,7 +706,7 @@ void Editor::WidgetGizmo(Entity* entity) {
     currentEntityMatrix = entity->GetLocalMatrix();
 
     // Projection matrix.
-    glm::mat4 projectionMatrix = cameraEntity->GetComponent<Component::Lens>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
+    glm::mat4 projectionMatrix = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
 
     // View matrix.
     glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
@@ -794,7 +794,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
 
         Entity* player = Hymn().world.GetRoot()->AddChild("Player");
         player->position.z = 10.f;
-        player->AddComponent<Component::Lens>();
+        player->AddComponent<Component::Camera>();
         player->AddComponent<Component::Listener>();
 
         Entity* sun = Hymn().world.GetRoot()->AddChild("Sun");
