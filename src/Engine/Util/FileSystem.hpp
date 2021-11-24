@@ -90,7 +90,7 @@ std::string GetExtension(const std::string& filename);
 
 /// Get the name of the file without the extension.
 /**
- * @param The datapath to the file.
+ * @param filepath The datapath to the file.
  * @return The name of the file without extension.
  */
 std::string GetName(const std::string& filepath);

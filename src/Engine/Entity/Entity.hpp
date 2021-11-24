@@ -98,7 +98,7 @@ class Entity {
 
     /// Get child based on its name.
     /**
-     * @param name The name of the child to get.
+     * @param index The index of the child to get.
      * @return The child or nullptr if none was found.
      */
     Entity* GetChildFromIndex(int index) const;

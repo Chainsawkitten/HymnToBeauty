@@ -42,7 +42,7 @@ class ScriptManager {
 
     /// Fetches the functions from the script and fills the scriptfiles vector.
     /**
-     * @param script The scriptfile which vector to update.
+     * @param scriptFile The scriptfile which vector to update.
      */
     void FillFunctionVector(ScriptFile* scriptFile);
 
@@ -66,6 +66,7 @@ class ScriptManager {
     /// Send a message to an entity.
     /**
      * @param recipient The entity to receive the message.
+     * @param sender The entity that sent the message.
      * @param type The type of message to send.
      */
     void SendMessage(Entity* recipient, Entity* sender, int type);

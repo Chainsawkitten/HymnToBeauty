@@ -15,7 +15,7 @@ Gets whether the input `button` has been activated. Inputs are defined in the hy
 Register the current entity to receive update events. (The `void Update(float deltaTime)` method will be called each frame.)
 
 `void SendMessage(Entity@ recipient, int type)`  
-Send a message to `recipient`. (The `void ReceiveMessage(int type)` method will be called.)
+Send a message to `recipient`. (The `void ReceiveMessage(Entity@ sender, int type)` method will be called.)
 
 `Hub@ Managers()`  
 Get a hub containing all the subsystems.
