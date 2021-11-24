@@ -7,6 +7,7 @@
 #include "Manager/SoundManager.hpp"
 #include "Manager/TriggerManager.hpp"
 #include "Manager/DebugDrawingManager.hpp"
+#include "Manager/RenderManager.hpp"
 #include "Manager/ResourceManager.hpp"
 #include "Geometry/Model.hpp"
 #include "Input/Input.hpp"
@@ -40,9 +41,6 @@ void ActiveHymn::Clear() {
     world.Clear();
 
     entityNumber = 1U;
-
-    filterSettings.gamma = 2.2f;
-    filterSettings.fxaa = true;
 
     for (ScriptFile* script : scripts) {
         Managers().resourceManager->FreeScriptFile(script);
@@ -92,17 +90,6 @@ Json::Value ActiveHymn::ToJson() const {
     inputNode.append(Input::GetInstance().Save());
     root["input"] = inputNode;
 
-    // Filter settings.
-    Json::Value filtersNode;
-    filtersNode["gamma"] = filterSettings.gamma;
-    filtersNode["dither"] = filterSettings.ditherApply;
-    filtersNode["fxaa"] = filterSettings.fxaa;
-    filtersNode["bloom"] = filterSettings.bloom;
-    filtersNode["bloomIntensity"] = filterSettings.bloomIntensity;
-    filtersNode["bloomThreshold"] = filterSettings.bloomThreshold;
-    filtersNode["bloomScatter"] = filterSettings.bloomScatter;
-    root["filters"] = filtersNode;
-
     // Save scripts.
     Json::Value scriptNode;
     for (ScriptFile* script : scripts) {
@@ -119,16 +106,6 @@ Json::Value ActiveHymn::ToJson() const {
 void ActiveHymn::FromJson(Json::Value root) {
     const Json::Value inputNode = root["input"];
     Input::GetInstance().Load(inputNode[0]);
-
-    // Load filter settings.
-    Json::Value filtersNode = root["filters"];
-    filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
-    filterSettings.ditherApply = filtersNode["dither"].asBool();
-    filterSettings.fxaa = filtersNode["fxaa"].asBool();
-    filterSettings.bloom = filtersNode["bloom"].asBool();
-    filterSettings.bloomIntensity = filtersNode.get("bloomIntensity", 1.0f).asFloat();
-    filterSettings.bloomThreshold = filtersNode.get("bloomThreshold", 1.0f).asFloat();
-    filterSettings.bloomScatter = filtersNode.get("bloomScatter", 0.7f).asFloat();
 
     // Load scripts.
     scripts.clear();
@@ -187,10 +164,10 @@ void ActiveHymn::Update(float deltaTime) {
     }
 }
 
-void ActiveHymn::Render(Entity* camera, bool soundSources, bool lightSources, bool cameras, bool physics, bool lighting, bool lightVolumes) {
+void ActiveHymn::Render(Entity* camera, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics, bool lighting, bool showLightVolumes) {
     PROFILE("Render world");
 
-    Managers().renderManager->Render(world, soundSources, lightSources, cameras, physics, camera, lighting, lightVolumes);
+    Managers().renderManager->Render(world, showSoundSources, showLightSources, showCameras, showPhysics, camera, lighting, showLightVolumes);
 }
 
 Entity* ActiveHymn::GetEntityByGUID(unsigned int GUID) {

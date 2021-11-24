@@ -82,7 +82,7 @@ The `@entity` parameter is the entity to which the script is attached.
 
             @hub = Managers();
 
-This gets the manager hub. From this hub, you can access the managers, such as the debug drawing manager or the renderer manager. We won't use those in this script.
+This gets the manager hub. From this hub, you can access the managers, such as the debug drawing manager or the physics manager. We won't use those in this script.
 
             @self = @entity;
 

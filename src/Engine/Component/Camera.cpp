@@ -12,6 +12,17 @@ Json::Value Camera::Save() const {
     component["fieldOfView"] = fieldOfView;
     component["zNear"] = zNear;
     component["zFar"] = zFar;
+
+    Json::Value filtersNode;
+    filtersNode["gamma"] = filterSettings.gamma;
+    filtersNode["dither"] = filterSettings.ditherApply;
+    filtersNode["fxaa"] = filterSettings.fxaa;
+    filtersNode["bloom"] = filterSettings.bloom;
+    filtersNode["bloomIntensity"] = filterSettings.bloomIntensity;
+    filtersNode["bloomThreshold"] = filterSettings.bloomThreshold;
+    filtersNode["bloomScatter"] = filterSettings.bloomScatter;
+    component["filters"] = filtersNode;
+
     return component;
 }
 

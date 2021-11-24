@@ -4,7 +4,6 @@
 #include <vector>
 #include <json/json.h>
 #include <glm/glm.hpp>
-#include "Manager/RenderManager.hpp"
 #include "Entity/World.hpp"
 
 class ScriptFile;
@@ -65,14 +64,14 @@ class ActiveHymn {
     /// Render the world.
     /**
      * @param camera Camera through which to render (or first camera in the world if nullptr).
-     * @param soundSources Whether to show sound sources.
-     * @param lightSources Whether to show light sources.
-     * @param cameras Whether to show cameras.
-     * @param physics Whether to show physics volumes.
+     * @param showSoundSources Whether to show sound sources.
+     * @param showLightSources Whether to show light sources.
+     * @param showCameras Whether to show cameras.
+     * @param showPhysics Whether to show physics volumes.
      * @param lighting Whether to light the world (otherwise full ambient is used).
-     * @param lightVolumes Whether to show light culling volumes.
+     * @param showLightVolumes Whether to show light culling volumes.
      */
-    void Render(Entity* camera = nullptr, bool soundSources = false, bool lightSources = false, bool cameras = false, bool physics = false, bool lighting = true, bool lightVolumes = false);
+    void Render(Entity* camera = nullptr, bool showSoundSources = false, bool showLightSources = false, bool showCameras = false, bool showPhysics = false, bool lighting = true, bool showLightVolumes = false);
 
     /// Find entity via GUID.
     /**
@@ -95,33 +94,6 @@ class ActiveHymn {
 
     /// The id of the next script to create.
     unsigned int scriptNumber = 0U;
-
-    /// Filter settings.
-    struct FilterSettings {
-        /// Whether to enable FXAA.
-        bool fxaa = true;
-
-        /// Whether to enable dithering.
-        bool ditherApply = true;
-
-        /// Gamma correction value.
-        float gamma = 2.2f;
-
-        /// Whether to enable bloom.
-        bool bloom = false;
-
-        /// Intensity of the bloom effect.
-        float bloomIntensity = 1.0f;
-
-        /// Threshold for the bloom effect.
-        float bloomThreshold = 1.0f;
-
-        /// How scattered the bloom effect should be.
-        float bloomScatter = 0.7f;
-    };
-
-    /// Filter settings.
-    FilterSettings filterSettings;
 
     /// Whether to restart the hymn
     bool restart = false;

@@ -79,12 +79,12 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
     }
 
     // Set image processing variables.
-    renderer->SetGamma(Hymn().filterSettings.gamma);
+    const Camera* camera = cameraEntity->GetComponent<Camera>();
+    renderer->SetGamma(camera->filterSettings.gamma);
 
     // Render main window.
     {
         PROFILE("Render main window");
-        Camera* camera = cameraEntity->GetComponent<Camera>();
         const glm::mat4 projectionMatrix = camera->GetProjection(windowSize);
         const glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
         const glm::vec3 position = cameraEntity->GetWorldPosition();
@@ -107,13 +107,13 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
 
             // Configure.
             Video::PostProcessing::Configuration configuration;
-            configuration.gamma = Hymn().filterSettings.gamma;
-            configuration.fxaa.enabled = Hymn().filterSettings.fxaa;
-            configuration.dither.enabled = Hymn().filterSettings.ditherApply;
-            configuration.bloom.enabled = Hymn().filterSettings.bloom;
-            configuration.bloom.intensity = Hymn().filterSettings.bloomIntensity;
-            configuration.bloom.threshold = Hymn().filterSettings.bloomThreshold;
-            configuration.bloom.scatter = Hymn().filterSettings.bloomScatter;
+            configuration.gamma = camera->filterSettings.gamma;
+            configuration.fxaa.enabled = camera->filterSettings.fxaa;
+            configuration.dither.enabled = camera->filterSettings.ditherApply;
+            configuration.bloom.enabled = camera->filterSettings.bloom;
+            configuration.bloom.intensity = camera->filterSettings.bloomIntensity;
+            configuration.bloom.threshold = camera->filterSettings.bloomThreshold;
+            configuration.bloom.scatter = camera->filterSettings.bloomScatter;
             renderer->ConfigurePostProcessing(configuration);
 
             // Apply.
@@ -300,6 +300,15 @@ Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
     camera->zNear = node.get("zNear", 0.1f).asFloat();
     camera->zFar = node.get("zFar", 100.f).asFloat();
 
+    const Json::Value& filtersNode = node["filters"];
+    camera->filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
+    camera->filterSettings.ditherApply = filtersNode["dither"].asBool();
+    camera->filterSettings.fxaa = filtersNode["fxaa"].asBool();
+    camera->filterSettings.bloom = filtersNode["bloom"].asBool();
+    camera->filterSettings.bloomIntensity = filtersNode.get("bloomIntensity", 1.0f).asFloat();
+    camera->filterSettings.bloomThreshold = filtersNode.get("bloomThreshold", 1.0f).asFloat();
+    camera->filterSettings.bloomScatter = filtersNode.get("bloomScatter", 0.7f).asFloat();
+
     return camera;
 }
 
@@ -393,22 +402,6 @@ void RenderManager::ClearKilledComponents() {
     meshes.ClearKilled();
     pointLights.ClearKilled();
     spotLights.ClearKilled();
-}
-
-void RenderManager::SetGamma(float gamma) {
-    Hymn().filterSettings.gamma = gamma;
-}
-
-float RenderManager::GetGamma() const {
-    return Hymn().filterSettings.gamma;
-}
-
-void RenderManager::SetDitherApply(bool ditherApply) {
-    Hymn().filterSettings.ditherApply = ditherApply;
-}
-
-bool RenderManager::GetDitherApply() const {
-    return Hymn().filterSettings.ditherApply;
 }
 
 unsigned int RenderManager::GetLightCount() const {
