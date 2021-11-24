@@ -86,7 +86,7 @@ class LowLevelRenderer {
 
     /// Create a geometry binding.
     /**
-     * @param vertexDescriptiopn Description of the attributes in the vertex buffer.
+     * @param vertexDescription Description of the attributes in the vertex buffer.
      * @param vertexBuffer Buffer containing the vertex data.
      * @param indexType The type of values in the index buffer.
      * @param indexBuffer Index buffer.

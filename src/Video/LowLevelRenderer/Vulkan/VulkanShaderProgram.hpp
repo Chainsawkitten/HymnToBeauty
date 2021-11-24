@@ -27,7 +27,6 @@ class VulkanShaderProgram : public ShaderProgram {
     /// Create new Vulkan shader program.
     /**
      * @param vulkanRenderer The Vulkan renderer.
-     * @param device The Vulkan device.
      * @param shaders List of shaders to link together.
      */
     VulkanShaderProgram(VulkanRenderer* vulkanRenderer, std::initializer_list<const Shader*> shaders);
