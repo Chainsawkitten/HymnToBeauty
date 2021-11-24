@@ -162,30 +162,6 @@ class RenderManager {
     /// Remove all killed components.
     void ClearKilledComponents();
 
-    /// Set gamma correction.
-    /**
-     * @param gamma Gamma to apply.
-     */
-    void SetGamma(float gamma);
-
-    /// Get gamma correction.
-    /**
-     * @return gamma Gamma value.
-     */
-    float GetGamma() const;
-
-    /// Set whether dithering is applied.
-    /**
-     * @param ditherApply Whether to apply dithering.
-     */
-    void SetDitherApply(bool ditherApply);
-
-    /// Get whether dithering is applied.
-    /**
-     * @return Whether dithering is applied.
-     */
-    bool GetDitherApply() const;
-
     /// Get the number of lights currently being rendered.
     /**
      * @return Then number of lights being rendered.

@@ -36,5 +36,32 @@ class Camera : public SuperComponent {
      * Default: 100.0
      */
     float zFar = 100.f;
+
+    /// Filter settings.
+    struct FilterSettings {
+        /// Whether to enable FXAA.
+        bool fxaa = true;
+
+        /// Whether to enable dithering.
+        bool ditherApply = true;
+
+        /// Gamma correction value.
+        float gamma = 2.2f;
+
+        /// Whether to enable bloom.
+        bool bloom = false;
+
+        /// Intensity of the bloom effect.
+        float bloomIntensity = 1.0f;
+
+        /// Threshold for the bloom effect.
+        float bloomThreshold = 1.0f;
+
+        /// How scattered the bloom effect should be.
+        float bloomScatter = 0.7f;
+    };
+
+    /// Filter settings.
+    FilterSettings filterSettings;
 };
 } // namespace Component

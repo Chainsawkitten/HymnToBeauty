@@ -3,6 +3,7 @@
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
+#include <Engine/Manager/RenderManager.hpp>
 #include <Engine/MainWindow.hpp>
 #include <Engine/Input/Input.hpp>
 #include <Engine/Util/Input.hpp>

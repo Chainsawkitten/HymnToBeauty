@@ -234,6 +234,44 @@ void EntityEditor::CameraEditor(Component::Camera* camera) {
     ImGui::DraggableFloat("Field of view", camera->fieldOfView, 0.0f, 180.f);
     ImGui::DraggableFloat("Z near", camera->zNear, 0.0f);
     ImGui::DraggableFloat("Z far", camera->zFar, 0.0f);
+
+    if (ImGui::CollapsingHeader("Filters")) {
+        ImGui::Indent();
+
+        // Bloom
+        if (ImGui::CollapsingHeader("Bloom")) {
+            ImGui::TextWrapped("Causes bright areas of the image to bleed.");
+
+            ImGui::Checkbox("Enable##Bloom", &camera->filterSettings.bloom);
+            ImGui::DragFloat("Intensity", &camera->filterSettings.bloomIntensity, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Threshold", &camera->filterSettings.bloomThreshold, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Scatter", &camera->filterSettings.bloomScatter, 0.01f, 0.0f, 1.0f);
+        }
+
+        // Gamma
+        if (ImGui::CollapsingHeader("Gamma correction")) {
+            ImGui::TextWrapped("Gamma correction filter.");
+
+            ImGui::DragFloat("Gamma", &camera->filterSettings.gamma, 0.1f, 1.0f, 10.0f);
+        }
+
+        // FXAA
+        if (ImGui::CollapsingHeader("FXAA")) {
+            ImGui::TextWrapped("Cheap anti-aliasing.");
+
+            ImGui::Checkbox("Enable##FXAA", &camera->filterSettings.fxaa);
+        }
+
+        // Dither
+        if (ImGui::CollapsingHeader("Dither")) {
+            ImGui::TextWrapped("Prevents large-scale color patterns such as color banding.");
+
+            ImGui::Checkbox("Enable##Dither", &camera->filterSettings.ditherApply);
+        }
+
+        ImGui::Unindent();
+    }
+
     ImGui::Unindent();
 }
 

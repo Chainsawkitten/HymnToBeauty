@@ -57,9 +57,6 @@ Set the orientation in world space.
 `void SetLocalOrientation(quat orientation)`  
 Set the orientation in local space.
 
-`Component::AnimationController@ GetAnimationController()`  
-Get the entity's animation controller component, if it has any. Otherwise returns null.
-
 `Component::DirectionalLight@ GetDirectionalLight()`  
 Get the entity's directional light component, if it has any. Otherwise returns null.
 
@@ -185,8 +182,8 @@ Singleton class that holds all subsystems.
 `DebugDrawingManager@ debugDrawingManager`  
 The debug drawing manager.
 
-`RenderManager@ renderManager`  
-The render manager.
+`PhysicsManager@ physicsManager`  
+The physics manager.
 
 \section DebugDrawingManager
 Debug drawing facilities.
@@ -216,41 +213,18 @@ Add a cylinder to the world.
 `void AddCone(float radius, float height, const mat4& matrix, const vec3& color, float lineWidth = 1.0f, float duration = 0.0f, bool depthTesting = true)`  
 Add a cone to the world.
 
-\section RenderManager
-Responsible for rendering the game world and all the post-processing effects.
+\section PhysicsManager
+Debug drawing facilities.
 
-`void SetGamma(float gamma)`  
-Set the gamma correction value.
+## Methods
+`void MakeKinematic(Component::RigidBody@ rigidBody)`  
+Turn a rigid body into a kinematic object, putting movement in the control of the programmer.
 
-`float GetGamma()`  
-Get the gamma correction value.
+`void MakeDynamic(Component::RigidBody@ rigidBody)`  
+Turn a rigid body into a dynamic object.
 
-`void SetFogApply(bool apply)`  
-Set whether to apply the fog shader.
+`void ForceTransformSync(Component::RigidBody@ rigidBody)`  
+Forces a dynamic rigid body to synchronize its transform with that of its owning entity during the next simulation iteration.
 
-`bool GetFogApply()`  
-Get whether to apply the fog shader.
-
-`void SetFogDensity(float density)`  
-Set the density of the fog.
-
-`float GetFogDensity()`  
-Get the density of the fog.
-
-`void SetFogColor(const vec3& color)`  
-Set fog color.
-
-`vec3 GetFogColor()`  
-Get fog color.
-
-`void SetColorFilterApply(bool apply)`  
-Set whether to apply the color filter.
-
-`vec3 GetColorFilterColor()`  
-Get the color blended with the screen.
-
-`void SetDitherApply(bool)`  
-Set whether to use dithering.
-
-`bool GetDitherApply()`  
-Get whether dithering is used.
+`void HaltMovement(Component::RigidBody@ rigidBody)`  
+Halts movement of a kinematic rigid body.
