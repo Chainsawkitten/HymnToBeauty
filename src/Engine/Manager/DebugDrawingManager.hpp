@@ -9,10 +9,6 @@ namespace Component {
 class Mesh;
 }
 
-namespace Video {
-class Renderer;
-}
-
 /// Debug drawing facilities.
 class DebugDrawingManager {
     friend class Hub;
@@ -28,6 +24,12 @@ class DebugDrawingManager {
      */
     void AddPoint(const glm::vec3& position, const glm::vec3& color, float size, float duration = 0.f, bool depthTesting = true);
 
+    /// Get all debug points.
+    /**
+     * @return All debug points.
+     */
+    const std::vector<Video::DebugDrawing::Point>& GetPoints() const;
+
     /// Add a line to the world.
     /**
      * @param startPosition Position of the start point of the line.
@@ -39,6 +41,12 @@ class DebugDrawingManager {
      */
     void AddLine(const glm::vec3& startPosition, const glm::vec3& endPosition, const glm::vec3& color, float width = 1.f, float duration = 0.f, bool depthTesting = true);
 
+    /// Get all debug lines.
+    /**
+     * @return All debug lines.
+     */
+    const std::vector<Video::DebugDrawing::Line>& GetLines() const;
+
     /// Add a cuboid to the world.
     /**
      * @param dimensions The dimensions of the cuboid.
@@ -49,6 +57,12 @@ class DebugDrawingManager {
      * @param depthTesting Whether to enable depth testing.
      */
     void AddCuboid(const glm::vec3& dimensions, const glm::mat4& matrix, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+
+    /// Get all debug cuboids.
+    /**
+     * @return All debug cuboids.
+     */
+    const std::vector<Video::DebugDrawing::Cuboid>& GetCuboids() const;
 
     /// Add a plane to the world.
     /**
@@ -62,6 +76,12 @@ class DebugDrawingManager {
      */
     void AddPlane(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& size, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
 
+    /// Get all debug planes.
+    /**
+     * @return All debug planes.
+     */
+    const std::vector<Video::DebugDrawing::Plane>& GetPlanes() const;
+
     /// Add a circle to the world.
     /**
      * @param position Center position of the circle.
@@ -74,6 +94,12 @@ class DebugDrawingManager {
      */
     void AddCircle(const glm::vec3& position, const glm::vec3& normal, float radius, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
 
+    /// Get all debug circles.
+    /**
+     * @return All debug circles.
+     */
+    const std::vector<Video::DebugDrawing::Circle>& GetCircles() const;
+
     /// Add a sphere to the world.
     /**
      * @param position The position of the sphere.
@@ -84,6 +110,12 @@ class DebugDrawingManager {
      * @param depthTesting Whether to enable depth testing.
      */
     void AddSphere(const glm::vec3& position, float radius, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+
+    /// Get all debug spheres.
+    /**
+     * @return All debug spheres.
+     */
+    const std::vector<Video::DebugDrawing::Sphere>& GetSpheres() const;
 
     /// Add a cylinder to the world.
     /**
@@ -97,6 +129,12 @@ class DebugDrawingManager {
      */
     void AddCylinder(float radius, float length, const glm::mat4& matrix, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
 
+    /// Get all debug cylinders.
+    /**
+     * @return All debug cylinders.
+     */
+    const std::vector<Video::DebugDrawing::Cylinder>& GetCylinders() const;
+
     /// Add a cone to the world.
     /**
      * @param radius The radius of the cone.
@@ -108,6 +146,12 @@ class DebugDrawingManager {
      * @param depthTesting Whether to enable depth testing.
      */
     void AddCone(float radius, float height, const glm::mat4& matrix, const glm::vec3& color, float lineWidth = 1.f, float duration = 0.f, bool depthTesting = true);
+
+    /// Get all debug cones.
+    /**
+     * @return All debug cones.
+     */
+    const std::vector<Video::DebugDrawing::Cone>& GetCones() const;
 
     /// Add a mesh to the world.
     /**
@@ -121,21 +165,20 @@ class DebugDrawingManager {
      */
     void AddMesh(unsigned int id, Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame = true, float duration = 0.f, bool depthTesting = true);
 
+    /// Get all debug meshes.
+    /**
+     * @return All debug meshes.
+     */
+    std::vector<Video::DebugDrawing::Mesh> GetMeshes() const;
+
     /// Update the debug geometry.
     /**
      * @param deltaTime Time since last frame (in seconds).
      */
     void Update(float deltaTime);
 
-    /// Render the debug primitives.
-    /**
-     * @param viewMatrix The camera's view matrix.
-     * @param projectionMatrix The camera's projection matrix.
-     */
-    void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
-
   private:
-    DebugDrawingManager(Video::Renderer* renderer);
+    DebugDrawingManager();
     ~DebugDrawingManager();
     DebugDrawingManager(DebugDrawingManager const&) = delete;
     void operator=(DebugDrawingManager const&) = delete;
@@ -149,6 +192,4 @@ class DebugDrawingManager {
     std::vector<Video::DebugDrawing::Cylinder> cylinders;
     std::vector<Video::DebugDrawing::Cone> cones;
     std::map<unsigned int, Video::DebugDrawing::Mesh> meshMap;
-
-    Video::DebugDrawing* debugDrawing;
 };

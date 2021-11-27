@@ -10,12 +10,12 @@
 
 using namespace Video;
 
-DebugDrawingManager::DebugDrawingManager(Renderer* renderer) {
-    debugDrawing = new DebugDrawing(renderer);
+DebugDrawingManager::DebugDrawingManager() {
+    
 }
 
 DebugDrawingManager::~DebugDrawingManager() {
-    delete debugDrawing;
+    
 }
 
 void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& color, float size, float duration, bool depthTesting) {
@@ -26,6 +26,10 @@ void DebugDrawingManager::AddPoint(const glm::vec3& position, const glm::vec3& c
     point.duration = duration;
     point.depthTesting = depthTesting;
     points.push_back(point);
+}
+
+const std::vector<Video::DebugDrawing::Point>& DebugDrawingManager::GetPoints() const {
+    return points;
 }
 
 void DebugDrawingManager::AddLine(const glm::vec3& startPosition, const glm::vec3& endPosition, const glm::vec3& color, float width, float duration, bool depthTesting) {
@@ -39,6 +43,10 @@ void DebugDrawingManager::AddLine(const glm::vec3& startPosition, const glm::vec
     lines.push_back(line);
 }
 
+const std::vector<Video::DebugDrawing::Line>& DebugDrawingManager::GetLines() const {
+    return lines;
+}
+
 void DebugDrawingManager::AddCuboid(const glm::vec3& dimensions, const glm::mat4& matrix, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
     DebugDrawing::Cuboid cuboid;
     cuboid.dimensions = dimensions;
@@ -48,6 +56,10 @@ void DebugDrawingManager::AddCuboid(const glm::vec3& dimensions, const glm::mat4
     cuboid.duration = duration;
     cuboid.depthTesting = depthTesting;
     cuboids.push_back(cuboid);
+}
+
+const std::vector<Video::DebugDrawing::Cuboid>& DebugDrawingManager::GetCuboids() const {
+    return cuboids;
 }
 
 void DebugDrawingManager::AddPlane(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& size, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
@@ -62,6 +74,10 @@ void DebugDrawingManager::AddPlane(const glm::vec3& position, const glm::vec3& n
     planes.push_back(plane);
 }
 
+const std::vector<Video::DebugDrawing::Plane>& DebugDrawingManager::GetPlanes() const {
+    return planes;
+}
+
 void DebugDrawingManager::AddCircle(const glm::vec3& position, const glm::vec3& normal, float radius, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
     DebugDrawing::Circle circle;
     circle.position = position;
@@ -74,6 +90,10 @@ void DebugDrawingManager::AddCircle(const glm::vec3& position, const glm::vec3& 
     circles.push_back(circle);
 }
 
+const std::vector<Video::DebugDrawing::Circle>& DebugDrawingManager::GetCircles() const {
+    return circles;
+}
+
 void DebugDrawingManager::AddSphere(const glm::vec3& position, float radius, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
     DebugDrawing::Sphere sphere;
     sphere.position = position;
@@ -83,6 +103,10 @@ void DebugDrawingManager::AddSphere(const glm::vec3& position, float radius, con
     sphere.duration = duration;
     sphere.depthTesting = depthTesting;
     spheres.push_back(sphere);
+}
+
+const std::vector<Video::DebugDrawing::Sphere>& DebugDrawingManager::GetSpheres() const {
+    return spheres;
 }
 
 void DebugDrawingManager::AddCylinder(float radius, float length, const glm::mat4& matrix, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
@@ -97,6 +121,10 @@ void DebugDrawingManager::AddCylinder(float radius, float length, const glm::mat
     cylinders.push_back(cylinder);
 }
 
+const std::vector<Video::DebugDrawing::Cylinder>& DebugDrawingManager::GetCylinders() const {
+    return cylinders;
+}
+
 void DebugDrawingManager::AddCone(float radius, float height, const glm::mat4& matrix, const glm::vec3& color, float lineWidth, float duration, bool depthTesting) {
     DebugDrawing::Cone cone;
     cone.radius = radius;
@@ -107,6 +135,10 @@ void DebugDrawingManager::AddCone(float radius, float height, const glm::mat4& m
     cone.duration = duration;
     cone.depthTesting = depthTesting;
     cones.push_back(cone);
+}
+
+const std::vector<Video::DebugDrawing::Cone>& DebugDrawingManager::GetCones() const {
+    return cones;
 }
 
 void DebugDrawingManager::AddMesh(unsigned int id, Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame, float duration, bool depthTesting) {
@@ -131,6 +163,15 @@ void DebugDrawingManager::AddMesh(unsigned int id, Component::Mesh* meshComponen
     mesh.wireFrame = wireFrame;
     mesh.duration = duration;
     mesh.depthTesting = depthTesting;
+}
+
+std::vector<Video::DebugDrawing::Mesh> DebugDrawingManager::GetMeshes() const {
+    std::vector<Video::DebugDrawing::Mesh> meshes(meshMap.size());
+
+    for (const std::pair<unsigned int, DebugDrawing::Mesh>& it : meshMap)
+        meshes.push_back(it.second);
+
+    return meshes;
 }
 
 void DebugDrawingManager::Update(float deltaTime) {
@@ -228,47 +269,4 @@ void DebugDrawingManager::Update(float deltaTime) {
         else
             ++it;
     }
-}
-
-void DebugDrawingManager::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    // Bind render target.
-    debugDrawing->StartDebugDrawing(projectionMatrix * viewMatrix);
-
-    // Points.
-    for (const DebugDrawing::Point& point : points)
-        debugDrawing->DrawPoint(point);
-
-    // Lines.
-    for (const DebugDrawing::Line& line : lines)
-        debugDrawing->DrawLine(line);
-
-    // Cuboids.
-    for (const DebugDrawing::Cuboid& cuboid : cuboids)
-        debugDrawing->DrawCuboid(cuboid);
-
-    // Planes.
-    for (const DebugDrawing::Plane& plane : planes)
-        debugDrawing->DrawPlane(plane);
-
-    // Circles.
-    for (const DebugDrawing::Circle& circle : circles)
-        debugDrawing->DrawCircle(circle);
-
-    // Spheres.
-    for (const DebugDrawing::Sphere& sphere : spheres)
-        debugDrawing->DrawSphere(sphere);
-
-    // Cylinders.
-    for (const DebugDrawing::Cylinder& cylinder : cylinders)
-        debugDrawing->DrawCylinder(cylinder);
-
-    // Cones.
-    for (const DebugDrawing::Cone& cone : cones)
-        debugDrawing->DrawCone(cone);
-
-    // Meshes.
-    for (const std::pair<unsigned int, DebugDrawing::Mesh>& it : meshMap)
-        debugDrawing->DrawMesh(it.second);
-
-    debugDrawing->EndDebugDrawing();
 }

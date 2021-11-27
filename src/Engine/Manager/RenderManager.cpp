@@ -20,10 +20,8 @@
 #include <Video/Geometry/Geometry3D.hpp>
 #include "../Texture/TextureAsset.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include <Video/Culling/Frustum.hpp>
-#include <Video/Culling/Sphere.hpp>
+#include <Video/RenderScene.hpp>
 #include "../MainWindow.hpp"
-#include <Video/Lighting/Light.hpp>
 #include "../Hymn.hpp"
 #include "../Util/Profiling.hpp"
 #include "../Util/Json.hpp"
@@ -68,206 +66,52 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
     renderer->BeginFrame();
 
     if (cameraEntity == nullptr) {
-        renderer->StartDepthPrePass();
-        renderer->StartMainPass();
-
-        Video::PostProcessing::Configuration configuration;
-        renderer->ConfigurePostProcessing(configuration);
-        renderer->ApplyPostProcessing();
-
+        renderer->RenderEmpty();
         return;
     }
 
-    // Set image processing variables.
-    const Camera* camera = cameraEntity->GetComponent<Camera>();
-    renderer->SetGamma(camera->filterSettings.gamma);
-
-    // Render main window.
+    // Setup the render scene.
+    Video::RenderScene renderScene;
     {
-        PROFILE("Render main window");
-        const glm::mat4 projectionMatrix = camera->GetProjection(windowSize);
-        const glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
-        const glm::vec3 position = cameraEntity->GetWorldPosition();
-        const glm::vec3 up(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
+        PROFILE("Setup render scene");
 
-        {
-            PROFILE("Render world entities");
+        // Camera.
+        const Camera* camera = cameraEntity->GetComponent<Camera>();
+        renderScene.camera.position = cameraEntity->GetWorldPosition();
+        renderScene.camera.viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
+        renderScene.camera.projectionMatrix = camera->GetProjection(windowSize);
+        renderScene.camera.viewProjectionMatrix = renderScene.camera.projectionMatrix * renderScene.camera.viewMatrix;
+        renderScene.camera.zNear = camera->zNear;
+        renderScene.camera.zFar = camera->zFar;
 
-            RenderWorldEntities(world, viewMatrix, projectionMatrix, lighting, camera->zNear, camera->zFar, showLightVolumes);
-        }
+        renderScene.camera.postProcessingConfiguration.gamma = camera->filterSettings.gamma;
+        renderScene.camera.postProcessingConfiguration.fxaa.enabled = camera->filterSettings.fxaa;
+        renderScene.camera.postProcessingConfiguration.dither.enabled = camera->filterSettings.ditherApply;
+        renderScene.camera.postProcessingConfiguration.bloom.enabled = camera->filterSettings.bloom;
+        renderScene.camera.postProcessingConfiguration.bloom.intensity = camera->filterSettings.bloomIntensity;
+        renderScene.camera.postProcessingConfiguration.bloom.threshold = camera->filterSettings.bloomThreshold;
+        renderScene.camera.postProcessingConfiguration.bloom.scatter = camera->filterSettings.bloomScatter;
 
-        {
-            PROFILE("Render debug entities");
+        // Lights.
+        AddLights(renderScene, lighting, showLightVolumes);
 
-            Managers().debugDrawingManager->Render(viewMatrix, projectionMatrix);
-        }
+        // Meshes.
+        AddMeshes(renderScene);
 
-        {
-            PROFILE("Post-processing");
-
-            // Configure.
-            Video::PostProcessing::Configuration configuration;
-            configuration.gamma = camera->filterSettings.gamma;
-            configuration.fxaa.enabled = camera->filterSettings.fxaa;
-            configuration.dither.enabled = camera->filterSettings.ditherApply;
-            configuration.bloom.enabled = camera->filterSettings.bloom;
-            configuration.bloom.intensity = camera->filterSettings.bloomIntensity;
-            configuration.bloom.threshold = camera->filterSettings.bloomThreshold;
-            configuration.bloom.scatter = camera->filterSettings.bloomScatter;
-            renderer->ConfigurePostProcessing(configuration);
-
-            // Apply.
-            renderer->ApplyPostProcessing();
-        }
-
+        // Editor entities.
         if (showSoundSources || showLightSources || showCameras || showPhysics) {
-            PROFILE("Render editor entities");
-
-            RenderEditorEntities(world, showSoundSources, showLightSources, showCameras, showPhysics, position, up, viewMatrix, projectionMatrix);
+            AddEditorEntities(renderScene, showSoundSources, showLightSources, showCameras, showPhysics);
         }
+
+        // Debug shapes.
+        AddDebugShapes(renderScene);
     }
+
+    renderer->Render(renderScene);
 }
 
 void RenderManager::UpdateBufferSize() {
     renderer->SetRenderSurfaceSize(MainWindow::GetInstance()->GetSize());
-}
-
-void RenderManager::RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool showLightVolumes) {
-    // Render from camera.
-    glm::mat4 lightViewMatrix;
-    glm::mat4 lightProjection;
-
-    // Camera matrices.
-    const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
-    const std::vector<Mesh*>& meshComponents = meshes.GetAll();
-
-    // Lights.
-    {
-        PROFILE("Update lights");
-
-        if (lighting) {
-            // Cull lights and update light list.
-            LightWorld(viewMatrix, projectionMatrix, cameraNear, cameraFar, showLightVolumes);
-        } else {
-            // Use full ambient light and ignore lights in the scene.
-            LightAmbient(projectionMatrix, cameraNear, cameraFar);
-        }
-    }
-
-    // Get list of entities to render.
-    std::vector<Entity*> staticEntities;
-    {
-        PROFILE("Frustum culling");
-
-        for (Mesh* mesh : meshComponents) {
-            Entity* entity = mesh->entity;
-            if (entity->IsKilled() || !entity->IsEnabled())
-                continue;
-
-            if (mesh->geometry == nullptr || mesh->geometry->GetIndexCount() == 0)
-                continue;
-
-            if (entity->GetComponent<Material>() == nullptr)
-                continue;
-
-            Video::Frustum frustum(viewProjectionMatrix * entity->GetModelMatrix());
-            if (!frustum.Intersects(mesh->geometry->GetAxisAlignedBoundingBox()))
-                continue;
-
-            staticEntities.push_back(entity);
-        }
-    }
-
-    // Depth pre-pass.
-    renderer->StartDepthPrePass();
-    {
-        PROFILE("Depth pre-pass");
-
-        // Static meshes.
-        if (!staticEntities.empty()) {
-            renderer->PrepareStaticMeshDepthRendering(viewMatrix, projectionMatrix);
-
-            for (Entity* entity : staticEntities) {
-                renderer->DepthRenderStaticMesh(entity->GetComponent<Mesh>()->geometry, entity->GetModelMatrix());
-            }
-        }
-    }
-
-    // Render meshes.
-    renderer->StartMainPass();
-    {
-        PROFILE("Render meshes");
-
-        // Static meshes.
-        if (!staticEntities.empty()) {
-            renderer->PrepareStaticMeshRendering(viewMatrix, projectionMatrix, cameraNear, cameraFar);
-
-            for (Entity* entity : staticEntities) {
-                Material* material = entity->GetComponent<Material>();
-
-                renderer->RenderStaticMesh(entity->GetComponent<Mesh>()->geometry, material->albedo->GetTexture(), material->normal->GetTexture(), material->roughnessMetallic->GetTexture(), entity->GetModelMatrix());
-            }
-        }
-    }
-}
-
-void RenderManager::RenderEditorEntities(World& world, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
-
-    renderer->PrepareRenderingIcons(viewProjectionMatrix, position, up);
-
-    // Render sound sources.
-    if (showSoundSources) {
-        for (SoundSource* soundSource : Managers().soundManager->GetSoundSources())
-            renderer->RenderIcon(soundSource->entity->GetWorldPosition(), soundSourceTexture);
-    }
-
-    // Render light sources.
-    if (showLightSources) {
-        for (DirectionalLight* light : directionalLights.GetAll())
-            renderer->RenderIcon(light->entity->GetWorldPosition(), lightTexture);
-
-        for (PointLight* light : pointLights.GetAll())
-            renderer->RenderIcon(light->entity->GetWorldPosition(), lightTexture);
-
-        for (SpotLight* light : spotLights.GetAll())
-            renderer->RenderIcon(light->entity->GetWorldPosition(), lightTexture);
-    }
-
-    // Render cameras.
-    if (showCameras) {
-        for (Camera* camera : cameras.GetAll())
-            renderer->RenderIcon(camera->entity->GetWorldPosition(), cameraTexture);
-    }
-
-    // Render physics.
-    if (showPhysics) {
-        for (Component::Shape* shapeComp : Managers().physicsManager->GetShapeComponents()) {
-            const ::Physics::Shape& shape = *shapeComp->GetShape();
-            if (shape.GetKind() == ::Physics::Shape::Kind::Sphere) {
-                Managers().debugDrawingManager->AddSphere(shapeComp->entity->GetWorldPosition(), shape.GetSphereData()->radius, glm::vec3(1.0f, 1.0f, 1.0f));
-            } else if (shape.GetKind() == ::Physics::Shape::Kind::Plane) {
-                glm::vec3 normal = shapeComp->entity->GetModelMatrix() * glm::vec4(shape.GetPlaneData()->normal, 0.0f);
-                Managers().debugDrawingManager->AddPlane(shapeComp->entity->GetWorldPosition(), normal, glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-            } else if (shape.GetKind() == ::Physics::Shape::Kind::Box) {
-                glm::vec3 dimensions(shape.GetBoxData()->width, shape.GetBoxData()->height, shape.GetBoxData()->depth);
-                glm::vec3 position = shapeComp->entity->GetWorldPosition();
-                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
-                glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
-                Managers().debugDrawingManager->AddCuboid(dimensions, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-            } else if (shape.GetKind() == ::Physics::Shape::Kind::Cylinder) {
-                glm::vec3 position = shapeComp->entity->GetWorldPosition();
-                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
-                glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
-                Managers().debugDrawingManager->AddCylinder(shape.GetCylinderData()->radius, shape.GetCylinderData()->length, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-            } else if (shape.GetKind() == ::Physics::Shape::Kind::Cone) {
-                glm::vec3 position = shapeComp->entity->GetWorldPosition();
-                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
-                glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
-                Managers().debugDrawingManager->AddCone(shape.GetConeData()->radius, shape.GetConeData()->height, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-            }
-        }
-    }
 }
 
 Component::DirectionalLight* RenderManager::CreateDirectionalLight() {
@@ -404,99 +248,195 @@ void RenderManager::ClearKilledComponents() {
     spotLights.ClearKilled();
 }
 
-unsigned int RenderManager::GetLightCount() const {
-    return lightCount;
-}
-
 Video::Renderer* RenderManager::GetRenderer() {
     return renderer;
 }
 
-void RenderManager::LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool showLightVolumes) {
-    const glm::mat4 viewProjectionMatrix = projectionMatrix * viewMatrix;
-    const Video::Frustum frustum(viewProjectionMatrix);
+void RenderManager::AddLights(Video::RenderScene& renderScene, bool lighting, bool showLightVolumes) {
+    if (lighting) {
+        // Cull lights and update light list.
+        AddWorldLights(renderScene, showLightVolumes);
+    } else {
+        // Use full ambient light and ignore lights in the scene.
+        AddAmbientLight(renderScene);
+    }
+}
 
-    std::vector<Video::DirectionalLight> directionalLightStructs;
-    std::vector<Video::Light> lights;
-
+void RenderManager::AddWorldLights(Video::RenderScene& renderScene, bool showLightVolumes) {
     // Add all directional lights.
     for (Component::DirectionalLight* directionalLight : directionalLights.GetAll()) {
         if (directionalLight->IsKilled() || !directionalLight->entity->IsEnabled())
             continue;
 
+        Video::RenderScene::DirectionalLight light;
+
         Entity* lightEntity = directionalLight->entity;
-        glm::vec4 direction(glm::vec4(lightEntity->GetDirection(), 0.f));
-        Video::DirectionalLight light;
-        light.direction = viewMatrix * -direction;
-        light.intensitiesAmbientCoefficient = glm::vec4(directionalLight->color, directionalLight->ambientCoefficient);
-        directionalLightStructs.push_back(light);
+        light.direction = lightEntity->GetDirection();
+        light.color = directionalLight->color;
+        light.ambientCoefficient = directionalLight->ambientCoefficient;
+
+        renderScene.directionalLights.push_back(light);
     }
 
     // Add all spot lights.
-    /// @todo More accurate frustum culling.
     for (Component::SpotLight* spotLight : spotLights.GetAll()) {
         if (spotLight->IsKilled() || !spotLight->entity->IsEnabled())
             continue;
 
+        Video::RenderScene::SpotLight light;
+
         Entity* lightEntity = spotLight->entity;
-        glm::vec3 worldPosition = lightEntity->GetWorldPosition();
-        Video::Sphere sphere(worldPosition, spotLight->distance);
+        light.position = lightEntity->GetWorldPosition();
+        light.distance = spotLight->distance;
+        light.color = spotLight->color;
+        light.intensity = spotLight->intensity;
+        light.attenuation = spotLight->attenuation;
+        light.direction = lightEntity->GetDirection();
+        light.coneAngle = spotLight->coneAngle;
 
-        if (frustum.Intersects(sphere)) {
-            if (showLightVolumes)
-                Managers().debugDrawingManager->AddSphere(worldPosition, spotLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
+        renderScene.spotLights.push_back(light);
 
-            glm::vec4 direction(viewMatrix * glm::vec4(lightEntity->GetDirection(), 0.0f));
-            glm::vec4 position(viewMatrix * (glm::vec4(worldPosition, 1.0f)));
-            Video::Light light;
-            light.positionDistance = glm::vec4(position.x, position.y, position.z, spotLight->distance);
-            light.intensitiesAttenuation = glm::vec4(spotLight->color * spotLight->intensity, spotLight->attenuation);
-            light.directionConeAngle = glm::vec4(direction.x, direction.y, direction.z, spotLight->coneAngle);
-            lights.push_back(light);
-        }
+        if (showLightVolumes)
+            Managers().debugDrawingManager->AddSphere(light.position, spotLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
     }
 
     // Add all point lights.
-    /// @todo More accurate frustum culling.
     for (Component::PointLight* pointLight : pointLights.GetAll()) {
         if (pointLight->IsKilled() || !pointLight->entity->IsEnabled())
             continue;
 
+        Video::RenderScene::PointLight light;
+
         Entity* lightEntity = pointLight->entity;
-        glm::vec3 worldPosition = lightEntity->GetWorldPosition();
-        Video::Sphere sphere(worldPosition, pointLight->distance);
+        light.position = lightEntity->GetWorldPosition();
+        light.distance = pointLight->distance;
+        light.color = pointLight->color;
+        light.intensity = pointLight->intensity;
+        light.attenuation = pointLight->attenuation;
 
-        if (frustum.Intersects(sphere)) {
-            if (showLightVolumes)
-                Managers().debugDrawingManager->AddSphere(worldPosition, pointLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
+        renderScene.pointLights.push_back(light);
 
-            glm::vec4 position(viewMatrix * (glm::vec4(worldPosition, 1.0f)));
-            Video::Light light;
-            light.positionDistance = glm::vec4(position.x, position.y, position.z, pointLight->distance);
-            light.intensitiesAttenuation = glm::vec4(pointLight->color * pointLight->intensity, pointLight->attenuation);
-            light.directionConeAngle = glm::vec4(1.0f, 0.0f, 0.0f, 180.0f);
-            lights.push_back(light);
-        }
+        if (showLightVolumes)
+            Managers().debugDrawingManager->AddSphere(light.position, pointLight->distance, glm::vec3(1.0f, 1.0f, 1.0f));
     }
-
-    lightCount = lights.size();
-
-    // Update light buffer.
-    renderer->SetLights(directionalLightStructs, lights, projectionMatrix, zNear, zFar);
 }
 
-void RenderManager::LightAmbient(const glm::mat4& projectionMatrix, float zNear, float zFar) {
-    std::vector<Video::DirectionalLight> directionalLightStructs;
-    std::vector<Video::Light> lights;
+void RenderManager::AddAmbientLight(Video::RenderScene& renderScene) {
+    Video::RenderScene::DirectionalLight light;
+    light.direction = glm::vec3(1.0f, 0.0f, 0.0f);
+    light.color = glm::vec3(0.0f, 0.0f, 0.0f);
+    light.ambientCoefficient = 1.0f;
 
-    Video::DirectionalLight light;
-    light.direction = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    light.intensitiesAmbientCoefficient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    renderScene.directionalLights.push_back(light);
+}
 
-    directionalLightStructs.push_back(light);
+void RenderManager::AddMeshes(Video::RenderScene& renderScene) {
+    const std::vector<Mesh*>& meshComponents = meshes.GetAll();
 
-    // Update light buffer.
-    renderer->SetLights(directionalLightStructs, lights, projectionMatrix, zNear, zFar);
+    for (Mesh* meshComp : meshComponents) {
+        Entity* entity = meshComp->entity;
+        if (entity->IsKilled() || !entity->IsEnabled())
+            continue;
+
+        if (meshComp->geometry == nullptr || meshComp->geometry->GetIndexCount() == 0)
+            continue;
+
+        Material* material = entity->GetComponent<Material>();
+        if (material == nullptr)
+            continue;
+
+        Video::RenderScene::Mesh mesh;
+        mesh.modelMatrix = entity->GetModelMatrix();
+        mesh.geometry = meshComp->geometry;
+        mesh.axisAlignedBoundingBox = meshComp->geometry->GetAxisAlignedBoundingBox();
+        mesh.albedo = material->albedo->GetTexture();
+        mesh.normal = material->normal->GetTexture();
+        mesh.roughnessMetallic = material->roughnessMetallic->GetTexture();
+
+        renderScene.meshes.push_back(mesh);
+    }
+}
+
+void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics) {
+    // Sound sources.
+    if (showSoundSources) {
+        Video::RenderScene::Icon icon;
+        icon.texture = soundSourceTexture;
+
+        for (SoundSource* soundSource : Managers().soundManager->GetSoundSources())
+            icon.positions.push_back(soundSource->entity->GetWorldPosition());
+
+        renderScene.icons.push_back(icon);
+    }
+
+    // Light sources.
+    if (showLightSources) {
+        Video::RenderScene::Icon icon;
+        icon.texture = lightTexture;
+
+        for (DirectionalLight* light : directionalLights.GetAll())
+            icon.positions.push_back(light->entity->GetWorldPosition());
+
+        for (PointLight* light : pointLights.GetAll())
+            icon.positions.push_back(light->entity->GetWorldPosition());
+
+        for (SpotLight* light : spotLights.GetAll())
+            icon.positions.push_back(light->entity->GetWorldPosition());
+
+        renderScene.icons.push_back(icon);
+    }
+
+    // Cameras.
+    if (showCameras) {
+        Video::RenderScene::Icon icon;
+        icon.texture = cameraTexture;
+
+        for (Camera* camera : cameras.GetAll())
+            icon.positions.push_back(camera->entity->GetWorldPosition());
+
+        renderScene.icons.push_back(icon);
+    }
+
+    // Physics.
+    if (showPhysics) {
+        for (Component::Shape* shapeComp : Managers().physicsManager->GetShapeComponents()) {
+            const ::Physics::Shape& shape = *shapeComp->GetShape();
+            if (shape.GetKind() == ::Physics::Shape::Kind::Sphere) {
+                Managers().debugDrawingManager->AddSphere(shapeComp->entity->GetWorldPosition(), shape.GetSphereData()->radius, glm::vec3(1.0f, 1.0f, 1.0f));
+            } else if (shape.GetKind() == ::Physics::Shape::Kind::Plane) {
+                glm::vec3 normal = shapeComp->entity->GetModelMatrix() * glm::vec4(shape.GetPlaneData()->normal, 0.0f);
+                Managers().debugDrawingManager->AddPlane(shapeComp->entity->GetWorldPosition(), normal, glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+            } else if (shape.GetKind() == ::Physics::Shape::Kind::Box) {
+                glm::vec3 dimensions(shape.GetBoxData()->width, shape.GetBoxData()->height, shape.GetBoxData()->depth);
+                glm::vec3 position = shapeComp->entity->GetWorldPosition();
+                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
+                glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
+                Managers().debugDrawingManager->AddCuboid(dimensions, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
+            } else if (shape.GetKind() == ::Physics::Shape::Kind::Cylinder) {
+                glm::vec3 position = shapeComp->entity->GetWorldPosition();
+                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
+                glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
+                Managers().debugDrawingManager->AddCylinder(shape.GetCylinderData()->radius, shape.GetCylinderData()->length, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
+            } else if (shape.GetKind() == ::Physics::Shape::Kind::Cone) {
+                glm::vec3 position = shapeComp->entity->GetWorldPosition();
+                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
+                glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
+                Managers().debugDrawingManager->AddCone(shape.GetConeData()->radius, shape.GetConeData()->height, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
+            }
+        }
+    }
+}
+
+void RenderManager::AddDebugShapes(Video::RenderScene& renderScene) {
+    renderScene.debugDrawingPoints = Managers().debugDrawingManager->GetPoints();
+    renderScene.debugDrawingLines = Managers().debugDrawingManager->GetLines();
+    renderScene.debugDrawingCuboids = Managers().debugDrawingManager->GetCuboids();
+    renderScene.debugDrawingPlanes = Managers().debugDrawingManager->GetPlanes();
+    renderScene.debugDrawingCircles = Managers().debugDrawingManager->GetCircles();
+    renderScene.debugDrawingSpheres = Managers().debugDrawingManager->GetSpheres();
+    renderScene.debugDrawingCylinders = Managers().debugDrawingManager->GetCylinders();
+    renderScene.debugDrawingCones = Managers().debugDrawingManager->GetCones();
+    renderScene.debugDrawingMeshes = Managers().debugDrawingManager->GetMeshes();
 }
 
 void RenderManager::LoadTexture(TextureAsset*& texture, const std::string& name) {
