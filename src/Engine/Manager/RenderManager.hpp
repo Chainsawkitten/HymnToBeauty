@@ -6,7 +6,7 @@
 
 namespace Video {
 class Renderer;
-class LowLevelRenderer;
+struct RenderScene;
 class Texture2D;
 } // namespace Video
 class World;
@@ -162,12 +162,6 @@ class RenderManager {
     /// Remove all killed components.
     void ClearKilledComponents();
 
-    /// Get the number of lights currently being rendered.
-    /**
-     * @return Then number of lights being rendered.
-     */
-    unsigned int GetLightCount() const;
-
     /// Get the renderer.
     Video::Renderer* GetRenderer();
 
@@ -177,12 +171,15 @@ class RenderManager {
     RenderManager(RenderManager const&) = delete;
     void operator=(RenderManager const&) = delete;
 
-    void RenderWorldEntities(World& world, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, bool lighting, float cameraNear, float cameraFar, bool showLightVolumes);
+    void AddLights(Video::RenderScene& renderScene, bool lighting, bool showLightVolumes);
+    void AddWorldLights(Video::RenderScene& renderScene, bool showLightVolumes);
+    void AddAmbientLight(Video::RenderScene& renderScene);
 
-    void RenderEditorEntities(World& world, bool soundSources, bool lightSources, bool cameras, bool physics, const glm::vec3& position, const glm::vec3& up, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+    void AddMeshes(Video::RenderScene& renderScene);
 
-    void LightWorld(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, float zNear, float zFar, bool lightVolumes);
-    void LightAmbient(const glm::mat4& projectionMatrix, float zNear, float zFar);
+    void AddEditorEntities(Video::RenderScene& renderScene, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics);
+
+    void AddDebugShapes(Video::RenderScene& renderScene);
 
     void LoadTexture(TextureAsset*& texture, const std::string& name);
 
@@ -202,5 +199,4 @@ class RenderManager {
     ComponentContainer<Component::SpotLight> spotLights;
 
     uint8_t textureReduction = 0;
-    unsigned int lightCount = 0;
 };

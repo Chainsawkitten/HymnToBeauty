@@ -29,7 +29,7 @@ void Hub::StartUp(Video::Renderer::GraphicsAPI graphicsAPI) {
     physicsManager = new PhysicsManager();
     soundManager = new SoundManager();
     scriptManager = new ScriptManager();
-    debugDrawingManager = new DebugDrawingManager(renderer);
+    debugDrawingManager = new DebugDrawingManager();
     profilingManager = new ProfilingManager();
     triggerManager = new TriggerManager();
 }

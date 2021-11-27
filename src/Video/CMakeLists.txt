@@ -19,6 +19,7 @@ set(SRCS
 set(HEADERS
     DebugDrawing.hpp
     Renderer.hpp
+    RenderScene.hpp
     Culling/AxisAlignedBoundingBox.hpp
     Culling/Frustum.hpp
     Culling/Sphere.hpp
