@@ -5,11 +5,11 @@
 #include <Engine/Util/Input.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Utility/Log.hpp>
+#include <Utility/Profiling/Profiling.hpp>
 #include <Engine/Input/Input.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Manager/RenderManager.hpp>
-#include <Engine/Util/Profiling.hpp>
 #include <Engine/Hymn.hpp>
 #include "ImGui/Implementation.hpp"
 #include <imgui.h>

@@ -29,7 +29,7 @@ void ProfilingManager::BeginFrame() {
         currentFrameEvent = mainThread->AddEvent("Frame " + std::to_string(currentFrame));
         currentFrameEvent->time = glfwGetTime();
         currentFrameEvent->duration = 0.0;
-        currentEvent = currentFrameEvent;
+        Profiling::currentEvent = currentFrameEvent;
     }
 }
 
@@ -54,6 +54,7 @@ bool ProfilingManager::Active() const {
 
 void ProfilingManager::SetActive(bool active) {
     this->active = active;
+    Profiling::cpuActive = active;
     lowLevelRenderer->SetProfiling(active);
 
     if (active) {
@@ -103,24 +104,4 @@ void ProfilingManager::FetchGPUTimeline() {
 
 const Profiling::Timeline& ProfilingManager::GetTimeline() const {
     return timeline;
-}
-
-Profiling::Event* ProfilingManager::StartEvent(const std::string& name) {
-    assert(active);
-
-    currentEvent->children.push_back(Profiling::Event(name));
-    Profiling::Event* event = &currentEvent->children.back();
-    event->parent = currentEvent;
-    event->time = glfwGetTime();
-    currentEvent = event;
-
-    return event;
-}
-
-void ProfilingManager::FinishEvent(Profiling::Event* event) {
-    assert(active);
-    assert(event != nullptr);
-
-    currentEvent->duration = glfwGetTime() - currentEvent->time;
-    currentEvent = currentEvent->parent;
 }

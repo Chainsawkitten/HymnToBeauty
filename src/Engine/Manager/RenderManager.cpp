@@ -23,7 +23,7 @@
 #include <Video/RenderScene.hpp>
 #include "../MainWindow.hpp"
 #include "../Hymn.hpp"
-#include "../Util/Profiling.hpp"
+#include <Utility/Profiling/Profiling.hpp>
 #include "../Util/Json.hpp"
 #include <Utility/Log.hpp>
 #include <glm/gtc/quaternion.hpp>

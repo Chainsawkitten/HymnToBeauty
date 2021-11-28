@@ -4,10 +4,11 @@
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/RenderManager.hpp>
+#include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/MainWindow.hpp>
 #include <Engine/Input/Input.hpp>
 #include <Engine/Util/Input.hpp>
-#include <Engine/Util/Profiling.hpp>
+#include <Utility/Profiling/Profiling.hpp>
 #include <Utility/Log.hpp>
 #include <thread>
 #include <GLFW/glfw3.h>

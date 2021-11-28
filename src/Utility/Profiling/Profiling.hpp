@@ -1,7 +1,16 @@
 #pragma once
 
 #include <string>
-#include "../Manager/ProfilingManager.hpp"
+
+namespace Profiling {
+
+class Event;
+
+/// Whether CPU profiling is active.
+extern bool cpuActive;
+
+/// The current profiling event.
+extern Event* currentEvent;
 
 /// Run profiling.
 class ProfilingScope {
@@ -16,8 +25,10 @@ class ProfilingScope {
     ~ProfilingScope();
 
   private:
-    Profiling::Event* event;
+    Event* event;
     double start;
 };
 
-#define PROFILE(name) ProfilingScope __profileInstance(name)
+}
+
+#define PROFILE(name) Profiling::ProfilingScope __profileInstance(name)

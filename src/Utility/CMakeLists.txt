@@ -1,6 +1,7 @@
 set(SRCS
         Log.cpp
         Profiling/Event.cpp
+        Profiling/Profiling.cpp
         Profiling/Thread.cpp
         Profiling/Timeline.cpp
     )
@@ -10,6 +11,7 @@ set(HEADERS
         LockBox.hpp
         Log.hpp
         Profiling/Event.hpp
+        Profiling/Profiling.hpp
         Profiling/Thread.hpp
         Profiling/Timeline.hpp
     )
@@ -17,6 +19,7 @@ set(HEADERS
 create_directory_groups(${SRCS} ${HEADERS})
 
 add_library(Utility STATIC ${SRCS} ${HEADERS})
-target_link_libraries(Utility glm jsoncpp_lib_static)
+target_link_libraries(Utility glfw ${GLFW_LIBRARIES} glm jsoncpp_lib_static)
+
 set_property(TARGET Utility PROPERTY CXX_STANDARD 11)
 set_property(TARGET Utility PROPERTY CXX_STANDARD_REQUIRED ON)
