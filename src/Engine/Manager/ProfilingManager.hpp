@@ -5,6 +5,7 @@
 #include <map>
 
 #include <Utility/Profiling/Timeline.hpp>
+#include <Utility/Profiling/Profiling.hpp>
 
 namespace Video {
 class LowLevelRenderer;
@@ -13,7 +14,6 @@ class LowLevelRenderer;
 /// Handles profiling.
 class ProfilingManager {
     friend class Hub;
-    friend class ProfilingScope;
 
   public:
     /// Begin profiling a frame.
@@ -61,14 +61,10 @@ class ProfilingManager {
     ProfilingManager(ProfilingManager const&) = delete;
     void operator=(ProfilingManager const&) = delete;
 
-    Profiling::Event* StartEvent(const std::string& name);
-    void FinishEvent(Profiling::Event* event);
-
     bool active;
 
     Profiling::Timeline timeline;
     Profiling::Thread* mainThread;
-    Profiling::Event* currentEvent;
     Profiling::Event* currentFrameEvent;
 
     Video::LowLevelRenderer* lowLevelRenderer;

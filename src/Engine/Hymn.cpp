@@ -14,7 +14,7 @@
 #include "Script/ScriptFile.hpp"
 #include "Util/Json.hpp"
 #include <fstream>
-#include "Util/Profiling.hpp"
+#include <Utility/Profiling/Profiling.hpp>
 #include "Entity/Entity.hpp"
 
 // Fix windows.h pollution.

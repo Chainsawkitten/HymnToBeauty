@@ -16,6 +16,7 @@
 #include "EditorEntity.vert.hpp"
 #include "EditorEntity.frag.hpp"
 #include <Utility/Log.hpp>
+#include <Utility/Profiling/Profiling.hpp>
 
 #include "LowLevelRenderer/Interface/LowLevelRenderer.hpp"
 #ifdef OPENGL_SUPPORT
@@ -145,13 +146,11 @@ void Renderer::BeginFrame() {
 }
 
 void Renderer::Render(const RenderScene& renderScene) {
-    /// @todo What if no camera???
-
     // Set image processing variables.
     staticRenderProgram->SetGamma(renderScene.camera.postProcessingConfiguration.gamma);
 
     {
-        ///@todo PROFILE("Render camera");
+        PROFILE("Render camera");
 
         UpdateLights(renderScene);
 
@@ -167,7 +166,7 @@ void Renderer::Render(const RenderScene& renderScene) {
         commandBuffer->EndRenderPass();
 
         {
-            ///@todo PROFILE("Post-processing");
+            PROFILE("Post-processing");
 
             postProcessing->Configure(renderScene.camera.postProcessingConfiguration);
             postProcessing->ApplyPostProcessing(*commandBuffer, colorTexture);
@@ -215,7 +214,7 @@ void Renderer::FreeRenderTextures() {
 }
 
 void Renderer::UpdateLights(const RenderScene& renderScene) {
-    ///@todo PROFILE("Update lights");
+    PROFILE("Update lights");
 
     const Video::Frustum frustum(renderScene.camera.viewProjectionMatrix);
 
@@ -267,7 +266,7 @@ void Renderer::UpdateLights(const RenderScene& renderScene) {
 }
 
 std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene) {
-    ///@todo PROFILE("Frustum culling");
+    PROFILE("Frustum culling");
 
     std::vector<std::size_t> culledMeshes;
 
@@ -283,7 +282,7 @@ std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene
 }
 
 void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes) {
-    ///@todo PROFILE("Depth pre-pass");
+    PROFILE("Depth pre-pass");
 
     commandBuffer->BeginRenderPass(depthRenderPass, "Depth pre-pass");
 
@@ -301,7 +300,7 @@ void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vec
 }
 
 void Renderer::RenderMainPass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes) {
-    ///@todo PROFILE("Main pass");
+    PROFILE("Main pass");
 
     commandBuffer->BeginRenderPass(mainRenderPass, "Main pass");
 
@@ -317,7 +316,7 @@ void Renderer::RenderMainPass(const RenderScene& renderScene, const std::vector<
 }
 
 void Renderer::RenderDebugShapes(const RenderScene& renderScene) {
-    ///@todo PROFILE("Render debug entities");
+    PROFILE("Render debug entities");
 
     // Bind render target.
     debugDrawing->StartDebugDrawing(renderScene.camera.viewProjectionMatrix);
@@ -363,7 +362,7 @@ void Renderer::RenderDebugShapes(const RenderScene& renderScene) {
 
 void Renderer::RenderIcons(const RenderScene& renderScene) {
     if (!renderScene.icons.empty()) {
-        ///@todo PROFILE("Render icons");
+        PROFILE("Render icons");
 
         const glm::vec3 up(renderScene.camera.viewMatrix[0][1], renderScene.camera.viewMatrix[1][1], renderScene.camera.viewMatrix[2][1]);
         PrepareRenderingIcons(renderScene.camera.viewProjectionMatrix, renderScene.camera.position, up);
