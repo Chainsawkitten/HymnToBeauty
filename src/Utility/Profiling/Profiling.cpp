@@ -22,7 +22,7 @@ static Event* StartEvent(const std::string& name) {
 }
 
 static void FinishEvent(Profiling::Event* event) {
-    assert(active);
+    assert(cpuActive);
     assert(event != nullptr);
 
     currentEvent->duration = glfwGetTime() - currentEvent->time;

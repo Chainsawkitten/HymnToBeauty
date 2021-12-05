@@ -39,7 +39,7 @@ class VulkanGeometryBinding : public GeometryBinding {
     /**
      * @return The index buffer.
      */
-    VkBuffer GetIndexBuffer() const;
+    const VulkanBuffer* GetIndexBuffer() const;
 
   private:
     VulkanGeometryBinding(const VulkanGeometryBinding& other) = delete;

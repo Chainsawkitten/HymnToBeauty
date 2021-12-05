@@ -1,70 +1,36 @@
 #include "OpenGLBuffer.hpp"
 
+#include <Utility/Log.hpp>
+#include "OpenGLBufferAllocator.hpp"
 #include <assert.h>
-#include <cstddef>
 
 namespace Video {
 
-OpenGLBuffer::OpenGLBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data) : Buffer(bufferUsage) {
-    assert(size > 0);
-
-    this->size = size;
-
-    // Map high-level buffer usage to OpenGL buffer type and usage.
-    GLenum usage;
-    switch (bufferUsage) {
-    case BufferUsage::VERTEX_BUFFER_STATIC:
-        target = GL_ARRAY_BUFFER;
-        usage = GL_STATIC_DRAW;
-        break;
-    case BufferUsage::VERTEX_BUFFER_DYNAMIC:
-        target = GL_ARRAY_BUFFER;
-        usage = GL_DYNAMIC_DRAW;
-        break;
-    case BufferUsage::INDEX_BUFFER_STATIC:
-        target = GL_ELEMENT_ARRAY_BUFFER;
-        usage = GL_STATIC_DRAW;
-        break;
-    case BufferUsage::INDEX_BUFFER_DYNAMIC:
-        target = GL_ELEMENT_ARRAY_BUFFER;
-        usage = GL_DYNAMIC_DRAW;
-        break;
-    case BufferUsage::UNIFORM_BUFFER:
-        target = GL_UNIFORM_BUFFER;
-        usage = GL_DYNAMIC_DRAW;
-        break;
-    case BufferUsage::STORAGE_BUFFER:
-        target = GL_SHADER_STORAGE_BUFFER;
-        usage = GL_DYNAMIC_DRAW;
-        break;
-    case BufferUsage::VERTEX_STORAGE_BUFFER:
-        target = GL_SHADER_STORAGE_BUFFER;
-        usage = GL_DYNAMIC_DRAW;
-        break;
-    }
-
-    // Create buffer.
-    glGenBuffers(1, &buffer);
-    glBindBuffer(target, buffer);
-    glBufferData(target, static_cast<GLsizeiptr>(size), (data != nullptr) ? data : NULL, usage);
-
-    glBindBuffer(target, 0);
+OpenGLBuffer::OpenGLBuffer(Buffer::BufferUsage bufferUsage, const BufferAllocation& allocation) : Buffer(bufferUsage) {
+    Reset(bufferUsage, allocation);
 }
 
 OpenGLBuffer::~OpenGLBuffer() {
-    glDeleteBuffers(1, &buffer);
+    if (rawBuffer != nullptr) {
+        if (!temporaryAllocation)
+            delete rawBuffer;
+    } else {
+        glDeleteBuffers(1, &buffer);
+    }
 }
 
-void OpenGLBuffer::Write(const void* data) {
-    assert(data != nullptr);
-    assert(GetBufferUsage() == BufferUsage::VERTEX_BUFFER_DYNAMIC || GetBufferUsage() == BufferUsage::INDEX_BUFFER_DYNAMIC || GetBufferUsage() == BufferUsage::UNIFORM_BUFFER || GetBufferUsage() == BufferUsage::STORAGE_BUFFER);
-
-    glBindBuffer(target, buffer);
-    glBufferSubData(target, 0, size, data);
-    glBindBuffer(target, 0);
+void OpenGLBuffer::Reset(BufferUsage bufferUsage, const BufferAllocation& allocation) {
+    this->bufferUsage = bufferUsage;
+    rawBuffer = allocation.buffer;
+    OpenGLRawBuffer* openGLRawBuffer = static_cast<OpenGLRawBuffer*>(rawBuffer);
+    buffer = openGLRawBuffer->GetBufferID();
+    target = openGLRawBuffer->GetTarget();
+    offset = allocation.offset;
+    size = allocation.size;
+    temporaryAllocation = allocation.temporaryAllocation;
 }
 
-unsigned int OpenGLBuffer::GetSize() const {
+uint32_t OpenGLBuffer::GetSize() const {
     return size;
 }
 
@@ -74,6 +40,10 @@ GLuint OpenGLBuffer::GetBufferID() const {
 
 GLenum OpenGLBuffer::GetTarget() const {
     return target;
+}
+
+uint32_t OpenGLBuffer::GetOffset() const {
+    return offset;
 }
 
 }

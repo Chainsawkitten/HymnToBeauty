@@ -69,14 +69,13 @@ class StaticRenderProgram : public RenderProgram {
   private:
     StaticRenderProgram(const StaticRenderProgram& other) = delete;
 
+    LowLevelRenderer* lowLevelRenderer;
     VertexDescription* vertexDescription;
 
     Shader* depthVertexShader;
     Shader* depthFragmentShader;
     ShaderProgram* depthShaderProgram;
     GraphicsPipeline* depthGraphicsPipeline;
-
-    Buffer* depthMatricesBuffer;
 
     Shader* vertexShader;
     Shader* fragmentShader;
@@ -87,7 +86,6 @@ class StaticRenderProgram : public RenderProgram {
         glm::mat4 viewProjectionMatrix;
         glm::mat4 viewMatrix;
     };
-    Buffer* matricesBuffer;
 
     struct FragmentUniforms {
         uint32_t directionalLightCount;
@@ -100,7 +98,6 @@ class StaticRenderProgram : public RenderProgram {
         float zNear;
         float zFar;
     };
-    Buffer* fragmentUniformBuffer;
 
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;

@@ -3,6 +3,7 @@
 #include "../Interface/GeometryBinding.hpp"
 
 #include <glad/glad.h>
+#include <cstdint>
 
 namespace Video {
 
@@ -36,11 +37,18 @@ class OpenGLGeometryBinding : public GeometryBinding {
      */
     GLenum GetIndexType() const;
 
+    /// Get the offset into the index buffer.
+    /**
+     * @return Offset of the first element in bytes.
+     */
+    uintptr_t GetIndexBufferOffset() const;
+
   private:
     OpenGLGeometryBinding(const OpenGLGeometryBinding& other) = delete;
 
     GLuint vertexArray;
     GLenum indexType;
+    uintptr_t indexBufferOffset = 0u;
 };
 
 }

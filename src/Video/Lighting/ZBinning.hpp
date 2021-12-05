@@ -125,15 +125,11 @@ class ZBinning {
         float invIsocahedronError;
     };
 
-    Buffer* tilingMatricesBuffer;
-
     struct TilingUniformData {
         uint32_t tileSize;
         uint32_t maskCount;
         uint32_t tilesX;
     };
-
-    Buffer* tilingUniformBuffer;
 
     glm::uvec2 screenSize;
     glm::uvec2 tilingSize;

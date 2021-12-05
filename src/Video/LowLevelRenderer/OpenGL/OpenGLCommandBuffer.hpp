@@ -152,11 +152,15 @@ class OpenGLCommandBuffer : public CommandBuffer {
     struct BindUniformBufferCommand {
         GLuint index;
         GLuint uniformBuffer;
+        GLintptr offset;
+        GLsizeiptr size;
     };
 
     struct BindStorageBufferCommand {
         GLuint index;
         GLuint storageBuffer;
+        GLintptr offset;
+        GLsizeiptr size;
     };
 
     struct DrawCommand {
@@ -200,6 +204,8 @@ class OpenGLCommandBuffer : public CommandBuffer {
     struct ClearBufferCommand {
         GLenum target;
         GLuint buffer;
+        GLintptr offset;
+        GLsizeiptr size;
     };
 
     struct Command {
@@ -279,6 +285,7 @@ class OpenGLCommandBuffer : public CommandBuffer {
     GLenum indexType;
     uint32_t indexSize;
     uint32_t frameBufferHeight;
+    uintptr_t indexBufferOffset;
 
     bool inRenderPass = false;
 

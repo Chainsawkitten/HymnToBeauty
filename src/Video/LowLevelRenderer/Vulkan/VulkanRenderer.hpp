@@ -13,6 +13,7 @@ struct GLFWwindow;
 namespace Video {
 
 class VulkanBuffer;
+class VulkanBufferAllocator;
 
 /// Low-level renderer implementing Vulkan.
 class VulkanRenderer : public LowLevelRenderer {
@@ -30,7 +31,8 @@ class VulkanRenderer : public LowLevelRenderer {
     void BeginFrame() final;
     void Submit(CommandBuffer* commandBuffer) final;
     void Present() final;
-    Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) final;
+    Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data = nullptr) final;
+    Buffer* CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data = nullptr) final;
     VertexDescription* CreateVertexDescription(unsigned int attributeCount, const VertexDescription::Attribute* attributes, bool indexBuffer = false) final;
     GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) final;
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
@@ -188,8 +190,13 @@ class VulkanRenderer : public LowLevelRenderer {
 
     VkCommandPool commandPool;
 
+    VulkanBufferAllocator* bufferAllocator;
+    uint32_t nonCoherentAtomSize;
+
     VkDescriptorSetLayout emptyDescriptorSetLayout;
     VkDescriptorSetLayout bufferDescriptorSetLayouts[ShaderProgram::BindingType::BINDING_TYPES];
+    std::vector<std::map<ShaderProgram::BindingType, std::vector<VkDescriptorSet>>> bufferDescriptorSetCache;
+    unsigned int currentBufferDescriptorSet[ShaderProgram::BindingType::BINDING_TYPES];
 
     static const unsigned int bakedStorageBufferDescriptorSetLayouts = 16;
     VkDescriptorSetLayout storageBufferDescriptorSetLayouts[bakedStorageBufferDescriptorSetLayouts];
@@ -202,7 +209,6 @@ class VulkanRenderer : public LowLevelRenderer {
     unsigned int currentMaterialDescriptorSet[bakedMaterialDescriptorSetLayouts];
 
     VkDescriptorPool descriptorPool;
-    std::map<ShaderProgram::BindingType, std::map<VkBuffer, VkDescriptorSet>> bufferDescriptorSetCache;
 
     OptionalFeatures optionalFeatures;
     

@@ -55,8 +55,8 @@ Isocahedron::Isocahedron(LowLevelRenderer* lowLevelRenderer) {
     /// @todo Subdivide?
 
     // Create buffers.
-    vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(glm::vec3) * 12, vertices);
-    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER_STATIC, sizeof(uint16_t) * 60, indices);
+    vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(glm::vec3) * 12, vertices);
+    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER, sizeof(uint16_t) * 60, indices);
 
     // Create vertex attribute.
     VertexDescription::Attribute attribute = {};

@@ -6,6 +6,7 @@
 
 namespace Video {
 
+class RawBuffer;
 class VulkanRenderer;
 
 /// Vulkan implementation of Buffer.
@@ -13,19 +14,15 @@ class VulkanBuffer : public Buffer {
   public:
     /// Create new Vulkan buffer.
     /**
-     * @param vulkanRenderer The Vulkan renderer.
-     * @param device The Vulkan device.
-     * @param physicalDevice The physical device.
      * @param bufferUsage How the buffer will be used.
-     * @param size The size of the buffer in bytes.
-     * @param data Data to upload to the buffer. Can be nullptr if no data should be uploaded.
+     * @param allocation The allocation to encapsulate.
      */
-    VulkanBuffer(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr);
+    VulkanBuffer(Buffer::BufferUsage bufferUsage, const BufferAllocation& allocation);
 
     /// Destructor.
     ~VulkanBuffer() final;
 
-    void Write(const void* data) final;
+    void Reset(BufferUsage bufferUsage, const BufferAllocation& allocation) final;
     unsigned int GetSize() const final;
 
     /// Get the internal Vulkan buffer.
@@ -33,6 +30,12 @@ class VulkanBuffer : public Buffer {
      * @return The internal Vulkan buffer.
      */
     VkBuffer GetBuffer() const;
+
+    /// Get the offset into the raw buffer.
+    /**
+     * @return The offset into the raw buffer.
+     */
+    uint32_t GetOffset() const;
 
     /// Get which pipeline stages have read the buffer since the last write.
     /**
@@ -65,15 +68,16 @@ class VulkanBuffer : public Buffer {
     VulkanBuffer(const VulkanBuffer& other) = delete;
 
     VkDevice device;
-    VkBuffer* buffer;
-    VkDeviceMemory* deviceMemory;
+    VkBuffer buffer;
+    VkDeviceMemory deviceMemory;
+    uint32_t offset;
     uint32_t size;
 
-    uint32_t currentFrame = 0;
-    uint32_t swapChainImages;
+    RawBuffer* rawBuffer;
+    bool temporaryAllocation;
 
-    VkPipelineStageFlags readMask = 0;
-    VkPipelineStageFlags lastWrite = 0;
+    VkPipelineStageFlags readMask;
+    VkPipelineStageFlags lastWrite;
 };
 
 }

@@ -10,6 +10,7 @@ struct GLFWwindow;
 namespace Video {
 
 class OpenGLShaderProgram;
+class OpenGLBufferAllocator;
 
 /// Low-level renderer implementing OpenGL.
 class OpenGLRenderer : public LowLevelRenderer {
@@ -28,6 +29,7 @@ class OpenGLRenderer : public LowLevelRenderer {
     void Submit(CommandBuffer* commandBuffer) final;
     void Present() final;
     Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) final;
+    Buffer* CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) final;
     VertexDescription* CreateVertexDescription(unsigned int attributeCount, const VertexDescription::Attribute* attributes, bool indexBuffer = false) final;
     GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) final;
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
@@ -63,6 +65,8 @@ class OpenGLRenderer : public LowLevelRenderer {
     Shader* blitVertexShader;
     Shader* blitFragmentShader;
     ShaderProgram* blitShaderProgram;
+
+    OpenGLBufferAllocator* bufferAllocator;
 
     OptionalFeatures optionalFeatures;
 

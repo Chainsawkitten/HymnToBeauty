@@ -44,7 +44,7 @@ void CreateBuffer(VkDevice device, VkPhysicalDevice physicalDevice, unsigned int
     memoryAllocateInfo.memoryTypeIndex = Utility::FindMemoryType(physicalDevice, memoryRequirements.memoryTypeBits, memoryProperties);
 
     if (vkAllocateMemory(device, &memoryAllocateInfo, nullptr, deviceMemory) != VK_SUCCESS) {
-        Log(Log::ERR) << "Failed to allocate device memory for image.\n";
+        Log(Log::ERR) << "Failed to allocate device memory for buffer.\n";
     }
 
     // Bind memory.
