@@ -40,14 +40,10 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outp
     uberShaderProgram = lowLevelRenderer->CreateShaderProgram({vertexShader, uberShader});
     uberPipeline = lowLevelRenderer->CreateGraphicsPipeline(uberShaderProgram, configuration);
 
-    uberUniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(UberUniforms));
-
     // FXAA.
     fxaaShader = lowLevelRenderer->CreateShader(FXAA_FRAG, Shader::Type::FRAGMENT_SHADER);
     fxaaShaderProgram = lowLevelRenderer->CreateShaderProgram({vertexShader, fxaaShader});
     fxaaPipeline = lowLevelRenderer->CreateGraphicsPipeline(fxaaShaderProgram, configuration);
-
-    fxaaUniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(FXAAUniforms));
 
     // Bloom.
     bloomThresholdShader = lowLevelRenderer->CreateShader(BLOOMTHRESHOLD_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -72,12 +68,10 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outp
 }
 
 PostProcessing::~PostProcessing() {
-    delete uberUniformBuffer;
     delete uberPipeline;
     delete uberShaderProgram;
     delete uberShader;
 
-    delete fxaaUniformBuffer;
     delete fxaaPipeline;
     delete fxaaShaderProgram;
     delete fxaaShader;
@@ -131,7 +125,7 @@ void PostProcessing::Configure(const Configuration& configuration) {
     // Perform dither in uber pass if there is no FXAA pass.
     uberUniforms.ditherEnable = configuration.dither.enabled && !configuration.fxaa.enabled;
 
-    uberUniformBuffer->Write(&uberUniforms);
+    uberUniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(UberUniforms), &uberUniforms);
 
     // Update FXAA uniform buffer.
     if (configuration.fxaa.enabled) {
@@ -140,7 +134,7 @@ void PostProcessing::Configure(const Configuration& configuration) {
         fxaaUniforms.time = time;
         fxaaUniforms.ditherEnable = configuration.dither.enabled;
 
-        fxaaUniformBuffer->Write(&fxaaUniforms);
+        fxaaUniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(FXAAUniforms), &fxaaUniforms);
     }
 }
 

@@ -76,16 +76,14 @@ bool MultipleFrames(void* data) {
             -1.0f,  1.0f, 0.0f, 0.0f, 0.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
     GeometryBinding* geometryBinding = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer);
 
     // Create uniform buffers.
-    Buffer* uniformBuffer;
     glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-    uniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4));
 
     // Create texture.
     Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
@@ -101,7 +99,7 @@ bool MultipleFrames(void* data) {
         cameraPosition.y = sin(static_cast<float>(frame) * 0.01f);
 
         const glm::mat4 viewMatrix = glm::translate(glm::mat4(), -cameraPosition);
-        uniformBuffer->Write(&viewMatrix);
+        Buffer* uniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &viewMatrix);
 
         lowLevelRenderer->BeginFrame();
 
@@ -128,7 +126,6 @@ bool MultipleFrames(void* data) {
     // Cleanup
     delete commandBuffer;
     delete texture;
-    delete uniformBuffer;
     delete geometryBinding;
     delete vertexBuffer;
     delete graphicsPipeline;

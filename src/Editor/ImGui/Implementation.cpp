@@ -47,14 +47,11 @@ static Video::Shader* g_FragmentShader = nullptr;
 static Video::ShaderProgram* g_ShaderProgram = nullptr;
 static Video::GraphicsPipeline* g_GraphicsPipeline = nullptr;
 static unsigned int g_BufferMemoryAlignment = 256;
-static const unsigned int g_VertexBufferSize = 100000;
+static const unsigned int g_VertexBufferSize = 40000;
 static ImDrawVert* g_VertexData = nullptr;
-static Video::Buffer* g_VertexBuffer = nullptr;
 static const unsigned int g_IndexBufferSize = 100000;
 static ImDrawIdx* g_IndexData = nullptr;
-static Video::Buffer* g_IndexBuffer = nullptr;
 static Video::VertexDescription* g_VertexDescription = nullptr;
-static Video::GeometryBinding* g_GeometryBinding = nullptr;
 
 void Init(GLFWwindow* window, Video::Renderer* renderer) {
     g_Window = window;
@@ -177,8 +174,9 @@ void Render() {
         indexMemory += cmdList->IdxBuffer.Size;
     }
 
-    g_VertexBuffer->Write(g_VertexData);
-    g_IndexBuffer->Write(g_IndexData);
+    Video::Buffer* vertexBuffer = g_LowLevelRenderer->CreateTemporaryBuffer(Video::Buffer::BufferUsage::VERTEX_BUFFER, g_VertexBufferSize * sizeof(ImDrawVert), g_VertexData);
+    Video::Buffer* indexBuffer = g_LowLevelRenderer->CreateTemporaryBuffer(Video::Buffer::BufferUsage::INDEX_BUFFER, g_IndexBufferSize * sizeof(ImDrawIdx), g_IndexData);
+    Video::GeometryBinding* geometryBinding = g_LowLevelRenderer->CreateGeometryBinding(g_VertexDescription, vertexBuffer, Video::GeometryBinding::IndexType::SHORT, indexBuffer);
 
     // Record rendering commands.
     Video::CommandBuffer* commandBuffer = g_Renderer->GetCommandBuffer();
@@ -194,7 +192,7 @@ void Render() {
         {-1.0f, 1.0f, 0.0f, 1.0f},
     };
     commandBuffer->PushConstants(&orthoProjection);
-    commandBuffer->BindGeometry(g_GeometryBinding);
+    commandBuffer->BindGeometry(geometryBinding);
 
     // Draw all the commands in the draw list.
     unsigned int baseVertex = 0;
@@ -215,6 +213,8 @@ void Render() {
         }
         baseVertex += cmdList->VtxBuffer.Size;
     }
+
+    delete geometryBinding;
 }
 
 static const char* GetClipboardText(void* userData) {
@@ -301,29 +301,15 @@ void CreateDeviceObjects() {
 
     g_GraphicsPipeline = g_LowLevelRenderer->CreateGraphicsPipeline(g_ShaderProgram, configuration, g_VertexDescription);
 
-    g_VertexBuffer = g_LowLevelRenderer->CreateBuffer(Video::Buffer::BufferUsage::VERTEX_BUFFER_DYNAMIC, g_VertexBufferSize * sizeof(ImDrawVert));
-    g_IndexBuffer = g_LowLevelRenderer->CreateBuffer(Video::Buffer::BufferUsage::INDEX_BUFFER_DYNAMIC, g_IndexBufferSize * sizeof(ImDrawIdx));
-
     g_VertexData = new ImDrawVert[g_VertexBufferSize];
     g_IndexData = new ImDrawIdx[g_IndexBufferSize];
-
-    g_GeometryBinding = g_LowLevelRenderer->CreateGeometryBinding(g_VertexDescription, g_VertexBuffer, Video::GeometryBinding::IndexType::SHORT, g_IndexBuffer);
 
     CreateFontsTexture();
 }
 
 void InvalidateDeviceObjects() {
-    delete g_GeometryBinding;
-    g_GeometryBinding = nullptr;
-
     delete g_VertexDescription;
     g_VertexDescription = nullptr;
-
-    delete g_VertexBuffer;
-    g_VertexBuffer = nullptr;
-
-    delete g_IndexBuffer;
-    g_IndexBuffer = nullptr;
 
     delete[] g_VertexData;
     delete[] g_IndexData;

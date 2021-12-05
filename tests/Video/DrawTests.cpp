@@ -173,7 +173,7 @@ bool DrawVertexTriangle(void* data) {
             -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -271,7 +271,7 @@ bool DrawTexturedTriangle(void* data) {
             -1.0f,  1.0f, 0.0f, 0.0f, 0.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -377,7 +377,7 @@ bool DrawQuad(void* data) {
              1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create index buffer.
@@ -388,7 +388,7 @@ bool DrawQuad(void* data) {
             2, 3, 1
         };
 
-        indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER_STATIC, sizeof(indexData), indexData);
+        indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER, sizeof(indexData), indexData);
     }
 
     // Create geometry binding.
@@ -489,7 +489,7 @@ bool DrawTriangles(void* data) {
             -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -500,7 +500,7 @@ bool DrawTriangles(void* data) {
     glm::vec3 positions[2] = { glm::vec3(0.2f, 0.0f, -0.5f), glm::vec3(-0.2f, 0.0f, 0.5f) };
     for (int i = 0; i < 2; ++i) {
         glm::mat4 modelMatrix = glm::translate(glm::mat4(), positions[i]);
-        uniformBuffers[i] = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &modelMatrix);
+        uniformBuffers[i] = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &modelMatrix);
     }
 
     // Create command buffer.
@@ -532,8 +532,6 @@ bool DrawTriangles(void* data) {
 
     // Cleanup
     delete commandBuffer;
-    delete uniformBuffers[0];
-    delete uniformBuffers[1];
     delete geometryBinding;
     delete vertexBuffer;
     delete graphicsPipeline;
@@ -598,7 +596,7 @@ bool DrawPushTriangles(void* data) {
             -0.5f,  0.5f, 0.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -696,7 +694,7 @@ bool DrawStorageTriangle(void* data) {
     storageContents.colors[1] = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
     storageContents.colors[2] = glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
     
-    Buffer* storageBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(StorageContents), &storageContents);
+    Buffer* storageBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(StorageContents), &storageContents);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
@@ -724,7 +722,6 @@ bool DrawStorageTriangle(void* data) {
 
     // Cleanup
     delete commandBuffer;
-    delete storageBuffer;
     delete graphicsPipeline;
     delete renderPass;
     delete renderTexture;
@@ -796,7 +793,7 @@ bool InvertColors(void* data) {
             -0.5f,  0.5f, 0.0f
         };
 
-        triangleVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        triangleVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -928,7 +925,7 @@ bool DrawMipmappedTriangle(void* data) {
             -1.0f,  1.0f, 0.0f, 0.0f, 0.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -1034,7 +1031,7 @@ bool DepthPrePass(void* data) {
             -0.5f,  0.5f, 0.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.
@@ -1154,7 +1151,7 @@ bool DrawLines(void* data) {
             -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f
         };
 
-        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(vertexData), vertexData);
+        vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
     }
 
     // Create geometry binding.

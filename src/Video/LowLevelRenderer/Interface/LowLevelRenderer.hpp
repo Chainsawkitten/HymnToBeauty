@@ -74,6 +74,18 @@ class LowLevelRenderer {
      */
     virtual Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) = 0;
 
+    /// Create a temporary GPU buffer.
+    /**
+     * The returned buffer's lifetime is controlled by the rendered and should not be deleted.
+     *
+     * @param bufferUsage How the buffer will be used.
+     * @param size The size of the buffer in bytes.
+     * @param data Data to upload to the buffer. Can be nullptr if no data should be uploaded.
+     *
+     * @return The created buffer.
+     */
+    virtual Buffer* CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) = 0;
+
     /// Create a vertex description.
     /**
      * @param attributeCount The number of vertex attributes.

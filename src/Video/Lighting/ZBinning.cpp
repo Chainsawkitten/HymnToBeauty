@@ -20,12 +20,8 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
     conservativeRasterization = lowLevelRenderer->GetOptionalFeatures().conservativeRasterization;
 
-    // Create light buffers.
     lightInfo.directionalLightCount = 0;
-    lightInfo.directionalLightBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(DirectionalLight) * MAX_DIRECTIONAL_LIGHTS);
-
     lightInfo.lightCount = 0;
-    lightInfo.lightBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * MAX_LIGHTS);
 
     // Create binning resources.
     lightInfo.zBins = 128;
@@ -58,9 +54,6 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
     tilingFragmentShader = lowLevelRenderer->CreateShader(LIGHTTILING_FRAG, Shader::Type::FRAGMENT_SHADER);
     tilingShaderProgram = lowLevelRenderer->CreateShaderProgram({ tilingVertexShader, tilingFragmentShader });
 
-    tilingMatricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(TilingMatricesData));
-    tilingUniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(TilingUniformData));
-
     GraphicsPipeline::Configuration configuration = {};
     configuration.primitiveType = PrimitiveType::TRIANGLE;
     configuration.polygonMode = PolygonMode::FILL;
@@ -73,9 +66,6 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 }
 
 ZBinning::~ZBinning() {
-    delete lightInfo.directionalLightBuffer;
-    delete lightInfo.lightBuffer;
-
     delete lightInfo.zMaskBuffer;
 
     delete binningPipeline;
@@ -90,9 +80,6 @@ ZBinning::~ZBinning() {
     delete tilingVertexShader;
     delete tilingFragmentShader;
     delete tilingPipeline;
-
-    delete tilingMatricesBuffer;
-    delete tilingUniformBuffer;
 }
 
 void ZBinning::SetRenderSurfaceSize(const glm::uvec2& size) {
@@ -136,8 +123,7 @@ void ZBinning::BinLights(CommandBuffer& commandBuffer, const std::vector<Directi
         directionalLightData[i] = directionalLights[i];
     }
 
-    if (lightInfo.directionalLightCount > 0)
-        lightInfo.directionalLightBuffer->Write(directionalLightData);
+    lightInfo.directionalLightBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(DirectionalLight) * MAX_DIRECTIONAL_LIGHTS, directionalLightData);
 
     // Spot and point lights.
     lightInfo.lightCount = static_cast<unsigned int>(lights.size());
@@ -151,8 +137,7 @@ void ZBinning::BinLights(CommandBuffer& commandBuffer, const std::vector<Directi
         lightData[i] = lights[i];
     }
 
-    if (lightInfo.lightCount > 0)
-        lightInfo.lightBuffer->Write(lightData);
+    lightInfo.lightBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * MAX_LIGHTS, lightData);
 
     lightInfo.maskCount = lightInfo.lightCount / 32 + (lightInfo.lightCount % 32 > 0);
 
@@ -211,14 +196,14 @@ void ZBinning::Tiling(CommandBuffer& commandBuffer, const glm::mat4& projectionM
     matricesData.scale = glm::vec2(screenSize) / glm::vec2(representativeTilingSize);
     matricesData.invIsocahedronError = 1.0f / isocahedron.GetError();
 
-    tilingMatricesBuffer->Write(&matricesData);
+    Buffer* tilingMatricesBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(TilingMatricesData), &matricesData);
 
     TilingUniformData uniformData;
     uniformData.tileSize = conservativeRasterization ? 1u : (lightInfo.tileSize / msaaScale);
     uniformData.maskCount = lightInfo.maskCount;
     uniformData.tilesX = lightInfo.tiles.x;
 
-    tilingUniformBuffer->Write(&uniformData);
+    Buffer* tilingUniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(TilingUniformData), &uniformData);
 
     // Draw proxy light geometry.
     commandBuffer.BeginRenderPass(tilingRenderPass, "Tiling");

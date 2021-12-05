@@ -70,7 +70,7 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
     vertex[4] = glm::vec2(1.0, 0.0);
     vertex[5] = glm::vec2(1.0, 1.0);
 
-    iconVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, sizeof(glm::vec2) * 6, &vertex);
+    iconVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(glm::vec2) * 6, &vertex);
 
     VertexDescription::Attribute attribute;
     attribute.size = 2;
@@ -94,8 +94,6 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
     configuration.depthComparison = DepthComparison::LESS;
 
     iconGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(iconShaderProgram, configuration, iconVertexDescription);
-
-    iconMatricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4));
 }
 
 Renderer::~Renderer() {
@@ -112,7 +110,6 @@ Renderer::~Renderer() {
     delete iconGeometryBinding;
     delete iconVertexDescription;
     delete iconVertexBuffer;
-    delete iconMatricesBuffer;
 
     delete commandBuffer;
     FreeRenderTextures();
@@ -383,7 +380,7 @@ void Renderer::PrepareRenderingIcons(const glm::mat4& viewProjectionMatrix, cons
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 
     // Set camera uniforms.
-    iconMatricesBuffer->Write(&viewProjectionMatrix);
+    Buffer* iconMatricesBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &viewProjectionMatrix);
     commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::MATRICES, iconMatricesBuffer);
 
     this->cameraPosition = cameraPosition;

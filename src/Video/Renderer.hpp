@@ -133,7 +133,6 @@ class Renderer {
     Buffer* iconVertexBuffer;
     VertexDescription* iconVertexDescription;
     GeometryBinding* iconGeometryBinding;
-    Buffer* iconMatricesBuffer;
 
     glm::vec3 cameraPosition;
     glm::vec3 cameraUp;

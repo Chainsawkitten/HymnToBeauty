@@ -31,10 +31,10 @@ GeometryBinding::IndexType VulkanGeometryBinding::GetIndexType() const {
     return indexType;
 }
 
-VkBuffer VulkanGeometryBinding::GetIndexBuffer() const {
+const VulkanBuffer* VulkanGeometryBinding::GetIndexBuffer() const {
     assert(indexType != IndexType::NONE);
 
-    return indexBuffer->GetBuffer();
+    return indexBuffer;
 }
 
 }

@@ -6,7 +6,7 @@ using namespace Video;
 using namespace Geometry;
 
 Buffer* VertexType::StaticVertex::GenerateVertexBuffer(LowLevelRenderer* lowLevelRenderer, StaticVertex* vertices, unsigned int vertexCount) {
-    return lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, vertexCount * sizeof(StaticVertex), vertices);
+    return lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, vertexCount * sizeof(StaticVertex), vertices);
 }
 
 VertexDescription* VertexType::StaticVertex::GenerateVertexDescription(LowLevelRenderer* lowLevelRenderer) {

@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "OpenGLBuffer.hpp"
+#include "OpenGLBufferAllocator.hpp"
 #include "OpenGLVertexDescription.hpp"
 #include "OpenGLGeometryBinding.hpp"
 #include "OpenGLShader.hpp"
@@ -66,6 +67,8 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
     GLint maxSamples;
     glGetIntegerv(GL_MAX_FRAMEBUFFER_SAMPLES, &maxSamples);
     optionalFeatures.attachmentlessMsaaSamples = (static_cast<uint32_t>(maxSamples) << 1u) - 1u;
+
+    bufferAllocator = new OpenGLBufferAllocator(2);
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
@@ -74,6 +77,8 @@ OpenGLRenderer::~OpenGLRenderer() {
     delete blitFragmentShader;
 
     glDeleteQueries(maxQueries, queries);
+
+    delete bufferAllocator;
 }
 
 CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
@@ -82,6 +87,7 @@ CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
 
 void OpenGLRenderer::BeginFrame() {
     firstSubmission = true;
+    bufferAllocator->BeginFrame();
 }
 
 void OpenGLRenderer::Submit(CommandBuffer* commandBuffer) {
@@ -144,8 +150,12 @@ void OpenGLRenderer::Present() {
     submittedTimings[currentFrame].clear();
 }
 
-Buffer* OpenGLRenderer::CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data) {
-    return new OpenGLBuffer(bufferUsage, size, data);
+Buffer* OpenGLRenderer::CreateBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data) {
+    return bufferAllocator->CreateBuffer(bufferUsage, size, data);
+}
+
+Buffer* OpenGLRenderer::CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data) {
+    return bufferAllocator->CreateTemporaryBuffer(bufferUsage, size, data);
 }
 
 VertexDescription* OpenGLRenderer::CreateVertexDescription(unsigned int attributeCount, const VertexDescription::Attribute* attributes, bool indexBuffer) {

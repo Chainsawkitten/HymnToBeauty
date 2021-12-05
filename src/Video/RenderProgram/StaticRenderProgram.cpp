@@ -19,6 +19,8 @@
 using namespace Video;
 
 StaticRenderProgram::StaticRenderProgram(LowLevelRenderer* lowLevelRenderer) {
+    this->lowLevelRenderer = lowLevelRenderer;
+
     vertexShader = lowLevelRenderer->CreateShader(DEFAULT3D_VERT, Shader::Type::VERTEX_SHADER);
     fragmentShader = lowLevelRenderer->CreateShader(DEFAULT3D_FRAG, Shader::Type::FRAGMENT_SHADER);
     shaderProgram = lowLevelRenderer->CreateShaderProgram({vertexShader, fragmentShader});
@@ -44,18 +46,9 @@ StaticRenderProgram::StaticRenderProgram(LowLevelRenderer* lowLevelRenderer) {
     configuration.depthComparison = DepthComparison::LESS;
     configuration.depthMode = DepthMode::TEST_WRITE;
     depthGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(depthShaderProgram, configuration, vertexDescription);
-
-    // Create uniform buffers.
-    depthMatricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4));
-    matricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(MatricesValues));
-    fragmentUniformBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(FragmentUniforms));
 }
 
 StaticRenderProgram::~StaticRenderProgram() {
-    delete depthMatricesBuffer;
-    delete matricesBuffer;
-    delete fragmentUniformBuffer;
-
     delete graphicsPipeline;
     delete depthGraphicsPipeline;
 
@@ -78,7 +71,7 @@ void StaticRenderProgram::PreDepthRender(CommandBuffer& commandBuffer, const glm
     viewProjectionMatrix = projectionMatrix * viewMatrix;
 
     // Matrices.
-    depthMatricesBuffer->Write(&viewProjectionMatrix);
+    Buffer* depthMatricesBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &viewProjectionMatrix);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::MATRICES, depthMatricesBuffer);
 }
 
@@ -99,7 +92,7 @@ void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
     matricesValues.viewProjectionMatrix = viewProjectionMatrix;
     matricesValues.viewMatrix = viewMatrix;
 
-    matricesBuffer->Write(&matricesValues);
+    Buffer* matricesBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(MatricesValues), &matricesValues);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::MATRICES, matricesBuffer);
 
     // Fragment uniforms.
@@ -114,7 +107,7 @@ void StaticRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
     fragmentUniforms.zNear = lightInfo.zNear;
     fragmentUniforms.zFar = lightInfo.zFar;
 
-    fragmentUniformBuffer->Write(&fragmentUniforms);
+    Buffer* fragmentUniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(FragmentUniforms), &fragmentUniforms);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fragmentUniformBuffer);
 
     // Light storage buffer.

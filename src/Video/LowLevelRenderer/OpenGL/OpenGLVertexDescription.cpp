@@ -40,7 +40,7 @@ OpenGLVertexDescription::OpenGLVertexDescription(unsigned int attributeCount, co
         attribute.location = static_cast<GLuint>(i);
         attribute.size = static_cast<GLint>(attributes[i].size);
         attribute.normalized = (attributes[i].normalized ? GL_TRUE : GL_FALSE);
-        attribute.offset = static_cast<char*>(nullptr) + stride;
+        attribute.offset = stride;
 
         this->attributes.push_back(attribute);
 

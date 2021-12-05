@@ -55,9 +55,6 @@ DebugDrawing::DebugDrawing(Renderer* renderer) {
         configuration.polygonMode = PolygonMode::LINE;
         lineTriangleGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, meshVertexDescription);
     }
-    
-    // Create matrices buffer.
-    matricesBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4));
 
     // Create point vertex buffer.
     glm::vec3 point(0.f, 0.f, 0.f);
@@ -162,8 +159,6 @@ DebugDrawing::~DebugDrawing() {
     delete coneVertexBuffer;
     delete coneGeometryBinding;
 
-    delete matricesBuffer;
-
     for (uint8_t i = 0; i < 2; ++i) {
         delete pointGraphicsPipeline[i];
         delete lineGraphicsPipeline[i];
@@ -180,7 +175,7 @@ DebugDrawing::~DebugDrawing() {
 }
 
 void DebugDrawing::StartDebugDrawing(const glm::mat4& viewProjectionMatrix) {
-    matricesBuffer->Write(&viewProjectionMatrix);
+    matricesBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &viewProjectionMatrix);
 }
 
 void DebugDrawing::DrawPoint(const Point& point) {
@@ -377,7 +372,7 @@ void DebugDrawing::BindGeometry(GeometryBinding* geometryBinding) {
 }
 
 void DebugDrawing::CreateVertexBuffer(const glm::vec3* positions, unsigned int positionCount, Buffer*& vertexBuffer, GeometryBinding*& geometryBinding) {
-    vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, positionCount * sizeof(glm::vec3), static_cast<const void*>(positions));
+    vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, positionCount * sizeof(glm::vec3), static_cast<const void*>(positions));
     geometryBinding = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer);
 }
 

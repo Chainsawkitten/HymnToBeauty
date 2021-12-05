@@ -25,7 +25,7 @@ class OpenGLVertexDescription : public VertexDescription {
         GLboolean normalized;
 
         /// The offset to the first component in the buffer.
-        const void* offset;
+        uintptr_t offset;
     };
 
     /// Create new OpenGL vertex description.

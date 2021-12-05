@@ -214,7 +214,7 @@ void VulkanCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
         BufferBarrier(vertexBuffer, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, false);
     }
 
-    const VkDeviceSize offset = 0;
+    const VkDeviceSize offset = vertexBuffer->GetOffset();
     vkCmdBindVertexBuffers(renderPassCommandBuffer, 0, 1, &vulkanVertexBuffer, &offset);
 
     GeometryBinding::IndexType indexType = vulkanGeometryBinding->GetIndexType();
@@ -232,7 +232,8 @@ void VulkanCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
             Log(Log::ERR) << "Index type not supported.\n";
         }
 
-        vkCmdBindIndexBuffer(renderPassCommandBuffer, vulkanGeometryBinding->GetIndexBuffer(), 0, vkIndexType);
+        const VulkanBuffer* indexBuffer = vulkanGeometryBinding->GetIndexBuffer();
+        vkCmdBindIndexBuffer(renderPassCommandBuffer, indexBuffer->GetBuffer(), indexBuffer->GetOffset(), vkIndexType);
     }
 }
 
@@ -524,7 +525,8 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
         memoryBarrier.srcAccessMask = sourceAccess;
         memoryBarrier.dstAccessMask = destinationAccess;
         memoryBarrier.buffer = buffer->GetBuffer();
-        memoryBarrier.size = VK_WHOLE_SIZE;
+        memoryBarrier.offset = buffer->GetOffset();
+        memoryBarrier.size = buffer->GetSize();
 
         vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, destinationStages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
     }

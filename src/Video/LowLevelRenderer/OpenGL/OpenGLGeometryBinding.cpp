@@ -28,12 +28,15 @@ OpenGLGeometryBinding::OpenGLGeometryBinding(const VertexDescription* vertexDesc
 
     // Bind index buffer.
     if (indexBuffer != nullptr) {
-        assert(indexBuffer->GetBufferUsage() == Buffer::BufferUsage::INDEX_BUFFER_STATIC || indexBuffer->GetBufferUsage() == Buffer::BufferUsage::INDEX_BUFFER_DYNAMIC);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<const OpenGLBuffer*>(indexBuffer)->GetBufferID());
+        assert(indexBuffer->GetBufferUsage() == Buffer::BufferUsage::INDEX_BUFFER);
+        const OpenGLBuffer* openGLIndexBuffer = static_cast<const OpenGLBuffer*>(indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, openGLIndexBuffer->GetBufferID());
+        indexBufferOffset = openGLIndexBuffer->GetOffset();
     }
 
     // Bind vertex buffer.
-    glBindBuffer(GL_ARRAY_BUFFER, static_cast<const OpenGLBuffer*>(vertexBuffer)->GetBufferID());
+    const OpenGLBuffer* openGLVertexBuffer = static_cast<const OpenGLBuffer*>(vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, openGLVertexBuffer->GetBufferID());
 
     // Describe vertex attributes.
     const OpenGLVertexDescription* openGLVertexDescription = static_cast<const OpenGLVertexDescription*>(vertexDescription);
@@ -42,7 +45,8 @@ OpenGLGeometryBinding::OpenGLGeometryBinding(const VertexDescription* vertexDesc
 
     for (const OpenGLVertexDescription::OpenGLAttribute attribute : attributes) {
         glEnableVertexAttribArray(attribute.location);
-        glVertexAttribPointer(attribute.location, attribute.size, attribute.type, attribute.normalized, stride, attribute.offset);
+        uintptr_t offset = attribute.offset + openGLVertexBuffer->GetOffset();
+        glVertexAttribPointer(attribute.location, attribute.size, attribute.type, attribute.normalized, stride, reinterpret_cast<const void*>(offset));
     }
 
     glBindVertexArray(0);
@@ -58,6 +62,10 @@ GLuint OpenGLGeometryBinding::GetVertexArray() const {
 
 GLenum OpenGLGeometryBinding::GetIndexType() const {
     return indexType;
+}
+
+uintptr_t OpenGLGeometryBinding::GetIndexBufferOffset() const {
+    return indexBufferOffset;
 }
 
 }

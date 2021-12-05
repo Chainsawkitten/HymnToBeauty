@@ -25,8 +25,8 @@ const GeometryBinding* Geometry2D::GetGeometryBinding() const {
 }
 
 void Geometry2D::GenerateBuffers() {
-    vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER_STATIC, GetVertexCount() * sizeof(Vertex), GetVertices());
-    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER_STATIC, GetIndexCount() * sizeof(unsigned int), GetIndices());
+    vertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, GetVertexCount() * sizeof(Vertex), GetVertices());
+    indexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER, GetIndexCount() * sizeof(unsigned int), GetIndices());
 }
 
 void Geometry2D::GenerateGeometryBinding() {

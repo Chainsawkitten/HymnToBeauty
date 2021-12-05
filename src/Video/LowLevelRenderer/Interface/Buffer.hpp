@@ -2,25 +2,19 @@
 
 namespace Video {
 
+struct BufferAllocation;
+
 /// A buffer containing GPU accessible data.
 class Buffer {
   public:
     /// How the buffer is going to be used.
     enum class BufferUsage {
-        VERTEX_BUFFER_STATIC, ///< The buffer will be used as a vertex buffer and only written to once.
-        VERTEX_BUFFER_DYNAMIC, ///< The buffer with be used as a vertex buffer and written to many times.
-        INDEX_BUFFER_STATIC, ///< The buffer will be used as an index buffer and only written to once.
-        INDEX_BUFFER_DYNAMIC, ///< The buffer will be used as an index buffer and written to many times.
+        VERTEX_BUFFER, ///< The buffer will be used as a vertex buffer.
+        INDEX_BUFFER, ///< The buffer will be used as an index buffer.
         UNIFORM_BUFFER, ///< The buffer will be used as a uniform buffer.
         STORAGE_BUFFER, ///< The buffer will be used as a storage buffer.
-        VERTEX_STORAGE_BUFFER ///< The buffer will be used as both vertex and storage buffer.
-    };
-
-    /// Access specified when mapping a buffer.
-    enum class Access {
-        READ_ONLY, ///< The mapped memory will be read, but not written.
-        WRITE_ONLY, ///< The mapped memory will be written, but not read.
-        READ_WRITE ///< The mapped memory will be both read and written.
+        VERTEX_STORAGE_BUFFER, ///< The buffer will be used as both vertex and storage buffer.
+        COUNT ///< The number of different buffer usages.
     };
     
     /// Create a new buffer.
@@ -34,12 +28,12 @@ class Buffer {
     /// Destructor.
     virtual ~Buffer() {}
 
-    /// Write data to buffer.
-    /**
-     * The buffer's data can only be written once per frame.
-     * @param data Data to write to the buffer.
+    /// Reset the buffer.
+    /** 
+     * @param bufferUsage How the buffer will be used.
+     * @param allocation Allocation to back up buffer memory.
      */
-    virtual void Write(const void* data) = 0;
+    virtual void Reset(BufferUsage bufferUsage, const BufferAllocation& allocation) = 0;
 
     /// Get the size of the buffer.
     /**
@@ -55,10 +49,12 @@ class Buffer {
         return bufferUsage;
     }
 
+  protected:
+    /// How the buffer will be used.
+    BufferUsage bufferUsage;
+
   private:
     Buffer(const Buffer& other) = delete;
-
-    BufferUsage bufferUsage;
 };
 
 }

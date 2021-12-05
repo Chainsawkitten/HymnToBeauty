@@ -14,6 +14,7 @@ set(SRCS
     RenderProgram/RenderProgram.cpp
     RenderProgram/StaticRenderProgram.cpp
     Texture/Texture2D.cpp
+    LowLevelRenderer/Interface/BufferAllocator.cpp
 )
 
 set(HEADERS
@@ -36,6 +37,7 @@ set(HEADERS
     Texture/Texture2D.hpp
     LowLevelRenderer/Interface/LowLevelRenderer.hpp
     LowLevelRenderer/Interface/Buffer.hpp
+    LowLevelRenderer/Interface/BufferAllocator.hpp
     LowLevelRenderer/Interface/CommandBuffer.hpp
     LowLevelRenderer/Interface/ComputePipeline.hpp
     LowLevelRenderer/Interface/GeometryBinding.hpp
@@ -63,6 +65,7 @@ if(OpenGLRenderer)
         ${SRCS}
         LowLevelRenderer/OpenGL/OpenGLRenderer.cpp
         LowLevelRenderer/OpenGL/OpenGLBuffer.cpp
+        LowLevelRenderer/OpenGL/OpenGLBufferAllocator.cpp
         LowLevelRenderer/OpenGL/OpenGLCommandBuffer.cpp
         LowLevelRenderer/OpenGL/OpenGLComputePipeline.cpp
         LowLevelRenderer/OpenGL/OpenGLGeometryBinding.cpp
@@ -78,6 +81,7 @@ if(OpenGLRenderer)
         ${HEADERS}
         LowLevelRenderer/OpenGL/OpenGLRenderer.hpp
         LowLevelRenderer/OpenGL/OpenGLBuffer.hpp
+        LowLevelRenderer/OpenGL/OpenGLBufferAllocator.hpp
         LowLevelRenderer/OpenGL/OpenGLCommandBuffer.hpp
         LowLevelRenderer/OpenGL/OpenGLComputePipeline.hpp
         LowLevelRenderer/OpenGL/OpenGLGeometryBinding.hpp
@@ -103,6 +107,7 @@ if(VulkanRenderer)
         ${SRCS}
         LowLevelRenderer/Vulkan/VulkanRenderer.cpp
         LowLevelRenderer/Vulkan/VulkanBuffer.cpp
+        LowLevelRenderer/Vulkan/VulkanBufferAllocator.cpp
         LowLevelRenderer/Vulkan/VulkanCommandBuffer.cpp
         LowLevelRenderer/Vulkan/VulkanComputePipeline.cpp
         LowLevelRenderer/Vulkan/VulkanGeometryBinding.cpp
@@ -119,6 +124,7 @@ if(VulkanRenderer)
         ${HEADERS}
         LowLevelRenderer/Vulkan/VulkanRenderer.hpp
         LowLevelRenderer/Vulkan/VulkanBuffer.hpp
+        LowLevelRenderer/Vulkan/VulkanBufferAllocator.hpp
         LowLevelRenderer/Vulkan/VulkanCommandBuffer.hpp
         LowLevelRenderer/Vulkan/VulkanComputePipeline.hpp
         LowLevelRenderer/Vulkan/VulkanGeometryBinding.hpp

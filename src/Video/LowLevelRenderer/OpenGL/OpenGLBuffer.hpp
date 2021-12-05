@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Interface/Buffer.hpp"
+#include "../Interface/BufferAllocator.hpp"
 
 #include <glad/glad.h>
 
@@ -12,15 +13,14 @@ class OpenGLBuffer : public Buffer {
     /// Create new OpenGL buffer.
     /**
      * @param bufferUsage How the buffer will be used.
-     * @param size The size of the buffer in bytes.
-     * @param data Data to upload to the buffer. Can be nullptr if no data should be uploaded.
+     * @param allocation The allocation to encapsulate.
      */
-    OpenGLBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr);
+    OpenGLBuffer(Buffer::BufferUsage bufferUsage, const BufferAllocation& allocation);
 
     /// Destructor.
     ~OpenGLBuffer() final;
 
-    void Write(const void* data) final;
+    void Reset(BufferUsage bufferUsage, const BufferAllocation& allocation) final;
     unsigned int GetSize() const final;
 
     /// Get the buffer OpenGL ID.
@@ -35,12 +35,22 @@ class OpenGLBuffer : public Buffer {
      */
     GLenum GetTarget() const;
 
+    /// Get the offset into the raw buffer.
+    /**
+     * @return The offset into the raw buffer.
+     */
+    uint32_t GetOffset() const;
+
   private:
     OpenGLBuffer(const OpenGLBuffer& other) = delete;
 
     GLenum target;
     GLuint buffer;
-    unsigned int size;
+    uint32_t offset;
+    uint32_t size;
+
+    RawBuffer* rawBuffer = nullptr;
+    bool temporaryAllocation = false;
 
 #ifndef NDEBUG
     bool mapped = false;

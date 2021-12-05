@@ -225,6 +225,8 @@ void OpenGLCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
         break;
     }
 
+    indexBufferOffset = openGLGeometryBinding->GetIndexBufferOffset();
+
     Command command = {};
     command.type = Command::Type::BIND_GEOMETRY;
 
@@ -251,7 +253,10 @@ void OpenGLCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
         assert(false);
     }
 
-    command.bindUniformBufferCommand.uniformBuffer = static_cast<OpenGLBuffer*>(uniformBuffer)->GetBufferID();
+    OpenGLBuffer* openGLBuffer = static_cast<OpenGLBuffer*>(uniformBuffer);
+    command.bindUniformBufferCommand.uniformBuffer = openGLBuffer->GetBufferID();
+    command.bindUniformBufferCommand.offset = openGLBuffer->GetOffset();
+    command.bindUniformBufferCommand.size = openGLBuffer->GetSize();
 
     AddCommand(command);
 }
@@ -266,7 +271,11 @@ void OpenGLCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
         assert(buffer->GetBufferUsage() == Buffer::BufferUsage::STORAGE_BUFFER || buffer->GetBufferUsage() == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER);
 
         command.bindStorageBufferCommand.index = index++;
-        command.bindStorageBufferCommand.storageBuffer = static_cast<OpenGLBuffer*>(buffer)->GetBufferID();
+
+        OpenGLBuffer* openGLBuffer = static_cast<OpenGLBuffer*>(buffer);
+        command.bindStorageBufferCommand.storageBuffer = openGLBuffer->GetBufferID();
+        command.bindStorageBufferCommand.offset = openGLBuffer->GetOffset();
+        command.bindStorageBufferCommand.size = openGLBuffer->GetSize();
 
         AddCommand(command);
     }
@@ -345,7 +354,7 @@ void OpenGLCommandBuffer::DrawIndexed(unsigned int indexCount, unsigned int firs
     command.drawIndexedCommand.mode = primitiveType;
     command.drawIndexedCommand.count = indexCount;
     command.drawIndexedCommand.type = indexType;
-    command.drawIndexedCommand.indices = reinterpret_cast<GLvoid*>(static_cast<uintptr_t>(firstIndex) * indexSize);
+    command.drawIndexedCommand.indices = reinterpret_cast<GLvoid*>(indexBufferOffset + static_cast<uintptr_t>(firstIndex) * indexSize);
     command.drawIndexedCommand.baseVertex = baseVertex;
 
     AddCommand(command);
@@ -360,7 +369,7 @@ void OpenGLCommandBuffer::DrawIndexedInstanced(unsigned int indexCount, unsigned
     command.drawIndexedInstancedCommand.mode = primitiveType;
     command.drawIndexedInstancedCommand.instanceCount = instanceCount;
     command.drawIndexedInstancedCommand.type = indexType;
-    command.drawIndexedInstancedCommand.indices = reinterpret_cast<GLvoid*>(static_cast<uintptr_t>(firstIndex) * indexSize);
+    command.drawIndexedInstancedCommand.indices = reinterpret_cast<GLvoid*>(indexBufferOffset + static_cast<uintptr_t>(firstIndex) * indexSize);
     command.drawIndexedInstancedCommand.count = indexCount;
     command.drawIndexedInstancedCommand.baseVertex = baseVertex;
 
@@ -432,6 +441,8 @@ void OpenGLCommandBuffer::ClearBuffer(Buffer* buffer) {
 
     command.clearBufferCommand.target = openGLBuffer->GetTarget();
     command.clearBufferCommand.buffer = openGLBuffer->GetBufferID();
+    command.clearBufferCommand.offset = openGLBuffer->GetOffset();
+    command.clearBufferCommand.size = openGLBuffer->GetSize();
 
     AddCommand(command);
 }
@@ -660,11 +671,11 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         break;
     }
     case Command::Type::BIND_UNIFORM_BUFFER: {
-        glBindBufferBase(GL_UNIFORM_BUFFER, command.bindUniformBufferCommand.index, command.bindUniformBufferCommand.uniformBuffer);
+        glBindBufferRange(GL_UNIFORM_BUFFER, command.bindUniformBufferCommand.index, command.bindUniformBufferCommand.uniformBuffer, command.bindUniformBufferCommand.offset, command.bindUniformBufferCommand.size);
         break;
     }
     case Command::Type::BIND_STORAGE_BUFFER: {
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, command.bindStorageBufferCommand.index, command.bindStorageBufferCommand.storageBuffer);
+        glBindBufferRange(GL_SHADER_STORAGE_BUFFER, command.bindStorageBufferCommand.index, command.bindStorageBufferCommand.storageBuffer, command.bindStorageBufferCommand.offset, command.bindStorageBufferCommand.size);
         break;
     }
     case Command::Type::DRAW: {
@@ -714,7 +725,7 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     case Command::Type::CLEAR_BUFFER: {
         glBindBuffer(command.clearBufferCommand.target, command.clearBufferCommand.buffer);
         GLuint zero = 0;
-        glClearBufferData(command.clearBufferCommand.target, GL_R32UI, GL_RED, GL_UNSIGNED_INT, &zero);
+        glClearBufferSubData(command.clearBufferCommand.target, GL_R32UI, command.clearBufferCommand.offset, command.clearBufferCommand.size, GL_RED, GL_UNSIGNED_INT, &zero);
         glBindBuffer(command.clearBufferCommand.target, 0);
         break;
     }
