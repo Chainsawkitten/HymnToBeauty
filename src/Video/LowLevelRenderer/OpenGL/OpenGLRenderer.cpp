@@ -12,6 +12,7 @@
 #include "OpenGLShaderProgram.hpp"
 #include "OpenGLTexture.hpp"
 #include "OpenGLRenderPass.hpp"
+#include "OpenGLRenderPassAllocator.hpp"
 #include "OpenGLGraphicsPipeline.hpp"
 #include "OpenGLComputePipeline.hpp"
 
@@ -69,6 +70,7 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
     optionalFeatures.attachmentlessMsaaSamples = (static_cast<uint32_t>(maxSamples) << 1u) - 1u;
 
     bufferAllocator = new OpenGLBufferAllocator(2);
+    renderPassAllocator = new OpenGLRenderPassAllocator();
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
@@ -79,15 +81,17 @@ OpenGLRenderer::~OpenGLRenderer() {
     glDeleteQueries(maxQueries, queries);
 
     delete bufferAllocator;
+    delete renderPassAllocator;
 }
 
 CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
-    return new OpenGLCommandBuffer(*this);
+    return new OpenGLCommandBuffer(*this, *renderPassAllocator);
 }
 
 void OpenGLRenderer::BeginFrame() {
     firstSubmission = true;
     bufferAllocator->BeginFrame();
+    renderPassAllocator->BeginFrame();
 }
 
 void OpenGLRenderer::Submit(CommandBuffer* commandBuffer) {
@@ -178,14 +182,6 @@ Texture* OpenGLRenderer::CreateTexture(const glm::uvec2 size, Texture::Type type
     return new OpenGLTexture(size, type, format, components, data);
 }
 
-RenderPass* OpenGLRenderer::CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) {
-    return new OpenGLRenderPass(colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
-}
-
-RenderPass* OpenGLRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) {
-    return new OpenGLRenderPass(size, msaaSamples);
-}
-
 GraphicsPipeline* OpenGLRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
     return new OpenGLGraphicsPipeline(shaderProgram, configuration);
 }
@@ -198,18 +194,15 @@ void OpenGLRenderer::Wait() {
     glFinish();
 }
 
-unsigned char* OpenGLRenderer::ReadImage(RenderPass* renderPass) {
-    OpenGLRenderPass* openGLRenderPass = static_cast<OpenGLRenderPass*>(renderPass);
-
+unsigned char* OpenGLRenderer::ReadImage(Texture* texture) {
     // Calculate buffer size.
-    const glm::uvec2 size = renderPass->GetSize();
+    const glm::uvec2 size = texture->GetSize();
     const uint32_t bufferSize = size.x * size.y * 4 * 1;
 
-    // Read frame buffer contents.
+    // Read texture contents.
     unsigned char* data = new unsigned char[bufferSize];
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, openGLRenderPass->GetFrameBuffer());
-    glReadPixels(0, 0, size.x, size.y, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, static_cast<OpenGLTexture*>(texture)->GetID());
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
     // Flip image.
     for (uint32_t y = 0; y < size.y / 2; ++y) {

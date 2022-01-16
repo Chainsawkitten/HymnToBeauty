@@ -11,12 +11,13 @@
 #include "OpenGLTexture.hpp"
 #include "OpenGLBuffer.hpp"
 #include "OpenGLRenderPass.hpp"
+#include "OpenGLRenderPassAllocator.hpp"
 #include "OpenGLGraphicsPipeline.hpp"
 #include "OpenGLComputePipeline.hpp"
 
 namespace Video {
 
-OpenGLCommandBuffer::OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer) : openGLRenderer(openGLRenderer) {
+OpenGLCommandBuffer::OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer, OpenGLRenderPassAllocator& renderPassAllocator) : openGLRenderer(openGLRenderer), renderPassAllocator(renderPassAllocator) {
     blitShaderProgram = openGLRenderer.GetBlitShaderProgram();
 }
 
@@ -47,6 +48,16 @@ void OpenGLCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::str
     }
 
     inRenderPass = true;
+}
+
+void OpenGLCommandBuffer::BeginRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation, const std::string& name) {
+    RenderPass* renderPass = renderPassAllocator.CreateRenderPass(colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
+    BeginRenderPass(renderPass, name);
+}
+
+void OpenGLCommandBuffer::BeginAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples, const std::string& name) {
+    RenderPass* renderPass = renderPassAllocator.CreateAttachmentlessRenderPass(size, msaaSamples);
+    BeginRenderPass(renderPass, name);
 }
 
 void OpenGLCommandBuffer::EndRenderPass() {

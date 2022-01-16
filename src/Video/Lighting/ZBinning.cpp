@@ -33,7 +33,6 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
     // Create tiling resources.
     lightInfo.tileSize = 16;
-    tilingRenderPass = nullptr;
     lightInfo.tileMaskBuffer = nullptr;
     if (!conservativeRasterization) {
         const uint32_t msaaSupport = lowLevelRenderer->GetOptionalFeatures().attachmentlessMsaaSamples;
@@ -74,8 +73,6 @@ ZBinning::~ZBinning() {
 
     delete lightInfo.tileMaskBuffer;
 
-    delete tilingRenderPass;
-
     delete tilingShaderProgram;
     delete tilingVertexShader;
     delete tilingFragmentShader;
@@ -84,10 +81,6 @@ ZBinning::~ZBinning() {
 
 void ZBinning::SetRenderSurfaceSize(const glm::uvec2& size) {
     assert(size.x > 0 && size.y > 0);
-
-    // Destroy old resources.
-    if (tilingRenderPass != nullptr)
-        delete tilingRenderPass;
 
     if (lightInfo.tileMaskBuffer != nullptr)
         delete lightInfo.tileMaskBuffer;
@@ -102,7 +95,6 @@ void ZBinning::SetRenderSurfaceSize(const glm::uvec2& size) {
     } else {
         tilingSize /= msaaScale;
     }
-    tilingRenderPass = lowLevelRenderer->CreateAttachmentlessRenderPass(tilingSize, msaa);
 
     lightInfo.tileMaskBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, lightInfo.tiles.x * lightInfo.tiles.y * sizeof(uint32_t) * MAX_LIGHTS / 32);
 }
@@ -206,7 +198,7 @@ void ZBinning::Tiling(CommandBuffer& commandBuffer, const glm::mat4& projectionM
     Buffer* tilingUniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(TilingUniformData), &uniformData);
 
     // Draw proxy light geometry.
-    commandBuffer.BeginRenderPass(tilingRenderPass, "Tiling");
+    commandBuffer.BeginAttachmentlessRenderPass(tilingSize, msaa, "Tiling");
     commandBuffer.BindGraphicsPipeline(tilingPipeline);
     commandBuffer.BindGeometry(isocahedron.GetGeometryBinding());
     commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), tilingSize);

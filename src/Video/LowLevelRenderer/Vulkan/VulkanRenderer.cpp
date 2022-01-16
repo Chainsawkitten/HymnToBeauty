@@ -12,6 +12,7 @@
 #include "VulkanShaderProgram.hpp"
 #include "VulkanTexture.hpp"
 #include "VulkanRenderPass.hpp"
+#include "VulkanRenderPassAllocator.hpp"
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanComputePipeline.hpp"
 #include "VulkanUtility.hpp"
@@ -52,10 +53,12 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
     }
 
     bufferAllocator = new VulkanBufferAllocator(*this, device, physicalDevice, GetSwapChainImageCount(), nonCoherentAtomSize);
+    renderPassAllocator = new VulkanRenderPassAllocator(device);
 }
 
 VulkanRenderer::~VulkanRenderer() {
     delete bufferAllocator;
+    delete renderPassAllocator;
 
     for (VkQueryPool queryPool : queryPools) {
         vkDestroyQueryPool(device, queryPool, nullptr);
@@ -106,11 +109,12 @@ VulkanRenderer::~VulkanRenderer() {
 }
 
 CommandBuffer* VulkanRenderer::CreateCommandBuffer() {
-    return new VulkanCommandBuffer(this, device, commandPool);
+    return new VulkanCommandBuffer(this, device, commandPool, *renderPassAllocator);
 }
 
 void VulkanRenderer::BeginFrame() {
     bufferAllocator->BeginFrame();
+    renderPassAllocator->BeginFrame();
 
     AcquireSwapChainImage();
     for (unsigned int i = 0; i < ShaderProgram::BindingType::BINDING_TYPES; ++i) {
@@ -258,14 +262,6 @@ Texture* VulkanRenderer::CreateTexture(const glm::uvec2 size, Texture::Type type
     return new VulkanTexture(*this, device, physicalDevice, size, type, format, components, data);
 }
 
-RenderPass* VulkanRenderer::CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) {
-    return new VulkanRenderPass(device, colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
-}
-
-RenderPass* VulkanRenderer::CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) {
-    return new VulkanRenderPass(device, size, msaaSamples);
-}
-
 GraphicsPipeline* VulkanRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
     return new VulkanGraphicsPipeline(*this, device, shaderProgram, configuration, vertexDescription);
 }
@@ -278,11 +274,11 @@ void VulkanRenderer::Wait() {
     vkDeviceWaitIdle(device);
 }
 
-unsigned char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
-    VulkanRenderPass* vulkanRenderPass = static_cast<VulkanRenderPass*>(renderPass);
+unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
+    VkImage textureImage = static_cast<VulkanTexture*>(texture)->GetImage();
 
     // Calculate buffer size.
-    const glm::uvec2 size = renderPass->GetSize();
+    const glm::uvec2 size = texture->GetSize();
     const uint32_t bufferSize = size.x * size.y * 4 * 1;
 
     // Create image to map.
@@ -296,7 +292,7 @@ unsigned char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
     VkCommandBuffer vkCommandBuffer = vulkanCommandBuffer->GetCommandBuffer();
 
     // Transition source image to transfer source layout.
-    Utility::TransitionImage(vkCommandBuffer, vulkanRenderPass->GetColorAttachment()->GetImage(), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    Utility::TransitionImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
     // Transition destination image to transfer destination layout.
     Utility::TransitionImage(vkCommandBuffer, image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
@@ -316,7 +312,7 @@ unsigned char* VulkanRenderer::ReadImage(RenderPass* renderPass) {
         imageBlitRegion.dstSubresource.layerCount = 1;
         imageBlitRegion.dstOffsets[1] = blitSize;
 
-        vkCmdBlitImage(vkCommandBuffer, vulkanRenderPass->GetColorAttachment()->GetImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &imageBlitRegion, VK_FILTER_NEAREST);
+        vkCmdBlitImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &imageBlitRegion, VK_FILTER_NEAREST);
     }
 
     // Transition destination image to general layout.

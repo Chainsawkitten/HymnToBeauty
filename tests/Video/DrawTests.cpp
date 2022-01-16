@@ -67,9 +67,6 @@ bool DrawTriangle(void* data) {
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
 
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
-
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
     Shader* fragmentShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -89,7 +86,7 @@ bool DrawTriangle(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->Draw(3);
@@ -102,7 +99,7 @@ bool DrawTriangle(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWTRIANGLE_PNG, DRAWTRIANGLE_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawTriangle.png");
@@ -111,7 +108,6 @@ bool DrawTriangle(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -127,9 +123,6 @@ bool DrawVertexTriangle(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -183,7 +176,7 @@ bool DrawVertexTriangle(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -197,7 +190,7 @@ bool DrawVertexTriangle(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWTRIANGLE_PNG, DRAWTRIANGLE_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawVertexTriangle.png");
@@ -209,7 +202,6 @@ bool DrawVertexTriangle(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -225,9 +217,6 @@ bool DrawTexturedTriangle(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTEXTUREDTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -285,7 +274,7 @@ bool DrawTexturedTriangle(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -300,7 +289,7 @@ bool DrawTexturedTriangle(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWTEXTUREDTRIANGLE_PNG, DRAWTEXTUREDTRIANGLE_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawTexturedTriangle.png");
@@ -314,7 +303,6 @@ bool DrawTexturedTriangle(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -330,9 +318,6 @@ bool DrawQuad(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -398,7 +383,7 @@ bool DrawQuad(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -412,7 +397,7 @@ bool DrawQuad(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWQUAD_PNG, DRAWQUAD_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawQuad.png");
@@ -425,7 +410,6 @@ bool DrawQuad(void* data) {
     delete indexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -442,9 +426,6 @@ bool DrawTriangles(void* data) {
     // Create render textures.
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
     Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::CLEAR);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -507,7 +488,7 @@ bool DrawTriangles(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -524,7 +505,7 @@ bool DrawTriangles(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, colorTexture);
     bool result = imageVerification.Compare(DRAWTRIANGLES_PNG, DRAWTRIANGLES_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawTriangles.png");
@@ -536,7 +517,6 @@ bool DrawTriangles(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete colorTexture;
     delete depthTexture;
     delete shaderProgram;
@@ -554,9 +534,6 @@ bool DrawPushTriangles(void* data) {
     // Create render textures.
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
     Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::CLEAR);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWPUSHTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -616,7 +593,7 @@ bool DrawPushTriangles(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -633,7 +610,7 @@ bool DrawPushTriangles(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, colorTexture);
     bool result = imageVerification.Compare(DRAWPUSHTRIANGLES_PNG, DRAWPUSHTRIANGLES_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawPushTriangles.png");
@@ -645,7 +622,6 @@ bool DrawPushTriangles(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete colorTexture;
     delete depthTexture;
     delete shaderProgram;
@@ -662,9 +638,6 @@ bool DrawStorageTriangle(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWSTORAGETRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -700,7 +673,7 @@ bool DrawStorageTriangle(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindStorageBuffers({ storageBuffer });
@@ -714,7 +687,7 @@ bool DrawStorageTriangle(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWTRIANGLE_PNG, DRAWTRIANGLE_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawStorageTriangle.png");
@@ -723,7 +696,6 @@ bool DrawStorageTriangle(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -741,11 +713,6 @@ bool InvertColors(void* data) {
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
     Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
     Texture* secondColorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* firstRenderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::CLEAR);
-    RenderPass* secondRenderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::LOAD, depthTexture, RenderPass::LoadOperation::LOAD);
-    RenderPass* invertRenderPass = lowLevelRenderer->CreateRenderPass(secondColorTexture, RenderPass::LoadOperation::DONT_CARE);
 
     // Create shaders.
     Shader* triangleVertexShader = lowLevelRenderer->CreateShader(DRAWPUSHTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -813,7 +780,7 @@ bool InvertColors(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(firstRenderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(triangleGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(triangleGeometryBinding);
@@ -821,7 +788,7 @@ bool InvertColors(void* data) {
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 
-    commandBuffer->BeginRenderPass(secondRenderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::LOAD, depthTexture, RenderPass::LoadOperation::LOAD);
     commandBuffer->BindGraphicsPipeline(triangleGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(triangleGeometryBinding);
@@ -829,7 +796,7 @@ bool InvertColors(void* data) {
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 
-    commandBuffer->BeginRenderPass(invertRenderPass);
+    commandBuffer->BeginRenderPass(secondColorTexture, RenderPass::LoadOperation::DONT_CARE);
     commandBuffer->BindGraphicsPipeline(invertGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindMaterial({ colorTexture });
@@ -843,7 +810,7 @@ bool InvertColors(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, invertRenderPass);
+    ImageVerification imageVerification(lowLevelRenderer, secondColorTexture);
     bool result = imageVerification.Compare(INVERTCOLORS_PNG, INVERTCOLORS_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("InvertColors.png");
@@ -856,9 +823,6 @@ bool InvertColors(void* data) {
     delete triangleGraphicsPipeline;
     delete invertGraphicsPipeline;
     delete triangleVertexDescription;
-    delete firstRenderPass;
-    delete secondRenderPass;
-    delete invertRenderPass;
     delete colorTexture;
     delete depthTexture;
     delete secondColorTexture;
@@ -879,9 +843,6 @@ bool DrawMipmappedTriangle(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTEXTUREDTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -938,7 +899,7 @@ bool DrawMipmappedTriangle(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -953,7 +914,7 @@ bool DrawMipmappedTriangle(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWMIPMAPPEDTRIANGLE_PNG, DRAWMIPMAPPEDTRIANGLE_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawMipmappedTriangle.png");
@@ -966,7 +927,6 @@ bool DrawMipmappedTriangle(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -983,10 +943,6 @@ bool DepthPrePass(void* data) {
     // Create render textures.
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
     Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
-
-    // Create renderpass.
-    RenderPass* depthRenderPass = lowLevelRenderer->CreateRenderPass(nullptr, RenderPass::LoadOperation::DONT_CARE, depthTexture, RenderPass::LoadOperation::CLEAR);
-    RenderPass* colorRenderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWPUSHTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -1051,7 +1007,7 @@ bool DepthPrePass(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(depthRenderPass);
+    commandBuffer->BeginRenderPass(nullptr, RenderPass::LoadOperation::DONT_CARE, depthTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(depthGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -1059,7 +1015,7 @@ bool DepthPrePass(void* data) {
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 
-    commandBuffer->BeginRenderPass(colorRenderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD);
     commandBuffer->BindGraphicsPipeline(colorGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -1074,7 +1030,7 @@ bool DepthPrePass(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, colorRenderPass);
+    ImageVerification imageVerification(lowLevelRenderer, colorTexture);
     bool result = imageVerification.Compare(DEPTHPREPASS_PNG, DEPTHPREPASS_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DepthPrePass.png");
@@ -1087,8 +1043,6 @@ bool DepthPrePass(void* data) {
     delete depthGraphicsPipeline;
     delete colorGraphicsPipeline;
     delete vertexDescription;
-    delete depthRenderPass;
-    delete colorRenderPass;
     delete colorTexture;
     delete depthTexture;
     delete shaderProgram;
@@ -1105,9 +1059,6 @@ bool DrawLines(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -1161,7 +1112,7 @@ bool DrawLines(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -1176,7 +1127,7 @@ bool DrawLines(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(DRAWLINES_PNG, DRAWLINES_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("DrawLines.png");
@@ -1188,7 +1139,6 @@ bool DrawLines(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;
@@ -1204,10 +1154,6 @@ bool Attachmentless(void* data) {
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* attachmentlessRenderPass = lowLevelRenderer->CreateAttachmentlessRenderPass(renderTexture->GetSize());
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -1235,7 +1181,7 @@ bool Attachmentless(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginAttachmentlessRenderPass(renderTexture->GetSize());
     commandBuffer->BindGraphicsPipeline(writeGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     const glm::uvec2 screenSize(imageSize, imageSize);
@@ -1244,7 +1190,7 @@ bool Attachmentless(void* data) {
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(readGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->PushConstants(&screenSize);
@@ -1259,7 +1205,7 @@ bool Attachmentless(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(ATTACHMENTLESS_PNG, ATTACHMENTLESS_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("Attachmentless.png");
@@ -1269,8 +1215,6 @@ bool Attachmentless(void* data) {
     delete commandBuffer;
     delete writeGraphicsPipeline;
     delete readGraphicsPipeline;
-    delete attachmentlessRenderPass;
-    delete renderPass;
     delete renderTexture;
     delete writeShaderProgram;
     delete readShaderProgram;
@@ -1294,9 +1238,6 @@ bool ConservativeRasterization(void* data) {
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
 
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
-
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
     Shader* fragmentShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -1317,7 +1258,7 @@ bool ConservativeRasterization(void* data) {
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     // Record command buffer.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(renderTexture);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->Draw(3);
@@ -1330,7 +1271,7 @@ bool ConservativeRasterization(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
     bool result = imageVerification.Compare(CONSERVATIVERASTERIZATION_PNG, CONSERVATIVERASTERIZATION_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("ConservativeRasterization.png");
@@ -1339,7 +1280,6 @@ bool ConservativeRasterization(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;

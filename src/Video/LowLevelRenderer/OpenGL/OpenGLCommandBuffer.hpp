@@ -8,6 +8,7 @@
 namespace Video {
 
 class OpenGLRenderer;
+class OpenGLRenderPassAllocator;
 class OpenGLShaderProgram;
 
 /// OpenGL implementation of CommandBuffer.
@@ -28,13 +29,16 @@ class OpenGLCommandBuffer : public CommandBuffer {
     /// Create new OpenGL command buffer.
     /**
      * @param openGLRenderer The OpenGL renderer.
+     * @param renderPassAllocator The render pass allocator.
      */
-    explicit OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer);
+    OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer, OpenGLRenderPassAllocator& renderPassAllocator);
 
     /// Destructor.
     ~OpenGLCommandBuffer() final;
 
     void BeginRenderPass(RenderPass* renderPass, const std::string& name) final;
+    void BeginRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation, const std::string& name) final;
+    void BeginAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples, const std::string& name) final;
     void EndRenderPass() final;
     void BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) final;
     void SetViewport(const glm::uvec2& origin, const glm::uvec2& size) final;
@@ -279,6 +283,7 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void SubmitCommand(const Command& command);
 
     OpenGLRenderer& openGLRenderer;
+    OpenGLRenderPassAllocator& renderPassAllocator;
 
     std::vector<Command> commands;
     GLenum primitiveType;

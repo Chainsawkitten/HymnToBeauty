@@ -11,7 +11,6 @@ namespace Video {
 class StaticRenderProgram;
 class Shader;
 class ShaderProgram;
-class RenderPass;
 class Buffer;
 class VertexDescription;
 class GeometryBinding;
@@ -111,9 +110,6 @@ class Renderer {
     Texture* colorTexture;
     Texture* depthTexture;
     Texture* postProcessingTexture;
-    RenderPass* depthRenderPass;
-    RenderPass* mainRenderPass;
-    RenderPass* emptyRenderPass;
     CommandBuffer* commandBuffer;
 
     StaticRenderProgram* staticRenderProgram;

@@ -26,10 +26,7 @@ class Texture {
      * @param type The type of texture.
      * @param size The size of the texture.
      */
-    Texture(Type type, const glm::uvec2& size) {
-        this->type = type;
-        this->size = size;
-    }
+    Texture(Type type, const glm::uvec2& size);
 
     /// Destructor.
     virtual ~Texture() {}
@@ -50,11 +47,18 @@ class Texture {
         return size;
     }
 
+    /// Get a unique identifier.
+    /**
+     * @return A unique identifier.
+     */
+    uint64_t GetUniqueIdentifier() const;
+
   private:
     Texture(const Texture& other) = delete;
 
     Type type;
     glm::uvec2 size;
+    uint64_t uniqueIdentifier;
 };
 
 }

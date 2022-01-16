@@ -15,7 +15,6 @@ class ComputePipeline;
 class GraphicsPipeline;
 class Shader;
 class ShaderProgram;
-class RenderPass;
 
 /// Handles binning and tiling of lights.
 class ZBinning {
@@ -117,7 +116,6 @@ class ZBinning {
     ShaderProgram* tilingShaderProgram;
     GraphicsPipeline* tilingPipeline;
     Isocahedron isocahedron;
-    RenderPass* tilingRenderPass;
 
     struct TilingMatricesData {
         glm::mat4 projectionMatrix;
