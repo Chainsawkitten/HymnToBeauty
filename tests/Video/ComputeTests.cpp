@@ -42,9 +42,6 @@ bool ComputeSetBuffer(void* data) {
     // Create render textures.
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
 
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
-
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
     Shader* fragmentShader = lowLevelRenderer->CreateShader(STORAGEBUFFER_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -87,7 +84,7 @@ bool ComputeSetBuffer(void* data) {
     commandBuffer->Dispatch(glm::uvec3(1, 1, 1));
 
     // Output buffer contents to render target.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindStorageBuffers({ storageBuffer });
@@ -101,7 +98,7 @@ bool ComputeSetBuffer(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, colorTexture);
     bool result = imageVerification.Compare(COMPUTESETBUFFER_PNG, COMPUTESETBUFFER_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("ComputeSetBuffer.png");
@@ -113,7 +110,6 @@ bool ComputeSetBuffer(void* data) {
     delete uniformBuffer;
     delete graphicsPipeline;
     delete computePipeline;
-    delete renderPass;
     delete colorTexture;
     delete graphicsShaderProgram;
     delete vertexShader;
@@ -131,9 +127,6 @@ bool ComputeVertexBuffer(void* data) {
 
     // Create render textures.
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(COMPUTEVERTEXBUFFER_VERT, Shader::Type::VERTEX_SHADER);
@@ -189,7 +182,7 @@ bool ComputeVertexBuffer(void* data) {
     commandBuffer->Dispatch(glm::uvec3(1, 1, 1));
 
     // Draw triangle using the vertex buffer written to by the compute pass.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
@@ -203,7 +196,7 @@ bool ComputeVertexBuffer(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, colorTexture);
     bool result = imageVerification.Compare(DRAWTRIANGLE_PNG, DRAWTRIANGLE_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("ComputeVertexBuffer.png");
@@ -216,7 +209,6 @@ bool ComputeVertexBuffer(void* data) {
     delete storageBuffer;
     delete graphicsPipeline;
     delete computePipeline;
-    delete renderPass;
     delete colorTexture;
     delete graphicsShaderProgram;
     delete vertexShader;
@@ -234,9 +226,6 @@ bool ComputeMultipleBuffers(void* data) {
 
     // Create render textures.
     Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -277,7 +266,7 @@ bool ComputeMultipleBuffers(void* data) {
     commandBuffer->Dispatch(glm::uvec3(1, 1, 1));
 
     // Output buffer contents to render target.
-    commandBuffer->BeginRenderPass(renderPass);
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR);
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindStorageBuffers({ destinationBuffer });
@@ -291,7 +280,7 @@ bool ComputeMultipleBuffers(void* data) {
     lowLevelRenderer->Wait();
 
     // Image verification.
-    ImageVerification imageVerification(lowLevelRenderer, renderPass);
+    ImageVerification imageVerification(lowLevelRenderer, colorTexture);
     bool result = imageVerification.Compare(COMPUTESETBUFFER_PNG, COMPUTESETBUFFER_PNG_LENGTH);
     if (!result) {
         imageVerification.WritePNG("ComputeMultipleBuffers.png");
@@ -303,7 +292,6 @@ bool ComputeMultipleBuffers(void* data) {
     delete destinationBuffer;
     delete graphicsPipeline;
     delete computePipeline;
-    delete renderPass;
     delete colorTexture;
     delete graphicsShaderProgram;
     delete vertexShader;

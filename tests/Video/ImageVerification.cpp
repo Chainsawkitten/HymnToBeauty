@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <cstdlib>
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
-#include <Video/LowLevelRenderer/Interface/RenderPass.hpp>
 #include <Utility/Log.hpp>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -14,9 +13,9 @@
 
 using namespace Video;
 
-ImageVerification::ImageVerification(LowLevelRenderer* lowLevelRenderer, RenderPass* renderPass) {
-    data = lowLevelRenderer->ReadImage(renderPass);
-    size = renderPass->GetSize();
+ImageVerification::ImageVerification(LowLevelRenderer* lowLevelRenderer, Texture* texture) {
+    data = lowLevelRenderer->ReadImage(texture);
+    size = texture->GetSize();
 }
 
 ImageVerification::~ImageVerification() {

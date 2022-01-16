@@ -11,7 +11,6 @@ class RenderSurface;
 class Filter;
 class CommandBuffer;
 class Texture;
-class RenderPass;
 class Buffer;
 
 /// Applies post-processing effects to the rendered image.
@@ -71,9 +70,6 @@ class PostProcessing {
   private:
     PostProcessing(const PostProcessing& other) = delete;
 
-    void CreateRenderPasses(Texture* outputTexture);
-    void FreeRenderPasses();
-
     void CreateBloomResources();
     void FreeBloomResources();
     void GenerateBloomTexture(CommandBuffer& commandBuffer, Texture* inputTexture);
@@ -85,15 +81,13 @@ class PostProcessing {
     Shader* vertexShader;
 
     Texture* tempTexture;
-    RenderPass* tempRenderPass;
-    RenderPass* outputRenderPass;
+    Texture* outputTexture;
 
     Texture* dummyTexture;
 
     // Bloom.
     struct BloomData {
         Texture* textures[2];
-        RenderPass* renderPasses[2];
     };
     BloomData* bloomPasses;
     uint32_t bloomPassCount;

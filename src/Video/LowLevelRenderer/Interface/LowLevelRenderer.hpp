@@ -143,22 +143,6 @@ class LowLevelRenderer {
      */
     virtual Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) = 0;
 
-    /// Create a render pass.
-    /**
-     * @param colorAttachment The color attachment to draw to.
-     * @param colorLoadOperation What to do with the previous contents of the color attachment.
-     * @param depthAttachment The depth attachment to draw to.
-     * @param depthLoadOperation What to do with the previous contents of the depth attachment.
-     */
-    virtual RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation = RenderPass::LoadOperation::CLEAR, Texture* depthAttachment = nullptr, RenderPass::LoadOperation depthLoadOperation = RenderPass::LoadOperation::CLEAR) = 0;
-
-    /// Create an attachmentless render pass.
-    /**
-     * @param size The framebuffer size.
-     * @param msaaSamples Number of MSAA samples.
-     */
-    virtual RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples = 1) = 0;
-
     /// Create a graphics pipeline.
     /**
      * @param shaderProgram The shader program to use.
@@ -176,13 +160,13 @@ class LowLevelRenderer {
     /// Wait for all rendering to finish.
     virtual void Wait() = 0;
 
-    /// Read a render pass' color image.
+    /// Read a render texture color image.
     /**
-     * @param renderPass The render pass to read.
+     * @param texture The texture to read.
      *
      * @return The color image as a char-array.
      */
-    virtual unsigned char* ReadImage(RenderPass* renderPass) = 0;
+    virtual unsigned char* ReadImage(Texture* texture) = 0;
 
     /// Set whether to profile.
     /**

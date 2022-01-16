@@ -174,7 +174,7 @@ void Renderer::Render(const RenderScene& renderScene) {
 }
 
 void Renderer::RenderEmpty() {
-    commandBuffer->BeginRenderPass(emptyRenderPass, "Empty render pass");
+    commandBuffer->BeginRenderPass(postProcessingTexture, RenderPass::LoadOperation::CLEAR, nullptr, RenderPass::LoadOperation::DONT_CARE, "Empty render pass");
 }
 
 void Renderer::Present() {
@@ -198,14 +198,9 @@ void Renderer::CreateRenderTextures() {
     colorTexture = lowLevelRenderer->CreateTexture(renderSurfaceSize, Texture::Type::RENDER_COLOR, Texture::Format::R11G11B10);
     depthTexture = lowLevelRenderer->CreateTexture(renderSurfaceSize, Texture::Type::RENDER_DEPTH, Texture::Format::D32);
     postProcessingTexture = lowLevelRenderer->CreateTexture(renderSurfaceSize, Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-    depthRenderPass = lowLevelRenderer->CreateRenderPass(nullptr, RenderPass::LoadOperation::DONT_CARE, depthTexture, RenderPass::LoadOperation::CLEAR);
-    mainRenderPass = lowLevelRenderer->CreateRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD);
-    emptyRenderPass = lowLevelRenderer->CreateRenderPass(postProcessingTexture, RenderPass::LoadOperation::CLEAR);
 }
 
 void Renderer::FreeRenderTextures() {
-    delete depthRenderPass;
-    delete mainRenderPass;
     delete colorTexture;
     delete depthTexture;
 }
@@ -281,7 +276,7 @@ std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene
 void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes) {
     PROFILE("Depth pre-pass");
 
-    commandBuffer->BeginRenderPass(depthRenderPass, "Depth pre-pass");
+    commandBuffer->BeginRenderPass(nullptr, RenderPass::LoadOperation::DONT_CARE, depthTexture, RenderPass::LoadOperation::CLEAR, "Depth pre-pass");
 
     // Static meshes.
     if (!culledMeshes.empty()) {
@@ -299,7 +294,7 @@ void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vec
 void Renderer::RenderMainPass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes) {
     PROFILE("Main pass");
 
-    commandBuffer->BeginRenderPass(mainRenderPass, "Main pass");
+    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD, "Main pass");
 
     // Static meshes.
     if (!culledMeshes.empty()) {

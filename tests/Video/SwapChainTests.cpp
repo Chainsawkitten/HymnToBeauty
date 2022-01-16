@@ -31,9 +31,6 @@ bool MultipleFrames(void* data) {
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(VideoSuite::swapchainSize, VideoSuite::swapchainSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
 
-    // Create renderpass.
-    RenderPass* renderPass = lowLevelRenderer->CreateRenderPass(renderTexture);
-
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(MULTIPLEFRAMES_VERT, Shader::Type::VERTEX_SHADER);
     Shader* fragmentShader = lowLevelRenderer->CreateShader(MULTIPLEFRAMES_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -104,7 +101,7 @@ bool MultipleFrames(void* data) {
         lowLevelRenderer->BeginFrame();
 
         // Render frame.
-        commandBuffer->BeginRenderPass(renderPass);
+        commandBuffer->BeginRenderPass(renderTexture);
         commandBuffer->BindGraphicsPipeline(graphicsPipeline);
         commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(VideoSuite::swapchainSize, VideoSuite::swapchainSize));
         commandBuffer->BindGeometry(geometryBinding);
@@ -130,7 +127,6 @@ bool MultipleFrames(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderPass;
     delete renderTexture;
     delete shaderProgram;
     delete vertexShader;

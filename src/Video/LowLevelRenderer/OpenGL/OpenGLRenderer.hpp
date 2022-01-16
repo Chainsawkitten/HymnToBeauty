@@ -11,6 +11,7 @@ namespace Video {
 
 class OpenGLShaderProgram;
 class OpenGLBufferAllocator;
+class OpenGLRenderPassAllocator;
 
 /// Low-level renderer implementing OpenGL.
 class OpenGLRenderer : public LowLevelRenderer {
@@ -28,19 +29,17 @@ class OpenGLRenderer : public LowLevelRenderer {
     void BeginFrame() final;
     void Submit(CommandBuffer* commandBuffer) final;
     void Present() final;
-    Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) final;
-    Buffer* CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, unsigned int size, const void* data = nullptr) final;
+    Buffer* CreateBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data = nullptr) final;
+    Buffer* CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data = nullptr) final;
     VertexDescription* CreateVertexDescription(unsigned int attributeCount, const VertexDescription::Attribute* attributes, bool indexBuffer = false) final;
     GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) final;
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
-    RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) final;
-    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;
-    unsigned char* ReadImage(RenderPass* renderPass) final;
+    unsigned char* ReadImage(Texture* texture) final;
     const std::vector<Profiling::Event>& GetTimeline() const final;
     const OptionalFeatures& GetOptionalFeatures() const final;
 
@@ -67,6 +66,7 @@ class OpenGLRenderer : public LowLevelRenderer {
     ShaderProgram* blitShaderProgram;
 
     OpenGLBufferAllocator* bufferAllocator;
+    OpenGLRenderPassAllocator* renderPassAllocator;
 
     OptionalFeatures optionalFeatures;
 

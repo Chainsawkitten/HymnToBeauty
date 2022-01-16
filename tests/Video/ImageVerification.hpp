@@ -4,18 +4,18 @@
 
 namespace Video {
 class LowLevelRenderer;
-class RenderPass;
+class Texture;
 }
 
 /// Helper class that does image verification against a ground truth.
 class ImageVerification {
   public:
-    /// Create new image verification of the given render pass.
+    /// Create new image verification of the given render texture.
     /**
      * @param lowLevelRenderer The low-level renderer.
-     * @param renderPass The render pass to compare against something.
+     * @param texture The texture to compare against something.
      */
-    ImageVerification(Video::LowLevelRenderer* lowLevelRenderer, Video::RenderPass* renderPass);
+    ImageVerification(Video::LowLevelRenderer* lowLevelRenderer, Video::Texture* texture);
 
     /// Destructor.
     ~ImageVerification();

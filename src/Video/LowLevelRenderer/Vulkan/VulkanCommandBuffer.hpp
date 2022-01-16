@@ -9,6 +9,7 @@ namespace Video {
 class VulkanBuffer;
 class VulkanRenderer;
 class VulkanRenderPass;
+class VulkanRenderPassAllocator;
 class VulkanGraphicsPipeline;
 class VulkanComputePipeline;
 class VulkanTexture;
@@ -33,13 +34,16 @@ class VulkanCommandBuffer : public CommandBuffer {
      * @param vulkanRenderer The Vulkan renderer.
      * @param device The Vulkan device.
      * @param commandPool The command pool to allocate the command buffer from.
+     * @param renderPassAllocator The render pass allocator.
      */
-    VulkanCommandBuffer(VulkanRenderer* vulkanRenderer, VkDevice device, VkCommandPool commandPool);
+    VulkanCommandBuffer(VulkanRenderer* vulkanRenderer, VkDevice device, VkCommandPool commandPool, VulkanRenderPassAllocator& renderPassAllocator);
 
     /// Destructor.
     ~VulkanCommandBuffer() final;
 
     void BeginRenderPass(RenderPass* renderPass, const std::string& name) final;
+    void BeginRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation, const std::string& name) final;
+    void BeginAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples, const std::string& name) final;
     void EndRenderPass() final;
     void BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) final;
     void SetViewport(const glm::uvec2& origin, const glm::uvec2& size) final;
@@ -93,6 +97,7 @@ class VulkanCommandBuffer : public CommandBuffer {
     VulkanRenderer* vulkanRenderer;
     VkDevice device;
     VkCommandPool commandPool;
+    VulkanRenderPassAllocator& renderPassAllocator;
 
     VkCommandBuffer* commandBuffer;
     VkCommandBuffer renderPassCommandBuffer;

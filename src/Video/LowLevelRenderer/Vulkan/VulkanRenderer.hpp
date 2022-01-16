@@ -14,6 +14,7 @@ namespace Video {
 
 class VulkanBuffer;
 class VulkanBufferAllocator;
+class VulkanRenderPassAllocator;
 
 /// Low-level renderer implementing Vulkan.
 class VulkanRenderer : public LowLevelRenderer {
@@ -38,12 +39,10 @@ class VulkanRenderer : public LowLevelRenderer {
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
-    RenderPass* CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) final;
-    RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;
-    unsigned char* ReadImage(RenderPass* renderPass) final;
+    unsigned char* ReadImage(Texture* texture) final;
     const std::vector<Profiling::Event>& GetTimeline() const final;
     const OptionalFeatures& GetOptionalFeatures() const final;
 
@@ -192,6 +191,8 @@ class VulkanRenderer : public LowLevelRenderer {
 
     VulkanBufferAllocator* bufferAllocator;
     uint32_t nonCoherentAtomSize;
+
+    VulkanRenderPassAllocator* renderPassAllocator;
 
     VkDescriptorSetLayout emptyDescriptorSetLayout;
     VkDescriptorSetLayout bufferDescriptorSetLayouts[ShaderProgram::BindingType::BINDING_TYPES];

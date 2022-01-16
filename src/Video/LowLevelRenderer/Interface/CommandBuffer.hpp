@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include "Types.hpp"
 #include "ShaderProgram.hpp"
+#include "RenderPass.hpp"
 #include <initializer_list>
 
 namespace Video {
@@ -11,7 +12,6 @@ class VertexDescription;
 class GeometryBinding;
 class Texture;
 class Buffer;
-class RenderPass;
 class GraphicsPipeline;
 class ComputePipeline;
 
@@ -33,6 +33,24 @@ class CommandBuffer {
      * @param name The name of the render pass (displayed in profiling).
      */
     virtual void BeginRenderPass(RenderPass* renderPass, const std::string& name = "Untitled render pass") = 0;
+
+    /// Begin render pass.
+    /**
+     * @param colorAttachment The color attachment to draw to.
+     * @param colorLoadOperation What to do with the previous contents of the color attachment.
+     * @param depthAttachment The depth attachment to draw to.
+     * @param depthLoadOperation What to do with the previous contents of the depth attachment.
+     * @param name The name of the render pass (displayed in profiling).
+     */
+    virtual void BeginRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation = RenderPass::LoadOperation::CLEAR, Texture* depthAttachment = nullptr, RenderPass::LoadOperation depthLoadOperation = RenderPass::LoadOperation::CLEAR, const std::string& name = "Untitled render pass") = 0;
+
+    /// Begin attachmentless render pass.
+    /**
+     * @param size The framebuffer size.
+     * @param msaaSamples Number of MSAA samples.
+     * @param name The name of the render pass (displayed in profiling).
+     */
+    virtual void BeginAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples = 1, const std::string& name = "Untitled render pass") = 0;
 
     /// End render pass.
     virtual void EndRenderPass() = 0;

@@ -3,6 +3,7 @@
 #include <Utility/Log.hpp>
 #include "VulkanRenderer.hpp"
 #include "VulkanRenderPass.hpp"
+#include "VulkanRenderPassAllocator.hpp"
 #include "VulkanBuffer.hpp"
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanComputePipeline.hpp"
@@ -14,7 +15,9 @@
 
 namespace Video {
 
-VulkanCommandBuffer::VulkanCommandBuffer(VulkanRenderer* vulkanRenderer, VkDevice device, VkCommandPool commandPool) {
+VulkanCommandBuffer::VulkanCommandBuffer(VulkanRenderer* vulkanRenderer, VkDevice device, VkCommandPool commandPool, VulkanRenderPassAllocator& renderPassAllocator) : renderPassAllocator(renderPassAllocator) {
+    assert(vulkanRenderer != nullptr);
+
     this->vulkanRenderer = vulkanRenderer;
     this->device = device;
     this->commandPool = commandPool;
@@ -135,6 +138,16 @@ void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::str
 
     inRenderPass = true;
     currentComputePipeline = nullptr;
+}
+
+void VulkanCommandBuffer::BeginRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation, const std::string& name) {
+    RenderPass* renderPass = renderPassAllocator.CreateRenderPass(colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
+    BeginRenderPass(renderPass, name);
+}
+
+void VulkanCommandBuffer::BeginAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples, const std::string& name) {
+    RenderPass* renderPass = renderPassAllocator.CreateAttachmentlessRenderPass(size, msaaSamples);
+    BeginRenderPass(renderPass, name);
 }
 
 void VulkanCommandBuffer::EndRenderPass() {
