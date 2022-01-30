@@ -424,7 +424,7 @@ void VulkanCommandBuffer::ClearBuffer(Buffer* buffer) {
         BufferBarrier(vulkanBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, true);
     }
 
-    vkCmdFillBuffer(commandBuffer[currentFrame], vulkanBuffer->GetBuffer(), 0, VK_WHOLE_SIZE, 0);
+    vkCmdFillBuffer(commandBuffer[currentFrame], vulkanBuffer->GetBuffer(), vulkanBuffer->GetOffset(), vulkanBuffer->GetSize(), 0);
 }
 
 VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const {

@@ -1,6 +1,5 @@
 #include "RenderPassAllocator.hpp"
 
-#include <cassert>
 #include "Texture.hpp"
 
 namespace Video {

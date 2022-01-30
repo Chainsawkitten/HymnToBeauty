@@ -50,14 +50,13 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
     renderSurfaceSize = glm::uvec2(width, height);
 
-    CreateRenderTextures();
     commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     staticRenderProgram = new StaticRenderProgram(lowLevelRenderer);
 
     zBinning = new ZBinning(lowLevelRenderer, renderSurfaceSize);
 
-    postProcessing = new PostProcessing(lowLevelRenderer, postProcessingTexture);
+    postProcessing = new PostProcessing(lowLevelRenderer);
 
     debugDrawing = new DebugDrawing(this);
 
@@ -112,8 +111,6 @@ Renderer::~Renderer() {
     delete iconVertexBuffer;
 
     delete commandBuffer;
-    FreeRenderTextures();
-    delete postProcessingTexture;
     delete lowLevelRenderer;
 }
 
@@ -122,15 +119,7 @@ LowLevelRenderer* Renderer::GetLowLevelRenderer() {
 }
 
 void Renderer::SetRenderSurfaceSize(const glm::uvec2& size) {
-    lowLevelRenderer->Wait();
-
     renderSurfaceSize = size;
-
-    // Resize color and depth textures and recreate render passes.
-    FreeRenderTextures();
-    CreateRenderTextures();
-    postProcessing->SetOutputTexture(postProcessingTexture);
-
     zBinning->SetRenderSurfaceSize(size);
 }
 
@@ -154,32 +143,41 @@ void Renderer::Render(const RenderScene& renderScene) {
         std::vector<std::size_t> culledMeshes;
         culledMeshes = FrustumCulling(renderScene);
 
+        depthTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::D32);
         RenderDepthPrePass(renderScene, culledMeshes);
 
+        colorTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R11G11B10);
         RenderMainPass(renderScene, culledMeshes);
 
         RenderDebugShapes(renderScene);
 
         commandBuffer->EndRenderPass();
 
+        lowLevelRenderer->FreeRenderTarget(depthTexture);
+
         {
             PROFILE("Post-processing");
 
-            postProcessing->Configure(renderScene.camera.postProcessingConfiguration);
+            postProcessingTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R8G8B8A8);
+            postProcessing->Configure(renderScene.camera.postProcessingConfiguration, postProcessingTexture);
             postProcessing->ApplyPostProcessing(*commandBuffer, colorTexture);
         }
+
+        lowLevelRenderer->FreeRenderTarget(colorTexture);
 
         RenderIcons(renderScene);
     }
 }
 
 void Renderer::RenderEmpty() {
+    postProcessingTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R8G8B8A8);
     commandBuffer->BeginRenderPass(postProcessingTexture, RenderPass::LoadOperation::CLEAR, nullptr, RenderPass::LoadOperation::DONT_CARE, "Empty render pass");
 }
 
 void Renderer::Present() {
     commandBuffer->EndRenderPass();
     commandBuffer->BlitToSwapChain(postProcessingTexture);
+    lowLevelRenderer->FreeRenderTarget(postProcessingTexture);
 
     lowLevelRenderer->Submit(commandBuffer);
 
@@ -192,17 +190,6 @@ void Renderer::WaitForRender() {
 
 CommandBuffer* Renderer::GetCommandBuffer() {
     return commandBuffer;
-}
-
-void Renderer::CreateRenderTextures() {
-    colorTexture = lowLevelRenderer->CreateTexture(renderSurfaceSize, Texture::Type::RENDER_COLOR, Texture::Format::R11G11B10);
-    depthTexture = lowLevelRenderer->CreateTexture(renderSurfaceSize, Texture::Type::RENDER_DEPTH, Texture::Format::D32);
-    postProcessingTexture = lowLevelRenderer->CreateTexture(renderSurfaceSize, Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-}
-
-void Renderer::FreeRenderTextures() {
-    delete colorTexture;
-    delete depthTexture;
 }
 
 void Renderer::UpdateLights(const RenderScene& renderScene) {

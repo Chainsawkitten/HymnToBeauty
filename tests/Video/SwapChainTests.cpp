@@ -29,7 +29,7 @@ bool MultipleFrames(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(VideoSuite::swapchainSize, VideoSuite::swapchainSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(VideoSuite::swapchainSize, VideoSuite::swapchainSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(MULTIPLEFRAMES_VERT, Shader::Type::VERTEX_SHADER);
@@ -127,7 +127,7 @@ bool MultipleFrames(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;

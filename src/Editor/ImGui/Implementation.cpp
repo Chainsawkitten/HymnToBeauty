@@ -265,7 +265,7 @@ void CreateFontsTexture() {
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
     // Will generate mipmaps, which isn't really necessary for the font texture.
-    g_FontTexture = g_LowLevelRenderer->CreateTexture(glm::uvec2(width, height), Video::Texture::Type::COLOR, Video::Texture::Format::R8G8B8A8, 4, pixels);
+    g_FontTexture = g_LowLevelRenderer->CreateTexture(glm::uvec2(width, height), Video::Texture::Format::R8G8B8A8, 4, pixels);
 
     // Store our identifier
     io.Fonts->TexID = g_FontTexture;

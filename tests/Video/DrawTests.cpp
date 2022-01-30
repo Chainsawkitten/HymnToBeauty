@@ -65,7 +65,7 @@ bool DrawTriangle(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -108,7 +108,7 @@ bool DrawTriangle(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -122,7 +122,7 @@ bool DrawVertexTriangle(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -202,7 +202,7 @@ bool DrawVertexTriangle(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -216,7 +216,7 @@ bool DrawTexturedTriangle(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTEXTUREDTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -303,7 +303,7 @@ bool DrawTexturedTriangle(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -317,7 +317,7 @@ bool DrawQuad(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -410,7 +410,7 @@ bool DrawQuad(void* data) {
     delete indexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -424,8 +424,8 @@ bool DrawTriangles(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-    Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
+    Texture* depthTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::D32);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -517,8 +517,8 @@ bool DrawTriangles(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete colorTexture;
-    delete depthTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
+    lowLevelRenderer->FreeRenderTarget(depthTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -532,8 +532,8 @@ bool DrawPushTriangles(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-    Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
+    Texture* depthTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::D32);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWPUSHTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -622,8 +622,8 @@ bool DrawPushTriangles(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete colorTexture;
-    delete depthTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
+    lowLevelRenderer->FreeRenderTarget(depthTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -637,7 +637,7 @@ bool DrawStorageTriangle(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWSTORAGETRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -696,7 +696,7 @@ bool DrawStorageTriangle(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -710,9 +710,9 @@ bool InvertColors(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-    Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
-    Texture* secondColorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
+    Texture* depthTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::D32);
+    Texture* secondColorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* triangleVertexShader = lowLevelRenderer->CreateShader(DRAWPUSHTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -823,9 +823,9 @@ bool InvertColors(void* data) {
     delete triangleGraphicsPipeline;
     delete invertGraphicsPipeline;
     delete triangleVertexDescription;
-    delete colorTexture;
-    delete depthTexture;
-    delete secondColorTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
+    lowLevelRenderer->FreeRenderTarget(depthTexture);
+    lowLevelRenderer->FreeRenderTarget(secondColorTexture);
     delete triangleShaderProgram;
     delete triangleVertexShader;
     delete triangleFragmentShader;
@@ -842,7 +842,7 @@ bool DrawMipmappedTriangle(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTEXTUREDTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -927,7 +927,7 @@ bool DrawMipmappedTriangle(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -941,8 +941,8 @@ bool DepthPrePass(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
-    Texture* depthTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_DEPTH, Texture::Format::D32);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
+    Texture* depthTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::D32);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWPUSHTRIANGLES_VERT, Shader::Type::VERTEX_SHADER);
@@ -1043,8 +1043,8 @@ bool DepthPrePass(void* data) {
     delete depthGraphicsPipeline;
     delete colorGraphicsPipeline;
     delete vertexDescription;
-    delete colorTexture;
-    delete depthTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
+    lowLevelRenderer->FreeRenderTarget(depthTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -1058,7 +1058,7 @@ bool DrawLines(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -1139,7 +1139,7 @@ bool DrawLines(void* data) {
     delete vertexBuffer;
     delete graphicsPipeline;
     delete vertexDescription;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -1153,7 +1153,7 @@ bool Attachmentless(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -1215,7 +1215,7 @@ bool Attachmentless(void* data) {
     delete commandBuffer;
     delete writeGraphicsPipeline;
     delete readGraphicsPipeline;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete writeShaderProgram;
     delete readShaderProgram;
     delete vertexShader;
@@ -1236,7 +1236,7 @@ bool ConservativeRasterization(void* data) {
         return true;
 
     // Create render texture.
-    Texture* renderTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -1280,7 +1280,7 @@ bool ConservativeRasterization(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
-    delete renderTexture;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;

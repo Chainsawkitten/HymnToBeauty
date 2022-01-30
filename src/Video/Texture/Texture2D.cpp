@@ -22,7 +22,7 @@ Texture2D::Texture2D(LowLevelRenderer* lowLevelRenderer, const char* filename) {
         Log() << "Couldn't load image file " << filename << ".\n";
 
     // Create texture.
-    texture = lowLevelRenderer->CreateTexture(glm::uvec2(width, height), Texture::Type::COLOR, Texture::Format::R8G8B8A8, components, data);
+    texture = lowLevelRenderer->CreateTexture(glm::uvec2(width, height), Texture::Format::R8G8B8A8, components, data);
 
     // We no longer need the CPU side data.
     stbi_image_free(data);
@@ -39,7 +39,7 @@ Texture2D::Texture2D(LowLevelRenderer* lowLevelRenderer, const char* source, int
         Log() << "Couldn't load headerized image.\n";
 
     // Create texture.
-    texture = lowLevelRenderer->CreateTexture(glm::uvec2(width, height), Texture::Type::COLOR, Texture::Format::R8G8B8A8, components, data);
+    texture = lowLevelRenderer->CreateTexture(glm::uvec2(width, height), Texture::Format::R8G8B8A8, components, data);
 
     // We no longer need the CPU side data.
     stbi_image_free(data);

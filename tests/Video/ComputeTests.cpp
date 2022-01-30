@@ -40,7 +40,7 @@ bool ComputeSetBuffer(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -110,7 +110,7 @@ bool ComputeSetBuffer(void* data) {
     delete uniformBuffer;
     delete graphicsPipeline;
     delete computePipeline;
-    delete colorTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
     delete graphicsShaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -126,7 +126,7 @@ bool ComputeVertexBuffer(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(COMPUTEVERTEXBUFFER_VERT, Shader::Type::VERTEX_SHADER);
@@ -209,7 +209,7 @@ bool ComputeVertexBuffer(void* data) {
     delete storageBuffer;
     delete graphicsPipeline;
     delete computePipeline;
-    delete colorTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
     delete graphicsShaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -225,7 +225,7 @@ bool ComputeMultipleBuffers(void* data) {
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // Create render textures.
-    Texture* colorTexture = lowLevelRenderer->CreateTexture(glm::uvec2(imageSize, imageSize), Texture::Type::RENDER_COLOR, Texture::Format::R8G8B8A8);
+    Texture* colorTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
     // Create shaders.
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
@@ -292,7 +292,7 @@ bool ComputeMultipleBuffers(void* data) {
     delete destinationBuffer;
     delete graphicsPipeline;
     delete computePipeline;
-    delete colorTexture;
+    lowLevelRenderer->FreeRenderTarget(colorTexture);
     delete graphicsShaderProgram;
     delete vertexShader;
     delete fragmentShader;

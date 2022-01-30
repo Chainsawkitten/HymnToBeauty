@@ -39,24 +39,18 @@ class PostProcessing {
     /// Create new post-processing handler.
     /**
      * @param lowLevelRenderer The low-level renderer to use.
-     * @param outputTexture The texture to output to.
      */
-    PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outputTexture);
+    explicit PostProcessing(LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     ~PostProcessing();
 
-    /// Set texture to output to.
-    /**
-     * @param outputTexture The texture to output to.
-     */
-    void SetOutputTexture(Texture* outputTexture);
-
     /// Configure the post-processing.
     /**
      * @param configuration The configuration.
+     * @param outputTexture The texture to output to.
      */
-    void Configure(const Configuration& configuration);
+    void Configure(const Configuration& configuration, Texture* outputTexture);
 
     /// Apply post-processing effects.
     /**
@@ -80,8 +74,7 @@ class PostProcessing {
     glm::uvec2 screenSize;
     Shader* vertexShader;
 
-    Texture* tempTexture;
-    Texture* outputTexture;
+    Texture* outputTexture = nullptr;
 
     Texture* dummyTexture;
 
@@ -103,7 +96,6 @@ class PostProcessing {
     Shader* bloomBlurShader;
     ShaderProgram* bloomBlurShaderProgram;
     GraphicsPipeline* bloomBlurPipeline;
-    bool bloomResourcesCreated = false;
 
     // Uber.
     Shader* uberShader;

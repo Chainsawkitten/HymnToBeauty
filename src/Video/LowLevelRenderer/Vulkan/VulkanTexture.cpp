@@ -9,7 +9,7 @@
 
 namespace Video {
 
-VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, const glm::uvec2 size, Texture::Type type, Texture::Format format, int components, unsigned char* data) : Texture(type, size) {
+VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, const glm::uvec2 size, Texture::Type type, Texture::Format format, int components, unsigned char* data) : Texture(type, size, format) {
     assert(size.x > 0 && size.y > 0);
     assert((data != nullptr && components >= 1 && components <= 4) || (data == nullptr && components == 0));
     assert((type == Texture::Type::COLOR && data != nullptr) || (type != Texture::Type::COLOR && data == nullptr));
