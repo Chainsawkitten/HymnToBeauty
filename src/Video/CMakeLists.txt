@@ -16,6 +16,7 @@ set(SRCS
     Texture/Texture2D.cpp
     LowLevelRenderer/Interface/BufferAllocator.cpp
     LowLevelRenderer/Interface/RenderPassAllocator.cpp
+    LowLevelRenderer/Interface/RenderTargetAllocator.cpp
     LowLevelRenderer/Interface/Texture.cpp
 )
 
@@ -46,6 +47,7 @@ set(HEADERS
     LowLevelRenderer/Interface/GraphicsPipeline.hpp
     LowLevelRenderer/Interface/RenderPass.hpp
     LowLevelRenderer/Interface/RenderPassAllocator.hpp
+    LowLevelRenderer/Interface/RenderTargetAllocator.hpp
     LowLevelRenderer/Interface/Shader.hpp
     LowLevelRenderer/Interface/ShaderProgram.hpp
     LowLevelRenderer/Interface/Texture.hpp
@@ -75,6 +77,7 @@ if(OpenGLRenderer)
         LowLevelRenderer/OpenGL/OpenGLGraphicsPipeline.cpp
         LowLevelRenderer/OpenGL/OpenGLRenderPass.cpp
         LowLevelRenderer/OpenGL/OpenGLRenderPassAllocator.cpp
+        LowLevelRenderer/OpenGL/OpenGLRenderTargetAllocator.cpp
         LowLevelRenderer/OpenGL/OpenGLShader.cpp
         LowLevelRenderer/OpenGL/OpenGLShaderProgram.cpp
         LowLevelRenderer/OpenGL/OpenGLTexture.cpp
@@ -92,6 +95,7 @@ if(OpenGLRenderer)
         LowLevelRenderer/OpenGL/OpenGLGraphicsPipeline.hpp
         LowLevelRenderer/OpenGL/OpenGLRenderPass.hpp
         LowLevelRenderer/OpenGL/OpenGLRenderPassAllocator.hpp
+        LowLevelRenderer/OpenGL/OpenGLRenderTargetAllocator.hpp
         LowLevelRenderer/OpenGL/OpenGLShader.hpp
         LowLevelRenderer/OpenGL/OpenGLShaderProgram.hpp
         LowLevelRenderer/OpenGL/OpenGLTexture.hpp
@@ -119,6 +123,7 @@ if(VulkanRenderer)
         LowLevelRenderer/Vulkan/VulkanGraphicsPipeline.cpp
         LowLevelRenderer/Vulkan/VulkanRenderPass.cpp
         LowLevelRenderer/Vulkan/VulkanRenderPassAllocator.cpp
+        LowLevelRenderer/Vulkan/VulkanRenderTargetAllocator.cpp
         LowLevelRenderer/Vulkan/VulkanShader.cpp
         LowLevelRenderer/Vulkan/VulkanShaderProgram.cpp
         LowLevelRenderer/Vulkan/VulkanTexture.cpp
@@ -137,6 +142,7 @@ if(VulkanRenderer)
         LowLevelRenderer/Vulkan/VulkanGraphicsPipeline.hpp
         LowLevelRenderer/Vulkan/VulkanRenderPass.hpp
         LowLevelRenderer/Vulkan/VulkanRenderPassAllocator.hpp
+        LowLevelRenderer/Vulkan/VulkanRenderTargetAllocator.hpp
         LowLevelRenderer/Vulkan/VulkanShader.hpp
         LowLevelRenderer/Vulkan/VulkanShaderProgram.hpp
         LowLevelRenderer/Vulkan/VulkanTexture.hpp

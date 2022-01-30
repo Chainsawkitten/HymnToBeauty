@@ -107,6 +107,8 @@ class ZBinning {
     static const uint32_t MAX_LIGHTS = 2048;
     Light lightData[MAX_LIGHTS];
 
+	static const uint32_t TILE_MASK_BUFFER_SIZE = 8 * 1024 * 1024;
+
     Shader* binningShader;
     ShaderProgram* binningShaderProgram;
     ComputePipeline* binningPipeline;

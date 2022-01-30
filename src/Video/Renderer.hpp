@@ -92,9 +92,6 @@ class Renderer {
   private:
     Renderer(const Renderer& other) = delete;
 
-    void CreateRenderTextures();
-    void FreeRenderTextures();
-
     void UpdateLights(const RenderScene& renderScene);
     std::vector<std::size_t> FrustumCulling(const RenderScene& renderScene);
     void RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes);

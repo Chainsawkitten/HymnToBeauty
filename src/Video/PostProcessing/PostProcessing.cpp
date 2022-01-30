@@ -7,6 +7,7 @@
 #include "../LowLevelRenderer/Interface/Texture.hpp"
 #include <chrono>
 #include <algorithm>
+#include <cassert>
 
 #include "PostProcessing.vert.hpp"
 #include "UberPostProcessing.frag.hpp"
@@ -18,10 +19,8 @@
 
 using namespace Video;
 
-PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outputTexture) {
+PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer) {
     this->lowLevelRenderer = lowLevelRenderer;
-    this->screenSize = outputTexture->GetSize();
-    this->outputTexture = outputTexture;
 
     vertexShader = lowLevelRenderer->CreateShader(POSTPROCESSING_VERT, Shader::Type::VERTEX_SHADER);
 
@@ -32,9 +31,6 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outp
     configuration.blendMode = BlendMode::NONE;
     configuration.depthMode = DepthMode::NONE;
     configuration.depthComparison = DepthComparison::ALWAYS;
-
-    // Create textures.
-    tempTexture = lowLevelRenderer->CreateTexture(outputTexture->GetSize(), Texture::Type::RENDER_COLOR, Texture::Format::R11G11B10);
 
     // Uber.
     uberShader = lowLevelRenderer->CreateShader(UBERPOSTPROCESSING_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -64,8 +60,8 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer, Texture* outp
     bloomUpscalePipeline = lowLevelRenderer->CreateGraphicsPipeline(bloomUpscaleShaderProgram, configuration);
 
     // Dummy texture (used to fill texture slots for disabled effects).
-    unsigned char dummyData[4] = { 0, 0, 0, 0 };
-    dummyTexture = lowLevelRenderer->CreateTexture(glm::uvec2(1, 1), Texture::Type::COLOR, Texture::Format::R8G8B8A8, 4, dummyData);
+    unsigned char dummyData[4] = {0, 0, 0, 0};
+    dummyTexture = lowLevelRenderer->CreateTexture(glm::uvec2(1, 1), Texture::Format::R8G8B8A8, 4, dummyData);
 }
 
 PostProcessing::~PostProcessing() {
@@ -93,29 +89,18 @@ PostProcessing::~PostProcessing() {
     delete bloomUpscaleShaderProgram;
     delete bloomUpscaleShader;
 
-    delete tempTexture;
-    if (bloomResourcesCreated)
-        FreeBloomResources();
-
     delete vertexShader;
 
     delete dummyTexture;
 }
 
-void PostProcessing::SetOutputTexture(Texture* outputTexture) {
-    delete tempTexture;
-    if (bloomResourcesCreated)
-        FreeBloomResources();
+void PostProcessing::Configure(const Configuration& configuration, Texture* outputTexture) {
+    assert(outputTexture != nullptr);
+    assert(outputTexture->GetType() == Texture::Type::RENDER_COLOR);
 
-    this->outputTexture = outputTexture;
-    this->screenSize = outputTexture->GetSize();
-
-    tempTexture = lowLevelRenderer->CreateTexture(outputTexture->GetSize(), Texture::Type::RENDER_COLOR, Texture::Format::R11G11B10);
-    CreateBloomResources();
-}
-
-void PostProcessing::Configure(const Configuration& configuration) {
     this->configuration = configuration;
+    this->outputTexture = outputTexture;
+    screenSize = outputTexture->GetSize();
 
     float time = static_cast<float>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() % 30000000000 / 1000000000.0);
 
@@ -141,25 +126,34 @@ void PostProcessing::Configure(const Configuration& configuration) {
 }
 
 void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* inputTexture) {
+    assert(inputTexture != nullptr);
+    assert(outputTexture != nullptr);
+
     bool hasFxaaPass = configuration.fxaa.enabled;
     Texture* bloomTexture = dummyTexture;
 
     // Bloom.
     if (configuration.bloom.enabled) {
-        if (!bloomResourcesCreated)
-            CreateBloomResources();
-
+        CreateBloomResources();
         GenerateBloomTexture(commandBuffer, inputTexture);
         bloomTexture = bloomPasses[0].textures[1];
     }
 
     // Uber.
+    Texture* tempTexture;
+    if (hasFxaaPass) {
+        tempTexture = lowLevelRenderer->CreateRenderTarget(screenSize, Texture::Format::R11G11B10);
+    }
     commandBuffer.BeginRenderPass(hasFxaaPass ? tempTexture : outputTexture, RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE, "Uber post-processing");
     commandBuffer.BindGraphicsPipeline(uberPipeline);
     commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, uberUniformBuffer);
     commandBuffer.BindMaterial({inputTexture, bloomTexture});
     commandBuffer.Draw(3);
+
+    if (configuration.bloom.enabled) {
+        FreeBloomResources();
+    }
 
     // FXAA.
     if (hasFxaaPass) {
@@ -171,6 +165,8 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
         commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fxaaUniformBuffer);
         commandBuffer.BindMaterial({tempTexture});
         commandBuffer.Draw(3);
+
+        lowLevelRenderer->FreeRenderTarget(tempTexture);
     }
 }
 
@@ -184,21 +180,17 @@ void PostProcessing::CreateBloomResources() {
     for (uint32_t i = 0; i < bloomPassCount; i++) {
         size /= 2;
 
-        bloomPasses[i].textures[0] = lowLevelRenderer->CreateTexture(size, Texture::Type::RENDER_COLOR, Texture::Format::R11G11B10);
-        bloomPasses[i].textures[1] = lowLevelRenderer->CreateTexture(size, Texture::Type::RENDER_COLOR, Texture::Format::R11G11B10);
+        bloomPasses[i].textures[0] = lowLevelRenderer->CreateRenderTarget(size, Texture::Format::R11G11B10);
+        bloomPasses[i].textures[1] = lowLevelRenderer->CreateRenderTarget(size, Texture::Format::R11G11B10);
     }
-
-    bloomResourcesCreated = true;
 }
 
 void PostProcessing::FreeBloomResources() {
     for (uint32_t i = 0; i < bloomPassCount; i++) {
-        delete bloomPasses[i].textures[0];
-        delete bloomPasses[i].textures[1];
+        lowLevelRenderer->FreeRenderTarget(bloomPasses[i].textures[0]);
+        lowLevelRenderer->FreeRenderTarget(bloomPasses[i].textures[1]);
     }
     delete[] bloomPasses;
-
-    bloomResourcesCreated = false;
 }
 
 void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture* inputTexture) {
@@ -208,7 +200,7 @@ void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture*
 
         if (i == 0) {
             // Threshold.
-            commandBuffer.BeginRenderPass(bloomPasses[i].textures[0], RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE,"Bloom threshold");
+            commandBuffer.BeginRenderPass(bloomPasses[i].textures[0], RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE, "Bloom threshold");
             commandBuffer.BindGraphicsPipeline(bloomThresholdPipeline);
             commandBuffer.SetViewportAndScissor(glm::uvec2(0.0f, 0.0f), size);
             commandBuffer.PushConstants(&configuration.bloom.threshold);

@@ -13,6 +13,7 @@
 #include "OpenGLTexture.hpp"
 #include "OpenGLRenderPass.hpp"
 #include "OpenGLRenderPassAllocator.hpp"
+#include "OpenGLRenderTargetAllocator.hpp"
 #include "OpenGLGraphicsPipeline.hpp"
 #include "OpenGLComputePipeline.hpp"
 
@@ -71,6 +72,7 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
 
     bufferAllocator = new OpenGLBufferAllocator(2);
     renderPassAllocator = new OpenGLRenderPassAllocator();
+    renderTargetAllocator = new OpenGLRenderTargetAllocator(buffering);
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
@@ -82,6 +84,7 @@ OpenGLRenderer::~OpenGLRenderer() {
 
     delete bufferAllocator;
     delete renderPassAllocator;
+    delete renderTargetAllocator;
 }
 
 CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
@@ -92,6 +95,7 @@ void OpenGLRenderer::BeginFrame() {
     firstSubmission = true;
     bufferAllocator->BeginFrame();
     renderPassAllocator->BeginFrame();
+    renderTargetAllocator->BeginFrame();
 }
 
 void OpenGLRenderer::Submit(CommandBuffer* commandBuffer) {
@@ -178,8 +182,17 @@ ShaderProgram* OpenGLRenderer::CreateShaderProgram(std::initializer_list<const S
     return new OpenGLShaderProgram(shaders);
 }
 
-Texture* OpenGLRenderer::CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components, unsigned char* data) {
-    return new OpenGLTexture(size, type, format, components, data);
+Texture* OpenGLRenderer::CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) {
+    assert(data != nullptr);
+    return new OpenGLTexture(size, Texture::Type::COLOR, format, components, data);
+}
+
+Texture* OpenGLRenderer::CreateRenderTarget(const glm::uvec2& size, Texture::Format format) {
+    return renderTargetAllocator->CreateRenderTarget(size, format);
+}
+
+void OpenGLRenderer::FreeRenderTarget(Texture* renderTarget) {
+    renderTargetAllocator->FreeRenderTarget(renderTarget);
 }
 
 GraphicsPipeline* OpenGLRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {

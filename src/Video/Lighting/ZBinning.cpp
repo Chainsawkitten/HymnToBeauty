@@ -33,7 +33,7 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
     // Create tiling resources.
     lightInfo.tileSize = 16;
-    lightInfo.tileMaskBuffer = nullptr;
+    lightInfo.tileMaskBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, TILE_MASK_BUFFER_SIZE);
     if (!conservativeRasterization) {
         const uint32_t msaaSupport = lowLevelRenderer->GetOptionalFeatures().attachmentlessMsaaSamples;
         if (msaaSupport & 16) {
@@ -66,12 +66,11 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
 ZBinning::~ZBinning() {
     delete lightInfo.zMaskBuffer;
+    delete lightInfo.tileMaskBuffer;
 
     delete binningPipeline;
     delete binningShaderProgram;
     delete binningShader;
-
-    delete lightInfo.tileMaskBuffer;
 
     delete tilingShaderProgram;
     delete tilingVertexShader;
@@ -82,21 +81,15 @@ ZBinning::~ZBinning() {
 void ZBinning::SetRenderSurfaceSize(const glm::uvec2& size) {
     assert(size.x > 0 && size.y > 0);
 
-    if (lightInfo.tileMaskBuffer != nullptr)
-        delete lightInfo.tileMaskBuffer;
-
     screenSize = size;
     lightInfo.tiles = (screenSize - glm::uvec2(1, 1)) / glm::uvec2(lightInfo.tileSize, lightInfo.tileSize) + glm::uvec2(1, 1);
 
-    // Create new resources.
     tilingSize = screenSize;
     if (conservativeRasterization) {
         tilingSize = lightInfo.tiles;
     } else {
         tilingSize /= msaaScale;
     }
-
-    lightInfo.tileMaskBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, lightInfo.tiles.x * lightInfo.tiles.y * sizeof(uint32_t) * MAX_LIGHTS / 32);
 }
 
 void ZBinning::BinLights(CommandBuffer& commandBuffer, const std::vector<DirectionalLight>& directionalLights, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, float zNear, float zFar) {
@@ -132,6 +125,9 @@ void ZBinning::BinLights(CommandBuffer& commandBuffer, const std::vector<Directi
     lightInfo.lightBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * MAX_LIGHTS, lightData);
 
     lightInfo.maskCount = lightInfo.lightCount / 32 + (lightInfo.lightCount % 32 > 0);
+    if (lightInfo.tiles.x * lightInfo.tiles.y * sizeof(uint32_t) * lightInfo.maskCount > TILE_MASK_BUFFER_SIZE) {
+        Log(Log::ERR) << "Max tile mask buffer size exceeded.\n";
+	}
 
     ClearBuffers(commandBuffer);
 

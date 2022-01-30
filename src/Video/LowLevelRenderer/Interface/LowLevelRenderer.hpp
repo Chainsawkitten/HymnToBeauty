@@ -136,12 +136,24 @@ class LowLevelRenderer {
     /// Create a texture.
     /**
      * @param size The size of the texture, in pixels.
-     * @param type The type of texture to create.
      * @param format The format of the texture.
      * @param components The number of components in the texture, 0 if no texture data is supplied.
      * @param data The texture data to upload, or nullptr.
      */
-    virtual Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) = 0;
+    virtual Texture* CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) = 0;
+
+    /// Create a render target.
+    /**
+     * @param size The size of the texture, in pixels.
+     * @param format The format of the texture.
+     */
+    virtual Texture* CreateRenderTarget(const glm::uvec2& size, Texture::Format format) = 0;
+
+    /// Free a render target.
+    /**
+     * @param renderTarget The render target to free.
+     */
+    virtual void FreeRenderTarget(Texture* renderTarget) = 0;
 
     /// Create a graphics pipeline.
     /**

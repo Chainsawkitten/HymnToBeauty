@@ -12,6 +12,7 @@ namespace Video {
 class OpenGLShaderProgram;
 class OpenGLBufferAllocator;
 class OpenGLRenderPassAllocator;
+class OpenGLRenderTargetAllocator;
 
 /// Low-level renderer implementing OpenGL.
 class OpenGLRenderer : public LowLevelRenderer {
@@ -35,7 +36,9 @@ class OpenGLRenderer : public LowLevelRenderer {
     GeometryBinding* CreateGeometryBinding(const VertexDescription* vertexDescription, Buffer* vertexBuffer, GeometryBinding::IndexType indexType = GeometryBinding::IndexType::NONE, const Buffer* indexBuffer = nullptr) final;
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
-    Texture* CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components = 0, unsigned char* data = nullptr) final;
+    Texture* CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) final;
+    Texture* CreateRenderTarget(const glm::uvec2& size, Texture::Format format) final;
+    void FreeRenderTarget(Texture* renderTarget) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
     ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) final;
     void Wait() final;
@@ -67,6 +70,7 @@ class OpenGLRenderer : public LowLevelRenderer {
 
     OpenGLBufferAllocator* bufferAllocator;
     OpenGLRenderPassAllocator* renderPassAllocator;
+    OpenGLRenderTargetAllocator* renderTargetAllocator;
 
     OptionalFeatures optionalFeatures;
 

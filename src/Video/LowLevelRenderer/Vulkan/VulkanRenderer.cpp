@@ -13,6 +13,7 @@
 #include "VulkanTexture.hpp"
 #include "VulkanRenderPass.hpp"
 #include "VulkanRenderPassAllocator.hpp"
+#include "VulkanRenderTargetAllocator.hpp"
 #include "VulkanGraphicsPipeline.hpp"
 #include "VulkanComputePipeline.hpp"
 #include "VulkanUtility.hpp"
@@ -54,11 +55,13 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
 
     bufferAllocator = new VulkanBufferAllocator(*this, device, physicalDevice, GetSwapChainImageCount(), nonCoherentAtomSize);
     renderPassAllocator = new VulkanRenderPassAllocator(device);
+    renderTargetAllocator = new VulkanRenderTargetAllocator(*this, device, physicalDevice);
 }
 
 VulkanRenderer::~VulkanRenderer() {
     delete bufferAllocator;
     delete renderPassAllocator;
+    delete renderTargetAllocator;
 
     for (VkQueryPool queryPool : queryPools) {
         vkDestroyQueryPool(device, queryPool, nullptr);
@@ -115,6 +118,7 @@ CommandBuffer* VulkanRenderer::CreateCommandBuffer() {
 void VulkanRenderer::BeginFrame() {
     bufferAllocator->BeginFrame();
     renderPassAllocator->BeginFrame();
+    renderTargetAllocator->BeginFrame();
 
     AcquireSwapChainImage();
     for (unsigned int i = 0; i < ShaderProgram::BindingType::BINDING_TYPES; ++i) {
@@ -258,8 +262,18 @@ ShaderProgram* VulkanRenderer::CreateShaderProgram(std::initializer_list<const S
     return new VulkanShaderProgram(this, shaders);
 }
 
-Texture* VulkanRenderer::CreateTexture(const glm::uvec2 size, Texture::Type type, Texture::Format format, int components, unsigned char* data) {
-    return new VulkanTexture(*this, device, physicalDevice, size, type, format, components, data);
+Texture* VulkanRenderer::CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) {
+    assert(data != nullptr);
+
+    return new VulkanTexture(*this, device, physicalDevice, size, Texture::Type::COLOR, format, components, data);
+}
+
+Texture* VulkanRenderer::CreateRenderTarget(const glm::uvec2& size, Texture::Format format) {
+    return renderTargetAllocator->CreateRenderTarget(size, format);
+}
+
+void VulkanRenderer::FreeRenderTarget(Texture* renderTarget) {
+    renderTargetAllocator->FreeRenderTarget(renderTarget);
 }
 
 GraphicsPipeline* VulkanRenderer::CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription) {
@@ -317,6 +331,9 @@ unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
 
     // Transition destination image to general layout.
     Utility::TransitionImage(vkCommandBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
+
+    // Transition source image back.
+    Utility::TransitionImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
     Submit(commandBuffer);
     Wait();
