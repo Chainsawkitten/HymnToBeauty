@@ -5,7 +5,7 @@
 
 namespace Video {
 
-VulkanRenderTargetAllocator::VulkanRenderTargetAllocator(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice) : RenderTargetAllocator(vulkanRenderer.GetSwapChainImageCount()), vulkanRenderer(vulkanRenderer) {
+VulkanRenderTargetAllocator::VulkanRenderTargetAllocator(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, RenderPassAllocator* renderPassAllocator) : RenderTargetAllocator(vulkanRenderer.GetSwapChainImageCount(), renderPassAllocator), vulkanRenderer(vulkanRenderer) {
     this->device = device;
     this->physicalDevice = physicalDevice;
 }

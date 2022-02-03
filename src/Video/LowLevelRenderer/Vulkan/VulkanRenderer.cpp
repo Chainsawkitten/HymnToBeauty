@@ -55,7 +55,7 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
 
     bufferAllocator = new VulkanBufferAllocator(*this, device, physicalDevice, GetSwapChainImageCount(), nonCoherentAtomSize);
     renderPassAllocator = new VulkanRenderPassAllocator(device);
-    renderTargetAllocator = new VulkanRenderTargetAllocator(*this, device, physicalDevice);
+    renderTargetAllocator = new VulkanRenderTargetAllocator(*this, device, physicalDevice, renderPassAllocator);
 }
 
 VulkanRenderer::~VulkanRenderer() {
@@ -117,7 +117,6 @@ CommandBuffer* VulkanRenderer::CreateCommandBuffer() {
 
 void VulkanRenderer::BeginFrame() {
     bufferAllocator->BeginFrame();
-    renderPassAllocator->BeginFrame();
     renderTargetAllocator->BeginFrame();
 
     AcquireSwapChainImage();

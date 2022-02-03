@@ -16,9 +16,6 @@ class RenderPassAllocator {
     /// Destructor.
     virtual ~RenderPassAllocator();
 
-    /// Call at the beginning of each frame.
-    void BeginFrame();
-
     /// Create a render pass.
     /**
      * @param colorAttachment The color attachment to draw to.
@@ -34,6 +31,12 @@ class RenderPassAllocator {
      * @param msaaSamples Number of MSAA samples.
      */
     RenderPass* CreateAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples);
+
+    /// Free all render passes that contain the given attachment.
+    /**
+     * @param attachment The attachment.
+     */
+    void FreePasses(const Texture* attachment);
 
   private:
     struct RenderPassInfo {

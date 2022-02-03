@@ -7,14 +7,17 @@
 
 namespace Video {
 
+class RenderPassAllocator;
+
 /// Responsible for allocating render targets.
 class RenderTargetAllocator {
   public:
     /// Create a new render target allocator.
     /**
-     * @param frames How many frames before re-using buffers.
+     * @param frames How many frames to keep unused render targets alive.
+     * @param renderPassAllocator Render pass allocator.
      */
-    explicit RenderTargetAllocator(uint8_t frames);
+    RenderTargetAllocator(uint8_t frames, RenderPassAllocator* renderPassAllocator);
 
     /// Destructor.
     virtual ~RenderTargetAllocator();
@@ -62,6 +65,7 @@ class RenderTargetAllocator {
 
     std::map<RenderTargetInfo, std::deque<RenderTarget>, RenderTargetInfoCompare> freeRenderTargets;
     uint8_t frames; 
+    RenderPassAllocator* renderPassAllocator;
 
     virtual Texture* AllocateRenderTarget(const glm::uvec2& size, Texture::Format format) = 0;
 };

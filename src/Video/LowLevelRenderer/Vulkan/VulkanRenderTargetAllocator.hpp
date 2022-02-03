@@ -16,8 +16,9 @@ class VulkanRenderTargetAllocator : public RenderTargetAllocator {
      * @param vulkanRenderer The Vulkan renderer.
      * @param device The Vulkan device.
      * @param physicalDevice The physical device.
+     * @param renderPassAllocator Render pass allocator.
      */
-    VulkanRenderTargetAllocator(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice);
+    VulkanRenderTargetAllocator(VulkanRenderer& vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, RenderPassAllocator* renderPassAllocator);
 
     /// Destructor.
     ~VulkanRenderTargetAllocator() final;

@@ -5,7 +5,7 @@
 
 namespace Video {
 
-OpenGLRenderTargetAllocator::OpenGLRenderTargetAllocator(uint8_t frames) : RenderTargetAllocator(frames) {}
+OpenGLRenderTargetAllocator::OpenGLRenderTargetAllocator(uint8_t frames, RenderPassAllocator* renderPassAllocator) : RenderTargetAllocator(frames, renderPassAllocator) {}
 
 OpenGLRenderTargetAllocator::~OpenGLRenderTargetAllocator() {}
 
