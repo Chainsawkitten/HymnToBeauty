@@ -1,12 +1,13 @@
 #include "RenderTargetAllocator.hpp"
 
 #include "Texture.hpp"
-#include <Utility/Log.hpp>
+#include "RenderPassAllocator.hpp"
 
 namespace Video {
 
-RenderTargetAllocator::RenderTargetAllocator(uint8_t frames) {
+RenderTargetAllocator::RenderTargetAllocator(uint8_t frames, RenderPassAllocator* renderPassAllocator) {
     this->frames = frames;
+    this->renderPassAllocator = renderPassAllocator;
 }
 
 RenderTargetAllocator::~RenderTargetAllocator() {
@@ -24,6 +25,7 @@ void RenderTargetAllocator::BeginFrame() {
         auto i = it.second.begin();
         while (i != it.second.end()) {
             if (i->age++ > frames) {
+                renderPassAllocator->FreePasses(i->texture);
                 delete i->texture;
                 i = it.second.erase(i);
             } else {

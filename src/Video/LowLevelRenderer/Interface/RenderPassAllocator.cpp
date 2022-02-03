@@ -1,6 +1,7 @@
 #include "RenderPassAllocator.hpp"
 
 #include "Texture.hpp"
+#include <cassert>
 
 namespace Video {
 
@@ -18,11 +19,9 @@ RenderPassAllocator::~RenderPassAllocator() {
     }
 }
 
-void RenderPassAllocator::BeginFrame() {
-    /// @todo Free old render passes
-}
-
 RenderPass* RenderPassAllocator::CreateRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation) {
+    assert(colorAttachment != nullptr || depthAttachment != nullptr);
+
     RenderPassInfo renderPassInfo;
     renderPassInfo.colorAttachment = (colorAttachment == nullptr) ? 0u : colorAttachment->GetUniqueIdentifier();
     renderPassInfo.colorLoadOperation = colorLoadOperation;
@@ -55,6 +54,21 @@ RenderPass* RenderPassAllocator::CreateAttachmentlessRenderPass(const glm::uvec2
         RenderPass* renderPass = AllocateAttachmentlessRenderPass(size, msaaSamples);
         attachmentlessRenderPasses[renderPassInfo] = renderPass;
         return renderPass;
+    }
+}
+
+void RenderPassAllocator::FreePasses(const Texture* attachment) {
+    assert(attachment != nullptr);
+
+    // Delete render passes that contain the texture as either color or depth attachment.
+    auto it = renderPasses.cbegin();
+    while (it != renderPasses.cend()) {
+        if (it->first.colorAttachment == attachment->GetUniqueIdentifier() || it->first.depthAttachment == attachment->GetUniqueIdentifier()) {
+            delete it->second;
+            it = renderPasses.erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 

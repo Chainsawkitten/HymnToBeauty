@@ -72,7 +72,7 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
 
     bufferAllocator = new OpenGLBufferAllocator(2);
     renderPassAllocator = new OpenGLRenderPassAllocator();
-    renderTargetAllocator = new OpenGLRenderTargetAllocator(buffering);
+    renderTargetAllocator = new OpenGLRenderTargetAllocator(buffering, renderPassAllocator);
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
@@ -94,7 +94,6 @@ CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
 void OpenGLRenderer::BeginFrame() {
     firstSubmission = true;
     bufferAllocator->BeginFrame();
-    renderPassAllocator->BeginFrame();
     renderTargetAllocator->BeginFrame();
 }
 

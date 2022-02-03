@@ -10,8 +10,9 @@ class OpenGLRenderTargetAllocator : public RenderTargetAllocator {
     /// Create a new render target allocator.
     /**
      * @param frames How many frames before re-using buffers.
+     * @param renderPassAllocator Render pass allocator.
      */
-    explicit OpenGLRenderTargetAllocator(uint8_t frames);
+    OpenGLRenderTargetAllocator(uint8_t frames, RenderPassAllocator* renderPassAllocator);
 
     /// Destructor.
     ~OpenGLRenderTargetAllocator() final;
