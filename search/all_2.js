@@ -42,7 +42,7 @@ var searchData=
   ['bufferusage_39',['BufferUsage',['../class_video_1_1_buffer.html#a6101bc6751006c27c5050f010882efa3',1,'Video::Buffer']]],
   ['bufferusage_40',['bufferUsage',['../class_video_1_1_buffer.html#a7700c966ff636df59937a4e6bb79e3b8',1,'Video::Buffer']]],
   ['buildallscripts_41',['BuildAllScripts',['../class_script_manager.html#ae05cce58150907a311661fe592b1e76c',1,'ScriptManager']]],
-  ['building_42',['Building',['../md_docs__getting_started__building.html',1,'']]],
+  ['building_42',['Building',['../_building.html',1,'GettingStarted']]],
   ['building_2emd_43',['Building.md',['../_building_8md.html',1,'']]],
   ['buildscript_44',['BuildScript',['../class_script_manager.html#a8f045e5dfdd04bd77d8234d1424fa538',1,'ScriptManager']]],
   ['button_45',['Button',['../class_input_handler.html#af877d52dbdb6f2bb992f5c22de7b93b4',1,'InputHandler::Button()'],['../struct_input_1_1_button.html',1,'Input::Button']]],

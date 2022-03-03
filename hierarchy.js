@@ -25,18 +25,6 @@ var hierarchy =
     ] ],
     [ "Video::VulkanRenderPass::Compatibility", "struct_video_1_1_vulkan_render_pass_1_1_compatibility.html", null ],
     [ "ComponentContainer< C >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Camera >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::DirectionalLight >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Listener >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Material >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Mesh >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::PointLight >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::RigidBody >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Script >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Shape >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::SoundSource >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::SpotLight >", "class_component_container.html", null ],
-    [ "ComponentContainer< Component::Trigger >", "class_component_container.html", null ],
     [ "Video::ComputePipeline", "class_video_1_1_compute_pipeline.html", [
       [ "Video::OpenGLComputePipeline", "class_video_1_1_open_g_l_compute_pipeline.html", null ],
       [ "Video::VulkanComputePipeline", "class_video_1_1_vulkan_compute_pipeline.html", null ]
@@ -104,7 +92,6 @@ var hierarchy =
     [ "Video::ZBinning::LightInfo", "struct_video_1_1_z_binning_1_1_light_info.html", null ],
     [ "Video::DebugDrawing::Line", "struct_video_1_1_debug_drawing_1_1_line.html", null ],
     [ "Utility::LockBox< T >", "class_utility_1_1_lock_box.html", null ],
-    [ "Utility::LockBox< Physics::Trigger >", "class_utility_1_1_lock_box.html", null ],
     [ "Log", "class_log.html", null ],
     [ "GUI::LogView", "class_g_u_i_1_1_log_view.html", null ],
     [ "Video::LowLevelRenderer", "class_video_1_1_low_level_renderer.html", [

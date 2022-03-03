@@ -7,7 +7,7 @@ var searchData=
   ['implementation_2ecpp_4',['Implementation.cpp',['../_implementation_8cpp.html',1,'']]],
   ['implementation_2ehpp_5',['Implementation.hpp',['../_implementation_8hpp.html',1,'']]],
   ['import_6',['Import',['../class_g_l_t_f_importer.html#a7e782573fbb8a26124e6a18a3db4897a',1,'GLTFImporter']]],
-  ['importing_20a_203d_20model_7',['Importing a 3D model',['../md_docs__getting_started__your_first_hymn__importing3_d_model.html',1,'']]],
+  ['importing_20a_203d_20model_7',['Importing a 3D model',['../_your_first_hymn__importing3_d_model.html',1,'YourFirstHymn']]],
   ['importing3dmodel_2emd_8',['Importing3DModel.md',['../_importing3_d_model_8md.html',1,'']]],
   ['index_5fbuffer_9',['INDEX_BUFFER',['../class_video_1_1_buffer.html#a6101bc6751006c27c5050f010882efa3a24ba47a6b7ca772e4185e7a7b54d4c90',1,'Video::Buffer']]],
   ['indexbuffer_10',['indexBuffer',['../class_video_1_1_geometry_1_1_geometry3_d.html#adc99e1e1673212e4a451278350785dbd',1,'Video::Geometry::Geometry3D']]],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['building_0',['Building',['../md_docs__getting_started__building.html',1,'']]]
+  ['building_0',['Building',['../_building.html',1,'GettingStarted']]]
 ];

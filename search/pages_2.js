@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['development_0',['Development',['../md_docs__development.html',1,'']]],
-  ['directional_20light_1',['Directional light',['../md_docs__components__directional_light.html',1,'']]]
+  ['development_0',['Development',['../_development.html',1,'index']]],
+  ['directional_20light_1',['Directional light',['../_component_directional_light.html',1,'Components']]]
 ];
