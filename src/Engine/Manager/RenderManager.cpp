@@ -55,63 +55,47 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
     if (windowSize.x == 0 || windowSize.y == 0)
         return;
 
-    // Find camera entity.
-    if (cameraEntity == nullptr) {
-        for (Camera* camera : cameras.GetAll()) {
-            if (camera->entity->IsEnabled())
-                cameraEntity = camera->entity;
-        }
-    }
-
     renderer->BeginFrame();
-
-    if (cameraEntity == nullptr) {
-        renderer->RenderEmpty();
-        return;
-    }
-
+    
     // Setup the render scene.
     Video::RenderScene renderScene;
     {
         PROFILE("Setup render scene");
 
-        // Camera.
-        const Camera* camera = cameraEntity->GetComponent<Camera>();
-        renderScene.camera.position = cameraEntity->GetWorldPosition();
-        renderScene.camera.viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
-        renderScene.camera.projectionMatrix = camera->GetProjection(windowSize);
-        renderScene.camera.viewProjectionMatrix = renderScene.camera.projectionMatrix * renderScene.camera.viewMatrix;
-        renderScene.camera.zNear = camera->zNear;
-        renderScene.camera.zFar = camera->zFar;
-
-        renderScene.camera.postProcessingConfiguration.gamma = camera->filterSettings.gamma;
-        renderScene.camera.postProcessingConfiguration.fxaa.enabled = camera->filterSettings.fxaa;
-        renderScene.camera.postProcessingConfiguration.dither.enabled = camera->filterSettings.ditherApply;
-        renderScene.camera.postProcessingConfiguration.bloom.enabled = camera->filterSettings.bloom;
-        renderScene.camera.postProcessingConfiguration.bloom.intensity = camera->filterSettings.bloomIntensity;
-        renderScene.camera.postProcessingConfiguration.bloom.threshold = camera->filterSettings.bloomThreshold;
-        renderScene.camera.postProcessingConfiguration.bloom.scatter = camera->filterSettings.bloomScatter;
-
-        // Lights.
-        AddLights(renderScene, lighting, showLightVolumes);
-
-        // Meshes.
-        AddMeshes(renderScene);
-
-        // Editor entities.
-        if (showSoundSources || showLightSources || showCameras || showPhysics) {
-            AddEditorEntities(renderScene, showSoundSources, showLightSources, showCameras, showPhysics);
+        if (cameraEntity != nullptr) {
+            // Camera specified.
+            AddCamera(renderScene, *cameraEntity->GetComponent<Camera>(), windowSize);
+        } else {
+            // No camera specified. Render all the cameras.
+            for (Camera* camera : cameras.GetAll()) {
+                if (camera->entity->IsEnabled()) {
+                    AddCamera(renderScene, *camera, windowSize);
+                }
+            }
         }
 
-        // Debug shapes.
-        AddDebugShapes(renderScene);
+        if (!renderScene.cameras.empty()) {
+            // Lights.
+            AddLights(renderScene, lighting, showLightVolumes);
+
+            // Meshes.
+            AddMeshes(renderScene);
+
+            // Editor entities.
+            if (showSoundSources || showLightSources || showCameras || showPhysics) {
+                AddEditorEntities(renderScene, showSoundSources, showLightSources, showCameras, showPhysics);
+            }
+
+            // Debug shapes.
+            AddDebugShapes(renderScene);
+        }
     }
 
     renderer->Render(renderScene);
 }
 
 void RenderManager::UpdateBufferSize() {
-    renderer->SetRenderSurfaceSize(MainWindow::GetInstance()->GetSize());
+    renderer->SetOutputSize(MainWindow::GetInstance()->GetSize());
 }
 
 Component::DirectionalLight* RenderManager::CreateDirectionalLight() {
@@ -143,6 +127,7 @@ Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
     camera->fieldOfView = node.get("fieldOfView", 45.f).asFloat();
     camera->zNear = node.get("zNear", 0.1f).asFloat();
     camera->zFar = node.get("zFar", 100.f).asFloat();
+    camera->viewport = Json::LoadVec4(node["viewport"]);
 
     const Json::Value& filtersNode = node["filters"];
     camera->filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
@@ -250,6 +235,29 @@ void RenderManager::ClearKilledComponents() {
 
 Video::Renderer* RenderManager::GetRenderer() {
     return renderer;
+}
+
+void RenderManager::AddCamera(Video::RenderScene& renderScene, const Component::Camera& camera, const glm::uvec2& windowSize) {
+    Video::RenderScene::Camera renderCamera = {};
+
+    Entity* cameraEntity = camera.entity;
+    renderCamera.position = cameraEntity->GetWorldPosition();
+    renderCamera.viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
+    renderCamera.projectionMatrix = camera.GetProjection(glm::vec2(windowSize) * glm::vec2(camera.viewport.z, camera.viewport.w));
+    renderCamera.viewProjectionMatrix = renderCamera.projectionMatrix * renderCamera.viewMatrix;
+    renderCamera.zNear = camera.zNear;
+    renderCamera.zFar = camera.zFar;
+    renderCamera.viewport = camera.viewport;
+
+    renderCamera.postProcessingConfiguration.gamma = camera.filterSettings.gamma;
+    renderCamera.postProcessingConfiguration.fxaa.enabled = camera.filterSettings.fxaa;
+    renderCamera.postProcessingConfiguration.dither.enabled = camera.filterSettings.ditherApply;
+    renderCamera.postProcessingConfiguration.bloom.enabled = camera.filterSettings.bloom;
+    renderCamera.postProcessingConfiguration.bloom.intensity = camera.filterSettings.bloomIntensity;
+    renderCamera.postProcessingConfiguration.bloom.threshold = camera.filterSettings.bloomThreshold;
+    renderCamera.postProcessingConfiguration.bloom.scatter = camera.filterSettings.bloomScatter;
+
+    renderScene.cameras.push_back(renderCamera);
 }
 
 void RenderManager::AddLights(Video::RenderScene& renderScene, bool lighting, bool showLightVolumes) {

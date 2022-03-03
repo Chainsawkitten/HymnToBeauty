@@ -32,6 +32,20 @@ Json::Value SaveVec3(const glm::vec3& value);
  */
 glm::vec3 LoadVec3(const Value& value);
 
+/// Convert a vec4 to a JSON node.
+/**
+ * @param value %Value to convert.
+ * @return JSON node.
+ */
+Json::Value SaveVec4(const glm::vec4& value);
+
+/// Load a vec4 from a JSON node.
+/**
+ * @param value The JSON node to load from.
+ * @return The loaded vec4.
+ */
+glm::vec4 LoadVec4(const Value& value);
+
 /// Convert a quaternion into a JSON node.
 /**
  * @param value %Value to convert.

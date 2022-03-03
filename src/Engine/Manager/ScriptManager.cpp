@@ -402,6 +402,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Camera", "float fieldOfView", asOFFSET(Camera, fieldOfView));
     engine->RegisterObjectProperty("Camera", "float zNear", asOFFSET(Camera, zNear));
     engine->RegisterObjectProperty("Camera", "float zFar", asOFFSET(Camera, zFar));
+    engine->RegisterObjectProperty("Camera", "vec4 viewport", asOFFSET(Camera, viewport));
 
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
 

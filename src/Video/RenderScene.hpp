@@ -53,23 +53,19 @@ struct RenderScene {
     /// A camera through which the scene should be rendered.
     struct Camera {
         glm::vec3 position;
-
         glm::mat4 viewMatrix;
-
         glm::mat4 projectionMatrix;
-
         glm::mat4 viewProjectionMatrix;
-
         float zNear;
-
         float zFar;
+		glm::vec4 viewport;
 
         /// Configuration of post-processing effects.
         Video::PostProcessing::Configuration postProcessingConfiguration;
     };
 
-    /// The camera through which to render the scene.
-    Camera camera;
+    /// The cameras through which to render the scene.
+    std::vector<Camera> cameras;
 
     /// A mesh that should be rendered.
     struct Mesh {

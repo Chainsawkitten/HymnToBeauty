@@ -234,6 +234,7 @@ void EntityEditor::CameraEditor(Component::Camera* camera) {
     ImGui::DraggableFloat("Field of view", camera->fieldOfView, 0.0f, 180.f);
     ImGui::DraggableFloat("Z near", camera->zNear, 0.0f);
     ImGui::DraggableFloat("Z far", camera->zFar, 0.0f);
+    ImGui::InputFloat4("Viewport", &camera->viewport.x);
 
     if (ImGui::CollapsingHeader("Filters")) {
         ImGui::Indent();
