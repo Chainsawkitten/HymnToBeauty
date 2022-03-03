@@ -25,6 +25,7 @@ class Texture {
     /**
      * @param type The type of texture.
      * @param size The size of the texture.
+     * @param format The format of the texture.
      */
     Texture(Type type, const glm::uvec2& size, Format format);
 
