@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
+#include <Engine/Util/Json.hpp>
 
 using namespace Component;
 
@@ -12,6 +13,7 @@ Json::Value Camera::Save() const {
     component["fieldOfView"] = fieldOfView;
     component["zNear"] = zNear;
     component["zFar"] = zFar;
+    component["viewport"] = Json::SaveVec4(viewport);
 
     Json::Value filtersNode;
     filtersNode["gamma"] = filterSettings.gamma;

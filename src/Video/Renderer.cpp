@@ -13,8 +13,6 @@
 #include "LowLevelRenderer/Interface/Shader.hpp"
 #include "LowLevelRenderer/Interface/ShaderProgram.hpp"
 #include "LowLevelRenderer/Interface/Texture.hpp"
-#include "EditorEntity.vert.hpp"
-#include "EditorEntity.frag.hpp"
 #include <Utility/Log.hpp>
 #include <Utility/Profiling/Profiling.hpp>
 
@@ -25,6 +23,11 @@
 #ifdef VULKAN_SUPPORT
 #include "LowLevelRenderer/Vulkan/VulkanRenderer.hpp"
 #endif
+
+#include "EditorEntity.vert.hpp"
+#include "EditorEntity.frag.hpp"
+#include "PostProcessing.vert.hpp"
+#include "SampleTexture.frag.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -45,54 +48,73 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 #endif
     }
 
-    // Get the size of the window (and thus initial size of the render surface).
+    // Get the size of the window (and thus initial size of the output texture).
     int width, height;
     glfwGetWindowSize(window, &width, &height);
-    renderSurfaceSize = glm::uvec2(width, height);
+    outputSize = glm::uvec2(width, height);
 
     commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     staticRenderProgram = new StaticRenderProgram(lowLevelRenderer);
 
-    zBinning = new ZBinning(lowLevelRenderer, renderSurfaceSize);
+    zBinning = new ZBinning(lowLevelRenderer, outputSize);
 
     postProcessing = new PostProcessing(lowLevelRenderer);
 
     debugDrawing = new DebugDrawing(this);
 
-    // Create icon geometry.
-    glm::vec2 vertex[6];
-    vertex[0] = glm::vec2(0.0, 1.0);
-    vertex[1] = glm::vec2(0.0, 0.0);
-    vertex[2] = glm::vec2(1.0, 1.0);
-    vertex[3] = glm::vec2(0.0, 0.0);
-    vertex[4] = glm::vec2(1.0, 0.0);
-    vertex[5] = glm::vec2(1.0, 1.0);
+	// Blitting.
+	{
+		blitVertexShader = lowLevelRenderer->CreateShader(POSTPROCESSING_VERT, Shader::Type::VERTEX_SHADER);
+		blitFragmentShader = lowLevelRenderer->CreateShader(SAMPLETEXTURE_FRAG, Shader::Type::FRAGMENT_SHADER);
+		blitShaderProgram = lowLevelRenderer->CreateShaderProgram({blitVertexShader, blitFragmentShader});
 
-    iconVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(glm::vec2) * 6, &vertex);
+		GraphicsPipeline::Configuration configuration = {};
+        configuration.primitiveType = PrimitiveType::TRIANGLE;
+        configuration.polygonMode = PolygonMode::FILL;
+        configuration.cullFace = CullFace::NONE;
+        configuration.blendMode = BlendMode::NONE;
+        configuration.depthMode = DepthMode::NONE;
 
-    VertexDescription::Attribute attribute;
-    attribute.size = 2;
-    attribute.type = VertexDescription::AttributeType::FLOAT;
-    attribute.normalized = false;
+		blitGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(blitShaderProgram, configuration);
+	}
 
-    iconVertexDescription = lowLevelRenderer->CreateVertexDescription(1, &attribute);
-    iconGeometryBinding = lowLevelRenderer->CreateGeometryBinding(iconVertexDescription, iconVertexBuffer);
+	// Icon rendering.
+	{
+		// Create icon geometry.
+		glm::vec2 vertex[6];
+		vertex[0] = glm::vec2(0.0, 1.0);
+		vertex[1] = glm::vec2(0.0, 0.0);
+		vertex[2] = glm::vec2(1.0, 1.0);
+		vertex[3] = glm::vec2(0.0, 0.0);
+		vertex[4] = glm::vec2(1.0, 0.0);
+		vertex[5] = glm::vec2(1.0, 1.0);
 
-    // Icon rendering.
-    iconVertexShader = lowLevelRenderer->CreateShader(EDITORENTITY_VERT, Shader::Type::VERTEX_SHADER);
-    iconFragmentShader = lowLevelRenderer->CreateShader(EDITORENTITY_FRAG, Shader::Type::FRAGMENT_SHADER);
-    iconShaderProgram = lowLevelRenderer->CreateShaderProgram({iconVertexShader, iconFragmentShader});
+		iconVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(glm::vec2) * 6, &vertex);
 
-    GraphicsPipeline::Configuration configuration = {};
-    configuration.primitiveType = PrimitiveType::TRIANGLE;
-    configuration.polygonMode = PolygonMode::FILL;
-    configuration.cullFace = CullFace::NONE;
-    configuration.blendMode = BlendMode::ALPHA_ONE_MINUS_SRC_ALPHA;
-    configuration.depthMode = DepthMode::TEST;
-    configuration.depthComparison = DepthComparison::LESS;
+		VertexDescription::Attribute attribute;
+		attribute.size = 2;
+		attribute.type = VertexDescription::AttributeType::FLOAT;
+		attribute.normalized = false;
 
-    iconGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(iconShaderProgram, configuration, iconVertexDescription);
+		iconVertexDescription = lowLevelRenderer->CreateVertexDescription(1, &attribute);
+		iconGeometryBinding = lowLevelRenderer->CreateGeometryBinding(iconVertexDescription, iconVertexBuffer);
+
+		// Pipeline.
+		iconVertexShader = lowLevelRenderer->CreateShader(EDITORENTITY_VERT, Shader::Type::VERTEX_SHADER);
+		iconFragmentShader = lowLevelRenderer->CreateShader(EDITORENTITY_FRAG, Shader::Type::FRAGMENT_SHADER);
+		iconShaderProgram = lowLevelRenderer->CreateShaderProgram({iconVertexShader, iconFragmentShader});
+
+		GraphicsPipeline::Configuration configuration = {};
+		configuration.primitiveType = PrimitiveType::TRIANGLE;
+		configuration.polygonMode = PolygonMode::FILL;
+		configuration.cullFace = CullFace::NONE;
+		configuration.blendMode = BlendMode::ALPHA_ONE_MINUS_SRC_ALPHA;
+		configuration.depthMode = DepthMode::TEST;
+		configuration.depthComparison = DepthComparison::LESS;
+
+		iconGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(iconShaderProgram, configuration, iconVertexDescription);
+	}
 }
 
 Renderer::~Renderer() {
@@ -100,6 +122,12 @@ Renderer::~Renderer() {
 
     delete zBinning;
     delete postProcessing;
+
+	// Blitting.
+    delete blitGraphicsPipeline;
+    delete blitShaderProgram;
+    delete blitVertexShader;
+    delete blitFragmentShader;
 
     // Icon rendering.
     delete iconGraphicsPipeline;
@@ -118,9 +146,8 @@ LowLevelRenderer* Renderer::GetLowLevelRenderer() {
     return lowLevelRenderer;
 }
 
-void Renderer::SetRenderSurfaceSize(const glm::uvec2& size) {
-    renderSurfaceSize = size;
-    zBinning->SetRenderSurfaceSize(size);
+void Renderer::SetOutputSize(const glm::uvec2& size) {
+    outputSize = size;
 }
 
 const glm::uvec2& Renderer::GetRenderSurfaceSize() const {
@@ -129,55 +156,75 @@ const glm::uvec2& Renderer::GetRenderSurfaceSize() const {
 
 void Renderer::BeginFrame() {
     lowLevelRenderer->BeginFrame();
+    outputTexture = lowLevelRenderer->CreateRenderTarget(outputSize, Texture::Format::R8G8B8A8);
 }
 
 void Renderer::Render(const RenderScene& renderScene) {
-    // Set image processing variables.
-    staticRenderProgram->SetGamma(renderScene.camera.postProcessingConfiguration.gamma);
+    bool firstCamera = true;
 
-    {
+    for (const RenderScene::Camera& camera : renderScene.cameras) {
         PROFILE("Render camera");
 
-        UpdateLights(renderScene);
+		glm::uvec2 cameraOffset = glm::uvec2(glm::vec2(camera.viewport.x, camera.viewport.y) * glm::vec2(outputSize));
+        glm::uvec2 cameraSize = glm::uvec2(glm::vec2(camera.viewport.z, camera.viewport.w) * glm::vec2(outputSize));
+		SetRenderSurfaceSize(cameraSize);
+
+        UpdateLights(renderScene, camera);
 
         std::vector<std::size_t> culledMeshes;
-        culledMeshes = FrustumCulling(renderScene);
+        culledMeshes = FrustumCulling(renderScene, camera);
 
+		// Depth pre-pass
         depthTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::D32);
-        RenderDepthPrePass(renderScene, culledMeshes);
+        RenderDepthPrePass(renderScene, culledMeshes, camera);
 
+		// Main pass
         colorTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R11G11B10);
-        RenderMainPass(renderScene, culledMeshes);
+        commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD, "Main pass");
 
-        RenderDebugShapes(renderScene);
+        staticRenderProgram->SetGamma(camera.postProcessingConfiguration.gamma);
+        RenderOpaques(renderScene, culledMeshes, camera);
+        RenderDebugShapes(renderScene, camera);
 
         commandBuffer->EndRenderPass();
 
         lowLevelRenderer->FreeRenderTarget(depthTexture);
 
+        // Post-processing and icons.
         {
             PROFILE("Post-processing");
 
             postProcessingTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R8G8B8A8);
-            postProcessing->Configure(renderScene.camera.postProcessingConfiguration, postProcessingTexture);
+            postProcessing->Configure(camera.postProcessingConfiguration, postProcessingTexture);
             postProcessing->ApplyPostProcessing(*commandBuffer, colorTexture);
         }
 
         lowLevelRenderer->FreeRenderTarget(colorTexture);
 
-        RenderIcons(renderScene);
-    }
-}
+        RenderIcons(renderScene, camera);
 
-void Renderer::RenderEmpty() {
-    postProcessingTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R8G8B8A8);
-    commandBuffer->BeginRenderPass(postProcessingTexture, RenderPass::LoadOperation::CLEAR, nullptr, RenderPass::LoadOperation::DONT_CARE, "Empty render pass");
+        commandBuffer->EndRenderPass();
+
+        // Blit to output texture according to viewport.
+        commandBuffer->BeginRenderPass(outputTexture, firstCamera ? RenderPass::LoadOperation::CLEAR : RenderPass::LoadOperation::LOAD, nullptr, RenderPass::LoadOperation::DONT_CARE, "Blit");
+        commandBuffer->BindGraphicsPipeline(blitGraphicsPipeline);
+        commandBuffer->SetViewportAndScissor(cameraOffset, cameraSize);
+        commandBuffer->BindMaterial({ postProcessingTexture });
+        commandBuffer->Draw(3);
+        commandBuffer->EndRenderPass();
+
+        lowLevelRenderer->FreeRenderTarget(postProcessingTexture);
+
+        firstCamera = false;
+    }
+
+    commandBuffer->BeginRenderPass(outputTexture, RenderPass::LoadOperation::LOAD, nullptr, RenderPass::LoadOperation::DONT_CARE, "GUI");
 }
 
 void Renderer::Present() {
     commandBuffer->EndRenderPass();
-    commandBuffer->BlitToSwapChain(postProcessingTexture);
-    lowLevelRenderer->FreeRenderTarget(postProcessingTexture);
+    commandBuffer->BlitToSwapChain(outputTexture);
+    lowLevelRenderer->FreeRenderTarget(outputTexture);
 
     lowLevelRenderer->Submit(commandBuffer);
 
@@ -192,10 +239,15 @@ CommandBuffer* Renderer::GetCommandBuffer() {
     return commandBuffer;
 }
 
-void Renderer::UpdateLights(const RenderScene& renderScene) {
+void Renderer::SetRenderSurfaceSize(const glm::uvec2& size) {
+    renderSurfaceSize = size;
+    zBinning->SetRenderSurfaceSize(size);
+}
+
+void Renderer::UpdateLights(const RenderScene& renderScene, const RenderScene::Camera& camera) {
     PROFILE("Update lights");
 
-    const Video::Frustum frustum(renderScene.camera.viewProjectionMatrix);
+    const Video::Frustum frustum(camera.viewProjectionMatrix);
 
     std::vector<DirectionalLight> directionalLightStructs;
     std::vector<Light> lights;
@@ -204,7 +256,7 @@ void Renderer::UpdateLights(const RenderScene& renderScene) {
     for (const RenderScene::DirectionalLight& directionalLight : renderScene.directionalLights) {
         glm::vec4 direction(directionalLight.direction, 0.0f);
         Video::DirectionalLight light;
-        light.direction = renderScene.camera.viewMatrix * -direction;
+        light.direction = camera.viewMatrix * -direction;
         light.intensitiesAmbientCoefficient = glm::vec4(directionalLight.color, directionalLight.ambientCoefficient);
         directionalLightStructs.push_back(light);
     }
@@ -215,8 +267,8 @@ void Renderer::UpdateLights(const RenderScene& renderScene) {
         Video::Sphere sphere(spotLight.position, spotLight.distance);
 
         if (frustum.Intersects(sphere)) {
-            glm::vec4 direction(renderScene.camera.viewMatrix * glm::vec4(spotLight.direction, 0.0f));
-            glm::vec4 position(renderScene.camera.viewMatrix * (glm::vec4(spotLight.position, 1.0f)));
+            glm::vec4 direction(camera.viewMatrix * glm::vec4(spotLight.direction, 0.0f));
+            glm::vec4 position(camera.viewMatrix * (glm::vec4(spotLight.position, 1.0f)));
             Video::Light light;
             light.positionDistance = glm::vec4(position.x, position.y, position.z, spotLight.distance);
             light.intensitiesAttenuation = glm::vec4(spotLight.color * spotLight.intensity, spotLight.attenuation);
@@ -231,7 +283,7 @@ void Renderer::UpdateLights(const RenderScene& renderScene) {
         Video::Sphere sphere(pointLight.position, pointLight.distance);
 
         if (frustum.Intersects(sphere)) {
-            glm::vec4 position(renderScene.camera.viewMatrix * (glm::vec4(pointLight.position, 1.0f)));
+            glm::vec4 position(camera.viewMatrix * (glm::vec4(pointLight.position, 1.0f)));
             Video::Light light;
             light.positionDistance = glm::vec4(position.x, position.y, position.z, pointLight.distance);
             light.intensitiesAttenuation = glm::vec4(pointLight.color * pointLight.intensity, pointLight.attenuation);
@@ -241,16 +293,16 @@ void Renderer::UpdateLights(const RenderScene& renderScene) {
     }
 
     // Update light buffer.
-    zBinning->BinLights(*commandBuffer, directionalLightStructs, lights, renderScene.camera.projectionMatrix, renderScene.camera.zNear, renderScene.camera.zFar);
+    zBinning->BinLights(*commandBuffer, directionalLightStructs, lights, camera.projectionMatrix, camera.zNear, camera.zFar);
 }
 
-std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene) {
+std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene, const RenderScene::Camera& camera) {
     PROFILE("Frustum culling");
 
     std::vector<std::size_t> culledMeshes;
 
     for (std::size_t i = 0; i < renderScene.meshes.size(); ++i) {
-        Video::Frustum frustum(renderScene.camera.viewProjectionMatrix * renderScene.meshes[i].modelMatrix);
+        Video::Frustum frustum(camera.viewProjectionMatrix * renderScene.meshes[i].modelMatrix);
         if (!frustum.Intersects(renderScene.meshes[i].axisAlignedBoundingBox))
             continue;
 
@@ -260,14 +312,14 @@ std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene
     return culledMeshes;
 }
 
-void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes) {
+void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const RenderScene::Camera& camera) {
     PROFILE("Depth pre-pass");
 
     commandBuffer->BeginRenderPass(nullptr, RenderPass::LoadOperation::DONT_CARE, depthTexture, RenderPass::LoadOperation::CLEAR, "Depth pre-pass");
 
     // Static meshes.
     if (!culledMeshes.empty()) {
-        staticRenderProgram->PreDepthRender(*commandBuffer, renderScene.camera.viewMatrix, renderScene.camera.projectionMatrix);
+        staticRenderProgram->PreDepthRender(*commandBuffer, camera.viewMatrix, camera.projectionMatrix);
         commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 
         for (std::size_t meshIndex : culledMeshes) {
@@ -278,14 +330,12 @@ void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vec
     commandBuffer->EndRenderPass();
 }
 
-void Renderer::RenderMainPass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes) {
-    PROFILE("Main pass");
-
-    commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD, "Main pass");
+void Renderer::RenderOpaques(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const RenderScene::Camera& camera) {
+    PROFILE("Render opaques");
 
     // Static meshes.
     if (!culledMeshes.empty()) {
-        staticRenderProgram->PreRender(*commandBuffer, renderScene.camera.viewMatrix, renderScene.camera.projectionMatrix, zBinning->GetLightInfo());
+        staticRenderProgram->PreRender(*commandBuffer, camera.viewMatrix, camera.projectionMatrix, zBinning->GetLightInfo());
         commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 
         for (std::size_t meshIndex : culledMeshes) {
@@ -294,11 +344,11 @@ void Renderer::RenderMainPass(const RenderScene& renderScene, const std::vector<
     }
 }
 
-void Renderer::RenderDebugShapes(const RenderScene& renderScene) {
+void Renderer::RenderDebugShapes(const RenderScene& renderScene, const RenderScene::Camera& camera) {
     PROFILE("Render debug entities");
 
     // Bind render target.
-    debugDrawing->StartDebugDrawing(renderScene.camera.viewProjectionMatrix);
+    debugDrawing->StartDebugDrawing(camera.viewProjectionMatrix);
 
     // Points.
     for (const DebugDrawing::Point& point : renderScene.debugDrawingPoints)
@@ -339,12 +389,12 @@ void Renderer::RenderDebugShapes(const RenderScene& renderScene) {
     debugDrawing->EndDebugDrawing();
 }
 
-void Renderer::RenderIcons(const RenderScene& renderScene) {
+void Renderer::RenderIcons(const RenderScene& renderScene, const RenderScene::Camera& camera) {
     if (!renderScene.icons.empty()) {
         PROFILE("Render icons");
 
-        const glm::vec3 up(renderScene.camera.viewMatrix[0][1], renderScene.camera.viewMatrix[1][1], renderScene.camera.viewMatrix[2][1]);
-        PrepareRenderingIcons(renderScene.camera.viewProjectionMatrix, renderScene.camera.position, up);
+        const glm::vec3 up(camera.viewMatrix[0][1], camera.viewMatrix[1][1], camera.viewMatrix[2][1]);
+        PrepareRenderingIcons(camera.viewProjectionMatrix, camera.position, up);
 
         for (const RenderScene::Icon& icon : renderScene.icons) {
             commandBuffer->BindMaterial({icon.texture->GetTexture()});

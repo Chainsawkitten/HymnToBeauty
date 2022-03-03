@@ -171,6 +171,8 @@ class RenderManager {
     RenderManager(RenderManager const&) = delete;
     void operator=(RenderManager const&) = delete;
 
+    void AddCamera(Video::RenderScene& renderScene, const Component::Camera& camera, const glm::uvec2& windowSize);
+
     void AddLights(Video::RenderScene& renderScene, bool lighting, bool showLightVolumes);
     void AddWorldLights(Video::RenderScene& renderScene, bool showLightVolumes);
     void AddAmbientLight(Video::RenderScene& renderScene);

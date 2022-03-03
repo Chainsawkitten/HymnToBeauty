@@ -4,6 +4,7 @@
 #include <vector>
 #include "Lighting/Light.hpp"
 #include "PostProcessing/PostProcessing.hpp"
+#include "RenderScene.hpp"
 
 struct GLFWwindow;
 
@@ -19,7 +20,6 @@ class CommandBuffer;
 class Texture;
 class ZBinning;
 class DebugDrawing;
-struct RenderScene;
 namespace Geometry {
 class Geometry3D;
 } // namespace Geometry
@@ -49,11 +49,11 @@ class Renderer {
      */
     LowLevelRenderer* GetLowLevelRenderer();
 
-    /// Set the size of the render surface.
+    /// Set the size of the output image.
     /**
-     * @param size The size of the render surface.
+     * @param size The size of the output image.
      */
-    void SetRenderSurfaceSize(const glm::uvec2& size);
+    void SetOutputSize(const glm::uvec2& size);
 
     /// Get the size of the render surface.
     /**
@@ -70,14 +70,11 @@ class Renderer {
      */
     void Render(const RenderScene& renderScene);
 
-    /// Render a black background.
-    void RenderEmpty();
-
     /// Display the rendered results to back buffer and swap back and front buffers.
     void Present();
 
     /// Wait until rendering and presentation is done.
-    /** 
+    /**
      * \note
      * Needs to be done before destroying render resources or they could still be in use.
      */
@@ -92,18 +89,21 @@ class Renderer {
   private:
     Renderer(const Renderer& other) = delete;
 
-    void UpdateLights(const RenderScene& renderScene);
-    std::vector<std::size_t> FrustumCulling(const RenderScene& renderScene);
-    void RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes);
-    void RenderMainPass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes);
-    void RenderDebugShapes(const RenderScene& renderScene);
-    void RenderIcons(const RenderScene& renderScene);
+    void SetRenderSurfaceSize(const glm::uvec2& size);
+    void UpdateLights(const RenderScene& renderScene, const RenderScene::Camera& camera);
+    std::vector<std::size_t> FrustumCulling(const RenderScene& renderScene, const RenderScene::Camera& camera);
+    void RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const RenderScene::Camera& camera);
+    void RenderOpaques(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const RenderScene::Camera& camera);
+    void RenderDebugShapes(const RenderScene& renderScene, const RenderScene::Camera& camera);
+    void RenderIcons(const RenderScene& renderScene, const RenderScene::Camera& camera);
     void PrepareRenderingIcons(const glm::mat4& viewProjectionMatrix, const glm::vec3& cameraPosition, const glm::vec3& cameraUp);
     void RenderIcon(const glm::vec3& position);
 
     LowLevelRenderer* lowLevelRenderer;
 
+    glm::uvec2 outputSize;
     glm::uvec2 renderSurfaceSize;
+    Texture* outputTexture;
     Texture* colorTexture;
     Texture* depthTexture;
     Texture* postProcessingTexture;
@@ -116,6 +116,12 @@ class Renderer {
     PostProcessing* postProcessing;
 
     DebugDrawing* debugDrawing;
+
+    // Blitting (viewport).
+    Shader* blitVertexShader;
+    Shader* blitFragmentShader;
+    ShaderProgram* blitShaderProgram;
+    GraphicsPipeline* blitGraphicsPipeline;
 
     // Icon rendering.
     Shader* iconVertexShader;

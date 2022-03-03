@@ -185,7 +185,7 @@ void VulkanCommandBuffer::SetViewport(const glm::uvec2& origin, const glm::uvec2
 
     VkViewport viewport = {};
     viewport.x = static_cast<float>(origin.x);
-    viewport.y = static_cast<float>(origin.x);
+    viewport.y = static_cast<float>(origin.y);
     viewport.width = static_cast<float>(size.x);
     viewport.height = static_cast<float>(size.y);
     viewport.minDepth = 0.0f;

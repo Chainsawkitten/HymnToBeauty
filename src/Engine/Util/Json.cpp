@@ -25,6 +25,19 @@ glm::vec3 LoadVec3(const Value& value) {
     return glm::vec3(value.get("x", 0.f).asFloat(), value.get("y", 0.f).asFloat(), value.get("z", 0.f).asFloat());
 }
 
+Value SaveVec4(const glm::vec4& value) {
+    Value node;
+    node["x"] = value.x;
+    node["y"] = value.y;
+    node["z"] = value.z;
+    node["w"] = value.w;
+    return node;
+}
+
+glm::vec4 LoadVec4(const Value& value) {
+    return glm::vec4(value.get("x", 0.f).asFloat(), value.get("y", 0.f).asFloat(), value.get("z", 0.f).asFloat(), value.get("w", 0.f).asFloat());
+}
+
 Value SaveQuaternion(const glm::quat& value) {
     Value node;
     node["w"] = value.w;

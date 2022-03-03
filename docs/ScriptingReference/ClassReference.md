@@ -114,6 +114,9 @@ Near plane.
 `float zFar`  
 Far plane.
 
+`vec4 viewport`  
+Viewport.
+
 \section Listener Component::Listener
 A sound receptor.
 

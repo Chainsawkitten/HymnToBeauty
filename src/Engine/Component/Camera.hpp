@@ -37,6 +37,9 @@ class Camera : public SuperComponent {
      */
     float zFar = 100.f;
 
+	/// Viewport.
+	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
     /// Filter settings.
     struct FilterSettings {
         /// Whether to enable FXAA.
