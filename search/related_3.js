@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['managers_3065',['Managers',['../class_hub.html#a4c7f94eccb6da340484d34bd768b6082',1,'Hub']]]
+  ['managers_0',['Managers',['../class_hub.html#ac90dd77b371f5f4899f64090b7cdc4d3',1,'Hub']]]
 ];

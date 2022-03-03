@@ -14,7 +14,7 @@ var dir_3072bc1f55ed1280fe4fbe6b21c78379 =
     [ "Engine.cpp", "_engine_8cpp.html", null ],
     [ "Engine.hpp", "_engine_8hpp.html", [
       [ "Engine", "class_engine.html", "class_engine" ],
-      [ "Configuration", "struct_engine_1_1_configuration.html", "struct_engine_1_1_configuration" ]
+      [ "Engine::Configuration", "struct_engine_1_1_configuration.html", "struct_engine_1_1_configuration" ]
     ] ],
     [ "Hymn.cpp", "_hymn_8cpp.html", "_hymn_8cpp" ],
     [ "Hymn.hpp", "_hymn_8hpp.html", "_hymn_8hpp" ],

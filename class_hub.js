@@ -3,7 +3,7 @@ var class_hub =
     [ "ClearKilledComponents", "class_hub.html#ae2d32db6276b5967869d4278850f8175", null ],
     [ "ShutDown", "class_hub.html#abe1b68a719a6d8f0f01509499d3db4e4", null ],
     [ "StartUp", "class_hub.html#a8de8e6abe3179981685cb29abf2eb8ef", null ],
-    [ "Managers", "class_hub.html#a4c7f94eccb6da340484d34bd768b6082", null ],
+    [ "Managers", "class_hub.html#ac90dd77b371f5f4899f64090b7cdc4d3", null ],
     [ "debugDrawingManager", "class_hub.html#a715ad901dfab564c8306e0cf1ad60875", null ],
     [ "physicsManager", "class_hub.html#a49a6518483916f316e83a51fcf7949ac", null ],
     [ "profilingManager", "class_hub.html#aad67459873173ed98a2e1eecc4e17797", null ],

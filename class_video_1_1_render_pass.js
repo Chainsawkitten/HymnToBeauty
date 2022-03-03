@@ -7,5 +7,5 @@ var class_video_1_1_render_pass =
     ] ],
     [ "RenderPass", "class_video_1_1_render_pass.html#af82794cd80183f80238913afd9ca150c", null ],
     [ "~RenderPass", "class_video_1_1_render_pass.html#a505e091a4e5c9319aae569db2313a7ef", null ],
-    [ "GetSize", "class_video_1_1_render_pass.html#afadfa1c2dcf4a3725043c7c0011df293", null ]
+    [ "GetSize", "class_video_1_1_render_pass.html#ab85b1836a919a72eaa476a80a1cf471b", null ]
 ];

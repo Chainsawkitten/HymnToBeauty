@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['importing_20a_203d_20model_3086',['Importing a 3D model',['../_your_first_hymn__importing3_d_model.html',1,'YourFirstHymn']]]
+  ['hymn_20to_20beauty_0',['Hymn to Beauty',['../index.html',1,'']]]
 ];

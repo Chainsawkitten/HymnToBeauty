@@ -1,7 +1,7 @@
 var namespace_component =
 [
+    [ "Camera", "class_component_1_1_camera.html", "class_component_1_1_camera" ],
     [ "DirectionalLight", "class_component_1_1_directional_light.html", "class_component_1_1_directional_light" ],
-    [ "Lens", "class_component_1_1_lens.html", "class_component_1_1_lens" ],
     [ "Listener", "class_component_1_1_listener.html", "class_component_1_1_listener" ],
     [ "Material", "class_component_1_1_material.html", "class_component_1_1_material" ],
     [ "Mesh", "class_component_1_1_mesh.html", "class_component_1_1_mesh" ],

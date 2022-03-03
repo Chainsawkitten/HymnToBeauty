@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['lens_3087',['Lens',['../_component_lens.html',1,'Components']]],
-  ['listener_3088',['Listener',['../_component_listener.html',1,'Components']]]
+  ['importing_20a_203d_20model_0',['Importing a 3D model',['../md_docs__getting_started__your_first_hymn__importing3_d_model.html',1,'']]]
 ];

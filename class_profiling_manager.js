@@ -8,6 +8,5 @@ var class_profiling_manager =
     [ "GetFrameCount", "class_profiling_manager.html#a18e34c0335a43a61ecce3f133badee28", null ],
     [ "GetTimeline", "class_profiling_manager.html#aaa4c1027763467852b26d4291d1a1327", null ],
     [ "SetActive", "class_profiling_manager.html#a40fb035ae5a8aa0b59cbbff4e40f3cd2", null ],
-    [ "Hub", "class_profiling_manager.html#aea14f5495b4697c28ed665a9054acf5e", null ],
-    [ "ProfilingScope", "class_profiling_manager.html#a765d2e3871d5f352b16922f354e5892b", null ]
+    [ "Hub", "class_profiling_manager.html#aea14f5495b4697c28ed665a9054acf5e", null ]
 ];

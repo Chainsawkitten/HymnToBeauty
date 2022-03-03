@@ -7,6 +7,6 @@ var dir_9761b53e3d9349800c0cb59b71c8cd3d =
       [ "Log", "class_log.html", "class_log" ]
     ] ],
     [ "Queue.hpp", "_queue_8hpp.html", [
-      [ "Queue", "class_utility_1_1_queue.html", "class_utility_1_1_queue" ]
+      [ "Utility::Queue< T >", "class_utility_1_1_queue.html", "class_utility_1_1_queue" ]
     ] ]
 ];

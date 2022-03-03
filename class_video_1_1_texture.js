@@ -10,8 +10,10 @@ var class_video_1_1_texture =
       [ "RENDER_COLOR", "class_video_1_1_texture.html#a571ccf58a61cb4760da49381d1cf6bffac457409095b94845057384366dac6365", null ],
       [ "RENDER_DEPTH", "class_video_1_1_texture.html#a571ccf58a61cb4760da49381d1cf6bffa63245e3a5805dfa84e4c46fe470625c0", null ]
     ] ],
-    [ "Texture", "class_video_1_1_texture.html#a3f328f0b97ff83c11d27346379af727e", null ],
+    [ "Texture", "class_video_1_1_texture.html#a3085d9db538563099a9bb4392485f52c", null ],
     [ "~Texture", "class_video_1_1_texture.html#a44f3a93deb647424d1646ddc3f050347", null ],
-    [ "GetSize", "class_video_1_1_texture.html#aaa7afe1e578bd86fe828ad1c380fb9fe", null ],
-    [ "GetType", "class_video_1_1_texture.html#a2137886df0602dc7d978fb3d78a8920b", null ]
+    [ "GetFormat", "class_video_1_1_texture.html#ab12a2d09d5d619239845e8fbd849a009", null ],
+    [ "GetSize", "class_video_1_1_texture.html#a3ed1085d89cbe4e1bbda0b79177a904e", null ],
+    [ "GetType", "class_video_1_1_texture.html#a2137886df0602dc7d978fb3d78a8920b", null ],
+    [ "GetUniqueIdentifier", "class_video_1_1_texture.html#a223908183fb904864029b69972f6a697", null ]
 ];

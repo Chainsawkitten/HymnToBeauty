@@ -10,8 +10,6 @@ var dir_ffaac3aa99bbfe6503a02d1a48067399 =
     [ "MousePicking.hpp", "_mouse_picking_8hpp.html", [
       [ "MousePicking", "class_mouse_picking.html", "class_mouse_picking" ]
     ] ],
-    [ "Profiling.cpp", "_profiling_8cpp.html", null ],
-    [ "Profiling.hpp", "_profiling_8hpp.html", "_profiling_8hpp" ],
     [ "RayIntersection.cpp", "_ray_intersection_8cpp.html", null ],
     [ "RayIntersection.hpp", "_ray_intersection_8hpp.html", [
       [ "RayIntersection", "class_ray_intersection.html", "class_ray_intersection" ]

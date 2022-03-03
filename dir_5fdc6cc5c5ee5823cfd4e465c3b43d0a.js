@@ -10,7 +10,7 @@ var dir_5fdc6cc5c5ee5823cfd4e465c3b43d0a =
     ] ],
     [ "TriggerRepeat.cpp", "_trigger_repeat_8cpp.html", null ],
     [ "TriggerRepeat.hpp", "_trigger_repeat_8hpp.html", [
-      [ "EventStruct", "structtrigger_event_1_1_event_struct.html", "structtrigger_event_1_1_event_struct" ],
+      [ "triggerEvent::EventStruct", "structtrigger_event_1_1_event_struct.html", "structtrigger_event_1_1_event_struct" ],
       [ "TriggerRepeat", "class_trigger_repeat.html", "class_trigger_repeat" ]
     ] ]
 ];

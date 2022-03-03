@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['resources_3095',['Resources',['../_your_first_hymn__resources.html',1,'YourFirstHymn']]],
-  ['rigid_20body_3096',['Rigid body',['../_component_rigid_body.html',1,'Components']]]
+  ['player_20_25input_0',['Player %Input',['../md_docs__getting_started__your_first_hymn__player_input.html',1,'']]],
+  ['point_20light_1',['Point light',['../md_docs__components__point_light.html',1,'']]]
 ];

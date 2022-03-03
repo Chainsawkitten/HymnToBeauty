@@ -1,7 +1,7 @@
 var class_audio_1_1_sound_file =
 [
     [ "~SoundFile", "class_audio_1_1_sound_file.html#a2a4cc3a7780cc699e1ef51fc98f5d846", null ],
-    [ "GetData", "class_audio_1_1_sound_file.html#a6d6d575fe5c059fc0578b795eb183a64", null ],
+    [ "GetData", "class_audio_1_1_sound_file.html#aa5cb6179d536471608033d3b2b20e499", null ],
     [ "GetFormat", "class_audio_1_1_sound_file.html#a82b8a2c41a1ec109675d8f8a32034f5a", null ],
     [ "GetSampleRate", "class_audio_1_1_sound_file.html#ad59c449c19ccd747a1e2141f892ea6ba", null ],
     [ "GetSize", "class_audio_1_1_sound_file.html#a8eeb169a26e4442c568e40fff5787430", null ],

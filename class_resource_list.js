@@ -8,7 +8,7 @@ var class_resource_list =
     [ "Refresh", "class_resource_list.html#a6565316383ad37760c19444752d90df9", null ],
     [ "Save", "class_resource_list.html#ad8c2bafa0c2d7528a12010bae80f5a59", null ],
     [ "ToJson", "class_resource_list.html#a25cb449b836c1264c55802d9326528c7", null ],
-    [ "Resources", "class_resource_list.html#aef2f906996916c32830701c6afbf956c", null ],
+    [ "Resources", "class_resource_list.html#a616f89f038090bfc533ecd2f3f3ab150", null ],
     [ "activeScene", "class_resource_list.html#a0e2efe8d5e95e6ed7830a398e909b376", null ],
     [ "modelNumber", "class_resource_list.html#aca78fd7a25a888d1e44eb295ef08f403", null ],
     [ "resourceFolder", "class_resource_list.html#afd466c4587ebc77956bf71a3c1ed50a3", null ],

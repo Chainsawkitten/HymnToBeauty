@@ -9,19 +9,28 @@ var dir_e74635bff93ad8e4f78b71a46ef7ed78 =
     [ "Texture", "dir_6fe44ded41ac9f8a88ed2c6651d8c06a.html", "dir_6fe44ded41ac9f8a88ed2c6651d8c06a" ],
     [ "DebugDrawing.cpp", "_debug_drawing_8cpp.html", "_debug_drawing_8cpp" ],
     [ "DebugDrawing.hpp", "_debug_drawing_8hpp.html", [
-      [ "DebugDrawing", "class_video_1_1_debug_drawing.html", "class_video_1_1_debug_drawing" ],
-      [ "Point", "struct_video_1_1_debug_drawing_1_1_point.html", "struct_video_1_1_debug_drawing_1_1_point" ],
-      [ "Line", "struct_video_1_1_debug_drawing_1_1_line.html", "struct_video_1_1_debug_drawing_1_1_line" ],
-      [ "Cuboid", "struct_video_1_1_debug_drawing_1_1_cuboid.html", "struct_video_1_1_debug_drawing_1_1_cuboid" ],
-      [ "Plane", "struct_video_1_1_debug_drawing_1_1_plane.html", "struct_video_1_1_debug_drawing_1_1_plane" ],
-      [ "Circle", "struct_video_1_1_debug_drawing_1_1_circle.html", "struct_video_1_1_debug_drawing_1_1_circle" ],
-      [ "Sphere", "struct_video_1_1_debug_drawing_1_1_sphere.html", "struct_video_1_1_debug_drawing_1_1_sphere" ],
-      [ "Cylinder", "struct_video_1_1_debug_drawing_1_1_cylinder.html", "struct_video_1_1_debug_drawing_1_1_cylinder" ],
-      [ "Cone", "struct_video_1_1_debug_drawing_1_1_cone.html", "struct_video_1_1_debug_drawing_1_1_cone" ],
-      [ "Mesh", "struct_video_1_1_debug_drawing_1_1_mesh.html", "struct_video_1_1_debug_drawing_1_1_mesh" ]
+      [ "Video::DebugDrawing", "class_video_1_1_debug_drawing.html", "class_video_1_1_debug_drawing" ],
+      [ "Video::DebugDrawing::Point", "struct_video_1_1_debug_drawing_1_1_point.html", "struct_video_1_1_debug_drawing_1_1_point" ],
+      [ "Video::DebugDrawing::Line", "struct_video_1_1_debug_drawing_1_1_line.html", "struct_video_1_1_debug_drawing_1_1_line" ],
+      [ "Video::DebugDrawing::Cuboid", "struct_video_1_1_debug_drawing_1_1_cuboid.html", "struct_video_1_1_debug_drawing_1_1_cuboid" ],
+      [ "Video::DebugDrawing::Plane", "struct_video_1_1_debug_drawing_1_1_plane.html", "struct_video_1_1_debug_drawing_1_1_plane" ],
+      [ "Video::DebugDrawing::Circle", "struct_video_1_1_debug_drawing_1_1_circle.html", "struct_video_1_1_debug_drawing_1_1_circle" ],
+      [ "Video::DebugDrawing::Sphere", "struct_video_1_1_debug_drawing_1_1_sphere.html", "struct_video_1_1_debug_drawing_1_1_sphere" ],
+      [ "Video::DebugDrawing::Cylinder", "struct_video_1_1_debug_drawing_1_1_cylinder.html", "struct_video_1_1_debug_drawing_1_1_cylinder" ],
+      [ "Video::DebugDrawing::Cone", "struct_video_1_1_debug_drawing_1_1_cone.html", "struct_video_1_1_debug_drawing_1_1_cone" ],
+      [ "Video::DebugDrawing::Mesh", "struct_video_1_1_debug_drawing_1_1_mesh.html", "struct_video_1_1_debug_drawing_1_1_mesh" ]
     ] ],
     [ "Renderer.cpp", "_renderer_8cpp.html", null ],
     [ "Renderer.hpp", "_renderer_8hpp.html", [
-      [ "Renderer", "class_video_1_1_renderer.html", "class_video_1_1_renderer" ]
+      [ "Video::Renderer", "class_video_1_1_renderer.html", "class_video_1_1_renderer" ]
+    ] ],
+    [ "RenderScene.hpp", "_render_scene_8hpp.html", [
+      [ "Video::RenderScene", "struct_video_1_1_render_scene.html", "struct_video_1_1_render_scene" ],
+      [ "Video::RenderScene::DirectionalLight", "struct_video_1_1_render_scene_1_1_directional_light.html", "struct_video_1_1_render_scene_1_1_directional_light" ],
+      [ "Video::RenderScene::PointLight", "struct_video_1_1_render_scene_1_1_point_light.html", "struct_video_1_1_render_scene_1_1_point_light" ],
+      [ "Video::RenderScene::SpotLight", "struct_video_1_1_render_scene_1_1_spot_light.html", "struct_video_1_1_render_scene_1_1_spot_light" ],
+      [ "Video::RenderScene::Camera", "struct_video_1_1_render_scene_1_1_camera.html", "struct_video_1_1_render_scene_1_1_camera" ],
+      [ "Video::RenderScene::Mesh", "struct_video_1_1_render_scene_1_1_mesh.html", "struct_video_1_1_render_scene_1_1_mesh" ],
+      [ "Video::RenderScene::Icon", "struct_video_1_1_render_scene_1_1_icon.html", "struct_video_1_1_render_scene_1_1_icon" ]
     ] ]
 ];
