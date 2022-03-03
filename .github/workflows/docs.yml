@@ -16,7 +16,7 @@ jobs:
         submodules: recursive
 
     - name: Build documentation
-      uses: mattnotmitt/doxygen-action@v1
+      uses: mattnotmitt/doxygen-action@1.9.2
       with:
         doxyfile-path: 'docs/Doxyfile'
     
