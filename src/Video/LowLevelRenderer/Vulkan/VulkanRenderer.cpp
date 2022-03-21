@@ -382,9 +382,10 @@ VkDescriptorSetLayout VulkanRenderer::GetBufferDescriptorSetLayout(ShaderProgram
 }
 
 VkDescriptorSetLayout VulkanRenderer::GetStorageBufferDescriptorSetLayout(unsigned int buffers) const {
+    assert(buffers > 0);
     assert(buffers <= bakedStorageBufferDescriptorSetLayouts);
 
-    return storageBufferDescriptorSetLayouts[buffers];
+    return storageBufferDescriptorSetLayouts[buffers - 1];
 }
 
 VkDescriptorSetLayout VulkanRenderer::GetMaterialDescriptorSetLayout(unsigned int textures) const {
