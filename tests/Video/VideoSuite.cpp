@@ -63,6 +63,7 @@ void VideoSuite::Init() {
 }
 
 void VideoSuite::Shutdown() {
+    lowLevelRenderer->Wait();
     delete lowLevelRenderer;
 
     glfwDestroyWindow(window);
