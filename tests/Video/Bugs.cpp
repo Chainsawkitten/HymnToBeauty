@@ -45,6 +45,7 @@ bool BugFillBuffer(void* data) {
     Shader* writeBufferShader = lowLevelRenderer->CreateShader(WRITEBUFFER_COMP, Shader::Type::COMPUTE_SHADER);
     ShaderProgram* writeBufferShaderProgram = lowLevelRenderer->CreateShaderProgram({ writeBufferShader });
     ComputePipeline* writeBufferPipeline = lowLevelRenderer->CreateComputePipeline(writeBufferShaderProgram);
+    ComputePipeline* writeBufferPipeline2 = lowLevelRenderer->CreateComputePipeline(writeBufferShaderProgram);
 
     // The second shader program is a full-screen triangle (hard-coded into the vertex shader, no vertex buffer used).
     // The fragment shader reads back the value from the SSBO and compares it to a push constant. If the values match
@@ -107,7 +108,7 @@ bool BugFillBuffer(void* data) {
         // Write to buffer.
         pc.lightCount = 2;
 
-        commandBuffer->BindComputePipeline(writeBufferPipeline);
+        commandBuffer->BindComputePipeline(writeBufferPipeline2);
         commandBuffer->BindStorageBuffers({ zMaskBuffer });
         commandBuffer->PushConstants(&pc);
         commandBuffer->Dispatch(glm::uvec3(1u, 1u, 1u));
@@ -141,6 +142,7 @@ bool BugFillBuffer(void* data) {
     delete zMaskBuffer;
     delete commandBuffer;
     delete writeBufferPipeline;
+    delete writeBufferPipeline2;
     delete graphicsPipeline;
     lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete writeBufferShaderProgram;
@@ -169,6 +171,7 @@ bool BugFillBufferLoop(void* data) {
     Shader* writeBufferShader = lowLevelRenderer->CreateShader(WRITEBUFFER_COMP, Shader::Type::COMPUTE_SHADER);
     ShaderProgram* writeBufferShaderProgram = lowLevelRenderer->CreateShaderProgram({ writeBufferShader });
     ComputePipeline* writeBufferPipeline = lowLevelRenderer->CreateComputePipeline(writeBufferShaderProgram);
+    ComputePipeline* writeBufferPipeline2 = lowLevelRenderer->CreateComputePipeline(writeBufferShaderProgram);
 
     Shader* vertexShader = lowLevelRenderer->CreateShader(FULLSCREENTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
     Shader* fragmentShader = lowLevelRenderer->CreateShader(VERIFYFILLBUFFER_FRAG, Shader::Type::FRAGMENT_SHADER);
@@ -223,7 +226,7 @@ bool BugFillBufferLoop(void* data) {
             // Write to buffer.
             pc.lightCount = 2;
 
-            commandBuffer->BindComputePipeline(writeBufferPipeline);
+            commandBuffer->BindComputePipeline(writeBufferPipeline2);
             commandBuffer->BindStorageBuffers({ zMaskBuffer });
             commandBuffer->PushConstants(&pc);
             commandBuffer->Dispatch(glm::uvec3(1u, 1u, 1u));
@@ -259,6 +262,7 @@ bool BugFillBufferLoop(void* data) {
     delete zMaskBuffer;
     delete commandBuffer;
     delete writeBufferPipeline;
+    delete writeBufferPipeline2;
     delete graphicsPipeline;
     lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete writeBufferShaderProgram;
