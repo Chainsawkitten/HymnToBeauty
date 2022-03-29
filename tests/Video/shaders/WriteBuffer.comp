@@ -1,0 +1,22 @@
+precision mediump int;
+precision mediump float;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+// Defines an SSBO.
+// Each variable has to be on a new line.
+STORAGE_BUFFER_RW(0)
+{
+    uint mask;
+} testBuffer;
+
+// Push constants. (Uniforms in the OpenGL backend.)
+// Each variable has to be on a new line.
+PUSH_CONSTANTS
+{
+    uint lightCount;
+} pushConst;
+
+void main() {
+    testBuffer.mask = pushConst.lightCount;
+}

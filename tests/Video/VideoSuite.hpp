@@ -171,3 +171,19 @@ bool ComputeVertexBuffer(void* data);
  * @return Whether the test was successful.
  */
 bool ComputeMultipleBuffers(void* data);
+
+/// Reproduces for vkCmdFillBuffer bug.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool BugFillBuffer(void* data);
+
+/// Reproduces for vkCmdFillBuffer bug.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool BugFillBufferLoop(void* data);

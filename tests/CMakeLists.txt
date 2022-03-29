@@ -1,6 +1,7 @@
 set(SRCS
     main.cpp
     Framework/TestSuite.cpp
+    Video/Bugs.cpp
     Video/ComputeTests.cpp
     Video/DrawTests.cpp
     Video/ImageVerification.cpp
@@ -36,12 +37,15 @@ set(SHADERS
     Video/shaders/MultipleFrames.vert
     Video/shaders/MultipleFrames.frag
     Video/shaders/StorageBuffer.frag
+    Video/shaders/VerifyFillBuffer.frag
+    Video/shaders/WriteBuffer.comp
 )
 
 # Setup images.
 set(IMAGES
     Video/textures/Test.png
     Video/references/Attachmentless.png
+    Video/references/BugFillBuffer.png
     Video/references/ComputeSetBuffer.png
     Video/references/ConservativeRasterization.png
     Video/references/DepthPrePass.png

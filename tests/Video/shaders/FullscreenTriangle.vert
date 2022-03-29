@@ -16,6 +16,8 @@ void main() {
     gl_Position = vec4(positions[VertexIndex], 0.0, 1.0);
     texCoords = uvs[VertexIndex];
 
+    // These functions handle OpenGL-Vulkan differences in clip space and texture coordinates (when reading back render targets).
+    // Not relevant for the reproducer test. The texture coordinates aren't used and the fullscreen triangle is a single color so doesn't matter if it's upside down.
     FixPosition();
     FixFramebufferCoordinates(texCoords);
 }
