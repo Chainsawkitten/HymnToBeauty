@@ -501,8 +501,11 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
     VkAccessFlags sourceAccess = 0;
     VkAccessFlags destinationAccess = 0;
 
+    sourceStages |= VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+    destinationStages |= VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+
     // Read barrier.
-    if (buffer->GetLastWriteStage() != 0 && (readStages & stages) != stages) {
+    /*if (buffer->GetLastWriteStage() != 0 && (readStages & stages) != stages) {
         sourceStages |= buffer->GetLastWriteStage();
         if (sourceStages & (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT))
             sourceAccess |= VK_ACCESS_SHADER_WRITE_BIT;
@@ -530,7 +533,7 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
         buffer->ClearReadMask();
         buffer->SetLastWriteStage(stages);
 		destinationStages |= stages;
-    }
+    }*/
 
     if (sourceStages != 0 && destinationStages != 0) {
         VkBufferMemoryBarrier memoryBarrier = {};
@@ -541,7 +544,12 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
         memoryBarrier.offset = buffer->GetOffset();
         memoryBarrier.size = buffer->GetSize();
 
-        vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, destinationStages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
+        VkMemoryBarrier mmbb = {};
+        mmbb.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        mmbb.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+        mmbb.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+
+        vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, destinationStages, 0, 1, &mmbb, 0, &memoryBarrier, 0, nullptr);
     }
 }
 
