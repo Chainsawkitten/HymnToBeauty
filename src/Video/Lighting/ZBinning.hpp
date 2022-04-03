@@ -111,7 +111,8 @@ class ZBinning {
 
     Shader* binningShader;
     ShaderProgram* binningShaderProgram;
-    ComputePipeline* binningPipeline;
+    ComputePipeline* binningPipeline[2];
+    uint32_t pipelineCount = 0u;
 
     Shader* tilingVertexShader;
     Shader* tilingFragmentShader;

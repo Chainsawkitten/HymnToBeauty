@@ -29,7 +29,8 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
     binningShader = lowLevelRenderer->CreateShader(LIGHTBINNING_COMP, Shader::Type::COMPUTE_SHADER);
     binningShaderProgram = lowLevelRenderer->CreateShaderProgram({ binningShader });
-    binningPipeline = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
+    binningPipeline[0] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
+    binningPipeline[1] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
 
     // Create tiling resources.
     lightInfo.tileSize = 16;
@@ -68,7 +69,8 @@ ZBinning::~ZBinning() {
     delete lightInfo.zMaskBuffer;
     delete lightInfo.tileMaskBuffer;
 
-    delete binningPipeline;
+    delete binningPipeline[0];
+    delete binningPipeline[1];
     delete binningShaderProgram;
     delete binningShader;
 
@@ -147,7 +149,9 @@ void ZBinning::ClearBuffers(CommandBuffer& commandBuffer) {
 }
 
 void ZBinning::Binning(CommandBuffer& commandBuffer) {
-    commandBuffer.BindComputePipeline(binningPipeline);
+    // Ping-pong pipelines to avoid an AMD bug.
+    pipelineCount = 1u - pipelineCount;
+    commandBuffer.BindComputePipeline(binningPipeline[pipelineCount]);
     commandBuffer.BindStorageBuffers({ lightInfo.lightBuffer, lightInfo.zMaskBuffer });
 
     struct {
