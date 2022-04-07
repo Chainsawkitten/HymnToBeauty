@@ -48,8 +48,9 @@ set_property(TARGET imguizmo PROPERTY CXX_STANDARD_REQUIRED ON)
 set(JSONCPP_WITH_TESTS OFF CACHE BOOL "Don't build JsonCpp tests" FORCE)
 set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "Don't build JsonCpp unit tests" FORCE)
 set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "Don't build JsonCpp with pkgconfig support" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Don't build JsonCpp with shared libs" FORCE)
+set(BUILD_OBJECT_LIBS OFF CACHE BOOL "Don't build JsonCpp with object libs" FORCE)
 add_subdirectory(jsoncpp)
-target_include_directories(jsoncpp_lib_static INTERFACE jsoncpp/include)
 
 # Headerize
 add_subdirectory(Headerize)

@@ -186,7 +186,7 @@ endforeach()
 create_directory_groups(${SRCS} ${HEADERS})
 
 add_library(Video STATIC ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${SHADER_HEADER})
-target_link_libraries(Video Utility ${API_LIBRARIES} glfw ${GLFW_LIBRARIES} glm jsoncpp_lib_static stb ShaderSource)
+target_link_libraries(Video Utility ${API_LIBRARIES} glfw ${GLFW_LIBRARIES} glm stb ShaderSource)
 
 set_property(TARGET Video PROPERTY CXX_STANDARD 11)
 set_property(TARGET Video PROPERTY CXX_STANDARD_REQUIRED ON)
