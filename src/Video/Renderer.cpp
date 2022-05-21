@@ -2,6 +2,7 @@
 
 #include "RenderScene.hpp"
 #include "RenderProgram/StaticRenderProgram.hpp"
+#include "RenderProgram/SpriteRenderProgram.hpp"
 #include "Culling/AxisAlignedBoundingBox.hpp"
 #include "Culling/Frustum.hpp"
 #include "Culling/Sphere.hpp"
@@ -56,6 +57,7 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
     commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     staticRenderProgram = new StaticRenderProgram(lowLevelRenderer);
+    spriteRenderProgram = new SpriteRenderProgram(lowLevelRenderer);
 
     zBinning = new ZBinning(lowLevelRenderer, outputSize);
 
@@ -79,28 +81,30 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 		blitGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(blitShaderProgram, configuration);
 	}
 
+    // Create quad geometry.
+    {
+        glm::vec2 vertex[6];
+        vertex[0] = glm::vec2(0.0, 1.0);
+        vertex[1] = glm::vec2(0.0, 0.0);
+        vertex[2] = glm::vec2(1.0, 1.0);
+        vertex[3] = glm::vec2(0.0, 0.0);
+        vertex[4] = glm::vec2(1.0, 0.0);
+        vertex[5] = glm::vec2(1.0, 1.0);
+
+        quadVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(glm::vec2) * 6, &vertex);
+
+        VertexDescription::Attribute attribute;
+        attribute.size = 2;
+        attribute.type = VertexDescription::AttributeType::FLOAT;
+        attribute.normalized = false;
+
+        quadVertexDescription = lowLevelRenderer->CreateVertexDescription(1, &attribute);
+        quadGeometryBinding = lowLevelRenderer->CreateGeometryBinding(quadVertexDescription, quadVertexBuffer);
+    }
+
+
 	// Icon rendering.
 	{
-		// Create icon geometry.
-		glm::vec2 vertex[6];
-		vertex[0] = glm::vec2(0.0, 1.0);
-		vertex[1] = glm::vec2(0.0, 0.0);
-		vertex[2] = glm::vec2(1.0, 1.0);
-		vertex[3] = glm::vec2(0.0, 0.0);
-		vertex[4] = glm::vec2(1.0, 0.0);
-		vertex[5] = glm::vec2(1.0, 1.0);
-
-		iconVertexBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(glm::vec2) * 6, &vertex);
-
-		VertexDescription::Attribute attribute;
-		attribute.size = 2;
-		attribute.type = VertexDescription::AttributeType::FLOAT;
-		attribute.normalized = false;
-
-		iconVertexDescription = lowLevelRenderer->CreateVertexDescription(1, &attribute);
-		iconGeometryBinding = lowLevelRenderer->CreateGeometryBinding(iconVertexDescription, iconVertexBuffer);
-
-		// Pipeline.
 		iconVertexShader = lowLevelRenderer->CreateShader(EDITORENTITY_VERT, Shader::Type::VERTEX_SHADER);
 		iconFragmentShader = lowLevelRenderer->CreateShader(EDITORENTITY_FRAG, Shader::Type::FRAGMENT_SHADER);
 		iconShaderProgram = lowLevelRenderer->CreateShaderProgram({iconVertexShader, iconFragmentShader});
@@ -113,12 +117,13 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 		configuration.depthMode = DepthMode::TEST;
 		configuration.depthComparison = DepthComparison::LESS;
 
-		iconGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(iconShaderProgram, configuration, iconVertexDescription);
+		iconGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(iconShaderProgram, configuration, quadVertexDescription);
 	}
 }
 
 Renderer::~Renderer() {
     delete staticRenderProgram;
+    delete spriteRenderProgram;
 
     delete zBinning;
     delete postProcessing;
@@ -134,9 +139,10 @@ Renderer::~Renderer() {
     delete iconShaderProgram;
     delete iconVertexShader;
     delete iconFragmentShader;
-    delete iconGeometryBinding;
-    delete iconVertexDescription;
-    delete iconVertexBuffer;
+
+    delete quadGeometryBinding;
+    delete quadVertexDescription;
+    delete quadVertexBuffer;
 
     delete commandBuffer;
     delete lowLevelRenderer;
@@ -185,6 +191,8 @@ void Renderer::Render(const RenderScene& renderScene) {
         staticRenderProgram->SetGamma(camera.postProcessingConfiguration.gamma);
         RenderOpaques(renderScene, culledMeshes, camera);
         RenderDebugShapes(renderScene, camera);
+        spriteRenderProgram->SetGamma(camera.postProcessingConfiguration.gamma);
+        RenderSprites(renderScene, camera);
 
         commandBuffer->EndRenderPass();
 
@@ -408,7 +416,7 @@ void Renderer::RenderIcons(const RenderScene& renderScene, const RenderScene::Ca
 
 void Renderer::PrepareRenderingIcons(const glm::mat4& viewProjectionMatrix, const glm::vec3& cameraPosition, const glm::vec3& cameraUp) {
     commandBuffer->BindGraphicsPipeline(iconGraphicsPipeline);
-    commandBuffer->BindGeometry(iconGeometryBinding);
+    commandBuffer->BindGeometry(quadGeometryBinding);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 
     // Set camera uniforms.
@@ -433,4 +441,16 @@ void Renderer::RenderIcon(const glm::vec3& position) {
 
     commandBuffer->PushConstants(&pushConst);
     commandBuffer->Draw(6);
+}
+
+void Renderer::RenderSprites(const RenderScene& renderScene, const RenderScene::Camera& camera) {
+    PROFILE("Render sprites");
+
+    if (!renderScene.sprites.empty()) {
+        spriteRenderProgram->PreRender(*commandBuffer, camera.viewProjectionMatrix);
+
+        for (const RenderScene::Sprite& sprite : renderScene.sprites) {
+            spriteRenderProgram->Render(*commandBuffer, sprite.texture, sprite.size, sprite.pivot, sprite.modelMatrix, sprite.tint);
+        }
+    }
 }

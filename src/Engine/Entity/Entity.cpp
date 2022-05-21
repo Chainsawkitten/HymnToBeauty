@@ -12,6 +12,7 @@
 #include "../Component/Script.hpp"
 #include "../Component/Shape.hpp"
 #include "../Component/SoundSource.hpp"
+#include "../Component/Sprite.hpp"
 #include "../Component/Trigger.hpp"
 #include "../Util/Json.hpp"
 #include "../Util/FileSystem.hpp"
@@ -204,6 +205,7 @@ Json::Value Entity::Save() const {
         Save<Component::Script>(entity, "Script");
         Save<Component::Shape>(entity, "Shape");
         Save<Component::SoundSource>(entity, "SoundSource");
+        Save<Component::Sprite>(entity, "Sprite");
         Save<Component::Trigger>(entity, "Trigger");
 
         // Save children.
@@ -244,6 +246,7 @@ void Entity::Load(const Json::Value& node) {
         Load<Component::Script>(node, "Script");
         Load<Component::Shape>(node, "Shape");
         Load<Component::SoundSource>(node, "SoundSource");
+        Load<Component::Sprite>(node, "Sprite");
         Load<Component::Trigger>(node, "Trigger");
 
         // Load children.
@@ -390,6 +393,8 @@ Component::SuperComponent* Entity::AddComponent(std::type_index componentType) {
         component = Managers().soundManager->CreateSoundSource();
     else if (componentType == typeid(Component::SpotLight*))
         component = Managers().renderManager->CreateSpotLight();
+    else if (componentType == typeid(Component::Sprite*))
+        component = Managers().renderManager->CreateSprite();
     else if (componentType == typeid(Component::Trigger*))
         component = Managers().triggerManager->CreateTrigger();
     else {
@@ -448,6 +453,8 @@ void Entity::LoadComponent(std::type_index componentType, const Json::Value& nod
         component = Managers().soundManager->CreateSoundSource(node);
     else if (componentType == typeid(Component::SpotLight*))
         component = Managers().renderManager->CreateSpotLight(node);
+    else if (componentType == typeid(Component::Sprite*))
+        component = Managers().renderManager->CreateSprite(node);
     else if (componentType == typeid(Component::Trigger*))
         component = Managers().triggerManager->CreateTrigger(node);
     else {

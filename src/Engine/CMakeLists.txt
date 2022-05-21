@@ -22,6 +22,7 @@ set(SRCS
         Component/Shape.cpp
         Component/SoundSource.cpp
         Component/SpotLight.cpp
+        Component/Sprite.cpp
         Component/SuperComponent.cpp
         Component/Trigger.cpp
         Entity/Entity.cpp
@@ -75,6 +76,7 @@ set(HEADERS
         Component/Shape.hpp
         Component/SoundSource.hpp
         Component/SpotLight.hpp
+        Component/Sprite.hpp
         Component/SuperComponent.hpp
         Component/Trigger.hpp
         Entity/ComponentContainer.hpp

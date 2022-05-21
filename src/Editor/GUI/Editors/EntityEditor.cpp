@@ -11,6 +11,7 @@
 #include <Engine/Component/Script.hpp>
 #include <Engine/Component/Shape.hpp>
 #include <Engine/Component/SoundSource.hpp>
+#include <Engine/Component/Sprite.hpp>
 #include <Engine/Component/Trigger.hpp>
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Texture/TextureAsset.hpp>
@@ -58,6 +59,7 @@ EntityEditor::EntityEditor() {
     AddEditor<Component::Script>("Script", std::bind(&EntityEditor::ScriptEditor, this, std::placeholders::_1));
     AddEditor<Component::Shape>("Shape", std::bind(&EntityEditor::ShapeEditor, this, std::placeholders::_1));
     AddEditor<Component::SoundSource>("Sound source", std::bind(&EntityEditor::SoundSourceEditor, this, std::placeholders::_1));
+    AddEditor<Component::Sprite>("Sprite", std::bind(&EntityEditor::SpriteEditor, this, std::placeholders::_1));
     AddEditor<Component::Trigger>("Trigger", std::bind(&EntityEditor::TriggerEditor, this, std::placeholders::_1));
 
     shapeEditors.push_back(new SphereShapeEditor());
@@ -508,6 +510,37 @@ void EntityEditor::ShapeEditor(Component::Shape* shape) {
 
     if (selectedShape != -1) {
         shapeEditors[selectedShape]->Show(shape);
+    }
+}
+
+void EntityEditor::SpriteEditor(Component::Sprite* sprite) {
+    ImGui::Text("Sprite");
+    ImGui::Indent();
+
+    if (sprite->texture->GetTexture()->IsLoaded())
+        ImGui::Image((void*)sprite->texture->GetTexture()->GetTexture(), ImVec2(128, 128));
+
+    if (ImGui::Button("Select texture")) {
+        textureShow = true;
+    }
+
+    ImGui::DraggableFloat("Pixels per unit", sprite->pixelsPerUnit);
+    ImGui::DraggableVec2("Pivot", sprite->pivot, 0.0f, 1.0f);
+    ImGui::ColorEdit3("Tint", &sprite->tint[0]);
+    ImGui::DraggableFloat("Alpha", sprite->alpha, 0.0f, 1.0f);
+
+    ImGui::Unindent();
+
+    // Select texture.
+    if (textureShow) {
+        ImGui::Begin("Textures", &textureShow);
+        if (resourceSelector.Show(ResourceList::Resource::Type::TEXTURE)) {
+            if (sprite->texture != Managers().resourceManager->GetDefaultAlbedo())
+                Managers().resourceManager->FreeTextureAsset(sprite->texture);
+
+            sprite->texture = Managers().resourceManager->CreateTextureAsset(resourceSelector.GetSelectedResource().GetPath());
+        }
+        ImGui::End();
     }
 }
 

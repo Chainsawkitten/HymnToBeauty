@@ -27,8 +27,5 @@ class Material : public SuperComponent {
      * Roughness in green channel. Metallic in blue channel.
      */
     TextureAsset* roughnessMetallic;
-
-  private:
-    void LoadTexture(TextureAsset*& texture, const std::string& name);
 };
 } // namespace Component
