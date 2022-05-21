@@ -276,9 +276,6 @@ class Entity {
      */
     void SetUniqueIdentifier(unsigned int UID);
 
-    /// Whether the entity is static.
-    bool isStatic = false;
-
     /// Variables used for enabling and disabling the paint brush tool.
     bool loadPaintModeClicked = false;
     bool brushActive = false;
