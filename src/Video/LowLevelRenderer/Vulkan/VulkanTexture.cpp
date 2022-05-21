@@ -87,14 +87,14 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
         Utility::CreateBuffer(device, physicalDevice, bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &stagingBuffer, &stagingDeviceMemory);
 
         // Copy data to staging buffer.
-        char* stagingData;
+        unsigned char* stagingData;
         vkMapMemory(device, stagingDeviceMemory, 0, bufferSize, 0, reinterpret_cast<void**>(&stagingData));
 
         for (uint32_t i = 0; i < size.x * size.y; ++i) {
             stagingData[i * 4] = data[i * components];
             stagingData[i * 4 + 1] = (components > 1 ? data[i * components + 1] : 0);
-            stagingData[i * 4 + 2] = (components > 1 ? data[i * components + 2] : 0);
-            stagingData[i * 4 + 3] = (components > 1 ? data[i * components + 3] : 0);
+            stagingData[i * 4 + 2] = (components > 2 ? data[i * components + 2] : 0);
+            stagingData[i * 4 + 3] = (components > 3 ? data[i * components + 3] : 255);
         }
 
         vkUnmapMemory(device, stagingDeviceMemory);
