@@ -132,6 +132,7 @@ var hierarchy =
       [ "Video::VulkanRenderPassAllocator", "class_video_1_1_vulkan_render_pass_allocator.html", null ]
     ] ],
     [ "Video::RenderProgram", "class_video_1_1_render_program.html", [
+      [ "Video::SpriteRenderProgram", "class_video_1_1_sprite_render_program.html", null ],
       [ "Video::StaticRenderProgram", "class_video_1_1_static_render_program.html", null ]
     ] ],
     [ "Video::RenderScene", "struct_video_1_1_render_scene.html", null ],
@@ -177,6 +178,7 @@ var hierarchy =
     [ "Video::DebugDrawing::Sphere", "struct_video_1_1_debug_drawing_1_1_sphere.html", null ],
     [ "Video::Sphere", "class_video_1_1_sphere.html", null ],
     [ "Video::RenderScene::SpotLight", "struct_video_1_1_render_scene_1_1_spot_light.html", null ],
+    [ "Video::RenderScene::Sprite", "struct_video_1_1_render_scene_1_1_sprite.html", null ],
     [ "Video::Geometry::VertexType::StaticVertex", "struct_video_1_1_geometry_1_1_vertex_type_1_1_static_vertex.html", null ],
     [ "Video::VulkanShaderProgram::StorageBufferInfo", "struct_video_1_1_vulkan_shader_program_1_1_storage_buffer_info.html", null ],
     [ "Component::SuperComponent", "class_component_1_1_super_component.html", [
@@ -191,6 +193,7 @@ var hierarchy =
       [ "Component::Shape", "class_component_1_1_shape.html", null ],
       [ "Component::SoundSource", "class_component_1_1_sound_source.html", null ],
       [ "Component::SpotLight", "class_component_1_1_spot_light.html", null ],
+      [ "Component::Sprite", "class_component_1_1_sprite.html", null ],
       [ "Component::Trigger", "class_component_1_1_trigger.html", null ]
     ] ],
     [ "SuperTrigger", "class_super_trigger.html", [

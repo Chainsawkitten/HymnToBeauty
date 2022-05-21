@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"_isocahedron_8hpp_source.html":[7,0,1,4,2,1],
+"_light_8hpp.html":[7,0,1,4,2,2],
 "_light_8hpp_source.html":[7,0,1,4,2,2],
 "_listener_8cpp.html":[7,0,1,1,1,4],
 "_listener_8hpp.html":[7,0,1,1,1,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "_sound_source_8cpp.html":[7,0,1,1,1,18],
 "_sound_source_8hpp.html":[7,0,1,1,1,19],
 "_sound_source_8hpp_source.html":[7,0,1,1,1,19],
-"_sphere_8cpp.html":[7,0,1,4,0,4],
-"_sphere_8hpp.html":[7,0,1,4,0,5],
-"_sphere_8hpp_source.html":[7,0,1,4,0,5]
+"_sphere_8cpp.html":[7,0,1,4,0,4]
 };

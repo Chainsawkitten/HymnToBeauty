@@ -17,6 +17,7 @@ var annotated_dup =
       [ "Shape", "class_component_1_1_shape.html", "class_component_1_1_shape" ],
       [ "SoundSource", "class_component_1_1_sound_source.html", "class_component_1_1_sound_source" ],
       [ "SpotLight", "class_component_1_1_spot_light.html", "class_component_1_1_spot_light" ],
+      [ "Sprite", "class_component_1_1_sprite.html", "class_component_1_1_sprite" ],
       [ "SuperComponent", "class_component_1_1_super_component.html", "class_component_1_1_super_component" ],
       [ "Trigger", "class_component_1_1_trigger.html", "class_component_1_1_trigger" ]
     ] ],
@@ -120,6 +121,7 @@ var annotated_dup =
       [ "Shader", "class_video_1_1_shader.html", "class_video_1_1_shader" ],
       [ "ShaderProgram", "class_video_1_1_shader_program.html", "class_video_1_1_shader_program" ],
       [ "Sphere", "class_video_1_1_sphere.html", "class_video_1_1_sphere" ],
+      [ "SpriteRenderProgram", "class_video_1_1_sprite_render_program.html", "class_video_1_1_sprite_render_program" ],
       [ "StaticRenderProgram", "class_video_1_1_static_render_program.html", "class_video_1_1_static_render_program" ],
       [ "Texture", "class_video_1_1_texture.html", "class_video_1_1_texture" ],
       [ "Texture2D", "class_video_1_1_texture2_d.html", "class_video_1_1_texture2_d" ],

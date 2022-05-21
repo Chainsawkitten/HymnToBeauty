@@ -21,9 +21,11 @@ var searchData=
   ['sphere_18',['Sphere',['../struct_physics_1_1_shape_1_1_sphere.html',1,'Physics::Shape::Sphere'],['../struct_video_1_1_debug_drawing_1_1_sphere.html',1,'Video::DebugDrawing::Sphere'],['../class_video_1_1_sphere.html',1,'Video::Sphere']]],
   ['sphereshapeeditor_19',['SphereShapeEditor',['../class_g_u_i_1_1_sphere_shape_editor.html',1,'GUI']]],
   ['spotlight_20',['SpotLight',['../class_component_1_1_spot_light.html',1,'Component::SpotLight'],['../struct_video_1_1_render_scene_1_1_spot_light.html',1,'Video::RenderScene::SpotLight']]],
-  ['staticrenderprogram_21',['StaticRenderProgram',['../class_video_1_1_static_render_program.html',1,'Video']]],
-  ['staticvertex_22',['StaticVertex',['../struct_video_1_1_geometry_1_1_vertex_type_1_1_static_vertex.html',1,'Video::Geometry::VertexType']]],
-  ['storagebufferinfo_23',['StorageBufferInfo',['../struct_video_1_1_vulkan_shader_program_1_1_storage_buffer_info.html',1,'Video::VulkanShaderProgram']]],
-  ['supercomponent_24',['SuperComponent',['../class_component_1_1_super_component.html',1,'Component']]],
-  ['supertrigger_25',['SuperTrigger',['../class_super_trigger.html',1,'']]]
+  ['sprite_21',['Sprite',['../class_component_1_1_sprite.html',1,'Component::Sprite'],['../struct_video_1_1_render_scene_1_1_sprite.html',1,'Video::RenderScene::Sprite']]],
+  ['spriterenderprogram_22',['SpriteRenderProgram',['../class_video_1_1_sprite_render_program.html',1,'Video']]],
+  ['staticrenderprogram_23',['StaticRenderProgram',['../class_video_1_1_static_render_program.html',1,'Video']]],
+  ['staticvertex_24',['StaticVertex',['../struct_video_1_1_geometry_1_1_vertex_type_1_1_static_vertex.html',1,'Video::Geometry::VertexType']]],
+  ['storagebufferinfo_25',['StorageBufferInfo',['../struct_video_1_1_vulkan_shader_program_1_1_storage_buffer_info.html',1,'Video::VulkanShaderProgram']]],
+  ['supercomponent_26',['SuperComponent',['../class_component_1_1_super_component.html',1,'Component']]],
+  ['supertrigger_27',['SuperTrigger',['../class_super_trigger.html',1,'']]]
 ];

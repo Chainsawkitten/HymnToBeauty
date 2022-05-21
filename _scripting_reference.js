@@ -10,6 +10,7 @@ var _scripting_reference =
       [ "Component::RigidBody", "_class_reference.html#RigidBody", null ],
       [ "Component::SoundSource", "_class_reference.html#SoundSource", null ],
       [ "Component::SpotLight", "_class_reference.html#SpotLight", null ],
+      [ "Component::Sprite", "_class_reference.html#Sprite", null ],
       [ "Hub", "_class_reference.html#Hub", null ],
       [ "DebugDrawingManager", "_class_reference.html#DebugDrawingManager", null ],
       [ "PhysicsManager", "_class_reference.html#PhysicsManager", null ]

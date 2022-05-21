@@ -31,6 +31,7 @@ var dir_e74635bff93ad8e4f78b71a46ef7ed78 =
       [ "Video::RenderScene::SpotLight", "struct_video_1_1_render_scene_1_1_spot_light.html", "struct_video_1_1_render_scene_1_1_spot_light" ],
       [ "Video::RenderScene::Camera", "struct_video_1_1_render_scene_1_1_camera.html", "struct_video_1_1_render_scene_1_1_camera" ],
       [ "Video::RenderScene::Mesh", "struct_video_1_1_render_scene_1_1_mesh.html", "struct_video_1_1_render_scene_1_1_mesh" ],
-      [ "Video::RenderScene::Icon", "struct_video_1_1_render_scene_1_1_icon.html", "struct_video_1_1_render_scene_1_1_icon" ]
+      [ "Video::RenderScene::Icon", "struct_video_1_1_render_scene_1_1_icon.html", "struct_video_1_1_render_scene_1_1_icon" ],
+      [ "Video::RenderScene::Sprite", "struct_video_1_1_render_scene_1_1_sprite.html", "struct_video_1_1_render_scene_1_1_sprite" ]
     ] ]
 ];

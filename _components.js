@@ -12,5 +12,6 @@ var _components =
     [ "Rigid body", "_component_rigid_body.html", null ],
     [ "Shape", "_component_shape.html", null ],
     [ "Sound source", "_component_sound_source.html", null ],
+    [ "Sprite", "_component_sprite.html", null ],
     [ "Trigger", "_component_trigger.html", null ]
 ];

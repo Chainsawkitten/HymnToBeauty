@@ -45,6 +45,10 @@ var dir_d0f3276f03e9a9cb8f8ba3f2a5ea1262 =
     [ "SpotLight.hpp", "_spot_light_8hpp.html", [
       [ "Component::SpotLight", "class_component_1_1_spot_light.html", "class_component_1_1_spot_light" ]
     ] ],
+    [ "Sprite.cpp", "_sprite_8cpp.html", null ],
+    [ "Sprite.hpp", "_sprite_8hpp.html", [
+      [ "Component::Sprite", "class_component_1_1_sprite.html", "class_component_1_1_sprite" ]
+    ] ],
     [ "SuperComponent.cpp", "_super_component_8cpp.html", null ],
     [ "SuperComponent.hpp", "_super_component_8hpp.html", [
       [ "Component::SuperComponent", "class_component_1_1_super_component.html", "class_component_1_1_super_component" ]

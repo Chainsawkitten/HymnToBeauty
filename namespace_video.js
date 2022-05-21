@@ -47,6 +47,7 @@ var namespace_video =
     [ "Shader", "class_video_1_1_shader.html", "class_video_1_1_shader" ],
     [ "ShaderProgram", "class_video_1_1_shader_program.html", "class_video_1_1_shader_program" ],
     [ "Sphere", "class_video_1_1_sphere.html", "class_video_1_1_sphere" ],
+    [ "SpriteRenderProgram", "class_video_1_1_sprite_render_program.html", "class_video_1_1_sprite_render_program" ],
     [ "StaticRenderProgram", "class_video_1_1_static_render_program.html", "class_video_1_1_static_render_program" ],
     [ "Texture", "class_video_1_1_texture.html", "class_video_1_1_texture" ],
     [ "Texture2D", "class_video_1_1_texture2_d.html", "class_video_1_1_texture2_d" ],

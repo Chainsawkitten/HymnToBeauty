@@ -6,6 +6,7 @@ var struct_video_1_1_render_scene =
     [ "Mesh", "struct_video_1_1_render_scene_1_1_mesh.html", "struct_video_1_1_render_scene_1_1_mesh" ],
     [ "PointLight", "struct_video_1_1_render_scene_1_1_point_light.html", "struct_video_1_1_render_scene_1_1_point_light" ],
     [ "SpotLight", "struct_video_1_1_render_scene_1_1_spot_light.html", "struct_video_1_1_render_scene_1_1_spot_light" ],
+    [ "Sprite", "struct_video_1_1_render_scene_1_1_sprite.html", "struct_video_1_1_render_scene_1_1_sprite" ],
     [ "cameras", "struct_video_1_1_render_scene.html#aca560c0314b6e00483e76e8db0482637", null ],
     [ "debugDrawingCircles", "struct_video_1_1_render_scene.html#aae0e9809026eaa5f202f25dc4db71503", null ],
     [ "debugDrawingCones", "struct_video_1_1_render_scene.html#a1315ba72a01e30db0bd9f6d45f8fca6d", null ],
@@ -20,5 +21,6 @@ var struct_video_1_1_render_scene =
     [ "icons", "struct_video_1_1_render_scene.html#a3c5807563d032201f99ff31cadff30fb", null ],
     [ "meshes", "struct_video_1_1_render_scene.html#acb7b8c496d7b2d115cf4a0aadcb776ec", null ],
     [ "pointLights", "struct_video_1_1_render_scene.html#a589ba604142691c3262c86c956e741f9", null ],
-    [ "spotLights", "struct_video_1_1_render_scene.html#a99bd884b72e600d9cafcd25be98778ef", null ]
+    [ "spotLights", "struct_video_1_1_render_scene.html#a99bd884b72e600d9cafcd25be98778ef", null ],
+    [ "sprites", "struct_video_1_1_render_scene.html#a0e75b5ada6ea1a27643bbea150e9b834", null ]
 ];

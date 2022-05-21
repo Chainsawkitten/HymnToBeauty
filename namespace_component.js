@@ -11,6 +11,7 @@ var namespace_component =
     [ "Shape", "class_component_1_1_shape.html", "class_component_1_1_shape" ],
     [ "SoundSource", "class_component_1_1_sound_source.html", "class_component_1_1_sound_source" ],
     [ "SpotLight", "class_component_1_1_spot_light.html", "class_component_1_1_spot_light" ],
+    [ "Sprite", "class_component_1_1_sprite.html", "class_component_1_1_sprite" ],
     [ "SuperComponent", "class_component_1_1_super_component.html", "class_component_1_1_super_component" ],
     [ "Trigger", "class_component_1_1_trigger.html", "class_component_1_1_trigger" ]
 ];
