@@ -115,6 +115,17 @@ struct RenderScene {
 
     /// Debug drawing meshes.
     std::vector<DebugDrawing::Mesh> debugDrawingMeshes;
+
+    ///  A sprite that should be rendered.
+    struct Sprite {
+        Texture2D* texture;
+        glm::mat4 modelMatrix;
+        glm::vec2 size;
+        glm::vec2 pivot;
+        glm::vec4 tint;
+    };
+
+    std::vector<Sprite> sprites;
 };
 
 } // namespace Video

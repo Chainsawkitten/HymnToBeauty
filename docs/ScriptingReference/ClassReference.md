@@ -78,6 +78,9 @@ Get the entity's sound source component, if it has any. Otherwise returns null.
 `Component::SpotLight@ GetSpotLight()`  
 Get the entity's spot light component, if it has any. Otherwise returns null.
 
+`Component::Sprite@ GetSprite()`  
+Get the entity's sprite component, if it has any. Otherwise returns null.
+
 ## Properties
 `string name`  
 The name of the entity.
@@ -177,6 +180,22 @@ Intensity.
 
 `float coneAngle`  
 Angle of the cone (in degrees).
+
+\section Sprite Component::Sprite
+A 2D sprite.
+
+## Properties
+`float pixelsPerUnit`  
+How many pixels go into one world unit (how large the sprite will be)
+
+`vec2 pivot`  
+Where the center of the sprite is. The sprite will be rotated/scaled around its pivot point.
+
+`vec3 tint`  
+A color the sprite will be blended with.
+
+`float alpha`  
+The opacity of the sprite.
 
 \section Hub
 Singleton class that holds all subsystems.

@@ -20,6 +20,7 @@ class RigidBody;
 class Script;
 class Shape;
 class SoundSource;
+class Sprite;
 class Trigger;
 } // namespace Component
 
@@ -88,6 +89,7 @@ class EntityEditor {
     void ScriptEditor(Component::Script* script);
     void ShapeEditor(Component::Shape* shape);
     void SoundSourceEditor(Component::SoundSource* soundSource);
+    void SpriteEditor(Component::Sprite* sprite);
     void TriggerEditor(Component::Trigger* trigger);
 
     Entity* entity = nullptr;
@@ -111,6 +113,8 @@ class EntityEditor {
     bool albedoShow = false;
     bool normalShow = false;
     bool roughnessMetallicShow = false;
+
+    bool textureShow = false;
 };
 } // namespace GUI
 

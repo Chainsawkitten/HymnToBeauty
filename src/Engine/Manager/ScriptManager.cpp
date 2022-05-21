@@ -31,6 +31,7 @@
 #include "../Component/RigidBody.hpp"
 #include "../Component/SoundSource.hpp"
 #include "../Component/SpotLight.hpp"
+#include "../Component/Sprite.hpp"
 #include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 #include "../MainWindow.hpp"
@@ -426,6 +427,12 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("SoundSource", "void Pause()", asMETHOD(SoundSource, Pause), asCALL_THISCALL);
     engine->RegisterObjectMethod("SoundSource", "void Stop()", asMETHOD(SoundSource, Stop), asCALL_THISCALL);
 
+    engine->RegisterObjectType("Sprite", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Sprite", "float pixelsPerUnit", asOFFSET(Sprite, pixelsPerUnit));
+    engine->RegisterObjectProperty("Sprite", "vec2 pivot", asOFFSET(Sprite, pivot));
+    engine->RegisterObjectProperty("Sprite", "vec3 tint", asOFFSET(Sprite, tint));
+    engine->RegisterObjectProperty("Sprite", "float alpha", asOFFSET(Sprite, alpha));
+
     engine->SetDefaultNamespace("");
 
     // Register getting components.
@@ -436,6 +443,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("Entity", "Component::RigidBody@ GetRigidBody()", asMETHODPR(Entity, GetComponent, () const, RigidBody*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::SpotLight@ GetSpotLight()", asMETHODPR(Entity, GetComponent, () const, SpotLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::SoundSource@ GetSoundSource()", asMETHODPR(Entity, GetComponent, () const, SoundSource*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Sprite@ GetSprite()", asMETHODPR(Entity, GetComponent, () const, Sprite*), asCALL_THISCALL);
 
     // Register managers.
     engine->RegisterObjectType("DebugDrawingManager", 0, asOBJ_REF | asOBJ_NOCOUNT);

@@ -14,6 +14,7 @@
 #include "../Component/PointLight.hpp"
 #include "../Component/Shape.hpp"
 #include "../Component/SpotLight.hpp"
+#include "../Component/Sprite.hpp"
 #include "../Component/SoundSource.hpp"
 #include "../Geometry/Model.hpp"
 #include "../Physics/Shape.hpp"
@@ -28,6 +29,7 @@
 #include <Utility/Log.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <Video/Texture/Texture2D.hpp>
+#include <Video/LowLevelRenderer/Interface/Texture.hpp>
 #include "Light.png.hpp"
 #include "SoundSource.png.hpp"
 #include "Camera.png.hpp"
@@ -80,6 +82,9 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
 
             // Meshes.
             AddMeshes(renderScene);
+
+            // Sprites.
+            AddSprites(renderScene);
 
             // Editor entities.
             if (showSoundSources || showLightSources || showCameras || showPhysics) {
@@ -222,6 +227,27 @@ Component::SpotLight* RenderManager::CreateSpotLight(const Json::Value& node) {
 
 const std::vector<Component::SpotLight*>& RenderManager::GetSpotLights() const {
     return spotLights.GetAll();
+}
+
+Component::Sprite* RenderManager::CreateSprite() {
+    return sprites.Create();
+}
+
+Component::Sprite* RenderManager::CreateSprite(const Json::Value& node) {
+    Component::Sprite* sprite = sprites.Create();
+
+    // Load values from Json node.
+    LoadTexture(sprite->texture, node.get("texture", "").asString());
+    sprite->pixelsPerUnit = node.get("pixelsPerUnit", 100.0f).asFloat();
+    sprite->pivot = Json::LoadVec2(node["pivot"]);
+    sprite->tint = Json::LoadVec3(node["tint"]);
+    sprite->alpha = node.get("alpha", 1.0f).asFloat();
+
+    return sprite;
+}
+
+const std::vector<Component::Sprite*>& RenderManager::GetSprites() const {
+    return sprites.GetAll();
 }
 
 void RenderManager::ClearKilledComponents() {
@@ -445,6 +471,25 @@ void RenderManager::AddDebugShapes(Video::RenderScene& renderScene) {
     renderScene.debugDrawingCylinders = Managers().debugDrawingManager->GetCylinders();
     renderScene.debugDrawingCones = Managers().debugDrawingManager->GetCones();
     renderScene.debugDrawingMeshes = Managers().debugDrawingManager->GetMeshes();
+}
+
+void RenderManager::AddSprites(Video::RenderScene& renderScene) {
+    const std::vector<Sprite*>& spriteComponents = sprites.GetAll();
+
+    for (Sprite* spriteComp : spriteComponents) {
+        Entity* entity = spriteComp->entity;
+        if (entity->IsKilled() || !entity->IsEnabled())
+            continue;
+
+        Video::RenderScene::Sprite sprite;
+        sprite.texture = spriteComp->texture->GetTexture();
+        sprite.modelMatrix = entity->GetModelMatrix();
+        sprite.size = glm::vec2(sprite.texture->GetTexture()->GetSize()) / spriteComp->pixelsPerUnit;
+        sprite.pivot = spriteComp->pivot;
+        sprite.tint = glm::vec4(spriteComp->tint, spriteComp->alpha);
+
+        renderScene.sprites.push_back(sprite);
+    }
 }
 
 void RenderManager::LoadTexture(TextureAsset*& texture, const std::string& name) {

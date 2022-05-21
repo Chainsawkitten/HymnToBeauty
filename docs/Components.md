@@ -10,4 +10,5 @@
  - \subpage ComponentRigidBody
  - \subpage ComponentShape
  - \subpage ComponentSoundSource
+ - \subpage ComponentSprite
  - \subpage ComponentTrigger

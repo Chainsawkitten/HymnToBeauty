@@ -10,6 +10,7 @@ struct GLFWwindow;
 
 namespace Video {
 class StaticRenderProgram;
+class SpriteRenderProgram;
 class Shader;
 class ShaderProgram;
 class Buffer;
@@ -98,6 +99,7 @@ class Renderer {
     void RenderIcons(const RenderScene& renderScene, const RenderScene::Camera& camera);
     void PrepareRenderingIcons(const glm::mat4& viewProjectionMatrix, const glm::vec3& cameraPosition, const glm::vec3& cameraUp);
     void RenderIcon(const glm::vec3& position);
+    void RenderSprites(const RenderScene& renderScene, const RenderScene::Camera& camera);
 
     LowLevelRenderer* lowLevelRenderer;
 
@@ -110,6 +112,7 @@ class Renderer {
     CommandBuffer* commandBuffer;
 
     StaticRenderProgram* staticRenderProgram;
+    SpriteRenderProgram* spriteRenderProgram;
 
     ZBinning* zBinning;
 
@@ -123,15 +126,15 @@ class Renderer {
     ShaderProgram* blitShaderProgram;
     GraphicsPipeline* blitGraphicsPipeline;
 
+    Buffer* quadVertexBuffer;
+    VertexDescription* quadVertexDescription;
+    GeometryBinding* quadGeometryBinding;
+
     // Icon rendering.
     Shader* iconVertexShader;
     Shader* iconFragmentShader;
     ShaderProgram* iconShaderProgram;
     GraphicsPipeline* iconGraphicsPipeline;
-
-    Buffer* iconVertexBuffer;
-    VertexDescription* iconVertexDescription;
-    GeometryBinding* iconGeometryBinding;
 
     glm::vec3 cameraPosition;
     glm::vec3 cameraUp;

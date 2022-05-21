@@ -38,8 +38,3 @@ Json::Value Material::Save() const {
 
     return component;
 }
-
-void Material::LoadTexture(TextureAsset*& texture, const std::string& name) {
-    if (!name.empty())
-        texture = Managers().resourceManager->CreateTextureAsset(name);
-}

@@ -12,6 +12,7 @@ set(SRCS
     Lighting/ZBinning.cpp
     PostProcessing/PostProcessing.cpp
     RenderProgram/RenderProgram.cpp
+    RenderProgram/SpriteRenderProgram.cpp
     RenderProgram/StaticRenderProgram.cpp
     Texture/Texture2D.cpp
     LowLevelRenderer/Interface/BufferAllocator.cpp
@@ -36,6 +37,7 @@ set(HEADERS
     Lighting/ZBinning.hpp
     PostProcessing/PostProcessing.hpp
     RenderProgram/RenderProgram.hpp
+    RenderProgram/SpriteRenderProgram.hpp
     RenderProgram/StaticRenderProgram.hpp
     Texture/Texture2D.hpp
     LowLevelRenderer/Interface/LowLevelRenderer.hpp
@@ -169,6 +171,8 @@ set(SHADERS
     shaders/LightTiling.vert
     shaders/LightTiling.frag
     shaders/SampleTexture.frag
+    shaders/Sprite.vert
+    shaders/Sprite.frag
     shaders/PostProcessing/BloomBlur.frag
     shaders/PostProcessing/BloomDownscale.frag
     shaders/PostProcessing/BloomThreshold.frag

@@ -18,6 +18,7 @@ class Material;
 class Mesh;
 class PointLight;
 class SpotLight;
+class Sprite;
 } // namespace Component
 namespace Json {
 class Value;
@@ -159,6 +160,25 @@ class RenderManager {
      */
     const std::vector<Component::SpotLight*>& GetSpotLights() const;
 
+    /// Create sprite component.
+    /**
+     * @return The created component.
+     */
+    Component::Sprite* CreateSprite();
+
+    /// Create sprite component.
+    /**
+     * @param node Json node to load the component from.
+     * @return The created component.
+     */
+    Component::Sprite* CreateSprite(const Json::Value& node);
+
+    /// Get all sprite components.
+    /**
+     * @return All sprite components.
+     */
+    const std::vector<Component::Sprite*>& GetSprites() const;
+
     /// Remove all killed components.
     void ClearKilledComponents();
 
@@ -183,6 +203,8 @@ class RenderManager {
 
     void AddDebugShapes(Video::RenderScene& renderScene);
 
+    void AddSprites(Video::RenderScene& renderScene);
+
     void LoadTexture(TextureAsset*& texture, const std::string& name);
 
     Video::Renderer* renderer;
@@ -199,6 +221,7 @@ class RenderManager {
     ComponentContainer<Component::Mesh> meshes;
     ComponentContainer<Component::PointLight> pointLights;
     ComponentContainer<Component::SpotLight> spotLights;
+    ComponentContainer<Component::Sprite> sprites;
 
     uint8_t textureReduction = 0;
 };
