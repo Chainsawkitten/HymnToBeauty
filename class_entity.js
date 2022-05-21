@@ -40,7 +40,6 @@ var class_entity =
     [ "SetWorldOrientation", "class_entity.html#a252ca2612407521e256c40f819f82e90", null ],
     [ "SetWorldPosition", "class_entity.html#a84f5bca78df772653b2fe51ef55e19eb", null ],
     [ "brushActive", "class_entity.html#a8905566920749a7f6886a8c6b83b616a", null ],
-    [ "isStatic", "class_entity.html#a0301dce0d40ea1c567d42ba1b2d3a6c4", null ],
     [ "loadPaintModeClicked", "class_entity.html#ab671b8d6cb6b566b048ebc85b0d7d962", null ],
     [ "name", "class_entity.html#a931b21fbdebb1a5963b4bcab5df128f5", null ],
     [ "painting", "class_entity.html#af1a130c27d77acfbb93d0cfb7d6f2ed8", null ],
