@@ -14,8 +14,6 @@ bool Shader::Open(const string& filename) {
 
     source = GetSource(filename);
 
-    /// @todo Handle includes.
-
     return true;
 }
 
@@ -82,13 +80,22 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
         if (reflectionInfo.pushConstantCount > 0) {
             outFile << "static ShaderSource::ReflectionInfo::PushConstant pushConstants[" << reflectionInfo.pushConstantCount << "] = {\n";
 
+            uint32_t pushConstantSize = 0u;
+
             for (unsigned int i = 0; i < reflectionInfo.pushConstantCount; ++i) {
                 outFile << "    { " << PushConstantTypeToString(reflectionInfo.pushConstants[i].type) << ", \"" << reflectionInfo.pushConstants[i].name << "\" },\n";
+                pushConstantSize += PushConstantTypeToSize(reflectionInfo.pushConstants[i].type);
             }
 
             outFile << "};\n";
 
             delete[] reflectionInfo.pushConstants;
+
+            if (pushConstantSize > 128u) {
+                outFile.close();
+                cerr << "Push constants exceed 128 byte.\n";
+                return false;
+            }
         }
 
         // Storage buffers.
@@ -377,7 +384,7 @@ ShaderSource::ReflectionInfo::PushConstant::Type Shader::StringToPushConstantTyp
         return ShaderSource::ReflectionInfo::PushConstant::Type::MAT4;
     }
 
-    std::cerr << "Failed to parse push constant size.\n";
+    std::cerr << "Failed to parse push constant type.\n";
     return ShaderSource::ReflectionInfo::PushConstant::Type::VEC3;
 }
 
