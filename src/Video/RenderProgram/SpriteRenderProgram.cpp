@@ -53,6 +53,8 @@ SpriteRenderProgram::SpriteRenderProgram(LowLevelRenderer* lowLevelRenderer) {
     configuration.depthComparison = DepthComparison::LESS_EQUAL;
 
     graphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, vertexDescription);
+
+    sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
 }
 
 SpriteRenderProgram::~SpriteRenderProgram() {
@@ -89,7 +91,7 @@ void SpriteRenderProgram::PreRender(CommandBuffer& commandBuffer, const glm::mat
 
 void SpriteRenderProgram::Render(CommandBuffer& commandBuffer, Video::Texture2D* texture, const glm::vec2& size, const glm::vec2& pivot, const glm::mat4& modelMatrix, const glm::vec4& tint) const {
     // Textures
-    commandBuffer.BindMaterial({texture->GetTexture()});
+    commandBuffer.BindMaterial({{texture->GetTexture(), sampler}});
 
     // Render sprite.
     struct PushConstants {

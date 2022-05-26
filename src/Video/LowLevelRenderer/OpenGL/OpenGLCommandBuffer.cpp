@@ -9,6 +9,7 @@
 #include "OpenGLVertexDescription.hpp"
 #include "OpenGLGeometryBinding.hpp"
 #include "OpenGLTexture.hpp"
+#include "OpenGLSampler.hpp"
 #include "OpenGLBuffer.hpp"
 #include "OpenGLRenderPass.hpp"
 #include "OpenGLRenderPassAllocator.hpp"
@@ -19,6 +20,7 @@ namespace Video {
 
 OpenGLCommandBuffer::OpenGLCommandBuffer(OpenGLRenderer& openGLRenderer, OpenGLRenderPassAllocator& renderPassAllocator) : openGLRenderer(openGLRenderer), renderPassAllocator(renderPassAllocator) {
     blitShaderProgram = openGLRenderer.GetBlitShaderProgram();
+    blitSampler = static_cast<const OpenGLSampler*>(openGLRenderer.GetSampler(Sampler::Filter::NEAREST, Sampler::Clamping::CLAMP_TO_EDGE))->GetSampler(false);
 }
 
 OpenGLCommandBuffer::~OpenGLCommandBuffer() {}
@@ -292,17 +294,21 @@ void OpenGLCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
     }
 }
 
-void OpenGLCommandBuffer::BindMaterial(std::initializer_list<Texture*> textures) {
+void OpenGLCommandBuffer::BindMaterial(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) {
     Command command = {};
     command.type = Command::Type::BIND_TEXTURE;
 
-    GLenum slot = GL_TEXTURE0;
-    for (const Texture* texture : textures) {
-        assert(texture != nullptr);
+    GLenum slot = 0;
+    for (auto& texture : textures) {
+        assert(texture.first != nullptr);
+        assert(texture.second != nullptr);
 
+        const OpenGLTexture* openGLTexture = static_cast<const OpenGLTexture*>(texture.first);
+    
         command.bindTextureCommand.slot = slot++;
-        command.bindTextureCommand.texture = static_cast<const OpenGLTexture*>(texture)->GetID();
-
+        command.bindTextureCommand.texture = openGLTexture->GetID();
+        command.bindTextureCommand.sampler = static_cast<const OpenGLSampler*>(texture.second)->GetSampler(openGLTexture->HasMipMaps());
+    
         AddCommand(command);
     }
 }
@@ -677,8 +683,9 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         break;
     }
     case Command::Type::BIND_TEXTURE: {
-        glActiveTexture(command.bindTextureCommand.slot);
+        glActiveTexture(GL_TEXTURE0 + command.bindTextureCommand.slot);
         glBindTexture(GL_TEXTURE_2D, command.bindTextureCommand.texture);
+        glBindSampler(command.bindTextureCommand.slot, command.bindTextureCommand.sampler);
         break;
     }
     case Command::Type::BIND_UNIFORM_BUFFER: {
@@ -714,6 +721,7 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         glUseProgram(blitShaderProgram->GetID());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, command.blitToSwapChainCommand.texture);
+        glBindSampler(0, blitSampler);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glEnable(GL_SCISSOR_TEST);
         break;

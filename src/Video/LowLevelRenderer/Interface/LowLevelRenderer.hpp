@@ -6,6 +6,7 @@
 #include "RenderPass.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "Sampler.hpp"
 #include "GraphicsPipeline.hpp"
 
 #include <glm/glm.hpp>
@@ -139,13 +140,26 @@ class LowLevelRenderer {
      * @param format The format of the texture.
      * @param components The number of components in the texture, 0 if no texture data is supplied.
      * @param data The texture data to upload, or nullptr.
+     * 
+     * @return The created texture.
      */
     virtual Texture* CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) = 0;
+
+    /// Get a sampler.
+    /**
+     * @param filter The interpolation to apply.
+     * @param clamping How to handle sampling outside the texture dimensions.
+     * 
+     * @return The requested sampler.
+     */
+    virtual const Sampler* GetSampler(Sampler::Filter filter, Sampler::Clamping clamping) const = 0;
 
     /// Create a render target.
     /**
      * @param size The size of the texture, in pixels.
      * @param format The format of the texture.
+     * 
+     * @return The created texture.
      */
     virtual Texture* CreateRenderTarget(const glm::uvec2& size, Texture::Format format) = 0;
 
@@ -160,12 +174,16 @@ class LowLevelRenderer {
      * @param shaderProgram The shader program to use.
      * @param configuration The configuration of the pipeline.
      * @param vertexDescription The description of the vertex input to the pipeline.
+     * 
+     * @return The created graphics pipeline.
      */
     virtual GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) = 0;
 
     /// Create a compute pipeline.
     /**
      * @param shaderProgram The shader program to use.
+     * 
+     * @return The created compute pipeline.
      */
     virtual ComputePipeline* CreateComputePipeline(const ShaderProgram* shaderProgram) = 0;
 

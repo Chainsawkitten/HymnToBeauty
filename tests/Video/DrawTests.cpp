@@ -270,6 +270,8 @@ bool DrawTexturedTriangle(void* data) {
     Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
     Texture2D* texture2 = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
 
+    const Sampler* sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
+
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
@@ -278,7 +280,7 @@ bool DrawTexturedTriangle(void* data) {
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
-    commandBuffer->BindMaterial({ texture->GetTexture(), texture2->GetTexture() });
+    commandBuffer->BindMaterial({ {texture->GetTexture(), sampler}, {texture2->GetTexture(), sampler} });
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 
@@ -766,6 +768,9 @@ bool InvertColors(void* data) {
     // Create geometry binding.
     GeometryBinding* triangleGeometryBinding = lowLevelRenderer->CreateGeometryBinding(triangleVertexDescription, triangleVertexBuffer);
 
+    // Get sampler.
+    const Sampler* sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
+
     // Push constants.
     struct {
         glm::mat4 modelMatrix;
@@ -799,7 +804,7 @@ bool InvertColors(void* data) {
     commandBuffer->BeginRenderPass(secondColorTexture, RenderPass::LoadOperation::DONT_CARE);
     commandBuffer->BindGraphicsPipeline(invertGraphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
-    commandBuffer->BindMaterial({ colorTexture });
+    commandBuffer->BindMaterial({ {colorTexture, sampler} });
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 
@@ -894,6 +899,7 @@ bool DrawMipmappedTriangle(void* data) {
 
     // Create texture.
     Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
+    const Sampler* sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
@@ -903,7 +909,7 @@ bool DrawMipmappedTriangle(void* data) {
     commandBuffer->BindGraphicsPipeline(graphicsPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     commandBuffer->BindGeometry(geometryBinding);
-    commandBuffer->BindMaterial({ texture->GetTexture() });
+    commandBuffer->BindMaterial({ {texture->GetTexture(), sampler} });
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 

@@ -5,12 +5,14 @@
 #include "ShaderProgram.hpp"
 #include "RenderPass.hpp"
 #include <initializer_list>
+#include <utility>
 
 namespace Video {
 
 class VertexDescription;
 class GeometryBinding;
 class Texture;
+class Sampler;
 class Buffer;
 class GraphicsPipeline;
 class ComputePipeline;
@@ -114,7 +116,7 @@ class CommandBuffer {
     /**
      * @param textures The textures to bind to the graphics pipeline.
      */
-    virtual void BindMaterial(std::initializer_list<Texture*> textures) = 0;
+    virtual void BindMaterial(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) = 0;
 
     /// Update push constants.
     /**

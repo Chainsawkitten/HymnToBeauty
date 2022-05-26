@@ -40,31 +40,9 @@ OpenGLTexture::OpenGLTexture(const glm::uvec2 size, Texture::Type type, Texture:
     // Upload the image data.
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, size.x, size.y, 0, dataFormat, GL_UNSIGNED_BYTE, (data != nullptr) ? data : NULL);
 
-    /// @todo Configurable filtering.
-    switch (type) {
-    case Texture::Type::COLOR:
-        // Set texture parameters.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-        // Generate mipmaps.
+    if (type == Texture::Type::COLOR) {
         glGenerateMipmap(GL_TEXTURE_2D);
-        break;
-    case Texture::Type::RENDER_COLOR:
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        break;
-    case Texture::Type::RENDER_DEPTH:
-        // Set texture parameters.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        break;
+        hasMipMaps = true;
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -76,6 +54,10 @@ OpenGLTexture::~OpenGLTexture() {
 
 unsigned int OpenGLTexture::GetID() const {
     return texture;
+}
+
+bool OpenGLTexture::HasMipMaps() const {
+    return hasMipMaps;
 }
 
 GLenum OpenGLTexture::Format(int components) {

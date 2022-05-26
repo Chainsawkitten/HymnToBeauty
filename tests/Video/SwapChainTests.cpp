@@ -84,6 +84,7 @@ bool MultipleFrames(void* data) {
 
     // Create texture.
     Texture2D* texture = new Texture2D(lowLevelRenderer, TEST_PNG, TEST_PNG_LENGTH);
+    const Sampler* sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
@@ -105,7 +106,7 @@ bool MultipleFrames(void* data) {
         commandBuffer->BindGraphicsPipeline(graphicsPipeline);
         commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(VideoSuite::swapchainSize, VideoSuite::swapchainSize));
         commandBuffer->BindGeometry(geometryBinding);
-        commandBuffer->BindMaterial({ texture->GetTexture() });
+        commandBuffer->BindMaterial({ {texture->GetTexture(), sampler} });
         commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::MATRICES, uniformBuffer);
         const glm::mat4 modelMatrix = glm::translate(glm::mat4(), trianglePosition);
         commandBuffer->PushConstants(&modelMatrix);

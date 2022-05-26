@@ -133,52 +133,6 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
         GenerateMipMaps(vulkanRenderer, physicalDevice, size, mipLevels, internalFormat);
     }
 
-    if (type != Texture::Type::RENDER_DEPTH) {
-        /// @todo These could be cached somewhere since they're not image specific.
-        VkSamplerCreateInfo samplerCreateInfo = {};
-        samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        samplerCreateInfo.mipLodBias = 0.0f;
-        samplerCreateInfo.anisotropyEnable = VK_FALSE;
-        samplerCreateInfo.maxAnisotropy = 1.0f;
-        samplerCreateInfo.compareEnable = VK_FALSE;
-        samplerCreateInfo.minLod = 0.0f;
-        samplerCreateInfo.maxLod = 1000.0f;
-        samplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
-        samplerCreateInfo.unnormalizedCoordinates = VK_FALSE;
-
-        /// @todo Configurable filtering.
-        switch (type) {
-        case Texture::Type::COLOR:
-            samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
-            samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
-            samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-            samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            break;
-        case Texture::Type::RENDER_COLOR:
-            samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
-            samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
-            samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-            samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            break;
-        case Texture::Type::RENDER_DEPTH:
-            samplerCreateInfo.magFilter = VK_FILTER_NEAREST;
-            samplerCreateInfo.minFilter = VK_FILTER_NEAREST;
-            samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-            samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-            break;
-        }
-
-        if (vkCreateSampler(device, &samplerCreateInfo, nullptr, &sampler) != VK_SUCCESS) {
-            Log(Log::ERR) << "Failed to create sampler.\n";
-        }
-    }
-
     if (type == Texture::Type::RENDER_COLOR || type == Texture::Type::RENDER_DEPTH) {
         // Transition to attachment layout.
         currentLayout = (type == Texture::Type::RENDER_DEPTH ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
@@ -196,7 +150,6 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
 }
 
 VulkanTexture::~VulkanTexture() {
-    vkDestroySampler(device, sampler, nullptr);
     vkDestroyImageView(device, imageView, nullptr);
     vkDestroyImage(device, image, nullptr);
     vkFreeMemory(device, deviceMemory, nullptr);
@@ -212,10 +165,6 @@ VkImage VulkanTexture::GetImage() const {
 
 VkImageView VulkanTexture::GetImageView() const {
     return imageView;
-}
-
-VkSampler VulkanTexture::GetSampler() const {
-    return sampler;
 }
 
 VkImageLayout VulkanTexture::GetImageLayout() const {

@@ -29,6 +29,12 @@ class OpenGLTexture : public Texture {
      */
     unsigned int GetID() const;
 
+    /// Get whether the texture has mip maps.
+    /**
+     * @return Whether the texture has mip maps.
+     */
+    bool HasMipMaps() const;
+
   private:
     OpenGLTexture(const OpenGLTexture& other) = delete;
 
@@ -36,6 +42,7 @@ class OpenGLTexture : public Texture {
     static GLenum Format(int components);
 
     GLuint texture;
+    bool hasMipMaps = false;
 };
 
 }
