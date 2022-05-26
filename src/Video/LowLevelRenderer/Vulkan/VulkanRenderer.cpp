@@ -11,6 +11,7 @@
 #include "VulkanShader.hpp"
 #include "VulkanShaderProgram.hpp"
 #include "VulkanTexture.hpp"
+#include "VulkanSampler.hpp"
 #include "VulkanRenderPass.hpp"
 #include "VulkanRenderPassAllocator.hpp"
 #include "VulkanRenderTargetAllocator.hpp"
@@ -40,6 +41,7 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
     CreateBakedDescriptorSetLayouts();
     CreateDescriptorPool();
     CreateQueries();
+    CreateSamplers();
 
     for (unsigned int i = 0; i < ShaderProgram::BindingType::BINDING_TYPES; ++i) {
         currentBufferDescriptorSet[i] = 0;
@@ -62,6 +64,10 @@ VulkanRenderer::~VulkanRenderer() {
     delete bufferAllocator;
     delete renderPassAllocator;
     delete renderTargetAllocator;
+
+    for (uint32_t i = 0; i < static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT); ++i) {
+        delete samplers[i];
+    }
 
     for (VkQueryPool queryPool : queryPools) {
         vkDestroyQueryPool(device, queryPool, nullptr);
@@ -265,6 +271,13 @@ Texture* VulkanRenderer::CreateTexture(const glm::uvec2 size, Texture::Format fo
     assert(data != nullptr);
 
     return new VulkanTexture(*this, device, physicalDevice, size, Texture::Type::COLOR, format, components, data);
+}
+
+const Sampler* VulkanRenderer::GetSampler(Sampler::Filter filter, Sampler::Clamping clamping) const {
+    assert(filter < Sampler::Filter::COUNT);
+    assert(clamping < Sampler::Clamping::COUNT);
+
+    return samplers[static_cast<uint32_t>(filter) * static_cast<uint32_t>(Sampler::Filter::COUNT) + static_cast<uint32_t>(clamping)];
 }
 
 Texture* VulkanRenderer::CreateRenderTarget(const glm::uvec2& size, Texture::Format format) {
@@ -498,7 +511,7 @@ VkDescriptorSet VulkanRenderer::GetStorageBufferDescriptorSet(std::initializer_l
     return descriptorSet;
 }
 
-VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<Texture*> textures) {
+VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) {
     /// @todo Have some material object keep track of this instead of treating textures individually.
 
     VkDescriptorSetLayout descriptorSetLayout = GetMaterialDescriptorSetLayout(textures.size());
@@ -526,9 +539,9 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<Texture*>
     // Write data.
     VkDescriptorImageInfo* descriptorImageInfos = new VkDescriptorImageInfo[textures.size()];
     unsigned int i = 0;
-    for (const Texture* texture : textures) {
-        descriptorImageInfos[i].sampler = static_cast<const VulkanTexture*>(texture)->GetSampler();
-        descriptorImageInfos[i].imageView = static_cast<const VulkanTexture*>(texture)->GetImageView();
+    for (auto& texture : textures) {
+        descriptorImageInfos[i].sampler = static_cast<const VulkanSampler*>(texture.second)->GetSampler();
+        descriptorImageInfos[i].imageView = static_cast<const VulkanTexture*>(texture.first)->GetImageView();
         descriptorImageInfos[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         ++i;
     }
@@ -1256,6 +1269,14 @@ void VulkanRenderer::ResetQueries(uint32_t queryPool) {
     }
 
     needQueryWait[queryPool] = true;
+}
+
+void VulkanRenderer::CreateSamplers() {
+    for (uint32_t i = 0; i < static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT); ++i) {
+        samplers[i] = new VulkanSampler(device,
+                                        static_cast<Sampler::Filter>(i / static_cast<uint32_t>(Sampler::Filter::COUNT)),
+                                        static_cast<Sampler::Clamping>(i % static_cast<uint32_t>(Sampler::Filter::COUNT)));
+    }
 }
 
 void VulkanRenderer::AcquireSwapChainImage() {

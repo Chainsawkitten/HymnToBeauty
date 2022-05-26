@@ -11,6 +11,7 @@
 #include "OpenGLShader.hpp"
 #include "OpenGLShaderProgram.hpp"
 #include "OpenGLTexture.hpp"
+#include "OpenGLSampler.hpp"
 #include "OpenGLRenderPass.hpp"
 #include "OpenGLRenderPassAllocator.hpp"
 #include "OpenGLRenderTargetAllocator.hpp"
@@ -55,6 +56,12 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
         freeQueries.push_back(queries[i]);
     }
 
+    // Create samplers.
+    for (uint32_t i = 0; i < static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT); ++i) {
+        samplers[i] = new OpenGLSampler(static_cast<Sampler::Filter>(i / static_cast<uint32_t>(Sampler::Filter::COUNT)),
+                                        static_cast<Sampler::Clamping>(i % static_cast<uint32_t>(Sampler::Filter::COUNT)));
+    }
+
     // Get optional features.
     GLint precision;
     glGetQueryiv(GL_TIMESTAMP, GL_QUERY_COUNTER_BITS, &precision);
@@ -85,6 +92,10 @@ OpenGLRenderer::~OpenGLRenderer() {
     delete bufferAllocator;
     delete renderPassAllocator;
     delete renderTargetAllocator;
+
+    for (uint32_t i = 0; i < static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT); ++i) {
+        delete samplers[i];
+    }
 }
 
 CommandBuffer* OpenGLRenderer::CreateCommandBuffer() {
@@ -184,6 +195,13 @@ ShaderProgram* OpenGLRenderer::CreateShaderProgram(std::initializer_list<const S
 Texture* OpenGLRenderer::CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) {
     assert(data != nullptr);
     return new OpenGLTexture(size, Texture::Type::COLOR, format, components, data);
+}
+
+const Sampler* OpenGLRenderer::GetSampler(Sampler::Filter filter, Sampler::Clamping clamping) const {
+    assert(filter < Sampler::Filter::COUNT);
+    assert(clamping < Sampler::Clamping::COUNT);
+
+    return samplers[static_cast<uint32_t>(filter) * static_cast<uint32_t>(Sampler::Filter::COUNT) + static_cast<uint32_t>(clamping)];
 }
 
 Texture* OpenGLRenderer::CreateRenderTarget(const glm::uvec2& size, Texture::Format format) {

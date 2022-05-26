@@ -12,6 +12,7 @@ class GraphicsPipeline;
 class Buffer;
 class CommandBuffer;
 class Texture;
+class Sampler;
 class GeometryBinding;
 class VertexDescription;
 
@@ -58,6 +59,8 @@ class SpriteRenderProgram : public RenderProgram {
     Shader* fragmentShader;
     ShaderProgram* shaderProgram;
     GraphicsPipeline* graphicsPipeline;
+
+    const Sampler* sampler;
 
     struct MatricesValues {
         glm::mat4 viewProjectionMatrix;

@@ -46,6 +46,8 @@ StaticRenderProgram::StaticRenderProgram(LowLevelRenderer* lowLevelRenderer) {
     configuration.depthComparison = DepthComparison::LESS;
     configuration.depthMode = DepthMode::TEST_WRITE;
     depthGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(depthShaderProgram, configuration, vertexDescription);
+
+    sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::REPEAT);
 }
 
 StaticRenderProgram::~StaticRenderProgram() {
@@ -118,7 +120,11 @@ void StaticRenderProgram::Render(CommandBuffer& commandBuffer, Geometry::Geometr
     commandBuffer.BindGeometry(geometry->GetGeometryBinding());
 
     // Textures
-    commandBuffer.BindMaterial({ textureAlbedo->GetTexture(), textureNormal->GetTexture(), textureRoughnessMetallic->GetTexture() });
+    commandBuffer.BindMaterial({
+        {textureAlbedo->GetTexture(), sampler},
+        {textureNormal->GetTexture(), sampler},
+        {textureRoughnessMetallic->GetTexture(), sampler}
+    });
 
     // Render model.
     struct PushConstants {

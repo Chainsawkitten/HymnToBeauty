@@ -62,6 +62,8 @@ PostProcessing::PostProcessing(LowLevelRenderer* lowLevelRenderer) {
     // Dummy texture (used to fill texture slots for disabled effects).
     unsigned char dummyData[4] = {0, 0, 0, 0};
     dummyTexture = lowLevelRenderer->CreateTexture(glm::uvec2(1, 1), Texture::Format::R8G8B8A8, 4, dummyData);
+
+    sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
 }
 
 PostProcessing::~PostProcessing() {
@@ -148,7 +150,10 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
     commandBuffer.BindGraphicsPipeline(uberPipeline);
     commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
     commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, uberUniformBuffer);
-    commandBuffer.BindMaterial({inputTexture, bloomTexture});
+    commandBuffer.BindMaterial({
+        {inputTexture, sampler},
+        {bloomTexture, sampler}
+    });
     commandBuffer.Draw(3);
 
     if (configuration.bloom.enabled) {
@@ -163,7 +168,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
         commandBuffer.BindGraphicsPipeline(fxaaPipeline);
         commandBuffer.SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
         commandBuffer.BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, fxaaUniformBuffer);
-        commandBuffer.BindMaterial({tempTexture});
+        commandBuffer.BindMaterial({{tempTexture, sampler}});
         commandBuffer.Draw(3);
 
         lowLevelRenderer->FreeRenderTarget(tempTexture);
@@ -204,7 +209,7 @@ void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture*
             commandBuffer.BindGraphicsPipeline(bloomThresholdPipeline);
             commandBuffer.SetViewportAndScissor(glm::uvec2(0.0f, 0.0f), size);
             commandBuffer.PushConstants(&configuration.bloom.threshold);
-            commandBuffer.BindMaterial({inputTexture});
+            commandBuffer.BindMaterial({{inputTexture, sampler}});
             commandBuffer.Draw(3);
             commandBuffer.EndRenderPass();
         } else {
@@ -212,7 +217,7 @@ void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture*
             commandBuffer.BeginRenderPass(bloomPasses[i].textures[0], RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE, "Bloom downscale");
             commandBuffer.BindGraphicsPipeline(bloomDownscalePipeline);
             commandBuffer.SetViewportAndScissor(glm::uvec2(0.0f, 0.0f), size);
-            commandBuffer.BindMaterial({bloomPasses[i - 1].textures[0]});
+            commandBuffer.BindMaterial({{bloomPasses[i - 1].textures[0], sampler}});
             commandBuffer.Draw(3);
             commandBuffer.EndRenderPass();
         }
@@ -221,7 +226,7 @@ void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture*
         commandBuffer.BeginRenderPass(bloomPasses[i].textures[1], RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE, "Horizontal blur");
         commandBuffer.BindGraphicsPipeline(bloomBlurPipeline);
         commandBuffer.SetViewportAndScissor(glm::uvec2(0.0f, 0.0f), size);
-        commandBuffer.BindMaterial({bloomPasses[i].textures[0]});
+        commandBuffer.BindMaterial({{bloomPasses[i].textures[0], sampler}});
         glm::vec2 offset(1.0f / size.x, 0.0f);
         commandBuffer.PushConstants(&offset);
         commandBuffer.Draw(3);
@@ -231,7 +236,7 @@ void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture*
         commandBuffer.BeginRenderPass(bloomPasses[i].textures[0], RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE, "Vertical blur");
         commandBuffer.BindGraphicsPipeline(bloomBlurPipeline);
         commandBuffer.SetViewportAndScissor(glm::uvec2(0.0f, 0.0f), size);
-        commandBuffer.BindMaterial({bloomPasses[i].textures[1]});
+        commandBuffer.BindMaterial({{bloomPasses[i].textures[1], sampler}});
         offset = glm::vec2(0.0f, 1.0f / size.y);
         commandBuffer.PushConstants(&offset);
         commandBuffer.Draw(3);
@@ -247,7 +252,10 @@ void PostProcessing::GenerateBloomTexture(CommandBuffer& commandBuffer, Texture*
         commandBuffer.BindGraphicsPipeline(bloomUpscalePipeline);
         commandBuffer.SetViewportAndScissor(glm::uvec2(0.0f, 0.0f), size);
         commandBuffer.PushConstants(&configuration.bloom.scatter);
-        commandBuffer.BindMaterial({bloomPasses[pass].textures[0], bloomPasses[pass + 1].textures[i == 0 ? 0 : 1]});
+        commandBuffer.BindMaterial({
+            {bloomPasses[pass].textures[0], sampler},
+            {bloomPasses[pass + 1].textures[i == 0 ? 0 : 1], sampler}
+        });
         commandBuffer.Draw(3);
         commandBuffer.EndRenderPass();
     }

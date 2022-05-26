@@ -81,6 +81,8 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 		blitGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(blitShaderProgram, configuration);
 	}
 
+    sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
+
     // Create quad geometry.
     {
         glm::vec2 vertex[6];
@@ -217,7 +219,7 @@ void Renderer::Render(const RenderScene& renderScene) {
         commandBuffer->BeginRenderPass(outputTexture, firstCamera ? RenderPass::LoadOperation::CLEAR : RenderPass::LoadOperation::LOAD, nullptr, RenderPass::LoadOperation::DONT_CARE, "Blit");
         commandBuffer->BindGraphicsPipeline(blitGraphicsPipeline);
         commandBuffer->SetViewportAndScissor(cameraOffset, cameraSize);
-        commandBuffer->BindMaterial({ postProcessingTexture });
+        commandBuffer->BindMaterial({{postProcessingTexture, sampler}});
         commandBuffer->Draw(3);
         commandBuffer->EndRenderPass();
 
@@ -405,7 +407,7 @@ void Renderer::RenderIcons(const RenderScene& renderScene, const RenderScene::Ca
         PrepareRenderingIcons(camera.viewProjectionMatrix, camera.position, up);
 
         for (const RenderScene::Icon& icon : renderScene.icons) {
-            commandBuffer->BindMaterial({icon.texture->GetTexture()});
+            commandBuffer->BindMaterial({{icon.texture->GetTexture(), sampler}});
 
             for (const glm::vec3& position : icon.positions) {
                 RenderIcon(position);
