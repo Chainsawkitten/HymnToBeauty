@@ -19,6 +19,7 @@ class GeometryBinding;
 class LowLevelRenderer;
 class CommandBuffer;
 class Texture;
+class Sampler;
 class ZBinning;
 class DebugDrawing;
 namespace Geometry {
@@ -129,6 +130,8 @@ class Renderer {
     Buffer* quadVertexBuffer;
     VertexDescription* quadVertexDescription;
     GeometryBinding* quadGeometryBinding;
+
+    const Sampler* sampler;
 
     // Icon rendering.
     Shader* iconVertexShader;

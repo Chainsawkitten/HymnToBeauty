@@ -290,16 +290,16 @@ void VulkanCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
     }
 }
 
-void VulkanCommandBuffer::BindMaterial(std::initializer_list<Texture*> textures) {
+void VulkanCommandBuffer::BindMaterial(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) {
     assert(inRenderPass);
 
-    for (Texture* texture : textures) {
-        assert(texture->GetType() != Texture::Type::RENDER_DEPTH);
-        if (texture->GetType() == Texture::Type::RENDER_COLOR) {
-            TransitionTexture(static_cast<VulkanTexture*>(texture), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    for (auto& texture : textures) {
+        assert(texture.first->GetType() != Texture::Type::RENDER_DEPTH);
+        if (texture.first->GetType() == Texture::Type::RENDER_COLOR) {
+            TransitionTexture(static_cast<VulkanTexture*>(texture.first), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }
-
+    
     VkDescriptorSet descriptorSet = vulkanRenderer->GetDescriptorSet(textures);
     vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), ShaderProgram::BindingType::MATERIAL, 1, &descriptorSet, 0, nullptr);
 }

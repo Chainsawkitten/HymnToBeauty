@@ -16,6 +16,7 @@ class VulkanBuffer;
 class VulkanBufferAllocator;
 class VulkanRenderPassAllocator;
 class VulkanRenderTargetAllocator;
+class VulkanSampler;
 
 /// Low-level renderer implementing Vulkan.
 class VulkanRenderer : public LowLevelRenderer {
@@ -40,6 +41,7 @@ class VulkanRenderer : public LowLevelRenderer {
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) final;
+    const Sampler* GetSampler(Sampler::Filter filter, Sampler::Clamping clamping) const final;
     Texture* CreateRenderTarget(const glm::uvec2& size, Texture::Format format) final;
     void FreeRenderTarget(Texture* renderTarget) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
@@ -111,7 +113,7 @@ class VulkanRenderer : public LowLevelRenderer {
      *
      * @return The descriptor set.
      */
-    VkDescriptorSet GetDescriptorSet(std::initializer_list<Texture*> textures);
+    VkDescriptorSet GetDescriptorSet(std::initializer_list<std::pair<Texture*, const Sampler*>> textures);
 
     /// Get the current frame's query pool.
     /**
@@ -167,6 +169,8 @@ class VulkanRenderer : public LowLevelRenderer {
     void CreateQueries();
     void ResetQueries(uint32_t queryPool);
 
+    void CreateSamplers();
+
     void AcquireSwapChainImage();
 
     VkInstance instance;
@@ -214,6 +218,8 @@ class VulkanRenderer : public LowLevelRenderer {
     unsigned int currentMaterialDescriptorSet[bakedMaterialDescriptorSetLayouts];
 
     VkDescriptorPool descriptorPool;
+
+    VulkanSampler* samplers[static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT)];
 
     OptionalFeatures optionalFeatures;
     

@@ -9,6 +9,7 @@
 #include "OpenGLVertexDescription.hpp"
 #include "OpenGLGeometryBinding.hpp"
 #include "OpenGLTexture.hpp"
+#include "OpenGLSampler.hpp"
 #include "OpenGLBuffer.hpp"
 #include "OpenGLRenderPass.hpp"
 #include "OpenGLRenderPassAllocator.hpp"
@@ -292,17 +293,19 @@ void OpenGLCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
     }
 }
 
-void OpenGLCommandBuffer::BindMaterial(std::initializer_list<Texture*> textures) {
+void OpenGLCommandBuffer::BindMaterial(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) {
     Command command = {};
     command.type = Command::Type::BIND_TEXTURE;
 
     GLenum slot = GL_TEXTURE0;
-    for (const Texture* texture : textures) {
-        assert(texture != nullptr);
-
+    for (auto& texture : textures) {
+        assert(texture.first != nullptr);
+        assert(texture.second != nullptr);
+    
         command.bindTextureCommand.slot = slot++;
-        command.bindTextureCommand.texture = static_cast<const OpenGLTexture*>(texture)->GetID();
-
+        command.bindTextureCommand.texture = static_cast<const OpenGLTexture*>(texture.first)->GetID();
+        command.bindTextureCommand.sampler = static_cast<const OpenGLSampler*>(texture.second)->GetSampler();
+    
         AddCommand(command);
     }
 }
@@ -679,6 +682,7 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
     case Command::Type::BIND_TEXTURE: {
         glActiveTexture(command.bindTextureCommand.slot);
         glBindTexture(GL_TEXTURE_2D, command.bindTextureCommand.texture);
+        glBindSampler(GL_TEXTURE_2D, command.bindTextureCommand.sampler);
         break;
     }
     case Command::Type::BIND_UNIFORM_BUFFER: {

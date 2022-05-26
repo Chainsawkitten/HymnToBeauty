@@ -11,6 +11,7 @@ class RenderSurface;
 class Filter;
 class CommandBuffer;
 class Texture;
+class Sampler;
 class Buffer;
 
 /// Applies post-processing effects to the rendered image.
@@ -77,6 +78,8 @@ class PostProcessing {
     Texture* outputTexture = nullptr;
 
     Texture* dummyTexture;
+
+    const Sampler* sampler;
 
     // Bloom.
     struct BloomData {

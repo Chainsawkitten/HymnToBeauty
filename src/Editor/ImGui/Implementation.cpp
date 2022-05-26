@@ -195,6 +195,7 @@ void Render() {
     commandBuffer->BindGeometry(geometryBinding);
 
     // Draw all the commands in the draw list.
+    const Video::Sampler* sampler = g_LowLevelRenderer->GetSampler(Video::Sampler::Filter::LINEAR, Video::Sampler::Clamping::CLAMP_TO_EDGE);
     unsigned int baseVertex = 0;
     unsigned int firstIndex = 0;
     for (int n = 0; n < draw_data->CmdListsCount; n++) {
@@ -205,7 +206,7 @@ void Render() {
             if (pcmd->UserCallback) {
                 pcmd->UserCallback(cmdList, pcmd);
             } else {
-                commandBuffer->BindMaterial({static_cast<Video::Texture*>(pcmd->TextureId)});
+                commandBuffer->BindMaterial({{static_cast<Video::Texture*>(pcmd->TextureId), sampler}});
                 commandBuffer->SetScissor(glm::uvec2((int)pcmd->ClipRect.x, (int)(pcmd->ClipRect.y)), glm::uvec2((int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y)));
                 commandBuffer->DrawIndexed(pcmd->ElemCount, firstIndex, baseVertex);
             }

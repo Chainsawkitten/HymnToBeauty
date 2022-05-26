@@ -13,6 +13,7 @@ class OpenGLShaderProgram;
 class OpenGLBufferAllocator;
 class OpenGLRenderPassAllocator;
 class OpenGLRenderTargetAllocator;
+class OpenGLSampler;
 
 /// Low-level renderer implementing OpenGL.
 class OpenGLRenderer : public LowLevelRenderer {
@@ -37,6 +38,7 @@ class OpenGLRenderer : public LowLevelRenderer {
     Shader* CreateShader(const ShaderSource& shaderSource, Shader::Type type) final;
     ShaderProgram* CreateShaderProgram(std::initializer_list<const Shader*> shaders) final;
     Texture* CreateTexture(const glm::uvec2 size, Texture::Format format, int components, unsigned char* data) final;
+    const Sampler* GetSampler(Sampler::Filter filter, Sampler::Clamping clamping) const final;
     Texture* CreateRenderTarget(const glm::uvec2& size, Texture::Format format) final;
     void FreeRenderTarget(Texture* renderTarget) final;
     GraphicsPipeline* CreateGraphicsPipeline(const ShaderProgram* shaderProgram, const GraphicsPipeline::Configuration& configuration, const VertexDescription* vertexDescription = nullptr) final;
@@ -71,6 +73,8 @@ class OpenGLRenderer : public LowLevelRenderer {
     OpenGLBufferAllocator* bufferAllocator;
     OpenGLRenderPassAllocator* renderPassAllocator;
     OpenGLRenderTargetAllocator* renderTargetAllocator;
+
+    OpenGLSampler* samplers[static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT)];
 
     OptionalFeatures optionalFeatures;
 

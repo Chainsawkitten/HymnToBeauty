@@ -52,7 +52,7 @@ class VulkanCommandBuffer : public CommandBuffer {
     void BindGeometry(GeometryBinding* geometryBinding) final;
     void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) final;
     void BindStorageBuffers(std::initializer_list<Buffer*> buffers) final;
-    void BindMaterial(std::initializer_list<Texture*> textures) final;
+    void BindMaterial(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) final;
     void PushConstants(const void* data) final;
     void Draw(unsigned int vertexCount, unsigned int firstVertex) final;
     void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final;

@@ -46,12 +46,6 @@ class VulkanTexture : public Texture {
      */
     VkImageView GetImageView() const;
 
-    /// Get the sampler.
-    /**
-     * @return The sampler.
-     */
-    VkSampler GetSampler() const;
-
     /// Get the current image layout.
     /**
      * @return The image layout.
@@ -75,7 +69,6 @@ class VulkanTexture : public Texture {
     VkImage image;
     VkDeviceMemory deviceMemory;
     VkImageView imageView;
-    VkSampler sampler = VK_NULL_HANDLE;
     VkImageLayout currentLayout;
 };
 
