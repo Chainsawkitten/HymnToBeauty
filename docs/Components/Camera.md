@@ -4,7 +4,9 @@ A %Camera component adds a camera through which the scene is rendered.
 
 | Property | Description |
 |----------|-------------|
-| Field of view | The field of view in degrees. |
+| Orthographic | Whether the camera should use an orthographic projection. |
+| Field of view | The field of view in degrees (only when perspective) |
+| Size | Size of the view volume (only when orthographic). |
 | Z Near | Near field. |
 | Z Far | Far field. |
 | Viewport | Where on the screen the camera should be rendered. |
