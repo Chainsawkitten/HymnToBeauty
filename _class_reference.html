@@ -164,8 +164,12 @@ Component::DirectionalLight</h1>
 Component::Camera</h1>
 <p >A camera through which the world can be rendered.</p>
 <h2>Properties</h2>
+<p ><code>bool orthographic</code> <br  />
+ Whether the camera should have an orthographic projection. Otherwise a perspective projection is used.</p>
 <p ><code>float fieldOfView</code> <br  />
- Field of view, in degrees.</p>
+ Field of view, in degrees. Only applies to perspective projection.</p>
+<p ><code>float size</code> <br  />
+ The size of the view. Only applies to orthographic projection.</p>
 <p ><code>float zNear</code> <br  />
  Near plane.</p>
 <p ><code>float zFar</code> <br  />
