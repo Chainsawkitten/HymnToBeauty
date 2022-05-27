@@ -129,7 +129,9 @@ Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
     Component::Camera* camera = cameras.Create();
 
     // Load values from Json node.
+    camera->orthographic = node.get("orthographic", false).asBool();
     camera->fieldOfView = node.get("fieldOfView", 45.f).asFloat();
+    camera->size = node.get("size", 10.0f).asFloat();
     camera->zNear = node.get("zNear", 0.1f).asFloat();
     camera->zFar = node.get("zFar", 100.f).asFloat();
     camera->viewport = Json::LoadVec4(node["viewport"]);

@@ -19,11 +19,22 @@ class Camera : public SuperComponent {
      */
     glm::mat4 GetProjection(const glm::vec2& screenSize) const;
 
+    /// Whether the camera should use an orthographic projection, otherwise perspective projection.
+    bool orthographic = false;
+
     /// Field of view, in degrees.
     /**
      * Default: 45.0
+     * Only used for perspective projection.
      */
     float fieldOfView = 45.f;
+
+    /// The size of the view volume.
+    /**
+     * Default: 10.0
+     * Only used for orthographic projection.
+     */
+    float size = 10.0f;
 
     /// Near plane.
     /**

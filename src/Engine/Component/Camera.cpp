@@ -10,7 +10,9 @@ Camera::Camera() {}
 
 Json::Value Camera::Save() const {
     Json::Value component;
+    component["orthographic"] = orthographic;
     component["fieldOfView"] = fieldOfView;
+    component["size"] = size;
     component["zNear"] = zNear;
     component["zFar"] = zFar;
     component["viewport"] = Json::SaveVec4(viewport);
@@ -29,5 +31,11 @@ Json::Value Camera::Save() const {
 }
 
 glm::mat4 Camera::GetProjection(const glm::vec2& screenSize) const {
-    return glm::perspective(glm::radians(fieldOfView), screenSize.x / screenSize.y, zNear, zFar);
+    const float aspectRatio = screenSize.x / screenSize.y;
+
+    if (orthographic) {
+        return glm::ortho(-size * 0.5f * aspectRatio, size * 0.5f * aspectRatio, -size * 0.5f, size * 0.5f, zNear, zFar);
+    } else {
+        return glm::perspective(glm::radians(fieldOfView), aspectRatio, zNear, zFar);
+    }
 }
