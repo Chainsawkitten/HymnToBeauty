@@ -141,9 +141,15 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a71a3b5a440dcbde576cdb3ff67febfe4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#a71a3b5a440dcbde576cdb3ff67febfe4">orthographic</a> = false</td></tr>
+<tr class="memdesc:a71a3b5a440dcbde576cdb3ff67febfe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the camera should use an orthographic projection, otherwise perspective projection.  <a href="class_component_1_1_camera.html#a71a3b5a440dcbde576cdb3ff67febfe4">More...</a><br /></td></tr>
+<tr class="separator:a71a3b5a440dcbde576cdb3ff67febfe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6c1cc0eb81e7e1f601f83ebfe793800"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#ab6c1cc0eb81e7e1f601f83ebfe793800">fieldOfView</a> = 45.f</td></tr>
 <tr class="memdesc:ab6c1cc0eb81e7e1f601f83ebfe793800"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field of view, in degrees.  <a href="class_component_1_1_camera.html#ab6c1cc0eb81e7e1f601f83ebfe793800">More...</a><br /></td></tr>
 <tr class="separator:ab6c1cc0eb81e7e1f601f83ebfe793800"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4396039da2c5784d4f63886ebe237fdc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#a4396039da2c5784d4f63886ebe237fdc">size</a> = 10.0f</td></tr>
+<tr class="memdesc:a4396039da2c5784d4f63886ebe237fdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the view volume.  <a href="class_component_1_1_camera.html#a4396039da2c5784d4f63886ebe237fdc">More...</a><br /></td></tr>
+<tr class="separator:a4396039da2c5784d4f63886ebe237fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a728405a44a7b15a0c45800bdc5fddefc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#a728405a44a7b15a0c45800bdc5fddefc">zNear</a> = 0.1f</td></tr>
 <tr class="memdesc:a728405a44a7b15a0c45800bdc5fddefc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Near plane.  <a href="class_component_1_1_camera.html#a728405a44a7b15a0c45800bdc5fddefc">More...</a><br /></td></tr>
 <tr class="separator:a728405a44a7b15a0c45800bdc5fddefc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -255,7 +261,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Field of view, in degrees. </p>
-<p >Default: 45.0 </p>
+<p >Default: 45.0 Only used for perspective projection. </p>
 
 </div>
 </div>
@@ -272,6 +278,39 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Filter settings. </p>
+
+</div>
+</div>
+<a id="a71a3b5a440dcbde576cdb3ff67febfe4" name="a71a3b5a440dcbde576cdb3ff67febfe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71a3b5a440dcbde576cdb3ff67febfe4">&#9670;&nbsp;</a></span>orthographic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Component::Camera::orthographic = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether the camera should use an orthographic projection, otherwise perspective projection. </p>
+
+</div>
+</div>
+<a id="a4396039da2c5784d4f63886ebe237fdc" name="a4396039da2c5784d4f63886ebe237fdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4396039da2c5784d4f63886ebe237fdc">&#9670;&nbsp;</a></span>size</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Component::Camera::size = 10.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The size of the view volume. </p>
+<p >Default: 10.0 Only used for orthographic projection. </p>
 
 </div>
 </div>

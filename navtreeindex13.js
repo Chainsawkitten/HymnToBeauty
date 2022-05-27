@@ -1,5 +1,9 @@
 var NAVTREEINDEX13 =
 {
+"functions_vars_v.html":[6,3,2,19],
+"functions_vars_w.html":[6,3,2,20],
+"functions_vars_z.html":[6,3,2,21],
+"functions_w.html":[6,3,0,22],
 "functions_z.html":[6,3,0,23],
 "functions_~.html":[6,3,0,24],
 "globals.html":[7,1,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX13 =
 "struct_resource_list_1_1_resource_folder.html":[6,0,28,1],
 "struct_resource_list_1_1_resource_folder.html#a064a0568ec0913902d0876cb6c6e0098":[6,0,28,1,0],
 "struct_resource_list_1_1_resource_folder.html#a7d48b72568c2f8421add2d8171a66d85":[6,0,28,1,2],
-"struct_resource_list_1_1_resource_folder.html#af25ea088596701a62b985178048e0fc3":[6,0,28,1,1],
-"struct_video_1_1_buffer_allocation.html":[5,0,12,4],
-"struct_video_1_1_buffer_allocation.html":[6,0,8,3],
-"struct_video_1_1_buffer_allocation.html#a13c2f988283324be26f75acbb5a4d4b4":[6,0,8,3,1],
-"struct_video_1_1_buffer_allocation.html#a13c2f988283324be26f75acbb5a4d4b4":[5,0,12,4,1]
+"struct_resource_list_1_1_resource_folder.html#af25ea088596701a62b985178048e0fc3":[6,0,28,1,1]
 };
