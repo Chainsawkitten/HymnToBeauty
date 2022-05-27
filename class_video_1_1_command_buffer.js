@@ -8,7 +8,7 @@ var class_video_1_1_command_buffer =
     [ "BindComputePipeline", "class_video_1_1_command_buffer.html#a30dbbd40d20f3605a3b311ecbeb594b8", null ],
     [ "BindGeometry", "class_video_1_1_command_buffer.html#a4c4e4b4d8fdedd0f28a4db707465ed18", null ],
     [ "BindGraphicsPipeline", "class_video_1_1_command_buffer.html#ae01e80c947a37125548b3bfc310054d7", null ],
-    [ "BindMaterial", "class_video_1_1_command_buffer.html#a49ba15b1eaa49f9a6090ae2aaf01ab0a", null ],
+    [ "BindMaterial", "class_video_1_1_command_buffer.html#afd9ca1399d425525cf0f11b20da9ef3b", null ],
     [ "BindStorageBuffers", "class_video_1_1_command_buffer.html#aeb7f310f42076b5f1854dd77a46f3fb3", null ],
     [ "BindUniformBuffer", "class_video_1_1_command_buffer.html#aa972a0af9d0caeb41a095d1b85453150", null ],
     [ "BlitToSwapChain", "class_video_1_1_command_buffer.html#a312ed075ea1d34f4a116433b71ccfdf6", null ],

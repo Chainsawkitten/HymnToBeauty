@@ -20,12 +20,14 @@ var searchData=
   ['openglrenderpassallocator_2ehpp_17',['OpenGLRenderPassAllocator.hpp',['../_open_g_l_render_pass_allocator_8hpp.html',1,'']]],
   ['openglrendertargetallocator_2ecpp_18',['OpenGLRenderTargetAllocator.cpp',['../_open_g_l_render_target_allocator_8cpp.html',1,'']]],
   ['openglrendertargetallocator_2ehpp_19',['OpenGLRenderTargetAllocator.hpp',['../_open_g_l_render_target_allocator_8hpp.html',1,'']]],
-  ['openglshader_2ecpp_20',['OpenGLShader.cpp',['../_open_g_l_shader_8cpp.html',1,'']]],
-  ['openglshader_2ehpp_21',['OpenGLShader.hpp',['../_open_g_l_shader_8hpp.html',1,'']]],
-  ['openglshaderprogram_2ecpp_22',['OpenGLShaderProgram.cpp',['../_open_g_l_shader_program_8cpp.html',1,'']]],
-  ['openglshaderprogram_2ehpp_23',['OpenGLShaderProgram.hpp',['../_open_g_l_shader_program_8hpp.html',1,'']]],
-  ['opengltexture_2ecpp_24',['OpenGLTexture.cpp',['../_open_g_l_texture_8cpp.html',1,'']]],
-  ['opengltexture_2ehpp_25',['OpenGLTexture.hpp',['../_open_g_l_texture_8hpp.html',1,'']]],
-  ['openglvertexdescription_2ecpp_26',['OpenGLVertexDescription.cpp',['../_open_g_l_vertex_description_8cpp.html',1,'']]],
-  ['openglvertexdescription_2ehpp_27',['OpenGLVertexDescription.hpp',['../_open_g_l_vertex_description_8hpp.html',1,'']]]
+  ['openglsampler_2ecpp_20',['OpenGLSampler.cpp',['../_open_g_l_sampler_8cpp.html',1,'']]],
+  ['openglsampler_2ehpp_21',['OpenGLSampler.hpp',['../_open_g_l_sampler_8hpp.html',1,'']]],
+  ['openglshader_2ecpp_22',['OpenGLShader.cpp',['../_open_g_l_shader_8cpp.html',1,'']]],
+  ['openglshader_2ehpp_23',['OpenGLShader.hpp',['../_open_g_l_shader_8hpp.html',1,'']]],
+  ['openglshaderprogram_2ecpp_24',['OpenGLShaderProgram.cpp',['../_open_g_l_shader_program_8cpp.html',1,'']]],
+  ['openglshaderprogram_2ehpp_25',['OpenGLShaderProgram.hpp',['../_open_g_l_shader_program_8hpp.html',1,'']]],
+  ['opengltexture_2ecpp_26',['OpenGLTexture.cpp',['../_open_g_l_texture_8cpp.html',1,'']]],
+  ['opengltexture_2ehpp_27',['OpenGLTexture.hpp',['../_open_g_l_texture_8hpp.html',1,'']]],
+  ['openglvertexdescription_2ecpp_28',['OpenGLVertexDescription.cpp',['../_open_g_l_vertex_description_8cpp.html',1,'']]],
+  ['openglvertexdescription_2ehpp_29',['OpenGLVertexDescription.hpp',['../_open_g_l_vertex_description_8hpp.html',1,'']]]
 ];

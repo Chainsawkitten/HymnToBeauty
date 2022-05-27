@@ -6,6 +6,5 @@ var class_video_1_1_vulkan_texture =
     [ "GetImage", "class_video_1_1_vulkan_texture.html#a0e01cc1197c1ebbde85300347312d13f", null ],
     [ "GetImageLayout", "class_video_1_1_vulkan_texture.html#a1c74caf6bd19119580ef5cebdff33f34", null ],
     [ "GetImageView", "class_video_1_1_vulkan_texture.html#a70f3c3d75ddb081a494051a40c1dfc88", null ],
-    [ "GetSampler", "class_video_1_1_vulkan_texture.html#ab3efcea31240c81d1327cfe174bec17c", null ],
     [ "SetImageLayout", "class_video_1_1_vulkan_texture.html#a945b71db35d125d3b9908eb811b0290b", null ]
 ];

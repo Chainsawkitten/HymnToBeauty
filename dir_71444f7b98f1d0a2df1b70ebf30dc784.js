@@ -43,6 +43,10 @@ var dir_71444f7b98f1d0a2df1b70ebf30dc784 =
     [ "VulkanRenderTargetAllocator.hpp", "_vulkan_render_target_allocator_8hpp.html", [
       [ "Video::VulkanRenderTargetAllocator", "class_video_1_1_vulkan_render_target_allocator.html", "class_video_1_1_vulkan_render_target_allocator" ]
     ] ],
+    [ "VulkanSampler.cpp", "_vulkan_sampler_8cpp.html", null ],
+    [ "VulkanSampler.hpp", "_vulkan_sampler_8hpp.html", [
+      [ "Video::VulkanSampler", "class_video_1_1_vulkan_sampler.html", "class_video_1_1_vulkan_sampler" ]
+    ] ],
     [ "VulkanShader.cpp", "_vulkan_shader_8cpp.html", null ],
     [ "VulkanShader.hpp", "_vulkan_shader_8hpp.html", [
       [ "Video::VulkanShader", "class_video_1_1_vulkan_shader.html", "class_video_1_1_vulkan_shader" ]

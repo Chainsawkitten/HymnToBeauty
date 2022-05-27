@@ -115,19 +115,16 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dd><a class="anchor" id="_todo000029"></a>Clamp line width to supported values.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_open_g_l_renderer.html#af8fde26b7b9ee74821bae27d676fc715">Video::OpenGLRenderer::OpenGLRenderer</a>  (GLFWwindow *window)</dt>
 <dd><a class="anchor" id="_todo000030"></a>Disable GPU profiling if not supported.  </dd>
-<dt>Member <a class="el" href="class_video_1_1_open_g_l_texture.html#acee025c5893346cba749869f1879c664">Video::OpenGLTexture::OpenGLTexture</a>  (const glm::uvec2 size, <a class="el" href="class_video_1_1_texture.html#a571ccf58a61cb4760da49381d1cf6bff" title="The type of texture.">Texture::Type</a> type, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b" title="The format of the texture.">Texture::Format</a> format, int components=0, unsigned char *data=nullptr)</dt>
-<dd><a class="anchor" id="_todo000031"></a>Configurable filtering.  </dd>
 <dt>Class <a class="el" href="class_video_1_1_render_pass.html">Video::RenderPass</a>  </dt>
 <dd><a class="anchor" id="_todo000028"></a>Better documentation. This is not an intuitive concept (and doesn't map neatly to OpenGL or Vulkan).  </dd>
 <dt>Member <a class="el" href="class_video_1_1_vulkan_command_buffer.html#a3ceccd9cb8ec9d6124c8c09cbf3da639">Video::VulkanCommandBuffer::SetLineWidth</a>  (float width) final</dt>
-<dd><a class="anchor" id="_todo000032"></a>Clamp line width to supported values.  </dd>
-<dt>Member <a class="el" href="class_video_1_1_vulkan_renderer.html#a2176af2e53d271ec504f5489f52db7a6">Video::VulkanRenderer::GetDescriptorSet</a>  (std::initializer_list&lt; Texture * &gt; textures)</dt>
-<dd><a class="anchor" id="_todo000033"></a>Have some material object keep track of this instead of treating textures individually.  </dd>
+<dd><a class="anchor" id="_todo000031"></a>Clamp line width to supported values.  </dd>
+<dt>Member <a class="el" href="class_video_1_1_vulkan_renderer.html#ae860ba0cf78e0d46807842b19c1f3482">Video::VulkanRenderer::GetDescriptorSet</a>  (std::initializer_list&lt; std::pair&lt; Texture *, const Sampler * &gt; &gt; textures)</dt>
+<dd><a class="anchor" id="_todo000032"></a>Have some material object keep track of this instead of treating textures individually.  </dd>
+<dt>Member <a class="el" href="class_video_1_1_vulkan_sampler.html#a8991da6b35329c701699dfdcff4fb1a0">Video::VulkanSampler::VulkanSampler</a>  (VkDevice device, Filter filter, Clamping clamping)</dt>
+<dd><a class="anchor" id="_todo000037"></a>Anisotropic filtering.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_vulkan_texture.html#a22dc592037ac0838f067da237d2516ce">Video::VulkanTexture::VulkanTexture</a>  (<a class="el" href="class_video_1_1_vulkan_renderer.html" title="Low-level renderer implementing Vulkan.">VulkanRenderer</a> &amp;vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, const glm::uvec2 size, <a class="el" href="class_video_1_1_texture.html#a571ccf58a61cb4760da49381d1cf6bff" title="The type of texture.">Texture::Type</a> type, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b" title="The format of the texture.">Texture::Format</a> format, int components=0, unsigned char *data=nullptr)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000040"></a>Support textures of different formats. </p>
-<p class="interdd"><a class="anchor" id="_todo000041"></a>These could be cached somewhere since they're not image specific. </p>
-<p class="enddd"><a class="anchor" id="_todo000042"></a>Configurable filtering. </p>
-</dd>
+<dd><a class="anchor" id="_todo000040"></a>Support textures of different formats. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

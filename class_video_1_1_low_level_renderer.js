@@ -17,6 +17,7 @@ var class_video_1_1_low_level_renderer =
     [ "CreateVertexDescription", "class_video_1_1_low_level_renderer.html#a99e8cb5b0d255c6688b164990f35f3cb", null ],
     [ "FreeRenderTarget", "class_video_1_1_low_level_renderer.html#a71e96fe712867853e2f3c9cd4e4a918c", null ],
     [ "GetOptionalFeatures", "class_video_1_1_low_level_renderer.html#a7fd386b69eaaf956199542e304266ca9", null ],
+    [ "GetSampler", "class_video_1_1_low_level_renderer.html#a2d4ceb9e6ce8d3c3da6464a4333bfba1", null ],
     [ "GetTimeline", "class_video_1_1_low_level_renderer.html#af128e7b89facc9a342223f43831084c2", null ],
     [ "IsProfiling", "class_video_1_1_low_level_renderer.html#a37554f291ad908f8eee3bc30bb3edf9a", null ],
     [ "Present", "class_video_1_1_low_level_renderer.html#a6332bc99d2d135ccafac7ab5dd4a1810", null ],

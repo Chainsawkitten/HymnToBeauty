@@ -147,6 +147,10 @@ var hierarchy =
     [ "GUI::ResourceSelector", "class_g_u_i_1_1_resource_selector.html", null ],
     [ "GUI::ResourceView", "class_g_u_i_1_1_resource_view.html", null ],
     [ "GUI::RigidBodyEditor", "class_g_u_i_1_1_rigid_body_editor.html", null ],
+    [ "Video::Sampler", "class_video_1_1_sampler.html", [
+      [ "Video::OpenGLSampler", "class_video_1_1_open_g_l_sampler.html", null ],
+      [ "Video::VulkanSampler", "class_video_1_1_vulkan_sampler.html", null ]
+    ] ],
     [ "GUI::SavePromptWindow", "class_g_u_i_1_1_save_prompt_window.html", null ],
     [ "GUI::SceneEditor", "class_g_u_i_1_1_scene_editor.html", null ],
     [ "GUI::ScriptEditor", "class_g_u_i_1_1_script_editor.html", null ],

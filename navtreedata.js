@@ -70,20 +70,20 @@ var NAVTREEINDEX =
 [
 "_asset_editor_8cpp.html",
 "_isocahedron_8hpp_source.html",
-"_sphere_8hpp.html",
-"class_audio_1_1_sound_buffer.html#a888b5c33b63fc29e478fb5d19123f061",
-"class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7",
-"class_g_u_i_1_1_g_l_t_f_editor.html#a6719de08bf38976033f048bc706672a3",
-"class_hub.html#a8de8e6abe3179981685cb29abf2eb8ef",
-"class_profiling_1_1_thread.html#a1812e43104cfeb5b614e71ab232257d4",
-"class_utility_1_1_queue.html#a2137580d5ba3515653d2b6142f0262f2",
-"class_video_1_1_graphics_pipeline.html#ac6e777f9201e3367187677d340254ee8",
-"class_video_1_1_open_g_l_renderer.html#affd2efa24ff1aa65739b34d935bc6134",
-"class_video_1_1_vertex_description.html#a58f082a05aeda854fb33ba055849c521",
-"class_video_1_1_vulkan_shader.html#a5af6f79bbb9851495bddc0316cf6070c",
-"namespace_json.html#a0326e9bc5abf7c53d1935af52b315303",
-"struct_video_1_1_debug_drawing_1_1_cuboid.html#af2fce6274fb7edd2e1325f131e5547c1",
-"struct_video_1_1_render_scene_1_1_camera.html#a791f80ca09a5e09036f750849dcbe16b"
+"_sound_manager_8hpp_source.html",
+"class_active_hymn.html#ae5eb408a98330488fe141db6b6e2814b",
+"class_component_1_1_super_component.html#a7be3e14f15a1e8a2211181849b70e196",
+"class_g_u_i_1_1_folder_name_window.html#adb36c78f252b14feb08b936b03d00be7",
+"class_geometry_1_1_model.html#afc0c535949fe2a37278b7bc9aebd0d5d",
+"class_profiling_1_1_profiling_scope.html",
+"class_utility_1_1_lock_box.html#adb831017f47ff4c5da35568bc4355e4b",
+"class_video_1_1_geometry_binding.html#a91fc3628a5413774023553b4e51821cdab50339a10e1de285ac99d4c3990b8693",
+"class_video_1_1_open_g_l_renderer.html#ad7329fe7814d9d4bc6c61fb14af6ff62",
+"class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852ba18787043100457c689d4fd80e956472c",
+"class_video_1_1_vulkan_renderer.html#a4b80adbb71b8459f44217605e6d3333a",
+"functions_z.html",
+"struct_video_1_1_buffer_allocation.html#a2a9228dbd6a6abd1e42ac8ba7fb67b50",
+"struct_video_1_1_post_processing_1_1_configuration_1_1_dither.html#abff09445f3b04ad7540472f92e7ab0a5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

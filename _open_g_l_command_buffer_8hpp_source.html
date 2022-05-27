@@ -127,7 +127,7 @@ $(document).ready(function(){initNavTree('_open_g_l_command_buffer_8hpp_source.h
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#a12a58f75fbb90bf3387eb4cf5039a781">BindGeometry</a>(<a class="code hl_class" href="class_video_1_1_geometry_binding.html">GeometryBinding</a>* geometryBinding) final;</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#a4edb5995e3d4a9812f950ea6b4eb03b4">BindUniformBuffer</a>(<a class="code hl_class" href="class_video_1_1_shader_program.html">ShaderProgram</a>::BindingType bindingType, <a class="code hl_class" href="class_video_1_1_buffer.html">Buffer</a>* uniformBuffer) final;</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#ad39948e0a5ec2662b712c71123eca39b">BindStorageBuffers</a>(std::initializer_list&lt;<a class="code hl_class" href="class_video_1_1_buffer.html">Buffer</a>*&gt; buffers) final;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#a744ed0bf44944ed2286f2d66e6c0f2d0">BindMaterial</a>(std::initializer_list&lt;<a class="code hl_class" href="class_video_1_1_texture.html">Texture</a>*&gt; textures) final;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#ae8bb8da6021e1b14889e9a562092be88">BindMaterial</a>(std::initializer_list&lt;std::pair&lt;<a class="code hl_class" href="class_video_1_1_texture.html">Texture</a>*, const <a class="code hl_class" href="class_video_1_1_sampler.html">Sampler</a>*&gt;&gt; textures) final;</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#ac5a1521614a0c226bf3b364494139522">PushConstants</a>(const <span class="keywordtype">void</span>* data) final;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#a5fe6c3e1a59bda4a0d864cdef79cb777">Draw</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> vertexCount, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> firstVertex) final;</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_video_1_1_open_g_l_command_buffer.html#a682fc915cac1b7e9ae1c0f3c57bfb7e5">DrawIndexed</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> indexCount, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> firstIndex, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> baseVertex) final;</div>
@@ -227,192 +227,194 @@ $(document).ready(function(){initNavTree('_open_g_l_command_buffer_8hpp_source.h
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keyword">struct </span>BindTextureCommand {</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        GLenum slot;</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        GLuint texture;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    };</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keyword">struct </span>BindUniformBufferCommand {</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        GLuint index;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        GLuint uniformBuffer;</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        GLintptr offset;</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        GLsizeiptr size;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    };</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    <span class="keyword">struct </span>BindStorageBufferCommand {</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        GLuint index;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        GLuint storageBuffer;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        GLintptr offset;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        GLsizeiptr size;</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    };</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keyword">struct </span>DrawCommand {</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        GLenum mode;</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        GLint first;</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        GLsizei count;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    };</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keyword">struct </span>DrawIndexedCommand {</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        GLenum mode;</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        GLsizei count;</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        GLenum type;</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        GLvoid* indices;</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        GLint baseVertex;</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    };</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    <span class="keyword">struct </span>DrawIndexedInstancedCommand {</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        GLenum mode;</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        GLsizei count;</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        GLenum type;</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        GLvoid* indices;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        GLsizei instanceCount;</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        GLint baseVertex;</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    };</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keyword">struct </span>BlitToSwapChainCommand {</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        GLuint texture;</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    };</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="keyword">struct </span>BindComputePipelineCommand {</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        GLuint program;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    };</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keyword">struct </span>DispatchCommand {</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        GLuint groupsX;</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        GLuint groupsY;</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        GLuint groupsZ;</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timingIndex;</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    };</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    <span class="keyword">struct </span>ClearBufferCommand {</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        GLenum target;</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        GLuint buffer;</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        GLintptr offset;</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        GLsizeiptr size;</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    };</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="keyword">struct </span>Command {</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <span class="keyword">union </span>{</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>            BeginRenderPassCommand beginRenderPassCommand;</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            BindGraphicsPipelineCommand bindGraphicsPipelineCommand;</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>            SetViewportCommand setViewportCommand;</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>            SetScissorCommand setScissorCommand;</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            SetLineWidthCommand setLineWidthCommand;</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>            BindGeometryCommand bindGeometryCommand;</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>            SetUniformIntegerCommand setUniformIntegerCommand;</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            SetUniformUnsignedIntegerCommand setUniformUnsignedIntegerCommand;</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            SetUniformFloatCommand setUniformFloatCommand;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            SetUniformVector2Command setUniformVector2Command;</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            SetUniformVector3Command setUniformVector3Command;</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            SetUniformVector4Command setUniformVector4Command;</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            SetUniformMatrix3Command setUniformMatrix3Command;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>            SetUniformMatrix4Command setUniformMatrix4Command;</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            BindTextureCommand bindTextureCommand;</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            BindUniformBufferCommand bindUniformBufferCommand;</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            BindStorageBufferCommand bindStorageBufferCommand;</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            DrawCommand drawCommand;</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            DrawIndexedCommand drawIndexedCommand;</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            DrawIndexedInstancedCommand drawIndexedInstancedCommand;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            BlitToSwapChainCommand blitToSwapChainCommand;</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            BindComputePipelineCommand bindComputePipelineCommand;</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            DispatchCommand dispatchCommand;</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            ClearBufferCommand clearBufferCommand;</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        };</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        <span class="keyword">enum class</span> Type {</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>            BEGIN_RENDER_PASS,</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            END_RENDER_PASS,</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>            BIND_GRAPHICS_PIPELINE,</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            SET_VIEWPORT,</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            SET_SCISSOR,</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            SET_LINE_WIDTH,</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            BIND_GEOMETRY,</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            SET_UNIFORM_INTEGER,</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>            SET_UNIFORM_UNSIGNED_INTEGER,</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            SET_UNIFORM_FLOAT,</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>            SET_UNIFORM_VECTOR2,</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>            SET_UNIFORM_VECTOR3,</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>            SET_UNIFORM_VECTOR4,</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            SET_UNIFORM_MATRIX3,</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>            SET_UNIFORM_MATRIX4,</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            BIND_TEXTURE,</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>            BIND_UNIFORM_BUFFER,</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            BIND_STORAGE_BUFFER,</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            DRAW,</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            DRAW_INDEXED,</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            DRAW_INDEXED_INSTANCED,</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            BLIT_TO_SWAP_CHAIN,</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            BIND_COMPUTE_PIPELINE,</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>            DISPATCH,</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            CLEAR_BUFFER,</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>            MEMORY_BARRIER</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        } type;</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    };</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    <span class="keywordtype">void</span> SetUniformInteger(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, int32_t value);</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    <span class="keywordtype">void</span> SetUniformUnsignedInteger(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, uint32_t value);</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    <span class="keywordtype">void</span> SetUniformFloat(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keywordtype">float</span> value);</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keywordtype">void</span> SetUniformVector2(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::vec2&amp; value);</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keywordtype">void</span> SetUniformVector3(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::vec3&amp; value);</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="keywordtype">void</span> SetUniformVector4(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::vec4&amp; value);</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordtype">void</span> SetUniformMatrix3(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::mat3&amp; value);</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keywordtype">void</span> SetUniformMatrix4(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::mat4&amp; value);</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keywordtype">void</span> AddCommand(<span class="keyword">const</span> Command&amp; command);</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="keywordtype">void</span> SubmitCommand(<span class="keyword">const</span> Command&amp; command);</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    OpenGLRenderer&amp; openGLRenderer;</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    OpenGLRenderPassAllocator&amp; renderPassAllocator;</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    std::vector&lt;Command&gt; commands;</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    GLenum primitiveType;</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    GLenum indexType;</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    uint32_t indexSize;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    uint32_t frameBufferHeight;</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    uintptr_t indexBufferOffset;</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordtype">bool</span> inRenderPass = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <span class="keyword">const</span> OpenGLShaderProgram* currentShaderProgram = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    <span class="keyword">const</span> OpenGLShaderProgram* blitShaderProgram;</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="keywordtype">bool</span> writesStorageBuffer = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span> </div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    std::vector&lt;Timing&gt; timings;</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timingIndex;</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>};</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>} <span class="comment">// namespace Video</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        GLuint sampler;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    };</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="keyword">struct </span>BindUniformBufferCommand {</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        GLuint index;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        GLuint uniformBuffer;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        GLintptr offset;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        GLsizeiptr size;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    };</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keyword">struct </span>BindStorageBufferCommand {</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        GLuint index;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        GLuint storageBuffer;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        GLintptr offset;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        GLsizeiptr size;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    };</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keyword">struct </span>DrawCommand {</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        GLenum mode;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        GLint first;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        GLsizei count;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    };</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keyword">struct </span>DrawIndexedCommand {</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        GLenum mode;</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        GLsizei count;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        GLenum type;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        GLvoid* indices;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        GLint baseVertex;</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    };</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keyword">struct </span>DrawIndexedInstancedCommand {</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        GLenum mode;</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        GLsizei count;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        GLenum type;</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        GLvoid* indices;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        GLsizei instanceCount;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        GLint baseVertex;</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    };</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keyword">struct </span>BlitToSwapChainCommand {</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        GLuint texture;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    };</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    <span class="keyword">struct </span>BindComputePipelineCommand {</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        GLuint program;</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    };</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <span class="keyword">struct </span>DispatchCommand {</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        GLuint groupsX;</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        GLuint groupsY;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        GLuint groupsZ;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timingIndex;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    };</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="keyword">struct </span>ClearBufferCommand {</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        GLenum target;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        GLuint buffer;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        GLintptr offset;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        GLsizeiptr size;</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    };</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    <span class="keyword">struct </span>Command {</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        <span class="keyword">union </span>{</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            BeginRenderPassCommand beginRenderPassCommand;</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>            BindGraphicsPipelineCommand bindGraphicsPipelineCommand;</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>            SetViewportCommand setViewportCommand;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            SetScissorCommand setScissorCommand;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>            SetLineWidthCommand setLineWidthCommand;</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>            BindGeometryCommand bindGeometryCommand;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            SetUniformIntegerCommand setUniformIntegerCommand;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            SetUniformUnsignedIntegerCommand setUniformUnsignedIntegerCommand;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            SetUniformFloatCommand setUniformFloatCommand;</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            SetUniformVector2Command setUniformVector2Command;</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            SetUniformVector3Command setUniformVector3Command;</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            SetUniformVector4Command setUniformVector4Command;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>            SetUniformMatrix3Command setUniformMatrix3Command;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            SetUniformMatrix4Command setUniformMatrix4Command;</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            BindTextureCommand bindTextureCommand;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            BindUniformBufferCommand bindUniformBufferCommand;</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            BindStorageBufferCommand bindStorageBufferCommand;</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            DrawCommand drawCommand;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            DrawIndexedCommand drawIndexedCommand;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            DrawIndexedInstancedCommand drawIndexedInstancedCommand;</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            BlitToSwapChainCommand blitToSwapChainCommand;</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            BindComputePipelineCommand bindComputePipelineCommand;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            DispatchCommand dispatchCommand;</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            ClearBufferCommand clearBufferCommand;</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        };</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        <span class="keyword">enum class</span> Type {</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            BEGIN_RENDER_PASS,</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>            END_RENDER_PASS,</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            BIND_GRAPHICS_PIPELINE,</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            SET_VIEWPORT,</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            SET_SCISSOR,</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            SET_LINE_WIDTH,</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            BIND_GEOMETRY,</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>            SET_UNIFORM_INTEGER,</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            SET_UNIFORM_UNSIGNED_INTEGER,</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>            SET_UNIFORM_FLOAT,</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>            SET_UNIFORM_VECTOR2,</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>            SET_UNIFORM_VECTOR3,</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            SET_UNIFORM_VECTOR4,</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>            SET_UNIFORM_MATRIX3,</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            SET_UNIFORM_MATRIX4,</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>            BIND_TEXTURE,</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            BIND_UNIFORM_BUFFER,</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            BIND_STORAGE_BUFFER,</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            DRAW,</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            DRAW_INDEXED,</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            DRAW_INDEXED_INSTANCED,</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            BLIT_TO_SWAP_CHAIN,</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>            BIND_COMPUTE_PIPELINE,</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            DISPATCH,</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>            CLEAR_BUFFER,</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>            MEMORY_BARRIER</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        } type;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    };</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    <span class="keywordtype">void</span> SetUniformInteger(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, int32_t value);</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    <span class="keywordtype">void</span> SetUniformUnsignedInteger(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, uint32_t value);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keywordtype">void</span> SetUniformFloat(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keywordtype">float</span> value);</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keywordtype">void</span> SetUniformVector2(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::vec2&amp; value);</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="keywordtype">void</span> SetUniformVector3(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::vec3&amp; value);</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordtype">void</span> SetUniformVector4(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::vec4&amp; value);</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keywordtype">void</span> SetUniformMatrix3(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::mat3&amp; value);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <span class="keywordtype">void</span> SetUniformMatrix4(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> location, <span class="keyword">const</span> glm::mat4&amp; value);</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="keywordtype">void</span> AddCommand(<span class="keyword">const</span> Command&amp; command);</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    <span class="keywordtype">void</span> SubmitCommand(<span class="keyword">const</span> Command&amp; command);</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    OpenGLRenderer&amp; openGLRenderer;</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    OpenGLRenderPassAllocator&amp; renderPassAllocator;</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    std::vector&lt;Command&gt; commands;</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    GLenum primitiveType;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    GLenum indexType;</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    uint32_t indexSize;</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    uint32_t frameBufferHeight;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    uintptr_t indexBufferOffset;</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    <span class="keywordtype">bool</span> inRenderPass = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keyword">const</span> OpenGLShaderProgram* currentShaderProgram = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <span class="keyword">const</span> OpenGLShaderProgram* blitShaderProgram;</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <span class="keywordtype">bool</span> writesStorageBuffer = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    std::vector&lt;Timing&gt; timings;</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timingIndex;</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>};</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>} <span class="comment">// namespace Video</span></div>
 <div class="ttc" id="aclass_video_1_1_buffer_html"><div class="ttname"><a href="class_video_1_1_buffer.html">Video::Buffer</a></div><div class="ttdoc">A buffer containing GPU accessible data.</div><div class="ttdef"><b>Definition:</b> Buffer.hpp:8</div></div>
-<div class="ttc" id="aclass_video_1_1_command_buffer_html"><div class="ttname"><a href="class_video_1_1_command_buffer.html">Video::CommandBuffer</a></div><div class="ttdoc">A buffer into which rendering commands are recorded.</div><div class="ttdef"><b>Definition:</b> CommandBuffer.hpp:22</div></div>
+<div class="ttc" id="aclass_video_1_1_command_buffer_html"><div class="ttname"><a href="class_video_1_1_command_buffer.html">Video::CommandBuffer</a></div><div class="ttdoc">A buffer into which rendering commands are recorded.</div><div class="ttdef"><b>Definition:</b> CommandBuffer.hpp:24</div></div>
 <div class="ttc" id="aclass_video_1_1_compute_pipeline_html"><div class="ttname"><a href="class_video_1_1_compute_pipeline.html">Video::ComputePipeline</a></div><div class="ttdoc">A compute pipeline.</div><div class="ttdef"><b>Definition:</b> ComputePipeline.hpp:11</div></div>
 <div class="ttc" id="aclass_video_1_1_geometry_binding_html"><div class="ttname"><a href="class_video_1_1_geometry_binding.html">Video::GeometryBinding</a></div><div class="ttdoc">Binds together a vertex description with buffers.</div><div class="ttdef"><b>Definition:</b> GeometryBinding.hpp:8</div></div>
 <div class="ttc" id="aclass_video_1_1_graphics_pipeline_html"><div class="ttname"><a href="class_video_1_1_graphics_pipeline.html">Video::GraphicsPipeline</a></div><div class="ttdoc">A graphics pipeline.</div><div class="ttdef"><b>Definition:</b> GraphicsPipeline.hpp:11</div></div>
 <div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html">Video::OpenGLCommandBuffer</a></div><div class="ttdoc">OpenGL implementation of CommandBuffer.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.hpp:15</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a12a58f75fbb90bf3387eb4cf5039a781"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a12a58f75fbb90bf3387eb4cf5039a781">Video::OpenGLCommandBuffer::BindGeometry</a></div><div class="ttdeci">void BindGeometry(GeometryBinding *geometryBinding) final</div><div class="ttdoc">Bind geometry to be used in upcoming draw calls.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:223</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a17b1359c2ae3e2ee062d3ad41cd39af0"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a17b1359c2ae3e2ee062d3ad41cd39af0">Video::OpenGLCommandBuffer::DrawIndexedInstanced</a></div><div class="ttdeci">void DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount, unsigned int firstIndex, unsigned int baseVertex) final</div><div class="ttdoc">Draw indexed instanced geometry.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:374</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a1b43b2ad0c26d7833a017842d21df4fd"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a1b43b2ad0c26d7833a017842d21df4fd">Video::OpenGLCommandBuffer::SetScissor</a></div><div class="ttdeci">void SetScissor(const glm::uvec2 &amp;origin, const glm::uvec2 &amp;size) final</div><div class="ttdoc">Set the scissor box.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:199</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a4cca73ede7c68ccd8095a88f96795a2f"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a4cca73ede7c68ccd8095a88f96795a2f">Video::OpenGLCommandBuffer::EndRenderPass</a></div><div class="ttdeci">void EndRenderPass() final</div><div class="ttdoc">End render pass.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:63</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a4d48f835484818be182d885e12ca3a5e"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a4d48f835484818be182d885e12ca3a5e">Video::OpenGLCommandBuffer::BindComputePipeline</a></div><div class="ttdeci">void BindComputePipeline(ComputePipeline *computePipeline) final</div><div class="ttdoc">Bind compute pipeline.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:402</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a4edb5995e3d4a9812f950ea6b4eb03b4"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a4edb5995e3d4a9812f950ea6b4eb03b4">Video::OpenGLCommandBuffer::BindUniformBuffer</a></div><div class="ttdeci">void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer *uniformBuffer) final</div><div class="ttdoc">Bind uniform buffer for use in a shader.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:249</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a569d1250f0f6b42827d4dbcbe9604a97"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a569d1250f0f6b42827d4dbcbe9604a97">Video::OpenGLCommandBuffer::ClearBuffer</a></div><div class="ttdeci">void ClearBuffer(Buffer *buffer) final</div><div class="ttdoc">Clear a buffer (fill with 0).</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:444</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a5fe6c3e1a59bda4a0d864cdef79cb777"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a5fe6c3e1a59bda4a0d864cdef79cb777">Video::OpenGLCommandBuffer::Draw</a></div><div class="ttdeci">void Draw(unsigned int vertexCount, unsigned int firstVertex) final</div><div class="ttdoc">Draw geometry.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:346</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a67dee8779ee4429064adaedd55da40b0"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a67dee8779ee4429064adaedd55da40b0">Video::OpenGLCommandBuffer::BlitToSwapChain</a></div><div class="ttdeci">void BlitToSwapChain(Texture *texture) final</div><div class="ttdoc">Blit a texture to the current swap chain image.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:390</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a682fc915cac1b7e9ae1c0f3c57bfb7e5"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a682fc915cac1b7e9ae1c0f3c57bfb7e5">Video::OpenGLCommandBuffer::DrawIndexed</a></div><div class="ttdeci">void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final</div><div class="ttdoc">Draw indexed geometry.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:359</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a7079ffc8c6ee67fa3a2b3bf2436ec3d3"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a7079ffc8c6ee67fa3a2b3bf2436ec3d3">Video::OpenGLCommandBuffer::SetViewport</a></div><div class="ttdeci">void SetViewport(const glm::uvec2 &amp;origin, const glm::uvec2 &amp;size) final</div><div class="ttdoc">Set the viewport to render to.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:186</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a744ed0bf44944ed2286f2d66e6c0f2d0"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a744ed0bf44944ed2286f2d66e6c0f2d0">Video::OpenGLCommandBuffer::BindMaterial</a></div><div class="ttdeci">void BindMaterial(std::initializer_list&lt; Texture * &gt; textures) final</div><div class="ttdoc">Bind a material.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:295</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a7ae0a0c8f71757a3f47680ce075453e9"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a7ae0a0c8f71757a3f47680ce075453e9">Video::OpenGLCommandBuffer::BeginAttachmentlessRenderPass</a></div><div class="ttdeci">void BeginAttachmentlessRenderPass(const glm::uvec2 &amp;size, uint32_t msaaSamples, const std::string &amp;name) final</div><div class="ttdoc">Begin attachmentless render pass.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:58</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a7dfadf451ca73caf613088f36c5a2709"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a7dfadf451ca73caf613088f36c5a2709">Video::OpenGLCommandBuffer::Dispatch</a></div><div class="ttdeci">void Dispatch(const glm::uvec3 &amp;numGroups, const std::string &amp;name) final</div><div class="ttdoc">Dispatch compute shader.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:417</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a9aef90f34f64989dcea59c92c3303890"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a9aef90f34f64989dcea59c92c3303890">Video::OpenGLCommandBuffer::OpenGLCommandBuffer</a></div><div class="ttdeci">OpenGLCommandBuffer(OpenGLRenderer &amp;openGLRenderer, OpenGLRenderPassAllocator &amp;renderPassAllocator)</div><div class="ttdoc">Create new OpenGL command buffer.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:20</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_aa2264d3d3ee953cd1e3b54ad367cb4c6"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#aa2264d3d3ee953cd1e3b54ad367cb4c6">Video::OpenGLCommandBuffer::BeginRenderPass</a></div><div class="ttdeci">void BeginRenderPass(RenderPass *renderPass, const std::string &amp;name) final</div><div class="ttdoc">Begin render pass.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:26</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_aa65cc479712e6e8390a168948ab7c67a"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#aa65cc479712e6e8390a168948ab7c67a">Video::OpenGLCommandBuffer::Submit</a></div><div class="ttdeci">void Submit()</div><div class="ttdoc">Submit the commands in the command buffer to the GPU.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:461</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_aa8e537a333bf3602fa714edb50a52c8d"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#aa8e537a333bf3602fa714edb50a52c8d">Video::OpenGLCommandBuffer::BindGraphicsPipeline</a></div><div class="ttdeci">void BindGraphicsPipeline(GraphicsPipeline *graphicsPipeline) final</div><div class="ttdoc">Bind graphics pipeline.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:81</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac2eef0a155cbb3b48e2eee9e05ec8958"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac2eef0a155cbb3b48e2eee9e05ec8958">Video::OpenGLCommandBuffer::GetTimings</a></div><div class="ttdeci">const std::vector&lt; Timing &gt; &amp; GetTimings() const</div><div class="ttdoc">Get the all timings in the command buffer.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:470</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac5a1521614a0c226bf3b364494139522"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac5a1521614a0c226bf3b364494139522">Video::OpenGLCommandBuffer::PushConstants</a></div><div class="ttdeci">void PushConstants(const void *data) final</div><div class="ttdoc">Update push constants.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:310</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac975df8cf5b12168ff60267f9ae9b924"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac975df8cf5b12168ff60267f9ae9b924">Video::OpenGLCommandBuffer::SetLineWidth</a></div><div class="ttdeci">void SetLineWidth(float width) final</div><div class="ttdoc">Set width of lines.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:212</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac98c8e08d0f3178f27f6d044bcc5c936"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac98c8e08d0f3178f27f6d044bcc5c936">Video::OpenGLCommandBuffer::~OpenGLCommandBuffer</a></div><div class="ttdeci">~OpenGLCommandBuffer() final</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:24</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ad39948e0a5ec2662b712c71123eca39b"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ad39948e0a5ec2662b712c71123eca39b">Video::OpenGLCommandBuffer::BindStorageBuffers</a></div><div class="ttdeci">void BindStorageBuffers(std::initializer_list&lt; Buffer * &gt; buffers) final</div><div class="ttdoc">Bind storage buffers.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:275</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a12a58f75fbb90bf3387eb4cf5039a781"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a12a58f75fbb90bf3387eb4cf5039a781">Video::OpenGLCommandBuffer::BindGeometry</a></div><div class="ttdeci">void BindGeometry(GeometryBinding *geometryBinding) final</div><div class="ttdoc">Bind geometry to be used in upcoming draw calls.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:224</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a17b1359c2ae3e2ee062d3ad41cd39af0"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a17b1359c2ae3e2ee062d3ad41cd39af0">Video::OpenGLCommandBuffer::DrawIndexedInstanced</a></div><div class="ttdeci">void DrawIndexedInstanced(unsigned int indexCount, unsigned int instanceCount, unsigned int firstIndex, unsigned int baseVertex) final</div><div class="ttdoc">Draw indexed instanced geometry.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:377</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a1b43b2ad0c26d7833a017842d21df4fd"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a1b43b2ad0c26d7833a017842d21df4fd">Video::OpenGLCommandBuffer::SetScissor</a></div><div class="ttdeci">void SetScissor(const glm::uvec2 &amp;origin, const glm::uvec2 &amp;size) final</div><div class="ttdoc">Set the scissor box.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:200</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a4cca73ede7c68ccd8095a88f96795a2f"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a4cca73ede7c68ccd8095a88f96795a2f">Video::OpenGLCommandBuffer::EndRenderPass</a></div><div class="ttdeci">void EndRenderPass() final</div><div class="ttdoc">End render pass.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:64</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a4d48f835484818be182d885e12ca3a5e"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a4d48f835484818be182d885e12ca3a5e">Video::OpenGLCommandBuffer::BindComputePipeline</a></div><div class="ttdeci">void BindComputePipeline(ComputePipeline *computePipeline) final</div><div class="ttdoc">Bind compute pipeline.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:405</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a4edb5995e3d4a9812f950ea6b4eb03b4"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a4edb5995e3d4a9812f950ea6b4eb03b4">Video::OpenGLCommandBuffer::BindUniformBuffer</a></div><div class="ttdeci">void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer *uniformBuffer) final</div><div class="ttdoc">Bind uniform buffer for use in a shader.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:250</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a569d1250f0f6b42827d4dbcbe9604a97"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a569d1250f0f6b42827d4dbcbe9604a97">Video::OpenGLCommandBuffer::ClearBuffer</a></div><div class="ttdeci">void ClearBuffer(Buffer *buffer) final</div><div class="ttdoc">Clear a buffer (fill with 0).</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:447</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a5fe6c3e1a59bda4a0d864cdef79cb777"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a5fe6c3e1a59bda4a0d864cdef79cb777">Video::OpenGLCommandBuffer::Draw</a></div><div class="ttdeci">void Draw(unsigned int vertexCount, unsigned int firstVertex) final</div><div class="ttdoc">Draw geometry.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:349</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a67dee8779ee4429064adaedd55da40b0"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a67dee8779ee4429064adaedd55da40b0">Video::OpenGLCommandBuffer::BlitToSwapChain</a></div><div class="ttdeci">void BlitToSwapChain(Texture *texture) final</div><div class="ttdoc">Blit a texture to the current swap chain image.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:393</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a682fc915cac1b7e9ae1c0f3c57bfb7e5"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a682fc915cac1b7e9ae1c0f3c57bfb7e5">Video::OpenGLCommandBuffer::DrawIndexed</a></div><div class="ttdeci">void DrawIndexed(unsigned int indexCount, unsigned int firstIndex, unsigned int baseVertex) final</div><div class="ttdoc">Draw indexed geometry.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:362</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a7079ffc8c6ee67fa3a2b3bf2436ec3d3"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a7079ffc8c6ee67fa3a2b3bf2436ec3d3">Video::OpenGLCommandBuffer::SetViewport</a></div><div class="ttdeci">void SetViewport(const glm::uvec2 &amp;origin, const glm::uvec2 &amp;size) final</div><div class="ttdoc">Set the viewport to render to.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:187</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a7ae0a0c8f71757a3f47680ce075453e9"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a7ae0a0c8f71757a3f47680ce075453e9">Video::OpenGLCommandBuffer::BeginAttachmentlessRenderPass</a></div><div class="ttdeci">void BeginAttachmentlessRenderPass(const glm::uvec2 &amp;size, uint32_t msaaSamples, const std::string &amp;name) final</div><div class="ttdoc">Begin attachmentless render pass.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:59</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a7dfadf451ca73caf613088f36c5a2709"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a7dfadf451ca73caf613088f36c5a2709">Video::OpenGLCommandBuffer::Dispatch</a></div><div class="ttdeci">void Dispatch(const glm::uvec3 &amp;numGroups, const std::string &amp;name) final</div><div class="ttdoc">Dispatch compute shader.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:420</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_a9aef90f34f64989dcea59c92c3303890"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#a9aef90f34f64989dcea59c92c3303890">Video::OpenGLCommandBuffer::OpenGLCommandBuffer</a></div><div class="ttdeci">OpenGLCommandBuffer(OpenGLRenderer &amp;openGLRenderer, OpenGLRenderPassAllocator &amp;renderPassAllocator)</div><div class="ttdoc">Create new OpenGL command buffer.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:21</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_aa2264d3d3ee953cd1e3b54ad367cb4c6"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#aa2264d3d3ee953cd1e3b54ad367cb4c6">Video::OpenGLCommandBuffer::BeginRenderPass</a></div><div class="ttdeci">void BeginRenderPass(RenderPass *renderPass, const std::string &amp;name) final</div><div class="ttdoc">Begin render pass.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:27</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_aa65cc479712e6e8390a168948ab7c67a"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#aa65cc479712e6e8390a168948ab7c67a">Video::OpenGLCommandBuffer::Submit</a></div><div class="ttdeci">void Submit()</div><div class="ttdoc">Submit the commands in the command buffer to the GPU.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:464</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_aa8e537a333bf3602fa714edb50a52c8d"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#aa8e537a333bf3602fa714edb50a52c8d">Video::OpenGLCommandBuffer::BindGraphicsPipeline</a></div><div class="ttdeci">void BindGraphicsPipeline(GraphicsPipeline *graphicsPipeline) final</div><div class="ttdoc">Bind graphics pipeline.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:82</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac2eef0a155cbb3b48e2eee9e05ec8958"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac2eef0a155cbb3b48e2eee9e05ec8958">Video::OpenGLCommandBuffer::GetTimings</a></div><div class="ttdeci">const std::vector&lt; Timing &gt; &amp; GetTimings() const</div><div class="ttdoc">Get the all timings in the command buffer.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:473</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac5a1521614a0c226bf3b364494139522"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac5a1521614a0c226bf3b364494139522">Video::OpenGLCommandBuffer::PushConstants</a></div><div class="ttdeci">void PushConstants(const void *data) final</div><div class="ttdoc">Update push constants.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:313</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac975df8cf5b12168ff60267f9ae9b924"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac975df8cf5b12168ff60267f9ae9b924">Video::OpenGLCommandBuffer::SetLineWidth</a></div><div class="ttdeci">void SetLineWidth(float width) final</div><div class="ttdoc">Set width of lines.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:213</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ac98c8e08d0f3178f27f6d044bcc5c936"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ac98c8e08d0f3178f27f6d044bcc5c936">Video::OpenGLCommandBuffer::~OpenGLCommandBuffer</a></div><div class="ttdeci">~OpenGLCommandBuffer() final</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:25</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ad39948e0a5ec2662b712c71123eca39b"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ad39948e0a5ec2662b712c71123eca39b">Video::OpenGLCommandBuffer::BindStorageBuffers</a></div><div class="ttdeci">void BindStorageBuffers(std::initializer_list&lt; Buffer * &gt; buffers) final</div><div class="ttdoc">Bind storage buffers.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:276</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_command_buffer_html_ae8bb8da6021e1b14889e9a562092be88"><div class="ttname"><a href="class_video_1_1_open_g_l_command_buffer.html#ae8bb8da6021e1b14889e9a562092be88">Video::OpenGLCommandBuffer::BindMaterial</a></div><div class="ttdeci">void BindMaterial(std::initializer_list&lt; std::pair&lt; Texture *, const Sampler * &gt; &gt; textures) final</div><div class="ttdoc">Bind a material.</div><div class="ttdef"><b>Definition:</b> OpenGLCommandBuffer.cpp:296</div></div>
 <div class="ttc" id="aclass_video_1_1_open_g_l_render_pass_allocator_html"><div class="ttname"><a href="class_video_1_1_open_g_l_render_pass_allocator.html">Video::OpenGLRenderPassAllocator</a></div><div class="ttdoc">OpenGL implementation of RenderPassAllocator.</div><div class="ttdef"><b>Definition:</b> OpenGLRenderPassAllocator.hpp:8</div></div>
-<div class="ttc" id="aclass_video_1_1_open_g_l_renderer_html"><div class="ttname"><a href="class_video_1_1_open_g_l_renderer.html">Video::OpenGLRenderer</a></div><div class="ttdoc">Low-level renderer implementing OpenGL.</div><div class="ttdef"><b>Definition:</b> OpenGLRenderer.hpp:18</div></div>
+<div class="ttc" id="aclass_video_1_1_open_g_l_renderer_html"><div class="ttname"><a href="class_video_1_1_open_g_l_renderer.html">Video::OpenGLRenderer</a></div><div class="ttdoc">Low-level renderer implementing OpenGL.</div><div class="ttdef"><b>Definition:</b> OpenGLRenderer.hpp:19</div></div>
 <div class="ttc" id="aclass_video_1_1_render_pass_html"><div class="ttname"><a href="class_video_1_1_render_pass.html">Video::RenderPass</a></div><div class="ttdoc">A render pass.</div><div class="ttdef"><b>Definition:</b> RenderPass.hpp:11</div></div>
+<div class="ttc" id="aclass_video_1_1_sampler_html"><div class="ttname"><a href="class_video_1_1_sampler.html">Video::Sampler</a></div><div class="ttdoc">Determines how a texture should be sampled.</div><div class="ttdef"><b>Definition:</b> Sampler.hpp:6</div></div>
 <div class="ttc" id="aclass_video_1_1_shader_program_html"><div class="ttname"><a href="class_video_1_1_shader_program.html">Video::ShaderProgram</a></div><div class="ttdoc">A shader program.</div><div class="ttdef"><b>Definition:</b> ShaderProgram.hpp:11</div></div>
 <div class="ttc" id="aclass_video_1_1_texture_html"><div class="ttname"><a href="class_video_1_1_texture.html">Video::Texture</a></div><div class="ttdoc">A texture.</div><div class="ttdef"><b>Definition:</b> Texture.hpp:8</div></div>
 <div class="ttc" id="anamespace_video_html"><div class="ttname"><a href="namespace_video.html">Video</a></div><div class="ttdef"><b>Definition:</b> Editor.hpp:18</div></div>

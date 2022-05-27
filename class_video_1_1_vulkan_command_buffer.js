@@ -9,7 +9,7 @@ var class_video_1_1_vulkan_command_buffer =
     [ "BindComputePipeline", "class_video_1_1_vulkan_command_buffer.html#aa511892310d59b1ade0e8cae7ad2aa6f", null ],
     [ "BindGeometry", "class_video_1_1_vulkan_command_buffer.html#ab9cfffad3bb218e44a0ea3e6fb9c284e", null ],
     [ "BindGraphicsPipeline", "class_video_1_1_vulkan_command_buffer.html#a53f76471d53f36305e3d70214204e9d8", null ],
-    [ "BindMaterial", "class_video_1_1_vulkan_command_buffer.html#ab88ebff3630c187840d523d64fa751b8", null ],
+    [ "BindMaterial", "class_video_1_1_vulkan_command_buffer.html#a176c8074880b549fa21bf4a848447a44", null ],
     [ "BindStorageBuffers", "class_video_1_1_vulkan_command_buffer.html#a842ecf5abca783b68efb0de1caff004d", null ],
     [ "BindUniformBuffer", "class_video_1_1_vulkan_command_buffer.html#aea33e8e81d2039138be22bb3838517c2", null ],
     [ "BlitToSwapChain", "class_video_1_1_vulkan_command_buffer.html#afc1e88bf0d4cbe54d0e17b1e10a0b73d", null ],

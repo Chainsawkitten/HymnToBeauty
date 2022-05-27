@@ -154,9 +154,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a842ecf5abca783b68efb0de1caff004d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#a842ecf5abca783b68efb0de1caff004d">BindStorageBuffers</a> (std::initializer_list&lt; <a class="el" href="class_video_1_1_buffer.html">Buffer</a> * &gt; buffers) final</td></tr>
 <tr class="memdesc:a842ecf5abca783b68efb0de1caff004d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind storage buffers.  <a href="class_video_1_1_vulkan_command_buffer.html#a842ecf5abca783b68efb0de1caff004d">More...</a><br /></td></tr>
 <tr class="separator:a842ecf5abca783b68efb0de1caff004d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab88ebff3630c187840d523d64fa751b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#ab88ebff3630c187840d523d64fa751b8">BindMaterial</a> (std::initializer_list&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> * &gt; textures) final</td></tr>
-<tr class="memdesc:ab88ebff3630c187840d523d64fa751b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind a material.  <a href="class_video_1_1_vulkan_command_buffer.html#ab88ebff3630c187840d523d64fa751b8">More...</a><br /></td></tr>
-<tr class="separator:ab88ebff3630c187840d523d64fa751b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a176c8074880b549fa21bf4a848447a44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#a176c8074880b549fa21bf4a848447a44">BindMaterial</a> (std::initializer_list&lt; std::pair&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> *, const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> * &gt; &gt; textures) final</td></tr>
+<tr class="memdesc:a176c8074880b549fa21bf4a848447a44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind a material.  <a href="class_video_1_1_vulkan_command_buffer.html#a176c8074880b549fa21bf4a848447a44">More...</a><br /></td></tr>
+<tr class="separator:a176c8074880b549fa21bf4a848447a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0a5152f1cc087f3250ace58c34ceeb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#aa0a5152f1cc087f3250ace58c34ceeb6">PushConstants</a> (const void *data) final</td></tr>
 <tr class="memdesc:aa0a5152f1cc087f3250ace58c34ceeb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update push constants.  <a href="class_video_1_1_vulkan_command_buffer.html#aa0a5152f1cc087f3250ace58c34ceeb6">More...</a><br /></td></tr>
 <tr class="separator:aa0a5152f1cc087f3250ace58c34ceeb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -566,8 +566,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab88ebff3630c187840d523d64fa751b8" name="ab88ebff3630c187840d523d64fa751b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab88ebff3630c187840d523d64fa751b8">&#9670;&nbsp;</a></span>BindMaterial()</h2>
+<a id="a176c8074880b549fa21bf4a848447a44" name="a176c8074880b549fa21bf4a848447a44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a176c8074880b549fa21bf4a848447a44">&#9670;&nbsp;</a></span>BindMaterial()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -578,7 +578,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Video::VulkanCommandBuffer::BindMaterial </td>
           <td>(</td>
-          <td class="paramtype">std::initializer_list&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> * &gt;&#160;</td>
+          <td class="paramtype">std::initializer_list&lt; std::pair&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> *, const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> * &gt; &gt;&#160;</td>
           <td class="paramname"><em>textures</em></td><td>)</td>
           <td></td>
         </tr>
@@ -598,7 +598,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="class_video_1_1_command_buffer.html#a49ba15b1eaa49f9a6090ae2aaf01ab0a">Video::CommandBuffer</a>.</p>
+<p>Implements <a class="el" href="class_video_1_1_command_buffer.html#afd9ca1399d425525cf0f11b20da9ef3b">Video::CommandBuffer</a>.</p>
 
 </div>
 </div>
@@ -1160,7 +1160,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000032">Todo:</a></b></dt><dd>Clamp line width to supported values. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000031">Todo:</a></b></dt><dd>Clamp line width to supported values. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_command_buffer.html#a5e2c4b0f6f9e1752096eb99977b153d6">Video::CommandBuffer</a>.</p>
 

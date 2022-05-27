@@ -15,11 +15,12 @@ var searchData=
   ['vulkangraphicspipeline_12',['VulkanGraphicsPipeline',['../class_video_1_1_vulkan_graphics_pipeline.html#ace2055a8315ce492090f19050cd3cd41',1,'Video::VulkanGraphicsPipeline']]],
   ['vulkanrawbuffer_13',['VulkanRawBuffer',['../class_video_1_1_vulkan_raw_buffer.html#a1d6c6ea555cf25a6b86a82125f25c8a9',1,'Video::VulkanRawBuffer']]],
   ['vulkanrenderer_14',['VulkanRenderer',['../class_video_1_1_vulkan_renderer.html#a20ddbcc29f80090763591e1235569769',1,'Video::VulkanRenderer']]],
-  ['vulkanrenderpass_15',['VulkanRenderPass',['../class_video_1_1_vulkan_render_pass.html#a4cbd75750aa362e80b6d829145528dc8',1,'Video::VulkanRenderPass::VulkanRenderPass(VkDevice device, Texture *colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture *depthAttachment, RenderPass::LoadOperation depthLoadOperation)'],['../class_video_1_1_vulkan_render_pass.html#ad0d2f9d26cefe17b0607b8ad06a23fea',1,'Video::VulkanRenderPass::VulkanRenderPass(VkDevice device, const glm::uvec2 &amp;size, uint32_t msaaSamples)']]],
+  ['vulkanrenderpass_15',['VulkanRenderPass',['../class_video_1_1_vulkan_render_pass.html#ad0d2f9d26cefe17b0607b8ad06a23fea',1,'Video::VulkanRenderPass::VulkanRenderPass(VkDevice device, const glm::uvec2 &amp;size, uint32_t msaaSamples)'],['../class_video_1_1_vulkan_render_pass.html#a4cbd75750aa362e80b6d829145528dc8',1,'Video::VulkanRenderPass::VulkanRenderPass(VkDevice device, Texture *colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture *depthAttachment, RenderPass::LoadOperation depthLoadOperation)']]],
   ['vulkanrenderpassallocator_16',['VulkanRenderPassAllocator',['../class_video_1_1_vulkan_render_pass_allocator.html#ab25efb5db6644e3e9b243e9d0143f20b',1,'Video::VulkanRenderPassAllocator']]],
   ['vulkanrendertargetallocator_17',['VulkanRenderTargetAllocator',['../class_video_1_1_vulkan_render_target_allocator.html#a32c415191779d93f6b5b531dbc606c3f',1,'Video::VulkanRenderTargetAllocator']]],
-  ['vulkanshader_18',['VulkanShader',['../class_video_1_1_vulkan_shader.html#a7679885119d65b8c353080b8991b7685',1,'Video::VulkanShader']]],
-  ['vulkanshaderprogram_19',['VulkanShaderProgram',['../class_video_1_1_vulkan_shader_program.html#a8eeafd5e7e8ffdb9f24b9fa6810586b4',1,'Video::VulkanShaderProgram']]],
-  ['vulkantexture_20',['VulkanTexture',['../class_video_1_1_vulkan_texture.html#a22dc592037ac0838f067da237d2516ce',1,'Video::VulkanTexture']]],
-  ['vulkanvertexdescription_21',['VulkanVertexDescription',['../class_video_1_1_vulkan_vertex_description.html#ac59b7fbdb0f8294578ef908eed36befb',1,'Video::VulkanVertexDescription']]]
+  ['vulkansampler_18',['VulkanSampler',['../class_video_1_1_vulkan_sampler.html#a8991da6b35329c701699dfdcff4fb1a0',1,'Video::VulkanSampler']]],
+  ['vulkanshader_19',['VulkanShader',['../class_video_1_1_vulkan_shader.html#a7679885119d65b8c353080b8991b7685',1,'Video::VulkanShader']]],
+  ['vulkanshaderprogram_20',['VulkanShaderProgram',['../class_video_1_1_vulkan_shader_program.html#a8eeafd5e7e8ffdb9f24b9fa6810586b4',1,'Video::VulkanShaderProgram']]],
+  ['vulkantexture_21',['VulkanTexture',['../class_video_1_1_vulkan_texture.html#a22dc592037ac0838f067da237d2516ce',1,'Video::VulkanTexture']]],
+  ['vulkanvertexdescription_22',['VulkanVertexDescription',['../class_video_1_1_vulkan_vertex_description.html#ac59b7fbdb0f8294578ef908eed36befb',1,'Video::VulkanVertexDescription']]]
 ];

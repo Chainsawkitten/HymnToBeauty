@@ -146,6 +146,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a681c91e3d618f67e6c74467c061675de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_video_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#a681c91e3d618f67e6c74467c061675de">CreateTexture</a> (const glm::uvec2 size, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a> format, int components, unsigned char *data) final</td></tr>
 <tr class="memdesc:a681c91e3d618f67e6c74467c061675de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a texture.  <a href="class_video_1_1_vulkan_renderer.html#a681c91e3d618f67e6c74467c061675de">More...</a><br /></td></tr>
 <tr class="separator:a681c91e3d618f67e6c74467c061675de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c">GetSampler</a> (<a class="el" href="class_video_1_1_sampler.html#aef84e5e19ae2ebd3e8c01cfb012b653e">Sampler::Filter</a> filter, <a class="el" href="class_video_1_1_sampler.html#afbcd5d0379e9f3fec16090e2c7944dff">Sampler::Clamping</a> clamping) const final</td></tr>
+<tr class="memdesc:ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a sampler.  <a href="class_video_1_1_vulkan_renderer.html#ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c">More...</a><br /></td></tr>
+<tr class="separator:ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02324f25376f7fffbf9cfffce5e6e178"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_video_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#a02324f25376f7fffbf9cfffce5e6e178">CreateRenderTarget</a> (const glm::uvec2 &amp;size, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a> format) final</td></tr>
 <tr class="memdesc:a02324f25376f7fffbf9cfffce5e6e178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a render target.  <a href="class_video_1_1_vulkan_renderer.html#a02324f25376f7fffbf9cfffce5e6e178">More...</a><br /></td></tr>
 <tr class="separator:a02324f25376f7fffbf9cfffce5e6e178"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,9 +197,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa4311b7112579292d03ad7908971f85d"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#aa4311b7112579292d03ad7908971f85d">GetStorageBufferDescriptorSet</a> (std::initializer_list&lt; <a class="el" href="class_video_1_1_buffer.html">Buffer</a> * &gt; buffers)</td></tr>
 <tr class="memdesc:aa4311b7112579292d03ad7908971f85d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a descriptor set for a given binding of storage buffers.  <a href="class_video_1_1_vulkan_renderer.html#aa4311b7112579292d03ad7908971f85d">More...</a><br /></td></tr>
 <tr class="separator:aa4311b7112579292d03ad7908971f85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2176af2e53d271ec504f5489f52db7a6"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#a2176af2e53d271ec504f5489f52db7a6">GetDescriptorSet</a> (std::initializer_list&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> * &gt; textures)</td></tr>
-<tr class="memdesc:a2176af2e53d271ec504f5489f52db7a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a descriptor set for a given binding of textures.  <a href="class_video_1_1_vulkan_renderer.html#a2176af2e53d271ec504f5489f52db7a6">More...</a><br /></td></tr>
-<tr class="separator:a2176af2e53d271ec504f5489f52db7a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae860ba0cf78e0d46807842b19c1f3482"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#ae860ba0cf78e0d46807842b19c1f3482">GetDescriptorSet</a> (std::initializer_list&lt; std::pair&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> *, const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> * &gt; &gt; textures)</td></tr>
+<tr class="memdesc:ae860ba0cf78e0d46807842b19c1f3482"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a descriptor set for a given binding of textures.  <a href="class_video_1_1_vulkan_renderer.html#ae860ba0cf78e0d46807842b19c1f3482">More...</a><br /></td></tr>
+<tr class="separator:ae860ba0cf78e0d46807842b19c1f3482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a349dac2bfb96b1b4278e04bebd8000ec"><td class="memItemLeft" align="right" valign="top">VkQueryPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_renderer.html#a349dac2bfb96b1b4278e04bebd8000ec">GetQueryPool</a> ()</td></tr>
 <tr class="memdesc:a349dac2bfb96b1b4278e04bebd8000ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current frame's query pool.  <a href="class_video_1_1_vulkan_renderer.html#a349dac2bfb96b1b4278e04bebd8000ec">More...</a><br /></td></tr>
 <tr class="separator:a349dac2bfb96b1b4278e04bebd8000ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -416,10 +419,11 @@ Public Member Functions</h2></td></tr>
 <p>Create a compute pipeline. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">shaderProgram</td><td>The shader program to use. </td></tr>
+    <tr><td class="paramname">shaderProgram</td><td>The shader program to use.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created compute pipeline. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#a43d22219eff871d2f5b8c800d64da5e2">Video::LowLevelRenderer</a>.</p>
 
@@ -532,10 +536,11 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">shaderProgram</td><td>The shader program to use. </td></tr>
     <tr><td class="paramname">configuration</td><td>The configuration of the pipeline. </td></tr>
-    <tr><td class="paramname">vertexDescription</td><td>The description of the vertex input to the pipeline. </td></tr>
+    <tr><td class="paramname">vertexDescription</td><td>The description of the vertex input to the pipeline.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created graphics pipeline. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#a7a58ecf9e3ddee4dc6d60a90797a3bcb">Video::LowLevelRenderer</a>.</p>
 
@@ -579,10 +584,11 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">size</td><td>The size of the texture, in pixels. </td></tr>
-    <tr><td class="paramname">format</td><td>The format of the texture. </td></tr>
+    <tr><td class="paramname">format</td><td>The format of the texture.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created texture. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#ad5758451a79fdfd704feca26806e2b5e">Video::LowLevelRenderer</a>.</p>
 
@@ -773,10 +779,11 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">size</td><td>The size of the texture, in pixels. </td></tr>
     <tr><td class="paramname">format</td><td>The format of the texture. </td></tr>
     <tr><td class="paramname">components</td><td>The number of components in the texture, 0 if no texture data is supplied. </td></tr>
-    <tr><td class="paramname">data</td><td>The texture data to upload, or nullptr. </td></tr>
+    <tr><td class="paramname">data</td><td>The texture data to upload, or nullptr.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created texture. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#a316fada07fefc0b32ad13a9442929398">Video::LowLevelRenderer</a>.</p>
 
@@ -958,8 +965,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2176af2e53d271ec504f5489f52db7a6" name="a2176af2e53d271ec504f5489f52db7a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2176af2e53d271ec504f5489f52db7a6">&#9670;&nbsp;</a></span>GetDescriptorSet() <span class="overload">[2/2]</span></h2>
+<a id="ae860ba0cf78e0d46807842b19c1f3482" name="ae860ba0cf78e0d46807842b19c1f3482"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae860ba0cf78e0d46807842b19c1f3482">&#9670;&nbsp;</a></span>GetDescriptorSet() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -967,7 +974,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">VkDescriptorSet Video::VulkanRenderer::GetDescriptorSet </td>
           <td>(</td>
-          <td class="paramtype">std::initializer_list&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> * &gt;&#160;</td>
+          <td class="paramtype">std::initializer_list&lt; std::pair&lt; <a class="el" href="class_video_1_1_texture.html">Texture</a> *, const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> * &gt; &gt;&#160;</td>
           <td class="paramname"><em>textures</em></td><td>)</td>
           <td></td>
         </tr>
@@ -982,7 +989,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The descriptor set. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000033">Todo:</a></b></dt><dd>Have some material object keep track of this instead of treating textures individually. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000032">Todo:</a></b></dt><dd>Have some material object keep track of this instead of treating textures individually. </dd></dl>
 
 </div>
 </div>
@@ -1099,6 +1106,54 @@ Public Member Functions</h2></td></tr>
 
 <p>Get the current frame's query pool. </p>
 <dl class="section return"><dt>Returns</dt><dd>The current frame's query pool. </dd></dl>
+
+</div>
+</div>
+<a id="ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c" name="ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c">&#9670;&nbsp;</a></span>GetSampler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> * Video::VulkanRenderer::GetSampler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_video_1_1_sampler.html#aef84e5e19ae2ebd3e8c01cfb012b653e">Sampler::Filter</a>&#160;</td>
+          <td class="paramname"><em>filter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_video_1_1_sampler.html#afbcd5d0379e9f3fec16090e2c7944dff">Sampler::Clamping</a>&#160;</td>
+          <td class="paramname"><em>clamping</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">final</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a sampler. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filter</td><td>The interpolation to apply. </td></tr>
+    <tr><td class="paramname">clamping</td><td>How to handle sampling outside the texture dimensions.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The requested sampler. </dd></dl>
+
+<p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#a2d4ceb9e6ce8d3c3da6464a4333bfba1">Video::LowLevelRenderer</a>.</p>
 
 </div>
 </div>

@@ -18,6 +18,7 @@ var class_video_1_1_open_g_l_renderer =
     [ "GetBlitShaderProgram", "class_video_1_1_open_g_l_renderer.html#a3c52fe8953600a8f1c41c3d3b81b793d", null ],
     [ "GetFreeQuery", "class_video_1_1_open_g_l_renderer.html#ae6a751740fcff42d43957f15aa77d48d", null ],
     [ "GetOptionalFeatures", "class_video_1_1_open_g_l_renderer.html#ac3a4157b54dd9cb12e9c24a54a412be7", null ],
+    [ "GetSampler", "class_video_1_1_open_g_l_renderer.html#ad069d0a5f0e6e3bb8e1b6b21e724bc3e", null ],
     [ "GetTimeline", "class_video_1_1_open_g_l_renderer.html#aba14542f2f03416cff293ad270f1c2a3", null ],
     [ "Present", "class_video_1_1_open_g_l_renderer.html#ab6cb8e970c53020764e344cac32a7794", null ],
     [ "ReadImage", "class_video_1_1_open_g_l_renderer.html#af31d6b874935dfdfb036609318ef5acc", null ],

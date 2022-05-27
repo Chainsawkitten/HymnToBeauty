@@ -42,6 +42,10 @@ var dir_66b9d3c67dadb04cf8b48fa6a5165f36 =
     [ "OpenGLRenderTargetAllocator.hpp", "_open_g_l_render_target_allocator_8hpp.html", [
       [ "Video::OpenGLRenderTargetAllocator", "class_video_1_1_open_g_l_render_target_allocator.html", "class_video_1_1_open_g_l_render_target_allocator" ]
     ] ],
+    [ "OpenGLSampler.cpp", "_open_g_l_sampler_8cpp.html", null ],
+    [ "OpenGLSampler.hpp", "_open_g_l_sampler_8hpp.html", [
+      [ "Video::OpenGLSampler", "class_video_1_1_open_g_l_sampler.html", "class_video_1_1_open_g_l_sampler" ]
+    ] ],
     [ "OpenGLShader.cpp", "_open_g_l_shader_8cpp.html", null ],
     [ "OpenGLShader.hpp", "_open_g_l_shader_8hpp.html", [
       [ "Video::OpenGLShader", "class_video_1_1_open_g_l_shader.html", "class_video_1_1_open_g_l_shader" ]

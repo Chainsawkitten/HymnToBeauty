@@ -37,6 +37,9 @@ var dir_cfe473110b74d8fee694f34d0e36c556 =
     [ "RenderTargetAllocator.hpp", "_render_target_allocator_8hpp.html", [
       [ "Video::RenderTargetAllocator", "class_video_1_1_render_target_allocator.html", "class_video_1_1_render_target_allocator" ]
     ] ],
+    [ "Sampler.hpp", "_sampler_8hpp.html", [
+      [ "Video::Sampler", "class_video_1_1_sampler.html", "class_video_1_1_sampler" ]
+    ] ],
     [ "Shader.hpp", "_shader_8hpp.html", [
       [ "Video::Shader", "class_video_1_1_shader.html", "class_video_1_1_shader" ]
     ] ],

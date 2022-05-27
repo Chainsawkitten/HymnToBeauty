@@ -12,9 +12,10 @@ var searchData=
   ['openglrenderpass_9',['OpenGLRenderPass',['../class_video_1_1_open_g_l_render_pass.html',1,'Video']]],
   ['openglrenderpassallocator_10',['OpenGLRenderPassAllocator',['../class_video_1_1_open_g_l_render_pass_allocator.html',1,'Video']]],
   ['openglrendertargetallocator_11',['OpenGLRenderTargetAllocator',['../class_video_1_1_open_g_l_render_target_allocator.html',1,'Video']]],
-  ['openglshader_12',['OpenGLShader',['../class_video_1_1_open_g_l_shader.html',1,'Video']]],
-  ['openglshaderprogram_13',['OpenGLShaderProgram',['../class_video_1_1_open_g_l_shader_program.html',1,'Video']]],
-  ['opengltexture_14',['OpenGLTexture',['../class_video_1_1_open_g_l_texture.html',1,'Video']]],
-  ['openglvertexdescription_15',['OpenGLVertexDescription',['../class_video_1_1_open_g_l_vertex_description.html',1,'Video']]],
-  ['optionalfeatures_16',['OptionalFeatures',['../struct_video_1_1_low_level_renderer_1_1_optional_features.html',1,'Video::LowLevelRenderer']]]
+  ['openglsampler_12',['OpenGLSampler',['../class_video_1_1_open_g_l_sampler.html',1,'Video']]],
+  ['openglshader_13',['OpenGLShader',['../class_video_1_1_open_g_l_shader.html',1,'Video']]],
+  ['openglshaderprogram_14',['OpenGLShaderProgram',['../class_video_1_1_open_g_l_shader_program.html',1,'Video']]],
+  ['opengltexture_15',['OpenGLTexture',['../class_video_1_1_open_g_l_texture.html',1,'Video']]],
+  ['openglvertexdescription_16',['OpenGLVertexDescription',['../class_video_1_1_open_g_l_vertex_description.html',1,'Video']]],
+  ['optionalfeatures_17',['OptionalFeatures',['../struct_video_1_1_low_level_renderer_1_1_optional_features.html',1,'Video::LowLevelRenderer']]]
 ];

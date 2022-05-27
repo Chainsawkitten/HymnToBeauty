@@ -155,6 +155,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a316fada07fefc0b32ad13a9442929398"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_video_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_low_level_renderer.html#a316fada07fefc0b32ad13a9442929398">CreateTexture</a> (const glm::uvec2 size, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a> format, int components, unsigned char *data)=0</td></tr>
 <tr class="memdesc:a316fada07fefc0b32ad13a9442929398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a texture.  <a href="class_video_1_1_low_level_renderer.html#a316fada07fefc0b32ad13a9442929398">More...</a><br /></td></tr>
 <tr class="separator:a316fada07fefc0b32ad13a9442929398"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d4ceb9e6ce8d3c3da6464a4333bfba1"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_low_level_renderer.html#a2d4ceb9e6ce8d3c3da6464a4333bfba1">GetSampler</a> (<a class="el" href="class_video_1_1_sampler.html#aef84e5e19ae2ebd3e8c01cfb012b653e">Sampler::Filter</a> filter, <a class="el" href="class_video_1_1_sampler.html#afbcd5d0379e9f3fec16090e2c7944dff">Sampler::Clamping</a> clamping) const =0</td></tr>
+<tr class="memdesc:a2d4ceb9e6ce8d3c3da6464a4333bfba1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a sampler.  <a href="class_video_1_1_low_level_renderer.html#a2d4ceb9e6ce8d3c3da6464a4333bfba1">More...</a><br /></td></tr>
+<tr class="separator:a2d4ceb9e6ce8d3c3da6464a4333bfba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5758451a79fdfd704feca26806e2b5e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_video_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_low_level_renderer.html#ad5758451a79fdfd704feca26806e2b5e">CreateRenderTarget</a> (const glm::uvec2 &amp;size, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a> format)=0</td></tr>
 <tr class="memdesc:ad5758451a79fdfd704feca26806e2b5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a render target.  <a href="class_video_1_1_low_level_renderer.html#ad5758451a79fdfd704feca26806e2b5e">More...</a><br /></td></tr>
 <tr class="separator:ad5758451a79fdfd704feca26806e2b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -383,10 +386,11 @@ Public Member Functions</h2></td></tr>
 <p>Create a compute pipeline. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">shaderProgram</td><td>The shader program to use. </td></tr>
+    <tr><td class="paramname">shaderProgram</td><td>The shader program to use.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created compute pipeline. </dd></dl>
 
 <p>Implemented in <a class="el" href="class_video_1_1_open_g_l_renderer.html#abfbbd22ef7335e390b3c9e1e2962d9ab">Video::OpenGLRenderer</a>, and <a class="el" href="class_video_1_1_vulkan_renderer.html#a63114da4d930173aa25ef465596cde87">Video::VulkanRenderer</a>.</p>
 
@@ -499,10 +503,11 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">shaderProgram</td><td>The shader program to use. </td></tr>
     <tr><td class="paramname">configuration</td><td>The configuration of the pipeline. </td></tr>
-    <tr><td class="paramname">vertexDescription</td><td>The description of the vertex input to the pipeline. </td></tr>
+    <tr><td class="paramname">vertexDescription</td><td>The description of the vertex input to the pipeline.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created graphics pipeline. </dd></dl>
 
 <p>Implemented in <a class="el" href="class_video_1_1_open_g_l_renderer.html#aa999ff09c7c538f337ddcf192ca8ea99">Video::OpenGLRenderer</a>, and <a class="el" href="class_video_1_1_vulkan_renderer.html#a332d23394afb69a9250c5357b8347dcd">Video::VulkanRenderer</a>.</p>
 
@@ -546,10 +551,11 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">size</td><td>The size of the texture, in pixels. </td></tr>
-    <tr><td class="paramname">format</td><td>The format of the texture. </td></tr>
+    <tr><td class="paramname">format</td><td>The format of the texture.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created texture. </dd></dl>
 
 <p>Implemented in <a class="el" href="class_video_1_1_open_g_l_renderer.html#a97c862c027f0277d9bf4f94d8ab6bcda">Video::OpenGLRenderer</a>, and <a class="el" href="class_video_1_1_vulkan_renderer.html#a02324f25376f7fffbf9cfffce5e6e178">Video::VulkanRenderer</a>.</p>
 
@@ -752,10 +758,11 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">size</td><td>The size of the texture, in pixels. </td></tr>
     <tr><td class="paramname">format</td><td>The format of the texture. </td></tr>
     <tr><td class="paramname">components</td><td>The number of components in the texture, 0 if no texture data is supplied. </td></tr>
-    <tr><td class="paramname">data</td><td>The texture data to upload, or nullptr. </td></tr>
+    <tr><td class="paramname">data</td><td>The texture data to upload, or nullptr.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The created texture. </dd></dl>
 
 <p>Implemented in <a class="el" href="class_video_1_1_open_g_l_renderer.html#abe6e43afb860d29ad89df7a76ba2d6bc">Video::OpenGLRenderer</a>, and <a class="el" href="class_video_1_1_vulkan_renderer.html#a681c91e3d618f67e6c74467c061675de">Video::VulkanRenderer</a>.</p>
 
@@ -879,6 +886,54 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Which optional features are supported. </dd></dl>
 
 <p>Implemented in <a class="el" href="class_video_1_1_open_g_l_renderer.html#ac3a4157b54dd9cb12e9c24a54a412be7">Video::OpenGLRenderer</a>, and <a class="el" href="class_video_1_1_vulkan_renderer.html#ad8645e8cd554b0126c04f76cc7902345">Video::VulkanRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a2d4ceb9e6ce8d3c3da6464a4333bfba1" name="a2d4ceb9e6ce8d3c3da6464a4333bfba1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d4ceb9e6ce8d3c3da6464a4333bfba1">&#9670;&nbsp;</a></span>GetSampler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const <a class="el" href="class_video_1_1_sampler.html">Sampler</a> * Video::LowLevelRenderer::GetSampler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_video_1_1_sampler.html#aef84e5e19ae2ebd3e8c01cfb012b653e">Sampler::Filter</a>&#160;</td>
+          <td class="paramname"><em>filter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_video_1_1_sampler.html#afbcd5d0379e9f3fec16090e2c7944dff">Sampler::Clamping</a>&#160;</td>
+          <td class="paramname"><em>clamping</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a sampler. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filter</td><td>The interpolation to apply. </td></tr>
+    <tr><td class="paramname">clamping</td><td>How to handle sampling outside the texture dimensions.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The requested sampler. </dd></dl>
+
+<p>Implemented in <a class="el" href="class_video_1_1_open_g_l_renderer.html#ad069d0a5f0e6e3bb8e1b6b21e724bc3e">Video::OpenGLRenderer</a>, and <a class="el" href="class_video_1_1_vulkan_renderer.html#ad0f5aa2c7eebbefbd1cfb6c5c0e4f03c">Video::VulkanRenderer</a>.</p>
 
 </div>
 </div>
