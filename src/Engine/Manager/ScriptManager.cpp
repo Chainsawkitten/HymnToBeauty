@@ -400,7 +400,9 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("DirectionalLight", "float ambientCoefficient", asOFFSET(DirectionalLight, ambientCoefficient));
 
     engine->RegisterObjectType("Camera", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Camera", "bool orthographic", asOFFSET(Camera, orthographic));
     engine->RegisterObjectProperty("Camera", "float fieldOfView", asOFFSET(Camera, fieldOfView));
+    engine->RegisterObjectProperty("Camera", "float size", asOFFSET(Camera, size));
     engine->RegisterObjectProperty("Camera", "float zNear", asOFFSET(Camera, zNear));
     engine->RegisterObjectProperty("Camera", "float zFar", asOFFSET(Camera, zFar));
     engine->RegisterObjectProperty("Camera", "vec4 viewport", asOFFSET(Camera, viewport));

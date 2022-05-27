@@ -108,8 +108,14 @@ Coefficient of ambient lighting (between 0.0 and 1.0).
 A camera through which the world can be rendered.
 
 ## Properties
+`bool orthographic`  
+Whether the camera should have an orthographic projection. Otherwise a perspective projection is used.
+
 `float fieldOfView`  
-Field of view, in degrees.
+Field of view, in degrees. Only applies to perspective projection.
+
+`float size`  
+The size of the view. Only applies to orthographic projection.
 
 `float zNear`  
 Near plane.
