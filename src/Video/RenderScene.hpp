@@ -59,6 +59,7 @@ struct RenderScene {
         float zNear;
         float zFar;
 		glm::vec4 viewport;
+        uint32_t layerMask;
 
         /// Configuration of post-processing effects.
         Video::PostProcessing::Configuration postProcessingConfiguration;
@@ -75,6 +76,7 @@ struct RenderScene {
         Texture2D* albedo;
         Texture2D* normal;
         Texture2D* roughnessMetallic;
+        uint32_t layerMask;
     };
 
     /// The meshes that should be rendered.
@@ -123,6 +125,7 @@ struct RenderScene {
         glm::vec2 size;
         glm::vec2 pivot;
         glm::vec4 tint;
+        uint32_t layerMask;
     };
 
     std::vector<Sprite> sprites;

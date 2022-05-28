@@ -32,5 +32,8 @@ class Sprite : public SuperComponent {
 
     /// The opacity of the sprite (multiplied with the texture's alpha channel).
     float alpha = 1.0f;
+
+    /// Bitmask of which layers to render to.
+    uint32_t layerMask = 1u;
 };
 } // namespace Component

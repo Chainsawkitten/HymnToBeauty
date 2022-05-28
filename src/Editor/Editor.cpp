@@ -70,6 +70,7 @@ Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLeve
     cameraEntity->AddComponent<Component::Camera>();
     cameraEntity->position.z = 10.0f;
     cameraEntity->GetComponent<Component::Camera>()->zFar = 1000.f;
+    cameraEntity->GetComponent<Component::Camera>()->layerMask = ~0u;
 
     currentEntity = nullptr;
 

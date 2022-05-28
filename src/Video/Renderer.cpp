@@ -312,6 +312,9 @@ std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene
     std::vector<std::size_t> culledMeshes;
 
     for (std::size_t i = 0; i < renderScene.meshes.size(); ++i) {
+        if ((renderScene.meshes[i].layerMask & camera.layerMask) == 0u)
+            continue;
+
         Video::Frustum frustum(camera.viewProjectionMatrix * renderScene.meshes[i].modelMatrix);
         if (!frustum.Intersects(renderScene.meshes[i].axisAlignedBoundingBox))
             continue;
@@ -450,8 +453,12 @@ void Renderer::RenderSprites(const RenderScene& renderScene, const RenderScene::
 
     if (!renderScene.sprites.empty()) {
         spriteRenderProgram->PreRender(*commandBuffer, camera.viewProjectionMatrix);
+        commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
 
         for (const RenderScene::Sprite& sprite : renderScene.sprites) {
+            if ((sprite.layerMask & camera.layerMask) == 0u)
+                continue;
+
             spriteRenderProgram->Render(*commandBuffer, sprite.texture, sprite.size, sprite.pivot, sprite.modelMatrix, sprite.tint);
         }
     }

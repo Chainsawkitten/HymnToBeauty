@@ -66,6 +66,9 @@ Get the entity's camera component, if it has any. Otherwise returns null.
 `Component::Listener@ GetListener()`  
 Get the entity's listener component, if it has any. Otherwise returns null.
 
+`Component::Mesh@ GetMesh()`  
+Get the entity's mesh component, if it has any. Otherwise returns null.
+
 `Component::PointLight@ GetPointLight()`  
 Get the entity's point light component, if it has any. Otherwise returns null.
 
@@ -126,8 +129,19 @@ Far plane.
 `vec4 viewport`  
 Viewport.
 
+`uint layerMask`  
+Which layers the camera should show.
+
 \section Listener Component::Listener
 A sound receptor.
+
+\section Mesh Component::Mesh
+A 3D mesh.
+
+## Properties
+
+`uint layerMask`  
+Which layers the mesh should be rendered to.
 
 \section PointLight Component::PointLight
 A light emanating from a singular position in space.
@@ -202,6 +216,9 @@ A color the sprite will be blended with.
 
 `float alpha`  
 The opacity of the sprite.
+
+`uint layerMask`  
+Which layers the mesh should be rendered to.
 
 \section Hub
 Singleton class that holds all subsystems.
