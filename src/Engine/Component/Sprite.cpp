@@ -26,6 +26,7 @@ Json::Value Sprite::Save() const {
     component["pivot"] = Json::SaveVec2(pivot);
     component["tint"] = Json::SaveVec3(tint);
     component["alpha"] = alpha;
+    component["layerMask"] = layerMask;
 
     return component;
 }

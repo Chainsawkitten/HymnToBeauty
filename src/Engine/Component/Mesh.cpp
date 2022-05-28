@@ -21,5 +21,7 @@ Json::Value Mesh::Save() const {
     if (model != nullptr)
         component["model"] = model->path + model->name;
 
+    component["layerMask"] = layerMask;
+
     return component;
 }

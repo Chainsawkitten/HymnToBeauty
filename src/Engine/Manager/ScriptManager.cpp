@@ -406,8 +406,12 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Camera", "float zNear", asOFFSET(Camera, zNear));
     engine->RegisterObjectProperty("Camera", "float zFar", asOFFSET(Camera, zFar));
     engine->RegisterObjectProperty("Camera", "vec4 viewport", asOFFSET(Camera, viewport));
+    engine->RegisterObjectProperty("Camera", "uint layerMask", asOFFSET(Camera, layerMask));
 
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);
+
+    engine->RegisterObjectType("Mesh", 0, asOBJ_REF | asOBJ_NOCOUNT);
+    engine->RegisterObjectProperty("Mesh", "uint layerMask", asOFFSET(Mesh, layerMask));
 
     engine->RegisterObjectType("PointLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("PointLight", "vec3 color", asOFFSET(PointLight, color));
@@ -434,6 +438,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Sprite", "vec2 pivot", asOFFSET(Sprite, pivot));
     engine->RegisterObjectProperty("Sprite", "vec3 tint", asOFFSET(Sprite, tint));
     engine->RegisterObjectProperty("Sprite", "float alpha", asOFFSET(Sprite, alpha));
+    engine->RegisterObjectProperty("Sprite", "uint layerMask", asOFFSET(Sprite, layerMask));
 
     engine->SetDefaultNamespace("");
 
@@ -441,6 +446,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectMethod("Entity", "Component::DirectionalLight@ GetDirectionalLight()", asMETHODPR(Entity, GetComponent, () const, DirectionalLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Camera@ GetCamera()", asMETHODPR(Entity, GetComponent, () const, Camera*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::Listener@ GetListener()", asMETHODPR(Entity, GetComponent, () const, Listener*), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "Component::Mesh@ GetMesh()", asMETHODPR(Entity, GetComponent, () const, Mesh*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::PointLight@ GetPointLight()", asMETHODPR(Entity, GetComponent, () const, PointLight*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::RigidBody@ GetRigidBody()", asMETHODPR(Entity, GetComponent, () const, RigidBody*), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "Component::SpotLight@ GetSpotLight()", asMETHODPR(Entity, GetComponent, () const, SpotLight*), asCALL_THISCALL);

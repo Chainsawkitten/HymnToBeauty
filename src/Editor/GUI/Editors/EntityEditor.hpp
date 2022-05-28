@@ -115,6 +115,10 @@ class EntityEditor {
     bool roughnessMetallicShow = false;
 
     bool textureShow = false;
+
+    bool cameraLayers[32];
+    bool meshLayers[32];
+    bool spriteLayers[32];
 };
 } // namespace GUI
 
@@ -126,9 +130,12 @@ template <typename type> void GUI::EntityEditor::AddEditor(const std::string& na
 }
 
 template <typename type> void GUI::EntityEditor::AddComponent(const std::string& name) {
-    if (entity->GetComponent<type>() == nullptr)
-        if (ImGui::Selectable(name.c_str()))
+    if (entity->GetComponent<type>() == nullptr) {
+        if (ImGui::Selectable(name.c_str())) {
             entity->AddComponent<type>();
+            SetEntity(entity);
+        }
+    }
 }
 
 template <typename type> void GUI::EntityEditor::EditComponent(const std::string& name, std::function<void(type*)> editorFunction) {

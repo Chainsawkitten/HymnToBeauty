@@ -158,12 +158,33 @@ void EntityEditor::SetEntity(Entity* entity) {
     strcpy(name, entity->name.c_str());
 
     auto shapeComp = this->entity->GetComponent<Component::Shape>();
-    if (shapeComp) {
+    if (shapeComp != nullptr) {
         Physics::Shape& shape = *shapeComp->GetShape();
         for (uint32_t i = 0; i < shapeEditors.size(); ++i) {
             if (shapeEditors[i]->SetFromShape(shape)) {
                 selectedShape = i;
             }
+        }
+    }
+
+    const Component::Camera* camera = entity->GetComponent<Component::Camera>();
+    if (camera != nullptr) {
+        for (uint32_t i = 0; i < 32; ++i) {
+            cameraLayers[i] = (camera->layerMask & (1u << i)) != 0u;
+        }
+    }
+
+    const Component::Mesh* mesh = entity->GetComponent<Component::Mesh>();
+    if (mesh != nullptr) {
+        for (uint32_t i = 0; i < 32; ++i) {
+            meshLayers[i] = (mesh->layerMask & (1u << i)) != 0u;
+        }
+    }
+
+    const Component::Sprite* sprite = entity->GetComponent<Component::Sprite>();
+    if (sprite != nullptr) {
+        for (uint32_t i = 0; i < 32; ++i) {
+            spriteLayers[i] = (sprite->layerMask & (1u << i)) != 0u;
         }
     }
 }
@@ -188,6 +209,17 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
     ImGui::Indent();
     if (ImGui::Button("Select model##Mesh"))
         ImGui::OpenPopup("Select model##Mesh");
+
+    ImGui::Text("Layers");
+    ImGui::Indent();
+    mesh->layerMask = 0u;
+    for (uint32_t i = 0; i < 32; ++i) {
+        if (i % 8u != 0u)
+            ImGui::SameLine();
+        ImGui::Selectable(std::to_string(i + 1).c_str(), &meshLayers[i], 0, ImVec2(12, 12));
+        mesh->layerMask |= meshLayers[i] ? (1u << i) : 0u;
+    }
+    ImGui::Unindent();
 
     if (ImGui::BeginPopup("Select model##Mesh")) {
         ImGui::Text("Models");
@@ -241,6 +273,16 @@ void EntityEditor::CameraEditor(Component::Camera* camera) {
     ImGui::DraggableFloat("Z near", camera->zNear, 0.0f);
     ImGui::DraggableFloat("Z far", camera->zFar, 0.0f);
     ImGui::InputFloat4("Viewport", &camera->viewport.x);
+    ImGui::Text("Layers");
+    ImGui::Indent();
+    camera->layerMask = 0u;
+    for (uint32_t i = 0; i < 32; ++i) {
+        if (i % 8u != 0u)
+            ImGui::SameLine();
+        ImGui::Selectable(std::to_string(i + 1).c_str(), &cameraLayers[i], 0, ImVec2(12, 12));
+        camera->layerMask |= cameraLayers[i] ? (1u << i) : 0u;
+    }
+    ImGui::Unindent();
 
     if (ImGui::CollapsingHeader("Filters")) {
         ImGui::Indent();
@@ -532,6 +574,16 @@ void EntityEditor::SpriteEditor(Component::Sprite* sprite) {
     ImGui::DraggableVec2("Pivot", sprite->pivot, 0.0f, 1.0f);
     ImGui::ColorEdit3("Tint", &sprite->tint[0]);
     ImGui::DraggableFloat("Alpha", sprite->alpha, 0.0f, 1.0f);
+    ImGui::Text("Layers");
+    ImGui::Indent();
+    sprite->layerMask = 0u;
+    for (uint32_t i = 0; i < 32; ++i) {
+        if (i % 8u != 0u)
+            ImGui::SameLine();
+        ImGui::Selectable(std::to_string(i + 1).c_str(), &spriteLayers[i], 0, ImVec2(12, 12));
+        sprite->layerMask |= spriteLayers[i] ? (1u << i) : 0u;
+    }
+    ImGui::Unindent();
 
     ImGui::Unindent();
 

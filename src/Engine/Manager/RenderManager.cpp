@@ -135,6 +135,7 @@ Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
     camera->zNear = node.get("zNear", 0.1f).asFloat();
     camera->zFar = node.get("zFar", 100.f).asFloat();
     camera->viewport = Json::LoadVec4(node["viewport"]);
+    camera->layerMask = node.get("layerMask", 1u).asUInt();
 
     const Json::Value& filtersNode = node["filters"];
     camera->filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
@@ -181,6 +182,8 @@ Component::Mesh* RenderManager::CreateMesh(const Json::Value& node) {
     // Load values from Json node.
     std::string meshName = node.get("model", "").asString();
     mesh->geometry = Managers().resourceManager->CreateModel(meshName);
+
+    mesh->layerMask = node.get("layerMask", 1u).asUInt();
 
     return mesh;
 }
@@ -244,6 +247,7 @@ Component::Sprite* RenderManager::CreateSprite(const Json::Value& node) {
     sprite->pivot = Json::LoadVec2(node["pivot"]);
     sprite->tint = Json::LoadVec3(node["tint"]);
     sprite->alpha = node.get("alpha", 1.0f).asFloat();
+    sprite->layerMask = node.get("layerMask", 1u).asUInt();
 
     return sprite;
 }
@@ -259,6 +263,7 @@ void RenderManager::ClearKilledComponents() {
     meshes.ClearKilled();
     pointLights.ClearKilled();
     spotLights.ClearKilled();
+    sprites.ClearKilled();
 }
 
 Video::Renderer* RenderManager::GetRenderer() {
@@ -276,6 +281,7 @@ void RenderManager::AddCamera(Video::RenderScene& renderScene, const Component::
     renderCamera.zNear = camera.zNear;
     renderCamera.zFar = camera.zFar;
     renderCamera.viewport = camera.viewport;
+    renderCamera.layerMask = camera.layerMask;
 
     renderCamera.postProcessingConfiguration.gamma = camera.filterSettings.gamma;
     renderCamera.postProcessingConfiguration.fxaa.enabled = camera.filterSettings.fxaa;
@@ -388,6 +394,7 @@ void RenderManager::AddMeshes(Video::RenderScene& renderScene) {
         mesh.albedo = material->albedo->GetTexture();
         mesh.normal = material->normal->GetTexture();
         mesh.roughnessMetallic = material->roughnessMetallic->GetTexture();
+        mesh.layerMask = meshComp->layerMask;
 
         renderScene.meshes.push_back(mesh);
     }
@@ -489,6 +496,7 @@ void RenderManager::AddSprites(Video::RenderScene& renderScene) {
         sprite.size = glm::vec2(sprite.texture->GetTexture()->GetSize()) / spriteComp->pixelsPerUnit;
         sprite.pivot = spriteComp->pivot;
         sprite.tint = glm::vec4(spriteComp->tint, spriteComp->alpha);
+        sprite.layerMask = spriteComp->layerMask;
 
         renderScene.sprites.push_back(sprite);
     }

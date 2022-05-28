@@ -25,5 +25,8 @@ class Mesh : public SuperComponent {
      * Default: nullptr
      */
     Video::Geometry::Geometry3D* geometry = nullptr;
+
+    /// Bitmask of which layers to render to.
+    uint32_t layerMask = 1u;
 };
 } // namespace Component

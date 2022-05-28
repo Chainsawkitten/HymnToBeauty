@@ -51,6 +51,9 @@ class Camera : public SuperComponent {
 	/// Viewport.
 	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
+    /// Bitmask of which layers the camera should show.
+    uint32_t layerMask = 1u;
+
     /// Filter settings.
     struct FilterSettings {
         /// Whether to enable FXAA.
