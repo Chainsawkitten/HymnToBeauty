@@ -19,6 +19,7 @@ class PostProcessing {
   public:
     /// Post-processing configuration.
     struct Configuration {
+        bool tonemapping = true;
         float gamma = 2.2f;
 
         struct FXAA {
@@ -112,6 +113,7 @@ class PostProcessing {
         float bloomIntensity;
         float time;
         uint32_t ditherEnable;
+        uint32_t tonemapping;
     };
 
     // FXAA + dither.

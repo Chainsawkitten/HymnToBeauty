@@ -14,6 +14,7 @@ UNIFORMS
     float bloomIntensity;
     highp float time;
     highp uint ditherEnable;
+    highp uint tonemapping;
 } uniforms;
 
 #include "Dither.glsl"
@@ -28,7 +29,9 @@ void main () {
     }
     
     // Reinhard tone mapping.
-    color = clamp(color / (color + vec3(1.0)), 0.0, 1.0);
+    if (uniforms.tonemapping != 0) {
+        color = clamp(color / (color + vec3(1.0)), 0.0, 1.0);
+    }
     
     // Gamma correction.
     color = pow(color, vec3(1.0 / uniforms.gamma));

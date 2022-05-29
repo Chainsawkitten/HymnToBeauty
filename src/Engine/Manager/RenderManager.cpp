@@ -137,6 +137,7 @@ Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
     camera->layerMask = node.get("layerMask", 1u).asUInt();
 
     const Json::Value& filtersNode = node["filters"];
+    camera->filterSettings.tonemapping = filtersNode["tonemapping"].asBool();
     camera->filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
     camera->filterSettings.ditherApply = filtersNode["dither"].asBool();
     camera->filterSettings.fxaa = filtersNode["fxaa"].asBool();
@@ -283,6 +284,7 @@ void RenderManager::AddCamera(Video::RenderScene& renderScene, const Component::
     renderCamera.overlay = camera.overlay;
     renderCamera.layerMask = camera.layerMask;
 
+    renderCamera.postProcessingConfiguration.tonemapping = camera.filterSettings.tonemapping;
     renderCamera.postProcessingConfiguration.gamma = camera.filterSettings.gamma;
     renderCamera.postProcessingConfiguration.fxaa.enabled = camera.filterSettings.fxaa;
     renderCamera.postProcessingConfiguration.dither.enabled = camera.filterSettings.ditherApply;

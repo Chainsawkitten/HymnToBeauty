@@ -28,6 +28,10 @@ Causes bright areas of the image to bleed.
 | Threshold | How bright colors need to be to bleed. |
 | Scatter | How blurry the effect is. |
 
+## Tonemapping
+
+Transform colors from HDR to LDR. Don't apply this to unlit rendering such as 2D sprites.
+
 ## Gamma correction
 
 | Property | Description |
