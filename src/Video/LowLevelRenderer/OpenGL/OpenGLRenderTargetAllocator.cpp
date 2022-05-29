@@ -14,6 +14,7 @@ Texture* OpenGLRenderTargetAllocator::AllocateRenderTarget(const glm::uvec2& siz
     switch (format) {
     case Texture::Format::R11G11B10:
     case Texture::Format::R8G8B8A8:
+    case Texture::Format::R16G16B16A16:
         type = Texture::Type::RENDER_COLOR;
         break;
     case Texture::Format::D32:

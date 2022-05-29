@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "../LowLevelRenderer/Interface/Texture.hpp"
 
 namespace Video {
 class LowLevelRenderer;
@@ -10,7 +11,6 @@ class GraphicsPipeline;
 class RenderSurface;
 class Filter;
 class CommandBuffer;
-class Texture;
 class Sampler;
 class Buffer;
 
@@ -57,10 +57,11 @@ class PostProcessing {
     /**
      * @param commandBuffer Command buffer to build commands into.
      * @param inputTexture The render texture containing the rendered image.
+     * @param format The format to use for intermediate textures.
      *
      * @return The texture to blit to the swap chain.
      */
-    void ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* inputTexture);
+    void ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* inputTexture, Texture::Format format);
 
   private:
     PostProcessing(const PostProcessing& other) = delete;

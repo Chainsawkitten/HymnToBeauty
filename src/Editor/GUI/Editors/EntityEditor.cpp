@@ -273,6 +273,8 @@ void EntityEditor::CameraEditor(Component::Camera* camera) {
     ImGui::DraggableFloat("Z near", camera->zNear, 0.0f);
     ImGui::DraggableFloat("Z far", camera->zFar, 0.0f);
     ImGui::InputFloat4("Viewport", &camera->viewport.x);
+    ImGui::InputInt("Order", &camera->order);
+    ImGui::Checkbox("Overlay", &camera->overlay);
     ImGui::Text("Layers");
     ImGui::Indent();
     camera->layerMask = 0u;

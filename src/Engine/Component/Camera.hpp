@@ -48,6 +48,12 @@ class Camera : public SuperComponent {
      */
     float zFar = 100.f;
 
+    /// The order in the camera stack.
+    int32_t order = 0;
+
+    /// Whether the camera should be rendered with a transparent background.
+    bool overlay = false;
+
 	/// Viewport.
 	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 

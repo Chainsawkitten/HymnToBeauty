@@ -78,7 +78,11 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
         configuration.blendMode = BlendMode::NONE;
         configuration.depthMode = DepthMode::NONE;
 
-		blitGraphicsPipeline = lowLevelRenderer->CreateGraphicsPipeline(blitShaderProgram, configuration);
+        blitGraphicsPipeline[0] = lowLevelRenderer->CreateGraphicsPipeline(blitShaderProgram, configuration);
+
+        configuration.blendMode = BlendMode::ONE_ONE_MINUS_SRC_ALPHA;
+
+        blitGraphicsPipeline[1] = lowLevelRenderer->CreateGraphicsPipeline(blitShaderProgram, configuration);
 	}
 
     sampler = lowLevelRenderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE);
@@ -131,7 +135,8 @@ Renderer::~Renderer() {
     delete postProcessing;
 
 	// Blitting.
-    delete blitGraphicsPipeline;
+    delete blitGraphicsPipeline[0];
+    delete blitGraphicsPipeline[1];
     delete blitShaderProgram;
     delete blitVertexShader;
     delete blitFragmentShader;
@@ -187,7 +192,8 @@ void Renderer::Render(const RenderScene& renderScene) {
         RenderDepthPrePass(renderScene, culledMeshes, camera);
 
 		// Main pass
-        colorTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R11G11B10);
+        const Texture::Format textureFormat = camera.overlay ? Texture::Format::R16G16B16A16 : Texture::Format::R11G11B10;
+        colorTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, textureFormat);
         commandBuffer->BeginRenderPass(colorTexture, RenderPass::LoadOperation::CLEAR, depthTexture, RenderPass::LoadOperation::LOAD, "Main pass");
 
         staticRenderProgram->SetGamma(camera.postProcessingConfiguration.gamma);
@@ -206,7 +212,7 @@ void Renderer::Render(const RenderScene& renderScene) {
 
             postProcessingTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::R8G8B8A8);
             postProcessing->Configure(camera.postProcessingConfiguration, postProcessingTexture);
-            postProcessing->ApplyPostProcessing(*commandBuffer, colorTexture);
+            postProcessing->ApplyPostProcessing(*commandBuffer, colorTexture, textureFormat);
         }
 
         lowLevelRenderer->FreeRenderTarget(colorTexture);
@@ -217,7 +223,7 @@ void Renderer::Render(const RenderScene& renderScene) {
 
         // Blit to output texture according to viewport.
         commandBuffer->BeginRenderPass(outputTexture, firstCamera ? RenderPass::LoadOperation::CLEAR : RenderPass::LoadOperation::LOAD, nullptr, RenderPass::LoadOperation::DONT_CARE, "Blit");
-        commandBuffer->BindGraphicsPipeline(blitGraphicsPipeline);
+        commandBuffer->BindGraphicsPipeline(blitGraphicsPipeline[camera.overlay]);
         commandBuffer->SetViewportAndScissor(cameraOffset, cameraSize);
         commandBuffer->BindMaterial({{postProcessingTexture, sampler}});
         commandBuffer->Draw(3);

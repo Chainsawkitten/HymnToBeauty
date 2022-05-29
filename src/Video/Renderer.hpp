@@ -125,7 +125,7 @@ class Renderer {
     Shader* blitVertexShader;
     Shader* blitFragmentShader;
     ShaderProgram* blitShaderProgram;
-    GraphicsPipeline* blitGraphicsPipeline;
+    GraphicsPipeline* blitGraphicsPipeline[2];
 
     Buffer* quadVertexBuffer;
     VertexDescription* quadVertexDescription;

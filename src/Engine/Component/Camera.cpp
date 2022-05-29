@@ -16,6 +16,8 @@ Json::Value Camera::Save() const {
     component["zNear"] = zNear;
     component["zFar"] = zFar;
     component["viewport"] = Json::SaveVec4(viewport);
+    component["order"] = order;
+    component["overlay"] = overlay;
     component["layerMask"] = layerMask;
 
     Json::Value filtersNode;

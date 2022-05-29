@@ -10,6 +10,8 @@ A %Camera component adds a camera through which the scene is rendered.
 | Z Near | Near field. |
 | Z Far | Far field. |
 | Viewport | Where on the screen the camera should be rendered. |
+| Order | The order in the camera stack. Cameras with a lower value are rendered first. |
+| Overlay | Whether the camera should be rendered with a transparent background. |
 | Layers | Which layers the camera should show. |
 
 \section Filters

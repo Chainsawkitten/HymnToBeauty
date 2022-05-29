@@ -127,7 +127,7 @@ void PostProcessing::Configure(const Configuration& configuration, Texture* outp
     }
 }
 
-void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* inputTexture) {
+void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* inputTexture, Texture::Format format) {
     assert(inputTexture != nullptr);
     assert(outputTexture != nullptr);
 
@@ -144,7 +144,7 @@ void PostProcessing::ApplyPostProcessing(CommandBuffer& commandBuffer, Texture* 
     // Uber.
     Texture* tempTexture;
     if (hasFxaaPass) {
-        tempTexture = lowLevelRenderer->CreateRenderTarget(screenSize, Texture::Format::R11G11B10);
+        tempTexture = lowLevelRenderer->CreateRenderTarget(screenSize, format);
     }
     commandBuffer.BeginRenderPass(hasFxaaPass ? tempTexture : outputTexture, RenderPass::LoadOperation::DONT_CARE, nullptr, RenderPass::LoadOperation::DONT_CARE, "Uber post-processing");
     commandBuffer.BindGraphicsPipeline(uberPipeline);

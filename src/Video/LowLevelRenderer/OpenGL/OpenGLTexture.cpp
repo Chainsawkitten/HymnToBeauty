@@ -24,6 +24,11 @@ OpenGLTexture::OpenGLTexture(const glm::uvec2 size, Texture::Type type, Texture:
         internalFormat = GL_R11F_G11F_B10F;
         dataFormat = Format(components);
         break;
+    case Texture::Format::R16G16B16A16:
+        assert(type != Texture::Type::RENDER_DEPTH);
+        internalFormat = GL_RGBA16F;
+        dataFormat = Format(components);
+        break;
     case Texture::Format::D32:
         assert(type == Texture::Type::RENDER_DEPTH);
         internalFormat = GL_DEPTH_COMPONENT32;

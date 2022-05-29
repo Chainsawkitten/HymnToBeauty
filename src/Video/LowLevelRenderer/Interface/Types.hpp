@@ -38,7 +38,8 @@ enum class Filtering {
 /// Blending mode.
 enum class BlendMode {
     NONE, ///< Don't use blending.
-    ALPHA_ONE_MINUS_SRC_ALPHA ///< Regular blending.
+    ALPHA_ONE_MINUS_SRC_ALPHA, ///< Regular blending.
+    ONE_ONE_MINUS_SRC_ALPHA ///< Pre-multiplied alpha.
 };
 
 /// The type of primitives to render.

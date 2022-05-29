@@ -45,6 +45,10 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
         assert(type != Texture::Type::RENDER_DEPTH);
         internalFormat = VK_FORMAT_B10G11R11_UFLOAT_PACK32;
         break;
+    case Texture::Format::R16G16B16A16:
+        assert(type != Texture::Type::RENDER_DEPTH);
+        internalFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
+        break;
     case Texture::Format::D32:
         assert(type == Texture::Type::RENDER_DEPTH);
         internalFormat = VK_FORMAT_D32_SFLOAT;

@@ -19,7 +19,8 @@ UNIFORMS
 #include "Dither.glsl"
 
 void main () {
-    vec3 color = texture(colorSampler, inTexCoords).rgb;
+    vec4 inColor = texture(colorSampler, inTexCoords);
+    vec3 color = inColor.rgb;
     
     // Bloom.
     if (uniforms.bloomIntensity > 0.0) {
@@ -37,5 +38,5 @@ void main () {
 		color = dither(color, inTexCoords, uniforms.time);
 	}
     
-    outColor = vec4(color, 1.0);
+    outColor = vec4(color, inColor.a);
 }
