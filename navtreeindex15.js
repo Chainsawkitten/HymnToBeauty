@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"struct_video_1_1_post_processing_1_1_configuration.html#ae54e21e7765bd845e7244238a07f444f":[6,0,8,31,0,4],
+"struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[5,0,12,32,0,0],
 "struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[6,0,8,31,0,0],
 "struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html#a57bb973419ed033ae517dede3376630d":[5,0,12,32,0,0,3],
 "struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html#a57bb973419ed033ae517dede3376630d":[6,0,8,31,0,0,3],
