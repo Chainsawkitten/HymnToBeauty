@@ -299,6 +299,13 @@ void EntityEditor::CameraEditor(Component::Camera* camera) {
             ImGui::DragFloat("Scatter", &camera->filterSettings.bloomScatter, 0.01f, 0.0f, 1.0f);
         }
 
+        // Tonemapping
+        if (ImGui::CollapsingHeader("Tonemapping")) {
+            ImGui::TextWrapped("Reinhard tonemapping. Do not apply to unlit content (eg. 2D sprites).");
+
+            ImGui::Checkbox("Enable##Tonemapping", &camera->filterSettings.tonemapping);
+        }
+
         // Gamma
         if (ImGui::CollapsingHeader("Gamma correction")) {
             ImGui::TextWrapped("Gamma correction filter.");

@@ -21,6 +21,7 @@ Json::Value Camera::Save() const {
     component["layerMask"] = layerMask;
 
     Json::Value filtersNode;
+    filtersNode["tonemapping"] = filterSettings.tonemapping;
     filtersNode["gamma"] = filterSettings.gamma;
     filtersNode["dither"] = filterSettings.ditherApply;
     filtersNode["fxaa"] = filterSettings.fxaa;

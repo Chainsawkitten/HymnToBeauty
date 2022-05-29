@@ -68,6 +68,9 @@ class Camera : public SuperComponent {
         /// Whether to enable dithering.
         bool ditherApply = true;
 
+        /// Whether to apply tonemapping.
+        bool tonemapping = true;
+
         /// Gamma correction value.
         float gamma = 2.2f;
 

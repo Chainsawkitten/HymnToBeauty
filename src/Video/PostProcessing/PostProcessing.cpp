@@ -108,6 +108,7 @@ void PostProcessing::Configure(const Configuration& configuration, Texture* outp
 
     // Update uber uniform buffer.
     UberUniforms uberUniforms;
+    uberUniforms.tonemapping = configuration.tonemapping;
     uberUniforms.gamma = configuration.gamma;
     uberUniforms.bloomIntensity = configuration.bloom.enabled ? configuration.bloom.intensity : 0.0f;
     uberUniforms.time = time;
