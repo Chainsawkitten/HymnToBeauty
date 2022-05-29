@@ -6,6 +6,7 @@ var _scripting_reference =
       [ "Component::DirectionalLight", "_class_reference.html#DirectionalLight", null ],
       [ "Component::Camera", "_class_reference.html#Camera", null ],
       [ "Component::Listener", "_class_reference.html#Listener", null ],
+      [ "Component::Mesh", "_class_reference.html#Mesh", null ],
       [ "Component::PointLight", "_class_reference.html#PointLight", null ],
       [ "Component::RigidBody", "_class_reference.html#RigidBody", null ],
       [ "Component::SoundSource", "_class_reference.html#SoundSource", null ],

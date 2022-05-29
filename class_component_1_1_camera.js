@@ -6,6 +6,7 @@ var class_component_1_1_camera =
     [ "Save", "class_component_1_1_camera.html#a07abbea16b4e67be737f5cbeaa8e02ea", null ],
     [ "fieldOfView", "class_component_1_1_camera.html#ab6c1cc0eb81e7e1f601f83ebfe793800", null ],
     [ "filterSettings", "class_component_1_1_camera.html#a1a205612e005ed7065877d85eda1defb", null ],
+    [ "layerMask", "class_component_1_1_camera.html#a23a0fbdd1c6c9db33e0f09eca2a8d740", null ],
     [ "orthographic", "class_component_1_1_camera.html#a71a3b5a440dcbde576cdb3ff67febfe4", null ],
     [ "size", "class_component_1_1_camera.html#a4396039da2c5784d4f63886ebe237fdc", null ],
     [ "viewport", "class_component_1_1_camera.html#a315b0717e49d26868fb16fc700767caf", null ],

@@ -133,6 +133,8 @@ Entity</h1>
  Get the entity's camera component, if it has any. Otherwise returns null.</p>
 <p ><code><a class="el" href="class_component_1_1_listener.html" title="Component describing a listener that can listen to sounds.">Component::Listener</a>@ GetListener()</code> <br  />
  Get the entity's listener component, if it has any. Otherwise returns null.</p>
+<p ><code><a class="el" href="class_component_1_1_mesh.html" title="Component providing geometry to an entity.">Component::Mesh</a>@ GetMesh()</code> <br  />
+ Get the entity's mesh component, if it has any. Otherwise returns null.</p>
 <p ><code><a class="el" href="class_component_1_1_point_light.html" title="Component describing a point light.">Component::PointLight</a>@ GetPointLight()</code> <br  />
  Get the entity's point light component, if it has any. Otherwise returns null.</p>
 <p ><code><a class="el" href="class_component_1_1_rigid_body.html" title="Component that allows interacting with other physics components.">Component::RigidBody</a>@ GetRigidBody()</code> <br  />
@@ -176,9 +178,17 @@ Component::Camera</h1>
  Far plane.</p>
 <p ><code>vec4 viewport</code> <br  />
  Viewport.</p>
+<p ><code>uint layerMask</code> <br  />
+ Which layers the camera should show.</p>
 <h1><a class="anchor" id="Listener"></a>
 Component::Listener</h1>
 <p >A sound receptor.</p>
+<h1><a class="anchor" id="Mesh"></a>
+Component::Mesh</h1>
+<p >A 3D mesh.</p>
+<h2>Properties</h2>
+<p ><code>uint layerMask</code> <br  />
+ Which layers the mesh should be rendered to.</p>
 <h1><a class="anchor" id="PointLight"></a>
 Component::PointLight</h1>
 <p >A light emanating from a singular position in space.</p>
@@ -234,6 +244,8 @@ Component::Sprite</h1>
  A color the sprite will be blended with.</p>
 <p ><code>float alpha</code> <br  />
  The opacity of the sprite.</p>
+<p ><code>uint layerMask</code> <br  />
+ Which layers the mesh should be rendered to.</p>
 <h1><a class="anchor" id="Hub"></a>
 Hub</h1>
 <p >Singleton class that holds all subsystems.</p>
