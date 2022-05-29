@@ -79,7 +79,7 @@ void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::str
         clearValues[clearNumber].color.float32[0] = 0.0f;
         clearValues[clearNumber].color.float32[1] = 0.0f;
         clearValues[clearNumber].color.float32[2] = 0.0f;
-        clearValues[clearNumber].color.float32[3] = 1.0f;
+        clearValues[clearNumber].color.float32[3] = 0.0f;
 
         clearNumber++;
     }

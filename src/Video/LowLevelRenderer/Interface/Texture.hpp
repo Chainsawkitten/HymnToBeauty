@@ -18,6 +18,7 @@ class Texture {
     enum class Format {
         R8G8B8A8, ///< 8-bit RGBA color format.
         R11G11B10, ///< HDR RGB color format.
+        R16G16B16A16, ///< HDR RGBA color format.
         D32 ///< 32-bit depth format.
     };
 

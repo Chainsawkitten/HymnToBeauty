@@ -14,4 +14,7 @@ void main() {
     mediump vec4 color = texture(colorSampler, inTexCoords);
     color.rgb = pow(color.rgb, vec3(uniforms.gamma)); // Apply if texture not in sRGB
     outColor = color * inTint;
+    
+    // Pre-multiply alpha.
+    outColor = vec4(outColor.rgb * outColor.a, outColor.a);
 }

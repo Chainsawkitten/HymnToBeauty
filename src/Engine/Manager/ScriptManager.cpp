@@ -406,6 +406,8 @@ ScriptManager::ScriptManager() {
     engine->RegisterObjectProperty("Camera", "float zNear", asOFFSET(Camera, zNear));
     engine->RegisterObjectProperty("Camera", "float zFar", asOFFSET(Camera, zFar));
     engine->RegisterObjectProperty("Camera", "vec4 viewport", asOFFSET(Camera, viewport));
+    engine->RegisterObjectProperty("Camera", "int order", asOFFSET(Camera, order));
+    engine->RegisterObjectProperty("Camera", "bool overlay", asOFFSET(Camera, overlay));
     engine->RegisterObjectProperty("Camera", "uint layerMask", asOFFSET(Camera, layerMask));
 
     engine->RegisterObjectType("Listener", 0, asOBJ_REF | asOBJ_NOCOUNT);

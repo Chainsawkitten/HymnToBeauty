@@ -127,7 +127,13 @@ Near plane.
 Far plane.
 
 `vec4 viewport`  
-Viewport.
+Where on the screen the camera should be rendered.
+
+`int order`  
+The order in the camera stack. Cameras with a lower value are rendered first.
+
+`bool overlay`  
+Whether the camera should be rendered with a transparent background.
 
 `uint layerMask`  
 Which layers the camera should show.

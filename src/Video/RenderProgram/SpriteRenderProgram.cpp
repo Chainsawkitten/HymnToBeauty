@@ -48,7 +48,7 @@ SpriteRenderProgram::SpriteRenderProgram(LowLevelRenderer* lowLevelRenderer) {
     configuration.primitiveType = PrimitiveType::TRIANGLE;
     configuration.polygonMode = PolygonMode::FILL;
     configuration.cullFace = CullFace::NONE;
-    configuration.blendMode = BlendMode::ALPHA_ONE_MINUS_SRC_ALPHA;
+    configuration.blendMode = BlendMode::ONE_ONE_MINUS_SRC_ALPHA;
     configuration.depthMode = DepthMode::TEST;
     configuration.depthComparison = DepthComparison::LESS_EQUAL;
 

@@ -1,5 +1,6 @@
 #include "RenderManager.hpp"
 
+#include <algorithm>
 #include <Video/Renderer.hpp>
 #include "Managers.hpp"
 #include "ResourceManager.hpp"
@@ -69,11 +70,7 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
             AddCamera(renderScene, *cameraEntity->GetComponent<Camera>(), windowSize);
         } else {
             // No camera specified. Render all the cameras.
-            for (Camera* camera : cameras.GetAll()) {
-                if (camera->entity->IsEnabled()) {
-                    AddCamera(renderScene, *camera, windowSize);
-                }
-            }
+            AddCameras(renderScene, windowSize);
         }
 
         if (!renderScene.cameras.empty()) {
@@ -135,6 +132,8 @@ Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
     camera->zNear = node.get("zNear", 0.1f).asFloat();
     camera->zFar = node.get("zFar", 100.f).asFloat();
     camera->viewport = Json::LoadVec4(node["viewport"]);
+    camera->order = node.get("order", 0).asInt();
+    camera->overlay = node.get("overlay", false).asBool();
     camera->layerMask = node.get("layerMask", 1u).asUInt();
 
     const Json::Value& filtersNode = node["filters"];
@@ -281,6 +280,7 @@ void RenderManager::AddCamera(Video::RenderScene& renderScene, const Component::
     renderCamera.zNear = camera.zNear;
     renderCamera.zFar = camera.zFar;
     renderCamera.viewport = camera.viewport;
+    renderCamera.overlay = camera.overlay;
     renderCamera.layerMask = camera.layerMask;
 
     renderCamera.postProcessingConfiguration.gamma = camera.filterSettings.gamma;
@@ -292,6 +292,22 @@ void RenderManager::AddCamera(Video::RenderScene& renderScene, const Component::
     renderCamera.postProcessingConfiguration.bloom.scatter = camera.filterSettings.bloomScatter;
 
     renderScene.cameras.push_back(renderCamera);
+}
+
+void RenderManager::AddCameras(Video::RenderScene& renderScene, const glm::uvec2& windowSize) {
+    // Sort cameras according to the order.
+    std::vector<Camera*> sortedCameras = cameras.GetAll();
+    std::sort(sortedCameras.begin(), sortedCameras.end(),
+        [](const Camera* a, const Camera* b) -> bool {
+            return a->order < b->order;
+        });
+
+    // Add cameras to render scene.
+    for (Camera* camera : sortedCameras) {
+        if (camera->entity->IsEnabled()) {
+            AddCamera(renderScene, *camera, windowSize);
+        }
+    }
 }
 
 void RenderManager::AddLights(Video::RenderScene& renderScene, bool lighting, bool showLightVolumes) {

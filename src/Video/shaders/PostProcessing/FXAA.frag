@@ -70,5 +70,5 @@ void main () {
 		color = dither(color, inTexCoords, uniforms.time);
 	}
     
-    outColor = vec4(color, 1.0);
+    outColor = vec4(color,  texture(colorSampler, inTexCoords).a);
 }

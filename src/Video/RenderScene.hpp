@@ -58,7 +58,8 @@ struct RenderScene {
         glm::mat4 viewProjectionMatrix;
         float zNear;
         float zFar;
-		glm::vec4 viewport;
+        glm::vec4 viewport;
+        bool overlay;
         uint32_t layerMask;
 
         /// Configuration of post-processing effects.

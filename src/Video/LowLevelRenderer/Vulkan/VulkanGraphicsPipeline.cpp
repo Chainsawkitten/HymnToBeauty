@@ -184,6 +184,15 @@ VulkanGraphicsPipeline::VulkanGraphicsPipeline(const VulkanRenderer& renderer, V
         blendAttachmentState.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
         blendAttachmentState.alphaBlendOp = VK_BLEND_OP_ADD;
         break;
+    case BlendMode::ONE_ONE_MINUS_SRC_ALPHA:
+        blendAttachmentState.blendEnable = VK_TRUE;
+        blendAttachmentState.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+        blendAttachmentState.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        blendAttachmentState.colorBlendOp = VK_BLEND_OP_ADD;
+        blendAttachmentState.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        blendAttachmentState.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        blendAttachmentState.alphaBlendOp = VK_BLEND_OP_ADD;
+        break;
     }
 
     blendStateCreateInfo = {};

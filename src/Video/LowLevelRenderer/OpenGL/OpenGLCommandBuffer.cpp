@@ -174,6 +174,11 @@ void OpenGLCommandBuffer::BindGraphicsPipeline(GraphicsPipeline* graphicsPipelin
         command.bindGraphicsPipelineCommand.blendingSourceFactor = GL_SRC_ALPHA;
         command.bindGraphicsPipelineCommand.blendingDestinationFactor = GL_ONE_MINUS_SRC_ALPHA;
         break;
+    case BlendMode::ONE_ONE_MINUS_SRC_ALPHA:
+        command.bindGraphicsPipelineCommand.blendingEnabled = true;
+        command.bindGraphicsPipelineCommand.blendingSourceFactor = GL_ONE;
+        command.bindGraphicsPipelineCommand.blendingDestinationFactor = GL_ONE_MINUS_SRC_ALPHA;
+        break;
     }
 
     // Depth clamp.
@@ -572,6 +577,7 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         if (command.beginRenderPassCommand.clearMask != 0) {
             glDisable(GL_SCISSOR_TEST);
             glDepthMask(GL_TRUE);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(command.beginRenderPassCommand.clearMask);
             glEnable(GL_SCISSOR_TEST);
         }
