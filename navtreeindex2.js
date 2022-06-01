@@ -99,6 +99,7 @@ var NAVTREEINDEX2 =
 "_types_8hpp.html#a7f637d16797d825b66ba88876999c03ba17b8ef2c330f1430e00c9de5469fc7e7":[7,0,1,4,3,0,18,5,1],
 "_types_8hpp.html#a7f637d16797d825b66ba88876999c03bae8225b11842409df543692aebed34fd1":[7,0,1,4,3,0,18,5,0],
 "_types_8hpp.html#aa497c26337523e85e8f09f893e42693e":[7,0,1,4,3,0,18,0],
+"_types_8hpp.html#aa497c26337523e85e8f09f893e42693ea340fbffbc72ba560afd9d08eb3a036d2":[7,0,1,4,3,0,18,0,2],
 "_types_8hpp.html#aa497c26337523e85e8f09f893e42693ea79a8f3f66f059f22529eb6d4849d2621":[7,0,1,4,3,0,18,0,1],
 "_types_8hpp.html#aa497c26337523e85e8f09f893e42693eab50339a10e1de285ac99d4c3990b8693":[7,0,1,4,3,0,18,0,0],
 "_types_8hpp.html#ac27af02d8d3a6a5573d18c4bfdc68794":[7,0,1,4,3,0,18,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "class_active_hymn.html#a921bf854bf91f5b4f6fbbc306d0c1cf6":[6,0,9,15],
 "class_active_hymn.html#a9390c5bf3ed1481741a97b47f927318e":[6,0,9,16],
 "class_active_hymn.html#a9c75ec6846d087e606f4f0d3766df52f":[6,0,9,14],
-"class_active_hymn.html#aa76af86502ebb1995a1a6bc47a2a348a":[6,0,9,0],
-"class_active_hymn.html#abcb65a0f82258c96292fd1aa4c19da6b":[6,0,9,12]
+"class_active_hymn.html#aa76af86502ebb1995a1a6bc47a2a348a":[6,0,9,0]
 };

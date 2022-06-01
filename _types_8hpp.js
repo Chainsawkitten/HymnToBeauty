@@ -2,7 +2,8 @@ var _types_8hpp =
 [
     [ "BlendMode", "_types_8hpp.html#aa497c26337523e85e8f09f893e42693e", [
       [ "NONE", "_types_8hpp.html#aa497c26337523e85e8f09f893e42693eab50339a10e1de285ac99d4c3990b8693", null ],
-      [ "ALPHA_ONE_MINUS_SRC_ALPHA", "_types_8hpp.html#aa497c26337523e85e8f09f893e42693ea79a8f3f66f059f22529eb6d4849d2621", null ]
+      [ "ALPHA_ONE_MINUS_SRC_ALPHA", "_types_8hpp.html#aa497c26337523e85e8f09f893e42693ea79a8f3f66f059f22529eb6d4849d2621", null ],
+      [ "ONE_ONE_MINUS_SRC_ALPHA", "_types_8hpp.html#aa497c26337523e85e8f09f893e42693ea340fbffbc72ba560afd9d08eb3a036d2", null ]
     ] ],
     [ "CullFace", "_types_8hpp.html#ad1620093c6e3d6331c3f1944a69e5449", [
       [ "NONE", "_types_8hpp.html#ad1620093c6e3d6331c3f1944a69e5449ab50339a10e1de285ac99d4c3990b8693", null ],

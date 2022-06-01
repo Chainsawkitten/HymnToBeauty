@@ -105,6 +105,10 @@ $(document).ready(function(){initNavTree('_component_camera.html',''); initResiz
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Viewport   </td><td class="markdownTableBodyNone">Where on the screen the camera should be rendered.    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Order   </td><td class="markdownTableBodyNone">The order in the camera stack. Cameras with a lower value are rendered first.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Overlay   </td><td class="markdownTableBodyNone">Whether the camera should be rendered with a transparent background.    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Layers   </td><td class="markdownTableBodyNone">Which layers the camera should show.   </td></tr>
 </table>
 <h1><a class="anchor" id="Filters"></a>
@@ -122,6 +126,8 @@ Filters</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Scatter   </td><td class="markdownTableBodyNone">How blurry the effect is.   </td></tr>
 </table>
+<h2>Tonemapping</h2>
+<p >Transform colors from HDR to LDR. Don't apply this to unlit rendering such as 2D sprites.</p>
 <h2>Gamma correction</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">

@@ -177,7 +177,11 @@ Component::Camera</h1>
 <p ><code>float zFar</code> <br  />
  Far plane.</p>
 <p ><code>vec4 viewport</code> <br  />
- Viewport.</p>
+ Where on the screen the camera should be rendered.</p>
+<p ><code>int order</code> <br  />
+ The order in the camera stack. Cameras with a lower value are rendered first.</p>
+<p ><code>bool overlay</code> <br  />
+ Whether the camera should be rendered with a transparent background.</p>
 <p ><code>uint layerMask</code> <br  />
  Which layers the camera should show.</p>
 <h1><a class="anchor" id="Listener"></a>

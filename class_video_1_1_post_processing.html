@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6998f28b8d5135244577c289689707e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_post_processing.html#a6998f28b8d5135244577c289689707e8">Configure</a> (const <a class="el" href="struct_video_1_1_post_processing_1_1_configuration.html">Configuration</a> &amp;configuration, <a class="el" href="class_video_1_1_texture.html">Texture</a> *outputTexture)</td></tr>
 <tr class="memdesc:a6998f28b8d5135244577c289689707e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure the post-processing.  <a href="class_video_1_1_post_processing.html#a6998f28b8d5135244577c289689707e8">More...</a><br /></td></tr>
 <tr class="separator:a6998f28b8d5135244577c289689707e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63c709e9b2759965f28aaa8005cde42e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_post_processing.html#a63c709e9b2759965f28aaa8005cde42e">ApplyPostProcessing</a> (<a class="el" href="class_video_1_1_command_buffer.html">CommandBuffer</a> &amp;commandBuffer, <a class="el" href="class_video_1_1_texture.html">Texture</a> *inputTexture)</td></tr>
-<tr class="memdesc:a63c709e9b2759965f28aaa8005cde42e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply post-processing effects.  <a href="class_video_1_1_post_processing.html#a63c709e9b2759965f28aaa8005cde42e">More...</a><br /></td></tr>
-<tr class="separator:a63c709e9b2759965f28aaa8005cde42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5d1960c6b3168222b8e0009cd5263e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_post_processing.html#af5d1960c6b3168222b8e0009cd5263e0">ApplyPostProcessing</a> (<a class="el" href="class_video_1_1_command_buffer.html">CommandBuffer</a> &amp;commandBuffer, <a class="el" href="class_video_1_1_texture.html">Texture</a> *inputTexture, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a> format)</td></tr>
+<tr class="memdesc:af5d1960c6b3168222b8e0009cd5263e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply post-processing effects.  <a href="class_video_1_1_post_processing.html#af5d1960c6b3168222b8e0009cd5263e0">More...</a><br /></td></tr>
+<tr class="separator:af5d1960c6b3168222b8e0009cd5263e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Applies post-processing effects to the rendered image. </p>
@@ -176,8 +176,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a63c709e9b2759965f28aaa8005cde42e" name="a63c709e9b2759965f28aaa8005cde42e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63c709e9b2759965f28aaa8005cde42e">&#9670;&nbsp;</a></span>ApplyPostProcessing()</h2>
+<a id="af5d1960c6b3168222b8e0009cd5263e0" name="af5d1960c6b3168222b8e0009cd5263e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d1960c6b3168222b8e0009cd5263e0">&#9670;&nbsp;</a></span>ApplyPostProcessing()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +192,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_video_1_1_texture.html">Texture</a> *&#160;</td>
-          <td class="paramname"><em>inputTexture</em>&#160;</td>
+          <td class="paramname"><em>inputTexture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a>&#160;</td>
+          <td class="paramname"><em>format</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -206,7 +212,8 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">commandBuffer</td><td>Command buffer to build commands into. </td></tr>
-    <tr><td class="paramname">inputTexture</td><td>The render texture containing the rendered image.</td></tr>
+    <tr><td class="paramname">inputTexture</td><td>The render texture containing the rendered image. </td></tr>
+    <tr><td class="paramname">format</td><td>The format to use for intermediate textures.</td></tr>
   </table>
   </dd>
 </dl>
