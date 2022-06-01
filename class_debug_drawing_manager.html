@@ -148,9 +148,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a77afd03c4f94fe872b0d10eef7991237"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="struct_video_1_1_debug_drawing_1_1_cone.html">Video::DebugDrawing::Cone</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_debug_drawing_manager.html#a77afd03c4f94fe872b0d10eef7991237">GetCones</a> () const</td></tr>
 <tr class="memdesc:a77afd03c4f94fe872b0d10eef7991237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all debug cones.  <a href="class_debug_drawing_manager.html#a77afd03c4f94fe872b0d10eef7991237">More...</a><br /></td></tr>
 <tr class="separator:a77afd03c4f94fe872b0d10eef7991237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8b6ce87c5e2431f4fe9059f298eedde"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_debug_drawing_manager.html#ac8b6ce87c5e2431f4fe9059f298eedde">AddMesh</a> (unsigned int id, <a class="el" href="class_component_1_1_mesh.html">Component::Mesh</a> *meshComponent, const glm::mat4 &amp;matrix, const glm::vec3 &amp;color, bool wireFrame=true, float duration=0.f, bool depthTesting=true)</td></tr>
-<tr class="memdesc:ac8b6ce87c5e2431f4fe9059f298eedde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a mesh to the world.  <a href="class_debug_drawing_manager.html#ac8b6ce87c5e2431f4fe9059f298eedde">More...</a><br /></td></tr>
-<tr class="separator:ac8b6ce87c5e2431f4fe9059f298eedde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30ea7d61e51fce1fe8ed99a287e3bb63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_debug_drawing_manager.html#a30ea7d61e51fce1fe8ed99a287e3bb63">AddMesh</a> (<a class="el" href="class_component_1_1_mesh.html">Component::Mesh</a> *meshComponent, const glm::mat4 &amp;matrix, const glm::vec3 &amp;color, bool wireFrame=true, float duration=0.f, bool depthTesting=true)</td></tr>
+<tr class="memdesc:a30ea7d61e51fce1fe8ed99a287e3bb63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a mesh to the world.  <a href="class_debug_drawing_manager.html#a30ea7d61e51fce1fe8ed99a287e3bb63">More...</a><br /></td></tr>
+<tr class="separator:a30ea7d61e51fce1fe8ed99a287e3bb63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4128657398a20301c1a202da47726eb8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_video_1_1_debug_drawing_1_1_mesh.html">Video::DebugDrawing::Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_debug_drawing_manager.html#a4128657398a20301c1a202da47726eb8">GetMeshes</a> () const</td></tr>
 <tr class="memdesc:a4128657398a20301c1a202da47726eb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all debug meshes.  <a href="class_debug_drawing_manager.html#a4128657398a20301c1a202da47726eb8">More...</a><br /></td></tr>
 <tr class="separator:a4128657398a20301c1a202da47726eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -512,8 +512,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ac8b6ce87c5e2431f4fe9059f298eedde" name="ac8b6ce87c5e2431f4fe9059f298eedde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8b6ce87c5e2431f4fe9059f298eedde">&#9670;&nbsp;</a></span>AddMesh()</h2>
+<a id="a30ea7d61e51fce1fe8ed99a287e3bb63" name="a30ea7d61e51fce1fe8ed99a287e3bb63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30ea7d61e51fce1fe8ed99a287e3bb63">&#9670;&nbsp;</a></span>AddMesh()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -521,12 +521,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">void DebugDrawingManager::AddMesh </td>
           <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype"><a class="el" href="class_component_1_1_mesh.html">Component::Mesh</a> *&#160;</td>
           <td class="paramname"><em>meshComponent</em>, </td>
         </tr>
@@ -571,7 +565,6 @@ Friends</h2></td></tr>
 <p>Add a mesh to the world. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>The entity's UID. </td></tr>
     <tr><td class="paramname">meshComponent</td><td>The mesh component. </td></tr>
     <tr><td class="paramname">matrix</td><td>Matrix to transform the mesh with. </td></tr>
     <tr><td class="paramname">color</td><td>Color of the lines. </td></tr>

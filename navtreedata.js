@@ -83,7 +83,7 @@ var NAVTREEINDEX =
 "class_video_1_1_vulkan_renderer.html#a03ec5cc6922c56ec86b9337996903c71",
 "functions_vars_d.html",
 "struct_resource_list_1_1_resource.html#a00872ee602a5f997bddba2f57aea4097a1753792ef363c38366d842da6056cbec",
-"struct_video_1_1_open_g_l_vertex_description_1_1_open_g_l_attribute.html#aed934e95835aff640f52da6eb66cd3a1"
+"struct_video_1_1_post_processing_1_1_configuration.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

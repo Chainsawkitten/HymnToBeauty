@@ -6,6 +6,5 @@ var struct_video_1_1_debug_drawing_1_1_mesh =
     [ "geometryBinding", "struct_video_1_1_debug_drawing_1_1_mesh.html#ad2f968c91f243a2c47731de06d26662e", null ],
     [ "indexCount", "struct_video_1_1_debug_drawing_1_1_mesh.html#a3b511db4042c719c5c456e1b804ce994", null ],
     [ "matrix", "struct_video_1_1_debug_drawing_1_1_mesh.html#a4e1b2c1781dca8c59b34f1536f2189eb", null ],
-    [ "referenceCount", "struct_video_1_1_debug_drawing_1_1_mesh.html#a38df4fd4e0458405bebbb445d2b924da", null ],
     [ "wireFrame", "struct_video_1_1_debug_drawing_1_1_mesh.html#ae851d494011cb2fa4037d86e5745155e", null ]
 ];
