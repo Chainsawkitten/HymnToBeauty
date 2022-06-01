@@ -362,8 +362,6 @@ void EntityEditor::MaterialEditor(Component::Material* material) {
 
     ImGui::Unindent();
 
-    ImGui::Unindent();
-
     // Roughness
     ImGui::Text("Roughness-metallic");
     ImGui::Indent();

@@ -37,9 +37,9 @@ void main () {
     color = pow(color, vec3(1.0 / uniforms.gamma));
     
     // Dither.
-	if (uniforms.ditherEnable != 0) {
-		color = dither(color, inTexCoords, uniforms.time);
-	}
+    if (uniforms.ditherEnable != 0) {
+        color = dither(color, inTexCoords, uniforms.time);
+    }
     
     outColor = vec4(color, inColor.a);
 }
