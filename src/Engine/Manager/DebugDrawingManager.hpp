@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <map>
 #include <vector>
 #include <Video/DebugDrawing.hpp>
 
@@ -155,7 +154,6 @@ class DebugDrawingManager {
 
     /// Add a mesh to the world.
     /**
-     * @param id The entity's UID.
      * @param meshComponent The mesh component.
      * @param matrix Matrix to transform the mesh with.
      * @param color Color of the lines.
@@ -163,7 +161,7 @@ class DebugDrawingManager {
      * @param duration How long the mesh should stay in the world (in seconds).
      * @param depthTesting Whether to enable depth testing.
      */
-    void AddMesh(unsigned int id, Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame = true, float duration = 0.f, bool depthTesting = true);
+    void AddMesh(Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame = true, float duration = 0.f, bool depthTesting = true);
 
     /// Get all debug meshes.
     /**
@@ -191,5 +189,5 @@ class DebugDrawingManager {
     std::vector<Video::DebugDrawing::Sphere> spheres;
     std::vector<Video::DebugDrawing::Cylinder> cylinders;
     std::vector<Video::DebugDrawing::Cone> cones;
-    std::map<unsigned int, Video::DebugDrawing::Mesh> meshMap;
+    std::vector<Video::DebugDrawing::Mesh> meshes;
 };

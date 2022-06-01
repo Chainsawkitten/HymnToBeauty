@@ -230,7 +230,7 @@ void Editor::Show(float deltaTime) {
             // Highlight selected.
             Component::Mesh* mesh = currentEntity->GetComponent<Component::Mesh>();
             if (mesh && mesh->geometry)
-                Managers().debugDrawingManager->AddMesh(mesh->entity->GetUniqueIdentifier(), mesh, mesh->entity->GetModelMatrix(), glm::vec3(0.2f, 0.72f, 0.2f));
+                Managers().debugDrawingManager->AddMesh(mesh, mesh->entity->GetModelMatrix(), glm::vec3(0.2f, 0.72f, 0.2f));
         }
     }
 }

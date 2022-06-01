@@ -38,7 +38,7 @@ DebugDrawing::DebugDrawing(Renderer* renderer) {
     GraphicsPipeline::Configuration configuration = {};
     configuration.cullFace = CullFace::NONE;
     configuration.blendMode = BlendMode::NONE;
-    configuration.depthComparison = DepthComparison::LESS;
+    configuration.depthComparison = DepthComparison::LESS_EQUAL;
 
     for (uint8_t i = 0; i < 2; ++i) {
         configuration.depthMode = (i == 0 ? DepthMode::NONE : DepthMode::TEST_WRITE);
