@@ -141,36 +141,25 @@ const std::vector<Video::DebugDrawing::Cone>& DebugDrawingManager::GetCones() co
     return cones;
 }
 
-void DebugDrawingManager::AddMesh(unsigned int id, Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame, float duration, bool depthTesting) {
+void DebugDrawingManager::AddMesh(Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame, float duration, bool depthTesting) {
     assert(meshComponent);
     assert(meshComponent->geometry);
 
-    if (meshMap.find(id) == meshMap.end()) {
-        DebugDrawing::Mesh mesh;
-        if (meshComponent->geometry->GetGeometryBinding() == nullptr)
-            return;
+    if (meshComponent->geometry->GetGeometryBinding() == nullptr)
+        return;
 
-        mesh.geometryBinding = meshComponent->geometry->GetGeometryBinding();
-        mesh.indexCount = meshComponent->geometry->GetIndexCount();
-        mesh.referenceCount = 0;
-        meshMap[id] = mesh;
-    }
-
-    DebugDrawing::Mesh& mesh = meshMap[id];
-    mesh.referenceCount++;
+    DebugDrawing::Mesh mesh;
+    mesh.geometryBinding = meshComponent->geometry->GetGeometryBinding();
+    mesh.indexCount = meshComponent->geometry->GetIndexCount();
     mesh.matrix = matrix;
     mesh.color = color;
     mesh.wireFrame = wireFrame;
     mesh.duration = duration;
     mesh.depthTesting = depthTesting;
+    meshes.push_back(mesh);
 }
 
 std::vector<Video::DebugDrawing::Mesh> DebugDrawingManager::GetMeshes() const {
-    std::vector<Video::DebugDrawing::Mesh> meshes(meshMap.size());
-
-    for (const std::pair<unsigned int, DebugDrawing::Mesh>& it : meshMap)
-        meshes.push_back(it.second);
-
     return meshes;
 }
 
@@ -256,17 +245,12 @@ void DebugDrawingManager::Update(float deltaTime) {
     }
 
     // Mesh.
-    for (auto& it : meshMap) {
-        DebugDrawing::Mesh& mesh = it.second;
-        if (mesh.duration <= 0.f) {
-            --mesh.referenceCount;
+    for (std::size_t i = 0; i < meshes.size(); ++i) {
+        if (meshes[i].duration < 0.f) {
+            meshes[i] = meshes[meshes.size() - 1];
+            meshes.pop_back();
+            --i;
         } else
-            mesh.duration -= deltaTime;
-    }
-    for (auto it = meshMap.cbegin(); it != meshMap.cend();) {
-        if (it->second.referenceCount < 0)
-            meshMap.erase(it++);
-        else
-            ++it;
+            meshes[i].duration -= deltaTime;
     }
 }

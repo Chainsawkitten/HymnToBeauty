@@ -196,9 +196,6 @@ class DebugDrawing {
 
     /// A debug drawing mesh.
     struct Mesh {
-        /// Reference count.
-        int referenceCount;
-
         /// The matrix used to transform the cone.
         glm::mat4 matrix;
 
