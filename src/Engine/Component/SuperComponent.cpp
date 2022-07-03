@@ -13,7 +13,3 @@ void SuperComponent::Kill() {
 bool SuperComponent::IsKilled() const {
     return killed;
 }
-
-Json::Value SuperComponent::Save() const {
-    return Json::Value();
-}

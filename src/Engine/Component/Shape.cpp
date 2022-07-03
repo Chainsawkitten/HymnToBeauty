@@ -1,9 +1,32 @@
+#include "Shape.hpp"
+
+#include <btBulletDynamicsCommon.h>
 #include <Utility/Log.hpp>
 #include "../Physics/Shape.hpp"
 #include "../Util/Json.hpp"
-#include "Shape.hpp"
+#include "../Entity/Entity.hpp"
+#include "RigidBody.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/PhysicsManager.hpp"
 
 namespace Component {
+
+void Shape::Serialize(Json::Value& node, bool load) {
+    if (load) {
+        Load(node);
+    } else {
+        node = Save();
+    }
+}
+
+std::shared_ptr<Physics::Shape> Shape::GetShape() const {
+    return shape;
+}
+
+void Shape::SetShape(std::shared_ptr<Physics::Shape> shape) {
+    this->shape = shape;
+}
+
 Json::Value Shape::Save() const {
     Json::Value component;
 
@@ -17,7 +40,8 @@ Json::Value Shape::Save() const {
     }
     case Physics::Shape::Kind::Plane: {
         auto planeData = shape->GetPlaneData();
-        concreteShape["normal"] = Json::SaveVec3(planeData->normal);
+        glm::vec3 normal = planeData->normal;
+        Json::Serialize(concreteShape, false, "normal", normal, glm::vec3(0.0f, 0.0f, 0.0f));
         concreteShape["planeCoeff"] = planeData->planeCoeff;
         component["plane"] = concreteShape;
         break;
@@ -58,11 +82,50 @@ Json::Value Shape::Save() const {
     return component;
 }
 
-std::shared_ptr<Physics::Shape> Shape::GetShape() const {
-    return shape;
-}
+void Shape::Load(Json::Value& node) {
+    if (node.isMember("sphere")) {
+        auto sphere = node.get("sphere", {});
+        auto radius = sphere.get("radius", 1.0f).asFloat();
+        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Sphere(radius)));
+        SetShape(shape);
+    } else if (node.isMember("plane")) {
+        auto plane = node.get("plane", {});
+        glm::vec3 normal;
+        Json::Serialize(plane, true, "normal", normal, glm::vec3(0.0f, 0.0f, 0.0f));
+        auto planeCoeff = plane.get("planeCoeff", 0.0f).asFloat();
+        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Plane(normal, planeCoeff)));
+        SetShape(shape);
+    } else if (node.isMember("box")) {
+        auto box = node.get("box", {});
+        auto width = box.get("width", 1.0f).asFloat();
+        auto height = box.get("height", 1.0f).asFloat();
+        auto depth = box.get("depth", 1.0f).asFloat();
+        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Box(width, height, depth)));
+        SetShape(shape);
+    } else if (node.isMember("cylinder")) {
+        auto cylinder = node.get("cylinder", {});
+        auto radius = cylinder.get("radius", 1.0f).asFloat();
+        auto length = cylinder.get("length", 1.0f).asFloat();
+        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Cylinder(radius, length)));
+        SetShape(shape);
+    } else if (node.isMember("cone")) {
+        auto cone = node.get("cone", {});
+        auto radius = cone.get("radius", 1.0f).asFloat();
+        auto height = cone.get("height", 1.0f).asFloat();
+        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Cone(radius, height)));
+        SetShape(shape);
+    } else if (node.isMember("capsule")) {
+        auto capsule = node.get("capsule", {});
+        auto radius = capsule.get("radius", 1.0f).asFloat();
+        auto height = capsule.get("height", 1.0f).asFloat();
+        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Capsule(radius, height)));
+        SetShape(shape);
+    }
 
-void Shape::SetShape(std::shared_ptr<Physics::Shape> shape) {
-    this->shape = shape;
+    auto rigidBodyComp = entity->GetComponent<Component::RigidBody>();
+    if (rigidBodyComp) {
+        rigidBodyComp->SetCollisionShape(GetShape());
+        rigidBodyComp->SetMass(rigidBodyComp->GetMass());
+    }
 }
 } // namespace Component

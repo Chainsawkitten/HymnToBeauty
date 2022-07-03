@@ -19,7 +19,7 @@ class Shape : public SuperComponent {
     /// Create new shape.
     Shape() = default;
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Get the shape this component represents.
     /**
@@ -30,6 +30,8 @@ class Shape : public SuperComponent {
   private:
     // Set the shape that this component will represent.
     void SetShape(std::shared_ptr<::Physics::Shape> shape);
+    Json::Value Save() const;
+    void Load(Json::Value& node);
 
     std::shared_ptr<::Physics::Shape> shape = nullptr;
 };

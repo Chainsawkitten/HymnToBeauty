@@ -23,7 +23,7 @@ class Trigger : public SuperComponent {
     /// Destructor.
     ~Trigger() override;
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Get trigger of this component.
     /**
@@ -41,6 +41,9 @@ class Trigger : public SuperComponent {
     TriggerTypes triggerType = TriggerTypes::ONCE;
 
   private:
+    Json::Value Save() const;
+    void Load(Json::Value& node);
+
     SuperTrigger* superTrigger = nullptr;
 };
 } // namespace Component

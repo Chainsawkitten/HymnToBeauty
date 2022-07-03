@@ -139,17 +139,12 @@ class Entity {
      */
     bool IsKilled() const;
 
-    /// Save the entity.
+    /// Save or load entity to/from JSON.
     /**
-     * @return JSON value to be stored on disk.
+     * @param node The JSON node to save to or load from.
+     * @param load Whether to load (otherwise saves).
      */
-    Json::Value Save() const;
-
-    /// Load entity from JSON node.
-    /**
-     * @param node JSON node to load from.
-     */
-    void Load(const Json::Value& node);
+    void Serialize(Json::Value& node, bool load);
 
     /// Get the model matrix.
     /**
@@ -250,19 +245,19 @@ class Entity {
     /**
      * Default: 0.f, 0.f, 0.f
      */
-    glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 
     /// Scale.
     /**
      * Default: 1.f, 1.f, 1.f
      */
-    glm::vec3 scale = glm::vec3(1.f, 1.f, 1.f);
+    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
     /// Quaternion describing rotation and angle of entity.
     /**
      * Default: 0 radians around y axis.
      */
-    glm::quat rotation = glm::angleAxis(0.0f, glm::vec3(0, 1, 0));
+    glm::quat rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
     /// Get the entity's UID
     /**
@@ -284,12 +279,10 @@ class Entity {
     bool sceneChosen = false;
 
   private:
-    template <typename T> void Save(Json::Value& node, const std::string& name) const;
-    template <typename T> void Load(const Json::Value& node, const std::string& name);
+    template <typename T> void Serialize(Json::Value& node, bool load, const std::string& name);
     Component::SuperComponent* AddComponent(std::type_index componentType);
     Component::SuperComponent* GetComponent(std::type_index componentType) const;
     void KillComponent(std::type_index componentType);
-    void LoadComponent(std::type_index componentType, const Json::Value& node);
     void KillHelper();
 
     World* world;
@@ -318,16 +311,18 @@ template <typename T> void Entity::KillComponent() {
     KillComponent(typeid(T*));
 }
 
-template <typename T> void Entity::Save(Json::Value& node, const std::string& name) const {
-    Component::SuperComponent* component = GetComponent(std::type_index(typeid(T*)));
-    if (component != nullptr)
-        node[name] = component->Save();
-}
+template <typename T> void Entity::Serialize(Json::Value& node, bool load, const std::string& name) {
+    std::type_index componentType = std::type_index(typeid(T*));
+    Component::SuperComponent* component = nullptr;
+    if (load) {
+        if (!node[name].isNull()) {
+            component = AddComponent(componentType);
+        }
+    } else {
+        component = GetComponent(componentType);
+    }
 
-template <typename T> void Entity::Load(const Json::Value& node, const std::string& name) {
-    Json::Value componentNode = node[name];
-    if (!componentNode.isNull()) {
-        std::type_index componentType = std::type_index(typeid(T*));
-        LoadComponent(componentType, componentNode);
+    if (component != nullptr) {
+        component->Serialize(node[name], load);
     }
 }

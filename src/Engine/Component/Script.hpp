@@ -18,7 +18,7 @@ class Script : public SuperComponent {
     /// Destructor.
     ~Script() final;
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Whether the script component has been initialized.
     bool initialized = false;
@@ -65,6 +65,9 @@ class Script : public SuperComponent {
 
   private:
     Script(const Script& other) = delete;
+
+    Json::Value Save() const;
+    void Load(Json::Value& node);
 
     class Property {
       public:

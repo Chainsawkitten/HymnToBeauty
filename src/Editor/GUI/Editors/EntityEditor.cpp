@@ -226,16 +226,16 @@ void EntityEditor::MeshEditor(Component::Mesh* mesh) {
         ImGui::Separator();
 
         if (resourceSelector.Show(ResourceList::Resource::Type::MODEL)) {
-            if (mesh->geometry != nullptr)
-                Managers().resourceManager->FreeModel(dynamic_cast<Geometry::Model*>(mesh->geometry));
+            if (mesh->model != nullptr)
+                Managers().resourceManager->FreeModel(dynamic_cast<Geometry::Model*>(mesh->model));
 
-            mesh->geometry = Managers().resourceManager->CreateModel(resourceSelector.GetSelectedResource().GetPath());
+            mesh->model = Managers().resourceManager->CreateModel(resourceSelector.GetSelectedResource().GetPath());
         }
         ImGui::EndPopup();
     }
 
     // Paint Mode. Load vertices and indices.
-    if (entity->GetComponent<Component::Mesh>()->geometry != nullptr) {
+    if (entity->GetComponent<Component::Mesh>()->model != nullptr) {
         if (!entity->loadPaintModeClicked) {
             if (ImGui::Button("Load paint mode.")) {
                 entity->loadPaintModeClicked = true;
@@ -432,7 +432,6 @@ void EntityEditor::PointLightEditor(Component::PointLight* pointLight) {
 void EntityEditor::SpotLightEditor(Component::SpotLight* spotLight) {
     ImGui::Indent();
     ImGui::ColorEdit3("Color", &spotLight->color[0]);
-    ImGui::DraggableFloat("Ambient coefficient", spotLight->ambientCoefficient, 0.0f);
     ImGui::DraggableFloat("Attenuation", spotLight->attenuation, 0.0f);
     ImGui::DraggableFloat("Intensity", spotLight->intensity, 0.0f);
     ImGui::DraggableFloat("Cone angle", spotLight->coneAngle, 0.0f, 180.f);

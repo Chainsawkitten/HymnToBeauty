@@ -19,6 +19,7 @@ namespace Component {
 class RigidBody : public SuperComponent {
     friend class ::PhysicsManager;
     friend class ::Physics::Trigger;
+    friend class Shape;
 
   public:
     /// Constructor.
@@ -27,7 +28,7 @@ class RigidBody : public SuperComponent {
     /// Destructor.
     ~RigidBody();
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Return a value indicating whether the rigid body is kinematic
     /// or dynamic. In the former case the transform is determined by

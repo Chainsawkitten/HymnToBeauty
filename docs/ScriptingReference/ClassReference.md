@@ -195,9 +195,6 @@ Similar to a point light but only lights an angle around its direction.
 `vec3 color`  
 The light color.
 
-`float ambientCoefficient`  
-Coefficient of ambient lighting (between 0.0 and 1.0).
-
 `float attenuation`  
 How fast the light loses intensity over distance.
 

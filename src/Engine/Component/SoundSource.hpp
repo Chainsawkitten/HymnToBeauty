@@ -20,7 +20,7 @@ class SoundSource : public SuperComponent {
     /// Destructor.
     ~SoundSource();
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Play the sound.
     void Play();

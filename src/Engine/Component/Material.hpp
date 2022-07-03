@@ -14,7 +14,7 @@ class Material : public SuperComponent {
     /// Destructor.
     ~Material() override;
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Albedo texture.
     TextureAsset* albedo;

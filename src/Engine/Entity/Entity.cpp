@@ -92,7 +92,7 @@ Entity* Entity::InstantiateScene(const std::string& name, const std::string& ori
             std::ifstream file(filename);
             file >> root;
             file.close();
-            child->Load(root);
+            child->Serialize(root, true);
             child->scene = true;
             child->sceneName = name;
             Managers().triggerManager->InitiateUID();
@@ -180,86 +180,61 @@ bool Entity::IsKilled() const {
     return killed;
 }
 
-Json::Value Entity::Save() const {
-    Json::Value entity;
-    entity["name"] = name;
-    entity["position"] = Json::SaveVec3(position);
-    entity["scale"] = Json::SaveVec3(scale);
-    entity["rotation"] = Json::SaveQuaternion(rotation);
-    entity["scene"] = scene;
-    entity["uid"] = uniqueIdentifier;
+void Entity::Serialize(Json::Value& node, bool load) {
+    Json::Serialize(node, load, "scene", scene, false);
 
     if (scene) {
-        entity["sceneName"] = sceneName;
+        Json::Serialize(node, load, "sceneName", sceneName, "");
+
+        if (load) {
+            // Load scene.
+            std::string filename = Hymn().GetPath() + "/" + sceneName;
+            Json::Value root;
+            std::ifstream file(filename);
+            file >> root;
+            file.close();
+            Serialize(root, true);
+
+            scene = true;
+        }
     } else {
-        // Save components.
-        Save<Component::Camera>(entity, "Camera");
-        Save<Component::Mesh>(entity, "Mesh");
-        Save<Component::Material>(entity, "Material");
-        Save<Component::DirectionalLight>(entity, "DirectionalLight");
-        Save<Component::PointLight>(entity, "PointLight");
-        Save<Component::SpotLight>(entity, "SpotLight");
-        Save<Component::RigidBody>(entity, "RigidBody");
-        Save<Component::Listener>(entity, "Listener");
-        Save<Component::Script>(entity, "Script");
-        Save<Component::Shape>(entity, "Shape");
-        Save<Component::SoundSource>(entity, "SoundSource");
-        Save<Component::Sprite>(entity, "Sprite");
-        Save<Component::Trigger>(entity, "Trigger");
+        Serialize<Component::Camera>(node, load, "Camera");
+        Serialize<Component::Mesh>(node, load, "Mesh");
+        Serialize<Component::Material>(node, load, "Material");
+        Serialize<Component::DirectionalLight>(node, load, "DirectionalLight");
+        Serialize<Component::PointLight>(node, load, "PointLight");
+        Serialize<Component::SpotLight>(node, load, "SpotLight");
+        Serialize<Component::RigidBody>(node, load, "RigidBody");
+        Serialize<Component::Listener>(node, load, "Listener");
+        Serialize<Component::Script>(node, load, "Script");
+        Serialize<Component::Shape>(node, load, "Shape");
+        Serialize<Component::SoundSource>(node, load, "SoundSource");
+        Serialize<Component::Sprite>(node, load, "Sprite");
+        Serialize<Component::Trigger>(node, load, "Trigger");
 
-        // Save children.
-        Json::Value childNodes;
-        for (Entity* child : children)
-            childNodes.append(child->Save());
-        entity["children"] = childNodes;
-    }
-
-    return entity;
-}
-
-void Entity::Load(const Json::Value& node) {
-    scene = node["scene"].asBool();
-
-    if (scene) {
-        sceneName = node["sceneName"].asString();
-
-        // Load scene.
-        std::string filename = Hymn().GetPath() + "/" + sceneName;
-        Json::Value root;
-        std::ifstream file(filename);
-        file >> root;
-        file.close();
-        Load(root);
-
-        scene = true;
-    } else {
-        // Load components.
-        Load<Component::Camera>(node, "Camera");
-        Load<Component::Mesh>(node, "Mesh");
-        Load<Component::Material>(node, "Material");
-        Load<Component::DirectionalLight>(node, "DirectionalLight");
-        Load<Component::PointLight>(node, "PointLight");
-        Load<Component::SpotLight>(node, "SpotLight");
-        Load<Component::RigidBody>(node, "RigidBody");
-        Load<Component::Listener>(node, "Listener");
-        Load<Component::Script>(node, "Script");
-        Load<Component::Shape>(node, "Shape");
-        Load<Component::SoundSource>(node, "SoundSource");
-        Load<Component::Sprite>(node, "Sprite");
-        Load<Component::Trigger>(node, "Trigger");
-
-        // Load children.
-        for (unsigned int i = 0; i < node["children"].size(); ++i) {
-            Entity* entity = AddChild("");
-            entity->Load(node["children"][i]);
+        if (load) {
+            // Load children.
+            for (unsigned int i = 0; i < node["children"].size(); ++i) {
+                Entity* entity = AddChild("");
+                entity->Serialize(node["children"][i], true);
+            }
+        } else {
+            // Save children.
+            Json::Value childNodes;
+            for (Entity* child : children) {
+                Json::Value childNode;
+                child->Serialize(childNode, false);
+                childNodes.append(childNode);
+            }
+            node["children"] = childNodes;
         }
     }
 
-    name = node.get("name", "").asString();
-    position = Json::LoadVec3(node["position"]);
-    scale = Json::LoadVec3(node["scale"]);
-    rotation = Json::LoadQuaternion(node["rotation"]);
-    uniqueIdentifier = node.get("uid", 0).asUInt();
+    Json::Serialize(node, load, "name", name, "");
+    Json::Serialize(node, load, "position", position, glm::vec3(0.0f, 0.0f, 0.0f));
+    Json::Serialize(node, load, "scale", scale, glm::vec3(1.0f, 1.0f, 1.0f));
+    Json::Serialize(node, load, "rotation", rotation, glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f)));
+    Json::Serialize(node, load, "uid", uniqueIdentifier, 0u);
 }
 
 glm::mat4 Entity::GetModelMatrix() const {
@@ -423,49 +398,6 @@ void Entity::KillComponent(std::type_index componentType) {
         components[componentType]->Kill();
         components.erase(componentType);
     }
-}
-
-void Entity::LoadComponent(std::type_index componentType, const Json::Value& node) {
-    Component::SuperComponent* component;
-
-    // Create a component in the correct manager.
-    if (componentType == typeid(Component::DirectionalLight*))
-        component = Managers().renderManager->CreateDirectionalLight(node);
-    else if (componentType == typeid(Component::Camera*))
-        component = Managers().renderManager->CreateCamera(node);
-    else if (componentType == typeid(Component::Listener*))
-        component = Managers().soundManager->CreateListener(node);
-    else if (componentType == typeid(Component::Material*))
-        component = Managers().renderManager->CreateMaterial(node);
-    else if (componentType == typeid(Component::Mesh*))
-        component = Managers().renderManager->CreateMesh(node);
-    else if (componentType == typeid(Component::PointLight*))
-        component = Managers().renderManager->CreatePointLight(node);
-    else if (componentType == typeid(Component::RigidBody*))
-        component = Managers().physicsManager->CreateRigidBody(this, node);
-    else if (componentType == typeid(Component::Script*))
-        component = Managers().scriptManager->CreateScript(node);
-    else if (componentType == typeid(Component::Shape*))
-        component = Managers().physicsManager->CreateShape(this, node);
-    else if (componentType == typeid(Component::SoundSource*))
-        component = Managers().soundManager->CreateSoundSource(node);
-    else if (componentType == typeid(Component::SpotLight*))
-        component = Managers().renderManager->CreateSpotLight(node);
-    else if (componentType == typeid(Component::Sprite*))
-        component = Managers().renderManager->CreateSprite(node);
-    else if (componentType == typeid(Component::Trigger*))
-        component = Managers().triggerManager->CreateTrigger(node);
-    else {
-        Log() << componentType.name() << " not assigned to a manager!"
-              << "\n";
-        return;
-    }
-
-    // Add component to our map.
-    components[componentType] = component;
-
-    // Set ourselves as the owner.
-    component->entity = this;
 }
 
 void Entity::KillHelper() {

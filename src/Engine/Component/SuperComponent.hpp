@@ -23,11 +23,12 @@ class SuperComponent {
      */
     bool IsKilled() const;
 
-    /// Save the component.
+    /// Save or load component values to/from JSON.
     /**
-     * @return JSON value to be stored on disk.
+     * @param node The JSON node to save to or load from.
+     * @param load Whether to load (otherwise saves).
      */
-    virtual Json::Value Save() const;
+    virtual void Serialize(Json::Value& node, bool load) = 0;
 
     /// Pointer to which entity this component corresponds.
     Entity* entity = nullptr;

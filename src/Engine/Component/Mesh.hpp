@@ -2,11 +2,9 @@
 
 #include "SuperComponent.hpp"
 
-namespace Video {
 namespace Geometry {
-class Geometry3D;
+class Model;
 }
-} // namespace Video
 
 namespace Component {
 /// %Component providing geometry to an entity.
@@ -18,13 +16,13 @@ class Mesh : public SuperComponent {
     /// Destructor.
     ~Mesh() override;
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Geometry data.
     /**
      * Default: nullptr
      */
-    Video::Geometry::Geometry3D* geometry = nullptr;
+    Geometry::Model* model = nullptr;
 
     /// Bitmask of which layers to render to.
     uint32_t layerMask = 1u;

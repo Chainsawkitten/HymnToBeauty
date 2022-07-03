@@ -15,9 +15,6 @@ class ScriptFile;
 namespace Component {
 class Script;
 }
-namespace Json {
-class Value;
-}
 
 /// Handles scripting.
 class ScriptManager {
@@ -76,13 +73,6 @@ class ScriptManager {
      * @return The created component.
      */
     Component::Script* CreateScript();
-
-    /// Create script component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::Script* CreateScript(const Json::Value& node);
 
     /// Used to get the string identifier used to check if a property is a string.
     /**
