@@ -271,7 +271,7 @@ void GLTFImporter::LoadMeshes(const std::string& path, const std::string& filena
 
             Geometry::Model* model = Managers().resourceManager->CreateModel(primitiveName);
             Component::Mesh* meshComponent = entity->AddComponent<Component::Mesh>();
-            meshComponent->geometry = model;
+            meshComponent->model = model;
 
             Component::Material* materialComponent = entity->AddComponent<Component::Material>();
             const Material& material = gltf.materials[primitive.material];

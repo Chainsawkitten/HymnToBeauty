@@ -10,12 +10,12 @@ class DirectionalLight : public SuperComponent {
     /// Create new directional light.
     DirectionalLight();
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Color.
-    glm::vec3 color = glm::vec3(1.f, 1.f, 1.f);
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
     /// Ambient coefficient.
-    float ambientCoefficient = 0.f;
+    float ambientCoefficient = 0.0f;
 };
 } // namespace Component

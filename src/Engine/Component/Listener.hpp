@@ -9,6 +9,6 @@ class Listener : public SuperComponent {
     /// Create new listener.
     Listener();
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 };
 } // namespace Component

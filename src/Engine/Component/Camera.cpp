@@ -8,30 +8,26 @@ using namespace Component;
 
 Camera::Camera() {}
 
-Json::Value Camera::Save() const {
-    Json::Value component;
-    component["orthographic"] = orthographic;
-    component["fieldOfView"] = fieldOfView;
-    component["size"] = size;
-    component["zNear"] = zNear;
-    component["zFar"] = zFar;
-    component["viewport"] = Json::SaveVec4(viewport);
-    component["order"] = order;
-    component["overlay"] = overlay;
-    component["layerMask"] = layerMask;
-
-    Json::Value filtersNode;
-    filtersNode["tonemapping"] = filterSettings.tonemapping;
-    filtersNode["gamma"] = filterSettings.gamma;
-    filtersNode["dither"] = filterSettings.ditherApply;
-    filtersNode["fxaa"] = filterSettings.fxaa;
-    filtersNode["bloom"] = filterSettings.bloom;
-    filtersNode["bloomIntensity"] = filterSettings.bloomIntensity;
-    filtersNode["bloomThreshold"] = filterSettings.bloomThreshold;
-    filtersNode["bloomScatter"] = filterSettings.bloomScatter;
-    component["filters"] = filtersNode;
-
-    return component;
+void Camera::Serialize(Json::Value& node, bool load) {
+    Json::Serialize(node, load, "orthographic", orthographic, false);
+    Json::Serialize(node, load, "fieldOfView", fieldOfView, 45.0f);
+    Json::Serialize(node, load, "size", size, 10.0f);
+    Json::Serialize(node, load, "zNear", zNear, 0.1f);
+    Json::Serialize(node, load, "zFar", zFar, 100.0f);
+    Json::Serialize(node, load, "viewport", viewport, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    Json::Serialize(node, load, "order", order, 0);
+    Json::Serialize(node, load, "overlay", overlay, false);
+    Json::Serialize(node, load, "layerMask", layerMask, 1u);
+    
+    Json::Value& filtersNode = node["filters"];
+    Json::Serialize(filtersNode, load, "tonemapping", filterSettings.tonemapping, false);
+    Json::Serialize(filtersNode, load, "gamma", filterSettings.gamma, 2.2f);
+    Json::Serialize(filtersNode, load, "ditherApply", filterSettings.ditherApply, false);
+    Json::Serialize(filtersNode, load, "fxaa", filterSettings.fxaa, false);
+    Json::Serialize(filtersNode, load, "bloom", filterSettings.bloom, false);
+    Json::Serialize(filtersNode, load, "bloomIntensity", filterSettings.bloomIntensity, 1.0f);
+    Json::Serialize(filtersNode, load, "bloomThreshold", filterSettings.bloomThreshold, 1.0f);
+    Json::Serialize(filtersNode, load, "bloomScatter", filterSettings.bloomScatter, 0.7f);
 }
 
 glm::mat4 Camera::GetProjection(const glm::vec2& screenSize) const {

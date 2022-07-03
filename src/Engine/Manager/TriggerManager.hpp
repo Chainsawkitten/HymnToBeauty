@@ -10,10 +10,6 @@ namespace Component {
 class Trigger;
 }
 
-namespace Json {
-class Value;
-}
-
 namespace Physics {
 class Shape;
 }
@@ -33,13 +29,6 @@ class TriggerManager {
      * @return The created component.
      */
     Component::Trigger* CreateTrigger();
-
-    /// Create a trigger component from JSON definition.
-    /**
-     * @param node Json node from which to load component definition.
-     * @return The created component.
-     */
-    Component::Trigger* CreateTrigger(const Json::Value& node);
 
     /// Add a repeating trigger to the component.
     /**

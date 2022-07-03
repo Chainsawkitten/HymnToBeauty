@@ -20,9 +20,6 @@ class PointLight;
 class SpotLight;
 class Sprite;
 } // namespace Component
-namespace Json {
-class Value;
-}
 class TextureAsset;
 
 /// Handles rendering the world.
@@ -52,13 +49,6 @@ class RenderManager {
      */
     Component::DirectionalLight* CreateDirectionalLight();
 
-    /// Create directional light component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::DirectionalLight* CreateDirectionalLight(const Json::Value& node);
-
     /// Get all directional light components.
     /**
      * @return All directional light components.
@@ -70,13 +60,6 @@ class RenderManager {
      * @return The created component.
      */
     Component::Camera* CreateCamera();
-
-    /// Create camera component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::Camera* CreateCamera(const Json::Value& node);
 
     /// Get all camera components.
     /**
@@ -90,13 +73,6 @@ class RenderManager {
      */
     Component::Material* CreateMaterial();
 
-    /// Create material component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::Material* CreateMaterial(const Json::Value& node);
-
     /// Get all material components.
     /**
      * @return All material components.
@@ -108,13 +84,6 @@ class RenderManager {
      * @return The created component.
      */
     Component::Mesh* CreateMesh();
-
-    /// Create mesh component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::Mesh* CreateMesh(const Json::Value& node);
 
     /// Get all mesh components.
     /**
@@ -128,13 +97,6 @@ class RenderManager {
      */
     Component::PointLight* CreatePointLight();
 
-    /// Create point light component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::PointLight* CreatePointLight(const Json::Value& node);
-
     /// Get all point light components.
     /**
      * @return All point light components.
@@ -147,13 +109,6 @@ class RenderManager {
      */
     Component::SpotLight* CreateSpotLight();
 
-    /// Create spot light component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::SpotLight* CreateSpotLight(const Json::Value& node);
-
     /// Get all spot light components.
     /**
      * @return All spot light components.
@@ -165,13 +120,6 @@ class RenderManager {
      * @return The created component.
      */
     Component::Sprite* CreateSprite();
-
-    /// Create sprite component.
-    /**
-     * @param node Json node to load the component from.
-     * @return The created component.
-     */
-    Component::Sprite* CreateSprite(const Json::Value& node);
 
     /// Get all sprite components.
     /**
@@ -205,8 +153,6 @@ class RenderManager {
     void AddDebugShapes(Video::RenderScene& renderScene);
 
     void AddSprites(Video::RenderScene& renderScene);
-
-    void LoadTexture(TextureAsset*& texture, const std::string& name);
 
     Video::Renderer* renderer;
 

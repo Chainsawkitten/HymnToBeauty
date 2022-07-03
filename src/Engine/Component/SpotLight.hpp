@@ -10,24 +10,21 @@ class SpotLight : public SuperComponent {
     /// Create new spot light.
     SpotLight();
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Color.
-    glm::vec3 color = glm::vec3(1.f, 1.f, 1.f);
-
-    /// Ambient coefficient.
-    float ambientCoefficient = 0.f;
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
     /// Attenuation.
-    float attenuation = 1.f;
+    float attenuation = 1.0f;
 
     /// Intensity.
-    float intensity = 1.f;
+    float intensity = 1.0f;
 
     /// Angle of the cone (in degrees).
-    float coneAngle = 15.f;
+    float coneAngle = 15.0f;
 
     /// Distance.
-    float distance = 1.f;
+    float distance = 1.0f;
 };
 } // namespace Component

@@ -9,6 +9,10 @@
 class Entity;
 class TriggerManager;
 
+namespace Component {
+class Trigger;
+}
+
 namespace triggerEvent {
 struct EventStruct {
     int m_eventID = 0;
@@ -26,6 +30,7 @@ class Trigger;
 /// %Trigger that can be executed multiple times.
 class TriggerRepeat : public SuperTrigger {
     friend class ::TriggerManager;
+    friend class ::Component::Trigger;
 
   public:
     /// Constructor.

@@ -4,6 +4,7 @@
 #include "../Manager/ResourceManager.hpp"
 #include "../Texture/TextureAsset.hpp"
 #include "../Hymn.hpp"
+#include "../Util/Json.hpp"
 
 using namespace Component;
 
@@ -24,17 +25,8 @@ Material::~Material() {
         Managers().resourceManager->FreeTextureAsset(roughnessMetallic);
 }
 
-Json::Value Material::Save() const {
-    Json::Value component;
-
-    if (albedo != nullptr)
-        component["albedo"] = albedo->path + albedo->name;
-
-    if (normal != nullptr)
-        component["normal"] = normal->path + normal->name;
-
-    if (roughnessMetallic != nullptr)
-        component["roughnessMetallic"] = roughnessMetallic->path + roughnessMetallic->name;
-
-    return component;
+void Material::Serialize(Json::Value& node, bool load) {
+    Json::Serialize(node, load, "albedo", albedo);
+    Json::Serialize(node, load, "normal", normal);
+    Json::Serialize(node, load, "roughnessMetallic", roughnessMetallic);
 }

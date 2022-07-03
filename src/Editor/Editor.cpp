@@ -229,7 +229,7 @@ void Editor::Show(float deltaTime) {
 
             // Highlight selected.
             Component::Mesh* mesh = currentEntity->GetComponent<Component::Mesh>();
-            if (mesh && mesh->geometry)
+            if (mesh && mesh->model)
                 Managers().debugDrawingManager->AddMesh(mesh, mesh->entity->GetModelMatrix(), glm::vec3(0.2f, 0.72f, 0.2f));
         }
     }
@@ -528,7 +528,7 @@ void Editor::Picking() {
             if (entity->GetComponent<Component::SpotLight>() || entity->GetComponent<Component::DirectionalLight>() || entity->GetComponent<Component::PointLight>() || entity->GetComponent<Component::Mesh>() || entity->GetComponent<Component::Camera>() || entity->GetComponent<Component::SoundSource>()) {
                 // Get aabo.
                 Component::Mesh* mesh = entity->GetComponent<Component::Mesh>();
-                const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->geometry != nullptr ? mesh->geometry->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
+                const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->model != nullptr ? mesh->model->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
                 // Intersect with aabo.
                 if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), mousePicker.GetCurrentRay(), aabo, entity->GetModelMatrix(), intersectDistance)) {
                     if (intersectDistance < lastDistance && intersectDistance > 0.f) {

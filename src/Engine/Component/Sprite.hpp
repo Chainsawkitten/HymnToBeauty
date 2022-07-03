@@ -16,7 +16,7 @@ class Sprite : public SuperComponent {
     /// Destructor.
     ~Sprite() override;
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Texture.
     TextureAsset* texture;

@@ -32,6 +32,7 @@
 #include "../Component/SoundSource.hpp"
 #include "../Component/SpotLight.hpp"
 #include "../Component/Sprite.hpp"
+#include "../Geometry/Model.hpp"
 #include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
 #include "../MainWindow.hpp"
@@ -154,7 +155,7 @@ bool IsIntersect(Entity* checker, Entity* camera) {
     mousePicker.Update();
     RayIntersection rayIntersector;
     float intersectDistance;
-    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), mousePicker.GetCurrentRay(), checker->GetComponent<Component::Mesh>()->geometry->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
+    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), mousePicker.GetCurrentRay(), checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
         if (intersectDistance < 10.0f)
             return true;
         return false;
@@ -424,7 +425,6 @@ ScriptManager::ScriptManager() {
 
     engine->RegisterObjectType("SpotLight", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("SpotLight", "vec3 color", asOFFSET(SpotLight, color));
-    engine->RegisterObjectProperty("SpotLight", "float ambientCoefficient", asOFFSET(SpotLight, ambientCoefficient));
     engine->RegisterObjectProperty("SpotLight", "float attenuation", asOFFSET(SpotLight, attenuation));
     engine->RegisterObjectProperty("SpotLight", "float intensity", asOFFSET(SpotLight, intensity));
     engine->RegisterObjectProperty("SpotLight", "float coneAngle", asOFFSET(SpotLight, coneAngle));
@@ -774,38 +774,6 @@ void ScriptManager::SendMessage(Entity* recipient, Entity* sender, int type) {
 
 Component::Script* ScriptManager::CreateScript() {
     return scripts.Create();
-}
-
-Component::Script* ScriptManager::CreateScript(const Json::Value& node) {
-    Component::Script* script = scripts.Create();
-
-    // Load values from Json node.
-    std::string name = node.get("scriptName", "").asString();
-    script->scriptFile = Managers().resourceManager->CreateScriptFile(name);
-
-    if (node.isMember("propertyMap")) {
-
-        Json::Value propertyMapJson = node.get("propertyMap", "");
-        std::vector<std::string> names = propertyMapJson.getMemberNames();
-
-        for (auto& name : names) {
-            if (propertyMapJson.isMember(name)) {
-                Json::Value typeId_value = propertyMapJson.get(name, "");
-
-                std::vector<std::string> typeIds = typeId_value.getMemberNames();
-                int typeId = std::atoi(typeIds[0].c_str());
-                int size = typeId_value[typeIds[0]].size();
-                void* data = malloc(size + 1);
-                for (int i = 0; i < size; i++)
-                    ((unsigned char*)data)[i] = (unsigned char)(typeId_value[typeIds[0]][i].asInt());
-
-                script->AddToPropertyMap(name, typeId, size, data);
-                std::free(data);
-            }
-        }
-    }
-
-    return script;
 }
 
 int ScriptManager::GetStringDeclarationID() {

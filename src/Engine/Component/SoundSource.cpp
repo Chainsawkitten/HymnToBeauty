@@ -6,6 +6,7 @@
 #include "../Audio/SoundBuffer.hpp"
 #include "../Manager/Managers.hpp"
 #include "../Manager/ResourceManager.hpp"
+#include "../Util/Json.hpp"
 
 using namespace Component;
 
@@ -24,17 +25,11 @@ SoundSource::~SoundSource() {
     delete soundBuffer;
 }
 
-Json::Value SoundSource::Save() const {
-    Json::Value component;
-
-    Audio::SoundFile* soundFile = soundBuffer->GetSoundFile();
-    if (soundFile)
-        component["sound"] = soundFile->path + soundFile->name;
-
-    component["pitch"] = pitch;
-    component["gain"] = gain;
-    component["loop"] = loop;
-    return component;
+void SoundSource::Serialize(Json::Value& node, bool load) {
+    Json::Serialize(node, load, "sound", soundBuffer);
+    Json::Serialize(node, load, "pitch", pitch, 1.0f);
+    Json::Serialize(node, load, "gain", gain, 1.0f);
+    Json::Serialize(node, load, "loop", loop, false);
 }
 
 void SoundSource::Play() {

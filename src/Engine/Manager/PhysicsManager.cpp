@@ -11,7 +11,6 @@
 #include "../Physics/Shape.hpp"
 #include "../Physics/Trigger.hpp"
 #include "../Physics/TriggerObserver.hpp"
-#include "../Util/Json.hpp"
 
 PhysicsManager::PhysicsManager() {
     // The broadphase is used to quickly cull bodies that will not collide with
@@ -150,113 +149,12 @@ Component::RigidBody* PhysicsManager::CreateRigidBody(Entity* owner) {
     return comp;
 }
 
-Component::RigidBody* PhysicsManager::CreateRigidBody(Entity* owner, const Json::Value& node) {
-    auto comp = rigidBodyComponents.Create();
-    comp->entity = owner;
-
-    auto mass = node.get("mass", 1.0f).asFloat();
-    comp->NewBulletRigidBody(mass);
-
-    auto friction = node.get("friction", 0.5f).asFloat();
-    comp->SetFriction(friction);
-
-    auto rollingFriction = node.get("rollingFriction", 0.0f).asFloat();
-    comp->SetRollingFriction(rollingFriction);
-
-    auto spinningFriction = node.get("spinningFriction", 0.0f).asFloat();
-    comp->SetSpinningFriction(spinningFriction);
-
-    auto cor = node.get("cor", 0.0f).asFloat();
-    comp->SetRestitution(cor);
-
-    auto linearDamping = node.get("linearDamping", 0.0f).asFloat();
-    comp->SetLinearDamping(linearDamping);
-
-    auto angularDamping = node.get("angularDamping", 0.0f).asFloat();
-    comp->SetAngularDamping(angularDamping);
-
-    auto kinematic = node.get("kinematic", false).asFloat();
-    if (kinematic)
-        comp->MakeKinematic();
-
-    auto ghost = node.get("ghost", false).asBool();
-    if (ghost)
-        comp->SetGhost(ghost);
-
-    auto shapeComp = comp->entity->GetComponent<Component::Shape>();
-    if (shapeComp) {
-        comp->SetCollisionShape(shapeComp->GetShape());
-        comp->SetMass(mass);
-        if (ghost)
-            dynamicsWorld->addCollisionObject(comp->GetBulletCollisionObject());
-        else
-            dynamicsWorld->addRigidBody(comp->GetBulletRigidBody());
-    }
-
-    return comp;
-}
-
 Component::Shape* PhysicsManager::CreateShape(Entity* owner) {
     auto comp = shapeComponents.Create();
     comp->entity = owner;
 
     auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Sphere(1.0f)));
     comp->SetShape(shape);
-
-    auto rigidBodyComp = comp->entity->GetComponent<Component::RigidBody>();
-    if (rigidBodyComp) {
-        rigidBodyComp->SetCollisionShape(comp->GetShape());
-        rigidBodyComp->SetMass(rigidBodyComp->GetMass());
-        if (rigidBodyComp->ghost)
-            dynamicsWorld->addCollisionObject(rigidBodyComp->GetBulletCollisionObject());
-        else
-            dynamicsWorld->addRigidBody(rigidBodyComp->GetBulletRigidBody());
-    }
-
-    return comp;
-}
-
-Component::Shape* PhysicsManager::CreateShape(Entity* owner, const Json::Value& node) {
-    auto comp = shapeComponents.Create();
-    comp->entity = owner;
-
-    if (node.isMember("sphere")) {
-        auto sphere = node.get("sphere", {});
-        auto radius = sphere.get("radius", 1.0f).asFloat();
-        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Sphere(radius)));
-        comp->SetShape(shape);
-    } else if (node.isMember("plane")) {
-        auto plane = node.get("plane", {});
-        auto normal = Json::LoadVec3(plane.get("normal", {}));
-        auto planeCoeff = plane.get("planeCoeff", 0.0f).asFloat();
-        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Plane(normal, planeCoeff)));
-        comp->SetShape(shape);
-    } else if (node.isMember("box")) {
-        auto box = node.get("box", {});
-        auto width = box.get("width", 1.0f).asFloat();
-        auto height = box.get("height", 1.0f).asFloat();
-        auto depth = box.get("depth", 1.0f).asFloat();
-        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Box(width, height, depth)));
-        comp->SetShape(shape);
-    } else if (node.isMember("cylinder")) {
-        auto cylinder = node.get("cylinder", {});
-        auto radius = cylinder.get("radius", 1.0f).asFloat();
-        auto length = cylinder.get("length", 1.0f).asFloat();
-        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Cylinder(radius, length)));
-        comp->SetShape(shape);
-    } else if (node.isMember("cone")) {
-        auto cone = node.get("cone", {});
-        auto radius = cone.get("radius", 1.0f).asFloat();
-        auto height = cone.get("height", 1.0f).asFloat();
-        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Cone(radius, height)));
-        comp->SetShape(shape);
-    } else if (node.isMember("capsule")) {
-        auto capsule = node.get("capsule", {});
-        auto radius = capsule.get("radius", 1.0f).asFloat();
-        auto height = capsule.get("height", 1.0f).asFloat();
-        auto shape = std::shared_ptr<Physics::Shape>(new Physics::Shape(Physics::Shape::Capsule(radius, height)));
-        comp->SetShape(shape);
-    }
 
     auto rigidBodyComp = comp->entity->GetComponent<Component::RigidBody>();
     if (rigidBodyComp) {
@@ -400,4 +298,8 @@ void PhysicsManager::ClearKilledComponents() {
             dynamicsWorld->removeRigidBody(body->GetBulletRigidBody());
     });
     shapeComponents.ClearKilled();
+}
+
+btDiscreteDynamicsWorld* PhysicsManager::GetDynamicsWorld() {
+    return dynamicsWorld;
 }

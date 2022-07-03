@@ -77,7 +77,8 @@ void World::ClearKilled() {
 }
 
 void World::Save(const std::string& filename) const {
-    Json::Value rootNode = root->Save();
+    Json::Value rootNode;
+    root->Serialize(rootNode, false);
 
     std::ofstream file(filename);
     file << rootNode;
@@ -85,7 +86,9 @@ void World::Save(const std::string& filename) const {
 }
 
 Json::Value World::GetSaveJson() const {
-    return root->Save();
+    Json::Value rootNode;
+    root->Serialize(rootNode, false);
+    return rootNode;
 }
 
 void World::Load(const std::string& filename) {
@@ -100,17 +103,17 @@ void World::Load(const std::string& filename) {
         file >> rootNode;
         file.close();
 
-        root->Load(rootNode);
+        root->Serialize(rootNode, true);
     }
 
     Managers().triggerManager->InitiateUID();
     Managers().triggerManager->InitiateVolumes();
 }
 
-void World::Load(const Json::Value& node) {
+void World::Load(Json::Value& node) {
     Clear();
     CreateRoot();
-    root->Load(node);
+    root->Serialize(node, true);
     Managers().triggerManager->InitiateUID();
     Managers().triggerManager->InitiateVolumes();
 }

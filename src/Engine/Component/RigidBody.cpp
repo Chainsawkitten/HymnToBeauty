@@ -1,26 +1,52 @@
+#include "RigidBody.hpp"
+
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "../Physics/GlmConversion.hpp"
 #include "../Physics/Shape.hpp"
-#include "RigidBody.hpp"
+#include "../Entity/Entity.hpp"
+#include "Shape.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/PhysicsManager.hpp"
+#include "../Util/Json.hpp"
 
 namespace Component {
 RigidBody::~RigidBody() {
     Destroy();
 }
 
-Json::Value RigidBody::Save() const {
-    Json::Value component;
-    component["mass"] = mass;
-    component["friction"] = friction;
-    component["rollingFriction"] = rollingFriction;
-    component["spinningFriction"] = spinningFriction;
-    component["cor"] = restitution;
-    component["linearDamping"] = linearDamping;
-    component["angularDamping"] = angularDamping;
-    component["kinematic"] = kinematic;
-    component["ghost"] = ghost;
-    return component;
+void RigidBody::Serialize(Json::Value& node, bool load) {
+    Json::Serialize(node, load, "mass", mass, 1.0f);
+    Json::Serialize(node, load, "friction", friction, 0.5f);
+    Json::Serialize(node, load, "rollingFriction", rollingFriction, 0.0f);
+    Json::Serialize(node, load, "spinningFriction", spinningFriction, 0.0f);
+    Json::Serialize(node, load, "cor", restitution, 0.0f);
+    Json::Serialize(node, load, "linearDamping", linearDamping, 0.0f);
+    Json::Serialize(node, load, "angularDamping", angularDamping, 0.0f);
+    Json::Serialize(node, load, "kinematic", kinematic, false);
+    Json::Serialize(node, load, "ghost", ghost, false);
+
+    if (load) {
+        // Propagate the data to Bullet.
+        NewBulletRigidBody(mass);
+        SetFriction(friction);
+        SetRollingFriction(rollingFriction);
+        SetSpinningFriction(spinningFriction);
+        SetRestitution(restitution);
+        SetLinearDamping(linearDamping);
+        SetAngularDamping(angularDamping);
+        if (kinematic)
+            MakeKinematic();
+
+        if (ghost)
+            SetGhost(ghost);
+
+        auto shapeComp = entity->GetComponent<Component::Shape>();
+        if (shapeComp) {
+            SetCollisionShape(shapeComp->GetShape());
+            SetMass(mass);
+        }
+    }
 }
 
 bool RigidBody::IsKinematic() const {

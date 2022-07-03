@@ -10,7 +10,7 @@ class Camera : public SuperComponent {
     /// Create new camera.
     Camera();
 
-    Json::Value Save() const override;
+    void Serialize(Json::Value& node, bool load) override;
 
     /// Get the projection matrix.
     /**

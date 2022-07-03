@@ -2,61 +2,133 @@
 
 #include <json/json.h>
 #include <glm/glm.hpp>
+#include <string>
+
+class TextureAsset;
+namespace Geometry {
+class Model;
+}
+namespace Audio {
+class SoundBuffer;
+}
 
 namespace Json {
-/// Convert a vec2 to a JSON node.
-/**
- * @param value %Value to convert.
- * @return JSON node.
- */
-Json::Value SaveVec2(const glm::vec2& value);
 
-/// Load a vec2 from a JSON node.
+/// Serialize a boolean value.
 /**
- * @param value The JSON node to load from.
- * @return The loaded vec2.
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-glm::vec2 LoadVec2(const Value& value);
+void Serialize(Value& node, bool load, const std::string& name, bool& value, bool defaultValue);
 
-/// Convert a vec3 to a JSON node.
+/// Serialize an integer value.
 /**
- * @param value %Value to convert.
- * @return JSON node.
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-Json::Value SaveVec3(const glm::vec3& value);
+void Serialize(Value& node, bool load, const std::string& name, int32_t& value, int32_t defaultValue);
 
-/// Load a vec3 from a JSON node.
+/// Serialize an unsigned integer value.
 /**
- * @param value The JSON node to load from.
- * @return The loaded vec3.
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-glm::vec3 LoadVec3(const Value& value);
+void Serialize(Value& node, bool load, const std::string& name, uint32_t& value, uint32_t defaultValue);
 
-/// Convert a vec4 to a JSON node.
+/// Serialize a float value.
 /**
- * @param value %Value to convert.
- * @return JSON node.
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-Json::Value SaveVec4(const glm::vec4& value);
+void Serialize(Value& node, bool load, const std::string& name, float& value, float defaultValue);
 
-/// Load a vec4 from a JSON node.
+/// Serialize a vec2 value.
 /**
- * @param value The JSON node to load from.
- * @return The loaded vec4.
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-glm::vec4 LoadVec4(const Value& value);
+void Serialize(Value& node, bool load, const std::string& name, glm::vec2& value, const glm::vec2& defaultValue);
 
-/// Convert a quaternion into a JSON node.
+/// Serialize a vec3 value.
 /**
- * @param value %Value to convert.
- * @return JSON node.
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-Json::Value SaveQuaternion(const glm::quat& value);
+void Serialize(Value& node, bool load, const std::string& name, glm::vec3& value, const glm::vec3& defaultValue);
 
-/// Load a quaternion from a JSON node.
+/// Serialize a vec4 value.
 /**
- * @param value The JSON node to load from.
- * @return The loaded quaternion
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
  */
-glm::quat LoadQuaternion(const Value& value);
+void Serialize(Value& node, bool load, const std::string& name, glm::vec4& value, const glm::vec4& defaultValue);
+
+/// Serialize a quaternion value.
+/**
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
+ */
+void Serialize(Value& node, bool load, const std::string& name, glm::quat& value, const glm::quat& defaultValue);
+
+/// Serialize a string value.
+/**
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ * @param defaultValue Default value if loading and node does not exist.
+ */
+void Serialize(Value& node, bool load, const std::string& name, std::string& value, const std::string& defaultValue);
+
+/// Serialize a TextureAsset value.
+/**
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ */
+void Serialize(Value& node, bool load, const std::string& name, TextureAsset*& value);
+
+/// Serialize a Model value.
+/**
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ */
+void Serialize(Value& node, bool load, const std::string& name, Geometry::Model*& value);
+
+/// Serialize a SoundBuffer value.
+/**
+ * @param node Json node to save to/load from.
+ * @param load Whether to load (otherwise saves).
+ * @param name The name to store the value under.
+ * @param value The value to save/load.
+ */
+void Serialize(Value& node, bool load, const std::string& name, Audio::SoundBuffer*& value);
+
 } // namespace Json

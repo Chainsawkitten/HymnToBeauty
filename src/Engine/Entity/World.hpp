@@ -83,7 +83,7 @@ class World {
     /**
      * @param node The json containing a scene to load.
      */
-    void Load(const Json::Value& node);
+    void Load(Json::Value& node);
 
   private:
     // Copy constructor.

@@ -17,10 +17,6 @@ class Shape;
 class Trigger;
 } // namespace Physics
 
-namespace Json {
-class Value;
-}
-
 class btBroadphaseInterface;
 class btDefaultCollisionConfiguration;
 class btCollisionDispatcher;
@@ -95,28 +91,12 @@ class PhysicsManager {
      */
     Component::RigidBody* CreateRigidBody(Entity* owner);
 
-    /// Create rigid body component.
-    /**
-     * @param owner The %Entity that will own the component.
-     * @param node Json node from which to load component definition.
-     * @return The created component.
-     */
-    Component::RigidBody* CreateRigidBody(Entity* owner, const Json::Value& node);
-
     /// Create a component that represents a physical shape.
     /**
      * @param owner The %Entity that will own the component.
      * @return The created component.
      */
     Component::Shape* CreateShape(Entity* owner);
-
-    /// Create a component that represents a physical shape.
-    /**
-     * @param owner The %Entity that will own the component.
-     * @param node Json node from which to load component definition.
-     * @return The created component.
-     */
-    Component::Shape* CreateShape(Entity* owner, const Json::Value& node);
 
     /// Create a trigger volume that can be used to check intersection
     /// events against physics bodies.
@@ -255,6 +235,12 @@ class PhysicsManager {
 
     /// Remove all killed components.
     void ClearKilledComponents();
+
+    /// Get the Bullet dynamics world.
+    /**
+     * @return The dynamics world.
+     */
+    btDiscreteDynamicsWorld* GetDynamicsWorld();
 
   private:
     PhysicsManager();

@@ -26,7 +26,6 @@
 #include "../MainWindow.hpp"
 #include "../Hymn.hpp"
 #include <Utility/Profiling/Profiling.hpp>
-#include "../Util/Json.hpp"
 #include <Utility/Log.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <Video/Texture/Texture2D.hpp>
@@ -104,49 +103,12 @@ Component::DirectionalLight* RenderManager::CreateDirectionalLight() {
     return directionalLights.Create();
 }
 
-Component::DirectionalLight* RenderManager::CreateDirectionalLight(const Json::Value& node) {
-    Component::DirectionalLight* directionalLight = directionalLights.Create();
-
-    // Load values from Json node.
-    directionalLight->color = Json::LoadVec3(node["color"]);
-    directionalLight->ambientCoefficient = node.get("ambientCoefficient", 0.5f).asFloat();
-
-    return directionalLight;
-}
-
 const std::vector<Component::DirectionalLight*>& RenderManager::GetDirectionalLights() const {
     return directionalLights.GetAll();
 }
 
 Component::Camera* RenderManager::CreateCamera() {
     return cameras.Create();
-}
-
-Component::Camera* RenderManager::CreateCamera(const Json::Value& node) {
-    Component::Camera* camera = cameras.Create();
-
-    // Load values from Json node.
-    camera->orthographic = node.get("orthographic", false).asBool();
-    camera->fieldOfView = node.get("fieldOfView", 45.f).asFloat();
-    camera->size = node.get("size", 10.0f).asFloat();
-    camera->zNear = node.get("zNear", 0.1f).asFloat();
-    camera->zFar = node.get("zFar", 100.f).asFloat();
-    camera->viewport = Json::LoadVec4(node["viewport"]);
-    camera->order = node.get("order", 0).asInt();
-    camera->overlay = node.get("overlay", false).asBool();
-    camera->layerMask = node.get("layerMask", 1u).asUInt();
-
-    const Json::Value& filtersNode = node["filters"];
-    camera->filterSettings.tonemapping = filtersNode["tonemapping"].asBool();
-    camera->filterSettings.gamma = filtersNode.get("gamma", 2.2f).asFloat();
-    camera->filterSettings.ditherApply = filtersNode["dither"].asBool();
-    camera->filterSettings.fxaa = filtersNode["fxaa"].asBool();
-    camera->filterSettings.bloom = filtersNode["bloom"].asBool();
-    camera->filterSettings.bloomIntensity = filtersNode.get("bloomIntensity", 1.0f).asFloat();
-    camera->filterSettings.bloomThreshold = filtersNode.get("bloomThreshold", 1.0f).asFloat();
-    camera->filterSettings.bloomScatter = filtersNode.get("bloomScatter", 0.7f).asFloat();
-
-    return camera;
 }
 
 const std::vector<Component::Camera*>& RenderManager::GetCameras() const {
@@ -157,35 +119,12 @@ Component::Material* RenderManager::CreateMaterial() {
     return materials.Create();
 }
 
-Component::Material* RenderManager::CreateMaterial(const Json::Value& node) {
-    Component::Material* material = materials.Create();
-
-    // Load values from Json node.
-    LoadTexture(material->albedo, node.get("albedo", "").asString());
-    LoadTexture(material->normal, node.get("normal", "").asString());
-    LoadTexture(material->roughnessMetallic, node.get("roughnessMetallic", "").asString());
-
-    return material;
-}
-
 const std::vector<Component::Material*>& RenderManager::GetMaterials() const {
     return materials.GetAll();
 }
 
 Component::Mesh* RenderManager::CreateMesh() {
     return meshes.Create();
-}
-
-Component::Mesh* RenderManager::CreateMesh(const Json::Value& node) {
-    Component::Mesh* mesh = meshes.Create();
-
-    // Load values from Json node.
-    std::string meshName = node.get("model", "").asString();
-    mesh->geometry = Managers().resourceManager->CreateModel(meshName);
-
-    mesh->layerMask = node.get("layerMask", 1u).asUInt();
-
-    return mesh;
 }
 
 const std::vector<Component::Mesh*>& RenderManager::GetMeshes() const {
@@ -196,18 +135,6 @@ Component::PointLight* RenderManager::CreatePointLight() {
     return pointLights.Create();
 }
 
-Component::PointLight* RenderManager::CreatePointLight(const Json::Value& node) {
-    Component::PointLight* pointLight = pointLights.Create();
-
-    // Load values from Json node.
-    pointLight->color = Json::LoadVec3(node["color"]);
-    pointLight->attenuation = node.get("attenuation", 1.f).asFloat();
-    pointLight->intensity = node.get("intensity", 1.f).asFloat();
-    pointLight->distance = node.get("distance", 1.f).asFloat();
-
-    return pointLight;
-}
-
 const std::vector<Component::PointLight*>& RenderManager::GetPointLights() const {
     return pointLights.GetAll();
 }
@@ -216,40 +143,12 @@ Component::SpotLight* RenderManager::CreateSpotLight() {
     return spotLights.Create();
 }
 
-Component::SpotLight* RenderManager::CreateSpotLight(const Json::Value& node) {
-    Component::SpotLight* spotLight = spotLights.Create();
-
-    // Load values from Json node.
-    spotLight->color = Json::LoadVec3(node["color"]);
-    spotLight->ambientCoefficient = node.get("ambientCoefficient", 0.5f).asFloat();
-    spotLight->attenuation = node.get("attenuation", 1.f).asFloat();
-    spotLight->intensity = node.get("intensity", 1.f).asFloat();
-    spotLight->coneAngle = node.get("coneAngle", 15.f).asFloat();
-    spotLight->distance = node.get("distance", 1.f).asFloat();
-
-    return spotLight;
-}
-
 const std::vector<Component::SpotLight*>& RenderManager::GetSpotLights() const {
     return spotLights.GetAll();
 }
 
 Component::Sprite* RenderManager::CreateSprite() {
     return sprites.Create();
-}
-
-Component::Sprite* RenderManager::CreateSprite(const Json::Value& node) {
-    Component::Sprite* sprite = sprites.Create();
-
-    // Load values from Json node.
-    LoadTexture(sprite->texture, node.get("texture", "").asString());
-    sprite->pixelsPerUnit = node.get("pixelsPerUnit", 100.0f).asFloat();
-    sprite->pivot = Json::LoadVec2(node["pivot"]);
-    sprite->tint = Json::LoadVec3(node["tint"]);
-    sprite->alpha = node.get("alpha", 1.0f).asFloat();
-    sprite->layerMask = node.get("layerMask", 1u).asUInt();
-
-    return sprite;
 }
 
 const std::vector<Component::Sprite*>& RenderManager::GetSprites() const {
@@ -398,7 +297,7 @@ void RenderManager::AddMeshes(Video::RenderScene& renderScene) {
         if (entity->IsKilled() || !entity->IsEnabled())
             continue;
 
-        if (meshComp->geometry == nullptr || meshComp->geometry->GetIndexCount() == 0)
+        if (meshComp->model == nullptr || meshComp->model->GetIndexCount() == 0)
             continue;
 
         Material* material = entity->GetComponent<Material>();
@@ -407,8 +306,8 @@ void RenderManager::AddMeshes(Video::RenderScene& renderScene) {
 
         Video::RenderScene::Mesh mesh;
         mesh.modelMatrix = entity->GetModelMatrix();
-        mesh.geometry = meshComp->geometry;
-        mesh.axisAlignedBoundingBox = meshComp->geometry->GetAxisAlignedBoundingBox();
+        mesh.geometry = meshComp->model;
+        mesh.axisAlignedBoundingBox = meshComp->model->GetAxisAlignedBoundingBox();
         mesh.albedo = material->albedo->GetTexture();
         mesh.normal = material->normal->GetTexture();
         mesh.roughnessMetallic = material->roughnessMetallic->GetTexture();
@@ -518,9 +417,4 @@ void RenderManager::AddSprites(Video::RenderScene& renderScene) {
 
         renderScene.sprites.push_back(sprite);
     }
-}
-
-void RenderManager::LoadTexture(TextureAsset*& texture, const std::string& name) {
-    if (!name.empty())
-        texture = Managers().resourceManager->CreateTextureAsset(name);
 }

@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Managers.hpp"
 #include <Video/LowLevelRenderer/Interface/VertexDescription.hpp>
+#include "../Geometry/Model.hpp"
 
 #include "RenderManager.hpp"
 
@@ -143,14 +144,14 @@ const std::vector<Video::DebugDrawing::Cone>& DebugDrawingManager::GetCones() co
 
 void DebugDrawingManager::AddMesh(Component::Mesh* meshComponent, const glm::mat4& matrix, const glm::vec3& color, bool wireFrame, float duration, bool depthTesting) {
     assert(meshComponent);
-    assert(meshComponent->geometry);
+    assert(meshComponent->model);
 
-    if (meshComponent->geometry->GetGeometryBinding() == nullptr)
+    if (meshComponent->model->GetGeometryBinding() == nullptr)
         return;
 
     DebugDrawing::Mesh mesh;
-    mesh.geometryBinding = meshComponent->geometry->GetGeometryBinding();
-    mesh.indexCount = meshComponent->geometry->GetIndexCount();
+    mesh.geometryBinding = meshComponent->model->GetGeometryBinding();
+    mesh.indexCount = meshComponent->model->GetIndexCount();
     mesh.matrix = matrix;
     mesh.color = color;
     mesh.wireFrame = wireFrame;
