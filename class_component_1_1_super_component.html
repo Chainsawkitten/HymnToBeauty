@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('class_component_1_1_super_component.ht
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_component_1_1_super_component-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">Component::SuperComponent Class Reference</div></div>
+  <div class="headertitle"><div class="title">Component::SuperComponent Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -133,9 +133,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7735434d8176896d423fdfcaf8ff7ad4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_super_component.html#a7735434d8176896d423fdfcaf8ff7ad4">IsKilled</a> () const</td></tr>
 <tr class="memdesc:a7735434d8176896d423fdfcaf8ff7ad4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether component has been killed.  <a href="class_component_1_1_super_component.html#a7735434d8176896d423fdfcaf8ff7ad4">More...</a><br /></td></tr>
 <tr class="separator:a7735434d8176896d423fdfcaf8ff7ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8205a9689c3c92c4c09e162ff28bd7"><td class="memItemLeft" align="right" valign="top">virtual Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7">Save</a> () const</td></tr>
-<tr class="memdesc:aec8205a9689c3c92c4c09e162ff28bd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the component.  <a href="class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7">More...</a><br /></td></tr>
-<tr class="separator:aec8205a9689c3c92c4c09e162ff28bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5576b731608cbff1909a07772c90705"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_super_component.html#ae5576b731608cbff1909a07772c90705">Serialize</a> (Json::Value &amp;node, bool load)=0</td></tr>
+<tr class="memdesc:ae5576b731608cbff1909a07772c90705"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load component values to/from JSON.  <a href="class_component_1_1_super_component.html#ae5576b731608cbff1909a07772c90705">More...</a><br /></td></tr>
+<tr class="separator:ae5576b731608cbff1909a07772c90705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -232,8 +232,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aec8205a9689c3c92c4c09e162ff28bd7" name="aec8205a9689c3c92c4c09e162ff28bd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec8205a9689c3c92c4c09e162ff28bd7">&#9670;&nbsp;</a></span>Save()</h2>
+<a id="ae5576b731608cbff1909a07772c90705" name="ae5576b731608cbff1909a07772c90705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5576b731608cbff1909a07772c90705">&#9670;&nbsp;</a></span>Serialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -242,23 +242,40 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Json::Value SuperComponent::Save </td>
+          <td class="memname">virtual void Component::SuperComponent::Serialize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Save the component. </p>
-<dl class="section return"><dt>Returns</dt><dd>JSON value to be stored on disk. </dd></dl>
+<p>Save or load component values to/from JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The JSON node to save to or load from. </td></tr>
+    <tr><td class="paramname">load</td><td>Whether to load (otherwise saves). </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Reimplemented in <a class="el" href="class_component_1_1_camera.html#a07abbea16b4e67be737f5cbeaa8e02ea">Component::Camera</a>, <a class="el" href="class_component_1_1_directional_light.html#ad1b2586de2d0dd71290ced9cc5f32ec2">Component::DirectionalLight</a>, <a class="el" href="class_component_1_1_listener.html#a02203521fb803ee0e55345df81a8c309">Component::Listener</a>, <a class="el" href="class_component_1_1_material.html#a9d85868b703fd0f399da82b36d118319">Component::Material</a>, <a class="el" href="class_component_1_1_mesh.html#abaabb7327dcaacbd1b87301d5945e36d">Component::Mesh</a>, <a class="el" href="class_component_1_1_point_light.html#af2b3d5d8bc3de7e00bf20753cb19c930">Component::PointLight</a>, <a class="el" href="class_component_1_1_rigid_body.html#af2adcbeb45d195fc391539f4907d8ad4">Component::RigidBody</a>, <a class="el" href="class_component_1_1_script.html#abf26de06a5bc8824c6ddceaa9c5f673c">Component::Script</a>, <a class="el" href="class_component_1_1_shape.html#a1786760f4d2f22039c680d605a4a1ecb">Component::Shape</a>, <a class="el" href="class_component_1_1_sound_source.html#a38a62f4443b2ce38efe81e8a62f5035f">Component::SoundSource</a>, <a class="el" href="class_component_1_1_spot_light.html#a40726c6ccf6ba463e7e1fbfbbbde8516">Component::SpotLight</a>, <a class="el" href="class_component_1_1_sprite.html#a793072dc407fb5bd2e044d0347d4d335">Component::Sprite</a>, and <a class="el" href="class_component_1_1_trigger.html#a70c2d8076e7016d94dcd625877b10b60">Component::Trigger</a>.</p>
+<p>Implemented in <a class="el" href="class_component_1_1_camera.html#a5a6503e929b14b42877279396eab850a">Component::Camera</a>, <a class="el" href="class_component_1_1_directional_light.html#ace40b757a233db642c2c600e03b3732f">Component::DirectionalLight</a>, <a class="el" href="class_component_1_1_listener.html#abd2b9687fea5727a9efe090861214023">Component::Listener</a>, <a class="el" href="class_component_1_1_material.html#a038c991565b6190579df3e2058cbe865">Component::Material</a>, <a class="el" href="class_component_1_1_mesh.html#a7f534500dedcd9bf0b9dcecfa33ae9ac">Component::Mesh</a>, <a class="el" href="class_component_1_1_point_light.html#a3fb711bdd9b77aac5be9dd07a506d78c">Component::PointLight</a>, <a class="el" href="class_component_1_1_rigid_body.html#a3ed17912c853e50c7972dad8426f7960">Component::RigidBody</a>, <a class="el" href="class_component_1_1_script.html#ab335716338a6ba2f2109763c18b66437">Component::Script</a>, <a class="el" href="class_component_1_1_shape.html#aefeb1cd50bbce4de9eb9de84d4760f01">Component::Shape</a>, <a class="el" href="class_component_1_1_sound_source.html#a375cac78a1a79509b0d74b8a1c0ffaf5">Component::SoundSource</a>, <a class="el" href="class_component_1_1_spot_light.html#a74420a4a4360eb99eaff60028014ff52">Component::SpotLight</a>, <a class="el" href="class_component_1_1_sprite.html#acc81c2672554dadf4c6531bdfb18902c">Component::Sprite</a>, and <a class="el" href="class_component_1_1_trigger.html#a1f4daf28a3986686f72f6af56672e1d9">Component::Trigger</a>.</p>
 
 </div>
 </div>

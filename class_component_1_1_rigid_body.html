@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a899b3b67bfbb0f2b2fd804dc9a5b2128"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#a899b3b67bfbb0f2b2fd804dc9a5b2128">~RigidBody</a> ()</td></tr>
 <tr class="memdesc:a899b3b67bfbb0f2b2fd804dc9a5b2128"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_component_1_1_rigid_body.html#a899b3b67bfbb0f2b2fd804dc9a5b2128">More...</a><br /></td></tr>
 <tr class="separator:a899b3b67bfbb0f2b2fd804dc9a5b2128"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2adcbeb45d195fc391539f4907d8ad4"><td class="memItemLeft" align="right" valign="top">Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#af2adcbeb45d195fc391539f4907d8ad4">Save</a> () const override</td></tr>
-<tr class="memdesc:af2adcbeb45d195fc391539f4907d8ad4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the component.  <a href="class_component_1_1_rigid_body.html#af2adcbeb45d195fc391539f4907d8ad4">More...</a><br /></td></tr>
-<tr class="separator:af2adcbeb45d195fc391539f4907d8ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed17912c853e50c7972dad8426f7960"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#a3ed17912c853e50c7972dad8426f7960">Serialize</a> (Json::Value &amp;node, bool load) override</td></tr>
+<tr class="memdesc:a3ed17912c853e50c7972dad8426f7960"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load component values to/from JSON.  <a href="class_component_1_1_rigid_body.html#a3ed17912c853e50c7972dad8426f7960">More...</a><br /></td></tr>
+<tr class="separator:a3ed17912c853e50c7972dad8426f7960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae749242e2147f76591572ff28da69f77"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#ae749242e2147f76591572ff28da69f77">IsKinematic</a> () const</td></tr>
 <tr class="separator:ae749242e2147f76591572ff28da69f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e8ef3691b8be3b3b0397db2707052ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#a6e8ef3691b8be3b3b0397db2707052ef">IsGhost</a> () const</td></tr>
@@ -159,6 +159,8 @@ Friends</h2></td></tr>
 <tr class="separator:a26296dff3e049d7a5287bd11e02eae60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d96c18f9eb865043271009a6ab4c7c8"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#a0d96c18f9eb865043271009a6ab4c7c8">::Physics::Trigger</a></td></tr>
 <tr class="separator:a0d96c18f9eb865043271009a6ab4c7c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_rigid_body.html#a1e1ef8352d0a310bace7f7a3307d1378">Shape</a></td></tr>
+<tr class="separator:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -371,8 +373,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="af2adcbeb45d195fc391539f4907d8ad4" name="af2adcbeb45d195fc391539f4907d8ad4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2adcbeb45d195fc391539f4907d8ad4">&#9670;&nbsp;</a></span>Save()</h2>
+<a id="a3ed17912c853e50c7972dad8426f7960" name="a3ed17912c853e50c7972dad8426f7960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ed17912c853e50c7972dad8426f7960">&#9670;&nbsp;</a></span>Serialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -381,10 +383,21 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Json::Value Component::RigidBody::Save </td>
+          <td class="memname">void Component::RigidBody::Serialize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -394,10 +407,16 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Save the component. </p>
-<dl class="section return"><dt>Returns</dt><dd>JSON value to be stored on disk. </dd></dl>
+<p>Save or load component values to/from JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The JSON node to save to or load from. </td></tr>
+    <tr><td class="paramname">load</td><td>Whether to load (otherwise saves). </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Reimplemented from <a class="el" href="class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7">Component::SuperComponent</a>.</p>
+<p>Implements <a class="el" href="class_component_1_1_super_component.html#ae5576b731608cbff1909a07772c90705">Component::SuperComponent</a>.</p>
 
 </div>
 </div>
@@ -435,6 +454,28 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">friend class ::<a class="el" href="class_physics_manager.html">PhysicsManager</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1e1ef8352d0a310bace7f7a3307d1378" name="a1e1ef8352d0a310bace7f7a3307d1378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e1ef8352d0a310bace7f7a3307d1378">&#9670;&nbsp;</a></span>Shape</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_component_1_1_shape.html">Shape</a></td>
         </tr>
       </table>
   </td>

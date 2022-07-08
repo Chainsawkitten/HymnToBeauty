@@ -92,41 +92,62 @@ $(document).ready(function(){initNavTree('_engine_2_util_2_json_8hpp_source.html
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;json/json.h&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_json.html">Json</a> {</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>Json::Value <a class="code hl_function" href="namespace_json.html#a468535435ee61573401a808881e08de5">SaveVec2</a>(<span class="keyword">const</span> glm::vec2&amp; value);</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>glm::vec2 <a class="code hl_function" href="namespace_json.html#a26530f58769e990810b3b76e5510d71b">LoadVec2</a>(<span class="keyword">const</span> Value&amp; value);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>Json::Value <a class="code hl_function" href="namespace_json.html#aa3a1a85270c8b7f1ea033b401415ed64">SaveVec3</a>(<span class="keyword">const</span> glm::vec3&amp; value);</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>glm::vec3 <a class="code hl_function" href="namespace_json.html#a90a5d79b17792a470fb4cfaa3790f3c9">LoadVec3</a>(<span class="keyword">const</span> Value&amp; value);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">class </span><a class="code hl_class" href="class_texture_asset.html">TextureAsset</a>;</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_geometry.html">Geometry</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">class </span>Model;</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>}</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_audio.html">Audio</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">class </span>SoundBuffer;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>}</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_json.html">Json</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, <span class="keywordtype">bool</span>&amp; value, <span class="keywordtype">bool</span> defaultValue);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, int32_t&amp; value, int32_t defaultValue);</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>Json::Value <a class="code hl_function" href="namespace_json.html#a10dd8901150a5077a17f58e0ce7468a3">SaveVec4</a>(<span class="keyword">const</span> glm::vec4&amp; value);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>glm::vec4 <a class="code hl_function" href="namespace_json.html#a0326e9bc5abf7c53d1935af52b315303">LoadVec4</a>(<span class="keyword">const</span> Value&amp; value);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, uint32_t&amp; value, uint32_t defaultValue);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>Json::Value <a class="code hl_function" href="namespace_json.html#a516933ed7445f7dee2509ce9dbd392c0">SaveQuaternion</a>(<span class="keyword">const</span> glm::quat&amp; value);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>glm::quat <a class="code hl_function" href="namespace_json.html#aee2755d8951b1c0868074aa2709a6fee">LoadQuaternion</a>(<span class="keyword">const</span> Value&amp; value);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>} <span class="comment">// namespace Json</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, <span class="keywordtype">float</span>&amp; value, <span class="keywordtype">float</span> defaultValue);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, glm::vec2&amp; value, <span class="keyword">const</span> glm::vec2&amp; defaultValue);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, glm::vec3&amp; value, <span class="keyword">const</span> glm::vec3&amp; defaultValue);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, glm::vec4&amp; value, <span class="keyword">const</span> glm::vec4&amp; defaultValue);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, glm::quat&amp; value, <span class="keyword">const</span> glm::quat&amp; defaultValue);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, std::string&amp; value, <span class="keyword">const</span> std::string&amp; defaultValue);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, <a class="code hl_class" href="class_texture_asset.html">TextureAsset</a>*&amp; value);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, <a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>*&amp; value);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Serialize</a>(Value&amp; node, <span class="keywordtype">bool</span> load, <span class="keyword">const</span> std::string&amp; name, <a class="code hl_class" href="class_audio_1_1_sound_buffer.html">Audio::SoundBuffer</a>*&amp; value);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>} <span class="comment">// namespace Json</span></div>
+<div class="ttc" id="aclass_audio_1_1_sound_buffer_html"><div class="ttname"><a href="class_audio_1_1_sound_buffer.html">Audio::SoundBuffer</a></div><div class="ttdoc">Wrapper for OpenAL buffers.</div><div class="ttdef"><b>Definition:</b> SoundBuffer.hpp:11</div></div>
+<div class="ttc" id="aclass_geometry_1_1_model_html"><div class="ttname"><a href="class_geometry_1_1_model.html">Geometry::Model</a></div><div class="ttdoc">Interface of a model loaded from a file.</div><div class="ttdef"><b>Definition:</b> Model.hpp:8</div></div>
+<div class="ttc" id="aclass_texture_asset_html"><div class="ttname"><a href="class_texture_asset.html">TextureAsset</a></div><div class="ttdoc">A texture used in a hymn.</div><div class="ttdef"><b>Definition:</b> TextureAsset.hpp:11</div></div>
+<div class="ttc" id="anamespace_audio_html"><div class="ttname"><a href="namespace_audio.html">Audio</a></div><div class="ttdef"><b>Definition:</b> SoundEditor.hpp:6</div></div>
+<div class="ttc" id="anamespace_geometry_html"><div class="ttname"><a href="namespace_geometry.html">Geometry</a></div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:6</div></div>
 <div class="ttc" id="anamespace_json_html"><div class="ttname"><a href="namespace_json.html">Json</a></div><div class="ttdef"><b>Definition:</b> Json.cpp:3</div></div>
-<div class="ttc" id="anamespace_json_html_a0326e9bc5abf7c53d1935af52b315303"><div class="ttname"><a href="namespace_json.html#a0326e9bc5abf7c53d1935af52b315303">Json::LoadVec4</a></div><div class="ttdeci">glm::vec4 LoadVec4(const Value &amp;value)</div><div class="ttdoc">Load a vec4 from a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:37</div></div>
-<div class="ttc" id="anamespace_json_html_a10dd8901150a5077a17f58e0ce7468a3"><div class="ttname"><a href="namespace_json.html#a10dd8901150a5077a17f58e0ce7468a3">Json::SaveVec4</a></div><div class="ttdeci">Value SaveVec4(const glm::vec4 &amp;value)</div><div class="ttdoc">Convert a vec4 to a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:28</div></div>
-<div class="ttc" id="anamespace_json_html_a26530f58769e990810b3b76e5510d71b"><div class="ttname"><a href="namespace_json.html#a26530f58769e990810b3b76e5510d71b">Json::LoadVec2</a></div><div class="ttdeci">glm::vec2 LoadVec2(const Value &amp;value)</div><div class="ttdoc">Load a vec2 from a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:12</div></div>
-<div class="ttc" id="anamespace_json_html_a468535435ee61573401a808881e08de5"><div class="ttname"><a href="namespace_json.html#a468535435ee61573401a808881e08de5">Json::SaveVec2</a></div><div class="ttdeci">Value SaveVec2(const glm::vec2 &amp;value)</div><div class="ttdoc">Convert a vec2 to a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:5</div></div>
-<div class="ttc" id="anamespace_json_html_a516933ed7445f7dee2509ce9dbd392c0"><div class="ttname"><a href="namespace_json.html#a516933ed7445f7dee2509ce9dbd392c0">Json::SaveQuaternion</a></div><div class="ttdeci">Value SaveQuaternion(const glm::quat &amp;value)</div><div class="ttdoc">Convert a quaternion into a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:41</div></div>
-<div class="ttc" id="anamespace_json_html_a90a5d79b17792a470fb4cfaa3790f3c9"><div class="ttname"><a href="namespace_json.html#a90a5d79b17792a470fb4cfaa3790f3c9">Json::LoadVec3</a></div><div class="ttdeci">glm::vec3 LoadVec3(const Value &amp;value)</div><div class="ttdoc">Load a vec3 from a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:24</div></div>
-<div class="ttc" id="anamespace_json_html_aa3a1a85270c8b7f1ea033b401415ed64"><div class="ttname"><a href="namespace_json.html#aa3a1a85270c8b7f1ea033b401415ed64">Json::SaveVec3</a></div><div class="ttdeci">Value SaveVec3(const glm::vec3 &amp;value)</div><div class="ttdoc">Convert a vec3 to a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:16</div></div>
-<div class="ttc" id="anamespace_json_html_aee2755d8951b1c0868074aa2709a6fee"><div class="ttname"><a href="namespace_json.html#aee2755d8951b1c0868074aa2709a6fee">Json::LoadQuaternion</a></div><div class="ttdeci">glm::quat LoadQuaternion(const Value &amp;value)</div><div class="ttdoc">Load a quaternion from a JSON node.</div><div class="ttdef"><b>Definition:</b> Json.cpp:50</div></div>
+<div class="ttc" id="anamespace_json_html_a2f723ad8e86f7105cc4b892d194b656c"><div class="ttname"><a href="namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c">Json::Serialize</a></div><div class="ttdeci">void Serialize(Value &amp;node, bool load, const std::string &amp;name, bool &amp;value, bool defaultValue)</div><div class="ttdoc">Serialize a boolean value.</div><div class="ttdef"><b>Definition:</b> Json.cpp:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

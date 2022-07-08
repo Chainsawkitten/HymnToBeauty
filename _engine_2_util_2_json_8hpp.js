@@ -1,11 +1,15 @@
 var _engine_2_util_2_json_8hpp =
 [
-    [ "LoadQuaternion", "_engine_2_util_2_json_8hpp.html#aee2755d8951b1c0868074aa2709a6fee", null ],
-    [ "LoadVec2", "_engine_2_util_2_json_8hpp.html#a26530f58769e990810b3b76e5510d71b", null ],
-    [ "LoadVec3", "_engine_2_util_2_json_8hpp.html#a90a5d79b17792a470fb4cfaa3790f3c9", null ],
-    [ "LoadVec4", "_engine_2_util_2_json_8hpp.html#a0326e9bc5abf7c53d1935af52b315303", null ],
-    [ "SaveQuaternion", "_engine_2_util_2_json_8hpp.html#a516933ed7445f7dee2509ce9dbd392c0", null ],
-    [ "SaveVec2", "_engine_2_util_2_json_8hpp.html#a468535435ee61573401a808881e08de5", null ],
-    [ "SaveVec3", "_engine_2_util_2_json_8hpp.html#aa3a1a85270c8b7f1ea033b401415ed64", null ],
-    [ "SaveVec4", "_engine_2_util_2_json_8hpp.html#a10dd8901150a5077a17f58e0ce7468a3", null ]
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#ab63208a353e4ed2723a337cd9426e604", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a2f723ad8e86f7105cc4b892d194b656c", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a6a54aacf4c6bad9e6ee9e253f11dafbd", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a7f8e05cdb8b1bcce529e6c69fc3a1f1c", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a1abde2b032223744490d1938caeb50ce", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a89df75e10833e148160f1b742cdca2b1", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a1d95062722f495ed0725981e51b2598e", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a22db8dde314e72eed3e0c3623bbab11e", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#ad40df30d4b6119938ef03d43cce37475", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a9fe98b227c541389083b6ef8ac5887f4", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a22a8a11ac5aa1bc035ff5c6ea0e5c312", null ],
+    [ "Serialize", "_engine_2_util_2_json_8hpp.html#a0a55e8ca325dd00f7f041adbe4075877", null ]
 ];

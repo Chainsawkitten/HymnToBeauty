@@ -4,7 +4,6 @@ var class_script_manager =
     [ "BuildScript", "class_script_manager.html#a8f045e5dfdd04bd77d8234d1424fa538", null ],
     [ "ClearKilledComponents", "class_script_manager.html#a9ef24d4e662a73e9ca0d5aef6edd8fb5", null ],
     [ "CreateScript", "class_script_manager.html#a26b85e88a3ecb70c3830a03aa881b310", null ],
-    [ "CreateScript", "class_script_manager.html#ad16c02d789d3462c5432f1095fcbff9e", null ],
     [ "ExecuteScriptMethod", "class_script_manager.html#a67cdb0f9411565b1ff06c428b54d4443", null ],
     [ "FillFunctionVector", "class_script_manager.html#a1fb6d058d6ef6b9f146ebb5df7caee82", null ],
     [ "FillPropertyMap", "class_script_manager.html#a34a64de227301b391e23e73246380fd9", null ],

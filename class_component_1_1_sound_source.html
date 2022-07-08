@@ -116,9 +116,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a82de0c648f0ea72f66298af48ed9f138"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a82de0c648f0ea72f66298af48ed9f138">~SoundSource</a> ()</td></tr>
 <tr class="memdesc:a82de0c648f0ea72f66298af48ed9f138"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_component_1_1_sound_source.html#a82de0c648f0ea72f66298af48ed9f138">More...</a><br /></td></tr>
 <tr class="separator:a82de0c648f0ea72f66298af48ed9f138"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38a62f4443b2ce38efe81e8a62f5035f"><td class="memItemLeft" align="right" valign="top">Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a38a62f4443b2ce38efe81e8a62f5035f">Save</a> () const override</td></tr>
-<tr class="memdesc:a38a62f4443b2ce38efe81e8a62f5035f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the component.  <a href="class_component_1_1_sound_source.html#a38a62f4443b2ce38efe81e8a62f5035f">More...</a><br /></td></tr>
-<tr class="separator:a38a62f4443b2ce38efe81e8a62f5035f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a375cac78a1a79509b0d74b8a1c0ffaf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a375cac78a1a79509b0d74b8a1c0ffaf5">Serialize</a> (Json::Value &amp;node, bool load) override</td></tr>
+<tr class="memdesc:a375cac78a1a79509b0d74b8a1c0ffaf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load component values to/from JSON.  <a href="class_component_1_1_sound_source.html#a375cac78a1a79509b0d74b8a1c0ffaf5">More...</a><br /></td></tr>
+<tr class="separator:a375cac78a1a79509b0d74b8a1c0ffaf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dcd45f9805b3b37d98bf3f675aee52d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a6dcd45f9805b3b37d98bf3f675aee52d">Play</a> ()</td></tr>
 <tr class="memdesc:a6dcd45f9805b3b37d98bf3f675aee52d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound.  <a href="class_component_1_1_sound_source.html#a6dcd45f9805b3b37d98bf3f675aee52d">More...</a><br /></td></tr>
 <tr class="separator:a6dcd45f9805b3b37d98bf3f675aee52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -246,8 +246,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a38a62f4443b2ce38efe81e8a62f5035f" name="a38a62f4443b2ce38efe81e8a62f5035f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38a62f4443b2ce38efe81e8a62f5035f">&#9670;&nbsp;</a></span>Save()</h2>
+<a id="a375cac78a1a79509b0d74b8a1c0ffaf5" name="a375cac78a1a79509b0d74b8a1c0ffaf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a375cac78a1a79509b0d74b8a1c0ffaf5">&#9670;&nbsp;</a></span>Serialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,10 +256,21 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Json::Value SoundSource::Save </td>
+          <td class="memname">void SoundSource::Serialize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -269,10 +280,16 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Save the component. </p>
-<dl class="section return"><dt>Returns</dt><dd>JSON value to be stored on disk. </dd></dl>
+<p>Save or load component values to/from JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The JSON node to save to or load from. </td></tr>
+    <tr><td class="paramname">load</td><td>Whether to load (otherwise saves). </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Reimplemented from <a class="el" href="class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7">Component::SuperComponent</a>.</p>
+<p>Implements <a class="el" href="class_component_1_1_super_component.html#ae5576b731608cbff1909a07772c90705">Component::SuperComponent</a>.</p>
 
 </div>
 </div>

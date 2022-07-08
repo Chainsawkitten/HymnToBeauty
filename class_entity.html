@@ -163,12 +163,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a89a15d5925c93cbf2589c4a37137db39"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a89a15d5925c93cbf2589c4a37137db39">IsKilled</a> () const</td></tr>
 <tr class="memdesc:a89a15d5925c93cbf2589c4a37137db39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether entity has been killed.  <a href="class_entity.html#a89a15d5925c93cbf2589c4a37137db39">More...</a><br /></td></tr>
 <tr class="separator:a89a15d5925c93cbf2589c4a37137db39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ccd4c39a72dc88cd46c7858568eeae9"><td class="memItemLeft" align="right" valign="top">Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a4ccd4c39a72dc88cd46c7858568eeae9">Save</a> () const</td></tr>
-<tr class="memdesc:a4ccd4c39a72dc88cd46c7858568eeae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the entity.  <a href="class_entity.html#a4ccd4c39a72dc88cd46c7858568eeae9">More...</a><br /></td></tr>
-<tr class="separator:a4ccd4c39a72dc88cd46c7858568eeae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89a18511919359b35ee38fddfac5eef5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a89a18511919359b35ee38fddfac5eef5">Load</a> (const Json::Value &amp;node)</td></tr>
-<tr class="memdesc:a89a18511919359b35ee38fddfac5eef5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load entity from JSON node.  <a href="class_entity.html#a89a18511919359b35ee38fddfac5eef5">More...</a><br /></td></tr>
-<tr class="separator:a89a18511919359b35ee38fddfac5eef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0ed3b696379f2759ae857e87c290cd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ae0ed3b696379f2759ae857e87c290cd2">Serialize</a> (Json::Value &amp;node, bool load)</td></tr>
+<tr class="memdesc:ae0ed3b696379f2759ae857e87c290cd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load entity to/from JSON.  <a href="class_entity.html#ae0ed3b696379f2759ae857e87c290cd2">More...</a><br /></td></tr>
+<tr class="separator:ae0ed3b696379f2759ae857e87c290cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44ccd287aa36aa32586e926dd6ac4cfd"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a44ccd287aa36aa32586e926dd6ac4cfd">GetModelMatrix</a> () const</td></tr>
 <tr class="memdesc:a44ccd287aa36aa32586e926dd6ac4cfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the model matrix.  <a href="class_entity.html#a44ccd287aa36aa32586e926dd6ac4cfd">More...</a><br /></td></tr>
 <tr class="separator:a44ccd287aa36aa32586e926dd6ac4cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,13 +223,13 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a931b21fbdebb1a5963b4bcab5df128f5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a931b21fbdebb1a5963b4bcab5df128f5">name</a></td></tr>
 <tr class="memdesc:a931b21fbdebb1a5963b4bcab5df128f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the entity.  <a href="class_entity.html#a931b21fbdebb1a5963b4bcab5df128f5">More...</a><br /></td></tr>
 <tr class="separator:a931b21fbdebb1a5963b4bcab5df128f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad58d6e0405061032658b801bf549ea66"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ad58d6e0405061032658b801bf549ea66">position</a> = glm::vec3(0.f, 0.f, 0.f)</td></tr>
+<tr class="memitem:ad58d6e0405061032658b801bf549ea66"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ad58d6e0405061032658b801bf549ea66">position</a> = glm::vec3(0.0f, 0.0f, 0.0f)</td></tr>
 <tr class="memdesc:ad58d6e0405061032658b801bf549ea66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position relative to the parent entity.  <a href="class_entity.html#ad58d6e0405061032658b801bf549ea66">More...</a><br /></td></tr>
 <tr class="separator:ad58d6e0405061032658b801bf549ea66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92e7b4f35bbcf68e3ce8db3c0335c059"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a92e7b4f35bbcf68e3ce8db3c0335c059">scale</a> = glm::vec3(1.f, 1.f, 1.f)</td></tr>
+<tr class="memitem:a92e7b4f35bbcf68e3ce8db3c0335c059"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a92e7b4f35bbcf68e3ce8db3c0335c059">scale</a> = glm::vec3(1.0f, 1.0f, 1.0f)</td></tr>
 <tr class="memdesc:a92e7b4f35bbcf68e3ce8db3c0335c059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale.  <a href="class_entity.html#a92e7b4f35bbcf68e3ce8db3c0335c059">More...</a><br /></td></tr>
 <tr class="separator:a92e7b4f35bbcf68e3ce8db3c0335c059"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ad343ffb5f6625d7728b8e5423b1d5a"><td class="memItemLeft" align="right" valign="top">glm::quat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a8ad343ffb5f6625d7728b8e5423b1d5a">rotation</a> = glm::angleAxis(0.0f, glm::vec3(0, 1, 0))</td></tr>
+<tr class="memitem:a8ad343ffb5f6625d7728b8e5423b1d5a"><td class="memItemLeft" align="right" valign="top">glm::quat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#a8ad343ffb5f6625d7728b8e5423b1d5a">rotation</a> = glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f))</td></tr>
 <tr class="memdesc:a8ad343ffb5f6625d7728b8e5423b1d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quaternion describing rotation and angle of entity.  <a href="class_entity.html#a8ad343ffb5f6625d7728b8e5423b1d5a">More...</a><br /></td></tr>
 <tr class="separator:a8ad343ffb5f6625d7728b8e5423b1d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab671b8d6cb6b566b048ebc85b0d7d962"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_entity.html#ab671b8d6cb6b566b048ebc85b0d7d962">loadPaintModeClicked</a> = false</td></tr>
@@ -877,32 +874,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a89a18511919359b35ee38fddfac5eef5" name="a89a18511919359b35ee38fddfac5eef5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89a18511919359b35ee38fddfac5eef5">&#9670;&nbsp;</a></span>Load()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Entity::Load </td>
-          <td>(</td>
-          <td class="paramtype">const Json::Value &amp;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Load entity from JSON node. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>JSON node to load from. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a8f2d662f4ed081a8a4ade4d4b7d3eb5b" name="a8f2d662f4ed081a8a4ade4d4b7d3eb5b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f2d662f4ed081a8a4ade4d4b7d3eb5b">&#9670;&nbsp;</a></span>RemoveChild()</h2>
 
@@ -1045,23 +1016,40 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a4ccd4c39a72dc88cd46c7858568eeae9" name="a4ccd4c39a72dc88cd46c7858568eeae9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ccd4c39a72dc88cd46c7858568eeae9">&#9670;&nbsp;</a></span>Save()</h2>
+<a id="ae0ed3b696379f2759ae857e87c290cd2" name="ae0ed3b696379f2759ae857e87c290cd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0ed3b696379f2759ae857e87c290cd2">&#9670;&nbsp;</a></span>Serialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Json::Value Entity::Save </td>
+          <td class="memname">void Entity::Serialize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Save the entity. </p>
-<dl class="section return"><dt>Returns</dt><dd>JSON value to be stored on disk. </dd></dl>
+<p>Save or load entity to/from JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The JSON node to save to or load from. </td></tr>
+    <tr><td class="paramname">load</td><td>Whether to load (otherwise saves). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1301,7 +1289,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec3 Entity::position = glm::vec3(0.f, 0.f, 0.f)</td>
+          <td class="memname">glm::vec3 Entity::position = glm::vec3(0.0f, 0.0f, 0.0f)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1318,7 +1306,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::quat Entity::rotation = glm::angleAxis(0.0f, glm::vec3(0, 1, 0))</td>
+          <td class="memname">glm::quat Entity::rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1335,7 +1323,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec3 Entity::scale = glm::vec3(1.f, 1.f, 1.f)</td>
+          <td class="memname">glm::vec3 Entity::scale = glm::vec3(1.0f, 1.0f, 1.0f)</td>
         </tr>
       </table>
 </div><div class="memdoc">

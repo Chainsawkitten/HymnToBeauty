@@ -28,5 +28,6 @@ var class_trigger_repeat =
     [ "SetStartActive", "class_trigger_repeat.html#a76f53aed382773adadd12b1a32b596de", null ],
     [ "SetTriggerCharges", "class_trigger_repeat.html#a5c1fa2dcf19391404cfd49a8bacbf306", null ],
     [ "Update", "class_trigger_repeat.html#a7551b67de989f239b33145011c7b3cf9", null ],
+    [ "::Component::Trigger", "class_trigger_repeat.html#ad5680fa2e10e62474d860291eb7b2c4f", null ],
     [ "::TriggerManager", "class_trigger_repeat.html#abac6be0b27e6a6f854e6c71d5a6f7b7c", null ]
 ];

@@ -119,9 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a01f94c3543f56ede7af49dc778f19331"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#a01f94c3543f56ede7af49dc778f19331">Camera</a> ()</td></tr>
 <tr class="memdesc:a01f94c3543f56ede7af49dc778f19331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new camera.  <a href="class_component_1_1_camera.html#a01f94c3543f56ede7af49dc778f19331">More...</a><br /></td></tr>
 <tr class="separator:a01f94c3543f56ede7af49dc778f19331"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07abbea16b4e67be737f5cbeaa8e02ea"><td class="memItemLeft" align="right" valign="top">Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#a07abbea16b4e67be737f5cbeaa8e02ea">Save</a> () const override</td></tr>
-<tr class="memdesc:a07abbea16b4e67be737f5cbeaa8e02ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the component.  <a href="class_component_1_1_camera.html#a07abbea16b4e67be737f5cbeaa8e02ea">More...</a><br /></td></tr>
-<tr class="separator:a07abbea16b4e67be737f5cbeaa8e02ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a6503e929b14b42877279396eab850a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#a5a6503e929b14b42877279396eab850a">Serialize</a> (Json::Value &amp;node, bool load) override</td></tr>
+<tr class="memdesc:a5a6503e929b14b42877279396eab850a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load component values to/from JSON.  <a href="class_component_1_1_camera.html#a5a6503e929b14b42877279396eab850a">More...</a><br /></td></tr>
+<tr class="separator:a5a6503e929b14b42877279396eab850a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7e22f87bbc67b54e7bc1c572a571a29"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_camera.html#ac7e22f87bbc67b54e7bc1c572a571a29">GetProjection</a> (const glm::vec2 &amp;screenSize) const</td></tr>
 <tr class="memdesc:ac7e22f87bbc67b54e7bc1c572a571a29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the projection matrix.  <a href="class_component_1_1_camera.html#ac7e22f87bbc67b54e7bc1c572a571a29">More...</a><br /></td></tr>
 <tr class="separator:ac7e22f87bbc67b54e7bc1c572a571a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,8 +226,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a07abbea16b4e67be737f5cbeaa8e02ea" name="a07abbea16b4e67be737f5cbeaa8e02ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07abbea16b4e67be737f5cbeaa8e02ea">&#9670;&nbsp;</a></span>Save()</h2>
+<a id="a5a6503e929b14b42877279396eab850a" name="a5a6503e929b14b42877279396eab850a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a6503e929b14b42877279396eab850a">&#9670;&nbsp;</a></span>Serialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -236,10 +236,21 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Json::Value Camera::Save </td>
+          <td class="memname">void Camera::Serialize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -249,10 +260,16 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Save the component. </p>
-<dl class="section return"><dt>Returns</dt><dd>JSON value to be stored on disk. </dd></dl>
+<p>Save or load component values to/from JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The JSON node to save to or load from. </td></tr>
+    <tr><td class="paramname">load</td><td>Whether to load (otherwise saves). </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Reimplemented from <a class="el" href="class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7">Component::SuperComponent</a>.</p>
+<p>Implements <a class="el" href="class_component_1_1_super_component.html#ae5576b731608cbff1909a07772c90705">Component::SuperComponent</a>.</p>
 
 </div>
 </div>

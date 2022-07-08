@@ -139,9 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6d2d1024890846fda4bdbd042b9bbfd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a6d2d1024890846fda4bdbd042b9bbfd0">Load</a> (const std::string &amp;filename)</td></tr>
 <tr class="memdesc:a6d2d1024890846fda4bdbd042b9bbfd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the world from file.  <a href="class_world.html#a6d2d1024890846fda4bdbd042b9bbfd0">More...</a><br /></td></tr>
 <tr class="separator:a6d2d1024890846fda4bdbd042b9bbfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd1813751cbcc9f22a9444197919612"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a2dd1813751cbcc9f22a9444197919612">Load</a> (const Json::Value &amp;node)</td></tr>
-<tr class="memdesc:a2dd1813751cbcc9f22a9444197919612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the world from a json.  <a href="class_world.html#a2dd1813751cbcc9f22a9444197919612">More...</a><br /></td></tr>
-<tr class="separator:a2dd1813751cbcc9f22a9444197919612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf3d63f137ca81a424ccdc12c3a86e88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#aaf3d63f137ca81a424ccdc12c3a86e88">Load</a> (Json::Value &amp;node)</td></tr>
+<tr class="memdesc:aaf3d63f137ca81a424ccdc12c3a86e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the world from a json.  <a href="class_world.html#aaf3d63f137ca81a424ccdc12c3a86e88">More...</a><br /></td></tr>
+<tr class="separator:aaf3d63f137ca81a424ccdc12c3a86e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -354,34 +354,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a2dd1813751cbcc9f22a9444197919612" name="a2dd1813751cbcc9f22a9444197919612"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2dd1813751cbcc9f22a9444197919612">&#9670;&nbsp;</a></span>Load() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void World::Load </td>
-          <td>(</td>
-          <td class="paramtype">const Json::Value &amp;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Load the world from a json. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The json containing a scene to load. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a6d2d1024890846fda4bdbd042b9bbfd0" name="a6d2d1024890846fda4bdbd042b9bbfd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d2d1024890846fda4bdbd042b9bbfd0">&#9670;&nbsp;</a></span>Load() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d2d1024890846fda4bdbd042b9bbfd0">&#9670;&nbsp;</a></span>Load() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,6 +374,32 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>The name of the file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaf3d63f137ca81a424ccdc12c3a86e88" name="aaf3d63f137ca81a424ccdc12c3a86e88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf3d63f137ca81a424ccdc12c3a86e88">&#9670;&nbsp;</a></span>Load() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void World::Load </td>
+          <td>(</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Load the world from a json. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The json containing a scene to load. </td></tr>
   </table>
   </dd>
 </dl>

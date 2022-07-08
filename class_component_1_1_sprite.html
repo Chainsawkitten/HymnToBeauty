@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c755f9671770919be9eb24f48d52067"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sprite.html#a3c755f9671770919be9eb24f48d52067">~Sprite</a> () override</td></tr>
 <tr class="memdesc:a3c755f9671770919be9eb24f48d52067"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_component_1_1_sprite.html#a3c755f9671770919be9eb24f48d52067">More...</a><br /></td></tr>
 <tr class="separator:a3c755f9671770919be9eb24f48d52067"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a793072dc407fb5bd2e044d0347d4d335"><td class="memItemLeft" align="right" valign="top">Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sprite.html#a793072dc407fb5bd2e044d0347d4d335">Save</a> () const override</td></tr>
-<tr class="memdesc:a793072dc407fb5bd2e044d0347d4d335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the component.  <a href="class_component_1_1_sprite.html#a793072dc407fb5bd2e044d0347d4d335">More...</a><br /></td></tr>
-<tr class="separator:a793072dc407fb5bd2e044d0347d4d335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc81c2672554dadf4c6531bdfb18902c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sprite.html#acc81c2672554dadf4c6531bdfb18902c">Serialize</a> (Json::Value &amp;node, bool load) override</td></tr>
+<tr class="memdesc:acc81c2672554dadf4c6531bdfb18902c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load component values to/from JSON.  <a href="class_component_1_1_sprite.html#acc81c2672554dadf4c6531bdfb18902c">More...</a><br /></td></tr>
+<tr class="separator:acc81c2672554dadf4c6531bdfb18902c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_component_1_1_super_component"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_component_1_1_super_component')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_component_1_1_super_component.html">Component::SuperComponent</a></td></tr>
 <tr class="memitem:ad9803f7cfa36dfac6e989a0ba9dd480b inherit pub_methods_class_component_1_1_super_component"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_super_component.html#ad9803f7cfa36dfac6e989a0ba9dd480b">SuperComponent</a> ()</td></tr>
 <tr class="memdesc:ad9803f7cfa36dfac6e989a0ba9dd480b inherit pub_methods_class_component_1_1_super_component"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new SuperComponent.  <a href="class_component_1_1_super_component.html#ad9803f7cfa36dfac6e989a0ba9dd480b">More...</a><br /></td></tr>
@@ -207,8 +207,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a793072dc407fb5bd2e044d0347d4d335" name="a793072dc407fb5bd2e044d0347d4d335"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a793072dc407fb5bd2e044d0347d4d335">&#9670;&nbsp;</a></span>Save()</h2>
+<a id="acc81c2672554dadf4c6531bdfb18902c" name="acc81c2672554dadf4c6531bdfb18902c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc81c2672554dadf4c6531bdfb18902c">&#9670;&nbsp;</a></span>Serialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -217,10 +217,21 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Json::Value Sprite::Save </td>
+          <td class="memname">void Sprite::Serialize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">Json::Value &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -230,10 +241,16 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Save the component. </p>
-<dl class="section return"><dt>Returns</dt><dd>JSON value to be stored on disk. </dd></dl>
+<p>Save or load component values to/from JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The JSON node to save to or load from. </td></tr>
+    <tr><td class="paramname">load</td><td>Whether to load (otherwise saves). </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Reimplemented from <a class="el" href="class_component_1_1_super_component.html#aec8205a9689c3c92c4c09e162ff28bd7">Component::SuperComponent</a>.</p>
+<p>Implements <a class="el" href="class_component_1_1_super_component.html#ae5576b731608cbff1909a07772c90705">Component::SuperComponent</a>.</p>
 
 </div>
 </div>

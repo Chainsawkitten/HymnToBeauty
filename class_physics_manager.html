@@ -126,15 +126,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4b0ea2909b0faafdb476b66306ea0057"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_component_1_1_rigid_body.html">Component::RigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a4b0ea2909b0faafdb476b66306ea0057">CreateRigidBody</a> (<a class="el" href="class_entity.html">Entity</a> *owner)</td></tr>
 <tr class="memdesc:a4b0ea2909b0faafdb476b66306ea0057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create rigid body component.  <a href="class_physics_manager.html#a4b0ea2909b0faafdb476b66306ea0057">More...</a><br /></td></tr>
 <tr class="separator:a4b0ea2909b0faafdb476b66306ea0057"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59e1989630a6c701d7776e23ec8cee06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_component_1_1_rigid_body.html">Component::RigidBody</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a59e1989630a6c701d7776e23ec8cee06">CreateRigidBody</a> (<a class="el" href="class_entity.html">Entity</a> *owner, const Json::Value &amp;node)</td></tr>
-<tr class="memdesc:a59e1989630a6c701d7776e23ec8cee06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create rigid body component.  <a href="class_physics_manager.html#a59e1989630a6c701d7776e23ec8cee06">More...</a><br /></td></tr>
-<tr class="separator:a59e1989630a6c701d7776e23ec8cee06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1152979e48801729322ddb3ddd5b44f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_component_1_1_shape.html">Component::Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#ac1152979e48801729322ddb3ddd5b44f">CreateShape</a> (<a class="el" href="class_entity.html">Entity</a> *owner)</td></tr>
 <tr class="memdesc:ac1152979e48801729322ddb3ddd5b44f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a component that represents a physical shape.  <a href="class_physics_manager.html#ac1152979e48801729322ddb3ddd5b44f">More...</a><br /></td></tr>
 <tr class="separator:ac1152979e48801729322ddb3ddd5b44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a181280b8722aa301672e3edb3b405859"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_component_1_1_shape.html">Component::Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a181280b8722aa301672e3edb3b405859">CreateShape</a> (<a class="el" href="class_entity.html">Entity</a> *owner, const Json::Value &amp;node)</td></tr>
-<tr class="memdesc:a181280b8722aa301672e3edb3b405859"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a component that represents a physical shape.  <a href="class_physics_manager.html#a181280b8722aa301672e3edb3b405859">More...</a><br /></td></tr>
-<tr class="separator:a181280b8722aa301672e3edb3b405859"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11e79c0f13a3b5fc37671b995170605e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_utility_1_1_lock_box.html">Utility::LockBox</a>&lt; <a class="el" href="class_physics_1_1_trigger.html">Physics::Trigger</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a11e79c0f13a3b5fc37671b995170605e">CreateTrigger</a> (std::shared_ptr&lt; <a class="el" href="class_physics_1_1_shape.html">Physics::Shape</a> &gt; shape)</td></tr>
 <tr class="separator:a11e79c0f13a3b5fc37671b995170605e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88186bb8a155d61e1e4b92d6e7b3afae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a88186bb8a155d61e1e4b92d6e7b3afae">ReleaseTriggerVolume</a> (<a class="el" href="class_utility_1_1_lock_box.html">Utility::LockBox</a>&lt; <a class="el" href="class_physics_1_1_trigger.html">Physics::Trigger</a> &gt; &amp;&amp;trigger)</td></tr>
@@ -189,6 +183,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3d20e69df14e395c294048ac5a287d6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a3d20e69df14e395c294048ac5a287d6d">ClearKilledComponents</a> ()</td></tr>
 <tr class="memdesc:a3d20e69df14e395c294048ac5a287d6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all killed components.  <a href="class_physics_manager.html#a3d20e69df14e395c294048ac5a287d6d">More...</a><br /></td></tr>
 <tr class="separator:a3d20e69df14e395c294048ac5a287d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61fcd2bea8015d714f611c1ee3e8f60f"><td class="memItemLeft" align="right" valign="top">btDiscreteDynamicsWorld *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_physics_manager.html#a61fcd2bea8015d714f611c1ee3e8f60f">GetDynamicsWorld</a> ()</td></tr>
+<tr class="memdesc:a61fcd2bea8015d714f611c1ee3e8f60f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Bullet dynamics world.  <a href="class_physics_manager.html#a61fcd2bea8015d714f611c1ee3e8f60f">More...</a><br /></td></tr>
+<tr class="separator:a61fcd2bea8015d714f611c1ee3e8f60f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -218,7 +215,7 @@ Friends</h2></td></tr>
 </div>
 </div>
 <a id="a4b0ea2909b0faafdb476b66306ea0057" name="a4b0ea2909b0faafdb476b66306ea0057"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b0ea2909b0faafdb476b66306ea0057">&#9670;&nbsp;</a></span>CreateRigidBody() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b0ea2909b0faafdb476b66306ea0057">&#9670;&nbsp;</a></span>CreateRigidBody()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,44 +234,6 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">owner</td><td>The Entity that will own the component. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created component. </dd></dl>
-
-</div>
-</div>
-<a id="a59e1989630a6c701d7776e23ec8cee06" name="a59e1989630a6c701d7776e23ec8cee06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59e1989630a6c701d7776e23ec8cee06">&#9670;&nbsp;</a></span>CreateRigidBody() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_component_1_1_rigid_body.html">Component::RigidBody</a> * PhysicsManager::CreateRigidBody </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_entity.html">Entity</a> *&#160;</td>
-          <td class="paramname"><em>owner</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Json::Value &amp;&#160;</td>
-          <td class="paramname"><em>node</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Create rigid body component. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">owner</td><td>The Entity that will own the component. </td></tr>
-    <tr><td class="paramname">node</td><td><a class="el" href="namespace_json.html">Json</a> node from which to load component definition. </td></tr>
   </table>
   </dd>
 </dl>
@@ -283,7 +242,7 @@ Friends</h2></td></tr>
 </div>
 </div>
 <a id="ac1152979e48801729322ddb3ddd5b44f" name="ac1152979e48801729322ddb3ddd5b44f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1152979e48801729322ddb3ddd5b44f">&#9670;&nbsp;</a></span>CreateShape() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1152979e48801729322ddb3ddd5b44f">&#9670;&nbsp;</a></span>CreateShape()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -302,44 +261,6 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">owner</td><td>The Entity that will own the component. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created component. </dd></dl>
-
-</div>
-</div>
-<a id="a181280b8722aa301672e3edb3b405859" name="a181280b8722aa301672e3edb3b405859"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a181280b8722aa301672e3edb3b405859">&#9670;&nbsp;</a></span>CreateShape() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_component_1_1_shape.html">Component::Shape</a> * PhysicsManager::CreateShape </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_entity.html">Entity</a> *&#160;</td>
-          <td class="paramname"><em>owner</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Json::Value &amp;&#160;</td>
-          <td class="paramname"><em>node</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Create a component that represents a physical shape. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">owner</td><td>The Entity that will own the component. </td></tr>
-    <tr><td class="paramname">node</td><td><a class="el" href="namespace_json.html">Json</a> node from which to load component definition. </td></tr>
   </table>
   </dd>
 </dl>
@@ -504,6 +425,26 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a61fcd2bea8015d714f611c1ee3e8f60f" name="a61fcd2bea8015d714f611c1ee3e8f60f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61fcd2bea8015d714f611c1ee3e8f60f">&#9670;&nbsp;</a></span>GetDynamicsWorld()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btDiscreteDynamicsWorld * PhysicsManager::GetDynamicsWorld </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the Bullet dynamics world. </p>
+<dl class="section return"><dt>Returns</dt><dd>The dynamics world. </dd></dl>
 
 </div>
 </div>

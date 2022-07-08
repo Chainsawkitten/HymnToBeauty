@@ -10,7 +10,8 @@ var class_component_1_1_rigid_body =
     [ "GetSpinningFriction", "class_component_1_1_rigid_body.html#a6373fe9412409cdfe3940e1ddc2a595f", null ],
     [ "IsGhost", "class_component_1_1_rigid_body.html#a6e8ef3691b8be3b3b0397db2707052ef", null ],
     [ "IsKinematic", "class_component_1_1_rigid_body.html#ae749242e2147f76591572ff28da69f77", null ],
-    [ "Save", "class_component_1_1_rigid_body.html#af2adcbeb45d195fc391539f4907d8ad4", null ],
+    [ "Serialize", "class_component_1_1_rigid_body.html#a3ed17912c853e50c7972dad8426f7960", null ],
     [ "::Physics::Trigger", "class_component_1_1_rigid_body.html#a0d96c18f9eb865043271009a6ab4c7c8", null ],
-    [ "::PhysicsManager", "class_component_1_1_rigid_body.html#a26296dff3e049d7a5287bd11e02eae60", null ]
+    [ "::PhysicsManager", "class_component_1_1_rigid_body.html#a26296dff3e049d7a5287bd11e02eae60", null ],
+    [ "Shape", "class_component_1_1_rigid_body.html#a1e1ef8352d0a310bace7f7a3307d1378", null ]
 ];

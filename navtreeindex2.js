@@ -1,5 +1,13 @@
 var NAVTREEINDEX2 =
 {
+"_sound_buffer_8hpp_source.html":[7,0,1,1,0,1],
+"_sound_editor_8cpp.html":[7,0,1,0,0,0,23],
+"_sound_editor_8hpp.html":[7,0,1,0,0,0,24],
+"_sound_editor_8hpp_source.html":[7,0,1,0,0,0,24],
+"_sound_file_8cpp.html":[7,0,1,1,0,2],
+"_sound_file_8hpp.html":[7,0,1,1,0,3],
+"_sound_file_8hpp_source.html":[7,0,1,1,0,3],
+"_sound_manager_8cpp.html":[7,0,1,1,5,14],
 "_sound_manager_8hpp.html":[7,0,1,1,5,15],
 "_sound_manager_8hpp_source.html":[7,0,1,1,5,15],
 "_sound_source_8cpp.html":[7,0,1,1,1,18],
@@ -241,13 +249,5 @@ var NAVTREEINDEX2 =
 "class_active_hymn.html#a39961f61cd8acfee7f84da9e9bdb1339":[6,0,9,18],
 "class_active_hymn.html#a3eb84f50313e8d70aa2db6e62c1e2a5e":[6,0,9,8],
 "class_active_hymn.html#a40e12c3fdc014cf961328c68b0ac30ed":[6,0,9,3],
-"class_active_hymn.html#a47f58b09da17044c72aa478d6d33497a":[6,0,9,9],
-"class_active_hymn.html#a5676c857694accbc78144d7025aac836":[6,0,9,7],
-"class_active_hymn.html#a5d98570ce1a1c3eeea02e99ba70b40fa":[6,0,9,17],
-"class_active_hymn.html#a61f79b007c8ca6877f1e8ef7b0a05ef9":[6,0,9,4],
-"class_active_hymn.html#a6643ee2585926a894b6b235ffc2d17c7":[6,0,9,19],
-"class_active_hymn.html#a921bf854bf91f5b4f6fbbc306d0c1cf6":[6,0,9,15],
-"class_active_hymn.html#a9390c5bf3ed1481741a97b47f927318e":[6,0,9,16],
-"class_active_hymn.html#a9c75ec6846d087e606f4f0d3766df52f":[6,0,9,14],
-"class_active_hymn.html#aa76af86502ebb1995a1a6bc47a2a348a":[6,0,9,0]
+"class_active_hymn.html#a47f58b09da17044c72aa478d6d33497a":[6,0,9,9]
 };

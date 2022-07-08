@@ -10,7 +10,7 @@ var class_component_1_1_trigger =
     [ "Trigger", "class_component_1_1_trigger.html#afcf974790b6e846cd89eba5a802e7fa5", null ],
     [ "~Trigger", "class_component_1_1_trigger.html#a72bd38c364dd814569e790a559e1ed9e", null ],
     [ "GetTrigger", "class_component_1_1_trigger.html#a2d470fee12719bbfd18e02f4d0eacc49", null ],
-    [ "Save", "class_component_1_1_trigger.html#a70c2d8076e7016d94dcd625877b10b60", null ],
+    [ "Serialize", "class_component_1_1_trigger.html#a1f4daf28a3986686f72f6af56672e1d9", null ],
     [ "SetTrigger", "class_component_1_1_trigger.html#ab7dfb09aaf51861b1f43eb8d00163c03", null ],
     [ "::TriggerManager", "class_component_1_1_trigger.html#abac6be0b27e6a6f854e6c71d5a6f7b7c", null ],
     [ "triggerType", "class_component_1_1_trigger.html#aad644f3cca93bbd13033fb11f8bb660b", null ]

@@ -7,7 +7,7 @@ var class_component_1_1_script =
     [ "CopyDataFromPropertyMap", "class_component_1_1_script.html#a9a1b198d63fddd7fb4eb48d1ee0bb867", null ],
     [ "GetDataFromPropertyMap", "class_component_1_1_script.html#a59adf7426505a36350e77bbd021b34da", null ],
     [ "IsInPropertyMap", "class_component_1_1_script.html#a9ed4ebdb9d0e6995b74b54912e66dc2e", null ],
-    [ "Save", "class_component_1_1_script.html#abf26de06a5bc8824c6ddceaa9c5f673c", null ],
+    [ "Serialize", "class_component_1_1_script.html#ab335716338a6ba2f2109763c18b66437", null ],
     [ "initialized", "class_component_1_1_script.html#ac22bb37fd3ad4fe3398a82e4e27786b1", null ],
     [ "instance", "class_component_1_1_script.html#a8ed181c02d1f79b4458c16578130493c", null ],
     [ "scriptFile", "class_component_1_1_script.html#aa5967a2a29682422781483090c735870", null ]
