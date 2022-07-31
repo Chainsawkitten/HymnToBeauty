@@ -2,37 +2,49 @@
 
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/InputManager.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/RenderManager.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
-#include <Engine/MainWindow.hpp>
 #include <Engine/Input/Input.hpp>
-#include <Engine/Util/Input.hpp>
 #include <Utility/Profiling/Profiling.hpp>
 #include <Utility/Log.hpp>
+#include <Utility/Time.hpp>
+#include <Utility/Window.hpp>
 #include <thread>
+#if !ANDROID
 #include <GLFW/glfw3.h>
+#endif
 
 bool Engine::Start() {
+#if !ANDROID
     if (!glfwInit())
         return false;
+#endif
+    Utility::InitTime();
 
-    window = new MainWindow(configuration.width, configuration.height, configuration.fullscreen, configuration.borderless, "Hymn to Beauty",
-                            configuration.graphicsAPI == Video::Renderer::GraphicsAPI::VULKAN);
+#if ANDROID
+    window = new Utility::Window(configuration.androidWindow);
+#else
+    window = new Utility::Window(configuration.width, configuration.height, configuration.fullscreen, configuration.borderless, "Hymn to Beauty",
+                                 configuration.graphicsAPI == Video::Renderer::GraphicsAPI::VULKAN);
+#endif
 
-    Input::GetInstance().SetWindow(window->GetGLFWWindow());
-    Input()->AssignButton(InputHandler::WINDOWMODE, InputHandler::KEYBOARD, GLFW_KEY_F4);
+    Input::GetInstance().SetWindow(window);
 
-    Managers().StartUp(configuration.graphicsAPI);
+    Managers().StartUp(configuration.graphicsAPI, window);
+#if !ANDROID
+    Managers().inputManager->AssignButton(InputManager::WINDOWMODE, InputManager::KEYBOARD, GLFW_KEY_F4);
+#endif
 
     // Main loop.
-    lastTime = glfwGetTime();
-    lastTimeRender = glfwGetTime();
+    lastTime = Utility::GetTime();
+    lastTimeRender = Utility::GetTime();
 
     return true;
 }
 
-MainWindow* Engine::GetMainWindow() {
+Utility::Window* Engine::GetWindow() {
     return window;
 }
 
@@ -46,18 +58,20 @@ void Engine::Update() {
     {
         PROFILE("Update");
 
-        deltaTime = glfwGetTime() - lastTime;
-        lastTime = glfwGetTime();
+        deltaTime = Utility::GetTime() - lastTime;
+        lastTime = Utility::GetTime();
 
+#if !ANDROID
         // Switch between fullscreen and window mode.
-        if (Input()->Triggered(InputHandler::WINDOWMODE)) {
+        if (Managers().inputManager->Triggered(InputManager::WINDOWMODE)) {
             bool fullscreen, borderless;
             window->GetWindowMode(fullscreen, borderless);
             window->SetWindowMode(!fullscreen, borderless);
         }
+#endif
 
         // Update input.
-        glfwPollEvents();
+        Managers().inputManager->Update();
         window->Update();
 
         // Update hymn.
@@ -77,7 +91,8 @@ double Engine::GetDeltaTime() const {
 void Engine::Render() {
     PROFILE("Render");
 
-    Hymn().Render();
+    RenderManager::DebugConfiguration debugConfiguration = {};
+    Hymn().Render(debugConfiguration);
 }
 
 void Engine::Present() {
@@ -96,9 +111,9 @@ void Engine::Present() {
 
         // Wait for next frame.
         /// @todo Make limiting FPS optional.
-        while (glfwGetTime() < lastTimeRender + 1.0 / configuration.targetFPS)
+        while (Utility::GetTime() < lastTimeRender + 1.0 / configuration.targetFPS)
             std::this_thread::yield();
-        lastTimeRender = glfwGetTime();
+        lastTimeRender = Utility::GetTime();
     }
 
     Managers().profilingManager->EndFrame();
@@ -112,5 +127,7 @@ void Engine::Shutdown() {
 
     delete window;
 
+#if !ANDROID
     glfwTerminate();
+#endif
 }

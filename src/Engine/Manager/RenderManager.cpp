@@ -23,37 +23,27 @@
 #include "../Texture/TextureAsset.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <Video/RenderScene.hpp>
-#include "../MainWindow.hpp"
 #include "../Hymn.hpp"
 #include <Utility/Profiling/Profiling.hpp>
 #include <Utility/Log.hpp>
+#include <Utility/Window.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <Video/Texture/Texture2D.hpp>
 #include <Video/LowLevelRenderer/Interface/Texture.hpp>
-#include "Light.png.hpp"
-#include "SoundSource.png.hpp"
-#include "Camera.png.hpp"
 
 using namespace Component;
 
 RenderManager::RenderManager(Video::Renderer* renderer) {
     assert(renderer != nullptr);
     this->renderer = renderer;
-
-    // Init textures.
-    lightTexture = Managers().resourceManager->CreateTexture2D(LIGHT_PNG, LIGHT_PNG_LENGTH);
-    soundSourceTexture = Managers().resourceManager->CreateTexture2D(SOUNDSOURCE_PNG, SOUNDSOURCE_PNG_LENGTH);
-    cameraTexture = Managers().resourceManager->CreateTexture2D(CAMERA_PNG, CAMERA_PNG_LENGTH);
 }
 
 RenderManager::~RenderManager() {
-    Managers().resourceManager->FreeTexture2D(lightTexture);
-    Managers().resourceManager->FreeTexture2D(soundSourceTexture);
-    Managers().resourceManager->FreeTexture2D(cameraTexture);
+
 }
 
-void RenderManager::Render(World& world, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics, Entity* cameraEntity, bool lighting, bool showLightVolumes) {
-    const glm::uvec2 windowSize = MainWindow::GetInstance()->GetSize();
+void RenderManager::Render(World& world, const DebugConfiguration& debugConfiguration, Entity* cameraEntity) {
+    const glm::uvec2 windowSize = renderer->GetWindow()->GetSize();
     if (windowSize.x == 0 || windowSize.y == 0)
         return;
 
@@ -74,7 +64,7 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
 
         if (!renderScene.cameras.empty()) {
             // Lights.
-            AddLights(renderScene, lighting, showLightVolumes);
+            AddLights(renderScene, !debugConfiguration.unlit, debugConfiguration.showLightVolumes);
 
             // Meshes.
             AddMeshes(renderScene);
@@ -83,9 +73,7 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
             AddSprites(renderScene);
 
             // Editor entities.
-            if (showSoundSources || showLightSources || showCameras || showPhysics) {
-                AddEditorEntities(renderScene, showSoundSources, showLightSources, showCameras, showPhysics);
-            }
+            AddEditorEntities(renderScene, debugConfiguration);
 
             // Debug shapes.
             AddDebugShapes(renderScene);
@@ -93,10 +81,6 @@ void RenderManager::Render(World& world, bool showSoundSources, bool showLightSo
     }
 
     renderer->Render(renderScene);
-}
-
-void RenderManager::UpdateBufferSize() {
-    renderer->SetOutputSize(MainWindow::GetInstance()->GetSize());
 }
 
 Component::DirectionalLight* RenderManager::CreateDirectionalLight() {
@@ -317,11 +301,13 @@ void RenderManager::AddMeshes(Video::RenderScene& renderScene) {
     }
 }
 
-void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics) {
+void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, const DebugConfiguration& debugConfiguration) {
     // Sound sources.
-    if (showSoundSources) {
+    if (debugConfiguration.showSoundSources) {
+        assert(debugConfiguration.soundSourceTexture != nullptr);
+
         Video::RenderScene::Icon icon;
-        icon.texture = soundSourceTexture;
+        icon.texture = debugConfiguration.soundSourceTexture;
 
         for (SoundSource* soundSource : Managers().soundManager->GetSoundSources())
             icon.positions.push_back(soundSource->entity->GetWorldPosition());
@@ -330,9 +316,11 @@ void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, bool show
     }
 
     // Light sources.
-    if (showLightSources) {
+    if (debugConfiguration.showLightSources) {
+        assert(debugConfiguration.lightTexture != nullptr);
+
         Video::RenderScene::Icon icon;
-        icon.texture = lightTexture;
+        icon.texture = debugConfiguration.lightTexture;
 
         for (DirectionalLight* light : directionalLights.GetAll())
             icon.positions.push_back(light->entity->GetWorldPosition());
@@ -347,9 +335,11 @@ void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, bool show
     }
 
     // Cameras.
-    if (showCameras) {
+    if (debugConfiguration.showCameras) {
+        assert(debugConfiguration.cameraTexture != nullptr);
+
         Video::RenderScene::Icon icon;
-        icon.texture = cameraTexture;
+        icon.texture = debugConfiguration.cameraTexture;
 
         for (Camera* camera : cameras.GetAll())
             icon.positions.push_back(camera->entity->GetWorldPosition());
@@ -358,7 +348,7 @@ void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, bool show
     }
 
     // Physics.
-    if (showPhysics) {
+    if (debugConfiguration.showPhysics) {
         for (Component::Shape* shapeComp : Managers().physicsManager->GetShapeComponents()) {
             const ::Physics::Shape& shape = *shapeComp->GetShape();
             if (shape.GetKind() == ::Physics::Shape::Kind::Sphere) {

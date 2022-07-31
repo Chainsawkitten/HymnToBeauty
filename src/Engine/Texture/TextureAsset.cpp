@@ -2,7 +2,6 @@
 
 #include "../Hymn.hpp"
 #include "../Util/FileSystem.hpp"
-#include <DefaultAlbedo.png.hpp>
 #include <Video/Texture/Texture2D.hpp>
 #include "../Manager/Managers.hpp"
 #include "../Manager/RenderManager.hpp"
@@ -11,11 +10,15 @@ using namespace Video;
 
 TextureAsset::TextureAsset(LowLevelRenderer* lowLevelRenderer) {
     this->lowLevelRenderer = lowLevelRenderer;
-    texture = new Texture2D(lowLevelRenderer, DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
+    texture = new Texture2D(lowLevelRenderer, glm::uvec2(4, 4), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 TextureAsset::TextureAsset(LowLevelRenderer* lowLevelRenderer, const char* source, int sourceLength) {
     texture = new Texture2D(lowLevelRenderer, source, sourceLength);
+}
+
+TextureAsset::TextureAsset(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& size, const glm::vec4& color) {
+    texture = new Texture2D(lowLevelRenderer, size, color);
 }
 
 TextureAsset::~TextureAsset() {

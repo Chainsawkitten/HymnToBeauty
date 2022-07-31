@@ -2,13 +2,25 @@
 
 #include <glm/glm.hpp>
 
+#if ANDROID
+#include <game-activity/native_app_glue/android_native_app_glue.h>
+#else
 struct GLFWwindow;
-class InputHandler;
+#endif
 
-/// The main game window in which the game is contained.
-class MainWindow {
+namespace Utility {
+
+/// 
+class Window {
   public:
-    /// Create new main window.
+#if ANDROID
+    /// Create new window.
+    /**
+     * @param androidWindow Android window.
+     */
+    Window(ANativeWindow* androidWindow);
+#else
+    /// Create new window.
     /**
      * @param width Width of the window in pixels.
      * @param height Height of the window in pixels.
@@ -17,19 +29,19 @@ class MainWindow {
      * @param title Window title.
      * @param noAPI Create window without any specific API.
      */
-    MainWindow(unsigned int width, unsigned int height, bool fullscreen = false, bool borderless = false, const char* title = "", bool noAPI = false);
+    Window(unsigned int width, unsigned int height, bool fullscreen = false, bool borderless = false, const char* title = "", bool noAPI = false);
+#endif
 
     /// Destructor.
-    ~MainWindow();
+    ~Window();
 
-    /// Get the instance of %MainWindow.
+    /// Set the size of the window.
     /**
-     * @return The %MainWindow instance.
+     * Note that this function does not resize the window. It merely updates the stored size value.
+     * 
+     * @param size The new size of the window.
      */
-    static MainWindow* GetInstance();
-
-    /// Update
-    void Update();
+    void SetSize(const glm::uvec2& size);
 
     /// Get the size of the window.
     /**
@@ -37,18 +49,8 @@ class MainWindow {
      */
     const glm::uvec2& GetSize() const;
 
-    /// Set the size of the window.
-    /**
-     * @param width The width of the window in pixels.
-     * @param height The height of the window in pixels.
-     */
-    void SetSize(unsigned int width, unsigned int height);
-
-    /// Set window title.
-    /**
-     * @param title New window title.
-     */
-    void SetTitle(const char* title) const;
+    /// Update
+    void Update();
 
     /// Get whether the window should close.
     /**
@@ -56,17 +58,8 @@ class MainWindow {
      */
     bool ShouldClose() const;
 
-    /// Close the window.
-    void Close();
-
     /// Cancel the closing of the window.
     void CancelClose();
-
-    /// Get GLFW window.
-    /**
-     * @return The GLFW window struct.
-     */
-    GLFWwindow* GetGLFWWindow() const;
 
     /// Set window mode.
     /**
@@ -82,15 +75,31 @@ class MainWindow {
      */
     void GetWindowMode(bool& fullscreen, bool& borderless) const;
 
+#if ANDROID
+    /// Get Android window.
+    /**
+     * @return The Android window.
+     */
+    ANativeWindow* GetAndroidWindow();
+#else
+    /// Get the GLFW window.
+    /**
+     * @return The GLFW window.
+     */
+    GLFWwindow* GetGLFWWindow();
+#endif
+
   private:
-    // Copy Constructor
-    MainWindow(MainWindow& mainwindow) = delete;
+    Window(Window& window) = delete;
 
-    static MainWindow* instance;
-
-    InputHandler* input;
+#if ANDROID
+    ANativeWindow* window;
+#else
     GLFWwindow* window;
-    glm::uvec2 size;
+#endif
 
+    glm::uvec2 size;
     bool shouldClose = false;
 };
+
+}

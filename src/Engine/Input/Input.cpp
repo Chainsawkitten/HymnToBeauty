@@ -1,18 +1,29 @@
 #include "Input.hpp"
 
 #include <cstring>
+#include <Utility/Log.hpp>
+#include <Utility/Window.hpp>
+
+#if !ANDROID
 #include <GLFW/glfw3.h>
+#endif
 
 Input& Input::GetInstance() {
     static Input instance;
     return instance;
 }
 
-void Input::SetWindow(GLFWwindow* window) {
-    this->window = window;
+void Input::SetWindow(Utility::Window* window) {
+#if !ANDROID
+    this->window = window->GetGLFWWindow();
+#endif
 }
 
 bool Input::CheckButton(int index) const {
+#if ANDROID
+    Log(Log::ERR) << "Input::CheckButton not implemented for Android.";
+    return 0;
+#else
     Button* button = buttons[index];
     int state;
     if (button->key == 420)
@@ -20,6 +31,7 @@ bool Input::CheckButton(int index) const {
     else
         state = glfwGetKey(window, button->key);
     return state == button->state;
+#endif
 }
 
 Json::Value Input::Save() const {

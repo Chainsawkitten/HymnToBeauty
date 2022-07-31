@@ -149,7 +149,7 @@ void ZBinning::ClearBuffers(CommandBuffer& commandBuffer) {
 }
 
 void ZBinning::Binning(CommandBuffer& commandBuffer) {
-    // Ping-pong pipelines to avoid an AMD bug.
+    // Ping-pong pipelines to avoid an AMD bug (fixed in 22.10.1).
     pipelineCount = 1u - pipelineCount;
     commandBuffer.BindComputePipeline(binningPipeline[pipelineCount]);
     commandBuffer.BindStorageBuffers({ lightInfo.lightBuffer, lightInfo.zMaskBuffer });

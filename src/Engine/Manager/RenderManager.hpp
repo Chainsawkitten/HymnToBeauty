@@ -27,21 +27,43 @@ class RenderManager {
     friend class Hub;
 
   public:
+    /// Configuration for visualizing debug information.
+    struct DebugConfiguration {
+        /// Whether to show sound sources.
+        bool showSoundSources;
+
+        /// Texture to show sound sources with.
+        Video::Texture2D* soundSourceTexture;
+
+        /// Whether to show light sources.
+        bool showLightSources;
+
+        /// Texture to show light sources with.
+        Video::Texture2D* lightTexture;
+
+        /// Whether to show cameras.
+        bool showCameras;
+
+        /// Texture to show cameras with.
+        Video::Texture2D* cameraTexture;
+
+        /// Whether to show physics volumes.
+        bool showPhysics;
+
+        /// Whether to show light culling volumes.
+        bool showLightVolumes;
+
+        /// Whether to use full ambient instead of lighting the scene.
+        bool unlit;
+    };
+
     /// Render world containing entities.
     /**
      * @param world Contains a bunch of entities.
-     * @param showSoundSources Whether to show sound sources.
-     * @param showLightSources Whether to show light sources.
-     * @param showCameras Whether to show cameras.
-     * @param showPhysics Whether to show physics volumes.
+     * @param debugConfiguration Configuration for visualizing debug information.
      * @param cameraEntity Camera through which to render (or first camera in the world if nullptr).
-     * @param lighting Whether to light the scene (otherwise full ambient is used).
-     * @param lightVolumes Whether to show light culling volumes.
      */
-    void Render(World& world, bool showSoundSources = true, bool showLightSources = true, bool showCameras = true, bool showPhysics = true, Entity* cameraEntity = nullptr, bool lighting = true, bool lightVolumes = false);
-
-    /// Updates the buffers to fit the current screen size.
-    void UpdateBufferSize();
+    void Render(World& world, const DebugConfiguration& debugConfiguration, Entity* cameraEntity = nullptr);
 
     /// Create directional light component.
     /**
@@ -148,18 +170,13 @@ class RenderManager {
 
     void AddMeshes(Video::RenderScene& renderScene);
 
-    void AddEditorEntities(Video::RenderScene& renderScene, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics);
+    void AddEditorEntities(Video::RenderScene& renderScene, const DebugConfiguration& debugConfiguration);
 
     void AddDebugShapes(Video::RenderScene& renderScene);
 
     void AddSprites(Video::RenderScene& renderScene);
 
     Video::Renderer* renderer;
-
-    // Editor entity textures.
-    Video::Texture2D* lightTexture;
-    Video::Texture2D* soundSourceTexture;
-    Video::Texture2D* cameraTexture;
 
     // Components.
     ComponentContainer<Component::DirectionalLight> directionalLights;

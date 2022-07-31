@@ -7,6 +7,7 @@
 #include <scriptmath/scriptmath.h>
 #include <scriptstdstring/scriptstdstring.h>
 #include <Utility/Log.hpp>
+#include <Utility/Window.hpp>
 #include <Video/Geometry/Geometry3D.hpp>
 #include <map>
 #include <typeindex>
@@ -16,7 +17,6 @@
 #include <iostream>
 
 #include "../Util/FileSystem.hpp"
-#include "../Util/Input.hpp"
 #include "../Util/RayIntersection.hpp"
 #include "../Util/MousePicking.hpp"
 #include "../Hymn.hpp"
@@ -35,9 +35,9 @@
 #include "../Geometry/Model.hpp"
 #include "../Input/Input.hpp"
 #include "../Script/ScriptFile.hpp"
-#include "../MainWindow.hpp"
 
 #include "Managers.hpp"
+#include "InputManager.hpp"
 #include "DebugDrawingManager.hpp"
 #include "PhysicsManager.hpp"
 #include "ResourceManager.hpp"
@@ -50,7 +50,7 @@
 
 using namespace Component;
 
-void AngelScriptMessageCallback(const asSMessageInfo* message, void* param) {
+static void AngelScriptMessageCallback(const asSMessageInfo* message, void* param) {
     Log() << message->section << " (" << message->row << ", " << message->col << " : ";
 
     switch (message->type) {
@@ -68,7 +68,7 @@ void AngelScriptMessageCallback(const asSMessageInfo* message, void* param) {
     Log() << " : " << message->message << "\n";
 }
 
-std::string CallstackToString(asIScriptContext* ctx) {
+static std::string CallstackToString(asIScriptContext* ctx) {
     std::string callstack = "Callstack:\n";
     for (asUINT n = 0; n < ctx->GetCallstackSize(); n++) {
         asIScriptFunction* func;
@@ -86,7 +86,7 @@ std::string CallstackToString(asIScriptContext* ctx) {
     return callstack;
 }
 
-std::string VariablesToString(asIScriptContext* ctx, asUINT stackLevel) {
+static std::string VariablesToString(asIScriptContext* ctx, asUINT stackLevel) {
     // Print the value of each variable, including parameters
     int numVars = ctx->GetVarCount(stackLevel);
     std::string variables = "Variables:\n";
@@ -108,7 +108,7 @@ std::string VariablesToString(asIScriptContext* ctx, asUINT stackLevel) {
     return variables;
 }
 // An example line callback
-void AngelScriptDebugLineCallback(asIScriptContext* ctx, const std::map<std::string, std::set<int>>* breakpoints) {
+static void AngelScriptDebugLineCallback(asIScriptContext* ctx, const std::map<std::string, std::set<int>>* breakpoints) {
     const char* scriptSection;
     int line = ctx->GetLineNumber(0, 0, &scriptSection);
 
@@ -126,57 +126,44 @@ void AngelScriptDebugLineCallback(asIScriptContext* ctx, const std::map<std::str
     }
 }
 
-void print(const std::string& message) {
+static void print(const std::string& message) {
     Log() << message;
 }
 
-void RegisterUpdate() {
+static void RegisterUpdate() {
     Managers().scriptManager->RegisterUpdate(Managers().scriptManager->currentEntity);
 }
 
-bool ButtonInput(int buttonIndex) {
+static bool ButtonInput(int buttonIndex) {
     return Input::GetInstance().CheckButton(buttonIndex);
 }
 
-glm::vec2 GetCursorXY() {
-    return Input()->GetCursorXY();
+static glm::vec2 GetCursorXY() {
+    return Managers().inputManager->GetCursorXY();
 }
 
-void SendMessage(Entity* recipient, int type) {
+static void SendMessage(Entity* recipient, int type) {
     Managers().scriptManager->SendMessage(recipient, Managers().scriptManager->currentEntity, type);
 }
 
-void RestartScene() {
+static void RestartScene() {
     Hymn().restart = true;
 }
 
-bool IsIntersect(Entity* checker, Entity* camera) {
-    const glm::mat4 projection = camera->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
-    RayIntersection rayIntersector;
-    float intersectDistance;
-    const glm::vec3 rayDirection = MousePicking::GetRayDirection(camera, projection, MainWindow::GetInstance()->GetWindow());
-    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), rayDirection, checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
-        if (intersectDistance < 10.0f)
-            return true;
-        return false;
-    }
-    return false;
-}
-
-void vec2Constructor(float x, float y, void* memory) {
+static void vec2Constructor(float x, float y, void* memory) {
     glm::vec2* vec = static_cast<glm::vec2*>(memory);
     vec->x = x;
     vec->y = y;
 }
 
-void vec3Constructor(float x, float y, float z, void* memory) {
+static void vec3Constructor(float x, float y, float z, void* memory) {
     glm::vec3* vec = static_cast<glm::vec3*>(memory);
     vec->x = x;
     vec->y = y;
     vec->z = z;
 }
 
-void vec4Constructor(float x, float y, float z, float w, void* memory) {
+static void vec4Constructor(float x, float y, float z, float w, void* memory) {
     glm::vec4* vec = static_cast<glm::vec4*>(memory);
     vec->x = x;
     vec->y = y;
@@ -184,7 +171,7 @@ void vec4Constructor(float x, float y, float z, float w, void* memory) {
     vec->w = w;
 }
 
-void quatConstructor(float w, float x, float y, float z, void* memory) {
+static void quatConstructor(float w, float x, float y, float z, void* memory) {
     *static_cast<glm::quat*>(memory) = glm::quat(w, x, y, z);
 }
 
@@ -220,15 +207,17 @@ template <typename type> type glmNeg(const void* memory) {
     return -*static_cast<const type*>(memory);
 }
 
-glm::vec3 mat3MulVec3(const glm::vec3& a, const void* memory) {
+static glm::vec3 mat3MulVec3(const glm::vec3& a, const void* memory) {
     return *static_cast<const glm::mat3*>(memory) * a;
 }
 
-glm::vec4 mat4MulVec4(const glm::vec4& a, const void* memory) {
+static glm::vec4 mat4MulVec4(const glm::vec4& a, const void* memory) {
     return *static_cast<const glm::mat4*>(memory) * a;
 }
 
-ScriptManager::ScriptManager() {
+ScriptManager::ScriptManager(Utility::Window* window) {
+    this->window = window;
+
     // Create the script engine
     engine = asCreateScriptEngine();
 
@@ -483,7 +472,7 @@ ScriptManager::ScriptManager() {
     engine->RegisterGlobalFunction("void SendMessage(Entity@, int)", asFUNCTION(::SendMessage), asCALL_CDECL);
     engine->RegisterGlobalFunction("Hub@ Managers()", asFUNCTION(Managers), asCALL_CDECL);
     engine->RegisterGlobalFunction("vec2 GetCursorXY()", asFUNCTION(GetCursorXY), asCALL_CDECL);
-    engine->RegisterGlobalFunction("bool IsIntersect(Entity@, Entity@)", asFUNCTION(IsIntersect), asCALL_CDECL);
+    engine->RegisterGlobalFunction("bool IsIntersect(Entity@, Entity@)", asMETHOD(ScriptManager, IsIntersect), asCALL_THISCALL_ASGLOBAL, this);
     engine->RegisterGlobalFunction("void exit(int)", asFUNCTION(exit), asCALL_CDECL);
 }
 
@@ -953,6 +942,19 @@ asITypeInfo* ScriptManager::GetClass(const std::string& moduleName, const std::s
 
     Log() << "Couldn't find class \"" << className << "\".\n";
     return nullptr;
+}
+
+bool ScriptManager::IsIntersect(Entity* checker, Entity* camera) const {
+    const glm::mat4 projection = camera->GetComponent<Component::Camera>()->GetProjection(glm::vec2(window->GetSize().x, window->GetSize().y));
+    RayIntersection rayIntersector;
+    float intersectDistance;
+    const glm::vec3 rayDirection = MousePicking::GetRayDirection(camera, projection, window);
+    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), rayDirection, checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
+        if (intersectDistance < 10.0f)
+            return true;
+        return false;
+    }
+    return false;
 }
 
 const std::vector<Entity*>& ScriptManager::GetUpdateEntities() {

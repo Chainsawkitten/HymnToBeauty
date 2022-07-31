@@ -90,3 +90,6 @@ make docs
 
 ### Visual Studio
 Right click on the `docs` target in the solution and press Build.
+
+## Subpages
+ - \subpage BuildingAndroid

@@ -6,7 +6,9 @@
 #include "PostProcessing/PostProcessing.hpp"
 #include "RenderScene.hpp"
 
-struct GLFWwindow;
+namespace Utility {
+class Window;
+}
 
 namespace Video {
 class StaticRenderProgram;
@@ -40,7 +42,7 @@ class Renderer {
      * @param graphicsAPI Which graphics API to use for rendering.
      * @param window Window to render to.
      */
-    Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window);
+    Renderer(GraphicsAPI graphicsAPI, Utility::Window* window);
 
     /// Destructor.
     ~Renderer();
@@ -50,12 +52,6 @@ class Renderer {
      * @return The low-level renderer.
      */
     LowLevelRenderer* GetLowLevelRenderer();
-
-    /// Set the size of the output image.
-    /**
-     * @param size The size of the output image.
-     */
-    void SetOutputSize(const glm::uvec2& size);
 
     /// Get the size of the render surface.
     /**
@@ -88,6 +84,12 @@ class Renderer {
      */
     CommandBuffer* GetCommandBuffer();
 
+    /// Get the window the renderer is using.
+    /**
+     * @return The window the renderer is using.
+     */
+    Utility::Window* GetWindow();
+
   private:
     Renderer(const Renderer& other) = delete;
 
@@ -103,6 +105,7 @@ class Renderer {
     void RenderSprites(const RenderScene& renderScene, const RenderScene::Camera& camera);
 
     LowLevelRenderer* lowLevelRenderer;
+    Utility::Window* window;
 
     glm::uvec2 outputSize;
     glm::uvec2 renderSurfaceSize;

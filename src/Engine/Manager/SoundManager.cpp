@@ -1,6 +1,8 @@
 #include "SoundManager.hpp"
 
+#if !ANDROID
 #include <AL/al.h>
+#endif
 #include <Utility/Log.hpp>
 #include "../Entity/World.hpp"
 #include "../Entity/Entity.hpp"
@@ -15,11 +17,13 @@
 #include <cstdint>
 #include <cstring>
 #include <algorithm>
-#include <GLFW/glfw3.h>
 
 using namespace Audio;
 
 SoundManager::SoundManager() {
+#if ANDROID
+    Log(Log::ERR) << "Sound not implemented on Android.";
+#else
     // Open default audio device.
     device = alcOpenDevice(nullptr);
     if (!device)
@@ -29,16 +33,21 @@ SoundManager::SoundManager() {
     context = alcCreateContext(device, nullptr);
     if (!alcMakeContextCurrent(context))
         Log() << "Couldn't create audio context.\n";
+#endif
 }
 
 SoundManager::~SoundManager() {
+#if !ANDROID
     alcMakeContextCurrent(nullptr);
     alcDestroyContext(context);
     alcCloseDevice(device);
+#endif
 }
 
 void SoundManager::SetVolume(float volume) {
+#if !ANDROID
     alListenerf(AL_GAIN, volume);
+#endif
     this->volume = volume;
 }
 
@@ -47,6 +56,7 @@ float SoundManager::GetVolume() const {
 }
 
 void SoundManager::CheckError(const char* message) {
+#if !ANDROID
     ALenum error = alGetError();
     if (error != AL_NO_ERROR) {
         Log() << message << "\n";
@@ -61,9 +71,11 @@ void SoundManager::CheckError(const char* message) {
         if (error == AL_OUT_OF_MEMORY)
             Log() << "Out of memory like!\n";
     }
+#endif
 }
 
 void SoundManager::Update() {
+#if !ANDROID
     // Update sound sources.
     for (Component::SoundSource* sound : soundSources.GetAll()) {
         if (sound->IsKilled() || !sound->entity->IsEnabled())
@@ -126,6 +138,7 @@ void SoundManager::Update() {
 
         break;
     }
+#endif
 }
 
 Component::SoundSource* SoundManager::CreateSoundSource() {

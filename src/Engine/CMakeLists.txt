@@ -7,7 +7,6 @@ set(SRCS
         ../../externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
         Engine.cpp
         Hymn.cpp
-        MainWindow.cpp
         Audio/SoundBuffer.cpp
         Audio/SoundFile.cpp
         Audio/VorbisFile.cpp
@@ -33,6 +32,7 @@ set(SRCS
         Geometry/Model.cpp
         Manager/Managers.cpp
         Manager/DebugDrawingManager.cpp
+        Manager/InputManager.cpp
         Manager/ProfilingManager.cpp
         Manager/PhysicsManager.cpp
         Manager/RenderManager.cpp
@@ -48,7 +48,6 @@ set(SRCS
         Trigger/TriggerRepeat.cpp
         Trigger/TriggerOnce.cpp
         Util/FileSystem.cpp
-        Util/Input.cpp
         Util/Json.cpp
         Util/MousePicking.cpp
         Util/RayIntersection.cpp
@@ -61,7 +60,6 @@ set(SRCS
 set(HEADERS
         Engine.hpp
         Hymn.hpp
-        MainWindow.hpp
         Audio/SoundBuffer.hpp
         Audio/SoundFile.hpp
         Audio/VorbisFile.hpp
@@ -88,6 +86,7 @@ set(HEADERS
         Geometry/Model.hpp
         Manager/Managers.hpp
         Manager/DebugDrawingManager.hpp
+        Manager/InputManager.hpp
         Manager/ProfilingManager.hpp
         Manager/PhysicsManager.hpp
         Manager/RenderManager.hpp
@@ -103,7 +102,6 @@ set(HEADERS
         Trigger/TriggerRepeat.hpp
         Trigger/TriggerOnce.hpp
         Util/FileSystem.hpp
-        Util/Input.hpp
         Util/Json.hpp
         Util/MousePicking.hpp
         Util/RayIntersection.hpp
@@ -113,27 +111,14 @@ set(HEADERS
         Input/Input.hpp
     )
 
-# Setup embedded source
-set(EMBEDDED_INPUT
-    ../../assets/Camera.png
-    ../../assets/DefaultAlbedo.png
-    ../../assets/DefaultNormal.png
-    ../../assets/DefaultRoughnessMetallic.png
-    ../../assets/Light.png
-    ../../assets/SoundSource.png
-)
-
-foreach(item ${EMBEDDED_INPUT})
-    ProcessWithHeaderize(EMBEDDED_HEADER EMBEDDED_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
-endforeach()
-
-set_property(SOURCE ${SRCS} APPEND PROPERTY OBJECT_DEPENDS ${EMBEDDED_HEADER})
-
 create_directory_groups(${SRCS} ${HEADERS})
 
-add_library(Engine STATIC ${SRCS} ${HEADERS} ${EMBEDDED_SOURCE})
+add_library(Engine STATIC ${SRCS} ${HEADERS})
 
-target_link_libraries(Engine Video angelscript bullet glm OpenALSoft simpleini stb)
+target_link_libraries(Engine Video angelscript bullet glm simpleini stb)
+if (NOT ANDROID)
+    target_link_libraries(Engine OpenALSoft)
+endif()
 
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)

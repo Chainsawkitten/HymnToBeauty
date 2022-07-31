@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 namespace Video {
 class LowLevelRenderer;
@@ -23,6 +24,14 @@ class TextureAsset {
      * @param sourceLength Length of the source string.
      */
     TextureAsset(Video::LowLevelRenderer* lowLevelRenderer, const char* source, int sourceLength);
+
+    /// Create new uniform texture asset with a specified color value.
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     * @param size The size of the texture in pixels.
+     * @param color The color value.
+     */
+    TextureAsset(Video::LowLevelRenderer* lowLevelRenderer, const glm::uvec2& size, const glm::vec4& color);
 
     /// Destructor.
     ~TextureAsset();

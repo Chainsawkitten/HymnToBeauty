@@ -8,7 +8,9 @@
 #include "../Interface/ShaderProgram.hpp"
 #include "VulkanCommandBuffer.hpp"
 
-struct GLFWwindow;
+namespace Utility {
+class Window;
+}
 
 namespace Video {
 
@@ -25,7 +27,7 @@ class VulkanRenderer : public LowLevelRenderer {
     /**
      * @param window The window to render to.
      */
-    explicit VulkanRenderer(GLFWwindow* window);
+    explicit VulkanRenderer(::Utility::Window* window);
 
     /// Destructor.
     ~VulkanRenderer() final;
@@ -133,7 +135,7 @@ class VulkanRenderer : public LowLevelRenderer {
     void CreateInstance();
     bool CheckValidationLayersSupported(const std::vector<const char*>& validationLayers) const;
 
-    void CreateSurface(GLFWwindow* window);
+    void CreateSurface(::Utility::Window* window);
 
     struct SwapChainSupport {
         VkSurfaceCapabilitiesKHR capabilities;

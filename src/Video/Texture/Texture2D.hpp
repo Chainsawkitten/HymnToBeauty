@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace Video {
 class Texture;
 class LowLevelRenderer;
@@ -22,6 +24,14 @@ class Texture2D {
      * @param sourceLength Length of the source string.
      */
     Texture2D(LowLevelRenderer* lowLevelRenderer, const char* source, int sourceLength);
+
+    /// Create new uniform texture with a specified value.
+    /**
+     * @param lowLevelRenderer The low-level renderer to use.
+     * @param size The size of the texture in pixels.
+     * @param color The color value.
+     */
+    Texture2D(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& size, const glm::vec4& color);
 
     /// Destructor.
     ~Texture2D();

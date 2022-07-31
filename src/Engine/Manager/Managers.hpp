@@ -3,6 +3,7 @@
 #include <Video/Renderer.hpp>
 
 class ResourceManager;
+class InputManager;
 class RenderManager;
 class PhysicsManager;
 class SoundManager;
@@ -21,6 +22,9 @@ class Hub {
 
     /// The resource manager instance.
     ResourceManager* resourceManager;
+
+    /// The input manager instance.
+    InputManager* inputManager;
 
     /// The render manager instance.
     RenderManager* renderManager;
@@ -46,8 +50,9 @@ class Hub {
     /// Initialize all subsystems.
     /**
      * @param graphicsAPI Which graphics API to use for rendering.
+     * @parma window The window to display in.
      */
-    void StartUp(Video::Renderer::GraphicsAPI graphicsAPI);
+    void StartUp(Video::Renderer::GraphicsAPI graphicsAPI, Utility::Window* window);
 
     /// Deinitialize all subsystems.
     void ShutDown();

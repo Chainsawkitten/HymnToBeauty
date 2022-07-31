@@ -17,6 +17,7 @@
 struct GLFWcursor;
 namespace Video {
 class LowLevelRenderer;
+class Texture2D;
 }
 
 /// Handles the main editor.
@@ -24,12 +25,16 @@ class Editor {
   public:
     /// Create new editor.
     /**
+     * @param window The window to display the editor in.
      * @param lowLevelRenderer The low-level renderer to use.
      */
-    explicit Editor(Video::LowLevelRenderer* lowLevelRenderer);
+    Editor(Utility::Window* window, Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Destructor.
     ~Editor();
+
+    /// Render the hymn using the editor's debug visualization settings.
+    void RenderHymn();
 
     /// Show the editor.
     /**
@@ -59,7 +64,7 @@ class Editor {
     /**
      * @return Are we closing the editor?
      */
-    bool isClosing() const;
+    bool IsClosing() const;
 
     /// Close the editor.
     void Close();
@@ -112,6 +117,8 @@ class Editor {
         int snapOption;
     } gridSettings;
 
+    Utility::Window* window = nullptr;
+
     bool visible = true;
     GUI::SelectHymnWindow selectHymnWindow;
     GUI::InputWindow inputWindow;
@@ -151,4 +158,8 @@ class Editor {
     GLFWcursor* cursors[5];
 
     ImGuizmo::MODE imguizmoMode = ImGuizmo::MODE::WORLD;
+
+    Video::Texture2D* lightTexture;
+    Video::Texture2D* soundSourceTexture;
+    Video::Texture2D* cameraTexture;
 };

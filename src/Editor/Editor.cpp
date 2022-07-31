@@ -3,15 +3,15 @@
 #include "Util/EditorSettings.hpp"
 #undef CreateDirectory
 
-#include <Engine/Util/Input.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/InputManager.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
 #include <Engine/Manager/SoundManager.hpp>
 #include <Engine/Manager/DebugDrawingManager.hpp>
 #include <Engine/Manager/RenderManager.hpp>
+#include <Engine/Manager/ResourceManager.hpp>
 #include <Engine/Util/FileSystem.hpp>
-#include <Engine/MainWindow.hpp>
 #include <Engine/Component/DirectionalLight.hpp>
 #include <Engine/Component/Camera.hpp>
 #include <Engine/Component/Listener.hpp>
@@ -29,9 +29,20 @@
 #include <glm/gtx/transform.hpp>
 #include <fstream>
 #include <Utility/Log.hpp>
+#include <Utility/Window.hpp>
+
+#include "Light.png.hpp"
+#include "SoundSource.png.hpp"
+#include "Camera.png.hpp"
 
 ImGuizmo::OPERATION currentOperation = ImGuizmo::TRANSLATE;
-Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLevelRenderer) {
+
+Editor::Editor(Utility::Window* window, Video::LowLevelRenderer* lowLevelRenderer) : resourceView(window, lowLevelRenderer) {
+    assert(window != nullptr);
+    assert(lowLevelRenderer != nullptr);
+
+    this->window = window;
+
     // Create Hymns directory.
     FileSystem::CreateDirectory((FileSystem::DataPath("Hymn to Beauty") + FileSystem::DELIMITER + "Hymns").c_str());
 
@@ -45,24 +56,24 @@ Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLeve
     selectedEntity = nullptr;
 
     // Assign controls.
-    Input()->AssignButton(InputHandler::PROFILE, InputHandler::KEYBOARD, GLFW_KEY_F2);
-    Input()->AssignButton(InputHandler::WINDOWMODE, InputHandler::KEYBOARD, GLFW_KEY_F4);
-    Input()->AssignButton(InputHandler::PLAYTEST, InputHandler::KEYBOARD, GLFW_KEY_F5);
-    Input()->AssignButton(InputHandler::CONTROL, InputHandler::KEYBOARD, GLFW_KEY_LEFT_CONTROL);
-    Input()->AssignButton(InputHandler::NEW, InputHandler::KEYBOARD, GLFW_KEY_N);
-    Input()->AssignButton(InputHandler::OPEN, InputHandler::KEYBOARD, GLFW_KEY_O);
-    Input()->AssignButton(InputHandler::SAVE, InputHandler::KEYBOARD, GLFW_KEY_S);
-    Input()->AssignButton(InputHandler::CAMERA, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_MIDDLE);
-    Input()->AssignButton(InputHandler::FORWARD, InputHandler::KEYBOARD, GLFW_KEY_W);
-    Input()->AssignButton(InputHandler::BACKWARD, InputHandler::KEYBOARD, GLFW_KEY_S);
-    Input()->AssignButton(InputHandler::LEFT, InputHandler::KEYBOARD, GLFW_KEY_A);
-    Input()->AssignButton(InputHandler::RIGHT, InputHandler::KEYBOARD, GLFW_KEY_D);
-    Input()->AssignButton(InputHandler::ZOOM, InputHandler::KEYBOARD, GLFW_KEY_Z);
-    Input()->AssignButton(InputHandler::SELECT, InputHandler::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
-    Input()->AssignButton(InputHandler::FOCUS, InputHandler::KEYBOARD, GLFW_KEY_F);
-    Input()->AssignButton(InputHandler::W, InputHandler::KEYBOARD, GLFW_KEY_W);
-    Input()->AssignButton(InputHandler::E, InputHandler::KEYBOARD, GLFW_KEY_E);
-    Input()->AssignButton(InputHandler::R, InputHandler::KEYBOARD, GLFW_KEY_R);
+    Managers().inputManager->AssignButton(InputManager::PROFILE, InputManager::KEYBOARD, GLFW_KEY_F2);
+    Managers().inputManager->AssignButton(InputManager::WINDOWMODE, InputManager::KEYBOARD, GLFW_KEY_F4);
+    Managers().inputManager->AssignButton(InputManager::PLAYTEST, InputManager::KEYBOARD, GLFW_KEY_F5);
+    Managers().inputManager->AssignButton(InputManager::CONTROL, InputManager::KEYBOARD, GLFW_KEY_LEFT_CONTROL);
+    Managers().inputManager->AssignButton(InputManager::NEW, InputManager::KEYBOARD, GLFW_KEY_N);
+    Managers().inputManager->AssignButton(InputManager::OPEN, InputManager::KEYBOARD, GLFW_KEY_O);
+    Managers().inputManager->AssignButton(InputManager::SAVE, InputManager::KEYBOARD, GLFW_KEY_S);
+    Managers().inputManager->AssignButton(InputManager::CAMERA, InputManager::MOUSE, GLFW_MOUSE_BUTTON_MIDDLE);
+    Managers().inputManager->AssignButton(InputManager::FORWARD, InputManager::KEYBOARD, GLFW_KEY_W);
+    Managers().inputManager->AssignButton(InputManager::BACKWARD, InputManager::KEYBOARD, GLFW_KEY_S);
+    Managers().inputManager->AssignButton(InputManager::LEFT, InputManager::KEYBOARD, GLFW_KEY_A);
+    Managers().inputManager->AssignButton(InputManager::RIGHT, InputManager::KEYBOARD, GLFW_KEY_D);
+    Managers().inputManager->AssignButton(InputManager::ZOOM, InputManager::KEYBOARD, GLFW_KEY_Z);
+    Managers().inputManager->AssignButton(InputManager::SELECT, InputManager::MOUSE, GLFW_MOUSE_BUTTON_LEFT);
+    Managers().inputManager->AssignButton(InputManager::FOCUS, InputManager::KEYBOARD, GLFW_KEY_F);
+    Managers().inputManager->AssignButton(InputManager::W, InputManager::KEYBOARD, GLFW_KEY_W);
+    Managers().inputManager->AssignButton(InputManager::E, InputManager::KEYBOARD, GLFW_KEY_E);
+    Managers().inputManager->AssignButton(InputManager::R, InputManager::KEYBOARD, GLFW_KEY_R);
 
     // Create editor camera.
     cameraEntity = cameraWorld.CreateEntity("Editor Camera");
@@ -91,6 +102,11 @@ Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLeve
     gridSettings.lineWidth = EditorSettings::GetInstance().GetLong("Grid Line Width");
     gridSettings.gridSnap = EditorSettings::GetInstance().GetBool("Grid Snap");
     gridSettings.snapOption = EditorSettings::GetInstance().GetLong("Grid Snap Size");
+
+    // Create icons to show debug information with.
+    lightTexture = Managers().resourceManager->CreateTexture2D(LIGHT_PNG, LIGHT_PNG_LENGTH);
+    soundSourceTexture = Managers().resourceManager->CreateTexture2D(SOUNDSOURCE_PNG, SOUNDSOURCE_PNG_LENGTH);
+    cameraTexture = Managers().resourceManager->CreateTexture2D(CAMERA_PNG, CAMERA_PNG_LENGTH);
 }
 
 Editor::~Editor() {
@@ -98,6 +114,25 @@ Editor::~Editor() {
     for (int i = 0; i < 5; ++i) {
         glfwDestroyCursor(cursors[i]);
     }
+
+    Managers().resourceManager->FreeTexture2D(lightTexture);
+    Managers().resourceManager->FreeTexture2D(soundSourceTexture);
+    Managers().resourceManager->FreeTexture2D(cameraTexture);
+}
+
+void Editor::RenderHymn() {
+    RenderManager::DebugConfiguration debugConfiguration = {};
+    debugConfiguration.showCameras = EditorSettings::GetInstance().GetBool("Camera Icons");
+    debugConfiguration.cameraTexture = cameraTexture;
+    debugConfiguration.showLightSources = EditorSettings::GetInstance().GetBool("Light Source Icons");
+    debugConfiguration.lightTexture = lightTexture;
+    debugConfiguration.showSoundSources = EditorSettings::GetInstance().GetBool("Sound Source Icons");
+    debugConfiguration.soundSourceTexture = soundSourceTexture;
+    debugConfiguration.showLightVolumes = EditorSettings::GetInstance().GetBool("Light Volumes");
+    debugConfiguration.showPhysics = EditorSettings::GetInstance().GetBool("Physics Volumes");
+    debugConfiguration.unlit = !EditorSettings::GetInstance().GetBool("Lighting");
+
+    Hymn().Render(debugConfiguration, GetCamera());
 }
 
 void Editor::Show(float deltaTime) {
@@ -175,14 +210,14 @@ void Editor::Show(float deltaTime) {
         Focus();
 
         // Scroll zoom.
-        if (Input()->GetScrollDown()) {
+        if (Managers().inputManager->GetScrollDown()) {
             if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
                 glm::vec3 backward = cameraEntity->GetWorldOrientation() * glm::vec3(0, 0, 1);
                 float speed = 2.0f * deltaTime * glm::length(cameraEntity->position);
                 cameraEntity->position += speed * backward;
             }
         }
-        if (Input()->GetScrollUp()) {
+        if (Managers().inputManager->GetScrollUp()) {
             if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
                 glm::vec3 backward = cameraEntity->GetWorldOrientation() * glm::vec3(0, 0, 1);
                 float speed = 2.0f * deltaTime * glm::length(cameraEntity->position);
@@ -190,16 +225,16 @@ void Editor::Show(float deltaTime) {
             }
         }
 
-        if (Input()->Triggered(InputHandler::PLAYTEST) && Hymn().GetPath() != "")
+        if (Managers().inputManager->Triggered(InputManager::PLAYTEST) && Hymn().GetPath() != "")
             play = true;
 
-        if (Input()->Triggered(InputHandler::NEW) && Input()->Pressed(InputHandler::CONTROL))
+        if (Managers().inputManager->Triggered(InputManager::NEW) && Managers().inputManager->Pressed(InputManager::CONTROL))
             NewHymn();
 
-        if (Input()->Triggered(InputHandler::OPEN) && Input()->Pressed(InputHandler::CONTROL))
+        if (Managers().inputManager->Triggered(InputManager::OPEN) && Managers().inputManager->Pressed(InputManager::CONTROL))
             OpenHymn();
 
-        if (Hymn().GetPath() != "" && Input()->Triggered(InputHandler::SAVE) && Input()->Pressed(InputHandler::CONTROL))
+        if (Hymn().GetPath() != "" && Managers().inputManager->Triggered(InputManager::SAVE) && Managers().inputManager->Pressed(InputManager::CONTROL))
             Save();
 
         if (play)
@@ -208,7 +243,7 @@ void Editor::Show(float deltaTime) {
 
     // Set cursor.
     if (ImGui::GetMouseCursor() < 5) {
-        glfwSetCursor(MainWindow::GetInstance()->GetGLFWWindow(), cursors[ImGui::GetMouseCursor()]);
+        glfwSetCursor(window->GetGLFWWindow(), cursors[ImGui::GetMouseCursor()]);
     }
 
     // Get current active Entity.
@@ -310,7 +345,7 @@ bool Editor::ReadyToClose() const {
     return savePromptAnswered;
 }
 
-bool Editor::isClosing() const {
+bool Editor::IsClosing() const {
     return close;
 }
 
@@ -331,7 +366,7 @@ Entity* Editor::GetCamera() const {
 }
 
 void Editor::ShowMainMenuBar(bool& play) {
-    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+    ImVec2 size(window->GetSize().x, window->GetSize().y);
 
     // Main menu bar.
     if (ImGui::BeginMainMenuBar()) {
@@ -415,7 +450,7 @@ void Editor::ShowMainMenuBar(bool& play) {
         }
 
         if (Hymn().GetPath() != "") {
-            if (Input()->Triggered(InputHandler::ZOOM)) {
+            if (Managers().inputManager->Triggered(InputManager::ZOOM)) {
                 if (resourceView.GetScene().entityEditor.GetEntity() != nullptr) {
                     const glm::vec3 tempPos = resourceView.GetScene().entityEditor.GetEntity()->GetWorldPosition();
                     cameraEntity->position = tempPos + glm::vec3(0, 7, 7);
@@ -434,7 +469,7 @@ void Editor::ShowMainMenuBar(bool& play) {
 
 void Editor::ShowGridSettings() {
     if (showGridSettings) {
-        glm::vec2 size(MainWindow::GetInstance()->GetSize());
+        glm::vec2 size(window->GetSize());
         ImGui::SetNextWindowPos(ImVec2((int)size.x - 255 - static_cast<float>(resourceView.GetEditorWidth()), 20));
         ImGui::SetNextWindowSizeConstraints(ImVec2(255, 105), ImVec2(255, 105));
         ImGui::Begin("Grid Settings", &showGridSettings, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
@@ -473,19 +508,19 @@ void Editor::CreateGrid(int size) {
 }
 
 void Editor::ControlEditorCamera(float deltaTime) {
-    if (Input()->Pressed(InputHandler::CAMERA)) {
-        if (Input()->Triggered(InputHandler::CAMERA)) {
-            lastX = Input()->GetCursorX();
-            lastY = Input()->GetCursorY();
+    if (Managers().inputManager->Pressed(InputManager::CAMERA)) {
+        if (Managers().inputManager->Triggered(InputManager::CAMERA)) {
+            lastX = Managers().inputManager->GetCursorX();
+            lastY = Managers().inputManager->GetCursorY();
         }
         float sensitivity = 0.3f;
-        float horizontal = glm::radians(sensitivity * static_cast<float>(lastX - Input()->GetCursorX()));
-        float vertical = glm::radians(sensitivity * static_cast<float>(lastY - Input()->GetCursorY()));
+        float horizontal = glm::radians(sensitivity * static_cast<float>(lastX - Managers().inputManager->GetCursorX()));
+        float vertical = glm::radians(sensitivity * static_cast<float>(lastY - Managers().inputManager->GetCursorY()));
         cameraEntity->RotatePitch(vertical);
         cameraEntity->RotateAroundWorldAxis(horizontal, glm::vec3(0.0f, 1.0f, 0.0f));
 
-        lastX = Input()->GetCursorX();
-        lastY = Input()->GetCursorY();
+        lastX = Managers().inputManager->GetCursorX();
+        lastY = Managers().inputManager->GetCursorY();
 
         glm::mat4 orientation = glm::toMat4(glm::inverse(cameraEntity->GetWorldOrientation()));
         glm::vec3 backward(orientation[0][2], orientation[1][2], orientation[2][2]);
@@ -496,18 +531,18 @@ void Editor::ControlEditorCamera(float deltaTime) {
         float constantSpeed = 10.0f * deltaTime;
 
         if (cameraEntity->position.y > 10.0f || cameraEntity->position.y < -10.0f) {
-            cameraEntity->position += speed * backward * static_cast<float>(Input()->Pressed(InputHandler::BACKWARD) - Input()->Pressed(InputHandler::FORWARD));
-            cameraEntity->position += speed * right * static_cast<float>(Input()->Pressed(InputHandler::RIGHT) - Input()->Pressed(InputHandler::LEFT));
+            cameraEntity->position += speed * backward * static_cast<float>(Managers().inputManager->Pressed(InputManager::BACKWARD) - Managers().inputManager->Pressed(InputManager::FORWARD));
+            cameraEntity->position += speed * right * static_cast<float>(Managers().inputManager->Pressed(InputManager::RIGHT) - Managers().inputManager->Pressed(InputManager::LEFT));
         } else {
-            cameraEntity->position += constantSpeed * backward * static_cast<float>(Input()->Pressed(InputHandler::BACKWARD) - Input()->Pressed(InputHandler::FORWARD));
-            cameraEntity->position += constantSpeed * right * static_cast<float>(Input()->Pressed(InputHandler::RIGHT) - Input()->Pressed(InputHandler::LEFT));
+            cameraEntity->position += constantSpeed * backward * static_cast<float>(Managers().inputManager->Pressed(InputManager::BACKWARD) - Managers().inputManager->Pressed(InputManager::FORWARD));
+            cameraEntity->position += constantSpeed * right * static_cast<float>(Managers().inputManager->Pressed(InputManager::RIGHT) - Managers().inputManager->Pressed(InputManager::LEFT));
         }
     }
 }
 
 void Editor::Picking() {
-    if (Input()->Pressed(InputHandler::CONTROL) && Input()->Triggered(InputHandler::SELECT) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-        const glm::mat4 projection = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
+    if (Managers().inputManager->Pressed(InputManager::CONTROL) && Managers().inputManager->Triggered(InputManager::SELECT) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
+        const glm::mat4 projection = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(window->GetSize().x, window->GetSize().y));
         float lastDistance = INFINITY;
 
         // Deselect last entity.
@@ -526,7 +561,7 @@ void Editor::Picking() {
                 Component::Mesh* mesh = entity->GetComponent<Component::Mesh>();
                 const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->model != nullptr ? mesh->model->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
                 // Intersect with aabo.
-                const glm::vec3 rayDirection = MousePicking::GetRayDirection(cameraEntity, projection, MainWindow::GetInstance()->GetWindow());
+                const glm::vec3 rayDirection = MousePicking::GetRayDirection(cameraEntity, projection, window);
                 if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), rayDirection, aabo, entity->GetModelMatrix(), intersectDistance)) {
                     if (intersectDistance < lastDistance && intersectDistance > 0.f) {
                         lastDistance = intersectDistance;
@@ -544,7 +579,7 @@ void Editor::Picking() {
 }
 
 void Editor::Focus() {
-    if (Input()->Triggered(InputHandler::FOCUS)) {
+    if (Managers().inputManager->Triggered(InputManager::FOCUS)) {
         if (selectedEntity != nullptr) {
             glm::vec3 backward = glm::normalize(cameraEntity->position - selectedEntity->position);
 
@@ -621,7 +656,7 @@ void Editor::PaintBrush(Entity* entity) {
             glm::vec3 p2;
 
             mousePicker.Update();
-            mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
+            mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(window->GetSize().x, window->GetSize().y)));
 
             float intersectT = INFINITY;
 
@@ -653,7 +688,7 @@ void Editor::PaintBrush(Entity* entity) {
 
             // Paint objects (scenes).
             // Draw them when mouse pressed.
-            if (Input()->Pressed(InputHandler::SELECT) && intersect && paintTimer >= paintSpawnRate[0] && toolMenuPressed == false) {
+            if (Managers().inputManager->Pressed(InputManager::SELECT) && intersect && paintTimer >= paintSpawnRate[0] && toolMenuPressed == false) {
                 if (entity->GetChild("foliage") == nullptr)
                     parentEntity = entity->AddChild("foliage");
 
@@ -697,20 +732,20 @@ void Editor::WidgetGizmo(Entity* entity) {
     currentEntityMatrix = entity->GetLocalMatrix();
 
     // Projection matrix.
-    glm::mat4 projectionMatrix = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
+    glm::mat4 projectionMatrix = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(window->GetSize().x, window->GetSize().y));
 
     // View matrix.
     glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
 
     // Change operation based on key input.
     if (!ImGuizmo::IsUsing()) {
-        if (Input()->Triggered(InputHandler::W)) {
+        if (Managers().inputManager->Triggered(InputManager::W)) {
             currentOperation = ImGuizmo::TRANSLATE;
             imguizmoMode = ImGuizmo::MODE::WORLD;
-        } else if (Input()->Triggered(InputHandler::E)) {
+        } else if (Managers().inputManager->Triggered(InputManager::E)) {
             currentOperation = ImGuizmo::ROTATE;
             imguizmoMode = ImGuizmo::MODE::WORLD;
-        } else if (Input()->Triggered(InputHandler::R)) {
+        } else if (Managers().inputManager->Triggered(InputManager::R)) {
             currentOperation = ImGuizmo::SCALE;
             imguizmoMode = ImGuizmo::MODE::LOCAL;
         }

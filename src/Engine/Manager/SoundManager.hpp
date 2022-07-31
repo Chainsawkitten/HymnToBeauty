@@ -1,6 +1,8 @@
 #pragma once
 
+#if !ANDROID
 #include <AL/alc.h>
+#endif
 #include "../Entity/ComponentContainer.hpp"
 
 namespace Component {
@@ -9,6 +11,7 @@ class SoundSource;
 } // namespace Component
 
 /// Handles OpenAL sound.
+/// @todo Android sound support.
 class SoundManager {
     friend class Hub;
 
@@ -67,8 +70,10 @@ class SoundManager {
     SoundManager(SoundManager const&) = delete;
     void operator=(SoundManager const&) = delete;
 
+#if !ANDROID
     ALCdevice* device;
     ALCcontext* context;
+#endif
 
     float volume = 1.f;
 

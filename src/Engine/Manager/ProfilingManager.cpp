@@ -1,7 +1,7 @@
 #include "ProfilingManager.hpp"
 
-#include <GLFW/glfw3.h>
 #include <Utility/Log.hpp>
+#include <Utility/Time.hpp>
 #include "RenderManager.hpp"
 #include "Managers.hpp"
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
@@ -22,12 +22,12 @@ ProfilingManager::~ProfilingManager() {
 }
 
 void ProfilingManager::BeginFrame() {
-    frameStart = glfwGetTime();
+    frameStart = Utility::GetTime();
 
     if (active) {
         // Add new frame node to main thread.
         currentFrameEvent = mainThread->AddEvent("Frame " + std::to_string(currentFrame));
-        currentFrameEvent->time = glfwGetTime();
+        currentFrameEvent->time = Utility::GetTime();
         currentFrameEvent->duration = 0.0;
         Profiling::currentEvent = currentFrameEvent;
     }
@@ -35,14 +35,14 @@ void ProfilingManager::BeginFrame() {
 
 void ProfilingManager::EndFrame() {
     // Calculate the CPU time of this frame.
-    frameTimes[0][frame] = static_cast<float>((glfwGetTime() - frameStart) * 1000.0);
+    frameTimes[0][frame] = static_cast<float>((Utility::GetTime() - frameStart) * 1000.0);
 
     if (++frame >= frames)
         frame = 0;
 
     if (active) {
         // Get main thread time of the frame.
-        currentFrameEvent->duration = glfwGetTime() - currentFrameEvent->time;
+        currentFrameEvent->duration = Utility::GetTime() - currentFrameEvent->time;
     }
 
     currentFrame++;

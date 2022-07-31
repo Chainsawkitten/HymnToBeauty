@@ -4,10 +4,19 @@
 #include <vector>
 #include <glm/detail/type_vec2.hpp>
 
+#if !ANDROID
 struct GLFWwindow;
+#endif
 
-/// Class that handles input.
-class InputHandler {
+namespace Utility {
+class Window;
+}
+
+/// Handles input devices.
+/// @todo Android
+class InputManager {
+    friend class Hub;
+
   public:
     /// Button codes.
     enum Button {
@@ -38,21 +47,6 @@ class InputHandler {
         MOUSE,         ///< Mouse buttons
         INPUT_DEVICES, ///< Number of input devices
     };
-
-    /// Create new input handler.
-    /**
-     * @param window %Window to get input for.
-     */
-    explicit InputHandler(GLFWwindow* window);
-
-    /// Get currently active input handler.
-    /**
-     * @return The currently active input handler or nullptr.
-     */
-    static InputHandler* GetActiveInstance();
-
-    /// Set as currently active input handler.
-    void SetActive();
 
     /// Update input state.
     void Update();
@@ -125,9 +119,14 @@ class InputHandler {
     void ScrollCallback(double yOffset);
 
   private:
-    static InputHandler* activeInstance;
+    InputManager(Utility::Window* window);
+    ~InputManager();
+    InputManager(InputManager const&) = delete;
+    void operator=(InputManager const&) = delete;
 
-    GLFWwindow* window;
+#if !ANDROID
+    GLFWwindow* glfwWindow;
+#endif
 
     // Bindings
     struct Binding {
@@ -154,9 +153,3 @@ class InputHandler {
 
     std::string text = "", tempText = "";
 };
-
-/// Get currently active input handler.
-/**
- * @return The currently active input handler or nullptr.
- */
-InputHandler* Input();

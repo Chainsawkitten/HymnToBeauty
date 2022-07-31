@@ -11,18 +11,15 @@
 #include <Utility/Log.hpp>
 #include "../Audio/VorbisFile.hpp"
 
-#include "DefaultAlbedo.png.hpp"
-#include "DefaultNormal.png.hpp"
-#include "DefaultRoughnessMetallic.png.hpp"
-
 using namespace std;
 
 ResourceManager::ResourceManager(Video::Renderer* renderer) {
     this->lowLevelRenderer = renderer->GetLowLevelRenderer();
 
-    defaultAlbedo = new TextureAsset(lowLevelRenderer, DEFAULTALBEDO_PNG, DEFAULTALBEDO_PNG_LENGTH);
-    defaultNormal = new TextureAsset(lowLevelRenderer, DEFAULTNORMAL_PNG, DEFAULTNORMAL_PNG_LENGTH);
-    defaultRoughnessMetallic = new TextureAsset(lowLevelRenderer, DEFAULTROUGHNESSMETALLIC_PNG, DEFAULTROUGHNESSMETALLIC_PNG_LENGTH);
+    // Create default textures for when no (valid) texture has been specified.
+    defaultAlbedo = new TextureAsset(lowLevelRenderer, glm::uvec2(4, 4), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    defaultNormal = new TextureAsset(lowLevelRenderer, glm::uvec2(4, 4), glm::vec4(0.5f, 0.5f, 1.0f, 1.0f));
+    defaultRoughnessMetallic = new TextureAsset(lowLevelRenderer, glm::uvec2(4, 4), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 ResourceManager::~ResourceManager() {

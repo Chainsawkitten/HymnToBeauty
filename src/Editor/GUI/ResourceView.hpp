@@ -9,6 +9,9 @@
 #include "FolderNameWindow.hpp"
 #include "../Resources.hpp"
 
+namespace Utility {
+class Window;
+}
 namespace Video {
 class LowLevelRenderer;
 }
@@ -19,9 +22,10 @@ class ResourceView {
   public:
     /// Create new resource view.
     /**
+     * @param window The window the display the resource view in.
      * @param lowLevelRenderer The low-level renderer to use.
      */
-    explicit ResourceView(Video::LowLevelRenderer* lowLevelRenderer);
+    ResourceView(Utility::Window* window, Video::LowLevelRenderer* lowLevelRenderer);
 
     /// Show the resource list.
     void Show();
@@ -79,6 +83,7 @@ class ResourceView {
     bool ShowResource(ResourceList::ResourceFolder& folder, ResourceList::Resource& resource, const std::string& path);
     void FileNameWindowClosed(const std::string& name);
 
+    Utility::Window* window;
     Video::LowLevelRenderer* lowLevelRenderer;
 
     bool visible = false;

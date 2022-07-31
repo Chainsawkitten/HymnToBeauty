@@ -6,7 +6,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(UNIX OR MINGW)
+# Compiler flags
+if(ANDROID)
+    
+elseif(UNIX OR MINGW)
     option(HTB_DEBUG_INFO "Build Hymn to Beauty with DWARF debug data." OFF)
     if(HTB_DEBUG_INFO)
         set(DEBUG_DATA "-gdwarf-2")
@@ -19,11 +22,16 @@ elseif(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-option(OpenGLRenderer "OpenGL Renderer" ON)
+# Renderer backends
+if(NOT ANDROID)
+    # OpenGL backend is not supported on Android
+    option(OpenGLRenderer "OpenGL Renderer" ON)
+endif()
 option(VulkanRenderer "Vulkan Renderer" OFF)
 
 # Externals
 add_subdirectory(externals)
+add_subdirectory(tools)
 
 # This function should be passed a list of all files in a target. It will automatically generate
 # file groups following the directory hierarchy, so that the layout of the files in IDEs matches the
@@ -42,20 +50,24 @@ function(create_directory_groups)
 endfunction()
 
 # Doxygen documentation
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-    add_custom_target(docs
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Generating documentation with Doxygen" VERBATIM
-    )
+if(NOT ANDROID)
+    find_package(Doxygen)
+    if(DOXYGEN_FOUND)
+        add_custom_target(docs
+            ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Generating documentation with Doxygen" VERBATIM
+        )
+    endif()
 endif()
 
 # Source files
 add_subdirectory(src)
 
 # Tests
-option(HTB_TESTS "Build tests" ON)
-if (HTB_TESTS)
-    add_subdirectory(tests)
+if(NOT ANDROID)
+    option(HTB_TESTS "Build tests" ON)
+    if (HTB_TESTS)
+        add_subdirectory(tests)
+    endif()
 endif()

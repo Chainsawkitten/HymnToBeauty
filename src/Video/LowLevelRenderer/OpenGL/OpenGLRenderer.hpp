@@ -7,6 +7,10 @@
 
 struct GLFWwindow;
 
+namespace Utility {
+class Window;
+}
+
 namespace Video {
 
 class OpenGLShaderProgram;
@@ -22,7 +26,7 @@ class OpenGLRenderer : public LowLevelRenderer {
     /**
      * @param window The window to render to.
      */
-    explicit OpenGLRenderer(GLFWwindow* window);
+    explicit OpenGLRenderer(Utility::Window* window);
 
     /// Destructor.
     ~OpenGLRenderer() final;
