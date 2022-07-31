@@ -11,13 +11,17 @@
 using namespace Component;
 
 SoundSource::SoundSource() {
+#if !ANDROID
     alGenSources(1, &source);
+#endif
 
     soundBuffer = new Audio::SoundBuffer();
 }
 
 SoundSource::~SoundSource() {
+#if !ANDROID
     alDeleteSources(1, &source);
+#endif
 
     Audio::SoundFile* soundFile = soundBuffer->GetSoundFile();
     if (soundFile)

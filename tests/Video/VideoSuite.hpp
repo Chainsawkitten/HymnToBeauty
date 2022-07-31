@@ -3,9 +3,11 @@
 #include <Framework/TestSuite.hpp>
 #include <Video/Renderer.hpp>
 
-struct GLFWwindow;
 namespace Video {
 class LowLevelRenderer;
+}
+namespace Utility {
+class Window;
 }
 
 /// Suite testing the Video module.
@@ -33,7 +35,7 @@ class VideoSuite : public TestSuite {
     Video::Renderer::GraphicsAPI graphicsAPI;
     Video::LowLevelRenderer* lowLevelRenderer;
 
-    GLFWwindow* window;
+    Utility::Window* window;
 };
 
 /// Draw a colored triangle generated in the shader based on vertex index.

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "SuperComponent.hpp"
+#if !ANDROID
 #include <AL/al.h>
+#endif
 
 class SoundManager;
 namespace Audio {
@@ -44,7 +46,9 @@ class SoundSource : public SuperComponent {
     bool loop = false;
 
   private:
+#if !ANDROID
     ALuint source;
+#endif
 
     bool shouldPlay = false;
     bool shouldPause = false;

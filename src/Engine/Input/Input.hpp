@@ -3,13 +3,16 @@
 #include <json/json.h>
 #include <vector>
 
-struct GLFWwindow;
-
-namespace Component {
-class VRDevice;
+namespace Utility {
+class Window;
 }
 
+#if !ANDROID
+struct GLFWwindow;
+#endif
+
 /// Hold information about the hymn's inputs.
+/// @todo Android
 class Input {
   public:
     /// The information needed to identify a button.
@@ -35,9 +38,9 @@ class Input {
 
     /// Set the window to check for input against.
     /**
-     * @param window The target GLFWwindow.
+     * @param window The window to get input from.
      */
-    void SetWindow(GLFWwindow* window);
+    void SetWindow(Utility::Window* window);
 
     /// Check if a button was activated this frame.
     /**
@@ -59,7 +62,9 @@ class Input {
     void Load(const Json::Value& buttonsNode);
 
   private:
+#if !ANDROID
     GLFWwindow* window;
+#endif
 
     Input() {}
 

@@ -4,6 +4,10 @@
 #include <iostream>
 #include <cassert>
 
+#if ANDROID
+#include <android/log.h>
+#endif
+
 using namespace std;
 
 static bool callbackSet = false;
@@ -28,6 +32,25 @@ Log::~Log() {
         fileStream << message.str();
 
     // Output the message to standard output as well.
+#if ANDROID
+    android_LogPriority priority;
+    switch (currentChannel) {
+    case INFO:
+        priority = ANDROID_LOG_INFO;
+        break;
+    case WARNING:
+        priority = ANDROID_LOG_WARN;
+        break;
+    case ERR:
+        priority = ANDROID_LOG_ERROR;
+        break;
+    default:
+        priority = ANDROID_LOG_DEFAULT;
+        break;
+    }
+
+    __android_log_print(priority, "Hymn to Beauty", "%s", message.str().c_str());
+#else
     ostream* str;
     switch (currentChannel) {
     case WARNING:
@@ -40,6 +63,7 @@ Log::~Log() {
     }
     *str << message.str();
     str->flush();
+#endif
 }
 
 Log& Log::operator<<(const string& text) {

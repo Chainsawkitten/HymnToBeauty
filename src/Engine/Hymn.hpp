@@ -5,6 +5,7 @@
 #include <json/json.h>
 #include <glm/glm.hpp>
 #include "Entity/World.hpp"
+#include <Engine/Manager/RenderManager.hpp>
 
 class ScriptFile;
 
@@ -63,15 +64,10 @@ class ActiveHymn {
 
     /// Render the world.
     /**
+     * @param debugConfiguration Configuration for visualizing debug information.
      * @param camera Camera through which to render (or first camera in the world if nullptr).
-     * @param showSoundSources Whether to show sound sources.
-     * @param showLightSources Whether to show light sources.
-     * @param showCameras Whether to show cameras.
-     * @param showPhysics Whether to show physics volumes.
-     * @param lighting Whether to light the world (otherwise full ambient is used).
-     * @param showLightVolumes Whether to show light culling volumes.
      */
-    void Render(Entity* camera = nullptr, bool showSoundSources = false, bool showLightSources = false, bool showCameras = false, bool showPhysics = false, bool lighting = true, bool showLightVolumes = false);
+    void Render(const RenderManager::DebugConfiguration& debugConfiguration, Entity* camera = nullptr);
 
     /// Find entity via GUID.
     /**

@@ -1,13 +1,13 @@
 #include <Engine/Engine.hpp>
-#include <Engine/MainWindow.hpp>
 #include "Editor.hpp"
 #include "Util/EditorSettings.hpp"
-#include <Engine/Util/Input.hpp>
 #include <Engine/Util/FileSystem.hpp>
 #include <Utility/Log.hpp>
 #include <Utility/Profiling/Profiling.hpp>
+#include <Utility/Window.hpp>
 #include <Engine/Input/Input.hpp>
 #include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/InputManager.hpp>
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <Engine/Manager/RenderManager.hpp>
 #include <Engine/Hymn.hpp>
@@ -40,14 +40,14 @@ int main() {
         return -1;
 
     // Setup imgui implementation.
-    MainWindow* window = engine.GetMainWindow();
+    Utility::Window* window = engine.GetWindow();
     ImGuiImplementation::Init(window->GetGLFWWindow(), Managers().renderManager->GetRenderer());
 
-    Editor* editor = new Editor(Managers().renderManager->GetRenderer()->GetLowLevelRenderer());
+    Editor* editor = new Editor(window, Managers().renderManager->GetRenderer()->GetLowLevelRenderer());
 
     // Main loop.
     while (!engine.ShouldClose() || !editor->ReadyToClose()) {
-        if (Input()->Triggered(InputHandler::PROFILE)) {
+        if (Managers().inputManager->Triggered(InputManager::PROFILE)) {
             Managers().profilingManager->SetActive(!Managers().profilingManager->Active());
         }
 
@@ -58,19 +58,19 @@ int main() {
         ImGuiImplementation::NewFrame();
 
         if (editor->IsVisible()) {
-            Hymn().Render(editor->GetCamera(), EditorSettings::GetInstance().GetBool("Sound Source Icons"), EditorSettings::GetInstance().GetBool("Light Source Icons"), EditorSettings::GetInstance().GetBool("Camera Icons"), EditorSettings::GetInstance().GetBool("Physics Volumes"), EditorSettings::GetInstance().GetBool("Lighting"), EditorSettings::GetInstance().GetBool("Light Volumes"));
+            editor->RenderHymn();
 
             if (window->ShouldClose())
                 editor->Close();
 
             editor->Show(static_cast<float>(engine.GetDeltaTime()));
 
-            if (window->ShouldClose() && !editor->isClosing())
+            if (window->ShouldClose() && !editor->IsClosing())
                 window->CancelClose();
         } else {
             engine.Render();
 
-            if (Input()->Triggered(InputHandler::PLAYTEST)) {
+            if (Managers().inputManager->Triggered(InputManager::PLAYTEST)) {
                 // Rollback to the editor state.
                 editor->LoadSceneState();
 

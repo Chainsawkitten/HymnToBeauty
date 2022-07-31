@@ -47,6 +47,26 @@ Texture2D::Texture2D(LowLevelRenderer* lowLevelRenderer, const char* source, int
     loaded = true;
 }
 
+Texture2D::Texture2D(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& size, const glm::vec4& color) {
+    // Copy the specified value to all pixels.
+    unsigned char value[4];
+    value[0] = static_cast<unsigned char>(color.r * 255.0f);
+    value[1] = static_cast<unsigned char>(color.g * 255.0f);
+    value[2] = static_cast<unsigned char>(color.b * 255.0f);
+    value[3] = static_cast<unsigned char>(color.a * 255.0f);
+
+    unsigned char* data = new unsigned char[4 * size.x * size.y];
+    for (unsigned int i = 0; i < 4 * size.x * size.y; ++i) {
+        data[i] = value[i % 4];
+    }
+
+    texture = lowLevelRenderer->CreateTexture(size, Texture::Format::R8G8B8A8, 4, data);
+
+    delete[] data;
+
+    loaded = true;
+}
+
 Texture2D::~Texture2D() {
     if (texture != nullptr)
         delete texture;

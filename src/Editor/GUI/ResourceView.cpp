@@ -5,7 +5,6 @@
 #include <Engine/Audio/VorbisFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Hymn.hpp>
-#include <Engine/MainWindow.hpp>
 #include <fstream>
 #include <imgui.h>
 #include "../ImGui/Splitter.hpp"
@@ -13,6 +12,7 @@
 #include <Engine/Manager/ResourceManager.hpp>
 #include <cstdio>
 #include <Utility/Log.hpp>
+#include <Utility/Window.hpp>
 
 // Fix windows.h pollution.
 #ifdef _WIN32
@@ -26,7 +26,8 @@ using namespace std;
 
 extern std::string DefaultScriptBody;
 
-ResourceView::ResourceView(Video::LowLevelRenderer* lowLevelRenderer) {
+ResourceView::ResourceView(Utility::Window* window, Video::LowLevelRenderer* lowLevelRenderer) {
+    this->window = window;
     this->lowLevelRenderer = lowLevelRenderer;
     folderNameWindow.SetClosedCallback(std::bind(&ResourceView::FileNameWindowClosed, this, placeholders::_1));
     savePromptWindow.SetTitle("Save before you switch scene?");
@@ -34,7 +35,7 @@ ResourceView::ResourceView(Video::LowLevelRenderer* lowLevelRenderer) {
 }
 
 void ResourceView::Show() {
-    ImVec2 size(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y);
+    ImVec2 size(window->GetSize().x, window->GetSize().y);
 
     // Splitter.
     ImGui::VerticalSplitter(ImVec2(static_cast<float>(sceneWidth), static_cast<float>(size.y - resourceHeight)), static_cast<int>(size.x - sceneWidth - editorWidth), splitterSize, resourceHeight, resourceResize, 20, static_cast<int>(size.y - 20));

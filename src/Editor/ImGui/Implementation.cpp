@@ -3,8 +3,10 @@
 #include <cstring>
 #include <imgui.h>
 
-#include <Engine/Util/Input.hpp>
+#include <Engine/Manager/Managers.hpp>
+#include <Engine/Manager/InputManager.hpp>
 #include <Utility/Profiling/Profiling.hpp>
+#include <Utility/Time.hpp>
 #include <Video/Renderer.hpp>
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
 #include <Video/LowLevelRenderer/Interface/CommandBuffer.hpp>
@@ -116,7 +118,7 @@ void NewFrame() {
     io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)display_w / w) : 0, h > 0 ? ((float)display_h / h) : 0);
 
     // Setup time step
-    double current_time = glfwGetTime();
+    double current_time = Utility::GetTime();
     io.DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)(1.0f / 60.0f);
     g_Time = current_time;
 
@@ -233,7 +235,7 @@ void MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/) {
 
 void ScrollCallback(GLFWwindow*, double /*xoffset*/, double yoffset) {
     g_MouseWheel += (float)yoffset; // Use fractional mouse wheel, 1.0 unit 5 lines.
-    Input()->ScrollCallback(yoffset);
+    Managers().inputManager->ScrollCallback(yoffset);
 }
 
 void KeyCallback(GLFWwindow*, int key, int, int action, int mods) {

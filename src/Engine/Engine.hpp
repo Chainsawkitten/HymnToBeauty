@@ -2,7 +2,9 @@
 
 #include <Video/Renderer.hpp>
 
-class MainWindow;
+#if ANDROID
+#include <game-activity/native_app_glue/android_native_app_glue.h>
+#endif
 
 /// An instance of the engine.
 class Engine {
@@ -15,11 +17,11 @@ class Engine {
      */
     bool Start();
 
-    /// Get the main window.
+    /// Get the window.
     /**
-     * @return THe main window.
+     * @return The window.
      */
-    MainWindow* GetMainWindow();
+    Utility::Window* GetWindow();
 
     /// Get whether the application should close.
     /**
@@ -50,6 +52,10 @@ class Engine {
 
     /// Engine configuration.
     struct Configuration {
+#if ANDROID
+        /// The native window to render in.
+        ANativeWindow* androidWindow;
+#else
         /// Window width.
         int width = 1024;
 
@@ -61,6 +67,7 @@ class Engine {
 
         /// Whether to run in borderless window mode.
         bool borderless = false;
+#endif
 
         /// Whether to run in debug context.
         bool debug = false;
@@ -79,7 +86,7 @@ class Engine {
     } configuration;
 
   private:
-    MainWindow* window = nullptr;
+    Utility::Window* window = nullptr;
 
     double deltaTime = 0.0;
     double lastTime;

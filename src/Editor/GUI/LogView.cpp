@@ -1,7 +1,6 @@
 #include "LogView.hpp"
 
 #include <imgui.h>
-#include <Engine/MainWindow.hpp>
 #include "../ImGui/Splitter.hpp"
 #include <functional>
 

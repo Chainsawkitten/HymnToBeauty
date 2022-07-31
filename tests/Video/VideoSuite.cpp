@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
+#include <Utility/Window.hpp>
 
 #ifdef OPENGL_SUPPORT
 #include <Video/LowLevelRenderer/OpenGL/OpenGLRenderer.hpp>
@@ -44,8 +45,7 @@ void VideoSuite::Init() {
     case Video::Renderer::GraphicsAPI::OPENGL:
     {
         // Create window.
-        window = glfwCreateWindow(swapchainSize, swapchainSize, "Tests - OpenGL", nullptr, nullptr);
-
+        window = new Utility::Window(swapchainSize, swapchainSize, false, false, "Tests - OpenGL", false);
         lowLevelRenderer = new Video::OpenGLRenderer(window);
         break;
     }
@@ -53,9 +53,7 @@ void VideoSuite::Init() {
 #ifdef VULKAN_SUPPORT
     case Video::Renderer::GraphicsAPI::VULKAN:
         // Create window.
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        window = glfwCreateWindow(swapchainSize, swapchainSize, "Tests - Vulkan", nullptr, nullptr);
-
+        window = new Utility::Window(swapchainSize, swapchainSize, false, false, "Tests - Vulkan", true);
         lowLevelRenderer = new Video::VulkanRenderer(window);
         break;
 #endif
@@ -65,7 +63,6 @@ void VideoSuite::Init() {
 void VideoSuite::Shutdown() {
     lowLevelRenderer->Wait();
     delete lowLevelRenderer;
-
-    glfwDestroyWindow(window);
+    delete window;
     glfwTerminate();
 }

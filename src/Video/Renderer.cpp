@@ -16,6 +16,7 @@
 #include "LowLevelRenderer/Interface/Texture.hpp"
 #include <Utility/Log.hpp>
 #include <Utility/Profiling/Profiling.hpp>
+#include <Utility/Window.hpp>
 
 #include "LowLevelRenderer/Interface/LowLevelRenderer.hpp"
 #ifdef OPENGL_SUPPORT
@@ -30,11 +31,9 @@
 #include "PostProcessing.vert.hpp"
 #include "SampleTexture.frag.hpp"
 
-#include <GLFW/glfw3.h>
-
 using namespace Video;
 
-Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
+Renderer::Renderer(GraphicsAPI graphicsAPI, Utility::Window* window) {
     // Create a low-level renderer of the selected graphics API.
     switch (graphicsAPI) {
 #ifdef OPENGL_SUPPORT
@@ -49,10 +48,9 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
 #endif
     }
 
-    // Get the size of the window (and thus initial size of the output texture).
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    outputSize = glm::uvec2(width, height);
+    // Get the initial size of the output texture.
+    this->window = window;
+    outputSize = window->GetSize();
 
     commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
@@ -108,7 +106,6 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, GLFWwindow* window) {
         quadGeometryBinding = lowLevelRenderer->CreateGeometryBinding(quadVertexDescription, quadVertexBuffer);
     }
 
-
 	// Icon rendering.
 	{
 		iconVertexShader = lowLevelRenderer->CreateShader(EDITORENTITY_VERT, Shader::Type::VERTEX_SHADER);
@@ -159,16 +156,16 @@ LowLevelRenderer* Renderer::GetLowLevelRenderer() {
     return lowLevelRenderer;
 }
 
-void Renderer::SetOutputSize(const glm::uvec2& size) {
-    outputSize = size;
-}
-
 const glm::uvec2& Renderer::GetRenderSurfaceSize() const {
     return renderSurfaceSize;
 }
 
 void Renderer::BeginFrame() {
     lowLevelRenderer->BeginFrame();
+    const glm::uvec2 newSize = window->GetSize();
+    if (newSize.x > 0u && newSize.y > 0u) {
+        outputSize = newSize;
+    }
     outputTexture = lowLevelRenderer->CreateRenderTarget(outputSize, Texture::Format::R8G8B8A8);
 }
 
@@ -253,6 +250,10 @@ void Renderer::WaitForRender() {
 
 CommandBuffer* Renderer::GetCommandBuffer() {
     return commandBuffer;
+}
+
+Utility::Window* Renderer::GetWindow() {
+    return window;
 }
 
 void Renderer::SetRenderSurfaceSize(const glm::uvec2& size) {

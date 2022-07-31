@@ -2,6 +2,8 @@
 
 #include <GLFW/glfw3.h>
 #include <Utility/Log.hpp>
+#include <Utility/Time.hpp>
+#include <Utility/Window.hpp>
 #include <thread>
 
 #include "OpenGLBuffer.hpp"
@@ -26,9 +28,9 @@ namespace Video {
 void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam, bool showNotifications);
 void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
-OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
-    this->window = window;
-    glfwMakeContextCurrent(window);
+OpenGLRenderer::OpenGLRenderer(Utility::Window* window) {
+    this->window = window->GetGLFWWindow();
+    glfwMakeContextCurrent(this->window);
     glfwSwapInterval(1);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -119,7 +121,7 @@ void OpenGLRenderer::Submit(CommandBuffer* commandBuffer) {
     }
 
     if (firstSubmission) {
-        submissionTimes[currentFrame] = glfwGetTime();
+        submissionTimes[currentFrame] = Utility::GetTime();
         firstSubmission = false;
     }
 

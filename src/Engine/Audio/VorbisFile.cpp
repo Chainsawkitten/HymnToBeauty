@@ -16,6 +16,7 @@ const char* VorbisFile::GetData() const {
     return data;
 }
 
+#if !ANDROID
 ALsizei VorbisFile::GetSize() const {
     return dataSize;
 }
@@ -27,8 +28,10 @@ ALenum VorbisFile::GetFormat() const {
 ALsizei VorbisFile::GetSampleRate() const {
     return sampleRate;
 }
+#endif
 
 void VorbisFile::Load(const char* filename) {
+#if !ANDROID
     int channels;
     dataSize = stb_vorbis_decode_filename(filename, &channels, &sampleRate, reinterpret_cast<short**>(&data));
 
@@ -42,6 +45,7 @@ void VorbisFile::Load(const char* filename) {
         format = AL_FORMAT_STEREO16;
     else
         format = AL_FORMAT_MONO16;
+#endif
 }
 
 bool VorbisFile::IsLoaded() const {

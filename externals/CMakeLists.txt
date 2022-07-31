@@ -16,11 +16,12 @@ target_link_libraries(bullet INTERFACE BulletDynamics BulletCollision LinearMath
 target_include_directories(bullet INTERFACE bullet3/src)
 
 # GLFW
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "Don't build GLFW docs" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Don't build GLFW examples" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "Don't build GLFW tests" FORCE)
-add_subdirectory(glfw)
-#target_include_directories(glfw INTERFACE glfw/include)
+if (NOT ANDROID)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Don't build GLFW docs" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Don't build GLFW examples" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "Don't build GLFW tests" FORCE)
+    add_subdirectory(glfw)
+endif()
 
 # glad
 add_subdirectory(glad)
@@ -69,34 +70,17 @@ macro(ProcessWithHeaderize headervar sourcevar inputfile outdir)
     list(APPEND ${sourcevar} ${outputfile}.cpp)
 endmacro()
 
-# ShaderProcessor
-add_subdirectory(ShaderProcessor)
-macro(ProcessShader headervar sourcevar inputfile outdir includes)
-    if(VulkanRenderer)
-        set(vulkanargument --vulkan)
-    endif()
-    get_filename_component(basefile ${inputfile} NAME)
-    set(outputfile ${outdir}/${basefile})
-    set_source_files_properties(${outputfile}.hpp PROPERTIES HEADER_ONLY TRUE)
-    add_custom_command(
-        OUTPUT ${outputfile}.hpp ${outputfile}.cpp
-        COMMAND ShaderProcessor ${inputfile} ${outputfile} ${vulkanargument}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        DEPENDS ${inputfile} ${includes}
-        COMMENT "Generating shader variants for ${inputfile}"
-    )
-    list(APPEND ${headervar} ${outputfile}.hpp)
-    list(APPEND ${sourcevar} ${outputfile}.cpp)
-endmacro()
-
 # OpenAL Soft
-set(ALSOFT_UTILS OFF CACHE BOOL "Don't build OpenAL Soft utility programs" FORCE)
-set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
-set(ALSOFT_TESTS OFF CACHE BOOL "Don't build OpenAL Soft tests" FORCE)
-add_subdirectory(openal-soft)
-add_library(OpenALSoft INTERFACE)
-target_link_libraries(OpenALSoft INTERFACE OpenAL)
-target_include_directories(OpenALSoft INTERFACE openal-soft/include)
+if (NOT ANDROID)
+    # TODO Fix Android
+    set(ALSOFT_UTILS OFF CACHE BOOL "Don't build OpenAL Soft utility programs" FORCE)
+    set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
+    set(ALSOFT_TESTS OFF CACHE BOOL "Don't build OpenAL Soft tests" FORCE)
+    add_subdirectory(openal-soft)
+    add_library(OpenALSoft INTERFACE)
+    target_link_libraries(OpenALSoft INTERFACE OpenAL)
+    target_include_directories(OpenALSoft INTERFACE openal-soft/include)
+endif()
 
 # STB
 add_library(stb INTERFACE)

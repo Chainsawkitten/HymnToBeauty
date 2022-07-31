@@ -1,46 +1,53 @@
-#include "Input.hpp"
+#include "InputManager.hpp"
 
 #include <Utility/Log.hpp>
+#include <Utility/Window.hpp>
 #include <map>
+
+#if !ANDROID
 #include <GLFW/glfw3.h>
 
-std::map<GLFWwindow*, InputHandler*> inputMap;
+static std::map<GLFWwindow*, InputManager*> inputMap;
 
-void characterCallback(GLFWwindow* window, unsigned int codePoint) {
+static void characterCallback(GLFWwindow* window, unsigned int codePoint) {
     inputMap[window]->CharacterCallback(codePoint);
 }
 
-void scrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
+static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
     inputMap[window]->ScrollCallback(yOffset);
 }
+#endif
 
-InputHandler* InputHandler::activeInstance = nullptr;
-
-InputHandler::InputHandler(GLFWwindow* window) {
-    this->window = window;
-
+InputManager::InputManager(Utility::Window* window) {
     for (int i = 0; i < BUTTONS; i++) {
         buttonData[i].down = false;
         buttonData[i].released = false;
         buttonData[i].triggered = false;
     }
 
+#if ANDROID
+    Log(Log::ERR) << "InputManager has not been implemented for Android. No input will be available.\n";
+#else
+    glfwWindow = window->GetGLFWWindow();
+
     // Init mouse state.
-    glfwSetScrollCallback(window, scrollCallback);
+    glfwSetScrollCallback(glfwWindow, scrollCallback);
 
-    glfwSetCharCallback(window, characterCallback);
-    inputMap[window] = this;
+    glfwSetCharCallback(glfwWindow, characterCallback);
+    inputMap[glfwWindow] = this;
+#endif
+
+    Update();
 }
 
-InputHandler* InputHandler::GetActiveInstance() {
-    return activeInstance;
+InputManager::~InputManager() {
+
 }
 
-void InputHandler::SetActive() {
-    activeInstance = this;
-}
+void InputManager::Update() {
+#if !ANDROID
+    glfwPollEvents();
 
-void InputHandler::Update() {
     lastScroll = scroll;
     scroll = 0.0;
 
@@ -50,11 +57,11 @@ void InputHandler::Update() {
         bool value = false;
         switch (binding.device) {
         case KEYBOARD:
-            if (glfwGetKey(window, binding.index) == GLFW_PRESS)
+            if (glfwGetKey(glfwWindow, binding.index) == GLFW_PRESS)
                 value = true;
             break;
         case MOUSE:
-            if (glfwGetMouseButton(window, binding.index) == GLFW_PRESS)
+            if (glfwGetMouseButton(glfwWindow, binding.index) == GLFW_PRESS)
                 value = true;
             break;
         default:
@@ -72,33 +79,34 @@ void InputHandler::Update() {
         buttonData[button].down = values[button];
     }
 
-    glfwGetCursorPos(window, &cursorX, &cursorY);
+    glfwGetCursorPos(glfwWindow, &cursorX, &cursorY);
 
     text = tempText;
     tempText = "";
+#endif
 }
 
-double InputHandler::GetCursorX() const {
+double InputManager::GetCursorX() const {
     return cursorX;
 }
 
-double InputHandler::GetCursorY() const {
+double InputManager::GetCursorY() const {
     return cursorY;
 }
 
-glm::vec2 InputHandler::GetCursorXY() const {
+glm::vec2 InputManager::GetCursorXY() const {
     return glm::vec2(cursorX, cursorY);
 }
 
-bool InputHandler::GetScrollUp() const {
+bool InputManager::GetScrollUp() const {
     return lastScroll > 0.0;
 }
 
-bool InputHandler::GetScrollDown() const {
+bool InputManager::GetScrollDown() const {
     return lastScroll < 0.0;
 }
 
-void InputHandler::AssignButton(Button button, Device device, int index) {
+void InputManager::AssignButton(Button button, Device device, int index) {
     Binding binding;
     binding.button = button;
     binding.device = device;
@@ -107,22 +115,18 @@ void InputHandler::AssignButton(Button button, Device device, int index) {
     bindings.push_back(binding);
 }
 
-bool InputHandler::Pressed(Button button) const {
+bool InputManager::Pressed(Button button) const {
     return buttonData[button].down;
 }
 
-bool InputHandler::Triggered(Button button) const {
+bool InputManager::Triggered(Button button) const {
     return buttonData[button].triggered;
 }
 
-void InputHandler::CharacterCallback(unsigned int codePoint) {
+void InputManager::CharacterCallback(unsigned int codePoint) {
     tempText += static_cast<char>(codePoint);
 }
 
-void InputHandler::ScrollCallback(double yOffset) {
+void InputManager::ScrollCallback(double yOffset) {
     scroll += yOffset;
-}
-
-InputHandler* Input() {
-    return InputHandler::GetActiveInstance();
 }

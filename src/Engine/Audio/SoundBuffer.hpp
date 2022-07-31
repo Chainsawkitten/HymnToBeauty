@@ -1,6 +1,8 @@
 #pragma once
 
+#if !ANDROID
 #include <AL/al.h>
+#endif
 #include <string>
 #include <json/json.h>
 
@@ -16,11 +18,13 @@ class SoundBuffer {
     /// Destructor.
     ~SoundBuffer();
 
+#if !ANDROID
     /// Get AL buffer.
     /**
      * @return The OpenAL buffer ID.
      */
     ALuint GetBuffer() const;
+#endif
 
     /// Set sound file.
     /**
@@ -36,6 +40,8 @@ class SoundBuffer {
 
   private:
     SoundFile* soundFile = nullptr;
+#if !ANDROID
     ALuint buffer = 0;
+#endif
 };
 } // namespace Audio

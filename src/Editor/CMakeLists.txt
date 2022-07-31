@@ -77,12 +77,9 @@ set(HEADERS
 
 # Setup embedded source
 set(EMBEDDED_INPUT
-    ../../assets/Camera.png
-    ../../assets/DefaultAlbedo.png
-    ../../assets/DefaultNormal.png
-    ../../assets/DefaultRoughnessMetallic.png
-    ../../assets/Light.png
-    ../../assets/SoundSource.png
+    icons/Camera.png
+    icons/Light.png
+    icons/SoundSource.png
 )
 
 # Setup shaders

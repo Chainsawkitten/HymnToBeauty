@@ -1,7 +1,6 @@
 #include "InputWindow.hpp"
 
 #include <Engine/Util/FileSystem.hpp>
-#include <Engine/MainWindow.hpp>
 #include <Engine/Input/Input.hpp>
 
 #include <imgui.h>

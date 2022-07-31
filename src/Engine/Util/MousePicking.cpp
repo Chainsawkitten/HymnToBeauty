@@ -1,6 +1,7 @@
 #include "MousePicking.hpp"
 
-#include "Input.hpp"
+#include "../Manager/Managers.hpp"
+#include "../Manager/InputManager.hpp"
 #include "../Entity/Entity.hpp"
 #include <glm/gtx/transform.hpp>
 #include <Utility/Window.hpp>
@@ -32,8 +33,8 @@ static glm::vec3 ConvertWorldCoords(const glm::vec4& eyeCoords, const glm::mat4&
 
 glm::vec3 GetRayDirection(const Entity* camera, const glm::mat4& projection, const Utility::Window* window) {
     const glm::mat4 viewMatrix = glm::inverse(camera->GetModelMatrix());
-    double mouseX = Input()->GetCursorX();
-    double mouseY = Input()->GetCursorY();
+    double mouseX = Managers().inputManager->GetCursorX();
+    double mouseY = Managers().inputManager->GetCursorY();
 
     glm::vec2 NDC = GetNDC(mouseX, mouseY, window);
     glm::vec4 clipSpaceCoordinates = glm::vec4(NDC.x, NDC.y, -1.0f, 1.0f);

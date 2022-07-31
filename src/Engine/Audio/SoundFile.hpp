@@ -1,6 +1,8 @@
 #pragma once
 
+#if !ANDROID
 #include <AL/al.h>
+#endif
 #include <string>
 
 namespace Audio {
@@ -19,6 +21,7 @@ class SoundFile {
      */
     virtual const char* GetData() const = 0;
 
+#if !ANDROID
     /// Get data size.
     /**
      * @return The length of the raw audio data.
@@ -37,6 +40,7 @@ class SoundFile {
      * @return The sound file's sample rate (Hz).
      */
     virtual ALsizei GetSampleRate() const = 0;
+#endif
 
     /// Check whether sound is loaded.
     /**

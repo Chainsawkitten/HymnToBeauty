@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdk 31
+    ndkVersion "23.1.7779620"
+
+    defaultConfig {
+        applicationId "com.chainsawkitten.hymntobeauty"
+        minSdk 24
+        targetSdk 31
+        versionCode 272
+        versionName "1.1.0"
+
+        externalNativeBuild {
+            cmake {
+                arguments '-DVulkanRenderer=ON'
+                cppFlags '-std=c++17'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path file('../../../../CMakeLists.txt')
+            version '3.7.0+'
+        }
+    }
+    buildFeatures {
+        prefab true
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation "androidx.games:games-activity:1.1.0"
+}

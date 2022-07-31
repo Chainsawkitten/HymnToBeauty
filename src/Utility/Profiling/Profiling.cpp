@@ -1,7 +1,7 @@
 #include "Profiling.hpp"
 
 #include "Event.hpp"
-#include <GLFW/glfw3.h>
+#include "../Time.hpp"
 #include <cassert>
 
 namespace Profiling {
@@ -15,7 +15,7 @@ static Event* StartEvent(const std::string& name) {
     currentEvent->children.push_back(Profiling::Event(name));
     Profiling::Event* event = &currentEvent->children.back();
     event->parent = currentEvent;
-    event->time = glfwGetTime();
+    event->time = Utility::GetTime();
     currentEvent = event;
 
     return event;
@@ -25,7 +25,7 @@ static void FinishEvent(Profiling::Event* event) {
     assert(cpuActive);
     assert(event != nullptr);
 
-    currentEvent->duration = glfwGetTime() - currentEvent->time;
+    currentEvent->duration = Utility::GetTime() - currentEvent->time;
     currentEvent = currentEvent->parent;
 }
 

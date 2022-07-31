@@ -15,6 +15,9 @@ class ScriptFile;
 namespace Component {
 class Script;
 }
+namespace Utility {
+class Window;
+}
 
 /// Handles scripting.
 class ScriptManager {
@@ -113,7 +116,7 @@ class ScriptManager {
         int type;
     };
 
-    ScriptManager();
+    explicit ScriptManager(Utility::Window* window);
     ~ScriptManager();
     ScriptManager(ScriptManager const&) = delete;
     void operator=(ScriptManager const&) = delete;
@@ -126,6 +129,8 @@ class ScriptManager {
     void ExecuteCall(asIScriptContext* context, const std::string& scriptName);
     asITypeInfo* GetClass(const std::string& moduleName, const std::string& className);
 
+    bool IsIntersect(Entity* checker, Entity* camera) const;
+
     asIScriptEngine* engine;
 
     std::vector<Entity*> updateEntities;
@@ -136,4 +141,6 @@ class ScriptManager {
     std::map<std::string, std::set<int>> breakpoints;
 
     ComponentContainer<Component::Script> scripts;
+
+    Utility::Window* window;
 };

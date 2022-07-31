@@ -15,6 +15,7 @@
 #include "Util/Json.hpp"
 #include <fstream>
 #include <Utility/Profiling/Profiling.hpp>
+#include <Utility/Log.hpp>
 #include "Entity/Entity.hpp"
 
 // Fix windows.h pollution.
@@ -71,6 +72,8 @@ void ActiveHymn::Save() const {
 }
 
 void ActiveHymn::Load(const string& path) {
+    Log(Log::INFO) << "Loading hymn " << path;
+
     Clear();
     this->path = path;
 
@@ -164,10 +167,10 @@ void ActiveHymn::Update(float deltaTime) {
     }
 }
 
-void ActiveHymn::Render(Entity* camera, bool showSoundSources, bool showLightSources, bool showCameras, bool showPhysics, bool lighting, bool showLightVolumes) {
+void ActiveHymn::Render(const RenderManager::DebugConfiguration& debugConfiguration, Entity* camera) {
     PROFILE("Render world");
 
-    Managers().renderManager->Render(world, showSoundSources, showLightSources, showCameras, showPhysics, camera, lighting, showLightVolumes);
+    Managers().renderManager->Render(world, debugConfiguration, camera);
 }
 
 Entity* ActiveHymn::GetEntityByGUID(unsigned int GUID) {

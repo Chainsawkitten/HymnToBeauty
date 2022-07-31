@@ -1,6 +1,8 @@
 #include "VulkanRenderer.hpp"
 
 #include <Utility/Log.hpp>
+#include <Utility/Time.hpp>
+#include <Utility/Window.hpp>
 #include <assert.h>
 
 #include "VulkanCommandBuffer.hpp"
@@ -19,14 +21,18 @@
 #include "VulkanComputePipeline.hpp"
 #include "VulkanUtility.hpp"
 
+#if ANDROID
+#include <vulkan/vulkan_android.h>
+#else
 #include <glfw/glfw3.h>
+#endif
 #include <vector>
 #include <cstring>
 #include <cstdint>
 
 namespace Video {
 
-VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
+VulkanRenderer::VulkanRenderer(::Utility::Window* window) {
     optionalFeatures = {};
 
     CreateInstance();
@@ -205,7 +211,7 @@ void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
             needQueryWait[currentFrame] = false;
         }
 
-        submissionTimes[currentFrame] = glfwGetTime();
+        submissionTimes[currentFrame] = ::Utility::GetTime();
     }
 
     if (vulkanCommandBuffer->ContainsBlitToSwapChain()) {
@@ -603,8 +609,15 @@ void VulkanRenderer::CreateInstance() {
     }
 
     // Get required instance extensions.
-    uint32_t requiredExtensionCount;
+    uint32_t requiredExtensionCount; 
+#if ANDROID
+    requiredExtensionCount = 2u;
+    const char* requiredExtensions[2] = {
+        "VK_KHR_surface", "VK_KHR_android_surface"
+    };
+#else
     const char** requiredExtensions = glfwGetRequiredInstanceExtensions(&requiredExtensionCount);
+#endif
 
     // Create Vulkan instance.
     VkInstanceCreateInfo instanceCreateInfo = {};
@@ -654,8 +667,18 @@ bool VulkanRenderer::CheckValidationLayersSupported(const std::vector<const char
     return allLayersFound;
 }
 
-void VulkanRenderer::CreateSurface(GLFWwindow* window) {
-    if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+void VulkanRenderer::CreateSurface(::Utility::Window* window) {
+#if ANDROID
+    VkAndroidSurfaceCreateInfoKHR createInfo = {};
+    createInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
+    createInfo.window = window->GetAndroidWindow();
+
+    VkResult result = vkCreateAndroidSurfaceKHR(instance, &createInfo, nullptr, &surface);
+#else
+    VkResult result = glfwCreateWindowSurface(instance, window->GetGLFWWindow(), nullptr, &surface);
+#endif
+
+    if (result != VK_SUCCESS) {
         Log(Log::ERR) << "Could not create surface.\n";
     }
 }
@@ -710,26 +733,33 @@ VkPhysicalDevice VulkanRenderer::PickPhysicalDevice(const std::vector<const char
     VkPhysicalDevice* physicalDevices = new VkPhysicalDevice[deviceCount];
     vkEnumeratePhysicalDevices(instance, &deviceCount, physicalDevices);
 
+    Log(Log::INFO) << "Available devices:\n";
+
     // Find which is best.
-    VkPhysicalDevice bestDevice = VK_NULL_HANDLE;
     uint32_t bestDeviceScore = 0;
+    uint32_t bestDevice = 0;
     for (uint32_t device = 0; device < deviceCount; ++device) {
         SwapChainSupport support;
         uint32_t score = GetDeviceScore(physicalDevices[device], extensions);
 
         if (score > bestDeviceScore) {
-            bestDevice = physicalDevices[device];
+            bestDevice = device;
             bestDeviceScore = score;
         }
     }
+
+    VkPhysicalDevice selectedDevice = physicalDevices[bestDevice];
 
     delete[] physicalDevices;
 
     if (bestDeviceScore == 0) {
         Log(Log::ERR) << "No suitable device found.\n";
+        return VK_NULL_HANDLE;
     }
 
-    return bestDevice;
+    Log(Log::INFO) << "Selected device " << bestDevice << ".\n";
+
+    return selectedDevice;
 }
 
 uint32_t VulkanRenderer::GetDeviceScore(VkPhysicalDevice device, const std::vector<const char*>& extensions) const {
@@ -738,6 +768,8 @@ uint32_t VulkanRenderer::GetDeviceScore(VkPhysicalDevice device, const std::vect
     VkPhysicalDeviceFeatures deviceFeatures;
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
     vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+    Log(Log::INFO) << " - " << deviceProperties.deviceName << "\n";
 
     /* First determine if device supports all required functionality.
        Otherwise return a score of 0. */
@@ -806,11 +838,10 @@ uint32_t VulkanRenderer::GetQueueFamily(VkPhysicalDevice device) const {
     VkQueueFamilyProperties* queueFamilyProperties = new VkQueueFamilyProperties[queueFamilyCount];
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilyProperties);
 
-    // Find queue family that supports graphics and presenting using GLFW.
-    /// @todo Handle using multiple queue families.
+    // Find queue family that supports graphics, compute and presentation.
     uint32_t queueFamily = std::numeric_limits<uint32_t>::max();
     for (uint32_t i = 0; i < queueFamilyCount; ++i) {
-        if ((queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)) {
+        if (queueFamilyProperties[i].queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT)) {
             VkBool32 presentationSupported;
             vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentationSupported);
             if (presentationSupported) {

@@ -16,9 +16,11 @@ class VorbisFile : public SoundFile {
     ~VorbisFile() final;
 
     const char* GetData() const final;
+#if !ANDROID
     ALsizei GetSize() const final;
     ALenum GetFormat() const final;
     ALsizei GetSampleRate() const final;
+#endif
     bool IsLoaded() const final;
 
   private:
@@ -27,6 +29,8 @@ class VorbisFile : public SoundFile {
     char* data = nullptr;
     int dataSize;
     int sampleRate;
+#if !ANDROID
     ALenum format;
+#endif
 };
 } // namespace Audio
