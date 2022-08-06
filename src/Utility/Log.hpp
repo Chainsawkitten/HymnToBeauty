@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <ctime>
 #include <glm/glm.hpp>
+#include <functional>
 
 /// Logging class.
 /**
@@ -17,7 +19,7 @@ class Log {
         DEFAULT = 0,       ///< Default channel.
         INFO,              ///< Information.
         WARNING,           ///< Warnings.
-        ERR,               ///< Error.
+        ERR,             ///< Error.
         NUMBER_OF_CHANNELS ///< Maximum number of channels, ensure this is the last element of the enum if adding channels.
     };
 
@@ -27,56 +29,56 @@ class Log {
     /// Destructor.
     ~Log();
 
-    /// Output some text to stderr.
+    /// Output some text.
     /**
      * @param text Text to output.
      * @return The %Log instance
      */
     Log& operator<<(const std::string& text);
 
-    /// Output an integer to stderr.
+    /// Output an integer.
     /**
      * @param value Value to output.
      * @return The %Log instance
      */
     Log& operator<<(const int value);
 
-    /// Output an unsigned integer to stderr.
+    /// Output an unsigned integer.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const unsigned int value);
 
-    /// Output an unsigned long to stderr.
+    /// Output an unsigned long.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const unsigned long value);
 
-    /// Output an unsigned long long to stderr.
+    /// Output an unsigned long long.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const unsigned long long value);
 
-    /// Output a float to stderr.
+    /// Output a float.
     /**
      * @param value Value to output.
      * @return The %Log instance
      */
     Log& operator<<(const float value);
 
-    /// Output a double to stderr.
+    /// Output a double.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const double value);
 
-    /// Output a time to stderr.
+    /// Output a time.
     /**
      * Formatted Y-m-d H:M:S.
      * @param value Value to output.
@@ -84,46 +86,47 @@ class Log {
      */
     Log& operator<<(const time_t value);
 
-    /// Output a vec2 to stderr.
+    /// Output a vec2.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const glm::vec2& value);
 
-    /// Output a vec3 to stderr.
+    /// Output a vec3.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const glm::vec3& value);
 
-    /// Output a vec4 to stderr.
+    /// Output a vec4.
     /**
      * @param value Value to output.
      * @return The %Log instance.
      */
     Log& operator<<(const glm::vec4& value);
 
-    /// Sets channels.
+    /// Setup callback.
     /**
-     * @param channel The channel to set.
-     * @param stream The stream that will be mapped to the channel.
-     * @return Whether the operation succeeded or not.
+     * @param callback Callback function to call whenever something is logged.
+     * @return Whether the operation succeeded.
      */
-    static bool SetupStream(const Channel channel, std::ostream* stream);
+    static void SetupCallback(std::function<void(const Channel channel, const std::string& message)> callback);
 
-    /// Sets all channels at once.
+    /// Remove the callback function.
+    static void ResetCallback();
+
+    /// Setup file to log to.
     /**
-     * @param defaultStream The stream for default output.
-     * @param info The stream for information.
-     * @param warning The stream for warnings.
-     * @param error The stream for errors.
-     * @return Whether the operation succeeded or not.
+     * @param filename The file to write to.
      */
-    static bool SetupStreams(std::ostream* defaultStream, std::ostream* info, std::ostream* warning, std::ostream* error);
+    static void SetupFile(const std::string& filename);
+
+    /// Close any open logging file.
+    static void CloseFile();
 
   private:
     Channel currentChannel;
-    static std::ostream* streams[Channel::NUMBER_OF_CHANNELS];
+    std::stringstream message;
 };

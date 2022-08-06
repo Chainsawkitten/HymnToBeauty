@@ -272,77 +272,85 @@ void HandleDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, 
     if (!showNotifications && severity == GL_DEBUG_SEVERITY_NOTIFICATION)
         return;
 
+    std::string str = "";
+
     switch (source) {
     case GL_DEBUG_SOURCE_API:
-        fputs("Open GL API", stderr);
+        str += "Open GL API";
         break;
     case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
-        fputs("Window System", stderr);
+        str += " Window System";
         break;
     case GL_DEBUG_SOURCE_SHADER_COMPILER:
-        fputs("Shader Compiler", stderr);
+        str += "Shader Compiler";
         break;
     case GL_DEBUG_SOURCE_APPLICATION:
-        fputs("Application", stderr);
+        str += "Application";
         break;
     default:
-        fputs("Other", stderr);
+        str += "Other";
     }
 
-    fputs(": ", stderr);
+    str += ": ";
+    Log::Channel channel = Log::INFO;
 
     switch (type) {
     case GL_DEBUG_TYPE_ERROR:
-        fputs("Error", stderr);
+        str += "Error";
+        channel = Log::ERR;
         break;
     case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-        fputs("Deprecated Behavior", stderr);
+        str += "Deprecated Behavior";
+        channel = Log::WARNING;
         break;
     case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-        fputs("Undefined Behavior", stderr);
+        str += "Undefined Behavior";
+        channel = Log::WARNING;
         break;
     case GL_DEBUG_TYPE_PORTABILITY:
-        fputs("Portability", stderr);
+        str += "Portability";
+        channel = Log::WARNING;
         break;
     case GL_DEBUG_TYPE_PERFORMANCE:
-        fputs("Performance", stderr);
+        str += "Performance";
+        channel = Log::WARNING;
         break;
     case GL_DEBUG_TYPE_MARKER:
-        fputs("Marker", stderr);
+        str += "Marker";
         break;
     case GL_DEBUG_TYPE_PUSH_GROUP:
-        fputs("Push Group", stderr);
+        str += "Push Group";
         break;
     case GL_DEBUG_TYPE_POP_GROUP:
-        fputs("Pop Group", stderr);
+        str += "Pop Group";
         break;
     default:
-        fputs("Other", stderr);
+        str += "Other";
     }
 
-    fputs(" (", stderr);
+    str += " (";
 
     switch (severity) {
     case GL_DEBUG_SEVERITY_HIGH:
-        fputs("High Priority", stderr);
+        str += "High Priority";
         break;
     case GL_DEBUG_SEVERITY_MEDIUM:
-        fputs("Medium Priority", stderr);
+        str += "Medium Priority";
         break;
     case GL_DEBUG_SEVERITY_LOW:
-        fputs("Low Priority", stderr);
+        str += "Low Priority";
         break;
     case GL_DEBUG_SEVERITY_NOTIFICATION:
-        fputs("Notification", stderr);
+        str += "Notification";
         break;
     }
 
-    fputs("):\n", stderr);
+    str += "):\n";
 
-    fputs(message, stderr);
-    fputs("\n\n", stderr);
+    str += message;
+    str += "\n\n";
 
-    fflush(stderr);
+    Log(channel) << str;
 }
 
 void APIENTRY DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {

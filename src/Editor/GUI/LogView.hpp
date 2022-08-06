@@ -1,6 +1,8 @@
 #pragma once
-#include <sstream>
+
+#include <string>
 #include <imgui.h>
+#include <Utility/Log.hpp>
 
 namespace GUI {
 class LogView {
@@ -14,14 +16,8 @@ class LogView {
     /// Shows the log.
     void Show();
 
-    // Updates the log.
-    void UpdateLog();
-
   private:
-    std::stringstream defaultStringstream;
-    std::stringstream infoStringstream;
-    std::stringstream warningStringstream;
-    std::stringstream errorStringstream;
+    void MessageCallback(const Log::Channel channel, const std::string& message);
 
     ImGuiTextBuffer textBuffer;
     ImGuiTextFilter textFilter;

@@ -5,13 +5,10 @@
 #include <Engine/Hymn.hpp>
 #include <Utility/Log.hpp>
 #include <iostream>
-#include <fstream>
 #include <ctime>
 #include "Util/GameSettings.hpp"
 
 int main(int argc, char* argv[]) {
-    Log().SetupStreams(&std::cout, &std::cout, &std::cout, &std::cerr);
-
     Log() << "Game started - " << time(nullptr) << "\n";
 
     // Start engine.

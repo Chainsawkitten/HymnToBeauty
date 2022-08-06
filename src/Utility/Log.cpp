@@ -1,94 +1,79 @@
 #include "Log.hpp"
 
-#include <ostream>
+#include <fstream>
 #include <iostream>
+#include <cassert>
 
 using namespace std;
 
-ostream* Log::streams[NUMBER_OF_CHANNELS];
+static bool callbackSet = false;
+static std::function<void(const Log::Channel channel, const std::string& message)> callbackFunction;
+
+static ofstream fileStream;
+static bool fileSet = false;
 
 Log::Log(const Channel channel) {
+    assert(channel < NUMBER_OF_CHANNELS);
+
     currentChannel = channel;
 }
 
 Log::~Log() {
-    streams[currentChannel]->flush();
+    // Call the callback function (if any is set).
+    if (callbackSet)
+        callbackFunction(currentChannel, message.str());
+
+    // Write the message to the log file (if one is open).
+    if (fileSet)
+        fileStream << message.str();
+
+    // Output the message to standard output as well.
+    ostream* str;
+    switch (currentChannel) {
+    case WARNING:
+    case ERR:
+        str = &std::cerr;
+        break;
+    default:
+        str = &std::cout;
+        break;
+    }
+    *str << message.str();
+    str->flush();
 }
 
 Log& Log::operator<<(const string& text) {
-    *streams[currentChannel] << text;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << text;
-#endif
-
+    message << text;
     return *this;
 }
 
 Log& Log::operator<<(const int value) {
-    *streams[currentChannel] << value;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << value;
-#endif
-
+    message << value;
     return *this;
 }
 
 Log& Log::operator<<(const unsigned int value) {
-    *streams[currentChannel] << value;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << value;
-#endif
-
+    message << value;
     return *this;
 }
 
 Log& Log::operator<<(const unsigned long value) {
-    *streams[currentChannel] << value;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << value;
-#endif
-
+    message << value;
     return *this;
 }
 
 Log& Log::operator<<(const unsigned long long value) {
-    *streams[currentChannel] << value;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << value;
-#endif
-
+    message << value;
     return *this;
 }
 
 Log& Log::operator<<(const float value) {
-    *streams[currentChannel] << value;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << value;
-#endif
-
+    message << value;
     return *this;
 }
 
 Log& Log::operator<<(const double value) {
-    *streams[currentChannel] << value;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << value;
-#endif
-
+    message << value;
     return *this;
 }
 
@@ -101,62 +86,42 @@ Log& Log::operator<<(const time_t value) {
     strftime(buffer, bufferLength, "%Y-%m-%d %H:%M:%S", timeinfo);
     string const outString = string(buffer);
 
-    *streams[currentChannel] << outString;
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << outString;
-#endif
+    message << outString;
     return *this;
 }
 
 Log& Log::operator<<(const glm::vec2& value) {
-    string outString = "(" + std::to_string(value.x) + "," + std::to_string(value.y) + ")";
-    *streams[currentChannel] << outString;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << outString;
-#endif
-
+    message << "(" << std::to_string(value.x) << "," << std::to_string(value.y) << ")";
     return *this;
 }
 
 Log& Log::operator<<(const glm::vec3& value) {
-    string outString = "(" + std::to_string(value.x) + "," + std::to_string(value.y) + "," + std::to_string(value.z) + ")";
-    *streams[currentChannel] << outString;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << outString;
-#endif
-
+    message << "(" << std::to_string(value.x) << "," << std::to_string(value.y) << "," << std::to_string(value.z) << ")";
     return *this;
 }
 
 Log& Log::operator<<(const glm::vec4& value) {
-    string outString = "(" + std::to_string(value.x) + "," + std::to_string(value.y) + "," + std::to_string(value.z) + "," + std::to_string(value.w) + ")";
-    *streams[currentChannel] << outString;
-
-#ifdef USINGDOUBLELOGGING
-    if (currentChannel != INFO)
-        std::cout << outString;
-#endif
-
+    message << "(" << std::to_string(value.x) << "," << std::to_string(value.y) << "," << std::to_string(value.z) << "," << std::to_string(value.w) << ")";
     return *this;
 }
 
-bool Log::SetupStream(const Channel channel, std::ostream* stream) {
-    // Check if channel is outside the range of available channels
-    if (channel < DEFAULT || channel >= NUMBER_OF_CHANNELS) {
-        std::cout << "Error channel: out of range.\n";
-        return false;
-    }
-
-    // Set the channel.
-    streams[static_cast<int>(channel)] = stream;
-    return true;
+void Log::SetupCallback(std::function<void(const Channel channel, const std::string& message)> callback) {
+    callbackFunction = callback;
+    callbackSet = true;
 }
 
-bool Log::SetupStreams(std::ostream* defaultStream, std::ostream* info, std::ostream* warning, std::ostream* error) {
-    return SetupStream(DEFAULT, defaultStream) && SetupStream(INFO, info) && SetupStream(WARNING, warning) && SetupStream(ERR, error);
+void Log::ResetCallback() {
+    callbackSet = false;
+}
+
+void Log::SetupFile(const std::string& filename) {
+    CloseFile();
+    fileStream.open(filename.c_str(), std::ofstream::app);
+    fileSet = true;
+}
+
+void Log::CloseFile() {
+    if (fileSet)
+        fileStream.close();
+    fileSet = false;
 }

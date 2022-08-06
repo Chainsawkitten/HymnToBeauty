@@ -17,13 +17,9 @@
 #include <iostream>
 
 int main() {
-    Log().SetupStreams(&std::cout, &std::cout, &std::cout, &std::cerr);
-
-    // Enable logging if requested.
+    // Enable logging to file if requested.
     if (EditorSettings::GetInstance().GetBool("Logging")) {
-        FILE* file = freopen(FileSystem::DataPath("Hymn to Beauty", "log.txt").c_str(), "a", stderr);
-        if (file == nullptr)
-            Log() << "Could not open logging file!\n";
+        Log::SetupFile(FileSystem::DataPath("Hymn to Beauty", "log.txt"));
     }
 
     Log() << "Editor started - " << time(nullptr) << "\n";
@@ -97,6 +93,7 @@ int main() {
     engine.Shutdown();
 
     Log() << "Editor ended - " << time(nullptr) << "\n";
+    Log::CloseFile();
 
     return 0;
 }
