@@ -31,8 +31,7 @@ void ProfilingWindow::Show() {
         ShowTimeline();
     }
 
-    // Update log whether or not we're actually showing it.
-    logView.UpdateLog();
+    // Show the log.
     if (ImGui::CollapsingHeader("Log"))
         logView.Show();
 

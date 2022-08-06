@@ -3,7 +3,6 @@
 #include <cstring>
 
 #include "Video/VideoSuite.hpp"
-#include <Utility/Log.hpp>
 
 using namespace std;
 
@@ -19,8 +18,6 @@ static void PrintHelp() {
 }
 
 int main(int argc, char* argv[]) {
-    Log().SetupStreams(&std::cout, &std::cout, &std::cout, &std::cerr);
-
     // Process arguments.
     string suite = "";
     string test = "";

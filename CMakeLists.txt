@@ -51,11 +51,6 @@ if(DOXYGEN_FOUND)
     )
 endif()
 
-option(UseDoubleLogging "Log messages will be duplicated and sent to standard out." ON)
-if(UseDoubleLogging)
-    add_definitions(-DUSINGDOUBLELOGGING)
-endif()
-
 # Source files
 add_subdirectory(src)
 

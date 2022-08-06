@@ -1,26 +1,18 @@
 #include "LogView.hpp"
+
 #include <imgui.h>
 #include <Engine/MainWindow.hpp>
 #include "../ImGui/Splitter.hpp"
-#include <Utility/Log.hpp>
-#include <iostream>
+#include <functional>
 
 using namespace GUI;
 
 LogView::LogView() {
-    // Setup streams.
-    Log().SetupStream(Log::DEFAULT, &defaultStringstream);
-    Log().SetupStream(Log::INFO, &infoStringstream);
-    Log().SetupStream(Log::WARNING, &warningStringstream);
-    Log().SetupStream(Log::ERR, &errorStringstream);
+    Log::SetupCallback(std::bind(&LogView::MessageCallback, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 LogView::~LogView() {
-    // Reset streams to cout.
-    Log().SetupStream(Log::DEFAULT, &std::cout);
-    Log().SetupStream(Log::INFO, &std::cout);
-    Log().SetupStream(Log::WARNING, &std::cout);
-    Log().SetupStream(Log::ERR, &std::cout);
+    Log::ResetCallback();
 }
 
 void LogView::Show() {
@@ -59,33 +51,33 @@ void LogView::Show() {
     ImGui::EndChild();
 }
 
-void LogView::UpdateLog() {
-    // Create log output string.
-    std::string output;
-    if (!defaultStringstream.str().empty())
-        output += "[Default] " + defaultStringstream.str();
+void LogView::MessageCallback(const Log::Channel channel, const std::string& message) {
+    // Add a prefix based on which channel it is.
+    std::string prefix;
+    switch (channel) {
+    case Log::INFO:
+        prefix = "[Info]" ;
+        break;
+    case Log::WARNING:
+        prefix = "[Warning]";
+        break;
+    case Log::ERR:
+        prefix = "[Error]";
+        break;
+    default:
+        prefix = "[Default]";
+        break;
+    }
 
-    if (!infoStringstream.str().empty())
-        output += "[Info] " + infoStringstream.str();
-
-    if (!warningStringstream.str().empty())
-        output += "[Warning] " + warningStringstream.str();
-
-    if (!errorStringstream.str().empty())
-        output += "[Error] " + errorStringstream.str();
+    const std::string output = prefix + message;
 
     // Add new lines to text buffer.
     int oldSize = textBuffer.size();
 
     textBuffer.appendfv(output.c_str(), nullptr);
 
-    for (int newSize = textBuffer.size(); oldSize < newSize; oldSize++)
+    for (int newSize = textBuffer.size(); oldSize < newSize; oldSize++) {
         if (textBuffer[oldSize] == '\n')
             lineOffsets.push_back(oldSize);
-
-    // Clear streams.
-    defaultStringstream.str(std::string());
-    infoStringstream.str(std::string());
-    warningStringstream.str(std::string());
-    errorStringstream.str(std::string());
+    }
 }
