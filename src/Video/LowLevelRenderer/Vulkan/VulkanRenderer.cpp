@@ -735,8 +735,9 @@ uint32_t VulkanRenderer::GetDeviceScore(VkPhysicalDevice device, const std::vect
        Otherwise return a score of 0. */
 
     // Check that all required features are supported.
-    if (!deviceFeatures.fillModeNonSolid || !deviceFeatures.fragmentStoresAndAtomics || !deviceFeatures.depthClamp)
+    if (!deviceFeatures.fragmentStoresAndAtomics || !deviceFeatures.depthClamp) {
         return 0;
+    }
 
     // Check that the required extensions are supported.
     if (!CheckDeviceExtensionsSupported(device, extensions))
@@ -878,11 +879,12 @@ VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
 
     // Enabled mandatory features.
     VkPhysicalDeviceFeatures enabledFeatures = {};
-    enabledFeatures.fillModeNonSolid = VK_TRUE;
     enabledFeatures.fragmentStoresAndAtomics = VK_TRUE;
     enabledFeatures.depthClamp = VK_TRUE;
 
     // Enable optional features.
+    optionalFeatures.fillModeNonSolid = supportedFeatures.fillModeNonSolid;
+    enabledFeatures.fillModeNonSolid = supportedFeatures.fillModeNonSolid;
     optionalFeatures.wideLines = supportedFeatures.wideLines;
     enabledFeatures.wideLines = supportedFeatures.wideLines;
 

@@ -11,6 +11,7 @@
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
 #include <Video/LowLevelRenderer/Interface/CommandBuffer.hpp>
 #include <Video/Geometry/VertexType/StaticVertex.hpp>
+#include <Utility/Log.hpp>
 
 #define BUFFER_OFFSET(i) ((char*)nullptr + (i))
 
@@ -52,8 +53,10 @@ DebugDrawing::DebugDrawing(Renderer* renderer) {
         configuration.primitiveType = PrimitiveType::TRIANGLE;
         fillTriangleGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, meshVertexDescription);
 
-        configuration.polygonMode = PolygonMode::LINE;
-        lineTriangleGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, meshVertexDescription);
+        if (lowLevelRenderer->GetOptionalFeatures().fillModeNonSolid) {
+            configuration.polygonMode = PolygonMode::LINE;
+            lineTriangleGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, meshVertexDescription);
+        }
     }
 
     // Create point vertex buffer.
@@ -163,7 +166,9 @@ DebugDrawing::~DebugDrawing() {
         delete pointGraphicsPipeline[i];
         delete lineGraphicsPipeline[i];
         delete fillTriangleGraphicsPipeline[i];
-        delete lineTriangleGraphicsPipeline[i];
+        if (lowLevelRenderer->GetOptionalFeatures().fillModeNonSolid) {
+            delete lineTriangleGraphicsPipeline[i];
+        }
     }
 
     delete vertexDescription;
@@ -328,6 +333,11 @@ void DebugDrawing::DrawCone(const Cone& cone) {
 
 void DebugDrawing::DrawMesh(const Mesh& mesh) {
     assert(mesh.geometryBinding != nullptr);
+
+    if (mesh.wireFrame && !lowLevelRenderer->GetOptionalFeatures().fillModeNonSolid) {
+        Log(Log::WARNING) << "fillModeNonSolid not supported. Failed to draw wireframe mesh.\n";
+        return;
+    }
 
     BindGraphicsPipeline(mesh.wireFrame ? lineTriangleGraphicsPipeline[mesh.depthTesting] : fillTriangleGraphicsPipeline[mesh.depthTesting]);
     BindGeometry(mesh.geometryBinding);

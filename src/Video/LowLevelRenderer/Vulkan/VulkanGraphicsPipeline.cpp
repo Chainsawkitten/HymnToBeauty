@@ -12,6 +12,7 @@ namespace Video {
 
 VulkanGraphicsPipeline::VulkanGraphicsPipeline(const VulkanRenderer& renderer, VkDevice device, const ShaderProgram* shaderProgram, const Configuration& configuration, const VertexDescription* vertexDescription) {
     assert(shaderProgram != nullptr);
+    assert(renderer.GetOptionalFeatures().fillModeNonSolid || configuration.polygonMode != PolygonMode::LINE);
 
     this->device = device;
     vulkanShaderProgram = static_cast<const VulkanShaderProgram*>(shaderProgram);
