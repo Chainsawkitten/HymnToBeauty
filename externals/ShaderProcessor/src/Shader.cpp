@@ -58,7 +58,7 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
         outFile << "};" << endl;
 
         // SPIR-V source.
-        vector<char> spirvSource = GetSpirvSource(vulkan);
+        vector<char> spirvSource = GetSpirvSource(filename, vulkan);
         if (vulkan) {
             outFile << "static const uint32_t spirv[] = {";
             assert(spirvSource.size() % sizeof(uint32_t) == 0);
@@ -215,7 +215,7 @@ string Shader::GetGlslSource() const {
     return glsl;
 }
 
-vector<char> Shader::GetSpirvSource(bool vulkan) const {
+vector<char> Shader::GetSpirvSource(const std::string& filename, bool vulkan) const {
     // Early out if we shouldn't get SPIR-V.
     if (!vulkan) {
         vector<char> spirv;
@@ -229,14 +229,14 @@ vector<char> Shader::GetSpirvSource(bool vulkan) const {
     glsl += source;
 
     // Write temporary glsl file as input to glslangvalidator.
-    string tempGlslFilename = "temp_for_glslang" + extension;
+    const string tempGlslFilename = filename + ".temp_for_glslang" + extension;
     ofstream tempFile(tempGlslFilename);
     tempFile << glsl;
     tempFile.close();
 
     // Run glslangvalidator to generate SPIR-V.
-    const char* tempSpirvFilename = "temp_shader_output.spv";
-    system((string("glslangvalidator -V --target-env vulkan1.0 -o ") + tempSpirvFilename + " " + tempGlslFilename).c_str());
+    const string tempSpirvFilename = filename + ".temp_shader_output.spv";
+    system((string("glslangvalidator -V --target-env vulkan1.0 -o \"") + tempSpirvFilename + "\" \"" + tempGlslFilename + "\"").c_str());
 
     // Read back SPIR-V.
     ifstream file(tempSpirvFilename, ios::binary | ios::ate);
@@ -249,7 +249,7 @@ vector<char> Shader::GetSpirvSource(bool vulkan) const {
 
     // Clean up temp files.
     remove(tempGlslFilename.c_str());
-    remove(tempSpirvFilename);
+    remove(tempSpirvFilename.c_str());
 
     return spirv;
 }
