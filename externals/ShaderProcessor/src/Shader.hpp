@@ -38,7 +38,7 @@ class Shader {
     static std::string VariableName(std::string inputName);
     static std::string GetSource(const std::string& filename);
     std::string GetGlslSource() const;
-    std::vector<char> GetSpirvSource(bool vulkan) const;
+    std::vector<char> GetSpirvSource(const std::string& filename, bool vulkan) const;
     ShaderSource::ReflectionInfo GetReflectionInfo() const;
     
     static std::string GetVersionString();
