@@ -40,7 +40,9 @@ VulkanRenderer::VulkanRenderer(GLFWwindow* window) {
     CreateCommandPool();
     CreateBakedDescriptorSetLayouts();
     CreateDescriptorPool();
-    CreateQueries();
+    if (optionalFeatures.timestamps) {
+        CreateQueries();
+    }
     CreateSamplers();
 
     for (unsigned int i = 0; i < ShaderProgram::BindingType::BINDING_TYPES; ++i) {
@@ -69,18 +71,20 @@ VulkanRenderer::~VulkanRenderer() {
         delete samplers[i];
     }
 
-    for (VkQueryPool queryPool : queryPools) {
-        vkDestroyQueryPool(device, queryPool, nullptr);
-    }
-    delete[] queryCommandBuffers;
+    if (optionalFeatures.timestamps) {
+        for (VkQueryPool queryPool : queryPools) {
+            vkDestroyQueryPool(device, queryPool, nullptr);
+        }
+        delete[] queryCommandBuffers;
 
-    for (std::size_t i = 0; i < swapChainImages.size(); ++i) {
-        vkDestroySemaphore(device, queryResetSemaphores[i], nullptr);
+        for (std::size_t i = 0; i < swapChainImages.size(); ++i) {
+            vkDestroySemaphore(device, queryResetSemaphores[i], nullptr);
+        }
+        delete[] queryResetSemaphores;
+        delete[] needQueryWait;
+        delete[] submittedTimings;
+        delete[] submissionTimes;
     }
-    delete[] queryResetSemaphores;
-    delete[] needQueryWait;
-    delete[] submittedTimings;
-    delete[] submissionTimes;
 
     vkDestroyDescriptorPool(device, descriptorPool, nullptr);
     for (unsigned int i = 0; i < ShaderProgram::BindingType::BINDING_TYPES; ++i) {
@@ -139,7 +143,7 @@ void VulkanRenderer::BeginFrame() {
     }
 
     // Handle queries.
-    if (currentQuery[currentFrame] > 0) {
+    if (optionalFeatures.timestamps && currentQuery[currentFrame] > 0) {
         finishedEvents.clear();
 
         // Read results.
@@ -194,7 +198,7 @@ void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
     std::vector<VkSemaphore> signalSemaphores;
     VkFence fence = VK_NULL_HANDLE;
 
-    if (firstSubmission) {
+    if (optionalFeatures.timestamps && firstSubmission) {
         if (needQueryWait[currentFrame]) {
             waitStages.push_back(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
             waitSemaphores.push_back(queryResetSemaphores[currentFrame]);
@@ -563,10 +567,14 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<std::pair
 }
 
 VkQueryPool VulkanRenderer::GetQueryPool() {
+    assert(optionalFeatures.timestamps);
+
     return queryPools[currentFrame];
 }
 
 uint32_t VulkanRenderer::GetFreeQuery() {
+    assert(optionalFeatures.timestamps);
+
     return currentQuery[currentFrame]++;
 }
 
@@ -893,7 +901,9 @@ VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
     vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
 
     optionalFeatures.timestamps = deviceProperties.limits.timestampComputeAndGraphics;
-    assert(optionalFeatures.timestamps); /// @todo Disable GPU profiling when not supported.
+    if (!optionalFeatures.timestamps) {
+        Log(Log::WARNING) << "timestampComputeAndGraphics not supported on the device. GPU profiling will not be supported.\n";
+    }
     timestampPeriod = deviceProperties.limits.timestampPeriod;
     nonCoherentAtomSize = static_cast<uint32_t>(deviceProperties.limits.nonCoherentAtomSize);
 
@@ -1189,6 +1199,8 @@ void VulkanRenderer::CreateDescriptorPool() {
 }
 
 void VulkanRenderer::CreateQueries() {
+    assert(optionalFeatures.timestamps);
+
     // Create command buffers for resetting query pools.
     queryCommandBuffers = new VkCommandBuffer[swapChainImages.size()];
 
@@ -1240,6 +1252,8 @@ void VulkanRenderer::CreateQueries() {
 }
 
 void VulkanRenderer::ResetQueries(uint32_t queryPool) {
+    assert(optionalFeatures.timestamps);
+
     vkResetCommandBuffer(queryCommandBuffers[queryPool], 0);
 
     // Begin command buffer.
