@@ -67,6 +67,7 @@ OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) {
     glGetQueryiv(GL_TIMESTAMP, GL_QUERY_COUNTER_BITS, &precision);
 
     optionalFeatures = {};
+    optionalFeatures.fillModeNonSolid = true;
     optionalFeatures.wideLines = true;
     optionalFeatures.timestamps = precision > 0;
     optionalFeatures.conservativeRasterization = GLAD_GL_NV_conservative_raster;

@@ -28,6 +28,9 @@ class LowLevelRenderer {
   public:
     /// Optional features.
     struct OptionalFeatures {
+        /// Whether non-solid fill modes (point and line) are supported.
+        bool fillModeNonSolid;
+
         /// Whether wide lines are supported.
         bool wideLines;
 
