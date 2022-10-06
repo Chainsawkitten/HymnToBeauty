@@ -127,7 +127,7 @@ void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::str
     }
 
     // Queries.
-    if (vulkanRenderer->IsProfiling()) {
+    if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
         Timing timing;
         timing.name = name;
         timing.startQuery = vulkanRenderer->GetFreeQuery();
@@ -155,7 +155,7 @@ void VulkanCommandBuffer::EndRenderPass() {
 
     vkEndCommandBuffer(renderPassCommandBuffer);
 
-    if (vulkanRenderer->IsProfiling()) {
+    if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
         vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
     }
 
@@ -163,7 +163,7 @@ void VulkanCommandBuffer::EndRenderPass() {
     vkCmdExecuteCommands(commandBuffer[currentFrame], 1, &renderPassCommandBuffer);
     vkCmdEndRenderPass(commandBuffer[currentFrame]);
 
-    if (vulkanRenderer->IsProfiling()) {
+    if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
         vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
     }
 
@@ -395,7 +395,7 @@ void VulkanCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) 
 void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups, const std::string& name) {
     assert(!inRenderPass);
 
-    if (vulkanRenderer->IsProfiling()) {
+    if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
         Timing timing;
         timing.name = name;
         timing.startQuery = vulkanRenderer->GetFreeQuery();
@@ -408,7 +408,7 @@ void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups, const std::strin
 
     vkCmdDispatch(commandBuffer[currentFrame], numGroups.x, numGroups.y, numGroups.z);
 
-    if (vulkanRenderer->IsProfiling()) {
+    if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
         vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
     }
 }
