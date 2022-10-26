@@ -151,11 +151,11 @@ void RestartScene() {
 }
 
 bool IsIntersect(Entity* checker, Entity* camera) {
-    MousePicking mousePicker = MousePicking(camera, camera->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
-    mousePicker.Update();
+    const glm::mat4 projection = camera->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
     RayIntersection rayIntersector;
     float intersectDistance;
-    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), mousePicker.GetCurrentRay(), checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
+    const glm::vec3 rayDirection = MousePicking::GetRayDirection(camera, projection, MainWindow::GetInstance()->GetWindow());
+    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), rayDirection, checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
         if (intersectDistance < 10.0f)
             return true;
         return false;

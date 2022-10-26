@@ -131,7 +131,6 @@ class Editor {
     Entity* cameraEntity;
     Entity* currentEntity;
     Entity* selectedEntity;
-    MousePicking mousePicker;
     RayIntersection rayIntersector;
     int nrOfVertices = 0;
     int nrOfIndices = 0;
