@@ -91,9 +91,6 @@ Editor::Editor(Video::LowLevelRenderer* lowLevelRenderer) : resourceView(lowLeve
     gridSettings.lineWidth = EditorSettings::GetInstance().GetLong("Grid Line Width");
     gridSettings.gridSnap = EditorSettings::GetInstance().GetBool("Grid Snap");
     gridSettings.snapOption = EditorSettings::GetInstance().GetLong("Grid Snap Size");
-
-    // Ray mouse.
-    mousePicker = MousePicking(cameraEntity, cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
 }
 
 Editor::~Editor() {
@@ -510,8 +507,7 @@ void Editor::ControlEditorCamera(float deltaTime) {
 
 void Editor::Picking() {
     if (Input()->Pressed(InputHandler::CONTROL) && Input()->Triggered(InputHandler::SELECT) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-        mousePicker.UpdateProjectionMatrix(cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y)));
-        mousePicker.Update();
+        const glm::mat4 projection = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(MainWindow::GetInstance()->GetSize().x, MainWindow::GetInstance()->GetSize().y));
         float lastDistance = INFINITY;
 
         // Deselect last entity.
@@ -530,7 +526,8 @@ void Editor::Picking() {
                 Component::Mesh* mesh = entity->GetComponent<Component::Mesh>();
                 const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->model != nullptr ? mesh->model->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
                 // Intersect with aabo.
-                if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), mousePicker.GetCurrentRay(), aabo, entity->GetModelMatrix(), intersectDistance)) {
+                const glm::vec3 rayDirection = MousePicking::GetRayDirection(cameraEntity, projection, MainWindow::GetInstance()->GetWindow());
+                if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), rayDirection, aabo, entity->GetModelMatrix(), intersectDistance)) {
                     if (intersectDistance < lastDistance && intersectDistance > 0.f) {
                         lastDistance = intersectDistance;
                         selectedEntity = entity;
