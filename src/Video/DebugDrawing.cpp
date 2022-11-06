@@ -179,17 +179,20 @@ DebugDrawing::~DebugDrawing() {
     delete fragmentShader;
 }
 
-void DebugDrawing::StartDebugDrawing(const glm::mat4& viewProjectionMatrix) {
+void DebugDrawing::StartDebugDrawing(CommandBuffer* commandBuffer, const glm::mat4& viewProjectionMatrix) {
+    assert(commandBuffer != nullptr);
+
     matricesBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &viewProjectionMatrix);
+    this->commandBuffer = commandBuffer;
 }
 
 void DebugDrawing::DrawPoint(const Point& point) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(pointGraphicsPipeline[point.depthTesting]);
     BindGeometry(pointGeometryBinding);
 
     const glm::mat4 model(glm::translate(glm::mat4(), point.position));
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -200,12 +203,12 @@ void DebugDrawing::DrawPoint(const Point& point) {
 }
 
 void DebugDrawing::DrawLine(const Line& line) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[line.depthTesting]);
     BindGeometry(lineGeometryBinding);
 
     const glm::mat4 model(glm::translate(glm::mat4(), line.startPosition) * glm::scale(glm::mat4(), line.endPosition - line.startPosition));
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -217,12 +220,12 @@ void DebugDrawing::DrawLine(const Line& line) {
 }
 
 void DebugDrawing::DrawCuboid(const Cuboid& cuboid) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[cuboid.depthTesting]);
     BindGeometry(cuboidGeometryBinding);
 
     glm::mat4 model(cuboid.matrix * glm::scale(glm::mat4(), cuboid.dimensions));
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -234,6 +237,8 @@ void DebugDrawing::DrawCuboid(const Cuboid& cuboid) {
 }
 
 void DebugDrawing::DrawPlane(const Plane& plane) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[plane.depthTesting]);
     BindGeometry(planeGeometryBinding);
 
@@ -243,8 +248,6 @@ void DebugDrawing::DrawPlane(const Plane& plane) {
     model = glm::rotate(glm::mat4(), yaw, glm::vec3(0.f, 1.f, 0.f)) * model;
     model = glm::rotate(glm::mat4(), pitch, glm::vec3(1.f, 0.f, 0.f)) * model;
     model = glm::translate(glm::mat4(), plane.position) * model;
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -256,6 +259,8 @@ void DebugDrawing::DrawPlane(const Plane& plane) {
 }
 
 void DebugDrawing::DrawCircle(const Circle& circle) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[circle.depthTesting]);
     BindGeometry(circleGeometryBinding);
 
@@ -265,8 +270,6 @@ void DebugDrawing::DrawCircle(const Circle& circle) {
     model = glm::rotate(glm::mat4(), yaw, glm::vec3(0.f, 1.f, 0.f)) * model;
     model = glm::rotate(glm::mat4(), pitch, glm::vec3(1.f, 0.f, 0.f)) * model;
     model = glm::translate(glm::mat4(), circle.position) * model;
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -278,13 +281,13 @@ void DebugDrawing::DrawCircle(const Circle& circle) {
 }
 
 void DebugDrawing::DrawSphere(const Sphere& sphere) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[sphere.depthTesting]);
     BindGeometry(sphereGeometryBinding);
 
     glm::mat4 model(glm::scale(glm::mat4(), glm::vec3(sphere.radius, sphere.radius, sphere.radius)));
     model = glm::translate(glm::mat4(), sphere.position) * model;
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -296,13 +299,13 @@ void DebugDrawing::DrawSphere(const Sphere& sphere) {
 }
 
 void DebugDrawing::DrawCylinder(const Cylinder& cylinder) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[cylinder.depthTesting]);
     BindGeometry(cylinderGeometryBinding);
 
     glm::mat4 model(glm::scale(glm::mat4(), glm::vec3(cylinder.radius, cylinder.length, cylinder.radius)));
     model = cylinder.matrix * model;
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -314,13 +317,13 @@ void DebugDrawing::DrawCylinder(const Cylinder& cylinder) {
 }
 
 void DebugDrawing::DrawCone(const Cone& cone) {
+    assert(commandBuffer != nullptr);
+
     BindGraphicsPipeline(lineGraphicsPipeline[cone.depthTesting]);
     BindGeometry(coneGeometryBinding);
 
     glm::mat4 model(glm::scale(glm::mat4(), glm::vec3(cone.radius, cone.height, cone.radius)));
     model = cone.matrix * model;
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = model;
@@ -332,6 +335,7 @@ void DebugDrawing::DrawCone(const Cone& cone) {
 }
 
 void DebugDrawing::DrawMesh(const Mesh& mesh) {
+    assert(commandBuffer != nullptr);
     assert(mesh.geometryBinding != nullptr);
 
     if (mesh.wireFrame && !lowLevelRenderer->GetOptionalFeatures().fillModeNonSolid) {
@@ -341,8 +345,6 @@ void DebugDrawing::DrawMesh(const Mesh& mesh) {
 
     BindGraphicsPipeline(mesh.wireFrame ? lineTriangleGraphicsPipeline[mesh.depthTesting] : fillTriangleGraphicsPipeline[mesh.depthTesting]);
     BindGeometry(mesh.geometryBinding);
-
-    CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
 
     PushConstantData pushConst;
     pushConst.modelMatrix = mesh.matrix;
@@ -355,12 +357,14 @@ void DebugDrawing::DrawMesh(const Mesh& mesh) {
 void DebugDrawing::EndDebugDrawing() {
     BindGeometry(nullptr);
     BindGraphicsPipeline(nullptr);
+    commandBuffer = nullptr;
 }
 
 void DebugDrawing::BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) {
+    assert(commandBuffer != nullptr);
+
     if (boundGraphicsPipeline != graphicsPipeline) {
         if (graphicsPipeline != nullptr) {
-            CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
             commandBuffer->BindGraphicsPipeline(graphicsPipeline);
             commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderer->GetRenderSurfaceSize());
             commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::MATRICES, matricesBuffer);
@@ -371,9 +375,10 @@ void DebugDrawing::BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) {
 }
 
 void DebugDrawing::BindGeometry(GeometryBinding* geometryBinding) {
+    assert(commandBuffer != nullptr);
+
     if (boundGeometry != geometryBinding) {
         if (geometryBinding != nullptr) {
-            CommandBuffer* commandBuffer = renderer->GetCommandBuffer();
             commandBuffer->BindGeometry(geometryBinding);
         }
 

@@ -94,15 +94,15 @@ class Renderer {
     Renderer(const Renderer& other) = delete;
 
     void SetRenderSurfaceSize(const glm::uvec2& size);
-    void UpdateLights(const RenderScene& renderScene, const RenderScene::Camera& camera);
+    void UpdateLights(const RenderScene& renderScene, const uint32_t cameraIndex);
     std::vector<std::size_t> FrustumCulling(const RenderScene& renderScene, const RenderScene::Camera& camera);
-    void RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const RenderScene::Camera& camera);
-    void RenderOpaques(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const RenderScene::Camera& camera);
-    void RenderDebugShapes(const RenderScene& renderScene, const RenderScene::Camera& camera);
-    void RenderIcons(const RenderScene& renderScene, const RenderScene::Camera& camera);
-    void PrepareRenderingIcons(const glm::mat4& viewProjectionMatrix, const glm::vec3& cameraPosition, const glm::vec3& cameraUp);
-    void RenderIcon(const glm::vec3& position);
-    void RenderSprites(const RenderScene& renderScene, const RenderScene::Camera& camera);
+    void RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const uint32_t cameraIndex);
+    void RenderOpaques(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const uint32_t cameraIndex);
+    void RenderDebugShapes(const RenderScene& renderScene, const uint32_t cameraIndex);
+    void RenderIcons(const RenderScene& renderScene, const uint32_t cameraIndex);
+    void PrepareRenderingIcons(const uint32_t cameraIndex, const glm::mat4& viewProjectionMatrix, const glm::vec3& cameraPosition, const glm::vec3& cameraUp);
+    void RenderIcon(const uint32_t cameraIndex, const glm::vec3& position);
+    void RenderSprites(const RenderScene& renderScene, const uint32_t cameraIndex);
 
     LowLevelRenderer* lowLevelRenderer;
     Utility::Window* window;
@@ -113,7 +113,8 @@ class Renderer {
     Texture* colorTexture;
     Texture* depthTexture;
     Texture* postProcessingTexture;
-    CommandBuffer* commandBuffer;
+    CommandBuffer* guiCommandBuffer;
+    std::vector<CommandBuffer*> commandBuffers;
 
     StaticRenderProgram* staticRenderProgram;
     SpriteRenderProgram* spriteRenderProgram;

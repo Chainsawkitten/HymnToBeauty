@@ -7,6 +7,7 @@
 namespace Video {
 class Renderer;
 class LowLevelRenderer;
+class CommandBuffer;
 class Buffer;
 class Shader;
 class ShaderProgram;
@@ -230,9 +231,10 @@ class DebugDrawing {
     /// Start rendering debug primitives.
     /**
      * Needs to be called before DrawPoint, DrawLine or DrawCuboid.
+     * @param commandBuffer Command buffer to use for drawing.
      * @param viewProjectionMatrix The camera's view projection matrix.
      */
-    void StartDebugDrawing(const glm::mat4& viewProjectionMatrix);
+    void StartDebugDrawing(CommandBuffer* commandBuffer, const glm::mat4& viewProjectionMatrix);
 
     /// Draw a point.
     /**
@@ -304,6 +306,7 @@ class DebugDrawing {
 
     Renderer* renderer;
     LowLevelRenderer* lowLevelRenderer;
+    CommandBuffer* commandBuffer = nullptr;
     Shader* vertexShader;
     Shader* fragmentShader;
     ShaderProgram* shaderProgram;
