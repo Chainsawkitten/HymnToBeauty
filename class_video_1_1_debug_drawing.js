@@ -21,5 +21,5 @@ var class_video_1_1_debug_drawing =
     [ "DrawPoint", "class_video_1_1_debug_drawing.html#a2f2229cf77e4f57dbcad4d076ae78f9d", null ],
     [ "DrawSphere", "class_video_1_1_debug_drawing.html#ab6552ea0a5bcc57320f00a825f725638", null ],
     [ "EndDebugDrawing", "class_video_1_1_debug_drawing.html#ae39353e463ef2ed102e0caedd38b4918", null ],
-    [ "StartDebugDrawing", "class_video_1_1_debug_drawing.html#ad6ca83bce68c259ebb46add192bef14b", null ]
+    [ "StartDebugDrawing", "class_video_1_1_debug_drawing.html#aeff7c14668fb02974076d6763b83450f", null ]
 ];

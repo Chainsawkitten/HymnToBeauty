@@ -40,6 +40,7 @@ var hierarchy =
     [ "Video::DebugDrawing::Cuboid", "struct_video_1_1_debug_drawing_1_1_cuboid.html", null ],
     [ "Physics::Shape::Cylinder", "struct_physics_1_1_shape_1_1_cylinder.html", null ],
     [ "Video::DebugDrawing::Cylinder", "struct_video_1_1_debug_drawing_1_1_cylinder.html", null ],
+    [ "RenderManager::DebugConfiguration", "struct_render_manager_1_1_debug_configuration.html", null ],
     [ "Video::DebugDrawing", "class_video_1_1_debug_drawing.html", null ],
     [ "DebugDrawingManager", "class_debug_drawing_manager.html", null ],
     [ "Video::DirectionalLight", "struct_video_1_1_directional_light.html", null ],
@@ -76,7 +77,7 @@ var hierarchy =
     [ "Hub", "class_hub.html", null ],
     [ "Video::RenderScene::Icon", "struct_video_1_1_render_scene_1_1_icon.html", null ],
     [ "Input", "class_input.html", null ],
-    [ "InputHandler", "class_input_handler.html", null ],
+    [ "InputManager", "class_input_manager.html", null ],
     [ "GUI::InputWindow", "class_g_u_i_1_1_input_window.html", null ],
     [ "GUI::IShapeEditor", "class_g_u_i_1_1_i_shape_editor.html", [
       [ "GUI::BoxShapeEditor", "class_g_u_i_1_1_box_shape_editor.html", null ],
@@ -98,11 +99,9 @@ var hierarchy =
       [ "Video::OpenGLRenderer", "class_video_1_1_open_g_l_renderer.html", null ],
       [ "Video::VulkanRenderer", "class_video_1_1_vulkan_renderer.html", null ]
     ] ],
-    [ "MainWindow", "class_main_window.html", null ],
     [ "Video::DebugDrawing::Mesh", "struct_video_1_1_debug_drawing_1_1_mesh.html", null ],
     [ "Video::RenderScene::Mesh", "struct_video_1_1_render_scene_1_1_mesh.html", null ],
     [ "Geometry::MeshData", "struct_geometry_1_1_mesh_data.html", null ],
-    [ "MousePicking", "class_mouse_picking.html", null ],
     [ "Video::OpenGLVertexDescription::OpenGLAttribute", "struct_video_1_1_open_g_l_vertex_description_1_1_open_g_l_attribute.html", null ],
     [ "Video::LowLevelRenderer::OptionalFeatures", "struct_video_1_1_low_level_renderer_1_1_optional_features.html", null ],
     [ "PhysicsManager", "class_physics_manager.html", null ],
@@ -223,6 +222,10 @@ var hierarchy =
       [ "Video::OpenGLVertexDescription", "class_video_1_1_open_g_l_vertex_description.html", null ],
       [ "Video::VulkanVertexDescription", "class_video_1_1_vulkan_vertex_description.html", null ]
     ] ],
+    [ "Utility::Window", "class_utility_1_1_window.html", null ],
     [ "World", "class_world.html", null ],
-    [ "Video::ZBinning", "class_video_1_1_z_binning.html", null ]
+    [ "Video::ZBinning", "class_video_1_1_z_binning.html", null ],
+    [ "GameActivity", null, [
+      [ "com.chainsawkitten.hymntobeauty.MainActivity", "classcom_1_1chainsawkitten_1_1hymntobeauty_1_1_main_activity.html", null ]
+    ] ]
 ];

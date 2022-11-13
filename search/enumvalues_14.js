@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zoom_0',['ZOOM',['../class_input_handler.html#af877d52dbdb6f2bb992f5c22de7b93b4a30b5c49155df9882cee0e91b11612985',1,'InputHandler']]]
+  ['zoom_0',['ZOOM',['../class_input_manager.html#a3b658425a8c4735c79f611c38c44a356a0654ca653f3c15e9ca39175cbefd4687',1,'InputManager']]]
 ];

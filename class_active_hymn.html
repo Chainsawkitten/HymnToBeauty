@@ -129,9 +129,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a47f58b09da17044c72aa478d6d33497a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_active_hymn.html#a47f58b09da17044c72aa478d6d33497a">Update</a> (float deltaTime)</td></tr>
 <tr class="memdesc:a47f58b09da17044c72aa478d6d33497a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the world.  <a href="class_active_hymn.html#a47f58b09da17044c72aa478d6d33497a">More...</a><br /></td></tr>
 <tr class="separator:a47f58b09da17044c72aa478d6d33497a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f445da46cb514777f6264046ea929f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_active_hymn.html#a0f445da46cb514777f6264046ea929f8">Render</a> (<a class="el" href="class_entity.html">Entity</a> *camera=nullptr, bool showSoundSources=false, bool showLightSources=false, bool showCameras=false, bool showPhysics=false, bool lighting=true, bool showLightVolumes=false)</td></tr>
-<tr class="memdesc:a0f445da46cb514777f6264046ea929f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render the world.  <a href="class_active_hymn.html#a0f445da46cb514777f6264046ea929f8">More...</a><br /></td></tr>
-<tr class="separator:a0f445da46cb514777f6264046ea929f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c23a46ca896cea86c0cb0def0ee5fb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_active_hymn.html#a8c23a46ca896cea86c0cb0def0ee5fb0">Render</a> (const <a class="el" href="struct_render_manager_1_1_debug_configuration.html">RenderManager::DebugConfiguration</a> &amp;debugConfiguration, <a class="el" href="class_entity.html">Entity</a> *camera=nullptr)</td></tr>
+<tr class="memdesc:a8c23a46ca896cea86c0cb0def0ee5fb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render the world.  <a href="class_active_hymn.html#a8c23a46ca896cea86c0cb0def0ee5fb0">More...</a><br /></td></tr>
+<tr class="separator:a8c23a46ca896cea86c0cb0def0ee5fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -324,8 +324,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a0f445da46cb514777f6264046ea929f8" name="a0f445da46cb514777f6264046ea929f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f445da46cb514777f6264046ea929f8">&#9670;&nbsp;</a></span>Render()</h2>
+<a id="a8c23a46ca896cea86c0cb0def0ee5fb0" name="a8c23a46ca896cea86c0cb0def0ee5fb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c23a46ca896cea86c0cb0def0ee5fb0">&#9670;&nbsp;</a></span>Render()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -333,44 +333,14 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">void ActiveHymn::Render </td>
           <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_render_manager_1_1_debug_configuration.html">RenderManager::DebugConfiguration</a> &amp;&#160;</td>
+          <td class="paramname"><em>debugConfiguration</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="class_entity.html">Entity</a> *&#160;</td>
-          <td class="paramname"><em>camera</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showSoundSources</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showLightSources</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showCameras</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showPhysics</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>lighting</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showLightVolumes</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>camera</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -383,13 +353,8 @@ Friends</h2></td></tr>
 <p>Render the world. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">debugConfiguration</td><td>Configuration for visualizing debug information. </td></tr>
     <tr><td class="paramname">camera</td><td>Camera through which to render (or first camera in the world if nullptr). </td></tr>
-    <tr><td class="paramname">showSoundSources</td><td>Whether to show sound sources. </td></tr>
-    <tr><td class="paramname">showLightSources</td><td>Whether to show light sources. </td></tr>
-    <tr><td class="paramname">showCameras</td><td>Whether to show cameras. </td></tr>
-    <tr><td class="paramname">showPhysics</td><td>Whether to show physics volumes. </td></tr>
-    <tr><td class="paramname">lighting</td><td>Whether to light the world (otherwise full ambient is used). </td></tr>
-    <tr><td class="paramname">showLightVolumes</td><td>Whether to show light culling volumes. </td></tr>
   </table>
   </dd>
 </dl>

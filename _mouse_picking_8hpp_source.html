@@ -93,56 +93,21 @@ $(document).ready(function(){initNavTree('_mouse_picking_8hpp_source.html',''); 
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">class </span><a class="code hl_class" href="class_entity.html">Entity</a>;</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="class_mouse_picking.html">    8</a></span><span class="keyword">class </span><a class="code hl_class" href="class_mouse_picking.html">MousePicking</a> {</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="class_mouse_picking.html#a2850a040e8463e671004aa4e1e8ac532">   11</a></span>    <a class="code hl_function" href="class_mouse_picking.html#a2850a040e8463e671004aa4e1e8ac532">MousePicking</a>() {}</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <a class="code hl_function" href="class_mouse_picking.html#a2850a040e8463e671004aa4e1e8ac532">MousePicking</a>(<a class="code hl_class" href="class_entity.html">Entity</a>* cam, <span class="keyword">const</span> glm::mat4&amp; projection);</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_utility.html">Utility</a> {</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">class </span>Window;</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>}</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_mouse_picking.html">MousePicking</a> {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>glm::vec3 <a class="code hl_function" href="namespace_mouse_picking.html#a9d7f4e42a6abd52385d7e2ad34d09057">GetRayDirection</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_entity.html">Entity</a>* camera, <span class="keyword">const</span> glm::mat4&amp; projection, <span class="keyword">const</span> <a class="code hl_class" href="class_utility_1_1_window.html">Utility::Window</a>* window);</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <a class="code hl_function" href="class_mouse_picking.html#aef78e20c087f70efbe6b8879e98de620">~MousePicking</a>();</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    glm::vec3 <a class="code hl_function" href="class_mouse_picking.html#a042ae78d695bc208cd53deea0a6ac918">GetCurrentRay</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_mouse_picking.html#a5155c62ad270e8f8da17e270fd580af9">UpdateProjectionMatrix</a>(<span class="keyword">const</span> glm::mat4&amp; projection);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_mouse_picking.html#a573427360ac4dd69379ec953cff902a2">Update</a>();</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="comment">// Where current ray direction points in world space.</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    glm::vec3 currentRay;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="comment">// Projection matrix.</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    glm::mat4 pMatrix;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="comment">// View matrix.</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    glm::mat4 vMatrix;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="comment">// Entity to hold camera.</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <a class="code hl_class" href="class_entity.html">Entity</a>* camera;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="comment">// Return a vector</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    glm::vec3 CalculateRay() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="comment">// Return a vector with mouse coordinates in Normalized Device Coordinates.</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">static</span> glm::vec2 GetNDC(<span class="keywordtype">double</span> mouseX, <span class="keywordtype">double</span> mouseY);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="comment">// Convert clip space coordinates to eye coordinates.</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    glm::vec4 ConvertEyeCoords(<span class="keyword">const</span> glm::vec4&amp; clipSpaceCoordinates) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="comment">// Convert eye coordinates to world coordinates.</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    glm::vec3 ConvertWorldCoords(<span class="keyword">const</span> glm::vec4&amp; eyeCoords) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>}</div>
 <div class="ttc" id="aclass_entity_html"><div class="ttname"><a href="class_entity.html">Entity</a></div><div class="ttdoc">Entity containing various components.</div><div class="ttdef"><b>Definition:</b> Entity.hpp:15</div></div>
-<div class="ttc" id="aclass_mouse_picking_html"><div class="ttname"><a href="class_mouse_picking.html">MousePicking</a></div><div class="ttdoc">Use mouse cursor to select objects in editor and in game.</div><div class="ttdef"><b>Definition:</b> MousePicking.hpp:8</div></div>
-<div class="ttc" id="aclass_mouse_picking_html_a042ae78d695bc208cd53deea0a6ac918"><div class="ttname"><a href="class_mouse_picking.html#a042ae78d695bc208cd53deea0a6ac918">MousePicking::GetCurrentRay</a></div><div class="ttdeci">glm::vec3 GetCurrentRay() const</div><div class="ttdoc">Return the vector for current ray.</div><div class="ttdef"><b>Definition:</b> MousePicking.cpp:18</div></div>
-<div class="ttc" id="aclass_mouse_picking_html_a2850a040e8463e671004aa4e1e8ac532"><div class="ttname"><a href="class_mouse_picking.html#a2850a040e8463e671004aa4e1e8ac532">MousePicking::MousePicking</a></div><div class="ttdeci">MousePicking()</div><div class="ttdoc">Fake constructor.</div><div class="ttdef"><b>Definition:</b> MousePicking.hpp:11</div></div>
-<div class="ttc" id="aclass_mouse_picking_html_a5155c62ad270e8f8da17e270fd580af9"><div class="ttname"><a href="class_mouse_picking.html#a5155c62ad270e8f8da17e270fd580af9">MousePicking::UpdateProjectionMatrix</a></div><div class="ttdeci">void UpdateProjectionMatrix(const glm::mat4 &amp;projection)</div><div class="ttdoc">Updates the mouse picker's projection matrix.</div><div class="ttdef"><b>Definition:</b> MousePicking.cpp:22</div></div>
-<div class="ttc" id="aclass_mouse_picking_html_a573427360ac4dd69379ec953cff902a2"><div class="ttname"><a href="class_mouse_picking.html#a573427360ac4dd69379ec953cff902a2">MousePicking::Update</a></div><div class="ttdeci">void Update()</div><div class="ttdoc">Update the view matrix and recalculates the ray.</div><div class="ttdef"><b>Definition:</b> MousePicking.cpp:26</div></div>
-<div class="ttc" id="aclass_mouse_picking_html_aef78e20c087f70efbe6b8879e98de620"><div class="ttname"><a href="class_mouse_picking.html#aef78e20c087f70efbe6b8879e98de620">MousePicking::~MousePicking</a></div><div class="ttdeci">~MousePicking()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> MousePicking.cpp:16</div></div>
+<div class="ttc" id="aclass_utility_1_1_window_html"><div class="ttname"><a href="class_utility_1_1_window.html">Utility::Window</a></div><div class="ttdef"><b>Definition:</b> Window.hpp:14</div></div>
+<div class="ttc" id="anamespace_mouse_picking_html"><div class="ttname"><a href="namespace_mouse_picking.html">MousePicking</a></div><div class="ttdef"><b>Definition:</b> MousePicking.cpp:9</div></div>
+<div class="ttc" id="anamespace_mouse_picking_html_a9d7f4e42a6abd52385d7e2ad34d09057"><div class="ttname"><a href="namespace_mouse_picking.html#a9d7f4e42a6abd52385d7e2ad34d09057">MousePicking::GetRayDirection</a></div><div class="ttdeci">glm::vec3 GetRayDirection(const Entity *camera, const glm::mat4 &amp;projection, const Utility::Window *window)</div><div class="ttdoc">Get the direction of the ray in world space. Normalized.</div><div class="ttdef"><b>Definition:</b> MousePicking.cpp:34</div></div>
+<div class="ttc" id="anamespace_utility_html"><div class="ttname"><a href="namespace_utility.html">Utility</a></div><div class="ttdef"><b>Definition:</b> ResourceView.hpp:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

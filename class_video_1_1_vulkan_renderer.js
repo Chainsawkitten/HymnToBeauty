@@ -1,6 +1,6 @@
 var class_video_1_1_vulkan_renderer =
 [
-    [ "VulkanRenderer", "class_video_1_1_vulkan_renderer.html#a20ddbcc29f80090763591e1235569769", null ],
+    [ "VulkanRenderer", "class_video_1_1_vulkan_renderer.html#a1754a74d422903124b3d4f730b507fad", null ],
     [ "~VulkanRenderer", "class_video_1_1_vulkan_renderer.html#ad64a65fff4936ab447804ab3f4b076c6", null ],
     [ "BeginFrame", "class_video_1_1_vulkan_renderer.html#a59b4c10ddbe34c695344142750eb7705", null ],
     [ "CreateBuffer", "class_video_1_1_vulkan_renderer.html#a9886b063ea80514850c1724d3c1605f9", null ],

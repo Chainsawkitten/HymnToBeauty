@@ -1,6 +1,11 @@
 var namespaces_dup =
 [
     [ "Audio", "namespace_audio.html", "namespace_audio" ],
+    [ "com", null, [
+      [ "chainsawkitten", null, [
+        [ "hymntobeauty", "namespacecom_1_1chainsawkitten_1_1hymntobeauty.html", "namespacecom_1_1chainsawkitten_1_1hymntobeauty" ]
+      ] ]
+    ] ],
     [ "Component", "namespace_component.html", "namespace_component" ],
     [ "FileSystem", "namespace_file_system.html", [
       [ "Copy", "namespace_file_system.html#a635d8cb747bb609fdbbc8c1a83f9315c", null ],
@@ -57,6 +62,9 @@ var namespaces_dup =
       [ "Serialize", "namespace_json.html#a9fe98b227c541389083b6ef8ac5887f4", null ],
       [ "Serialize", "namespace_json.html#a22a8a11ac5aa1bc035ff5c6ea0e5c312", null ],
       [ "Serialize", "namespace_json.html#a0a55e8ca325dd00f7f041adbe4075877", null ]
+    ] ],
+    [ "MousePicking", "namespace_mouse_picking.html", [
+      [ "GetRayDirection", "namespace_mouse_picking.html#a9d7f4e42a6abd52385d7e2ad34d09057", null ]
     ] ],
     [ "Physics", "namespace_physics.html", "namespace_physics" ],
     [ "Profiling", "namespace_profiling.html", "namespace_profiling" ],

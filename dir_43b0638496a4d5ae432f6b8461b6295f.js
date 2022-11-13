@@ -4,6 +4,10 @@ var dir_43b0638496a4d5ae432f6b8461b6295f =
     [ "DebugDrawingManager.hpp", "_debug_drawing_manager_8hpp.html", [
       [ "DebugDrawingManager", "class_debug_drawing_manager.html", "class_debug_drawing_manager" ]
     ] ],
+    [ "InputManager.cpp", "_input_manager_8cpp.html", null ],
+    [ "InputManager.hpp", "_input_manager_8hpp.html", [
+      [ "InputManager", "class_input_manager.html", "class_input_manager" ]
+    ] ],
     [ "Managers.cpp", "_managers_8cpp.html", "_managers_8cpp" ],
     [ "Managers.hpp", "_managers_8hpp.html", "_managers_8hpp" ],
     [ "PhysicsManager.cpp", "_physics_manager_8cpp.html", null ],
@@ -16,7 +20,8 @@ var dir_43b0638496a4d5ae432f6b8461b6295f =
     ] ],
     [ "RenderManager.cpp", "_render_manager_8cpp.html", null ],
     [ "RenderManager.hpp", "_render_manager_8hpp.html", [
-      [ "RenderManager", "class_render_manager.html", "class_render_manager" ]
+      [ "RenderManager", "class_render_manager.html", "class_render_manager" ],
+      [ "RenderManager::DebugConfiguration", "struct_render_manager_1_1_debug_configuration.html", "struct_render_manager_1_1_debug_configuration" ]
     ] ],
     [ "ResourceManager.cpp", "_resource_manager_8cpp.html", null ],
     [ "ResourceManager.hpp", "_resource_manager_8hpp.html", [

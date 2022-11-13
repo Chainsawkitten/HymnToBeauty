@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('class_render_manager.html',''); initRe
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="class_render_manager-members.html">List of all members</a>  </div>
@@ -98,14 +99,17 @@ $(document).ready(function(){initNavTree('class_render_manager.html',''); initRe
 
 <p><code>#include &lt;<a class="el" href="_render_manager_8hpp_source.html">RenderManager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_render_manager_1_1_debug_configuration.html">DebugConfiguration</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration for visualizing debug information.  <a href="struct_render_manager_1_1_debug_configuration.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac7d6f388ca4ea671694602e66d14fd02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_manager.html#ac7d6f388ca4ea671694602e66d14fd02">Render</a> (<a class="el" href="class_world.html">World</a> &amp;world, bool showSoundSources=true, bool showLightSources=true, bool showCameras=true, bool showPhysics=true, <a class="el" href="class_entity.html">Entity</a> *cameraEntity=nullptr, bool lighting=true, bool lightVolumes=false)</td></tr>
-<tr class="memdesc:ac7d6f388ca4ea671694602e66d14fd02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render world containing entities.  <a href="class_render_manager.html#ac7d6f388ca4ea671694602e66d14fd02">More...</a><br /></td></tr>
-<tr class="separator:ac7d6f388ca4ea671694602e66d14fd02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd8375efe1294896244d4dd1b96b3c7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_manager.html#afd8375efe1294896244d4dd1b96b3c7d">UpdateBufferSize</a> ()</td></tr>
-<tr class="memdesc:afd8375efe1294896244d4dd1b96b3c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the buffers to fit the current screen size.  <a href="class_render_manager.html#afd8375efe1294896244d4dd1b96b3c7d">More...</a><br /></td></tr>
-<tr class="separator:afd8375efe1294896244d4dd1b96b3c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0627d2ca0609f99ce29def2b80423e3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_manager.html#a0627d2ca0609f99ce29def2b80423e3b">Render</a> (<a class="el" href="class_world.html">World</a> &amp;world, const <a class="el" href="struct_render_manager_1_1_debug_configuration.html">DebugConfiguration</a> &amp;debugConfiguration, <a class="el" href="class_entity.html">Entity</a> *cameraEntity=nullptr)</td></tr>
+<tr class="memdesc:a0627d2ca0609f99ce29def2b80423e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render world containing entities.  <a href="class_render_manager.html#a0627d2ca0609f99ce29def2b80423e3b">More...</a><br /></td></tr>
+<tr class="separator:a0627d2ca0609f99ce29def2b80423e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd39ba56639f539e0f12bf60c053797"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_component_1_1_directional_light.html">Component::DirectionalLight</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_manager.html#a8bd39ba56639f539e0f12bf60c053797">CreateDirectionalLight</a> ()</td></tr>
 <tr class="memdesc:a8bd39ba56639f539e0f12bf60c053797"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create directional light component.  <a href="class_render_manager.html#a8bd39ba56639f539e0f12bf60c053797">More...</a><br /></td></tr>
 <tr class="separator:a8bd39ba56639f539e0f12bf60c053797"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -481,8 +485,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ac7d6f388ca4ea671694602e66d14fd02" name="ac7d6f388ca4ea671694602e66d14fd02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7d6f388ca4ea671694602e66d14fd02">&#9670;&nbsp;</a></span>Render()</h2>
+<a id="a0627d2ca0609f99ce29def2b80423e3b" name="a0627d2ca0609f99ce29def2b80423e3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0627d2ca0609f99ce29def2b80423e3b">&#9670;&nbsp;</a></span>Render()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -496,44 +500,14 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showSoundSources</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showLightSources</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showCameras</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>showPhysics</em> = <code>true</code>, </td>
+          <td class="paramtype">const <a class="el" href="struct_render_manager_1_1_debug_configuration.html">DebugConfiguration</a> &amp;&#160;</td>
+          <td class="paramname"><em>debugConfiguration</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_entity.html">Entity</a> *&#160;</td>
-          <td class="paramname"><em>cameraEntity</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>lighting</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>lightVolumes</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>cameraEntity</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -547,35 +521,11 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">world</td><td>Contains a bunch of entities. </td></tr>
-    <tr><td class="paramname">showSoundSources</td><td>Whether to show sound sources. </td></tr>
-    <tr><td class="paramname">showLightSources</td><td>Whether to show light sources. </td></tr>
-    <tr><td class="paramname">showCameras</td><td>Whether to show cameras. </td></tr>
-    <tr><td class="paramname">showPhysics</td><td>Whether to show physics volumes. </td></tr>
+    <tr><td class="paramname">debugConfiguration</td><td>Configuration for visualizing debug information. </td></tr>
     <tr><td class="paramname">cameraEntity</td><td>Camera through which to render (or first camera in the world if nullptr). </td></tr>
-    <tr><td class="paramname">lighting</td><td>Whether to light the scene (otherwise full ambient is used). </td></tr>
-    <tr><td class="paramname">lightVolumes</td><td>Whether to show light culling volumes. </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="afd8375efe1294896244d4dd1b96b3c7d" name="afd8375efe1294896244d4dd1b96b3c7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd8375efe1294896244d4dd1b96b3c7d">&#9670;&nbsp;</a></span>UpdateBufferSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void RenderManager::UpdateBufferSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Updates the buffers to fit the current screen size. </p>
 
 </div>
 </div>

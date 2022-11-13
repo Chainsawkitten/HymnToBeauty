@@ -5,7 +5,7 @@ var class_active_hymn =
     [ "GetPath", "class_active_hymn.html#a1d769d9ee511801576199bc7b1c81995", null ],
     [ "GetSavePath", "class_active_hymn.html#a40e12c3fdc014cf961328c68b0ac30ed", null ],
     [ "Load", "class_active_hymn.html#a61f79b007c8ca6877f1e8ef7b0a05ef9", null ],
-    [ "Render", "class_active_hymn.html#a0f445da46cb514777f6264046ea929f8", null ],
+    [ "Render", "class_active_hymn.html#a8c23a46ca896cea86c0cb0def0ee5fb0", null ],
     [ "Save", "class_active_hymn.html#a073cd13290062cb2c7549ec663bc416c", null ],
     [ "SetPath", "class_active_hymn.html#a5676c857694accbc78144d7025aac836", null ],
     [ "ToJson", "class_active_hymn.html#a3eb84f50313e8d70aa2db6e62c1e2a5e", null ],

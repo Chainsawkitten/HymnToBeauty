@@ -1,5 +1,6 @@
 var class_render_manager =
 [
+    [ "DebugConfiguration", "struct_render_manager_1_1_debug_configuration.html", "struct_render_manager_1_1_debug_configuration" ],
     [ "ClearKilledComponents", "class_render_manager.html#ad1a201f75cd4deeea75d998b721b7438", null ],
     [ "CreateCamera", "class_render_manager.html#ac59c59bbad3eaa5f0f140be3de51ebad", null ],
     [ "CreateDirectionalLight", "class_render_manager.html#a8bd39ba56639f539e0f12bf60c053797", null ],
@@ -16,7 +17,6 @@ var class_render_manager =
     [ "GetRenderer", "class_render_manager.html#a27cd589c80de7f47875ce23c3fec2cad", null ],
     [ "GetSpotLights", "class_render_manager.html#aee44271c8807f3319a3bc33eaa1702b6", null ],
     [ "GetSprites", "class_render_manager.html#adbe66b7ff4af3e47a4fe9e10c6155c6d", null ],
-    [ "Render", "class_render_manager.html#ac7d6f388ca4ea671694602e66d14fd02", null ],
-    [ "UpdateBufferSize", "class_render_manager.html#afd8375efe1294896244d4dd1b96b3c7d", null ],
+    [ "Render", "class_render_manager.html#a0627d2ca0609f99ce29def2b80423e3b", null ],
     [ "Hub", "class_render_manager.html#aea14f5495b4697c28ed665a9054acf5e", null ]
 ];

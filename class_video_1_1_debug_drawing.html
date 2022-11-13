@@ -136,9 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac546ab9baddcd196ba7fb2d92fee1326"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_debug_drawing.html#ac546ab9baddcd196ba7fb2d92fee1326">~DebugDrawing</a> ()</td></tr>
 <tr class="memdesc:ac546ab9baddcd196ba7fb2d92fee1326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_video_1_1_debug_drawing.html#ac546ab9baddcd196ba7fb2d92fee1326">More...</a><br /></td></tr>
 <tr class="separator:ac546ab9baddcd196ba7fb2d92fee1326"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6ca83bce68c259ebb46add192bef14b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_debug_drawing.html#ad6ca83bce68c259ebb46add192bef14b">StartDebugDrawing</a> (const glm::mat4 &amp;viewProjectionMatrix)</td></tr>
-<tr class="memdesc:ad6ca83bce68c259ebb46add192bef14b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start rendering debug primitives.  <a href="class_video_1_1_debug_drawing.html#ad6ca83bce68c259ebb46add192bef14b">More...</a><br /></td></tr>
-<tr class="separator:ad6ca83bce68c259ebb46add192bef14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeff7c14668fb02974076d6763b83450f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_debug_drawing.html#aeff7c14668fb02974076d6763b83450f">StartDebugDrawing</a> (<a class="el" href="class_video_1_1_command_buffer.html">CommandBuffer</a> *commandBuffer, const glm::mat4 &amp;viewProjectionMatrix)</td></tr>
+<tr class="memdesc:aeff7c14668fb02974076d6763b83450f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start rendering debug primitives.  <a href="class_video_1_1_debug_drawing.html#aeff7c14668fb02974076d6763b83450f">More...</a><br /></td></tr>
+<tr class="separator:aeff7c14668fb02974076d6763b83450f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f2229cf77e4f57dbcad4d076ae78f9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_debug_drawing.html#a2f2229cf77e4f57dbcad4d076ae78f9d">DrawPoint</a> (const <a class="el" href="struct_video_1_1_debug_drawing_1_1_point.html">Point</a> &amp;point)</td></tr>
 <tr class="memdesc:a2f2229cf77e4f57dbcad4d076ae78f9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a point.  <a href="class_video_1_1_debug_drawing.html#a2f2229cf77e4f57dbcad4d076ae78f9d">More...</a><br /></td></tr>
 <tr class="separator:a2f2229cf77e4f57dbcad4d076ae78f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -480,8 +480,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad6ca83bce68c259ebb46add192bef14b" name="ad6ca83bce68c259ebb46add192bef14b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6ca83bce68c259ebb46add192bef14b">&#9670;&nbsp;</a></span>StartDebugDrawing()</h2>
+<a id="aeff7c14668fb02974076d6763b83450f" name="aeff7c14668fb02974076d6763b83450f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeff7c14668fb02974076d6763b83450f">&#9670;&nbsp;</a></span>StartDebugDrawing()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -489,9 +489,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void DebugDrawing::StartDebugDrawing </td>
           <td>(</td>
-          <td class="paramtype">const glm::mat4 &amp;&#160;</td>
-          <td class="paramname"><em>viewProjectionMatrix</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_video_1_1_command_buffer.html">CommandBuffer</a> *&#160;</td>
+          <td class="paramname"><em>commandBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const glm::mat4 &amp;&#160;</td>
+          <td class="paramname"><em>viewProjectionMatrix</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -499,6 +509,7 @@ Public Member Functions</h2></td></tr>
 <p>Start rendering debug primitives. </p>
 <p >Needs to be called before DrawPoint, DrawLine or DrawCuboid. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">commandBuffer</td><td>Command buffer to use for drawing. </td></tr>
     <tr><td class="paramname">viewProjectionMatrix</td><td>The camera's view projection matrix. </td></tr>
   </table>
   </dd>

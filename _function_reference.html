@@ -91,11 +91,11 @@ $(document).ready(function(){initNavTree('_function_reference.html',''); initRes
 <div class="textblock"><p >The scripting language contains the following global functions:</p>
 <p ><code>void print(const string&amp; in)</code> <br  />
  Display <code>in</code> in the console.</p>
-<p ><code>vec2 <a class="el" href="_script_manager_8cpp.html#abd2616d92388db4b677a42d9a271a58c">GetCursorXY()</a></code> <br  />
+<p ><code>vec2 GetCursorXY()</code> <br  />
  Get the mouse cursor's coordinates in an (x,y) vector.</p>
-<p ><code>bool <a class="el" href="class_input.html" title="Hold information about the hymn&#39;s inputs.">Input(input button)</a></code> <br  />
+<p ><code>bool <a class="el" href="class_input.html">Input(input button)</a></code> <br  />
  Gets whether the input <code>button</code> has been activated. Inputs are defined in the hymn.</p>
-<p ><code>void <a class="el" href="_script_manager_8cpp.html#a8609c315a9a14b340a40f8ce85a2c348">RegisterUpdate()</a></code> <br  />
+<p ><code>void RegisterUpdate()</code> <br  />
  Register the current entity to receive update events. (The <code>void Update(float deltaTime)</code> method will be called each frame.)</p>
 <p ><code>void SendMessage(<a class="el" href="class_entity.html" title="Entity containing various components.">Entity</a>@ recipient, int type)</code> <br  />
  Send a message to <code>recipient</code>. (The <code>void ReceiveMessage(<a class="el" href="class_entity.html" title="Entity containing various components.">Entity</a>@ sender, int type)</code> method will be called.)</p>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('_function_reference.html',''); initRes
  Set up a listener method with name <code>method</code> to call while <code>listener</code> is intersecting the volume defined by <code>trigger</code>. The listener method takes the trigger as first parameter and the listener object as second.</p>
 <p ><code>void RegisterTriggerLeave(Component::Physics@ trigger, Component::Physics@ listener, string method)</code> <br  />
  Set up a listener method with name <code>method</code> to call when <code>listener</code> stops intersecting the volume defined by <code>trigger</code>. The listener method takes the trigger as first parameter and the listener object as second.</p>
-<p ><code>void <a class="el" href="_script_manager_8cpp.html#a3370851e329c19d30796dfbfdccd176b">RestartScene()</a></code> <br  />
+<p ><code>void RestartScene()</code> <br  />
  Restarts the scene from the most recently saved state. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

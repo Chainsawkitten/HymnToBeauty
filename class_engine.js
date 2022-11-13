@@ -2,7 +2,7 @@ var class_engine =
 [
     [ "Configuration", "struct_engine_1_1_configuration.html", "struct_engine_1_1_configuration" ],
     [ "GetDeltaTime", "class_engine.html#acd469b062a4b907a807938e58bb55807", null ],
-    [ "GetMainWindow", "class_engine.html#a4bd10ca979001fadb4705196e5731981", null ],
+    [ "GetWindow", "class_engine.html#a4f98dcce00f0a54516dc3786f218be7e", null ],
     [ "Present", "class_engine.html#a93c17fbedd3c75d3f8abdf981585bbd6", null ],
     [ "Render", "class_engine.html#acde70aed0043e2e2091d0bb6cce8e3c1", null ],
     [ "ShouldClose", "class_engine.html#a9a04db57f07ae5d3c6e8c6534563ebd3", null ],

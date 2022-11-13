@@ -1,6 +1,6 @@
 var class_video_1_1_open_g_l_renderer =
 [
-    [ "OpenGLRenderer", "class_video_1_1_open_g_l_renderer.html#af8fde26b7b9ee74821bae27d676fc715", null ],
+    [ "OpenGLRenderer", "class_video_1_1_open_g_l_renderer.html#a0f866e4d6c3c771d4fdb7ac282c6b3ff", null ],
     [ "~OpenGLRenderer", "class_video_1_1_open_g_l_renderer.html#affd2efa24ff1aa65739b34d935bc6134", null ],
     [ "BeginFrame", "class_video_1_1_open_g_l_renderer.html#a9f255b55fbe4bdd94e95a97f273eee2e", null ],
     [ "CreateBuffer", "class_video_1_1_open_g_l_renderer.html#a62816b319049f83d9be08c3562f7da74", null ],

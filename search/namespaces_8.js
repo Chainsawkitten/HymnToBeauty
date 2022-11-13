@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['utility_0',['Utility',['../namespace_utility.html',1,'']]]
+  ['triggerevent_0',['triggerEvent',['../namespacetrigger_event.html',1,'']]]
 ];

@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['save_0',['SAVE',['../class_input_handler.html#af877d52dbdb6f2bb992f5c22de7b93b4a4f4f3b9314974baaf8c3311323c75362',1,'InputHandler']]],
+  ['save_0',['SAVE',['../class_input_manager.html#a3b658425a8c4735c79f611c38c44a356a7e9670fcc6b510b9f97659fee2085747',1,'InputManager']]],
   ['scene_1',['SCENE',['../struct_resource_list_1_1_resource.html#a00872ee602a5f997bddba2f57aea4097ab522d5db02502f073167344df0275fec',1,'ResourceList::Resource']]],
   ['script_2',['SCRIPT',['../struct_resource_list_1_1_resource.html#a00872ee602a5f997bddba2f57aea4097a5924cbcde2fd7a98ac06ed31a16c7054',1,'ResourceList::Resource']]],
-  ['select_3',['SELECT',['../class_input_handler.html#af877d52dbdb6f2bb992f5c22de7b93b4a4a2d5cc32ebe1536fc26866fd4d9ee4a',1,'InputHandler']]],
+  ['select_3',['SELECT',['../class_input_manager.html#a3b658425a8c4735c79f611c38c44a356a90225107ef93455ad663d3de21094e52',1,'InputManager']]],
   ['short_4',['SHORT',['../class_video_1_1_geometry_binding.html#a91fc3628a5413774023553b4e51821cdaa35c2b02966b1563e5bf7b81b8b0cf77',1,'Video::GeometryBinding']]],
   ['sound_5',['SOUND',['../struct_resource_list_1_1_resource.html#a00872ee602a5f997bddba2f57aea4097a815e8b5018b5e35fe2671bb18ab6554c',1,'ResourceList::Resource']]],
   ['sphere_6',['Sphere',['../class_physics_1_1_shape.html#ac759599529baca2d2ebc8daa69e526d7ab7095f057db3fefa7325ad93a04e14fd',1,'Physics::Shape']]],

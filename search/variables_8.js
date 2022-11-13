@@ -6,7 +6,7 @@ var searchData=
   ['indices_3',['indices',['../struct_geometry_1_1_mesh_data.html#a3d59d3cb4efa90e1f9ee1b40d20fd9c2',1,'Geometry::MeshData']]],
   ['ini_4',['ini',['../class_settings.html#a5af435c42b5e61af42f52eccd377ae5d',1,'Settings']]],
   ['initialized_5',['initialized',['../class_component_1_1_script.html#ac22bb37fd3ad4fe3398a82e4e27786b1',1,'Component::Script']]],
-  ['inputmap_6',['inputMap',['../_util_2_input_8cpp.html#a1d36b2d823b9294a6a112913d98d75f8',1,'Input.cpp']]],
+  ['inputmanager_6',['inputManager',['../class_hub.html#a9608e944ecfe9c1793f036f706c12af0',1,'Hub']]],
   ['instance_7',['instance',['../class_component_1_1_script.html#a8ed181c02d1f79b4458c16578130493c',1,'Component::Script']]],
   ['intensitiesambientcoefficient_8',['intensitiesAmbientCoefficient',['../struct_video_1_1_directional_light.html#abd12437a3a729b53614125e9e489d7b7',1,'Video::DirectionalLight']]],
   ['intensitiesattenuation_9',['intensitiesAttenuation',['../struct_video_1_1_light.html#a42e806c909fd7f62389e051f4e4e1358',1,'Video::Light']]],

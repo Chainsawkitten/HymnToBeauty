@@ -5,6 +5,13 @@ var annotated_dup =
       [ "SoundFile", "class_audio_1_1_sound_file.html", "class_audio_1_1_sound_file" ],
       [ "VorbisFile", "class_audio_1_1_vorbis_file.html", "class_audio_1_1_vorbis_file" ]
     ] ],
+    [ "com", null, [
+      [ "chainsawkitten", null, [
+        [ "hymntobeauty", "namespacecom_1_1chainsawkitten_1_1hymntobeauty.html", [
+          [ "MainActivity", "classcom_1_1chainsawkitten_1_1hymntobeauty_1_1_main_activity.html", "classcom_1_1chainsawkitten_1_1hymntobeauty_1_1_main_activity" ]
+        ] ]
+      ] ]
+    ] ],
     [ "Component", "namespace_component.html", [
       [ "Camera", "class_component_1_1_camera.html", "class_component_1_1_camera" ],
       [ "DirectionalLight", "class_component_1_1_directional_light.html", "class_component_1_1_directional_light" ],
@@ -70,7 +77,8 @@ var annotated_dup =
     ] ],
     [ "Utility", "namespace_utility.html", [
       [ "LockBox", "class_utility_1_1_lock_box.html", "class_utility_1_1_lock_box" ],
-      [ "Queue", "class_utility_1_1_queue.html", "class_utility_1_1_queue" ]
+      [ "Queue", "class_utility_1_1_queue.html", "class_utility_1_1_queue" ],
+      [ "Window", "class_utility_1_1_window.html", "class_utility_1_1_window" ]
     ] ],
     [ "Video", "namespace_video.html", [
       [ "Geometry", "namespace_video_1_1_geometry.html", [
@@ -157,10 +165,8 @@ var annotated_dup =
     [ "GLTFImporter", "class_g_l_t_f_importer.html", "class_g_l_t_f_importer" ],
     [ "Hub", "class_hub.html", "class_hub" ],
     [ "Input", "class_input.html", "class_input" ],
-    [ "InputHandler", "class_input_handler.html", "class_input_handler" ],
+    [ "InputManager", "class_input_manager.html", "class_input_manager" ],
     [ "Log", "class_log.html", "class_log" ],
-    [ "MainWindow", "class_main_window.html", "class_main_window" ],
-    [ "MousePicking", "class_mouse_picking.html", "class_mouse_picking" ],
     [ "PhysicsManager", "class_physics_manager.html", "class_physics_manager" ],
     [ "ProfilingManager", "class_profiling_manager.html", "class_profiling_manager" ],
     [ "RayIntersection", "class_ray_intersection.html", "class_ray_intersection" ],

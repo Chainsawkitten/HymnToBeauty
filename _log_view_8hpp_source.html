@@ -89,37 +89,34 @@ $(document).ready(function(){initNavTree('_log_view_8hpp_source.html',''); initR
 </div><!--header-->
 <div class="contents">
 <a href="_log_view_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;imgui.h&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_g_u_i.html">GUI</a> {</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno"><a class="line" href="class_g_u_i_1_1_log_view.html">    6</a></span><span class="keyword">class </span><a class="code hl_class" href="class_g_u_i_1_1_log_view.html">LogView</a> {</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>    <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a2fb392d2f295480df2296c4b448f618e">LogView</a>();</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a09bd9b2d7c2b955bf092ef10bc20326f">~LogView</a>();</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a78c94ec78e760be3884987f6f90e1f59">Show</a>();</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="comment">// Updates the log.</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a33f07504daf54becb0fbf933746f1560">UpdateLog</a>();</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    std::stringstream defaultStringstream;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    std::stringstream infoStringstream;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    std::stringstream warningStringstream;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    std::stringstream errorStringstream;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    ImGuiTextBuffer textBuffer;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    ImGuiTextFilter textFilter;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    ImVector&lt;int&gt; lineOffsets;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>};</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>} <span class="comment">// namespace GUI</span></div>
-<div class="ttc" id="aclass_g_u_i_1_1_log_view_html"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html">GUI::LogView</a></div><div class="ttdef"><b>Definition:</b> LogView.hpp:6</div></div>
-<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a09bd9b2d7c2b955bf092ef10bc20326f"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a09bd9b2d7c2b955bf092ef10bc20326f">GUI::LogView::~LogView</a></div><div class="ttdeci">~LogView()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> LogView.cpp:18</div></div>
-<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a2fb392d2f295480df2296c4b448f618e"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a2fb392d2f295480df2296c4b448f618e">GUI::LogView::LogView</a></div><div class="ttdeci">LogView()</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> LogView.cpp:10</div></div>
-<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a33f07504daf54becb0fbf933746f1560"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a33f07504daf54becb0fbf933746f1560">GUI::LogView::UpdateLog</a></div><div class="ttdeci">void UpdateLog()</div><div class="ttdef"><b>Definition:</b> LogView.cpp:62</div></div>
-<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a78c94ec78e760be3884987f6f90e1f59"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a78c94ec78e760be3884987f6f90e1f59">GUI::LogView::Show</a></div><div class="ttdeci">void Show()</div><div class="ttdoc">Shows the log.</div><div class="ttdef"><b>Definition:</b> LogView.cpp:26</div></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;imgui.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;<a class="code" href="_log_8hpp.html">Utility/Log.hpp</a>&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_g_u_i.html">GUI</a> {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="class_g_u_i_1_1_log_view.html">    8</a></span><span class="keyword">class </span><a class="code hl_class" href="class_g_u_i_1_1_log_view.html">LogView</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a2fb392d2f295480df2296c4b448f618e">LogView</a>();</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a09bd9b2d7c2b955bf092ef10bc20326f">~LogView</a>();</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_log_view.html#a78c94ec78e760be3884987f6f90e1f59">Show</a>();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">void</span> MessageCallback(<span class="keyword">const</span> <a class="code hl_enumeration" href="class_log.html#a47f96ac96002ccaa6543a5ff16218c5c">Log::Channel</a> channel, <span class="keyword">const</span> std::string&amp; message);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    ImGuiTextBuffer textBuffer;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    ImGuiTextFilter textFilter;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    ImVector&lt;int&gt; lineOffsets;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>};</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>} <span class="comment">// namespace GUI</span></div>
+<div class="ttc" id="a_log_8hpp_html"><div class="ttname"><a href="_log_8hpp.html">Log.hpp</a></div></div>
+<div class="ttc" id="aclass_g_u_i_1_1_log_view_html"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html">GUI::LogView</a></div><div class="ttdef"><b>Definition:</b> LogView.hpp:8</div></div>
+<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a09bd9b2d7c2b955bf092ef10bc20326f"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a09bd9b2d7c2b955bf092ef10bc20326f">GUI::LogView::~LogView</a></div><div class="ttdeci">~LogView()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> LogView.cpp:13</div></div>
+<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a2fb392d2f295480df2296c4b448f618e"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a2fb392d2f295480df2296c4b448f618e">GUI::LogView::LogView</a></div><div class="ttdeci">LogView()</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> LogView.cpp:9</div></div>
+<div class="ttc" id="aclass_g_u_i_1_1_log_view_html_a78c94ec78e760be3884987f6f90e1f59"><div class="ttname"><a href="class_g_u_i_1_1_log_view.html#a78c94ec78e760be3884987f6f90e1f59">GUI::LogView::Show</a></div><div class="ttdeci">void Show()</div><div class="ttdoc">Shows the log.</div><div class="ttdef"><b>Definition:</b> LogView.cpp:17</div></div>
+<div class="ttc" id="aclass_log_html_a47f96ac96002ccaa6543a5ff16218c5c"><div class="ttname"><a href="class_log.html#a47f96ac96002ccaa6543a5ff16218c5c">Log::Channel</a></div><div class="ttdeci">Channel</div><div class="ttdef"><b>Definition:</b> Log.hpp:18</div></div>
 <div class="ttc" id="anamespace_g_u_i_html"><div class="ttname"><a href="namespace_g_u_i.html">GUI</a></div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
