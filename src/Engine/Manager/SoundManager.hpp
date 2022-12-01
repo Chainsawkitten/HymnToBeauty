@@ -1,39 +1,18 @@
 #pragma once
 
-#if !ANDROID
-#include <AL/alc.h>
-#endif
 #include "../Entity/ComponentContainer.hpp"
+#include <miniaudio.h>
 
 namespace Component {
 class Listener;
 class SoundSource;
 } // namespace Component
 
-/// Handles OpenAL sound.
-/// @todo Android sound support.
+/// Handles sound.
 class SoundManager {
     friend class Hub;
 
   public:
-    /// Set main volume.
-    /**
-     * @param volume New volume.
-     */
-    void SetVolume(float volume);
-
-    /// Get main volume.
-    /**
-     * @return The main volume.
-     */
-    float GetVolume() const;
-
-    /// Check for OpenAL errors.
-    /**
-     * @param message Message to print to standard error if an error was encountered.
-     */
-    static void CheckError(const char* message);
-
     /// Moves sound sources and plays sounds.
     void Update();
 
@@ -70,12 +49,7 @@ class SoundManager {
     SoundManager(SoundManager const&) = delete;
     void operator=(SoundManager const&) = delete;
 
-#if !ANDROID
-    ALCdevice* device;
-    ALCcontext* context;
-#endif
-
-    float volume = 1.f;
+    ma_engine engine;
 
     ComponentContainer<Component::SoundSource> soundSources;
     ComponentContainer<Component::Listener> listeners;

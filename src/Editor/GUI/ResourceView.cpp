@@ -2,7 +2,6 @@
 
 #include <Engine/Geometry/Model.hpp>
 #include <Engine/Texture/TextureAsset.hpp>
-#include <Engine/Audio/VorbisFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Hymn.hpp>
 #include <fstream>
@@ -251,16 +250,6 @@ bool ResourceView::ShowResourceFolder(ResourceList::ResourceFolder& folder, cons
                 Log() << "Warning: new script `" << filePath << "` already exists.";
         }
 
-        // Add sound.
-        else if (ImGui::Selectable("Add sound")) {
-            ResourceList::Resource resource;
-            resource.type = ResourceList::Resource::SOUND;
-            resource.sound = new Audio::VorbisFile();
-            resource.sound->path = path + "/";
-            resource.sound->name = "Sound #" + std::to_string(Resources().soundNumber++);
-            folder.resources.push_back(resource);
-        }
-
         // Remove Folder.
         else if (folder.subfolders.empty() && folder.resources.empty()) {
             if (ImGui::Selectable("Remove folder")) {
@@ -420,23 +409,13 @@ bool ResourceView::ShowResource(ResourceList::ResourceFolder& folder, ResourceLi
 
     // Sounds.
     if (resource.type == ResourceList::Resource::SOUND) {
-        string imguiName = resource.sound->name + "##" + path;
+        string imguiName = resource.filename + "##" + path;
         if (ImGui::Selectable(imguiName.c_str())) {
             soundPressed = true;
-            soundEditor.SetSound(resource.sound);
+            soundEditor.SetFile(path, resource.filename);
         }
 
-        if (ImGui::BeginPopupContextItem(imguiName.c_str())) {
-            if (ImGui::Selectable("Delete")) {
-                if (soundEditor.GetSound() == resource.sound)
-                    soundEditor.SetVisible(false);
-
-                Managers().resourceManager->FreeSound(resource.sound);
-                ImGui::EndPopup();
-                return true;
-            }
-            ImGui::EndPopup();
-        }
+        /// @todo Delete
     }
 
     return false;

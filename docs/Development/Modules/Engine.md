@@ -10,6 +10,6 @@ Contains the world, entities, components and the managers that handle them.
 - Angelscript
 - Bullet
 - GLFW
-- OpenAL Soft
+- miniaudio
 - SimpleIni
 - STB

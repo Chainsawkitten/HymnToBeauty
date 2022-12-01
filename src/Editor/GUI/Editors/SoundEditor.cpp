@@ -1,54 +1,23 @@
 #include "SoundEditor.hpp"
 
-#include <Engine/Audio/SoundFile.hpp>
-#include <Engine/Audio/VorbisFile.hpp>
-#include "../FileSelector.hpp"
-#include <functional>
-#include <Engine/Hymn.hpp>
-#include <Engine/Util/FileSystem.hpp>
 #include <imgui.h>
 
 using namespace GUI;
 
 SoundEditor::SoundEditor() {
-    name[0] = '\0';
+    
 }
 
 void SoundEditor::Show() {
-    if (ImGui::Begin(("Sound: " + sound->name + "###" + std::to_string(reinterpret_cast<uintptr_t>(sound))).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
-        if (ImGui::InputText("Name", name, 128, ImGuiInputTextFlags_EnterReturnsTrue)) {
-            // Rename sound file.
-            std::string path = Hymn().GetPath() + "/" + sound->path;
-            rename((path + sound->name + "").c_str(), (path + name + ".ogg").c_str());
-            rename((path + sound->name + ".meta").c_str(), (path + name + ".ogg.meta").c_str());
-
-            sound->name = std::string(name) + ".ogg";
-        }
-
-        if (ImGui::Button("Load Ogg Vorbis")) {
-            fileSelector.AddExtensions("ogg");
-            fileSelector.SetInitialPath(Hymn().GetPath().c_str());
-            fileSelector.SetFileSelectedCallback(std::bind(&SoundEditor::FileSelected, this, std::placeholders::_1));
-            fileSelector.SetVisible(true);
-        }
+    if (ImGui::Begin(("Sound: " + filename + "###" + path + "/" + filename).c_str(), &visible, ImGuiWindowFlags_NoResize)) {
+        
     }
     ImGui::End();
-
-    if (fileSelector.IsVisible())
-        fileSelector.Show();
 }
 
-const Audio::SoundFile* SoundEditor::GetSound() const {
-    return sound;
-}
-
-void SoundEditor::SetSound(Audio::SoundFile* sound) {
-    this->sound = sound;
-
-    std::size_t pos = sound->name.find_last_of('.');
-    std::string nameWithoutExtension = sound->name.substr(0, pos);
-
-    strcpy(name, nameWithoutExtension.c_str());
+void SoundEditor::SetFile(const std::string& path, const std::string& filename) {
+    this->path = path;
+    this->filename = filename;
 }
 
 bool SoundEditor::IsVisible() const {
@@ -57,9 +26,4 @@ bool SoundEditor::IsVisible() const {
 
 void SoundEditor::SetVisible(bool visible) {
     this->visible = visible;
-}
-
-void SoundEditor::FileSelected(const std::string& file) {
-    std::string destination = Hymn().GetPath() + "/" + sound->path + sound->name + ".ogg";
-    FileSystem::Copy(file.c_str(), destination.c_str());
 }

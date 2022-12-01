@@ -5,8 +5,6 @@
 #include "../Manager/ResourceManager.hpp"
 #include "../Texture/TextureAsset.hpp"
 #include "../Geometry/Model.hpp"
-#include "../Audio/SoundBuffer.hpp"
-#include "../Audio/SoundFile.hpp"
 
 namespace Json {
 
@@ -102,17 +100,6 @@ void Serialize(Value& node, bool load, const std::string& name, Geometry::Model*
             value = Managers().resourceManager->CreateModel(modelName);
     } else if (value != nullptr) {
         node[name] = value->path + value->name;
-    }
-}
-
-void Serialize(Value& node, bool load, const std::string& name, Audio::SoundBuffer*& value) {
-    if (load) {
-        std::string soundFileName = node.get(name, "").asString();
-
-        if (!soundFileName.empty())
-            value->SetSoundFile(Managers().resourceManager->CreateSound(soundFileName));
-    } else if (value->GetSoundFile() != nullptr) {
-        node[name] = value->GetSoundFile()->path + value->GetSoundFile()->name;
     }
 }
 } // namespace Json

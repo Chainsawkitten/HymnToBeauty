@@ -72,7 +72,7 @@ void ActiveHymn::Save() const {
 }
 
 void ActiveHymn::Load(const string& path) {
-    Log(Log::INFO) << "Loading hymn " << path;
+    Log(Log::INFO) << "Loading hymn " << path << "\n";
 
     Clear();
     this->path = path;
@@ -151,6 +151,11 @@ void ActiveHymn::Update(float deltaTime) {
     {
         PROFILE("Process triggers");
         Managers().triggerManager->ProcessTriggers();
+    }
+
+    {
+        PROFILE("Update audio");
+        Managers().soundManager->Update();
     }
 
     {

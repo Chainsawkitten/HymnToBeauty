@@ -8,9 +8,6 @@ class TextureAsset;
 namespace Geometry {
 class Model;
 }
-namespace Audio {
-class SoundBuffer;
-}
 
 namespace Json {
 
@@ -121,14 +118,5 @@ void Serialize(Value& node, bool load, const std::string& name, TextureAsset*& v
  * @param value The value to save/load.
  */
 void Serialize(Value& node, bool load, const std::string& name, Geometry::Model*& value);
-
-/// Serialize a SoundBuffer value.
-/**
- * @param node Json node to save to/load from.
- * @param load Whether to load (otherwise saves).
- * @param name The name to store the value under.
- * @param value The value to save/load.
- */
-void Serialize(Value& node, bool load, const std::string& name, Audio::SoundBuffer*& value);
 
 } // namespace Json

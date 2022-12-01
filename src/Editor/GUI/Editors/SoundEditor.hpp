@@ -1,11 +1,6 @@
 #pragma once
 
 #include <string>
-#include "../FileSelector.hpp"
-
-namespace Audio {
-class SoundFile;
-}
 
 namespace GUI {
 /// Used to edit a sound.
@@ -17,17 +12,12 @@ class SoundEditor {
     /// Show the editor.
     void Show();
 
-    /// Get the sound being edited.
+    /// Set sound file.
     /**
-     * @return The sound being edited.
+     * @param path Path.
+     * @param filename Filename.
      */
-    const Audio::SoundFile* GetSound() const;
-
-    /// Set the sound to edit.
-    /**
-     * @param sound Sound to edit.
-     */
-    void SetSound(Audio::SoundFile* sound);
+    void SetFile(const std::string& path, const std::string& filename);
 
     /// Get whether the window is visible.
     /**
@@ -42,13 +32,8 @@ class SoundEditor {
     void SetVisible(bool visible);
 
   private:
-    void FileSelected(const std::string& file);
-
-    Audio::SoundFile* sound = nullptr;
     bool visible = false;
-
-    FileSelector fileSelector;
-
-    char name[128];
+    std::string path;
+    std::string filename;
 };
 } // namespace GUI

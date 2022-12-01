@@ -15,10 +15,6 @@ namespace Geometry {
 class Cube;
 class Model;
 } // namespace Geometry
-namespace Audio {
-class SoundFile;
-class AudioMaterial;
-} // namespace Audio
 
 class TextureAsset;
 class ScriptFile;
@@ -85,20 +81,6 @@ class ResourceManager {
      * @return How many instances of the texture asset currently exist.
      */
     int GetTextureAssetInstanceCount(TextureAsset* textureAsset);
-
-    /// Create a sound if it doesn't already exist.
-    /**
-     * @param name Name of the sound.
-     * @return The %SoundBuffer instance.
-     */
-    Audio::SoundFile* CreateSound(const std::string& name);
-
-    /// Free the reference to the sound.
-    /**
-     * Deletes the instance if no more references exist.
-     * @param soundFile %SoundFile to dereference.
-     */
-    void FreeSound(Audio::SoundFile* soundFile);
 
     /// Create a script file if it doesn't already exist.
     /**
@@ -170,14 +152,6 @@ class ResourceManager {
     };
     std::map<std::string, TextureAssetInstance> textureAssets;
     std::map<TextureAsset*, std::string> textureAssetsInverse;
-
-    // Sound.
-    struct SoundInstance {
-        Audio::SoundFile* sound;
-        int count;
-    };
-    std::map<std::string, SoundInstance> sounds;
-    std::map<Audio::SoundFile*, std::string> soundsInverse;
 
     // ScriptFile.
     struct ScriptFileInstance {
