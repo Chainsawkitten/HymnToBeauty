@@ -5,11 +5,9 @@
 #include "../Geometry/Cube.hpp"
 #include "../Geometry/Model.hpp"
 #include <Video/Texture/Texture2D.hpp>
-#include "../Audio/SoundBuffer.hpp"
 #include "../Texture/TextureAsset.hpp"
 #include "../Script/ScriptFile.hpp"
 #include <Utility/Log.hpp>
-#include "../Audio/VorbisFile.hpp"
 
 using namespace std;
 
@@ -98,29 +96,6 @@ void ResourceManager::FreeTextureAsset(TextureAsset* textureAsset) {
 int ResourceManager::GetTextureAssetInstanceCount(TextureAsset* textureAsset) {
     std::string name = textureAssetsInverse[textureAsset];
     return textureAssets[name].count;
-}
-
-Audio::SoundFile* ResourceManager::CreateSound(const string& name) {
-    if (sounds.find(name) == sounds.end()) {
-        Audio::SoundFile* soundFile = new Audio::VorbisFile();
-        soundFile->Load(name);
-        sounds[name].sound = soundFile;
-        soundsInverse[soundFile] = name;
-        sounds[name].count = 1;
-    } else
-        sounds[name].count++;
-
-    return sounds[name].sound;
-}
-
-void ResourceManager::FreeSound(Audio::SoundFile* soundFile) {
-    string name = soundsInverse[soundFile];
-
-    if (sounds[name].count-- <= 1) {
-        soundsInverse.erase(soundFile);
-        delete soundFile;
-        sounds.erase(name);
-    }
 }
 
 ScriptFile* ResourceManager::CreateScriptFile(const string& name) {

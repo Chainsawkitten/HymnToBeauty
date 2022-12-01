@@ -70,17 +70,9 @@ macro(ProcessWithHeaderize headervar sourcevar inputfile outdir)
     list(APPEND ${sourcevar} ${outputfile}.cpp)
 endmacro()
 
-# OpenAL Soft
-if (NOT ANDROID)
-    # TODO Fix Android
-    set(ALSOFT_UTILS OFF CACHE BOOL "Don't build OpenAL Soft utility programs" FORCE)
-    set(ALSOFT_EXAMPLES OFF CACHE BOOL "Don't build OpenAL Soft examples" FORCE)
-    set(ALSOFT_TESTS OFF CACHE BOOL "Don't build OpenAL Soft tests" FORCE)
-    add_subdirectory(openal-soft)
-    add_library(OpenALSoft INTERFACE)
-    target_link_libraries(OpenALSoft INTERFACE OpenAL)
-    target_include_directories(OpenALSoft INTERFACE openal-soft/include)
-endif()
+# miniaudio
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio INTERFACE miniaudio)
 
 # STB
 add_library(stb INTERFACE)

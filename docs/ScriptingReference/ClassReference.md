@@ -185,9 +185,6 @@ Pause the sound.
 `void Stop()`  
 Stop the sound.
 
-`bool IsPlaying()`
-Whether the sound is currently playing or not.
-
 \section SpotLight Component::SpotLight
 Similar to a point light but only lights an angle around its direction.
 

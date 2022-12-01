@@ -7,9 +7,6 @@ set(SRCS
         ../../externals/AngelScript/sdk/add_on/scriptstdstring/scriptstdstring.cpp
         Engine.cpp
         Hymn.cpp
-        Audio/SoundBuffer.cpp
-        Audio/SoundFile.cpp
-        Audio/VorbisFile.cpp
         Component/DirectionalLight.cpp
         Component/Camera.cpp
         Component/Listener.cpp
@@ -60,9 +57,6 @@ set(SRCS
 set(HEADERS
         Engine.hpp
         Hymn.hpp
-        Audio/SoundBuffer.hpp
-        Audio/SoundFile.hpp
-        Audio/VorbisFile.hpp
         Component/DirectionalLight.hpp
         Component/Camera.hpp
         Component/Listener.hpp
@@ -115,10 +109,7 @@ create_directory_groups(${SRCS} ${HEADERS})
 
 add_library(Engine STATIC ${SRCS} ${HEADERS})
 
-target_link_libraries(Engine Video angelscript bullet glm simpleini stb)
-if (NOT ANDROID)
-    target_link_libraries(Engine OpenALSoft)
-endif()
+target_link_libraries(Engine Video angelscript bullet glm miniaudio simpleini stb)
 
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)

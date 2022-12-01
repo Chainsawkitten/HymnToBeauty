@@ -17,9 +17,6 @@
 	path = externals/jsoncpp
 	url = https://github.com/open-source-parsers/jsoncpp.git
     ignore = dirty
-[submodule "externals/openal-soft"]
-	path = externals/openal-soft
-	url = https://github.com/kcat/openal-soft.git
 [submodule "externals/imgui"]
 	path = externals/imgui
 	url = https://github.com/ocornut/imgui.git
@@ -36,3 +33,6 @@
 [submodule "externals/doxygen-awesome-css"]
 	path = externals/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "externals/miniaudio"]
+	path = externals/miniaudio
+	url = https://github.com/mackron/miniaudio.git

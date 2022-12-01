@@ -3,7 +3,6 @@
 #include <fstream>
 #include <Engine/Texture/TextureAsset.hpp>
 #include <Engine/Geometry/Model.hpp>
-#include <Engine/Audio/SoundFile.hpp>
 #include <Engine/Script/ScriptFile.hpp>
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
@@ -21,7 +20,7 @@ string ResourceList::Resource::GetName() const {
     case Type::TEXTURE:
         return texture->name;
     case Type::SOUND:
-        return sound->name;
+        return filename;
     case Type::SCRIPT:
         return script->name;
     case Type::GLTF:
@@ -55,7 +54,6 @@ Json::Value ResourceList::ToJson() const {
     root["sceneNumber"] = sceneNumber;
     root["modelNumber"] = modelNumber;
     root["textureNumber"] = textureNumber;
-    root["soundNumber"] = soundNumber;
     root["scriptNumber"] = scriptNumber;
 
     return root;
@@ -73,7 +71,6 @@ void ResourceList::Load() {
     sceneNumber = root["sceneNumber"].asUInt();
     modelNumber = root["modelNumber"].asUInt();
     textureNumber = root["textureNumber"].asUInt();
-    soundNumber = root["soundNumber"].asUInt();
     scriptNumber = root["scriptNumber"].asUInt();
 }
 
@@ -84,7 +81,6 @@ void ResourceList::Clear() {
     sceneNumber = 0U;
     modelNumber = 0U;
     textureNumber = 0U;
-    soundNumber = 0U;
     scriptNumber = 0U;
 }
 
@@ -122,9 +118,6 @@ ResourceList::ResourceFolder ResourceList::LoadFolder(const string& name, std::s
         case Resource::TEXTURE:
             resource.texture = Managers().resourceManager->CreateTextureAsset(path + file);
             break;
-        case Resource::SOUND:
-            resource.sound = Managers().resourceManager->CreateSound(path + file);
-            break;
         case Resource::SCRIPT:
             resource.script = Managers().resourceManager->CreateScriptFile(path + file);
             break;
@@ -154,9 +147,6 @@ void ResourceList::ClearFolder(ResourceFolder& folder) {
             break;
         case Resource::Type::TEXTURE:
             Managers().resourceManager->FreeTextureAsset(resource.texture);
-            break;
-        case Resource::Type::SOUND:
-            Managers().resourceManager->FreeSound(resource.sound);
             break;
         case Resource::Type::SCENE:
             delete resource.scene;

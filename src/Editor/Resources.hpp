@@ -9,9 +9,6 @@ class ScriptFile;
 namespace Geometry {
 class Model;
 }
-namespace Audio {
-class SoundFile;
-}
 
 namespace Json {
 class Value;
@@ -44,9 +41,6 @@ class ResourceList {
 
         /// Texture.
         TextureAsset* texture;
-
-        /// Sound.
-        Audio::SoundFile* sound;
 
         /// Script.
         ScriptFile* script;
@@ -96,9 +90,6 @@ class ResourceList {
 
     /// The id of the next texture to create.
     unsigned int textureNumber = 0U;
-
-    /// The id of the next sound to create.
-    unsigned int soundNumber = 0U;
 
     /// The id of the next script to create.
     unsigned int scriptNumber = 0U;
