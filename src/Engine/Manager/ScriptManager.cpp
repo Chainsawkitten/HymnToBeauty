@@ -51,21 +51,20 @@
 using namespace Component;
 
 static void AngelScriptMessageCallback(const asSMessageInfo* message, void* param) {
-    Log() << message->section << " (" << message->row << ", " << message->col << " : ";
-
+    std::string typeString = "";
     switch (message->type) {
     case asMSGTYPE_ERROR:
-        Log() << "Error";
+        typeString = "Error";
         break;
     case asMSGTYPE_INFORMATION:
-        Log() << "Information";
+        typeString = "Information";
         break;
     case asMSGTYPE_WARNING:
-        Log() << "Warning";
+        typeString = "Warning";
         break;
     }
 
-    Log() << " : " << message->message << "\n";
+    Log(Log::ERR) << message->section << " (" << message->row << ", " << message->col << " : " << typeString << ") " << message->message << "\n";
 }
 
 static std::string CallstackToString(asIScriptContext* ctx) {
@@ -486,7 +485,7 @@ int ScriptManager::BuildScript(ScriptFile* script) {
 
     std::string filename = Hymn().GetPath() + "/" + script->path + script->name;
     if (!FileSystem::FileExists(filename.c_str())) {
-        Log() << "Script file does not exist: " << filename << "\n";
+        Log(Log::ERR) << "Script file does not exist: " << filename << "\n";
         return -1;
     }
 
@@ -494,19 +493,19 @@ int ScriptManager::BuildScript(ScriptFile* script) {
     CScriptBuilder builder;
     int r = builder.StartNewModule(engine, script->module.c_str());
     if (r < 0) {
-        Log() << "Couldn't start new module: " << script->module << ".\n";
+        Log(Log::ERR) << "Couldn't start new module: " << script->module << ".\n";
         return r;
     }
 
     r = builder.AddSectionFromFile(filename.c_str());
     if (r < 0) {
-        Log() << "File section could not be added: " << filename << ".\n";
+        Log(Log::ERR) << "File section could not be added: " << filename << ".\n";
         return r;
     }
 
     r = builder.BuildModule();
     if (r < 0) {
-        Log() << "Compile errors.\n";
+        Log(Log::ERR) << "Compile errors.\n";
         return r;
     }
 
@@ -521,7 +520,7 @@ void ScriptManager::BuildAllScripts() {
     for (ScriptFile* file : Hymn().scripts) {
         std::string filename = path + file->path + file->name;
         if (!FileSystem::FileExists(filename.c_str())) {
-            Log() << "Script file does not exist: " << filename << "\n";
+            Log(Log::ERR) << "Script file does not exist: " << filename << "\n";
             return;
         }
 
@@ -534,15 +533,15 @@ void ScriptManager::BuildAllScripts() {
         if (module == nullptr) {
             int r = builder.StartNewModule(engine, file->module.c_str());
             if (r < 0)
-                Log() << "Couldn't start new module: " << file->module << ".\n";
+                Log(Log::ERR) << "Couldn't start new module: " << file->module << ".\n";
 
             r = builder.AddSectionFromFile(filename.c_str());
             if (r < 0)
-                Log() << "File section could not be added: " << filename << ".\n";
+                Log(Log::ERR) << "File section could not be added: " << filename << ".\n";
 
             r = builder.BuildModule();
             if (r < 0)
-                Log() << "Compile errors.\n";
+                Log(Log::ERR) << "Compilation error when compiling " << file->name << ".\n";
         } else {
             std::string script;
 
@@ -551,7 +550,7 @@ void ScriptManager::BuildAllScripts() {
 
             int r = module->Build();
             if (r < 0)
-                Log() << file->name.c_str() << "Compile errors.\n";
+                Log(Log::ERR) << "Compilation error when compiling " << file->name << ".\n";
         }
 
         FillFunctionVector(file);
@@ -593,8 +592,7 @@ void ScriptManager::ClearBreakpoints() {
 void ScriptManager::FillPropertyMap(Script* script) {
     int r = BuildScript(script->scriptFile);
     if (r < 0) {
-        Log() << "Couldn't fetch properties"
-              << "\n";
+        Log(Log::ERR) << "Couldn't fetch properties\n";
     } else {
         if (!script->initialized)
             CreateInstance(script);
@@ -686,10 +684,10 @@ void ScriptManager::Update(World& world, float deltaTime) {
                         if (*GUID != 0)
                             *reinterpret_cast<Entity**>(varPointer) = Hymn().GetEntityByGUID(*GUID);
                         else
-                            Log() << "Property " << name << " of script " << script->scriptFile->name << " on entity " << script->entity->name << " is not initialized"
-                                  << "\n";
-                    } else
+                            Log(Log::ERR) << "Property " << name << " of script " << script->scriptFile->name << " on entity " << script->entity->name << " is not initialized.\n";
+                    } else {
                         script->CopyDataFromPropertyMap(name, varPointer);
+                    }
                 }
             }
         }
@@ -794,7 +792,7 @@ void ScriptManager::ExecuteScriptMethod(const Entity* entity, const std::string&
     methodDecl.append(method);
     asIScriptFunction* scriptMethod = type->GetMethodByDecl(methodDecl.c_str());
     if (scriptMethod == nullptr)
-        Log() << "Can't find method void " << method << "()\n";
+        Log(Log::ERR) << "Can't find method void " << method << "()\n";
 
     // Create context, prepare it and execute.
     asIScriptContext* context = engine->CreateContext();
@@ -825,7 +823,7 @@ void ScriptManager::CreateInstance(Component::Script* script) {
     std::string factoryName = scriptFile->module + "@ " + scriptFile->module + "(Entity@)";
     asIScriptFunction* factoryFunction = type->GetFactoryByDecl(factoryName.c_str());
     if (factoryFunction == nullptr)
-        Log() << "Couldn't find the factory function for " << scriptFile->module << ".\n";
+        Log(Log::ERR) << "Couldn't find the factory function for " << scriptFile->module << ".\n";
 
     // Create context, prepare it and execute.
     asIScriptContext* context = CreateContext();
@@ -861,7 +859,7 @@ void ScriptManager::CallMessageReceived(const Message& message) {
     // Find method to call.
     asIScriptFunction* method = type->GetMethodByDecl("void ReceiveMessage(Entity@, int)");
     if (method == nullptr)
-        Log() << "Can't find method void ReceiveMessage(Entity@, int)\n";
+        Log(Log::ERR) << "Can't find method void ReceiveMessage(Entity@, int)\n";
 
     // Create context, prepare it and execute.
     asIScriptContext* context = CreateContext();
@@ -885,7 +883,7 @@ void ScriptManager::CallUpdate(Entity* entity, float deltaTime) {
     // Find method to call.
     asIScriptFunction* method = type->GetMethodByDecl("void Update(float)");
     if (method == nullptr)
-        Log() << "Can't find method void Update(float)\n";
+        Log(Log::ERR) << "Can't find method void Update(float)\n";
 
     // Create context, prepare it and execute.
     asIScriptContext* context = CreateContext();
@@ -920,7 +918,7 @@ void ScriptManager::ExecuteCall(asIScriptContext* context, const std::string& sc
         // The execution didn't complete as expected. Determine what happened.
         if (r == asEXECUTION_EXCEPTION) {
             // An exception occurred, let the script writer know what happened so it can be corrected.
-            Log() << "An exception '" << context->GetExceptionString() << "' occurred in " << scriptName << ". Please correct the code and try again.\n";
+            Log(Log::ERR) << "An exception '" << context->GetExceptionString() << "' occurred in " << scriptName << ". Please correct the code and try again.\n";
         }
     }
 }
@@ -929,7 +927,7 @@ asITypeInfo* ScriptManager::GetClass(const std::string& moduleName, const std::s
     // Get script module.
     asIScriptModule* module = engine->GetModule(moduleName.c_str(), asGM_ONLY_IF_EXISTS);
     if (module == nullptr) {
-        Log() << "Couldn't find \"" << moduleName << "\" module.\n";
+        Log(Log::ERR) << "Couldn't find \"" << moduleName << "\" module.\n";
         return nullptr;
     }
 
@@ -941,7 +939,7 @@ asITypeInfo* ScriptManager::GetClass(const std::string& moduleName, const std::s
             return type;
     }
 
-    Log() << "Couldn't find class \"" << className << "\".\n";
+    Log(Log::ERR) << "Couldn't find class \"" << className << "\".\n";
     return nullptr;
 }
 
