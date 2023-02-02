@@ -109,7 +109,7 @@ create_directory_groups(${SRCS} ${HEADERS})
 
 add_library(Engine STATIC ${SRCS} ${HEADERS})
 
-target_link_libraries(Engine Video angelscript bullet glm miniaudio simpleini stb)
+target_link_libraries(Engine Video AngelScriptSDK bullet glm miniaudio simpleini stb)
 
 set_property(TARGET Engine PROPERTY CXX_STANDARD 11)
 set_property(TARGET Engine PROPERTY CXX_STANDARD_REQUIRED ON)
