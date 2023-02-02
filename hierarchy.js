@@ -171,11 +171,7 @@ var hierarchy =
       [ "Video::VulkanShaderProgram", "class_video_1_1_vulkan_shader_program.html", null ]
     ] ],
     [ "Physics::Shape", "class_physics_1_1_shape.html", null ],
-    [ "Audio::SoundBuffer", "class_audio_1_1_sound_buffer.html", null ],
     [ "GUI::SoundEditor", "class_g_u_i_1_1_sound_editor.html", null ],
-    [ "Audio::SoundFile", "class_audio_1_1_sound_file.html", [
-      [ "Audio::VorbisFile", "class_audio_1_1_vorbis_file.html", null ]
-    ] ],
     [ "SoundManager", "class_sound_manager.html", null ],
     [ "Physics::Shape::Sphere", "struct_physics_1_1_shape_1_1_sphere.html", null ],
     [ "Video::DebugDrawing::Sphere", "struct_video_1_1_debug_drawing_1_1_sphere.html", null ],

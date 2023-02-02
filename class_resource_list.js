@@ -14,6 +14,5 @@ var class_resource_list =
     [ "resourceFolder", "class_resource_list.html#afd466c4587ebc77956bf71a3c1ed50a3", null ],
     [ "sceneNumber", "class_resource_list.html#a8fd0d7807725c48dfc14c885eff9f692", null ],
     [ "scriptNumber", "class_resource_list.html#a9309822ae51d2bd7001a2f04d0777ec1", null ],
-    [ "soundNumber", "class_resource_list.html#a08b4639aff5e184ea7944e99cfe6d59f", null ],
     [ "textureNumber", "class_resource_list.html#a8ab91b176a9e54afa90236c9a8056f9f", null ]
 ];

@@ -14,7 +14,6 @@ var struct_resource_list_1_1_resource =
     [ "model", "struct_resource_list_1_1_resource.html#aca01e2432437d39d8933443615bf91a1", null ],
     [ "scene", "struct_resource_list_1_1_resource.html#ac8fa646a4e26e53cc7d5add7bf2b86fe", null ],
     [ "script", "struct_resource_list_1_1_resource.html#ac68e904878f31d0b580beccd21726714", null ],
-    [ "sound", "struct_resource_list_1_1_resource.html#a1fa3b461ca4dd3bd6c206ac1a42101d7", null ],
     [ "texture", "struct_resource_list_1_1_resource.html#a07f28f0967227cb0ad206ac5201ff739", null ],
     [ "type", "struct_resource_list_1_1_resource.html#acd04157b628462db0f93ffa0566a5808", null ]
 ];

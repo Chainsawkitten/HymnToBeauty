@@ -69,22 +69,21 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_android_main_8cpp.html",
-"_implementation_8hpp.html",
-"_sound_source_8hpp.html",
-"class_active_hymn.html#ac0ff9db55c1f4abedc2d667f44166906",
-"class_component_1_1_sprite.html#a7fd354f5048fe7d21982ca2c9c244924",
-"class_g_u_i_1_1_file_selector.html#a9b92183aa345f0c29529720b45509833",
-"class_geometry_1_1_cube.html#aa74335f994a13db54dd99dbc7ed55dd8",
-"class_profiling_1_1_thread.html#a1812e43104cfeb5b614e71ab232257d4",
-"class_utility_1_1_queue.html#a9e236d4b29ffa90ae2aa03cf683f74cf",
-"class_video_1_1_geometry_binding.html#a91fc3628a5413774023553b4e51821cda53f93baa3057821107c750323892fa92",
-"class_video_1_1_open_g_l_renderer.html#ac3a4157b54dd9cb12e9c24a54a412be7",
-"class_video_1_1_static_render_program.html#ac229c771d74134ed75f951cc3b2061ab",
-"class_video_1_1_vulkan_renderer.html#a2592a54abe0e5b5f64dedba18cae256b",
-"functions_vars.html",
-"struct_physics_1_1_shape_1_1_plane.html#a88cc9975f6aab5a5b52babff812d29d7",
-"struct_video_1_1_open_g_l_command_buffer_1_1_timing.html#a6d7febdb77c238d98340905c0c3b56b1",
-"structtrigger_event_1_1_event_struct.html#ac720ade94c2153242fcff65390a451e1"
+"_implementation_8hpp.html#a18dbb644d50dcac27480d3ea68d9c2ca",
+"_sphere_shape_editor_8hpp.html",
+"class_component_1_1_camera.html#a1a205612e005ed7065877d85eda1defb",
+"class_component_container.html#ad85b2b578f314114c5f69edab9b7f348",
+"class_g_u_i_1_1_log_view.html#a78c94ec78e760be3884987f6f90e1f59",
+"class_input_manager.html#a8cb341118606feff8da61d0361239dce",
+"class_resource_list.html#a25cb449b836c1264c55802d9326528c7",
+"class_video_1_1_buffer.html#a78237c94f751ec6ad977f2b077bfaca9",
+"class_video_1_1_low_level_renderer.html#acf708c88c0cb670977c1ab3f5dc69904",
+"class_video_1_1_open_g_l_vertex_description.html#ad22db815ae86229380b233e2e2b56853",
+"class_video_1_1_vulkan_buffer.html",
+"class_video_1_1_vulkan_shader.html#a7679885119d65b8c353080b8991b7685",
+"namespace_im_gui.html#aef36733e90e0f030d6b155f7637dfc06",
+"struct_video_1_1_debug_drawing_1_1_cone.html",
+"struct_video_1_1_render_scene.html#a589ba604142691c3262c86c956e741f9"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

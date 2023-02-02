@@ -119,6 +119,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a375cac78a1a79509b0d74b8a1c0ffaf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a375cac78a1a79509b0d74b8a1c0ffaf5">Serialize</a> (Json::Value &amp;node, bool load) override</td></tr>
 <tr class="memdesc:a375cac78a1a79509b0d74b8a1c0ffaf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save or load component values to/from JSON.  <a href="class_component_1_1_sound_source.html#a375cac78a1a79509b0d74b8a1c0ffaf5">More...</a><br /></td></tr>
 <tr class="separator:a375cac78a1a79509b0d74b8a1c0ffaf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3391f082c3115ca899a02da91889acb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a3391f082c3115ca899a02da91889acb9">SetPath</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:a3391f082c3115ca899a02da91889acb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the path to the sound file to play.  <a href="class_component_1_1_sound_source.html#a3391f082c3115ca899a02da91889acb9">More...</a><br /></td></tr>
+<tr class="separator:a3391f082c3115ca899a02da91889acb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12a289a12cd001651cfe82a4d76de11b"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a12a289a12cd001651cfe82a4d76de11b">GetPath</a> () const</td></tr>
+<tr class="memdesc:a12a289a12cd001651cfe82a4d76de11b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path to the sound file to play.  <a href="class_component_1_1_sound_source.html#a12a289a12cd001651cfe82a4d76de11b">More...</a><br /></td></tr>
+<tr class="separator:a12a289a12cd001651cfe82a4d76de11b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dcd45f9805b3b37d98bf3f675aee52d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a6dcd45f9805b3b37d98bf3f675aee52d">Play</a> ()</td></tr>
 <tr class="memdesc:a6dcd45f9805b3b37d98bf3f675aee52d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the sound.  <a href="class_component_1_1_sound_source.html#a6dcd45f9805b3b37d98bf3f675aee52d">More...</a><br /></td></tr>
 <tr class="separator:a6dcd45f9805b3b37d98bf3f675aee52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,13 +150,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a32252ca51853108dbcd84344590717e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_audio_1_1_sound_buffer.html">Audio::SoundBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a32252ca51853108dbcd84344590717e3">soundBuffer</a> = nullptr</td></tr>
-<tr class="memdesc:a32252ca51853108dbcd84344590717e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sound buffer.  <a href="class_component_1_1_sound_source.html#a32252ca51853108dbcd84344590717e3">More...</a><br /></td></tr>
-<tr class="separator:a32252ca51853108dbcd84344590717e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb154ea9c4e74029fe5c2711b934f440"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#adb154ea9c4e74029fe5c2711b934f440">pitch</a> = 1.f</td></tr>
+<tr class="memitem:adb154ea9c4e74029fe5c2711b934f440"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#adb154ea9c4e74029fe5c2711b934f440">pitch</a> = 1.0f</td></tr>
 <tr class="memdesc:adb154ea9c4e74029fe5c2711b934f440"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pitch.  <a href="class_component_1_1_sound_source.html#adb154ea9c4e74029fe5c2711b934f440">More...</a><br /></td></tr>
 <tr class="separator:adb154ea9c4e74029fe5c2711b934f440"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20a06ff38a1cd9a516b83c57a7b2706b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a20a06ff38a1cd9a516b83c57a7b2706b">gain</a> = 1.f</td></tr>
+<tr class="memitem:a20a06ff38a1cd9a516b83c57a7b2706b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#a20a06ff38a1cd9a516b83c57a7b2706b">gain</a> = 1.0f</td></tr>
 <tr class="memdesc:a20a06ff38a1cd9a516b83c57a7b2706b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gain.  <a href="class_component_1_1_sound_source.html#a20a06ff38a1cd9a516b83c57a7b2706b">More...</a><br /></td></tr>
 <tr class="separator:a20a06ff38a1cd9a516b83c57a7b2706b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af280de09a17242afc5f98b7c59c020be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_component_1_1_sound_source.html#af280de09a17242afc5f98b7c59c020be">loop</a> = false</td></tr>
@@ -208,6 +211,26 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a12a289a12cd001651cfe82a4d76de11b" name="a12a289a12cd001651cfe82a4d76de11b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12a289a12cd001651cfe82a4d76de11b">&#9670;&nbsp;</a></span>GetPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string &amp; SoundSource::GetPath </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the path to the sound file to play. </p>
+<dl class="section return"><dt>Returns</dt><dd>The path to the sound file to play. </dd></dl>
+
+</div>
+</div>
 <a id="ad8dfadfe8ef7c3f059268af868a2d0dc" name="ad8dfadfe8ef7c3f059268af868a2d0dc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8dfadfe8ef7c3f059268af868a2d0dc">&#9670;&nbsp;</a></span>Pause()</h2>
 
@@ -293,6 +316,27 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a3391f082c3115ca899a02da91889acb9" name="a3391f082c3115ca899a02da91889acb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3391f082c3115ca899a02da91889acb9">&#9670;&nbsp;</a></span>SetPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SoundSource::SetPath </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the path to the sound file to play. </p>
+<p >@parma path Path to the sound file to play. </p>
+
+</div>
+</div>
 <a id="a863aefbe24c84e2c58d93d47762c65b6" name="a863aefbe24c84e2c58d93d47762c65b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a863aefbe24c84e2c58d93d47762c65b6">&#9670;&nbsp;</a></span>Stop()</h2>
 
@@ -343,7 +387,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float Component::SoundSource::gain = 1.f</td>
+          <td class="memname">float Component::SoundSource::gain = 1.0f</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -375,28 +419,12 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float Component::SoundSource::pitch = 1.f</td>
+          <td class="memname">float Component::SoundSource::pitch = 1.0f</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Pitch. </p>
-
-</div>
-</div>
-<a id="a32252ca51853108dbcd84344590717e3" name="a32252ca51853108dbcd84344590717e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32252ca51853108dbcd84344590717e3">&#9670;&nbsp;</a></span>soundBuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_audio_1_1_sound_buffer.html">Audio::SoundBuffer</a>* Component::SoundSource::soundBuffer = nullptr</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sound buffer. </p>
 
 </div>
 </div>

@@ -87,23 +87,19 @@ $(document).ready(function(){initNavTree('class_sound_manager.html',''); initRes
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="class_sound_manager-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">SoundManager Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
+<p>Handles sound.  
+ <a href="class_sound_manager.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_sound_manager_8hpp_source.html">SoundManager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1b13e888a7298d50631a2a835acfa4bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sound_manager.html#a1b13e888a7298d50631a2a835acfa4bb">SetVolume</a> (float volume)</td></tr>
-<tr class="memdesc:a1b13e888a7298d50631a2a835acfa4bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set main volume.  <a href="class_sound_manager.html#a1b13e888a7298d50631a2a835acfa4bb">More...</a><br /></td></tr>
-<tr class="separator:a1b13e888a7298d50631a2a835acfa4bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a486b63483e16269cc18f6238ca7c9281"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sound_manager.html#a486b63483e16269cc18f6238ca7c9281">GetVolume</a> () const</td></tr>
-<tr class="memdesc:a486b63483e16269cc18f6238ca7c9281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get main volume.  <a href="class_sound_manager.html#a486b63483e16269cc18f6238ca7c9281">More...</a><br /></td></tr>
-<tr class="separator:a486b63483e16269cc18f6238ca7c9281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf241621221cdbefeba78e8b6bc29240"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sound_manager.html#aaf241621221cdbefeba78e8b6bc29240">Update</a> ()</td></tr>
 <tr class="memdesc:aaf241621221cdbefeba78e8b6bc29240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves sound sources and plays sounds.  <a href="class_sound_manager.html#aaf241621221cdbefeba78e8b6bc29240">More...</a><br /></td></tr>
 <tr class="separator:aaf241621221cdbefeba78e8b6bc29240"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,54 +119,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8dc4501e559962e3f08e0dbb1d168c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all killed components.  <a href="class_sound_manager.html#a8dc4501e559962e3f08e0dbb1d168c21">More...</a><br /></td></tr>
 <tr class="separator:a8dc4501e559962e3f08e0dbb1d168c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ae3b5dec0c94cff91535992e0a18f5308"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sound_manager.html#ae3b5dec0c94cff91535992e0a18f5308">CheckError</a> (const char *message)</td></tr>
-<tr class="memdesc:ae3b5dec0c94cff91535992e0a18f5308"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for OpenAL errors.  <a href="class_sound_manager.html#ae3b5dec0c94cff91535992e0a18f5308">More...</a><br /></td></tr>
-<tr class="separator:ae3b5dec0c94cff91535992e0a18f5308"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:aea14f5495b4697c28ed665a9054acf5e"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sound_manager.html#aea14f5495b4697c28ed665a9054acf5e">Hub</a></td></tr>
 <tr class="separator:aea14f5495b4697c28ed665a9054acf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Handles OpenAL sound. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000024">Todo:</a></b></dt><dd>Android sound support. </dd></dl>
+<div class="textblock"><p >Handles sound. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae3b5dec0c94cff91535992e0a18f5308" name="ae3b5dec0c94cff91535992e0a18f5308"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3b5dec0c94cff91535992e0a18f5308">&#9670;&nbsp;</a></span>CheckError()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SoundManager::CheckError </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check for OpenAL errors. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">message</td><td>Message to print to standard error if an error was encountered. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a8dc4501e559962e3f08e0dbb1d168c21" name="a8dc4501e559962e3f08e0dbb1d168c21"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8dc4501e559962e3f08e0dbb1d168c21">&#9670;&nbsp;</a></span>ClearKilledComponents()</h2>
 
@@ -270,52 +226,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a486b63483e16269cc18f6238ca7c9281" name="a486b63483e16269cc18f6238ca7c9281"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a486b63483e16269cc18f6238ca7c9281">&#9670;&nbsp;</a></span>GetVolume()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float SoundManager::GetVolume </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get main volume. </p>
-<dl class="section return"><dt>Returns</dt><dd>The main volume. </dd></dl>
-
-</div>
-</div>
-<a id="a1b13e888a7298d50631a2a835acfa4bb" name="a1b13e888a7298d50631a2a835acfa4bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b13e888a7298d50631a2a835acfa4bb">&#9670;&nbsp;</a></span>SetVolume()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SoundManager::SetVolume </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>volume</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set main volume. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">volume</td><td>New volume. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="aaf241621221cdbefeba78e8b6bc29240" name="aaf241621221cdbefeba78e8b6bc29240"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf241621221cdbefeba78e8b6bc29240">&#9670;&nbsp;</a></span>Update()</h2>
 
@@ -332,7 +242,8 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Moves sound sources and plays sounds. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000023">Todo:</a></b></dt><dd>Set velocity based on physics. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000024">Todo:</a></b></dt><dd>Set velocity based on physics. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000025">Todo:</a></b></dt><dd>More than one listener? Eg. for split-screen multiplayer. </dd></dl>
 
 </div>
 </div>

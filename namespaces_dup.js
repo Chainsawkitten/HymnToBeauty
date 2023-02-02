@@ -1,6 +1,5 @@
 var namespaces_dup =
 [
-    [ "Audio", "namespace_audio.html", "namespace_audio" ],
     [ "com", null, [
       [ "chainsawkitten", null, [
         [ "hymntobeauty", "namespacecom_1_1chainsawkitten_1_1hymntobeauty.html", "namespacecom_1_1chainsawkitten_1_1hymntobeauty" ]
@@ -50,7 +49,6 @@ var namespaces_dup =
       [ "LoadImVec4", "namespace_json.html#ac6880f4c0388127cc761a7fa6d088b83", null ],
       [ "SaveImVec2", "namespace_json.html#a948d6dfe7e67568922a3fb2bc9cc5016", null ],
       [ "SaveImVec4", "namespace_json.html#a5245cd033c79607a291e01f0241108b6", null ],
-      [ "Serialize", "namespace_json.html#ab63208a353e4ed2723a337cd9426e604", null ],
       [ "Serialize", "namespace_json.html#a2f723ad8e86f7105cc4b892d194b656c", null ],
       [ "Serialize", "namespace_json.html#a6a54aacf4c6bad9e6ee9e253f11dafbd", null ],
       [ "Serialize", "namespace_json.html#a7f8e05cdb8b1bcce529e6c69fc3a1f1c", null ],

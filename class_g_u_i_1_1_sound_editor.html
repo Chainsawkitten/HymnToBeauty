@@ -105,12 +105,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed7239fab943082b948af16f809a68e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_u_i_1_1_sound_editor.html#aed7239fab943082b948af16f809a68e9">Show</a> ()</td></tr>
 <tr class="memdesc:aed7239fab943082b948af16f809a68e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show the editor.  <a href="class_g_u_i_1_1_sound_editor.html#aed7239fab943082b948af16f809a68e9">More...</a><br /></td></tr>
 <tr class="separator:aed7239fab943082b948af16f809a68e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae846bfe7bc590da049f714d2d6578380"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_u_i_1_1_sound_editor.html#ae846bfe7bc590da049f714d2d6578380">GetSound</a> () const</td></tr>
-<tr class="memdesc:ae846bfe7bc590da049f714d2d6578380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the sound being edited.  <a href="class_g_u_i_1_1_sound_editor.html#ae846bfe7bc590da049f714d2d6578380">More...</a><br /></td></tr>
-<tr class="separator:ae846bfe7bc590da049f714d2d6578380"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab942da3c6e4d17bf295d36c58b093253"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_u_i_1_1_sound_editor.html#ab942da3c6e4d17bf295d36c58b093253">SetSound</a> (<a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> *sound)</td></tr>
-<tr class="memdesc:ab942da3c6e4d17bf295d36c58b093253"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the sound to edit.  <a href="class_g_u_i_1_1_sound_editor.html#ab942da3c6e4d17bf295d36c58b093253">More...</a><br /></td></tr>
-<tr class="separator:ab942da3c6e4d17bf295d36c58b093253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7828945726642a7f2a7fbecca7806f06"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_u_i_1_1_sound_editor.html#a7828945726642a7f2a7fbecca7806f06">SetFile</a> (const std::string &amp;path, const std::string &amp;filename)</td></tr>
+<tr class="memdesc:a7828945726642a7f2a7fbecca7806f06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sound file.  <a href="class_g_u_i_1_1_sound_editor.html#a7828945726642a7f2a7fbecca7806f06">More...</a><br /></td></tr>
+<tr class="separator:a7828945726642a7f2a7fbecca7806f06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a607a1c0ef2dd01e176fe4355bf52bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_u_i_1_1_sound_editor.html#a6a607a1c0ef2dd01e176fe4355bf52bb">IsVisible</a> () const</td></tr>
 <tr class="memdesc:a6a607a1c0ef2dd01e176fe4355bf52bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether the window is visible.  <a href="class_g_u_i_1_1_sound_editor.html#a6a607a1c0ef2dd01e176fe4355bf52bb">More...</a><br /></td></tr>
 <tr class="separator:a6a607a1c0ef2dd01e176fe4355bf52bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,26 +138,6 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae846bfe7bc590da049f714d2d6578380" name="ae846bfe7bc590da049f714d2d6578380"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae846bfe7bc590da049f714d2d6578380">&#9670;&nbsp;</a></span>GetSound()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> * SoundEditor::GetSound </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the sound being edited. </p>
-<dl class="section return"><dt>Returns</dt><dd>The sound being edited. </dd></dl>
-
-</div>
-</div>
 <a id="a6a607a1c0ef2dd01e176fe4355bf52bb" name="a6a607a1c0ef2dd01e176fe4355bf52bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a607a1c0ef2dd01e176fe4355bf52bb">&#9670;&nbsp;</a></span>IsVisible()</h2>
 
@@ -181,26 +158,37 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab942da3c6e4d17bf295d36c58b093253" name="ab942da3c6e4d17bf295d36c58b093253"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab942da3c6e4d17bf295d36c58b093253">&#9670;&nbsp;</a></span>SetSound()</h2>
+<a id="a7828945726642a7f2a7fbecca7806f06" name="a7828945726642a7f2a7fbecca7806f06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7828945726642a7f2a7fbecca7806f06">&#9670;&nbsp;</a></span>SetFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void SoundEditor::SetSound </td>
+          <td class="memname">void SoundEditor::SetFile </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> *&#160;</td>
-          <td class="paramname"><em>sound</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Set the sound to edit. </p>
+<p>Set sound file. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sound</td><td>Sound to edit. </td></tr>
+    <tr><td class="paramname">path</td><td>Path. </td></tr>
+    <tr><td class="paramname">filename</td><td>Filename. </td></tr>
   </table>
   </dd>
 </dl>

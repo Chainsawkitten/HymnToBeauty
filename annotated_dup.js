@@ -1,10 +1,5 @@
 var annotated_dup =
 [
-    [ "Audio", "namespace_audio.html", [
-      [ "SoundBuffer", "class_audio_1_1_sound_buffer.html", "class_audio_1_1_sound_buffer" ],
-      [ "SoundFile", "class_audio_1_1_sound_file.html", "class_audio_1_1_sound_file" ],
-      [ "VorbisFile", "class_audio_1_1_vorbis_file.html", "class_audio_1_1_vorbis_file" ]
-    ] ],
     [ "com", null, [
       [ "chainsawkitten", null, [
         [ "hymntobeauty", "namespacecom_1_1chainsawkitten_1_1hymntobeauty.html", [

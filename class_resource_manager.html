@@ -128,12 +128,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7bc9b2ed54cf0e3b62f3d1d0dbcc399"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#ab7bc9b2ed54cf0e3b62f3d1d0dbcc399">GetTextureAssetInstanceCount</a> (<a class="el" href="class_texture_asset.html">TextureAsset</a> *textureAsset)</td></tr>
 <tr class="memdesc:ab7bc9b2ed54cf0e3b62f3d1d0dbcc399"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of instances of a texture asset.  <a href="class_resource_manager.html#ab7bc9b2ed54cf0e3b62f3d1d0dbcc399">More...</a><br /></td></tr>
 <tr class="separator:ab7bc9b2ed54cf0e3b62f3d1d0dbcc399"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29bf53b589d818fa5829adb0f364e79f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a29bf53b589d818fa5829adb0f364e79f">CreateSound</a> (const std::string &amp;name)</td></tr>
-<tr class="memdesc:a29bf53b589d818fa5829adb0f364e79f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a sound if it doesn't already exist.  <a href="class_resource_manager.html#a29bf53b589d818fa5829adb0f364e79f">More...</a><br /></td></tr>
-<tr class="separator:a29bf53b589d818fa5829adb0f364e79f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6268d61b3c07c920ba9a28fef7f8ea35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a6268d61b3c07c920ba9a28fef7f8ea35">FreeSound</a> (<a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> *soundFile)</td></tr>
-<tr class="memdesc:a6268d61b3c07c920ba9a28fef7f8ea35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the reference to the sound.  <a href="class_resource_manager.html#a6268d61b3c07c920ba9a28fef7f8ea35">More...</a><br /></td></tr>
-<tr class="separator:a6268d61b3c07c920ba9a28fef7f8ea35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3eb2a868575dd7e28d7b2162c4b7e630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_script_file.html">ScriptFile</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_resource_manager.html#a3eb2a868575dd7e28d7b2162c4b7e630">CreateScriptFile</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a3eb2a868575dd7e28d7b2162c4b7e630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a script file if it doesn't already exist.  <a href="class_resource_manager.html#a3eb2a868575dd7e28d7b2162c4b7e630">More...</a><br /></td></tr>
 <tr class="separator:a3eb2a868575dd7e28d7b2162c4b7e630"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -266,33 +260,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a29bf53b589d818fa5829adb0f364e79f" name="a29bf53b589d818fa5829adb0f364e79f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29bf53b589d818fa5829adb0f364e79f">&#9670;&nbsp;</a></span>CreateSound()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> * ResourceManager::CreateSound </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Create a sound if it doesn't already exist. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>Name of the sound. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The SoundBuffer instance. </dd></dl>
-
-</div>
-</div>
 <a id="af9ce20ba27061142d769cb252e7c9687" name="af9ce20ba27061142d769cb252e7c9687"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9ce20ba27061142d769cb252e7c9687">&#9670;&nbsp;</a></span>CreateTexture2D()</h2>
 
@@ -404,32 +371,6 @@ Friends</h2></td></tr>
 <p >Deletes the instance if no more references exist. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">scriptFile</td><td>ScriptFile to dereference. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a6268d61b3c07c920ba9a28fef7f8ea35" name="a6268d61b3c07c920ba9a28fef7f8ea35"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6268d61b3c07c920ba9a28fef7f8ea35">&#9670;&nbsp;</a></span>FreeSound()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ResourceManager::FreeSound </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_audio_1_1_sound_file.html">Audio::SoundFile</a> *&#160;</td>
-          <td class="paramname"><em>soundFile</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Free the reference to the sound. </p>
-<p >Deletes the instance if no more references exist. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">soundFile</td><td>SoundFile to dereference. </td></tr>
   </table>
   </dd>
 </dl>

@@ -31,7 +31,7 @@ var dir_43b0638496a4d5ae432f6b8461b6295f =
     [ "ScriptManager.hpp", "_script_manager_8hpp.html", [
       [ "ScriptManager", "class_script_manager.html", "class_script_manager" ]
     ] ],
-    [ "SoundManager.cpp", "_sound_manager_8cpp.html", null ],
+    [ "SoundManager.cpp", "_sound_manager_8cpp.html", "_sound_manager_8cpp" ],
     [ "SoundManager.hpp", "_sound_manager_8hpp.html", [
       [ "SoundManager", "class_sound_manager.html", "class_sound_manager" ]
     ] ],

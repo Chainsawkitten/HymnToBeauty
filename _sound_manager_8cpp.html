@@ -85,26 +85,59 @@ $(document).ready(function(){initNavTree('_sound_manager_8cpp.html',''); initRes
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle"><div class="title">SoundManager.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="_sound_manager_8hpp_source.html">SoundManager.hpp</a>&quot;</code><br />
-<code>#include &lt;AL/al.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="_log_8hpp_source.html">Utility/Log.hpp</a>&gt;</code><br />
 <code>#include &quot;<a class="el" href="_world_8hpp_source.html">../Entity/World.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_entity_8hpp_source.html">../Entity/Entity.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_listener_8hpp_source.html">../Component/Listener.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_mesh_8hpp_source.html">../Component/Mesh.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_sound_source_8hpp_source.html">../Component/SoundSource.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_sound_file_8hpp_source.html">../Audio/SoundFile.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_sound_buffer_8hpp_source.html">../Audio/SoundBuffer.hpp</a>&quot;</code><br />
-<code>#include &lt;<a class="el" href="_geometry3_d_8hpp_source.html">Video/Geometry/Geometry3D.hpp</a>&gt;</code><br />
 <code>#include &quot;<a class="el" href="_managers_8hpp_source.html">Managers.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_resource_manager_8hpp_source.html">ResourceManager.hpp</a>&quot;</code><br />
-<code>#include &lt;cstdint&gt;</code><br />
-<code>#include &lt;cstring&gt;</code><br />
-<code>#include &lt;algorithm&gt;</code><br />
-</div></div><!-- contents -->
+<code>#include &lt;extras/stb_vorbis.c&gt;</code><br />
+<code>#include &lt;miniaudio.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a18995c0b9e97a05eeeab2fbd4c97e92e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sound_manager_8cpp.html#a18995c0b9e97a05eeeab2fbd4c97e92e">STB_VORBIS_HEADER_ONLY</a></td></tr>
+<tr class="separator:a18995c0b9e97a05eeeab2fbd4c97e92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf77f70dc931f91a9f09e7b54d8278f5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sound_manager_8cpp.html#abf77f70dc931f91a9f09e7b54d8278f5">MINIAUDIO_IMPLEMENTATION</a></td></tr>
+<tr class="separator:abf77f70dc931f91a9f09e7b54d8278f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="abf77f70dc931f91a9f09e7b54d8278f5" name="abf77f70dc931f91a9f09e7b54d8278f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf77f70dc931f91a9f09e7b54d8278f5">&#9670;&nbsp;</a></span>MINIAUDIO_IMPLEMENTATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MINIAUDIO_IMPLEMENTATION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a18995c0b9e97a05eeeab2fbd4c97e92e" name="a18995c0b9e97a05eeeab2fbd4c97e92e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18995c0b9e97a05eeeab2fbd4c97e92e">&#9670;&nbsp;</a></span>STB_VORBIS_HEADER_ONLY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define STB_VORBIS_HEADER_ONLY</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
