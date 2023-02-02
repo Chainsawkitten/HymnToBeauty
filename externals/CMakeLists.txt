@@ -1,7 +1,9 @@
 # AngelScript
 add_subdirectory(AngelScript/sdk/angelscript/projects/cmake)
-target_include_directories(angelscript INTERFACE AngelScript/sdk/angelscript/include)
-target_include_directories(angelscript INTERFACE AngelScript/sdk/add_on)
+add_library(AngelScriptSDK INTERFACE)
+target_link_libraries(AngelScriptSDK INTERFACE angelscript)
+target_include_directories(AngelScriptSDK INTERFACE AngelScript/sdk/angelscript/include)
+target_include_directories(AngelScriptSDK INTERFACE AngelScript/sdk/add_on)
 
 # Bullet
 set(BUILD_CPU_DEMOS OFF CACHE BOOL "Don't build bullet demos." FORCE)
