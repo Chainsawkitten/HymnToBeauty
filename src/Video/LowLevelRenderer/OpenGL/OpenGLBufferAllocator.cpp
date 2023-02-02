@@ -2,6 +2,7 @@
 
 #include "OpenGLBuffer.hpp"
 #include <cassert>
+#include <cstddef>
 
 namespace Video {
 
