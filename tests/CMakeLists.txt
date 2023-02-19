@@ -42,6 +42,7 @@ set(SHADERS
 set(IMAGES
     Video/textures/Test.png
     Video/references/Attachmentless.png
+    Video/references/ComputeClearBuffer.png
     Video/references/ComputeSetBuffer.png
     Video/references/ConservativeRasterization.png
     Video/references/DepthPrePass.png
@@ -70,6 +71,9 @@ if(OpenGLRenderer)
 endif()
 if(VulkanRenderer)
     add_definitions(-DVULKAN_SUPPORT)
+endif()
+if(WebGPURenderer)
+    add_definitions(-DWEBGPU_SUPPORT)
 endif()
 
 create_directory_groups(${SRCS} ${HEADERS})

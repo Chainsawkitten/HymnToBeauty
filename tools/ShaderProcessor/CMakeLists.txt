@@ -50,12 +50,15 @@ macro(ProcessShader headervar sourcevar inputfile outdir includes)
     if(VulkanRenderer)
         set(vulkanargument --vulkan)
     endif()
+    if(WebGPURenderer)
+        set(webgpuargument --webgpu)
+    endif()
     get_filename_component(basefile ${inputfile} NAME)
     set(outputfile ${outdir}/${basefile})
     set_source_files_properties(${outputfile}.hpp PROPERTIES HEADER_ONLY TRUE)
     add_custom_command(
         OUTPUT ${outputfile}.hpp ${outputfile}.cpp
-        COMMAND ShaderProcessor ${inputfile} ${outputfile} ${vulkanargument}
+        COMMAND ShaderProcessor ${inputfile} ${outputfile} ${vulkanargument} ${webgpuargument}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS ${inputfile} ${includes}
         COMMENT "Generating shader variants for ${inputfile}"

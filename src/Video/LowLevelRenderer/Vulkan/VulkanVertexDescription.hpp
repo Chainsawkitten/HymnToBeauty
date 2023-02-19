@@ -42,12 +42,12 @@ class VulkanVertexDescription : public VertexDescription {
     const VkVertexInputAttributeDescription* GetAttributeDescriptions() const;
 
   private:
-      VulkanVertexDescription(const VulkanVertexDescription& other) = delete;
+    VulkanVertexDescription(const VulkanVertexDescription& other) = delete;
 
-      VkVertexInputBindingDescription bindingDescription;
+    VkVertexInputBindingDescription bindingDescription;
 
-      unsigned int attributeDescriptionCount;
-      VkVertexInputAttributeDescription* attributeDescriptions;
+    unsigned int attributeDescriptionCount;
+    VkVertexInputAttributeDescription* attributeDescriptions;
 };
 
 }

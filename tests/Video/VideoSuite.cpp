@@ -10,6 +10,9 @@
 #ifdef VULKAN_SUPPORT
 #include <Video/LowLevelRenderer/Vulkan/VulkanRenderer.hpp>
 #endif
+#ifdef WEBGPU_SUPPORT
+#include <Video/LowLevelRenderer/WebGPU/WebGPURenderer.hpp>
+#endif
 
 #include <GLFW/glfw3.h>
 
@@ -35,6 +38,7 @@ VideoSuite::VideoSuite(Video::Renderer::GraphicsAPI graphicsAPI) : TestSuite("Vi
     AddTest("ComputeSetBuffer", ComputeSetBuffer, &lowLevelRenderer);
     AddTest("ComputeVertexBuffer", ComputeVertexBuffer, &lowLevelRenderer);
     AddTest("ComputeMultipleBuffers", ComputeMultipleBuffers, &lowLevelRenderer);
+    AddTest("ComputeClearBuffer", ComputeClearBuffer, &lowLevelRenderer);
 }
 
 void VideoSuite::Init() {
@@ -55,6 +59,13 @@ void VideoSuite::Init() {
         // Create window.
         window = new Utility::Window(swapchainSize, swapchainSize, false, false, "Tests - Vulkan", true);
         lowLevelRenderer = new Video::VulkanRenderer(window);
+        break;
+#endif
+#ifdef WEBGPU_SUPPORT
+    case Video::Renderer::GraphicsAPI::WEBGPU:
+        // Create window.
+        window = new Utility::Window(swapchainSize, swapchainSize, false, false, "Tests - WebGPU", true);
+        lowLevelRenderer = new Video::WebGPURenderer(window);
         break;
 #endif
     }

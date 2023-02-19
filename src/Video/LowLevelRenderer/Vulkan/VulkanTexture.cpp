@@ -37,6 +37,10 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
     }
 
     switch (format) {
+    case Texture::Format::R8:
+        assert(type != Texture::Type::RENDER_DEPTH);
+        internalFormat = VK_FORMAT_R8_UNORM;
+        break;
     case Texture::Format::R8G8B8A8:
         assert(type != Texture::Type::RENDER_DEPTH);
         internalFormat = VK_FORMAT_R8G8B8A8_UNORM;

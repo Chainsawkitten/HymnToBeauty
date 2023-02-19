@@ -4,8 +4,6 @@ project(HymnToBeauty)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 # Compiler flags
 if(ANDROID)
     
@@ -28,9 +26,13 @@ if(NOT ANDROID)
     option(OpenGLRenderer "OpenGL Renderer" ON)
 endif()
 option(VulkanRenderer "Vulkan Renderer" OFF)
+option(WebGPURenderer "WebGPU Renderer" OFF)
 
 # Externals
 add_subdirectory(externals)
+
+# Tools
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_subdirectory(tools)
 
 # This function should be passed a list of all files in a target. It will automatically generate

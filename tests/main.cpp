@@ -14,7 +14,8 @@ static void PrintHelp() {
             "  --test name   Only run the test with the given name.\n"
             "  --list        Display a list of all suites and the tests in them.\n"
             "  --help        Display this help.\n"
-            "  --vulkan      Use Vulkan. Otherwise OpenGL is used.\n";
+            "  --vulkan      Use Vulkan.\n"
+            "  --webgpu      Use WebGPU.\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -36,6 +37,8 @@ int main(int argc, char* argv[]) {
             list = true;
         } else if (strcmp(argv[i], "--vulkan") == 0) {
             graphicsAPI = Video::Renderer::GraphicsAPI::VULKAN;
+        } else if (strcmp(argv[i], "--webgpu") == 0) {
+            graphicsAPI = Video::Renderer::GraphicsAPI::WEBGPU;
         }
     }
 

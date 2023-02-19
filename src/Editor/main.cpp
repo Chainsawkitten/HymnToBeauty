@@ -34,6 +34,9 @@ int main() {
     if (EditorSettings::GetInstance().GetString("API") == "Vulkan") {
         engine.configuration.graphicsAPI = Video::Renderer::GraphicsAPI::VULKAN;
     }
+    if (EditorSettings::GetInstance().GetString("API") == "WebGPU") {
+        engine.configuration.graphicsAPI = Video::Renderer::GraphicsAPI::WEBGPU;
+    }
 
     // Start engine.
     if (!engine.Start())

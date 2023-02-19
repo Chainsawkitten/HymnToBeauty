@@ -128,14 +128,44 @@ class OpenGLCommandBuffer : public CommandBuffer {
         float value[2];
     };
 
+    struct SetUniformIVector2Command {
+        unsigned int location;
+        int32_t value[2];
+    };
+
+    struct SetUniformUVector2Command {
+        unsigned int location;
+        uint32_t value[2];
+    };
+
     struct SetUniformVector3Command {
         unsigned int location;
         float value[3];
     };
 
+    struct SetUniformIVector3Command {
+        unsigned int location;
+        int32_t value[3];
+    };
+
+    struct SetUniformUVector3Command {
+        unsigned int location;
+        uint32_t value[3];
+    };
+
     struct SetUniformVector4Command {
         unsigned int location;
         float value[4];
+    };
+
+    struct SetUniformIVector4Command {
+        unsigned int location;
+        int32_t value[4];
+    };
+
+    struct SetUniformUVector4Command {
+        unsigned int location;
+        uint32_t value[4];
     };
 
     struct SetUniformMatrix3Command {
@@ -225,8 +255,14 @@ class OpenGLCommandBuffer : public CommandBuffer {
             SetUniformUnsignedIntegerCommand setUniformUnsignedIntegerCommand;
             SetUniformFloatCommand setUniformFloatCommand;
             SetUniformVector2Command setUniformVector2Command;
+            SetUniformIVector2Command setUniformIVector2Command;
+            SetUniformUVector2Command setUniformUVector2Command;
             SetUniformVector3Command setUniformVector3Command;
+            SetUniformIVector3Command setUniformIVector3Command;
+            SetUniformUVector3Command setUniformUVector3Command;
             SetUniformVector4Command setUniformVector4Command;
+            SetUniformIVector4Command setUniformIVector4Command;
+            SetUniformUVector4Command setUniformUVector4Command;
             SetUniformMatrix3Command setUniformMatrix3Command;
             SetUniformMatrix4Command setUniformMatrix4Command;
             BindTextureCommand bindTextureCommand;
@@ -253,8 +289,14 @@ class OpenGLCommandBuffer : public CommandBuffer {
             SET_UNIFORM_UNSIGNED_INTEGER,
             SET_UNIFORM_FLOAT,
             SET_UNIFORM_VECTOR2,
+            SET_UNIFORM_IVECTOR2,
+            SET_UNIFORM_UVECTOR2,
             SET_UNIFORM_VECTOR3,
+            SET_UNIFORM_IVECTOR3,
+            SET_UNIFORM_UVECTOR3,
             SET_UNIFORM_VECTOR4,
+            SET_UNIFORM_IVECTOR4,
+            SET_UNIFORM_UVECTOR4,
             SET_UNIFORM_MATRIX3,
             SET_UNIFORM_MATRIX4,
             BIND_TEXTURE,
@@ -275,8 +317,14 @@ class OpenGLCommandBuffer : public CommandBuffer {
     void SetUniformUnsignedInteger(unsigned int location, uint32_t value);
     void SetUniformFloat(unsigned int location, float value);
     void SetUniformVector2(unsigned int location, const glm::vec2& value);
+    void SetUniformIVector2(unsigned int location, const glm::ivec2& value);
+    void SetUniformUVector2(unsigned int location, const glm::uvec2& value);
     void SetUniformVector3(unsigned int location, const glm::vec3& value);
+    void SetUniformIVector3(unsigned int location, const glm::ivec3& value);
+    void SetUniformUVector3(unsigned int location, const glm::uvec3& value);
     void SetUniformVector4(unsigned int location, const glm::vec4& value);
+    void SetUniformIVector4(unsigned int location, const glm::ivec4& value);
+    void SetUniformUVector4(unsigned int location, const glm::uvec4& value);
     void SetUniformMatrix3(unsigned int location, const glm::mat3& value);
     void SetUniformMatrix4(unsigned int location, const glm::mat4& value);
 

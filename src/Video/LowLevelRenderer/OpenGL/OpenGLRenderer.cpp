@@ -38,7 +38,6 @@ OpenGLRenderer::OpenGLRenderer(Utility::Window* window) {
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_SCISSOR_TEST);
     glEnable(GL_MULTISAMPLE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

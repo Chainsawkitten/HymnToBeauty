@@ -36,7 +36,7 @@ bool Shader::WriteHeader(const string& filename) {
     return true;
 }
 
-bool Shader::WriteSource(const string& filename, const string& headerName, bool vulkan) {
+bool Shader::WriteSource(const string& filename, const string& headerName, bool vulkan, bool webgpu) {
     // Tag for raw string literals, to make it unlikely (but not impossible) for shader to break.
     string tag = "__shader__";
 
@@ -45,6 +45,9 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
     if (outFile.is_open()) {
         std::size_t found = headerName.find_last_of("/\\");
         outFile << "#include \"" << headerName.substr(found+1) << "\"" << endl << endl;
+
+        // Reflection info.
+        ShaderSource::ReflectionInfo reflectionInfo = GetReflectionInfo();
 
         // GLSL source.
         outFile << "static const char glsl[] = {";
@@ -57,24 +60,21 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
         }
         outFile << "};" << endl;
 
-        // SPIR-V source.
-        vector<char> spirvSource = GetSpirvSource(filename, vulkan);
+        // Vulkan SPIR-V source.
+        vector<char> vulkanSpirvSource = GetVulkanSpirvSource(filename, !vulkan);
         if (vulkan) {
-            outFile << "static const uint32_t spirv[] = {";
-            assert(spirvSource.size() % sizeof(uint32_t) == 0);
-            size_t spirvUintLength = spirvSource.size() / sizeof(uint32_t);
-            const uint32_t* spirvUintSource = reinterpret_cast<const uint32_t*>(spirvSource.data());
-            for (size_t i = 0; i < spirvUintLength; i++) {
-                outFile << spirvUintSource[i];
-                if (i + 1 < spirvUintLength) {
-                    outFile << ",";
-                }
-            }
+            outFile << "static const uint32_t vulkanSpirv[] = {";
+            WriteSpirv(outFile, vulkanSpirvSource);
             outFile << "};" << endl << endl;
         }
 
-        // Reflection info.
-        ShaderSource::ReflectionInfo reflectionInfo = GetReflectionInfo();
+        // WebGPU SPIR-V source.
+        vector<char> webGPUSpirvSource = GetWebGPUSpirvSource(filename, !webgpu, reflectionInfo);
+        if (webgpu) {
+            outFile << "static const uint32_t webGPUSpirv[] = {";
+            WriteSpirv(outFile, webGPUSpirvSource);
+            outFile << "};" << endl << endl;
+        }
 
         // Push constants.
         if (reflectionInfo.pushConstantCount > 0) {
@@ -116,8 +116,14 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
 
         outFile << glslSource.length() << ", glsl, ";
         if (vulkan) {
-            outFile << spirvSource.size() << ", spirv, ";
+            outFile << vulkanSpirvSource.size() << ", vulkanSpirv, ";
         } else {
+            outFile << "0, nullptr, ";
+        }
+        if (webgpu) {
+            outFile << webGPUSpirvSource.size() << ", webGPUSpirv, ";
+        }
+        else {
             outFile << "0, nullptr, ";
         }
         outFile << (reflectionInfo.hasMatrices ? "true" : "false") << ", ";
@@ -215,9 +221,9 @@ string Shader::GetGlslSource() const {
     return glsl;
 }
 
-vector<char> Shader::GetSpirvSource(const std::string& filename, bool vulkan) const {
+vector<char> Shader::GetVulkanSpirvSource(const std::string& filename, bool skip) const {
     // Early out if we shouldn't get SPIR-V.
-    if (!vulkan) {
+    if (skip) {
         vector<char> spirv;
         return spirv;
     }
@@ -225,9 +231,29 @@ vector<char> Shader::GetSpirvSource(const std::string& filename, bool vulkan) co
     /// @todo Variants
 
     string glsl = GetVersionString();
-    glsl += GetDefaultSpirvInclude();
+    glsl += GetDefaultVulkanInclude();
     glsl += source;
 
+    return GetSpirvSource(filename, glsl);
+}
+
+vector<char> Shader::GetWebGPUSpirvSource(const std::string & filename, bool skip, const ShaderSource::ReflectionInfo& reflectionInfo) const {
+    // Early out if we shouldn't get SPIR-V.
+    if (skip) {
+        vector<char> spirv;
+        return spirv;
+    }
+
+    /// @todo Variants
+
+    string glsl = GetVersionString();
+    glsl += GetDefaultWebGPUInclude();
+    glsl += GetWebGPUGlsl(reflectionInfo);
+
+    return GetSpirvSource(filename, glsl);
+}
+
+vector<char> Shader::GetSpirvSource(const std::string& filename, const std::string& glsl) const {
     // Write temporary glsl file as input to glslangvalidator.
     const string tempGlslFilename = filename + ".temp_for_glslang" + extension;
     ofstream tempFile(tempGlslFilename);
@@ -333,6 +359,88 @@ ShaderSource::ReflectionInfo Shader::GetReflectionInfo() const {
     return reflectionInfo;
 }
 
+std::string Shader::GetWebGPUGlsl(const ShaderSource::ReflectionInfo& reflectionInfo) const {
+    string webGPUSource;
+
+    string line;
+    stringstream lineParser(source);
+    bool inPushConstantBlock = false;
+    vector<ShaderSource::ReflectionInfo::PushConstant> pushConstants;
+    vector<ShaderSource::ReflectionInfo::StorageBuffer> storageBuffers;
+    while (getline(lineParser, line)) {
+        bool skipLine = false;
+
+        // Remove leading whitespace.
+        size_t firstNonWhitespace = line.find_first_not_of(" \t");
+        if (firstNonWhitespace != string::npos) {
+            line = line.substr(firstNonWhitespace);
+        }
+
+        if (inPushConstantBlock) {
+            // Parse push constants.
+            if (line.find("}") == 0) {
+                inPushConstantBlock = false;
+            }
+        } else {
+            // Parse definitions.
+            if (line.find("MATERIAL") == 0) {
+                // Find first parameter.
+                string binding = line.substr(line.find("(") + 1);
+
+                // Remove leading whitespace.
+                size_t firstNonWhitespace = binding.find_first_not_of(" \t");
+                if (firstNonWhitespace != string::npos) {
+                    binding = binding.substr(firstNonWhitespace);
+                }
+
+                // Find end of binding: , or whitespace.
+                size_t end = binding.find_first_of(", \t");
+                binding = binding.substr(0, end);
+                
+                unsigned int bindingNumber = stoul(binding);
+
+                // Find second parameter.
+                string materialName = line.substr(line.find(",") + 1);
+
+                // Remove leading whitespace.
+                firstNonWhitespace = materialName.find_first_not_of(" \t");
+                if (firstNonWhitespace != string::npos) {
+                    materialName = materialName.substr(firstNonWhitespace);
+                }
+
+                // Find end of name: ) or whitespace.
+                end = materialName.find_first_of(") \t");
+                materialName = materialName.substr(0, end);
+
+                // Emulate combined sampler using a texture and a sampler and remap all references to the sampler2D.
+                webGPUSource += "layout(set = 1, binding = " + to_string(bindingNumber) + ") uniform texture2D " + materialName + "_texture;\n";
+                webGPUSource += "layout(set = 1, binding = " + to_string(bindingNumber + reflectionInfo.materialCount) + ") uniform sampler " + materialName + "_sampler;\n";
+                webGPUSource += "#define " + materialName + " sampler2D(" + materialName + "_texture, " + materialName + "_sampler)\n";
+
+                skipLine = true;
+            }
+        }
+
+        if (!skipLine) {
+            webGPUSource += line + '\n';
+        }
+    }
+
+    return webGPUSource;
+}
+
+void Shader::WriteSpirv(std::ofstream& file, const std::vector<char>& spirv) {
+    assert(spirv.size() % sizeof(uint32_t) == 0);
+    size_t spirvUintLength = spirv.size() / sizeof(uint32_t);
+    const uint32_t* spirvUintSource = reinterpret_cast<const uint32_t*>(spirv.data());
+    for (size_t i = 0; i < spirvUintLength; i++) {
+        file << spirvUintSource[i];
+        if (i + 1 < spirvUintLength) {
+            file << ",";
+        }
+    }
+}
+
 string Shader::GetVersionString() {
     return "#version 450\n\n";
 }
@@ -352,7 +460,7 @@ string Shader::GetDefaultGlslInclude() {
     return glsl;
 }
 
-string Shader::GetDefaultSpirvInclude() {
+string Shader::GetDefaultVulkanInclude() {
     string glsl = "#define VertexIndex gl_VertexIndex\n";
     glsl += "#define InstanceIndex gl_InstanceIndex\n";
     glsl += "#define MATRICES layout(std140, set = 0, binding = 0) uniform MatrixBlock\n";
@@ -367,6 +475,20 @@ string Shader::GetDefaultSpirvInclude() {
     return glsl;
 }
 
+string Shader::GetDefaultWebGPUInclude() {
+    string glsl = "#define VertexIndex gl_VertexIndex\n";
+    glsl += "#define InstanceIndex gl_InstanceIndex\n";
+    glsl += "#define MATRICES layout(std140, set = 0, binding = 0) uniform MatrixBlock\n";
+    glsl += "#define UNIFORMS layout(std140, set = 2, binding = 0) uniform FragmentUniformBlock\n";
+    glsl += "#define STORAGE_BUFFER(INDEX) layout(std430, set = 3, binding = INDEX) readonly buffer StorageBufferBlock##INDEX\n";
+    glsl += "#define STORAGE_BUFFER_RW(INDEX) layout(std430, set = 3, binding = INDEX) buffer StorageBufferBlock##INDEX\n";
+    glsl += "#define PUSH_CONSTANTS layout(std140, set = 2, binding = 1) uniform PushConstants\n";
+    glsl += "#define FixPosition() gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;\n";
+    glsl += "#define FixFramebufferCoordinates(TEX_COORDS)\n";
+
+    return glsl;
+}
+
 ShaderSource::ReflectionInfo::PushConstant::Type Shader::StringToPushConstantType(const string& text) {
     if (text == "int") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::INT;
@@ -376,10 +498,22 @@ ShaderSource::ReflectionInfo::PushConstant::Type Shader::StringToPushConstantTyp
         return ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT;
     } else if (text == "vec2") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::VEC2;
+    } else if (text == "ivec2") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::IVEC2;
+    } else if (text == "uvec2") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::UVEC2;
     } else if (text == "vec3") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::VEC3;
+    } else if (text == "ivec3") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::IVEC3;
+    } else if (text == "uvec3") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::UVEC3;
     } else if (text == "vec4") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::VEC4;
+    } else if (text == "ivec4") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::IVEC4;
+    } else if (text == "uvec4") {
+        return ShaderSource::ReflectionInfo::PushConstant::Type::UVEC4;
     } else if (text == "mat4") {
         return ShaderSource::ReflectionInfo::PushConstant::Type::MAT4;
     }
@@ -404,11 +538,29 @@ string Shader::PushConstantTypeToString(ShaderSource::ReflectionInfo::PushConsta
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC2:
         text += "VEC2";
         break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC2:
+        text += "IVEC2";
+        break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC2:
+        text += "UVEC2";
+        break;
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC3:
         text += "VEC3";
         break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC3:
+        text += "IVEC3";
+        break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC3:
+        text += "UVEC3";
+        break;
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC4:
         text += "VEC4";
+        break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC4:
+        text += "IVEC4";
+        break;
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC4:
+        text += "UVEC4";
         break;
     case ShaderSource::ReflectionInfo::PushConstant::Type::MAT4:
         text += "MAT4";

@@ -28,22 +28,28 @@ class Shader {
     /**
      * @param filename Name of the file to write to.
      * @param headerName The name of the header file.
-     * @param vulkan Whether to generate SPIR-V source or leave it as an empty string.
+     * @param vulkan Whether to generate SPIR-V source for Vulkan or leave it as an empty string.
+     * @param webgpu Whether to generate SPIR-V source for WebGPU or leave it as an empty string.
      *
      * @return Whether the source could be written correctly.
      */
-    bool WriteSource(const std::string& filename, const std::string& headerName, bool vulkan = false);
+    bool WriteSource(const std::string& filename, const std::string& headerName, bool vulkan = false, bool webgpu = false);
 
   private:
     static std::string VariableName(std::string inputName);
     static std::string GetSource(const std::string& filename);
     std::string GetGlslSource() const;
-    std::vector<char> GetSpirvSource(const std::string& filename, bool vulkan) const;
+    std::vector<char> GetVulkanSpirvSource(const std::string& filename, bool skip) const;
+    std::vector<char> GetWebGPUSpirvSource(const std::string& filename, bool skip, const ShaderSource::ReflectionInfo& reflectionInfo) const;
+    std::vector<char> GetSpirvSource(const std::string& filename, const std::string& glsl) const;
     ShaderSource::ReflectionInfo GetReflectionInfo() const;
+    std::string GetWebGPUGlsl(const ShaderSource::ReflectionInfo& reflectionInfo) const;
+    static void WriteSpirv(std::ofstream& file, const std::vector<char>& spirv);
     
     static std::string GetVersionString();
     static std::string GetDefaultGlslInclude();
-    static std::string GetDefaultSpirvInclude();
+    static std::string GetDefaultVulkanInclude();
+    static std::string GetDefaultWebGPUInclude();
 
     static ShaderSource::ReflectionInfo::PushConstant::Type StringToPushConstantType(const std::string& text);
     static std::string PushConstantTypeToString(ShaderSource::ReflectionInfo::PushConstant::Type type);

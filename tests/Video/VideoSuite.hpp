@@ -173,3 +173,11 @@ bool ComputeVertexBuffer(void* data);
  * @return Whether the test was successful.
  */
 bool ComputeMultipleBuffers(void* data);
+
+/// Test using ClearBuffer.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool ComputeClearBuffer(void* data);

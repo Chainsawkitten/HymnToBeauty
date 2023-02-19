@@ -6,6 +6,7 @@
 #include "LowLevelRenderer/Interface/Shader.hpp"
 #include "LowLevelRenderer/Interface/ShaderProgram.hpp"
 #include "DebugDrawing.vert.hpp"
+#include "DebugDrawingPoint.vert.hpp"
 #include "DebugDrawing.frag.hpp"
 #include <Video/Renderer.hpp>
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
@@ -22,8 +23,10 @@ DebugDrawing::DebugDrawing(Renderer* renderer) {
     lowLevelRenderer = renderer->GetLowLevelRenderer();
 
     vertexShader = lowLevelRenderer->CreateShader(DEBUGDRAWING_VERT, Shader::Type::VERTEX_SHADER);
+    pointVertexShader = lowLevelRenderer->CreateShader(DEBUGDRAWINGPOINT_VERT, Shader::Type::VERTEX_SHADER);
     fragmentShader = lowLevelRenderer->CreateShader(DEBUGDRAWING_FRAG, Shader::Type::FRAGMENT_SHADER);
     shaderProgram = lowLevelRenderer->CreateShaderProgram({vertexShader, fragmentShader});
+    pointShaderProgram = lowLevelRenderer->CreateShaderProgram({pointVertexShader, fragmentShader});
 
     // Create vertex description.
     VertexDescription::Attribute attribute;
@@ -44,8 +47,8 @@ DebugDrawing::DebugDrawing(Renderer* renderer) {
     for (uint8_t i = 0; i < 2; ++i) {
         configuration.depthMode = (i == 0 ? DepthMode::NONE : DepthMode::TEST_WRITE);
         configuration.polygonMode = PolygonMode::FILL;
-        configuration.primitiveType = PrimitiveType::POINT;
-        pointGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, vertexDescription);
+        configuration.primitiveType = PrimitiveType::TRIANGLE;
+        pointGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(pointShaderProgram, configuration);
 
         configuration.primitiveType = PrimitiveType::LINE;
         lineGraphicsPipeline[i] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, vertexDescription);
@@ -174,6 +177,9 @@ DebugDrawing::~DebugDrawing() {
     delete vertexDescription;
     delete meshVertexDescription;
 
+    delete pointShaderProgram;
+    delete pointVertexShader;
+
     delete shaderProgram;
     delete vertexShader;
     delete fragmentShader;
@@ -190,16 +196,14 @@ void DebugDrawing::DrawPoint(const Point& point) {
     assert(commandBuffer != nullptr);
 
     BindGraphicsPipeline(pointGraphicsPipeline[point.depthTesting]);
-    BindGeometry(pointGeometryBinding);
 
-    const glm::mat4 model(glm::translate(glm::mat4(), point.position));
-
-    PushConstantData pushConst;
-    pushConst.modelMatrix = model;
+    PointPushConstantData pushConst;
+    pushConst.position = glm::vec4(point.position, 1.0f);
     pushConst.colorSize = glm::vec4(point.color, point.size);
+    pushConst.screenSize = 1.0f / glm::vec2(renderer->GetRenderSurfaceSize());
 
     commandBuffer->PushConstants(&pushConst);
-    commandBuffer->Draw(1);
+    commandBuffer->Draw(6);
 }
 
 void DebugDrawing::DrawLine(const Line& line) {

@@ -186,7 +186,6 @@ void VulkanRenderer::BeginFrame() {
 }
 
 void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
-    // End command buffer.
     VulkanCommandBuffer* vulkanCommandBuffer = static_cast<VulkanCommandBuffer*>(commandBuffer);
 
     // Handle timings.
@@ -195,6 +194,7 @@ void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
         submittedTimings[currentFrame].push_back(timing);
     }
 
+    // End command buffer.
     vulkanCommandBuffer->End();
 
     // Synchronization.

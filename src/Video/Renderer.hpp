@@ -34,7 +34,8 @@ class Renderer {
     /// The supported graphics APIs.
     enum class GraphicsAPI {
         OPENGL, ///< OpenGL
-        VULKAN  ///< Vulkan
+        VULKAN, ///< Vulkan
+        WEBGPU, ///< WebGPU
     };
 
     /// Create new renderer.

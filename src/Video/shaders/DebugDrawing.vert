@@ -20,7 +20,7 @@ PUSH_CONSTANTS
 
 void main () {
     gl_Position = matrices.viewProjectionMatrix * (pushConst.modelMatrix * vec4(vertexPosition, 1.0));
-    gl_PointSize = pushConst.colorSize.z;
+    //gl_PointSize = pushConst.colorSize.z;
     
     vertexOut.color = pushConst.colorSize.rgb;
     

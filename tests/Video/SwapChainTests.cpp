@@ -96,10 +96,10 @@ bool MultipleFrames(void* data) {
         trianglePosition.x = cos(static_cast<float>(frame) * 0.05f);
         cameraPosition.y = sin(static_cast<float>(frame) * 0.01f);
 
+        lowLevelRenderer->BeginFrame();
+
         const glm::mat4 viewMatrix = glm::translate(glm::mat4(), -cameraPosition);
         Buffer* uniformBuffer = lowLevelRenderer->CreateTemporaryBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(glm::mat4), &viewMatrix);
-
-        lowLevelRenderer->BeginFrame();
 
         // Render frame.
         commandBuffer->BeginRenderPass(renderTexture);

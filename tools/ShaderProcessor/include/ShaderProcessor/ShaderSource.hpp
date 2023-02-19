@@ -12,11 +12,17 @@ struct ShaderSource {
     /// The GLSL source code.
     const char* glslSource;
     
-    /// The length of the SPIR-V source.
-    unsigned int spirvLength;
+    /// The length of the Vulkan SPIR-V source.
+    unsigned int vulkanSpirvLength;
     
-    /// The SPIR-V source code.
-    const uint32_t* spirvSource;
+    /// The Vulkan SPIR-V source code.
+    const uint32_t* vulkanSpirvSource;
+
+    /// The length of the WebGPU SPIR-V source.
+    unsigned int webGPUSpirvLength;
+
+    /// The WebGPU SPIR-V source code.
+    const uint32_t* webGPUSpirvSource;
     
     /// Information about the shader.
     struct ReflectionInfo {
@@ -28,8 +34,14 @@ struct ShaderSource {
                 UINT, ///< Scalar unsigned int.
                 FLOAT, ///< Scalar float.
                 VEC2, ///< 2 component vector.
+                IVEC2, ///< 2 component signed int vector.
+                UVEC2, ///< 2 component unsigned int vector.
                 VEC3, ///< 3 component vector.
+                IVEC3, ///< 3 component signed int vector.
+                UVEC3, ///< 3 component unsigned int vector.
                 VEC4, ///< 4 component vector.
+                IVEC4, ///< 4 component signed int vector.
+                UVEC4, ///< 4 component unsigned int vector.
                 MAT4 ///< 4x4 matrix.
             };
 
@@ -93,10 +105,16 @@ static uint32_t PushConstantTypeToSize(ShaderSource::ReflectionInfo::PushConstan
     case ShaderSource::ReflectionInfo::PushConstant::Type::FLOAT:
         return sizeof(float);
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC2:
+    case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC2:
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC2:
         return sizeof(float) * 2;
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC3:
+    case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC3:
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC3:
         return sizeof(float) * 3;
     case ShaderSource::ReflectionInfo::PushConstant::Type::VEC4:
+    case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC4:
+    case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC4:
         return sizeof(float) * 4;
     case ShaderSource::ReflectionInfo::PushConstant::Type::MAT4:
         return sizeof(float) * 4 * 4;
