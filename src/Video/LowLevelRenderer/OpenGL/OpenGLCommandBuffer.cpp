@@ -1,6 +1,6 @@
 #include "OpenGLCommandBuffer.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <Utility/Log.hpp>
 #include <cstring>
 #include <glm/glm.hpp>
@@ -341,11 +341,29 @@ void OpenGLCommandBuffer::PushConstants(const void* data) {
         case ShaderSource::ReflectionInfo::PushConstant::Type::VEC2:
             SetUniformVector2(pushConstant.uniformLocation, *reinterpret_cast<const glm::vec2*>(value));
             break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC2:
+            SetUniformIVector2(pushConstant.uniformLocation, *reinterpret_cast<const glm::ivec2*>(value));
+            break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC2:
+            SetUniformUVector2(pushConstant.uniformLocation, *reinterpret_cast<const glm::uvec2*>(value));
+            break;
         case ShaderSource::ReflectionInfo::PushConstant::Type::VEC3:
             SetUniformVector3(pushConstant.uniformLocation, *reinterpret_cast<const glm::vec3*>(value));
             break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC3:
+            SetUniformIVector3(pushConstant.uniformLocation, *reinterpret_cast<const glm::ivec3*>(value));
+            break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC3:
+            SetUniformUVector3(pushConstant.uniformLocation, *reinterpret_cast<const glm::uvec3*>(value));
+            break;
         case ShaderSource::ReflectionInfo::PushConstant::Type::VEC4:
             SetUniformVector4(pushConstant.uniformLocation, *reinterpret_cast<const glm::vec4*>(value));
+            break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::IVEC4:
+            SetUniformIVector4(pushConstant.uniformLocation, *reinterpret_cast<const glm::ivec4*>(value));
+            break;
+        case ShaderSource::ReflectionInfo::PushConstant::Type::UVEC4:
+            SetUniformUVector4(pushConstant.uniformLocation, *reinterpret_cast<const glm::uvec4*>(value));
             break;
         case ShaderSource::ReflectionInfo::PushConstant::Type::MAT4:
             SetUniformMatrix4(pushConstant.uniformLocation, *reinterpret_cast<const glm::mat4*>(value));
@@ -522,6 +540,26 @@ void OpenGLCommandBuffer::SetUniformVector2(unsigned int location, const glm::ve
     AddCommand(command);
 }
 
+void OpenGLCommandBuffer::SetUniformIVector2(unsigned int location, const glm::ivec2& value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_IVECTOR2;
+
+    command.setUniformIVector2Command.location = location;
+    memcpy(command.setUniformIVector2Command.value, &value[0], sizeof(value));
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::SetUniformUVector2(unsigned int location, const glm::uvec2& value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_UVECTOR2;
+
+    command.setUniformUVector2Command.location = location;
+    memcpy(command.setUniformUVector2Command.value, &value[0], sizeof(value));
+
+    AddCommand(command);
+}
+
 void OpenGLCommandBuffer::SetUniformVector3(unsigned int location, const glm::vec3& value) {
     Command command = {};
     command.type = Command::Type::SET_UNIFORM_VECTOR3;
@@ -532,12 +570,52 @@ void OpenGLCommandBuffer::SetUniformVector3(unsigned int location, const glm::ve
     AddCommand(command);
 }
 
+void OpenGLCommandBuffer::SetUniformIVector3(unsigned int location, const glm::ivec3& value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_IVECTOR3;
+
+    command.setUniformIVector3Command.location = location;
+    memcpy(command.setUniformIVector3Command.value, &value[0], sizeof(value));
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::SetUniformUVector3(unsigned int location, const glm::uvec3& value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_UVECTOR3;
+
+    command.setUniformUVector3Command.location = location;
+    memcpy(command.setUniformUVector3Command.value, &value[0], sizeof(value));
+
+    AddCommand(command);
+}
+
 void OpenGLCommandBuffer::SetUniformVector4(unsigned int location, const glm::vec4& value) {
     Command command = {};
     command.type = Command::Type::SET_UNIFORM_VECTOR4;
 
     command.setUniformVector4Command.location = location;
     memcpy(command.setUniformVector4Command.value, &value[0], sizeof(value));
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::SetUniformIVector4(unsigned int location, const glm::ivec4& value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_IVECTOR4;
+
+    command.setUniformIVector4Command.location = location;
+    memcpy(command.setUniformIVector4Command.value, &value[0], sizeof(value));
+
+    AddCommand(command);
+}
+
+void OpenGLCommandBuffer::SetUniformUVector4(unsigned int location, const glm::uvec4& value) {
+    Command command = {};
+    command.type = Command::Type::SET_UNIFORM_UVECTOR4;
+
+    command.setUniformUVector4Command.location = location;
+    memcpy(command.setUniformUVector4Command.value, &value[0], sizeof(value));
 
     AddCommand(command);
 }
@@ -672,12 +750,36 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         glUniform2fv(command.setUniformVector2Command.location, 1, command.setUniformVector2Command.value);
         break;
     }
+    case Command::Type::SET_UNIFORM_IVECTOR2: {
+        glUniform2iv(command.setUniformIVector2Command.location, 1, command.setUniformIVector2Command.value);
+        break;
+    }
+    case Command::Type::SET_UNIFORM_UVECTOR2: {
+        glUniform2uiv(command.setUniformUVector2Command.location, 1, command.setUniformUVector2Command.value);
+        break;
+    }
     case Command::Type::SET_UNIFORM_VECTOR3: {
         glUniform3fv(command.setUniformVector3Command.location, 1, command.setUniformVector3Command.value);
         break;
     }
+    case Command::Type::SET_UNIFORM_IVECTOR3: {
+        glUniform3iv(command.setUniformIVector3Command.location, 1, command.setUniformIVector3Command.value);
+        break;
+    }
+    case Command::Type::SET_UNIFORM_UVECTOR3: {
+        glUniform3uiv(command.setUniformUVector3Command.location, 1, command.setUniformUVector3Command.value);
+        break;
+    }
     case Command::Type::SET_UNIFORM_VECTOR4: {
         glUniform4fv(command.setUniformVector4Command.location, 1, command.setUniformVector4Command.value);
+        break;
+    }
+    case Command::Type::SET_UNIFORM_IVECTOR4: {
+        glUniform4iv(command.setUniformIVector4Command.location, 1, command.setUniformIVector4Command.value);
+        break;
+    }
+    case Command::Type::SET_UNIFORM_UVECTOR4: {
+        glUniform4uiv(command.setUniformUVector4Command.location, 1, command.setUniformUVector4Command.value);
         break;
     }
     case Command::Type::SET_UNIFORM_MATRIX3: {
@@ -758,6 +860,8 @@ void OpenGLCommandBuffer::SubmitCommand(const Command& command) {
         glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
         break;
     }
+    default:
+        assert(false);
     }
 }
 

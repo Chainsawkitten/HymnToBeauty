@@ -158,6 +158,48 @@ if(VulkanRenderer)
     )
 endif()
 
+if (WebGPURenderer)
+    set(API_LIBRARIES
+        ${API_LIBRARIES}
+        dawn_native
+        dawn_proc
+    )
+    
+    add_definitions(-DWEBGPU_SUPPORT)
+    
+    set(SRCS
+        ${SRCS}
+        LowLevelRenderer/WebGPU/WebGPURenderer.cpp
+        LowLevelRenderer/WebGPU/WebGPUBuffer.cpp
+        LowLevelRenderer/WebGPU/WebGPUCommandBuffer.cpp
+        LowLevelRenderer/WebGPU/WebGPUComputePipeline.cpp
+        LowLevelRenderer/WebGPU/WebGPUGeometryBinding.cpp
+        LowLevelRenderer/WebGPU/WebGPUGraphicsPipeline.cpp
+        LowLevelRenderer/WebGPU/WebGPURenderTargetAllocator.cpp
+        LowLevelRenderer/WebGPU/WebGPUSampler.cpp
+        LowLevelRenderer/WebGPU/WebGPUShader.cpp
+        LowLevelRenderer/WebGPU/WebGPUShaderProgram.cpp
+        LowLevelRenderer/WebGPU/WebGPUTexture.cpp
+        LowLevelRenderer/WebGPU/WebGPUVertexDescription.cpp
+    )
+    
+    set(HEADERS
+        ${HEADERS}
+        LowLevelRenderer/WebGPU/WebGPURenderer.hpp
+        LowLevelRenderer/WebGPU/WebGPUBuffer.hpp
+        LowLevelRenderer/WebGPU/WebGPUCommandBuffer.hpp
+        LowLevelRenderer/WebGPU/WebGPUComputePipeline.hpp
+        LowLevelRenderer/WebGPU/WebGPUGeometryBinding.hpp
+        LowLevelRenderer/WebGPU/WebGPUGraphicsPipeline.hpp
+        LowLevelRenderer/WebGPU/WebGPURenderTargetAllocator.hpp
+        LowLevelRenderer/WebGPU/WebGPUSampler.hpp
+        LowLevelRenderer/WebGPU/WebGPUShader.hpp
+        LowLevelRenderer/WebGPU/WebGPUShaderProgram.hpp
+        LowLevelRenderer/WebGPU/WebGPUTexture.hpp
+        LowLevelRenderer/WebGPU/WebGPUVertexDescription.hpp
+    )
+endif()
+
 # Setup shaders
 set(SHADER_INCLUDES
     shaders/PostProcessing/Dither.glsl
@@ -165,6 +207,7 @@ set(SHADER_INCLUDES
 
 set(SHADERS
     shaders/DebugDrawing.vert
+    shaders/DebugDrawingPoint.vert
     shaders/DebugDrawing.frag
     shaders/Default3D.vert
     shaders/Default3D.frag
@@ -197,5 +240,5 @@ create_directory_groups(${SRCS} ${HEADERS})
 add_library(Video STATIC ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${SHADER_HEADER})
 target_link_libraries(Video Utility ${API_LIBRARIES} glm stb ShaderSource)
 
-set_property(TARGET Video PROPERTY CXX_STANDARD 11)
+set_property(TARGET Video PROPERTY CXX_STANDARD 17)
 set_property(TARGET Video PROPERTY CXX_STANDARD_REQUIRED ON)

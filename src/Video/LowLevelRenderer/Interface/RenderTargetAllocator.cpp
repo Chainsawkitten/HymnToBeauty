@@ -3,6 +3,8 @@
 #include "Texture.hpp"
 #include "RenderPassAllocator.hpp"
 
+#include <cassert>
+
 namespace Video {
 
 RenderTargetAllocator::RenderTargetAllocator(uint8_t frames, RenderPassAllocator* renderPassAllocator) {
@@ -25,7 +27,7 @@ void RenderTargetAllocator::BeginFrame() {
         auto i = it.second.begin();
         while (i != it.second.end()) {
             if (i->age++ > frames) {
-                renderPassAllocator->FreePasses(i->texture);
+                FreeRenderPasses(i->texture);
                 delete i->texture;
                 i = it.second.erase(i);
             } else {
@@ -36,6 +38,8 @@ void RenderTargetAllocator::BeginFrame() {
 }
 
 Texture* RenderTargetAllocator::CreateRenderTarget(const glm::uvec2& size, Texture::Format format) {
+    assert(size.x > 0 && size.y > 0);
+
     RenderTargetInfo renderTargetInfo;
     renderTargetInfo.size = size;
     renderTargetInfo.format = format;
@@ -54,6 +58,8 @@ Texture* RenderTargetAllocator::CreateRenderTarget(const glm::uvec2& size, Textu
 }
 
 void RenderTargetAllocator::FreeRenderTarget(Texture* renderTarget) {
+    assert(renderTarget != nullptr);
+
     RenderTargetInfo renderTargetInfo;
     renderTargetInfo.size = renderTarget->GetSize();
     renderTargetInfo.format = renderTarget->GetFormat();
@@ -61,6 +67,10 @@ void RenderTargetAllocator::FreeRenderTarget(Texture* renderTarget) {
     RenderTarget rt = {renderTarget, 0};
 
     freeRenderTargets[renderTargetInfo].push_back(rt);
+}
+
+void RenderTargetAllocator::FreeRenderPasses(Texture* renderTarget) {
+    renderPassAllocator->FreePasses(renderTarget);
 }
 
 }

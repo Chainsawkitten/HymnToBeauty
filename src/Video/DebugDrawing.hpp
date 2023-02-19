@@ -310,6 +310,8 @@ class DebugDrawing {
     Shader* vertexShader;
     Shader* fragmentShader;
     ShaderProgram* shaderProgram;
+    Shader* pointVertexShader;
+    ShaderProgram* pointShaderProgram;
 
     GraphicsPipeline* pointGraphicsPipeline[2];
     GraphicsPipeline* lineGraphicsPipeline[2];
@@ -321,6 +323,11 @@ class DebugDrawing {
     struct PushConstantData {
         glm::mat4 modelMatrix;
         glm::vec4 colorSize;
+    };
+    struct PointPushConstantData {
+        glm::vec4 position;
+        glm::vec4 colorSize;
+        glm::vec2 screenSize;
     };
 
     // Geometry.

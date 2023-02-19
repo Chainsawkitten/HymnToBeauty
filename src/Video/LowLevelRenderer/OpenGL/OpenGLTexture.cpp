@@ -14,6 +14,11 @@ OpenGLTexture::OpenGLTexture(const glm::uvec2 size, Texture::Type type, Texture:
     GLint internalFormat;
     GLenum dataFormat;
     switch (format) {
+    case Texture::Format::R8:
+        assert(type != Texture::Type::RENDER_DEPTH);
+        internalFormat = GL_R8;
+        dataFormat = Format(components);
+        break;
     case Texture::Format::R8G8B8A8:
         assert(type != Texture::Type::RENDER_DEPTH);
         internalFormat = GL_RGBA8;

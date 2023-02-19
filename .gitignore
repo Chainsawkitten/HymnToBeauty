@@ -32,3 +32,6 @@ docs/html
 *.exe
 *.out
 *.app
+
+# WebGPU backends
+externals/dawn

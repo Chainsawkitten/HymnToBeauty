@@ -79,3 +79,7 @@ target_include_directories(miniaudio INTERFACE miniaudio)
 # STB
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE stb)
+
+if (WebGPURenderer)
+    add_subdirectory(dawn)
+endif()

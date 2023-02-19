@@ -12,7 +12,7 @@ int main(int argc, const char* argv[]) {
     if (argc == 1 || strcmp(argv[0], "--help") == 0) {
         cout << "ShaderProcessor is a tool to generate shader variants for GLSL shaders." << endl
              << "Usage:" << endl
-             << "ShaderProcessor input output [--vulkan]" << endl;
+             << "ShaderProcessor input output [--vulkan] [--webgpu]" << endl;
         return 0;
     }
     
@@ -26,9 +26,14 @@ int main(int argc, const char* argv[]) {
 
     // Process remaining arguments.
     bool vulkan = false;
+    bool webgpu = false;
     for (int i = 3; i < argc; i++) {
         if (strcmp(argv[i], "--vulkan") == 0) {
             vulkan = true;
+        }
+
+        if (strcmp(argv[i], "--webgpu") == 0) {
+            webgpu = true;
         }
     }
 
@@ -44,7 +49,7 @@ int main(int argc, const char* argv[]) {
     if (!shader.WriteHeader(headerName))
         return 1;
 
-    if (!shader.WriteSource(outputName + ".cpp", headerName, vulkan))
+    if (!shader.WriteSource(outputName + ".cpp", headerName, vulkan, webgpu))
         return 1;
     
     return 0;

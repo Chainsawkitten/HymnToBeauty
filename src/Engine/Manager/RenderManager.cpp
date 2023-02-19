@@ -47,7 +47,10 @@ void RenderManager::Render(World& world, const DebugConfiguration& debugConfigur
     if (windowSize.x == 0 || windowSize.y == 0)
         return;
 
-    renderer->BeginFrame();
+    {
+        PROFILE("Begin frame");
+        renderer->BeginFrame();
+    }
     
     // Setup the render scene.
     Video::RenderScene renderScene;

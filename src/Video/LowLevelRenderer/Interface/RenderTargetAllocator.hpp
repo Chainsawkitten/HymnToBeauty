@@ -15,7 +15,7 @@ class RenderTargetAllocator {
     /// Create a new render target allocator.
     /**
      * @param frames How many frames to keep unused render targets alive.
-     * @param renderPassAllocator Render pass allocator.
+     * @param renderPassAllocator Render pass allocator. A nullptr can be passed if the FreeRenderPasses method has been overriden to not use it.
      */
     RenderTargetAllocator(uint8_t frames, RenderPassAllocator* renderPassAllocator);
 
@@ -23,7 +23,7 @@ class RenderTargetAllocator {
     virtual ~RenderTargetAllocator();
 
     /// Call at the beginning of each frame.
-    void BeginFrame();
+    virtual void BeginFrame();
 
     /// Create a render target.
     /**
@@ -68,6 +68,7 @@ class RenderTargetAllocator {
     RenderPassAllocator* renderPassAllocator;
 
     virtual Texture* AllocateRenderTarget(const glm::uvec2& size, Texture::Format format) = 0;
+    virtual void FreeRenderPasses(Texture* renderTarget);
 };
 
 }

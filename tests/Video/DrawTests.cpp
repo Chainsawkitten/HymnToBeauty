@@ -1063,6 +1063,11 @@ bool DrawLines(void* data) {
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
+    // This test requires fillModeNonSolid
+    if (!lowLevelRenderer->GetOptionalFeatures().fillModeNonSolid) {
+        return false;
+    }
+
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
 
@@ -1192,7 +1197,7 @@ bool Attachmentless(void* data) {
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
     const glm::uvec2 screenSize(imageSize, imageSize);
     commandBuffer->PushConstants(&screenSize);
-    commandBuffer->BindStorageBuffers({ storageBuffer });
+    commandBuffer->BindStorageBuffers({storageBuffer});
     commandBuffer->Draw(3);
     commandBuffer->EndRenderPass();
 

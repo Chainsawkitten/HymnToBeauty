@@ -25,6 +25,9 @@
 #ifdef VULKAN_SUPPORT
 #include "LowLevelRenderer/Vulkan/VulkanRenderer.hpp"
 #endif
+#ifdef WEBGPU_SUPPORT
+#include "LowLevelRenderer/WebGPU/WebGPURenderer.hpp"
+#endif
 
 #include "EditorEntity.vert.hpp"
 #include "EditorEntity.frag.hpp"
@@ -44,6 +47,11 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, Utility::Window* window) {
 #ifdef VULKAN_SUPPORT
     case GraphicsAPI::VULKAN:
         lowLevelRenderer = new VulkanRenderer(window);
+        break;
+#endif
+#ifdef WEBGPU_SUPPORT
+    case GraphicsAPI::WEBGPU:
+        lowLevelRenderer = new WebGPURenderer(window);
         break;
 #endif
     }
