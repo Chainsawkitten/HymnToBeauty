@@ -8,7 +8,8 @@ var hierarchy =
     [ "Physics::Shape::Box", "struct_physics_1_1_shape_1_1_box.html", null ],
     [ "Video::Buffer", "class_video_1_1_buffer.html", [
       [ "Video::OpenGLBuffer", "class_video_1_1_open_g_l_buffer.html", null ],
-      [ "Video::VulkanBuffer", "class_video_1_1_vulkan_buffer.html", null ]
+      [ "Video::VulkanBuffer", "class_video_1_1_vulkan_buffer.html", null ],
+      [ "Video::WebGPUBuffer", "class_video_1_1_web_g_p_u_buffer.html", null ]
     ] ],
     [ "Video::BufferAllocation", "struct_video_1_1_buffer_allocation.html", null ],
     [ "Video::BufferAllocator", "class_video_1_1_buffer_allocator.html", [
@@ -21,13 +22,15 @@ var hierarchy =
     [ "Video::DebugDrawing::Circle", "struct_video_1_1_debug_drawing_1_1_circle.html", null ],
     [ "Video::CommandBuffer", "class_video_1_1_command_buffer.html", [
       [ "Video::OpenGLCommandBuffer", "class_video_1_1_open_g_l_command_buffer.html", null ],
-      [ "Video::VulkanCommandBuffer", "class_video_1_1_vulkan_command_buffer.html", null ]
+      [ "Video::VulkanCommandBuffer", "class_video_1_1_vulkan_command_buffer.html", null ],
+      [ "Video::WebGPUCommandBuffer", "class_video_1_1_web_g_p_u_command_buffer.html", null ]
     ] ],
     [ "Video::VulkanRenderPass::Compatibility", "struct_video_1_1_vulkan_render_pass_1_1_compatibility.html", null ],
     [ "ComponentContainer< C >", "class_component_container.html", null ],
     [ "Video::ComputePipeline", "class_video_1_1_compute_pipeline.html", [
       [ "Video::OpenGLComputePipeline", "class_video_1_1_open_g_l_compute_pipeline.html", null ],
-      [ "Video::VulkanComputePipeline", "class_video_1_1_vulkan_compute_pipeline.html", null ]
+      [ "Video::VulkanComputePipeline", "class_video_1_1_vulkan_compute_pipeline.html", null ],
+      [ "Video::WebGPUComputePipeline", "class_video_1_1_web_g_p_u_compute_pipeline.html", null ]
     ] ],
     [ "Physics::Shape::Cone", "struct_physics_1_1_shape_1_1_cone.html", null ],
     [ "Video::DebugDrawing::Cone", "struct_video_1_1_debug_drawing_1_1_cone.html", null ],
@@ -66,13 +69,15 @@ var hierarchy =
     ] ],
     [ "Video::GeometryBinding", "class_video_1_1_geometry_binding.html", [
       [ "Video::OpenGLGeometryBinding", "class_video_1_1_open_g_l_geometry_binding.html", null ],
-      [ "Video::VulkanGeometryBinding", "class_video_1_1_vulkan_geometry_binding.html", null ]
+      [ "Video::VulkanGeometryBinding", "class_video_1_1_vulkan_geometry_binding.html", null ],
+      [ "Video::WebGPUGeometryBinding", "class_video_1_1_web_g_p_u_geometry_binding.html", null ]
     ] ],
     [ "GUI::GLTFEditor", "class_g_u_i_1_1_g_l_t_f_editor.html", null ],
     [ "GLTFImporter", "class_g_l_t_f_importer.html", null ],
     [ "Video::GraphicsPipeline", "class_video_1_1_graphics_pipeline.html", [
       [ "Video::OpenGLGraphicsPipeline", "class_video_1_1_open_g_l_graphics_pipeline.html", null ],
-      [ "Video::VulkanGraphicsPipeline", "class_video_1_1_vulkan_graphics_pipeline.html", null ]
+      [ "Video::VulkanGraphicsPipeline", "class_video_1_1_vulkan_graphics_pipeline.html", null ],
+      [ "Video::WebGPUGraphicsPipeline", "class_video_1_1_web_g_p_u_graphics_pipeline.html", null ]
     ] ],
     [ "Hub", "class_hub.html", null ],
     [ "Video::RenderScene::Icon", "struct_video_1_1_render_scene_1_1_icon.html", null ],
@@ -97,7 +102,8 @@ var hierarchy =
     [ "GUI::LogView", "class_g_u_i_1_1_log_view.html", null ],
     [ "Video::LowLevelRenderer", "class_video_1_1_low_level_renderer.html", [
       [ "Video::OpenGLRenderer", "class_video_1_1_open_g_l_renderer.html", null ],
-      [ "Video::VulkanRenderer", "class_video_1_1_vulkan_renderer.html", null ]
+      [ "Video::VulkanRenderer", "class_video_1_1_vulkan_renderer.html", null ],
+      [ "Video::WebGPURenderer", "class_video_1_1_web_g_p_u_renderer.html", null ]
     ] ],
     [ "Video::DebugDrawing::Mesh", "struct_video_1_1_debug_drawing_1_1_mesh.html", null ],
     [ "Video::RenderScene::Mesh", "struct_video_1_1_render_scene_1_1_mesh.html", null ],
@@ -130,6 +136,7 @@ var hierarchy =
       [ "Video::OpenGLRenderPassAllocator", "class_video_1_1_open_g_l_render_pass_allocator.html", null ],
       [ "Video::VulkanRenderPassAllocator", "class_video_1_1_vulkan_render_pass_allocator.html", null ]
     ] ],
+    [ "Video::WebGPUGraphicsPipeline::RenderPassDescription", "struct_video_1_1_web_g_p_u_graphics_pipeline_1_1_render_pass_description.html", null ],
     [ "Video::RenderProgram", "class_video_1_1_render_program.html", [
       [ "Video::SpriteRenderProgram", "class_video_1_1_sprite_render_program.html", null ],
       [ "Video::StaticRenderProgram", "class_video_1_1_static_render_program.html", null ]
@@ -137,7 +144,8 @@ var hierarchy =
     [ "Video::RenderScene", "struct_video_1_1_render_scene.html", null ],
     [ "Video::RenderTargetAllocator", "class_video_1_1_render_target_allocator.html", [
       [ "Video::OpenGLRenderTargetAllocator", "class_video_1_1_open_g_l_render_target_allocator.html", null ],
-      [ "Video::VulkanRenderTargetAllocator", "class_video_1_1_vulkan_render_target_allocator.html", null ]
+      [ "Video::VulkanRenderTargetAllocator", "class_video_1_1_vulkan_render_target_allocator.html", null ],
+      [ "Video::WebGPURenderTargetAllocator", "class_video_1_1_web_g_p_u_render_target_allocator.html", null ]
     ] ],
     [ "ResourceList::Resource", "struct_resource_list_1_1_resource.html", null ],
     [ "ResourceList::ResourceFolder", "struct_resource_list_1_1_resource_folder.html", null ],
@@ -148,7 +156,8 @@ var hierarchy =
     [ "GUI::RigidBodyEditor", "class_g_u_i_1_1_rigid_body_editor.html", null ],
     [ "Video::Sampler", "class_video_1_1_sampler.html", [
       [ "Video::OpenGLSampler", "class_video_1_1_open_g_l_sampler.html", null ],
-      [ "Video::VulkanSampler", "class_video_1_1_vulkan_sampler.html", null ]
+      [ "Video::VulkanSampler", "class_video_1_1_vulkan_sampler.html", null ],
+      [ "Video::WebGPUSampler", "class_video_1_1_web_g_p_u_sampler.html", null ]
     ] ],
     [ "GUI::SavePromptWindow", "class_g_u_i_1_1_save_prompt_window.html", null ],
     [ "GUI::SceneEditor", "class_g_u_i_1_1_scene_editor.html", null ],
@@ -164,11 +173,13 @@ var hierarchy =
     [ "GUI::SettingsWindow", "class_g_u_i_1_1_settings_window.html", null ],
     [ "Video::Shader", "class_video_1_1_shader.html", [
       [ "Video::OpenGLShader", "class_video_1_1_open_g_l_shader.html", null ],
-      [ "Video::VulkanShader", "class_video_1_1_vulkan_shader.html", null ]
+      [ "Video::VulkanShader", "class_video_1_1_vulkan_shader.html", null ],
+      [ "Video::WebGPUShader", "class_video_1_1_web_g_p_u_shader.html", null ]
     ] ],
     [ "Video::ShaderProgram", "class_video_1_1_shader_program.html", [
       [ "Video::OpenGLShaderProgram", "class_video_1_1_open_g_l_shader_program.html", null ],
-      [ "Video::VulkanShaderProgram", "class_video_1_1_vulkan_shader_program.html", null ]
+      [ "Video::VulkanShaderProgram", "class_video_1_1_vulkan_shader_program.html", null ],
+      [ "Video::WebGPUShaderProgram", "class_video_1_1_web_g_p_u_shader_program.html", null ]
     ] ],
     [ "Physics::Shape", "class_physics_1_1_shape.html", null ],
     [ "GUI::SoundEditor", "class_g_u_i_1_1_sound_editor.html", null ],
@@ -201,7 +212,8 @@ var hierarchy =
     ] ],
     [ "Video::Texture", "class_video_1_1_texture.html", [
       [ "Video::OpenGLTexture", "class_video_1_1_open_g_l_texture.html", null ],
-      [ "Video::VulkanTexture", "class_video_1_1_vulkan_texture.html", null ]
+      [ "Video::VulkanTexture", "class_video_1_1_vulkan_texture.html", null ],
+      [ "Video::WebGPUTexture", "class_video_1_1_web_g_p_u_texture.html", null ]
     ] ],
     [ "Video::Texture2D", "class_video_1_1_texture2_d.html", null ],
     [ "TextureAsset", "class_texture_asset.html", null ],
@@ -216,7 +228,8 @@ var hierarchy =
     [ "Video::Geometry::Geometry2D::Vertex", "struct_video_1_1_geometry_1_1_geometry2_d_1_1_vertex.html", null ],
     [ "Video::VertexDescription", "class_video_1_1_vertex_description.html", [
       [ "Video::OpenGLVertexDescription", "class_video_1_1_open_g_l_vertex_description.html", null ],
-      [ "Video::VulkanVertexDescription", "class_video_1_1_vulkan_vertex_description.html", null ]
+      [ "Video::VulkanVertexDescription", "class_video_1_1_vulkan_vertex_description.html", null ],
+      [ "Video::WebGPUVertexDescription", "class_video_1_1_web_g_p_u_vertex_description.html", null ]
     ] ],
     [ "Utility::Window", "class_utility_1_1_window.html", null ],
     [ "World", "class_world.html", null ],

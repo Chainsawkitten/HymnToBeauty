@@ -2,7 +2,8 @@ var class_video_1_1_renderer =
 [
     [ "GraphicsAPI", "class_video_1_1_renderer.html#a4716b56ed996cb197d4db4202a6762f5", [
       [ "OPENGL", "class_video_1_1_renderer.html#a4716b56ed996cb197d4db4202a6762f5ac0ad831a34c4633bee584066cfcc5040", null ],
-      [ "VULKAN", "class_video_1_1_renderer.html#a4716b56ed996cb197d4db4202a6762f5ac60cacb57b9e78f018a9d973bee2f801", null ]
+      [ "VULKAN", "class_video_1_1_renderer.html#a4716b56ed996cb197d4db4202a6762f5ac60cacb57b9e78f018a9d973bee2f801", null ],
+      [ "WEBGPU", "class_video_1_1_renderer.html#a4716b56ed996cb197d4db4202a6762f5aa9ccfdd880db220ac67f5f0b51ec5673", null ]
     ] ],
     [ "Renderer", "class_video_1_1_renderer.html#a98191ed70c449285484d13fc9f1193e9", null ],
     [ "~Renderer", "class_video_1_1_renderer.html#afeee408862d5bd6255a6882d47e6d5cd", null ],

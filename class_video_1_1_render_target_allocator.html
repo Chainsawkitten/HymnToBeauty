@@ -103,8 +103,9 @@ Inheritance diagram for Video::RenderTargetAllocator:</div>
  <div class="center">
   <img src="class_video_1_1_render_target_allocator.png" usemap="#Video::RenderTargetAllocator_map" alt=""/>
   <map id="Video::RenderTargetAllocator_map" name="Video::RenderTargetAllocator_map">
-<area href="class_video_1_1_open_g_l_render_target_allocator.html" title="OpenGL implementation of RenderTargetAllocator." alt="Video::OpenGLRenderTargetAllocator" shape="rect" coords="0,56,226,80"/>
-<area href="class_video_1_1_vulkan_render_target_allocator.html" title="Vulkan implementation of RenderTargetAllocator." alt="Video::VulkanRenderTargetAllocator" shape="rect" coords="236,56,462,80"/>
+<area href="class_video_1_1_open_g_l_render_target_allocator.html" title="OpenGL implementation of RenderTargetAllocator." alt="Video::OpenGLRenderTargetAllocator" shape="rect" coords="0,56,229,80"/>
+<area href="class_video_1_1_vulkan_render_target_allocator.html" title="Vulkan implementation of RenderTargetAllocator." alt="Video::VulkanRenderTargetAllocator" shape="rect" coords="239,56,468,80"/>
+<area href="class_video_1_1_web_g_p_u_render_target_allocator.html" title="WebGPU implementation of RenderTargetAllocator." alt="Video::WebGPURenderTargetAllocator" shape="rect" coords="478,56,707,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -116,7 +117,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa8688f0a6b9390a37419f4202ea3665e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_render_target_allocator.html#aa8688f0a6b9390a37419f4202ea3665e">~RenderTargetAllocator</a> ()</td></tr>
 <tr class="memdesc:aa8688f0a6b9390a37419f4202ea3665e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_video_1_1_render_target_allocator.html#aa8688f0a6b9390a37419f4202ea3665e">More...</a><br /></td></tr>
 <tr class="separator:aa8688f0a6b9390a37419f4202ea3665e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc2c9e359f718d8c789aa90957404c85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_render_target_allocator.html#adc2c9e359f718d8c789aa90957404c85">BeginFrame</a> ()</td></tr>
+<tr class="memitem:adc2c9e359f718d8c789aa90957404c85"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_render_target_allocator.html#adc2c9e359f718d8c789aa90957404c85">BeginFrame</a> ()</td></tr>
 <tr class="memdesc:adc2c9e359f718d8c789aa90957404c85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call at the beginning of each frame.  <a href="class_video_1_1_render_target_allocator.html#adc2c9e359f718d8c789aa90957404c85">More...</a><br /></td></tr>
 <tr class="separator:adc2c9e359f718d8c789aa90957404c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a513d19558a1e693609b275e03619c958"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_video_1_1_texture.html">Texture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_render_target_allocator.html#a513d19558a1e693609b275e03619c958">CreateRenderTarget</a> (const glm::uvec2 &amp;size, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b">Texture::Format</a> format)</td></tr>
@@ -159,7 +160,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">frames</td><td>How many frames to keep unused render targets alive. </td></tr>
-    <tr><td class="paramname">renderPassAllocator</td><td>Render pass allocator. </td></tr>
+    <tr><td class="paramname">renderPassAllocator</td><td>Render pass allocator. A nullptr can be passed if the FreeRenderPasses method has been overriden to not use it. </td></tr>
   </table>
   </dd>
 </dl>
@@ -199,6 +200,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Video::RenderTargetAllocator::BeginFrame </td>
@@ -207,9 +211,16 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Call at the beginning of each frame. </p>
+
+<p>Reimplemented in <a class="el" href="class_video_1_1_web_g_p_u_render_target_allocator.html#ab61df3be5974041cb92485b6ce2c2391">Video::WebGPURenderTargetAllocator</a>.</p>
 
 </div>
 </div>

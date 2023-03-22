@@ -87,7 +87,19 @@ var searchData=
   ['_7evulkanshaderprogram_84',['~VulkanShaderProgram',['../class_video_1_1_vulkan_shader_program.html#a1acded7d85de49a162e18ce3c22daaff',1,'Video::VulkanShaderProgram']]],
   ['_7evulkantexture_85',['~VulkanTexture',['../class_video_1_1_vulkan_texture.html#ad7868278d723d5c88fe218b1509ccff3',1,'Video::VulkanTexture']]],
   ['_7evulkanvertexdescription_86',['~VulkanVertexDescription',['../class_video_1_1_vulkan_vertex_description.html#ae1ce409c6144c2b16721198c45c06170',1,'Video::VulkanVertexDescription']]],
-  ['_7ewindow_87',['~Window',['../class_utility_1_1_window.html#a080284058e8678ab29829d61f2b6c249',1,'Utility::Window']]],
-  ['_7eworld_88',['~World',['../class_world.html#a8c73fba541a5817fff65147ba47cd827',1,'World']]],
-  ['_7ezbinning_89',['~ZBinning',['../class_video_1_1_z_binning.html#a2b0802ebe436463e22b5c5817cf7d5c2',1,'Video::ZBinning']]]
+  ['_7ewebgpubuffer_87',['~WebGPUBuffer',['../class_video_1_1_web_g_p_u_buffer.html#a934beb87def650da82710fdb0a86fffe',1,'Video::WebGPUBuffer']]],
+  ['_7ewebgpucommandbuffer_88',['~WebGPUCommandBuffer',['../class_video_1_1_web_g_p_u_command_buffer.html#a79dd063a9b6cc3b45ee569aeb17b78c5',1,'Video::WebGPUCommandBuffer']]],
+  ['_7ewebgpucomputepipeline_89',['~WebGPUComputePipeline',['../class_video_1_1_web_g_p_u_compute_pipeline.html#ac33d57f5b126e485699acda97bb407a9',1,'Video::WebGPUComputePipeline']]],
+  ['_7ewebgpugeometrybinding_90',['~WebGPUGeometryBinding',['../class_video_1_1_web_g_p_u_geometry_binding.html#aca494bdd888721743eddc3a29188d36c',1,'Video::WebGPUGeometryBinding']]],
+  ['_7ewebgpugraphicspipeline_91',['~WebGPUGraphicsPipeline',['../class_video_1_1_web_g_p_u_graphics_pipeline.html#a76a2d25c47f9d1791815ed2672626e6b',1,'Video::WebGPUGraphicsPipeline']]],
+  ['_7ewebgpurenderer_92',['~WebGPURenderer',['../class_video_1_1_web_g_p_u_renderer.html#a4c0ad0e379bddc0434aeeacd1e15d6d8',1,'Video::WebGPURenderer']]],
+  ['_7ewebgpurendertargetallocator_93',['~WebGPURenderTargetAllocator',['../class_video_1_1_web_g_p_u_render_target_allocator.html#ab577ed84a2b6540817af0bc16e8c0d65',1,'Video::WebGPURenderTargetAllocator']]],
+  ['_7ewebgpusampler_94',['~WebGPUSampler',['../class_video_1_1_web_g_p_u_sampler.html#a079a5e5c6c95ebd408ce1551cf43b685',1,'Video::WebGPUSampler']]],
+  ['_7ewebgpushader_95',['~WebGPUShader',['../class_video_1_1_web_g_p_u_shader.html#a0cb68c53070e9cdc5b21bfaef2feb115',1,'Video::WebGPUShader']]],
+  ['_7ewebgpushaderprogram_96',['~WebGPUShaderProgram',['../class_video_1_1_web_g_p_u_shader_program.html#a12d8987e932297dcab5eefacde271a2d',1,'Video::WebGPUShaderProgram']]],
+  ['_7ewebgputexture_97',['~WebGPUTexture',['../class_video_1_1_web_g_p_u_texture.html#a03768e47c53682613316a9333d089f12',1,'Video::WebGPUTexture']]],
+  ['_7ewebgpuvertexdescription_98',['~WebGPUVertexDescription',['../class_video_1_1_web_g_p_u_vertex_description.html#a9e9dd97fdba58ed38ffd97abec899562',1,'Video::WebGPUVertexDescription']]],
+  ['_7ewindow_99',['~Window',['../class_utility_1_1_window.html#a080284058e8678ab29829d61f2b6c249',1,'Utility::Window']]],
+  ['_7eworld_100',['~World',['../class_world.html#a8c73fba541a5817fff65147ba47cd827',1,'World']]],
+  ['_7ezbinning_101',['~ZBinning',['../class_video_1_1_z_binning.html#a2b0802ebe436463e22b5c5817cf7d5c2',1,'Video::ZBinning']]]
 ];

@@ -1,6 +1,7 @@
 var class_video_1_1_texture =
 [
     [ "Format", "class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b", [
+      [ "R8", "class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852bacfff813d86d447fa2a9c858650ebbb90", null ],
       [ "R8G8B8A8", "class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852ba18787043100457c689d4fd80e956472c", null ],
       [ "R11G11B10", "class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852ba5415a634ac615fa2d2a99c2b7ad4b3df", null ],
       [ "R16G16B16A16", "class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852ba7ddfaad28210b8515486eed653011613", null ],
