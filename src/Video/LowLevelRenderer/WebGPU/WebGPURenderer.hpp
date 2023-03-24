@@ -2,7 +2,7 @@
 
 #include "../Interface/LowLevelRenderer.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Video/LowLevelRenderer/Interface/LowLevelRenderer.hpp>
 #include <Utility/Window.hpp>
+#include <Utility/Log.hpp>
 
 #ifdef OPENGL_SUPPORT
 #include <Video/LowLevelRenderer/OpenGL/OpenGLRenderer.hpp>
@@ -68,6 +69,8 @@ void VideoSuite::Init() {
         lowLevelRenderer = new Video::WebGPURenderer(window);
         break;
 #endif
+    default:
+        Log(Log::ERR) << "No backend selected/supported.\n";
     }
 }
 

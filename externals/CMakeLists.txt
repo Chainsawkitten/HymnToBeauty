@@ -81,5 +81,36 @@ add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE stb)
 
 if (WebGPURenderer)
-    add_subdirectory(dawn)
+    if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/dawn")
+        message(VERBOSE "Using dawn as WebGPU backend")
+        add_subdirectory(dawn)
+        set(WEBGPU_BACKEND_DAWN ON PARENT_SCOPE)
+    elseif (EXISTS "${CMAKE_CURRENT_LIST_DIR}/wgpu-native")
+        message(VERBOSE "Using wgpu as WebGPU backend")
+        set(WEBGPU_BACKEND_WGPU ON PARENT_SCOPE)
+        
+        # Find library
+        if (ANDROID)
+            find_library(WGPU_LIBRARY wgpu_native
+                HINTS "${CMAKE_CURRENT_SOURCE_DIR}/wgpu-native/target/aarch64-linux-android/release"
+            )
+        else()
+            find_library(WGPU_LIBRARY wgpu_native
+                HINTS "${CMAKE_CURRENT_SOURCE_DIR}/wgpu-native/target/release"
+            )
+        endif()
+        
+        # Setup WebGPU headers.
+        add_library(wgpu_headers INTERFACE)
+        target_include_directories(wgpu_headers INTERFACE wgpu-native/ffi)
+        
+        # Dependencies
+        if(MSVC)
+            set(WGPU_OS_LIBRARIES "userenv" "ws2_32" "Dwmapi" "dbghelp" "d3dcompiler" "D3D12" "D3D11" "DXGI" "setupapi" "Bcrypt" PARENT_SCOPE)
+        elseif(APPLE)
+            set(WGPU_OS_LIBRARIES "-framework Cocoa" "-framework CoreVideo" "-framework IOKit" "-framework QuartzCore" PARENT_SCOPE)
+        endif()
+    else()
+        message(FATAL_ERROR "WebGPURenderer requested but no WebGPU backend found")
+    endif()
 endif()

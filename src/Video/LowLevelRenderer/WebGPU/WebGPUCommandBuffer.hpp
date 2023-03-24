@@ -2,7 +2,7 @@
 
 #include "../Interface/CommandBuffer.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 #include <vector>
 #include "WebGPUGraphicsPipeline.hpp"
 

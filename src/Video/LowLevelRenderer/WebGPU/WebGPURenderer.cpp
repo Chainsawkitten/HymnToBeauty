@@ -2,8 +2,10 @@
 
 #include <Utility/Log.hpp>
 #include <Utility/Window.hpp>
+#if WEBGPU_BACKEND_DAWN
 #include <dawn/dawn_proc.h>
 #include <dawn/native/DawnNative.h>
+#endif
 #include <atomic>
 #include <thread>
 #include <vector>
@@ -83,7 +85,9 @@ WebGPURenderer::~WebGPURenderer() {
     delete blitFragmentShader;
 
     wgpuSwapChainRelease(swapChain);
+#if WEBGPU_BACKEND_DAWN
     wgpuQueueRelease(queue);
+#endif
     wgpuDeviceRelease(device);
     wgpuAdapterRelease(adapter);
     wgpuSurfaceRelease(surface);
@@ -176,15 +180,17 @@ ComputePipeline* WebGPURenderer::CreateComputePipeline(const ShaderProgram* shad
 void WebGPURenderer::Wait() {
     std::atomic<bool> finished = false;
     wgpuQueueOnSubmittedWorkDone(
-        queue, 0, [](WGPUQueueWorkDoneStatus status, void* userdata) {
+        queue,
+#if WEBGPU_BACKEND_DAWN
+        // Dawn additionally takes a signal value.
+        /// @todo Remove after updating Dawn
+        0,
+#endif
+        [](WGPUQueueWorkDoneStatus status, void* userdata) {
             *reinterpret_cast<bool*>(userdata) = true;
         }, &finished);
 
     while (!finished) {
-        // Submit empty command to "tick" the device.
-        /// @todo Doesn't work for some reason. Need to call tick explicitly.
-        // wgpuQueueSubmit(queue, 0, nullptr);
-
         wgpuDeviceTick(device);
         std::this_thread::yield();
     }
@@ -303,10 +309,13 @@ WGPUTextureFormat WebGPURenderer::GetSwapChainFormat() const {
 }
 
 void WebGPURenderer::InitializeWebGPUBackend() {
+#if WEBGPU_BACKEND_DAWN
     // Initialize Dawn
-    /// @todo wgpu backend
     DawnProcTable procs = dawn::native::GetProcs();
     dawnProcSetProcs(&procs);
+#elif WEBGPU_BACKEND_WGPU
+    /// @todo wgpu backend
+#endif
 }
 
 void WebGPURenderer::CreateInstance() {
@@ -442,7 +451,25 @@ void WebGPURenderer::CreateDevice() {
     deviceDescriptor.requiredFeaturesCount = features.size();
     deviceDescriptor.requiredFeatures = features.data();
 
-    device = wgpuAdapterCreateDevice(adapter, &deviceDescriptor);
+    struct UserData {
+        WGPUDevice device;
+        std::atomic<bool> finished = false;
+    };
+    UserData userData;
+
+    wgpuAdapterRequestDevice(
+        adapter, &deviceDescriptor, [](WGPURequestDeviceStatus status, WGPUDevice device, char const* message, void* userdata) {
+            UserData* userData = reinterpret_cast<UserData*>(userdata);
+            userData->device = device;
+            userData->finished = true;
+        }, &userData);
+
+    // Wait for request to finish.
+    while (!userData.finished) {
+        std::this_thread::yield();
+    }
+
+    device = userData.device;
 
     // Set error callbacks.
     wgpuDeviceSetDeviceLostCallback(

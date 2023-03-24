@@ -2,7 +2,7 @@
 
 #include "../Interface/ComputePipeline.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 
 namespace Video {
 
