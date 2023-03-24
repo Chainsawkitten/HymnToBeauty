@@ -66,16 +66,6 @@ foreach(item ${IMAGES})
     ProcessWithHeaderize(IMAGES_HEADER IMAGES_SOURCE ${item} ${CMAKE_CURRENT_BINARY_DIR})
 endforeach()
 
-if(OpenGLRenderer)
-    add_definitions(-DOPENGL_SUPPORT)
-endif()
-if(VulkanRenderer)
-    add_definitions(-DVULKAN_SUPPORT)
-endif()
-if(WebGPURenderer)
-    add_definitions(-DWEBGPU_SUPPORT)
-endif()
-
 create_directory_groups(${SRCS} ${HEADERS})
 
 include_directories(../src)

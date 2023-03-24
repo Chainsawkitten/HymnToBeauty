@@ -3,9 +3,7 @@ Vertex shader used for debug drawing.
 */
 layout(location = 0) in vec3 vertexPosition;
 
-layout(location = 0) out VertexData {
-    vec3 color;
-} vertexOut;
+layout(location = 0) out vec3 outColor;
 
 MATRICES
 {
@@ -20,9 +18,8 @@ PUSH_CONSTANTS
 
 void main () {
     gl_Position = matrices.viewProjectionMatrix * (pushConst.modelMatrix * vec4(vertexPosition, 1.0));
-    //gl_PointSize = pushConst.colorSize.z;
     
-    vertexOut.color = pushConst.colorSize.rgb;
+    outColor = pushConst.colorSize.rgb;
     
     FixPosition();
 }

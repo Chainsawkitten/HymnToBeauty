@@ -58,16 +58,14 @@ set(HEADERS
     LowLevelRenderer/Interface/VertexDescription.hpp
 )
 
+add_library(Video STATIC)
+
 # Graphics API libraries to link to.
 set(API_LIBRARIES)
 
 if(OpenGLRenderer)
-    set(API_LIBRARIES
-        ${API_LIBRARIES}
-        glad
-    )
-
-    add_definitions(-DOPENGL_SUPPORT)
+    target_link_libraries(Video glad)
+    target_compile_definitions(Video PUBLIC OPENGL_SUPPORT)
 
     set(SRCS
         ${SRCS}
@@ -110,12 +108,9 @@ endif()
 
 if(VulkanRenderer)
     find_package(VULKAN REQUIRED)
-    set(API_LIBRARIES
-        ${API_LIBRARIES}
-        Vulkan::Vulkan
-    )
 
-    add_definitions(-DVULKAN_SUPPORT)
+    target_link_libraries(Video Vulkan::Vulkan)
+    target_compile_definitions(Video PUBLIC VULKAN_SUPPORT)
 
     set(SRCS
         ${SRCS}
@@ -159,13 +154,15 @@ if(VulkanRenderer)
 endif()
 
 if (WebGPURenderer)
-    set(API_LIBRARIES
-        ${API_LIBRARIES}
-        dawn_native
-        dawn_proc
-    )
+    if (WEBGPU_BACKEND_DAWN)
+        target_link_libraries(Video dawn_native dawn_proc)
+        target_compile_definitions(Video PUBLIC WEBGPU_BACKEND_DAWN)
+    elseif(WEBGPU_BACKEND_WGPU)
+        target_link_libraries(Video ${WGPU_LIBRARY} wgpu_headers ${WGPU_OS_LIBRARIES})
+        target_compile_definitions(Video PUBLIC WEBGPU_BACKEND_WGPU)
+    endif()
     
-    add_definitions(-DWEBGPU_SUPPORT)
+    target_compile_definitions(Video PUBLIC WEBGPU_SUPPORT)
     
     set(SRCS
         ${SRCS}
@@ -185,6 +182,7 @@ if (WebGPURenderer)
     
     set(HEADERS
         ${HEADERS}
+        LowLevelRenderer/WebGPU/WebGPU.hpp
         LowLevelRenderer/WebGPU/WebGPURenderer.hpp
         LowLevelRenderer/WebGPU/WebGPUBuffer.hpp
         LowLevelRenderer/WebGPU/WebGPUCommandBuffer.hpp
@@ -237,8 +235,8 @@ endforeach()
 
 create_directory_groups(${SRCS} ${HEADERS})
 
-add_library(Video STATIC ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${SHADER_HEADER})
-target_link_libraries(Video Utility ${API_LIBRARIES} glm stb ShaderSource)
+target_sources(Video PRIVATE ${SRCS} ${HEADERS} ${SHADER_SOURCE} ${SHADER_HEADER})
+target_link_libraries(Video Utility glm stb ShaderSource)
 
 set_property(TARGET Video PROPERTY CXX_STANDARD 17)
 set_property(TARGET Video PROPERTY CXX_STANDARD_REQUIRED ON)

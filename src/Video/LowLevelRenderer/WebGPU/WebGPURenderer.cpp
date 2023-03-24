@@ -2,11 +2,14 @@
 
 #include <Utility/Log.hpp>
 #include <Utility/Window.hpp>
+#if WEBGPU_BACKEND_DAWN
 #include <dawn/dawn_proc.h>
 #include <dawn/native/DawnNative.h>
+#endif
 #include <atomic>
 #include <thread>
 #include <vector>
+#include <chrono>
 
 #include "WebGPUBuffer.hpp"
 #include "WebGPUVertexDescription.hpp"
@@ -83,7 +86,9 @@ WebGPURenderer::~WebGPURenderer() {
     delete blitFragmentShader;
 
     wgpuSwapChainRelease(swapChain);
+#if WEBGPU_BACKEND_DAWN
     wgpuQueueRelease(queue);
+#endif
     wgpuDeviceRelease(device);
     wgpuAdapterRelease(adapter);
     wgpuSurfaceRelease(surface);
@@ -111,7 +116,9 @@ void WebGPURenderer::Submit(CommandBuffer* commandBuffer) {
     webGPUCommandBuffer->NextFrame();
 
     wgpuQueueSubmit(queue, 1, &cmdbuf);
+#if WEBGPU_BACKEND_DAWN
     wgpuCommandBufferRelease(cmdbuf);
+#endif
 }
 
 void WebGPURenderer::Present() {
@@ -174,17 +181,26 @@ ComputePipeline* WebGPURenderer::CreateComputePipeline(const ShaderProgram* shad
 }
 
 void WebGPURenderer::Wait() {
+#if WEBGPU_BACKEND_WGPU
+    // wgpu-native doesn't currently implement wgpuQueueOnSubmittedWorkDone. Just wait for an arbitrary amount of time instead.
+    /// @todo Remove once wgpu-native adds it.
+    std::this_thread::sleep_for(std::chrono::duration<int>(1));
+    return;
+#endif
+
     std::atomic<bool> finished = false;
     wgpuQueueOnSubmittedWorkDone(
-        queue, 0, [](WGPUQueueWorkDoneStatus status, void* userdata) {
+        queue,
+#if WEBGPU_BACKEND_DAWN
+        // Dawn additionally takes a signal value.
+        /// @todo Remove after updating Dawn
+        0,
+#endif
+        [](WGPUQueueWorkDoneStatus status, void* userdata) {
             *reinterpret_cast<bool*>(userdata) = true;
         }, &finished);
 
     while (!finished) {
-        // Submit empty command to "tick" the device.
-        /// @todo Doesn't work for some reason. Need to call tick explicitly.
-        // wgpuQueueSubmit(queue, 0, nullptr);
-
         wgpuDeviceTick(device);
         std::this_thread::yield();
     }
@@ -298,15 +314,20 @@ bool WebGPURenderer::HasDepthClipControl() const {
     return depthClipControlEnabled;
 }
 
+bool WebGPURenderer::HasR11G11B10() const {
+    return r11g11b10Enabled;
+}
+
 WGPUTextureFormat WebGPURenderer::GetSwapChainFormat() const {
     return swapChainFormat;
 }
 
 void WebGPURenderer::InitializeWebGPUBackend() {
+#if WEBGPU_BACKEND_DAWN
     // Initialize Dawn
-    /// @todo wgpu backend
     DawnProcTable procs = dawn::native::GetProcs();
     dawnProcSetProcs(&procs);
+#endif
 }
 
 void WebGPURenderer::CreateInstance() {
@@ -422,9 +443,12 @@ void WebGPURenderer::CreateDevice() {
         Log(Log::WARNING) << "timestamp-query not supported on the device. GPU profiling will not be supported.\n";
     }*/
 
-    features.push_back(WGPUFeatureName_RG11B10UfloatRenderable);
     if (!wgpuAdapterHasFeature(adapter, WGPUFeatureName_RG11B10UfloatRenderable)) {
-        Log(Log::ERR) << "rg11b10ufloat-renderable is required but not supported on the adapter.\n";
+        Log(Log::WARNING) << "rg11b10ufloat-renderable is not supported. This will impact bandwidth usage.\n";
+        r11g11b10Enabled = false;
+    } else {
+        features.push_back(WGPUFeatureName_RG11B10UfloatRenderable);
+        r11g11b10Enabled = true;
     }
 
     if (!wgpuAdapterHasFeature(adapter, WGPUFeatureName_DepthClipControl)) {
@@ -438,11 +462,35 @@ void WebGPURenderer::CreateDevice() {
     // WebGPU supports 1x and 4x MSAA.
     optionalFeatures.attachmentlessMsaaSamples = 1u | 4u;
 
+#if WEBGPU_BACKEND_WGPU
+    optionalFeatures.shaderAtomics = false;
+#else
+    optionalFeatures.shaderAtomics = true;
+#endif
+
     WGPUDeviceDescriptor deviceDescriptor = {};
     deviceDescriptor.requiredFeaturesCount = features.size();
     deviceDescriptor.requiredFeatures = features.data();
 
-    device = wgpuAdapterCreateDevice(adapter, &deviceDescriptor);
+    struct UserData {
+        WGPUDevice device;
+        std::atomic<bool> finished = false;
+    };
+    UserData userData;
+
+    wgpuAdapterRequestDevice(
+        adapter, &deviceDescriptor, [](WGPURequestDeviceStatus status, WGPUDevice device, char const* message, void* userdata) {
+            UserData* userData = reinterpret_cast<UserData*>(userdata);
+            userData->device = device;
+            userData->finished = true;
+        }, &userData);
+
+    // Wait for request to finish.
+    while (!userData.finished) {
+        std::this_thread::yield();
+    }
+
+    device = userData.device;
 
     // Set error callbacks.
     wgpuDeviceSetDeviceLostCallback(

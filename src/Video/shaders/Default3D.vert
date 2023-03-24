@@ -6,12 +6,10 @@ layout(location = 1) in vec2 vertexTexture;
 layout(location = 2) in vec3 vertexNormal;
 layout(location = 3) in vec3 vertexTangent;
 
-layout(location = 0) out VertexData {
-    vec3 pos;
-    vec3 normal;
-    vec3 tangent;
-    vec2 texCoords;
-} vertexOut;
+layout(location = 0) out vec3 outPosition;
+layout(location = 1) out vec3 outNormal;
+layout(location = 2) out vec3 outTangent;
+layout(location = 3) out vec2 outTexCoords;
 
 MATRICES
 {
@@ -28,10 +26,10 @@ PUSH_CONSTANTS
 void main () {
     vec4 worldPosition = pushConst.modelMatrix * vec4(vertexPosition, 1.0);
     gl_Position = matrices.viewProjectionMatrix * worldPosition;
-    vertexOut.pos = vec3(matrices.viewMatrix * worldPosition);
-    vertexOut.normal = normalize(mat3(pushConst.normalMatrix) * vertexNormal);
-    vertexOut.tangent = vertexTangent;
-    vertexOut.texCoords = vertexTexture;
+    outPosition = vec3(matrices.viewMatrix * worldPosition);
+    outNormal = normalize(mat3(pushConst.normalMatrix) * vertexNormal);
+    outTangent = vertexTangent;
+    outTexCoords = vertexTexture;
     
     FixPosition();
 }

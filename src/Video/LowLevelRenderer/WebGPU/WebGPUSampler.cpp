@@ -18,12 +18,12 @@ WebGPUSampler::WebGPUSampler(WGPUDevice device, Filter filter, Clamping clamping
     case Filter::NEAREST:
         samplerDescriptor.magFilter = WGPUFilterMode_Nearest;
         samplerDescriptor.minFilter = WGPUFilterMode_Nearest;
-        samplerDescriptor.mipmapFilter = WGPUFilterMode_Nearest;
+        samplerDescriptor.mipmapFilter = WGPUMipmapFilterMode_Nearest;
         break;
     case Filter::LINEAR:
         samplerDescriptor.magFilter = WGPUFilterMode_Linear;
         samplerDescriptor.minFilter = WGPUFilterMode_Linear;
-        samplerDescriptor.mipmapFilter = WGPUFilterMode_Linear;
+        samplerDescriptor.mipmapFilter = WGPUMipmapFilterMode_Linear;
         break;
     default:
         assert(false);

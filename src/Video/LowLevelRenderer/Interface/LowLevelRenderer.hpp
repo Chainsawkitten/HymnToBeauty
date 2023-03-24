@@ -42,6 +42,10 @@ class LowLevelRenderer {
 
         /// Bitmask of the number of MSAA samples supported for attachmentless rendering.
         uint32_t attachmentlessMsaaSamples;
+
+        /// Whether shaders can use atomics.
+        /// @todo Remove this once wgpu supports atomics.
+        bool shaderAtomics;
     };
 
     /// Create a new low-level renderer.

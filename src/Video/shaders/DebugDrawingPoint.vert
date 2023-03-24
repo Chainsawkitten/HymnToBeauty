@@ -1,9 +1,7 @@
 /*
 Vertex shader used for debug drawing.
 */
-layout(location = 0) out VertexData {
-    vec3 color;
-} vertexOut;
+layout(location = 0) out vec3 outColor;
 
 MATRICES
 {
@@ -25,7 +23,7 @@ const vec2 relativePosition[6] = vec2[](
 void main () {
     gl_Position = matrices.viewProjectionMatrix * pushConst.position;
     
-    vertexOut.color = pushConst.colorSize.rgb;
+    outColor = pushConst.colorSize.rgb;
     
     FixPosition();
     

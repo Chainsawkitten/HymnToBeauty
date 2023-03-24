@@ -2,7 +2,7 @@
 
 #include "../Interface/CommandBuffer.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 #include <vector>
 #include "WebGPUGraphicsPipeline.hpp"
 
@@ -110,6 +110,8 @@ class WebGPUCommandBuffer : public CommandBuffer {
     const WebGPUBuffer* currentUniformBuffer;
 
     WebGPUTexture* dummyRenderTarget = nullptr;
+
+    std::vector<WGPUBindGroup> bindGroupsToRelease;
 };
 
 } // namespace Video

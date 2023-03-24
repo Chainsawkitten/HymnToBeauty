@@ -3,7 +3,7 @@
 #include "../Interface/Texture.hpp"
 
 #include <glm/glm.hpp>
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 
 namespace Video {
 
