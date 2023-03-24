@@ -21,9 +21,12 @@ const float offsets[sampleCount] = float[](0.0, 1.386283, 3.253459);
 
 void main () {
     vec3 color = weights[0] * texture(colorSampler, inTexCoords).rgb;
-    for (int i = 1; i < sampleCount; i++) {
-        color += weights[i] * texture(colorSampler, inTexCoords + offsets[i] * pushConst.offset).rgb;
-        color += weights[i] * texture(colorSampler, inTexCoords - offsets[i] * pushConst.offset).rgb;
-    }
+    
+    color += weights[1] * texture(colorSampler, inTexCoords + offsets[1] * pushConst.offset).rgb;
+    color += weights[1] * texture(colorSampler, inTexCoords - offsets[1] * pushConst.offset).rgb;
+    
+    color += weights[2] * texture(colorSampler, inTexCoords + offsets[2] * pushConst.offset).rgb;
+    color += weights[2] * texture(colorSampler, inTexCoords - offsets[2] * pushConst.offset).rgb;
+    
     outColor = vec4(color, 1.0);
 }

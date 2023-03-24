@@ -35,3 +35,4 @@ docs/html
 
 # WebGPU backends
 externals/dawn
+externals/wgpu-native

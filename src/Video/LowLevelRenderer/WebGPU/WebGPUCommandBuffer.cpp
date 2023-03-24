@@ -100,6 +100,10 @@ void WebGPUCommandBuffer::BeginRenderPass(Texture* colorAttachment, RenderPass::
             break;
         }
         passDepthAttachment.depthStoreOp = WGPUStoreOp_Store;
+#if WEBGPU_BACKEND_WGPU
+        passDepthAttachment.stencilLoadOp = WGPULoadOp_Clear;
+        passDepthAttachment.stencilStoreOp = WGPUStoreOp_Discard;
+#endif
 
         renderPassDescriptor.depthStencilAttachment = &passDepthAttachment;
 
@@ -149,7 +153,9 @@ void WebGPUCommandBuffer::EndRenderPass() {
     assert(inRenderPass);
     
     wgpuRenderPassEncoderEnd(renderPassEncoder);
+#if WEBGPU_BACKEND_DAWN
     wgpuRenderPassEncoderRelease(renderPassEncoder);
+#endif
 
     // Free attachmentless render target.
     if (dummyRenderTarget != nullptr) {
@@ -188,8 +194,16 @@ void WebGPUCommandBuffer::SetViewport(const glm::uvec2& origin, const glm::uvec2
 
 void WebGPUCommandBuffer::SetScissor(const glm::uvec2& origin, const glm::uvec2& size) {
     assert(inRenderPass);
+
+    /// @todo Remove once wgpu has added support for zero-area scissors. https://github.com/gfx-rs/wgpu/issues/1750
+    glm::uvec2 realSize = size;
+#if WEBGPU_BACKEND_WGPU
+    if (realSize.x == 0 || realSize.y == 0) {
+        realSize = glm::uvec2(1, 1);
+    }
+#endif
     
-    wgpuRenderPassEncoderSetScissorRect(renderPassEncoder, origin.x, origin.y, size.x, size.y);
+    wgpuRenderPassEncoderSetScissorRect(renderPassEncoder, origin.x, origin.y, realSize.x, realSize.y);
 }
 
 void WebGPUCommandBuffer::SetLineWidth(float width) {
@@ -252,7 +266,7 @@ void WebGPUCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
         assert(bindingType != ShaderProgram::BindingType::MATRICES);
         wgpuComputePassEncoderSetBindGroup(computePassEncoder, bindingType, uniformBindGroup, 0, nullptr);
     }
-    wgpuBindGroupRelease(uniformBindGroup);
+    bindGroupsToRelease.push_back(uniformBindGroup);
 }
 
 void WebGPUCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buffers) {
@@ -283,7 +297,7 @@ void WebGPUCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
         wgpuComputePassEncoderSetBindGroup(computePassEncoder, ShaderProgram::BindingType::STORAGE_BUFFER, storageBindGroup, 0, nullptr);
     }
 
-    wgpuBindGroupRelease(storageBindGroup);
+    bindGroupsToRelease.push_back(storageBindGroup);
     delete[] entries;
 }
 
@@ -315,7 +329,7 @@ void WebGPUCommandBuffer::BindMaterial(std::initializer_list<std::pair<Texture*,
 
     wgpuRenderPassEncoderSetBindGroup(renderPassEncoder, ShaderProgram::BindingType::MATERIAL, textureBindGroup, 0, nullptr);
 
-    wgpuBindGroupRelease(textureBindGroup);
+    bindGroupsToRelease.push_back(textureBindGroup);
     delete[] entries;
 }
 
@@ -473,14 +487,24 @@ WGPUCommandBuffer WebGPUCommandBuffer::End() {
     }
 
     WGPUCommandBufferDescriptor commandBufferDescriptor = {};
-    return wgpuCommandEncoderFinish(commandEncoder, &commandBufferDescriptor);
+    WGPUCommandBuffer commandBuffer = wgpuCommandEncoderFinish(commandEncoder, &commandBufferDescriptor);
+    
+    // Release bind groups.
+    for (WGPUBindGroup bindGroup : bindGroupsToRelease) {
+        wgpuBindGroupRelease(bindGroup);
+    }
+    bindGroupsToRelease.clear();
+
+    return commandBuffer;
 }
 
 void WebGPUCommandBuffer::NextFrame() {
     // Allocate a new command encoder for each frame.
+#if WEBGPU_BACKEND_DAWN
     if (commandEncoder != nullptr) {
         wgpuCommandEncoderRelease(commandEncoder);
     }
+#endif
 
     WGPUCommandEncoderDescriptor encoderDescriptor = {};
     commandEncoder = wgpuDeviceCreateCommandEncoder(device, &encoderDescriptor);
@@ -565,7 +589,7 @@ void WebGPUCommandBuffer::UpdateUniforms() {
         } else {
             wgpuComputePassEncoderSetBindGroup(computePassEncoder, ShaderProgram::BindingType::UNIFORMS, uniformBindGroup, 0, nullptr);
         }
-        wgpuBindGroupRelease(uniformBindGroup);
+        bindGroupsToRelease.push_back(uniformBindGroup);
     }
 
     uniformsHasChanged = false;
@@ -577,7 +601,9 @@ void WebGPUCommandBuffer::EndComputePass() {
     }
 
     wgpuComputePassEncoderEnd(computePassEncoder);
+#if WEBGPU_BACKEND_DAWN
     wgpuComputePassEncoderRelease(computePassEncoder);
+#endif
 
     inComputePass = false;
 }

@@ -72,6 +72,7 @@ OpenGLRenderer::OpenGLRenderer(Utility::Window* window) {
     optionalFeatures.wideLines = true;
     optionalFeatures.timestamps = precision > 0;
     optionalFeatures.conservativeRasterization = GLAD_GL_NV_conservative_raster;
+    optionalFeatures.shaderAtomics = true;
 
     assert(optionalFeatures.timestamps); /// @todo Disable GPU profiling if not supported.
 

@@ -2,7 +2,7 @@
 
 #include "../Interface/VertexDescription.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 
 namespace Video {
 

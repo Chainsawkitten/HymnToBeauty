@@ -4,7 +4,7 @@
 
 #include <initializer_list>
 #include <vector>
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 
 namespace Video {
 

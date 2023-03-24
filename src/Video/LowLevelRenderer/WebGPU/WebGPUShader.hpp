@@ -2,7 +2,7 @@
 
 #include "../Interface/Shader.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 #include <ShaderProcessor/ShaderSource.hpp>
 
 namespace Video {

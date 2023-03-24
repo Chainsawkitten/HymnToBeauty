@@ -27,10 +27,14 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
     lightInfo.zBins = 128;
     lightInfo.zMaskBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(uint32_t) * MAX_LIGHTS / 32 * lightInfo.zBins);
 
-    binningShader = lowLevelRenderer->CreateShader(LIGHTBINNING_COMP, Shader::Type::COMPUTE_SHADER);
-    binningShaderProgram = lowLevelRenderer->CreateShaderProgram({ binningShader });
-    binningPipeline[0] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
-    binningPipeline[1] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
+    // Workaround for missing atomics in wgpu.
+    /// @todo Remove.
+    if (lowLevelRenderer->GetOptionalFeatures().shaderAtomics) {
+        binningShader = lowLevelRenderer->CreateShader(LIGHTBINNING_COMP, Shader::Type::COMPUTE_SHADER);
+        binningShaderProgram = lowLevelRenderer->CreateShaderProgram({binningShader});
+        binningPipeline[0] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
+        binningPipeline[1] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
+    }
 
     // Create tiling resources.
     lightInfo.tileSize = 16;
@@ -50,34 +54,38 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
     lightInfo.maskCount = 0;
 
-    tilingVertexShader = lowLevelRenderer->CreateShader(LIGHTTILING_VERT, Shader::Type::VERTEX_SHADER);
-    tilingFragmentShader = lowLevelRenderer->CreateShader(LIGHTTILING_FRAG, Shader::Type::FRAGMENT_SHADER);
-    tilingShaderProgram = lowLevelRenderer->CreateShaderProgram({ tilingVertexShader, tilingFragmentShader });
+    if (lowLevelRenderer->GetOptionalFeatures().shaderAtomics) {
+        tilingVertexShader = lowLevelRenderer->CreateShader(LIGHTTILING_VERT, Shader::Type::VERTEX_SHADER);
+        tilingFragmentShader = lowLevelRenderer->CreateShader(LIGHTTILING_FRAG, Shader::Type::FRAGMENT_SHADER);
+        tilingShaderProgram = lowLevelRenderer->CreateShaderProgram({tilingVertexShader, tilingFragmentShader});
 
-    GraphicsPipeline::Configuration configuration = {};
-    configuration.primitiveType = PrimitiveType::TRIANGLE;
-    configuration.polygonMode = PolygonMode::FILL;
-    configuration.cullFace = CullFace::FRONT;
-    configuration.blendMode = BlendMode::NONE;
-    configuration.depthMode = DepthMode::NONE;
-    configuration.depthClamp = true;
-    configuration.conservativeRasterization = conservativeRasterization;
-    tilingPipeline = lowLevelRenderer->CreateGraphicsPipeline(tilingShaderProgram, configuration, isocahedron.GetVertexDescription());
+        GraphicsPipeline::Configuration configuration = {};
+        configuration.primitiveType = PrimitiveType::TRIANGLE;
+        configuration.polygonMode = PolygonMode::FILL;
+        configuration.cullFace = CullFace::FRONT;
+        configuration.blendMode = BlendMode::NONE;
+        configuration.depthMode = DepthMode::NONE;
+        configuration.depthClamp = true;
+        configuration.conservativeRasterization = conservativeRasterization;
+        tilingPipeline = lowLevelRenderer->CreateGraphicsPipeline(tilingShaderProgram, configuration, isocahedron.GetVertexDescription());
+    }
 }
 
 ZBinning::~ZBinning() {
     delete lightInfo.zMaskBuffer;
     delete lightInfo.tileMaskBuffer;
 
-    delete binningPipeline[0];
-    delete binningPipeline[1];
-    delete binningShaderProgram;
-    delete binningShader;
+    if (lowLevelRenderer->GetOptionalFeatures().shaderAtomics) {
+        delete binningPipeline[0];
+        delete binningPipeline[1];
+        delete binningShaderProgram;
+        delete binningShader;
 
-    delete tilingShaderProgram;
-    delete tilingVertexShader;
-    delete tilingFragmentShader;
-    delete tilingPipeline;
+        delete tilingShaderProgram;
+        delete tilingVertexShader;
+        delete tilingFragmentShader;
+        delete tilingPipeline;
+    }
 }
 
 void ZBinning::SetRenderSurfaceSize(const glm::uvec2& size) {
@@ -133,7 +141,7 @@ void ZBinning::BinLights(CommandBuffer& commandBuffer, const std::vector<Directi
 
     ClearBuffers(commandBuffer);
 
-    if (lightInfo.lightCount > 0) {
+    if (lowLevelRenderer->GetOptionalFeatures().shaderAtomics && lightInfo.lightCount > 0) {
         Binning(commandBuffer);
         Tiling(commandBuffer, projectionMatrix);
     }

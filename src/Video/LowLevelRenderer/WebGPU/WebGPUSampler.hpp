@@ -2,7 +2,7 @@
 
 #include "../Interface/Sampler.hpp"
 
-#include <dawn/webgpu.h>
+#include "WebGPU.hpp"
 
 namespace Video {
 
