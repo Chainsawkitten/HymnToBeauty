@@ -149,7 +149,9 @@ void WebGPUCommandBuffer::EndRenderPass() {
     assert(inRenderPass);
     
     wgpuRenderPassEncoderEnd(renderPassEncoder);
+#if WEBGPU_BACKEND_DAWN
     wgpuRenderPassEncoderRelease(renderPassEncoder);
+#endif
 
     // Free attachmentless render target.
     if (dummyRenderTarget != nullptr) {
@@ -478,9 +480,11 @@ WGPUCommandBuffer WebGPUCommandBuffer::End() {
 
 void WebGPUCommandBuffer::NextFrame() {
     // Allocate a new command encoder for each frame.
+#if WEBGPU_BACKEND_DAWN
     if (commandEncoder != nullptr) {
         wgpuCommandEncoderRelease(commandEncoder);
     }
+#endif
 
     WGPUCommandEncoderDescriptor encoderDescriptor = {};
     commandEncoder = wgpuDeviceCreateCommandEncoder(device, &encoderDescriptor);
@@ -577,7 +581,9 @@ void WebGPUCommandBuffer::EndComputePass() {
     }
 
     wgpuComputePassEncoderEnd(computePassEncoder);
+#if WEBGPU_BACKEND_DAWN
     wgpuComputePassEncoderRelease(computePassEncoder);
+#endif
 
     inComputePass = false;
 }

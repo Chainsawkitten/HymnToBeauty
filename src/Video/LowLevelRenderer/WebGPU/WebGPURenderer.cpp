@@ -9,6 +9,7 @@
 #include <atomic>
 #include <thread>
 #include <vector>
+#include <chrono>
 
 #include "WebGPUBuffer.hpp"
 #include "WebGPUVertexDescription.hpp"
@@ -115,7 +116,9 @@ void WebGPURenderer::Submit(CommandBuffer* commandBuffer) {
     webGPUCommandBuffer->NextFrame();
 
     wgpuQueueSubmit(queue, 1, &cmdbuf);
+#if WEBGPU_BACKEND_DAWN
     wgpuCommandBufferRelease(cmdbuf);
+#endif
 }
 
 void WebGPURenderer::Present() {
@@ -178,6 +181,13 @@ ComputePipeline* WebGPURenderer::CreateComputePipeline(const ShaderProgram* shad
 }
 
 void WebGPURenderer::Wait() {
+#if WEBGPU_BACKEND_WGPU
+    // wgpu-native doesn't currently implement wgpuQueueOnSubmittedWorkDone. Just wait for an arbitrary amount of time instead.
+    /// @todo Remove once wgpu-native adds it.
+    std::this_thread::sleep_for(std::chrono::duration<int>(1));
+    return;
+#endif
+
     std::atomic<bool> finished = false;
     wgpuQueueOnSubmittedWorkDone(
         queue,
