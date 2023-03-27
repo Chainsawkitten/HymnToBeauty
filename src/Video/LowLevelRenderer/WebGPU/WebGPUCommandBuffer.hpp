@@ -110,6 +110,8 @@ class WebGPUCommandBuffer : public CommandBuffer {
     const WebGPUBuffer* currentUniformBuffer;
 
     WebGPUTexture* dummyRenderTarget = nullptr;
+
+    std::vector<WGPUBindGroup> bindGroupsToRelease;
 };
 
 } // namespace Video

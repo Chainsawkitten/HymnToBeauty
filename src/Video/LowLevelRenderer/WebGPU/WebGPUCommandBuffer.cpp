@@ -254,7 +254,7 @@ void WebGPUCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
         assert(bindingType != ShaderProgram::BindingType::MATRICES);
         wgpuComputePassEncoderSetBindGroup(computePassEncoder, bindingType, uniformBindGroup, 0, nullptr);
     }
-    wgpuBindGroupRelease(uniformBindGroup);
+    bindGroupsToRelease.push_back(uniformBindGroup);
 }
 
 void WebGPUCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buffers) {
@@ -285,7 +285,7 @@ void WebGPUCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
         wgpuComputePassEncoderSetBindGroup(computePassEncoder, ShaderProgram::BindingType::STORAGE_BUFFER, storageBindGroup, 0, nullptr);
     }
 
-    wgpuBindGroupRelease(storageBindGroup);
+    bindGroupsToRelease.push_back(storageBindGroup);
     delete[] entries;
 }
 
@@ -317,7 +317,7 @@ void WebGPUCommandBuffer::BindMaterial(std::initializer_list<std::pair<Texture*,
 
     wgpuRenderPassEncoderSetBindGroup(renderPassEncoder, ShaderProgram::BindingType::MATERIAL, textureBindGroup, 0, nullptr);
 
-    wgpuBindGroupRelease(textureBindGroup);
+    bindGroupsToRelease.push_back(textureBindGroup);
     delete[] entries;
 }
 
@@ -475,7 +475,15 @@ WGPUCommandBuffer WebGPUCommandBuffer::End() {
     }
 
     WGPUCommandBufferDescriptor commandBufferDescriptor = {};
-    return wgpuCommandEncoderFinish(commandEncoder, &commandBufferDescriptor);
+    WGPUCommandBuffer commandBuffer = wgpuCommandEncoderFinish(commandEncoder, &commandBufferDescriptor);
+    
+    // Release bind groups.
+    for (WGPUBindGroup bindGroup : bindGroupsToRelease) {
+        wgpuBindGroupRelease(bindGroup);
+    }
+    bindGroupsToRelease.clear();
+
+    return commandBuffer;
 }
 
 void WebGPUCommandBuffer::NextFrame() {
@@ -569,7 +577,7 @@ void WebGPUCommandBuffer::UpdateUniforms() {
         } else {
             wgpuComputePassEncoderSetBindGroup(computePassEncoder, ShaderProgram::BindingType::UNIFORMS, uniformBindGroup, 0, nullptr);
         }
-        wgpuBindGroupRelease(uniformBindGroup);
+        bindGroupsToRelease.push_back(uniformBindGroup);
     }
 
     uniformsHasChanged = false;

@@ -154,6 +154,8 @@ void WebGPUTexture::GenerateMipMaps(WebGPURenderer& renderer, const glm::uvec2& 
 
     // Get render target to render mips to. We'll reuse a single render target, rather than allocating a new one per mip, so it has to be the size of the largest mip we'll render.
     Texture* renderTarget = renderer.CreateRenderTarget(glm::uvec2(mipWidth, mipHeight), GetFormat());
+    WGPUBindGroup* textureBindGroups = new WGPUBindGroup[mipLevels];
+    WGPUTextureView* mipTextureViews = new WGPUTextureView[mipLevels];
 
     // Generate mipmaps.
     for (uint32_t i = 1; i < mipLevels; ++i) {
@@ -173,14 +175,14 @@ void WebGPUTexture::GenerateMipMaps(WebGPURenderer& renderer, const glm::uvec2& 
             textureViewDescriptor.baseArrayLayer = 0;
             textureViewDescriptor.arrayLayerCount = 1;
             textureViewDescriptor.aspect = WGPUTextureAspect_All;
-            WGPUTextureView mipTextureView = wgpuTextureCreateView(texture, &textureViewDescriptor);
+            mipTextureViews[i] = wgpuTextureCreateView(texture, &textureViewDescriptor);
 
             // Bind this texture view, and the sampler.
             WGPUBindGroupEntry entries[2];
 
             entries[0] = {};
             entries[0].binding = 0;
-            entries[0].textureView = mipTextureView;
+            entries[0].textureView = mipTextureViews[i];
 
             entries[1] = {};
             entries[1].binding = 1;
@@ -191,12 +193,9 @@ void WebGPUTexture::GenerateMipMaps(WebGPURenderer& renderer, const glm::uvec2& 
             bindGroupDescriptor.entryCount = 2;
             bindGroupDescriptor.entries = entries;
 
-            WGPUBindGroup textureBindGroup = wgpuDeviceCreateBindGroup(renderer.GetDevice(), &bindGroupDescriptor);
+            textureBindGroups[i] = wgpuDeviceCreateBindGroup(renderer.GetDevice(), &bindGroupDescriptor);
 
-            wgpuRenderPassEncoderSetBindGroup(commandBuffer->GetRenderPassEncoder(), ShaderProgram::BindingType::MATERIAL, textureBindGroup, 0, nullptr);
-
-            wgpuBindGroupRelease(textureBindGroup);
-            wgpuTextureViewRelease(mipTextureView);
+            wgpuRenderPassEncoderSetBindGroup(commandBuffer->GetRenderPassEncoder(), ShaderProgram::BindingType::MATERIAL, textureBindGroups[i], 0, nullptr);
         }
 
         commandBuffer->Draw(3, 0);
@@ -229,6 +228,15 @@ void WebGPUTexture::GenerateMipMaps(WebGPURenderer& renderer, const glm::uvec2& 
     }
 
     renderer.Submit(commandBuffer);
+
+    // Cleanup
+    for (uint32_t i = 1; i < mipLevels; ++i) {
+        wgpuBindGroupRelease(textureBindGroups[i]);
+        wgpuTextureViewRelease(mipTextureViews[i]);
+    }
+    delete[] textureBindGroups;
+    delete[] mipTextureViews;
+
     renderer.FreeRenderTarget(renderTarget);
 
     delete commandBuffer;
