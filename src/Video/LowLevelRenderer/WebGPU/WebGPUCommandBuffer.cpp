@@ -100,6 +100,8 @@ void WebGPUCommandBuffer::BeginRenderPass(Texture* colorAttachment, RenderPass::
             break;
         }
         passDepthAttachment.depthStoreOp = WGPUStoreOp_Store;
+        passDepthAttachment.stencilLoadOp = WGPULoadOp_Clear;
+        passDepthAttachment.stencilStoreOp = WGPUStoreOp_Discard;
 
         renderPassDescriptor.depthStencilAttachment = &passDepthAttachment;
 
