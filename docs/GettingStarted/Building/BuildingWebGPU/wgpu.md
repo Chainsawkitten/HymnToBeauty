@@ -57,3 +57,6 @@ cargo build --target aarch64-linux-android --release
 
 ## Configure Hymn to Beauty
 Configure Hymn to Beauty and enable the WebGPURenderer option.
+
+## Known issues
+Local lights will not currently work in wgpu due to missing atomics support.

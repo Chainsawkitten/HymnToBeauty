@@ -27,10 +27,12 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
     lightInfo.zBins = 128;
     lightInfo.zMaskBuffer = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(uint32_t) * MAX_LIGHTS / 32 * lightInfo.zBins);
 
+#if !SKIP_LOCAL_LIGHTS
     binningShader = lowLevelRenderer->CreateShader(LIGHTBINNING_COMP, Shader::Type::COMPUTE_SHADER);
     binningShaderProgram = lowLevelRenderer->CreateShaderProgram({ binningShader });
     binningPipeline[0] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
     binningPipeline[1] = lowLevelRenderer->CreateComputePipeline(binningShaderProgram);
+#endif
 
     // Create tiling resources.
     lightInfo.tileSize = 16;
@@ -50,6 +52,7 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
 
     lightInfo.maskCount = 0;
 
+#if !SKIP_LOCAL_LIGHTS
     tilingVertexShader = lowLevelRenderer->CreateShader(LIGHTTILING_VERT, Shader::Type::VERTEX_SHADER);
     tilingFragmentShader = lowLevelRenderer->CreateShader(LIGHTTILING_FRAG, Shader::Type::FRAGMENT_SHADER);
     tilingShaderProgram = lowLevelRenderer->CreateShaderProgram({ tilingVertexShader, tilingFragmentShader });
@@ -63,12 +66,14 @@ ZBinning::ZBinning(LowLevelRenderer* lowLevelRenderer, const glm::uvec2& screenS
     configuration.depthClamp = true;
     configuration.conservativeRasterization = conservativeRasterization;
     tilingPipeline = lowLevelRenderer->CreateGraphicsPipeline(tilingShaderProgram, configuration, isocahedron.GetVertexDescription());
+#endif
 }
 
 ZBinning::~ZBinning() {
     delete lightInfo.zMaskBuffer;
     delete lightInfo.tileMaskBuffer;
 
+#if !SKIP_LOCAL_LIGHTS
     delete binningPipeline[0];
     delete binningPipeline[1];
     delete binningShaderProgram;
@@ -78,6 +83,7 @@ ZBinning::~ZBinning() {
     delete tilingVertexShader;
     delete tilingFragmentShader;
     delete tilingPipeline;
+#endif
 }
 
 void ZBinning::SetRenderSurfaceSize(const glm::uvec2& size) {
@@ -133,10 +139,12 @@ void ZBinning::BinLights(CommandBuffer& commandBuffer, const std::vector<Directi
 
     ClearBuffers(commandBuffer);
 
+#if !SKIP_LOCAL_LIGHTS
     if (lightInfo.lightCount > 0) {
         Binning(commandBuffer);
         Tiling(commandBuffer, projectionMatrix);
     }
+#endif
 }
 
 const ZBinning::LightInfo& ZBinning::GetLightInfo() {

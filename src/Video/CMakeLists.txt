@@ -160,6 +160,10 @@ if (WebGPURenderer)
     elseif(WEBGPU_BACKEND_WGPU)
         target_link_libraries(Video ${WGPU_LIBRARY} wgpu_headers ${WGPU_OS_LIBRARIES})
         target_compile_definitions(Video PUBLIC WEBGPU_BACKEND_WGPU)
+        
+        # Skip local lights to work around no atomics in wgpu.
+        # Remove this once wgpu has atomics.
+        target_compile_definitions(Video PRIVATE SKIP_LOCAL_LIGHTS)
     endif()
     
     target_compile_definitions(Video PUBLIC WEBGPU_SUPPORT)
