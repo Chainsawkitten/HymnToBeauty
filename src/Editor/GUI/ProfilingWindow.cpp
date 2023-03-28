@@ -31,6 +31,11 @@ void ProfilingWindow::Show() {
         ShowTimeline();
     }
 
+    // Statistics
+    if (ImGui::CollapsingHeader("Statistics")) {
+        ShowStatistics();
+    }
+
     // Show the log.
     if (ImGui::CollapsingHeader("Log"))
         logView.Show();
@@ -74,6 +79,7 @@ void ProfilingWindow::FileSelected(const std::string& filename) {
 
     timeline.FromJson(root);
     ParseTimeline();
+    CalculateStatistics();
 }
 
 void ProfilingWindow::ParseTimeline() {
@@ -271,5 +277,49 @@ void ProfilingWindow::ShowThreads() {
         ImGui::SetCursorPosY(rulerHeight + lines * ImGui::GetFrameHeightWithSpacing());
 
         ImGui::Separator();
+    }
+}
+
+void ProfilingWindow::CalculateStatistics() {
+    statistics.clear();
+    statistics.resize(threadViews.size());
+
+    for (std::size_t i = 0; i < threadViews.size(); ++i) {
+        for (unsigned int line = 0; line < threadViews[i].lines; ++line) {
+            for (const Profiling::Event& event : threadViews[i].events[line]) {
+                EventInfo& eventInfo = statistics[i][event.name];
+                eventInfo.count++;
+                eventInfo.totalDuration += event.duration;
+            }
+        }
+    }
+}
+
+void ProfilingWindow::ShowStatistics() {
+    for (std::size_t i = 0; i < threadViews.size(); ++i) {
+        ImGui::Text("%s", threadViews[i].name.c_str());
+
+        ImGui::Indent();
+
+        if (ImGui::BeginTable(threadViews[i].name.c_str(), 3)) {
+            ImGui::TableSetupColumn("Event");
+            ImGui::TableSetupColumn("Count");
+            ImGui::TableSetupColumn("Total duration");
+            ImGui::TableHeadersRow();
+
+            for (auto& it : statistics[i]) {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text("%s", it.first.c_str());
+                ImGui::TableNextColumn();
+                ImGui::Text("%i", it.second.count);
+                ImGui::TableNextColumn();
+                ImGui::Text("%f", it.second.totalDuration);
+            }
+
+            ImGui::EndTable();
+        }
+
+        ImGui::Unindent();
     }
 }

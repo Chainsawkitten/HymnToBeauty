@@ -2,6 +2,7 @@
 
 #include <Engine/Manager/ProfilingManager.hpp>
 #include <GUI/LogView.hpp>
+#include <map>
 #include "FileSelector.hpp"
 
 namespace GUI {
@@ -42,6 +43,9 @@ class ProfilingWindow {
     void ShowThreadNames();
     void ShowThreads();
 
+    void CalculateStatistics();
+    void ShowStatistics();
+
     bool visible = false;
 
     FileSelector fileSelector;
@@ -54,5 +58,11 @@ class ProfilingWindow {
     bool resetScroll = false;
 
     std::vector<ThreadView> threadViews;
+
+    struct EventInfo {
+        double totalDuration = 0.0;
+        uint32_t count = 0;
+    };
+    std::vector<std::map<std::string, EventInfo>> statistics;
 };
 } // namespace GUI
