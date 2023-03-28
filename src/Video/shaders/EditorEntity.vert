@@ -4,9 +4,7 @@ Vertex shader for editor entities.
 
 layout(location = 0) in vec2 vertexTexture;
 
-layout(location = 0) out VertexData {
-    vec2 texCoords;
-} vertexOut;
+layout(location = 0) out vec2 outTexCoords;
 
 MATRICES
 {
@@ -22,7 +20,7 @@ PUSH_CONSTANTS
 
 void main () {
     vec3 position = pushConst.position.xyz + pushConst.right.xyz * (vertexTexture.x - 0.5) - pushConst.up.xyz * (vertexTexture.y - 0.5);
-    vertexOut.texCoords = vertexTexture;
+    outTexCoords = vertexTexture;
     
     gl_Position = matrices.viewProjectionMatrix * vec4(position, 1.0);
     

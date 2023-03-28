@@ -3,12 +3,10 @@ Forward shader shading lights and applying effects
 */
 
 // --- IN ---
-layout(location = 0) in VertexData {
-    vec3 pos;
-    vec3 normal;
-    vec3 tangent;
-    vec2 texCoords;
-} vertexIn;
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec3 inTangent;
+layout(location = 3) in vec2 inTexCoords;
 
 // --- OUT ---
 layout(location = 0) out vec4 outColor;
@@ -221,11 +219,11 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
 
 // --- MAIN ---
 void main() {
-    vec3 albedo = texture(mapAlbedo, vertexIn.texCoords).rgb;
+    vec3 albedo = texture(mapAlbedo, inTexCoords).rgb;
     albedo = pow(albedo, vec3(uniforms.gamma)); // Apply if texture not in sRGB
-    vec3 normal = calculateNormal(vertexIn.normal, vertexIn.tangent, texture(mapNormal, vertexIn.texCoords).rgb);
-    vec2 roughnessMetallic = texture(mapRoughnessMetallic, vertexIn.texCoords).gb;
-    vec3 pos = vertexIn.pos;
+    vec3 normal = calculateNormal(inNormal, inTangent, texture(mapNormal, inTexCoords).rgb);
+    vec2 roughnessMetallic = texture(mapRoughnessMetallic, inTexCoords).gb;
+    vec3 pos = inPosition;
 
     // Shade fragment.
     vec3 color = ApplyLights(albedo, normal, roughnessMetallic.r, roughnessMetallic.g, pos);
