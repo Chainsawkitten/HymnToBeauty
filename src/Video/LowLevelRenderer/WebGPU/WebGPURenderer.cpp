@@ -314,6 +314,10 @@ bool WebGPURenderer::HasDepthClipControl() const {
     return depthClipControlEnabled;
 }
 
+bool WebGPURenderer::HasR11G11B10() const {
+    return r11g11b10Enabled;
+}
+
 WGPUTextureFormat WebGPURenderer::GetSwapChainFormat() const {
     return swapChainFormat;
 }
@@ -441,9 +445,12 @@ void WebGPURenderer::CreateDevice() {
         Log(Log::WARNING) << "timestamp-query not supported on the device. GPU profiling will not be supported.\n";
     }*/
 
-    features.push_back(WGPUFeatureName_RG11B10UfloatRenderable);
     if (!wgpuAdapterHasFeature(adapter, WGPUFeatureName_RG11B10UfloatRenderable)) {
-        Log(Log::ERR) << "rg11b10ufloat-renderable is required but not supported on the adapter.\n";
+        Log(Log::WARNING) << "rg11b10ufloat-renderable is not supported. This will impact bandwidth usage.\n";
+        r11g11b10Enabled = false;
+    } else {
+        features.push_back(WGPUFeatureName_RG11B10UfloatRenderable);
+        r11g11b10Enabled = true;
     }
 
     if (!wgpuAdapterHasFeature(adapter, WGPUFeatureName_DepthClipControl)) {

@@ -93,6 +93,12 @@ class WebGPURenderer : public LowLevelRenderer {
      */
     bool HasDepthClipControl() const;
 
+    /// Get whether R11G11B10 render targets can be used.
+    /**
+     * @return Whether the device has rg11b10ufloat-renderable.
+     */
+    bool HasR11G11B10() const;
+
     /// Get the format of the swap chain.
     /**
      * @return The swap chain format.
@@ -140,6 +146,7 @@ class WebGPURenderer : public LowLevelRenderer {
     std::vector<Profiling::Event> finishedEvents;
 
     bool depthClipControlEnabled;
+    bool r11g11b10Enabled;
 };
 
 } // namespace Video

@@ -52,7 +52,7 @@ WebGPUTexture::WebGPUTexture(WebGPURenderer& renderer, const glm::uvec2 size, Te
         break;
     case Texture::Format::R11G11B10:
         assert(type != Texture::Type::RENDER_DEPTH);
-        textureFormat = WGPUTextureFormat_RG11B10Ufloat;
+        textureFormat = renderer.HasR11G11B10() ? WGPUTextureFormat_RG11B10Ufloat : WGPUTextureFormat_RGBA16Float;
         break;
     case Texture::Format::R16G16B16A16:
         assert(type != Texture::Type::RENDER_DEPTH);
