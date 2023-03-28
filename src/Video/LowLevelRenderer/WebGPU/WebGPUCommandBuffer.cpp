@@ -192,8 +192,16 @@ void WebGPUCommandBuffer::SetViewport(const glm::uvec2& origin, const glm::uvec2
 
 void WebGPUCommandBuffer::SetScissor(const glm::uvec2& origin, const glm::uvec2& size) {
     assert(inRenderPass);
+
+    /// @todo Remove once wgpu has added support for zero-area scissors. https://github.com/gfx-rs/wgpu/issues/1750
+    glm::uvec2 realSize = size;
+#if WEBGPU_BACKEND_WGPU
+    if (realSize.x == 0 || realSize.y == 0) {
+        realSize = glm::uvec2(1, 1);
+    }
+#endif
     
-    wgpuRenderPassEncoderSetScissorRect(renderPassEncoder, origin.x, origin.y, size.x, size.y);
+    wgpuRenderPassEncoderSetScissorRect(renderPassEncoder, origin.x, origin.y, realSize.x, realSize.y);
 }
 
 void WebGPUCommandBuffer::SetLineWidth(float width) {
