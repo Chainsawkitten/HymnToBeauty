@@ -67,6 +67,11 @@ void SaveTheme(const char* name) {
     root["Color: PlotLinesHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotLinesHovered]);
     root["Color: PlotHistogram"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotHistogram]);
     root["Color: PlotHistogramHovered"] = Json::SaveImVec4(style.Colors[ImGuiCol_PlotHistogramHovered]);
+    root["Color: ImGuiCol_TableHeaderBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_TableHeaderBg]);
+    root["Color: ImGuiCol_TableBorderStrong"] = Json::SaveImVec4(style.Colors[ImGuiCol_TableBorderStrong]);
+    root["Color: ImGuiCol_TableBorderLight"] = Json::SaveImVec4(style.Colors[ImGuiCol_TableBorderLight]);
+    root["Color: ImGuiCol_TableRowBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_TableRowBg]);
+    root["Color: ImGuiCol_TableRowBgAlt"] = Json::SaveImVec4(style.Colors[ImGuiCol_TableRowBgAlt]);
     root["Color: TextSelectedBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_TextSelectedBg]);
     root["Color: ModalWindowDimBg"] = Json::SaveImVec4(style.Colors[ImGuiCol_ModalWindowDimBg]);
 
@@ -137,6 +142,11 @@ void LoadTheme(const char* name) {
     style.Colors[ImGuiCol_PlotLinesHovered] = Json::LoadImVec4(root["Color: PlotLinesHovered"]);
     style.Colors[ImGuiCol_PlotHistogram] = Json::LoadImVec4(root["Color: PlotHistogram"]);
     style.Colors[ImGuiCol_PlotHistogramHovered] = Json::LoadImVec4(root["Color: PlotHistogramHovered"]);
+    style.Colors[ImGuiCol_TableHeaderBg] = Json::LoadImVec4(root["Color: ImGuiCol_TableHeaderBg"]);
+    style.Colors[ImGuiCol_TableBorderStrong] = Json::LoadImVec4(root["Color: ImGuiCol_TableBorderStrong"]);
+    style.Colors[ImGuiCol_TableBorderLight] = Json::LoadImVec4(root["Color: ImGuiCol_TableBorderLight"]);
+    style.Colors[ImGuiCol_TableRowBg] = Json::LoadImVec4(root["Color: ImGuiCol_TableRowBg"]);
+    style.Colors[ImGuiCol_TableRowBgAlt] = Json::LoadImVec4(root["Color: ImGuiCol_TableRowBgAlt"]);
     style.Colors[ImGuiCol_TextSelectedBg] = Json::LoadImVec4(root["Color: TextSelectedBg"]);
     style.Colors[ImGuiCol_ModalWindowDimBg] = Json::LoadImVec4(root["Color: ModalWindowDimBg"]);
 }
@@ -195,6 +205,11 @@ void LoadDefaultTheme() {
     style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
     style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.0f, 0.6f, 0.0f, 1.0f);
+    style.Colors[ImGuiCol_TableHeaderBg] = ImVec4(0.54f, 0.73f, 0.96f, 1.0f);
+    style.Colors[ImGuiCol_TableBorderStrong] = ImVec4(0.63f, 0.78f, 0.97f, 1.0f);
+    style.Colors[ImGuiCol_TableBorderLight] = ImVec4(0.79f, 0.88f, 1.0f, 1.0f);
+    style.Colors[ImGuiCol_TableRowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+    style.Colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
     style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.0f, 0.45f, 1.0f, 0.35f);
     style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.2f, 0.2f, 0.2f, 0.35f);
 }

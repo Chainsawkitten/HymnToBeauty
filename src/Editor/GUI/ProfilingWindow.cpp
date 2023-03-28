@@ -29,6 +29,12 @@ void ProfilingWindow::Show() {
     // Timeline.
     if (ImGui::CollapsingHeader("Timeline")) {
         ShowTimeline();
+
+        // Timeline statistics.
+        if (ImGui::TreeNode("Statistics")) {
+            ShowStatistics();
+            ImGui::TreePop();
+        }
     }
 
     // Show the log.
@@ -74,6 +80,7 @@ void ProfilingWindow::FileSelected(const std::string& filename) {
 
     timeline.FromJson(root);
     ParseTimeline();
+    CalculateStatistics();
 }
 
 void ProfilingWindow::ParseTimeline() {
@@ -271,5 +278,101 @@ void ProfilingWindow::ShowThreads() {
         ImGui::SetCursorPosY(rulerHeight + lines * ImGui::GetFrameHeightWithSpacing());
 
         ImGui::Separator();
+    }
+}
+
+void ProfilingWindow::CalculateStatistics() {
+    statistics.clear();
+    statistics.resize(threadViews.size());
+    frameCount = 0;
+
+    for (std::size_t i = 0; i < threadViews.size(); ++i) {
+        // Parse events from timeline.
+        std::map<std::string, EventInfo> workingStats;
+        for (unsigned int line = 0; line < threadViews[i].lines; ++line) {
+            for (const Profiling::Event& event : threadViews[i].events[line]) {
+                std::string name = event.name;
+                if (i == 0 && line == 0) {
+                    ++frameCount;
+                    name = "Frame";
+                }
+
+                EventInfo& eventInfo = workingStats[name];
+                eventInfo.count++;
+                eventInfo.totalDuration += event.duration;
+            }
+        }
+
+        // Convert to vector.
+        for (auto& it : workingStats) {
+            EventInfo eventInfo = it.second;
+            eventInfo.name = it.first;
+
+            statistics[i].push_back(eventInfo);
+        }
+    }
+}
+
+void ProfilingWindow::ShowStatistics() {
+    for (std::size_t i = 0; i < threadViews.size(); ++i) {
+        ImGui::Text("%s", threadViews[i].name.c_str());
+
+        ImGui::Indent();
+
+        if (ImGui::BeginTable(threadViews[i].name.c_str(), 3, ImGuiTableFlags_Sortable)) {
+            ImGui::TableSetupColumn("Event");
+            ImGui::TableSetupColumn("Count (/frame)");
+            ImGui::TableSetupColumn("Duration (ms / frame)");
+            ImGui::TableHeadersRow();
+
+            ImGuiTableSortSpecs* sortSpecs = ImGui::TableGetSortSpecs();
+            if (sortSpecs != nullptr && sortSpecs->SpecsDirty) {
+                std::sort(statistics[i].begin(), statistics[i].end(), [sortSpecs](const EventInfo& a, const EventInfo& b) -> bool {
+                    switch (sortSpecs->Specs[0].ColumnIndex) {
+                    case 0:
+                        if (sortSpecs->Specs[0].SortDirection == ImGuiSortDirection_Ascending) {
+                            return a.name < b.name;
+                        } else {
+                            return b.name < a.name;
+                        }
+                        break;
+                    case 1:
+                        if (sortSpecs->Specs[0].SortDirection == ImGuiSortDirection_Ascending) {
+                            return a.count < b.count;
+                        } else {
+                            return b.count < a.count;
+                        }
+                        break;
+                    case 2:
+                        if (sortSpecs->Specs[0].SortDirection == ImGuiSortDirection_Ascending) {
+                            return a.totalDuration < b.totalDuration;
+                        } else {
+                            return b.totalDuration < a.totalDuration;
+                        }
+                        break;
+                    }
+                    });
+            }
+
+            for (const EventInfo& eventInfo : statistics[i]) {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text("%s", eventInfo.name.c_str());
+
+                ImGui::TableNextColumn();
+                if (eventInfo.count % frameCount == 0) {
+                    ImGui::Text("%i", eventInfo.count / frameCount);
+                } else {
+                    ImGui::Text("%f", static_cast<float>(eventInfo.count) / frameCount);
+                }
+
+                ImGui::TableNextColumn();
+                ImGui::Text("%f", eventInfo.totalDuration * 1000.0 / static_cast<double>(frameCount));
+            }
+
+            ImGui::EndTable();
+        }
+
+        ImGui::Unindent();
     }
 }
