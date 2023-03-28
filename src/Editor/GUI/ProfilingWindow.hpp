@@ -60,9 +60,11 @@ class ProfilingWindow {
     std::vector<ThreadView> threadViews;
 
     struct EventInfo {
+        std::string name;
         double totalDuration = 0.0;
         uint32_t count = 0;
     };
-    std::vector<std::map<std::string, EventInfo>> statistics;
+    std::vector<std::vector<EventInfo>> statistics;
+    uint32_t frameCount = 0;
 };
 } // namespace GUI
