@@ -464,6 +464,12 @@ void WebGPURenderer::CreateDevice() {
     // WebGPU supports 1x and 4x MSAA.
     optionalFeatures.attachmentlessMsaaSamples = 1u | 4u;
 
+#if WEBGPU_BACKEND_WGPU
+    optionalFeatures.shaderAtomics = false;
+#else
+    optionalFeatures.shaderAtomics = true;
+#endif
+
     WGPUDeviceDescriptor deviceDescriptor = {};
     deviceDescriptor.requiredFeaturesCount = features.size();
     deviceDescriptor.requiredFeatures = features.data();

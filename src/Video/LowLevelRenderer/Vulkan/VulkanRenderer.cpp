@@ -940,6 +940,8 @@ VkPhysicalDeviceFeatures VulkanRenderer::GetEnabledFeatures() {
 
     optionalFeatures.attachmentlessMsaaSamples = deviceProperties.limits.framebufferNoAttachmentsSampleCounts;
 
+    optionalFeatures.shaderAtomics = true;
+
     return enabledFeatures;
 }
 
