@@ -51,11 +51,10 @@ var searchData=
   ['window_2ehpp_48',['Window.hpp',['../_window_8hpp.html',1,'']]],
   ['windowmode_49',['WINDOWMODE',['../class_input_manager.html#a3b658425a8c4735c79f611c38c44a356a1f3a2a909df966f5c79ffd444c54c478',1,'InputManager']]],
   ['wireframe_50',['wireFrame',['../struct_video_1_1_debug_drawing_1_1_mesh.html#ae851d494011cb2fa4037d86e5745155e',1,'Video::DebugDrawing::Mesh']]],
-  ['world_51',['World',['../class_world.html',1,'']]],
+  ['world_51',['World',['../class_world.html',1,'World'],['../class_world.html#afa39d4e6f714a7a3691ac0c656f5e8a8',1,'World::World()']]],
   ['world_52',['world',['../class_active_hymn.html#a6643ee2585926a894b6b235ffc2d17c7',1,'ActiveHymn']]],
-  ['world_53',['World',['../class_world.html#afa39d4e6f714a7a3691ac0c656f5e8a8',1,'World']]],
-  ['world_2ecpp_54',['World.cpp',['../_world_8cpp.html',1,'']]],
-  ['world_2ehpp_55',['World.hpp',['../_world_8hpp.html',1,'']]],
-  ['write_56',['Write',['../class_video_1_1_raw_buffer.html#a381bc24312f4708252706848f5968cc3',1,'Video::RawBuffer::Write()'],['../class_video_1_1_open_g_l_raw_buffer.html#a521bbdfd4936c414fedc2c34bd4bb39e',1,'Video::OpenGLRawBuffer::Write()'],['../class_video_1_1_vulkan_raw_buffer.html#a4386bb2f9db46dc209c28f32f92944e9',1,'Video::VulkanRawBuffer::Write()']]],
-  ['writestostoragebuffer_57',['WritesToStorageBuffer',['../class_video_1_1_open_g_l_shader_program.html#a7bd9d26932af47c591a16c3517aff29a',1,'Video::OpenGLShaderProgram']]]
+  ['world_2ecpp_53',['World.cpp',['../_world_8cpp.html',1,'']]],
+  ['world_2ehpp_54',['World.hpp',['../_world_8hpp.html',1,'']]],
+  ['write_55',['Write',['../class_video_1_1_raw_buffer.html#a381bc24312f4708252706848f5968cc3',1,'Video::RawBuffer::Write()'],['../class_video_1_1_open_g_l_raw_buffer.html#a521bbdfd4936c414fedc2c34bd4bb39e',1,'Video::OpenGLRawBuffer::Write()'],['../class_video_1_1_vulkan_raw_buffer.html#a4386bb2f9db46dc209c28f32f92944e9',1,'Video::VulkanRawBuffer::Write()']]],
+  ['writestostoragebuffer_56',['WritesToStorageBuffer',['../class_video_1_1_open_g_l_shader_program.html#a7bd9d26932af47c591a16c3517aff29a',1,'Video::OpenGLShaderProgram']]]
 ];
