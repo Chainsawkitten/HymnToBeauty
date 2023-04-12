@@ -52,7 +52,7 @@ bool ProfilingManager::Active() const {
     return active;
 }
 
-void ProfilingManager::SetActive(bool active) {
+void ProfilingManager::SetActive(bool active, const std::string& profilingDirectory) {
     this->active = active;
     Profiling::cpuActive = active;
     lowLevelRenderer->SetProfiling(active);
@@ -65,7 +65,11 @@ void ProfilingManager::SetActive(bool active) {
 
         Log(Log::INFO) << "Profiling started.\n";
     } else {
-        FileSystem::CreateDirectory(FileSystem::DataPath("Hymn to Beauty", "Profiling").c_str());
+        std::string profilingDirPath = profilingDirectory;
+        if (profilingDirPath.empty()) {
+            profilingDirPath = FileSystem::DataPath("Hymn to Beauty", "Profiling");
+        }
+        FileSystem::CreateDirectory(profilingDirPath.c_str());
 
         // Save timeline to file.
         time_t today = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -77,7 +81,7 @@ void ProfilingManager::SetActive(bool active) {
         strftime(buffer, bufferLength, "%Y-%m-%d %H-%M-%S", timeinfo);
         const std::string dateString = std::string(buffer);
 
-        std::string path = FileSystem::DataPath("Hymn to Beauty", ("Profiling/" + dateString + ".json").c_str());
+        std::string path = profilingDirPath + "/" + dateString + ".json";
         std::ofstream file(path);
         file << timeline.ToJson();
         file.close();

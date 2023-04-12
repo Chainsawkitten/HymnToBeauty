@@ -7,6 +7,7 @@
 #include <Engine/Hymn.hpp>
 #include <Engine/Manager/Managers.hpp>
 #include <Engine/Manager/ScriptManager.hpp>
+#include <Engine/Manager/ProfilingManager.hpp>
 
 static Engine engine;
 static bool started = false;
@@ -55,6 +56,7 @@ void android_main(struct android_app* app) {
     android_poll_source* source;
 
     // Main loop
+    uint32_t frame = 0;
     do {
         if (ALooper_pollAll(1, nullptr, &events, (void**)&source) >= 0) {
             if (source != NULL)
@@ -62,6 +64,12 @@ void android_main(struct android_app* app) {
         }
 
         if (started) {
+            if (frame++ == 100) {
+                Managers().profilingManager->SetActive(true);
+            } else if (frame == 600) {
+                Managers().profilingManager->SetActive(false, app->activity->externalDataPath);
+            }
+
             // Draw a frame.
             engine.Update();
             engine.Render();

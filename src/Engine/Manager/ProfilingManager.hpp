@@ -31,8 +31,9 @@ class ProfilingManager {
     /// Set whether %ProfilingManager is active.
     /**
      * @param active Active state.
+     * @param profilingDirectory Where to store any output timeline files.
      */
-    void SetActive(bool active);
+    void SetActive(bool active, const std::string& profilingDirectory = "");
 
     /// Get number of frames being monitored.
     /**
