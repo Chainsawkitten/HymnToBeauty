@@ -26,6 +26,7 @@ var class_video_1_1_web_g_p_u_renderer =
     [ "GetSwapChainFormat", "class_video_1_1_web_g_p_u_renderer.html#a0a889ea8c9b4ebc910a263aa0cde2553", null ],
     [ "GetTimeline", "class_video_1_1_web_g_p_u_renderer.html#ade75208980c148f3ad698f8da524d2fe", null ],
     [ "HasDepthClipControl", "class_video_1_1_web_g_p_u_renderer.html#ab77844f25f7de4fbbdaad389de1dd5b4", null ],
+    [ "HasR11G11B10", "class_video_1_1_web_g_p_u_renderer.html#aa70cc8d6b454d26becf87457a5e4ca66", null ],
     [ "Present", "class_video_1_1_web_g_p_u_renderer.html#ae286069b64d3be3d28a9cce16c9c478d", null ],
     [ "ReadImage", "class_video_1_1_web_g_p_u_renderer.html#ad32f46a11d4760ff4bbaaa02a94be78b", null ],
     [ "Submit", "class_video_1_1_web_g_p_u_renderer.html#a97ff9edf17b5bee77ee7ee61f1777270", null ],

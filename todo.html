@@ -106,39 +106,43 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="class_script_manager.html#a991c91d1fd39bd93f5a5ac083d84e021">ScriptManager::RegisterUpdate</a>  (<a class="el" href="class_entity.html" title="Entity containing various components.">Entity</a> *entity)</dt>
 <dd><a class="anchor" id="_todo000023"></a>Fix so registered entities can be removed.  </dd>
 <dt>Member <a class="el" href="class_sound_manager.html#aaf241621221cdbefeba78e8b6bc29240">SoundManager::Update</a>  ()</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000025"></a>More than one listener? Eg. for split-screen multiplayer. </p>
-<p class="enddd"><a class="anchor" id="_todo000024"></a>Set velocity based on physics.  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000024"></a>Set velocity based on physics. </p>
+<p class="enddd"><a class="anchor" id="_todo000025"></a>More than one listener? Eg. for split-screen multiplayer.  </p>
 </dd>
 <dt>Member <a class="el" href="class_trigger_repeat.html#ae7b1f23cbf6b8bcb52e48734cfd2980b">TriggerRepeat::~TriggerRepeat</a>  ()</dt>
 <dd><a class="anchor" id="_todo000026"></a>: Vector support  </dd>
 <dt>Member <a class="el" href="class_utility_1_1_window.html#a01d7bedc306ca61bceff127ffe54ffda">Utility::Window::Window</a>  (unsigned int width, unsigned int height, bool fullscreen=false, bool borderless=false, const char *title="", bool noAPI=false)</dt>
 <dd><a class="anchor" id="_todo000029"></a>Print error to log.  </dd>
 <dt>Class <a class="el" href="class_video_1_1_compute_pipeline.html">Video::ComputePipeline</a>  </dt>
-<dd><a class="anchor" id="_todo000032"></a>Write better documentation.  </dd>
-<dt>Class <a class="el" href="class_video_1_1_graphics_pipeline.html">Video::GraphicsPipeline</a>  </dt>
 <dd><a class="anchor" id="_todo000033"></a>Write better documentation.  </dd>
+<dt>Class <a class="el" href="class_video_1_1_graphics_pipeline.html">Video::GraphicsPipeline</a>  </dt>
+<dd><a class="anchor" id="_todo000034"></a>Write better documentation.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_isocahedron.html#a9ffa2124b856243456d63a7d89a16205">Video::Isocahedron::Isocahedron</a>  (<a class="el" href="class_video_1_1_low_level_renderer.html" title="Low level renderer abstracting the underlaying graphics API (OpenGL or Vulkan).">LowLevelRenderer</a> *lowLevelRenderer)</dt>
 <dd><a class="anchor" id="_todo000030"></a>Subdivide?  </dd>
+<dt>Member <a class="el" href="struct_video_1_1_low_level_renderer_1_1_optional_features.html#ab06cd61a151409ec265b1f9218b0328e">Video::LowLevelRenderer::OptionalFeatures::shaderAtomics</a>  </dt>
+<dd><a class="anchor" id="_todo000035"></a>Remove this once wgpu supports atomics.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_open_g_l_command_buffer.html#ac975df8cf5b12168ff60267f9ae9b924">Video::OpenGLCommandBuffer::SetLineWidth</a>  (float width) final</dt>
-<dd><a class="anchor" id="_todo000035"></a>Clamp line width to supported values.  </dd>
-<dt>Member <a class="el" href="class_video_1_1_open_g_l_renderer.html#a0f866e4d6c3c771d4fdb7ac282c6b3ff">Video::OpenGLRenderer::OpenGLRenderer</a>  (<a class="el" href="class_utility_1_1_window.html">Utility::Window</a> *window)</dt>
-<dd><a class="anchor" id="_todo000036"></a>Disable GPU profiling if not supported.  </dd>
-<dt>Class <a class="el" href="class_video_1_1_render_pass.html">Video::RenderPass</a>  </dt>
-<dd><a class="anchor" id="_todo000034"></a>Better documentation. This is not an intuitive concept (and doesn't map neatly to OpenGL or Vulkan).  </dd>
-<dt>Member <a class="el" href="class_video_1_1_vulkan_command_buffer.html#a3ceccd9cb8ec9d6124c8c09cbf3da639">Video::VulkanCommandBuffer::SetLineWidth</a>  (float width) final</dt>
 <dd><a class="anchor" id="_todo000037"></a>Clamp line width to supported values.  </dd>
+<dt>Member <a class="el" href="class_video_1_1_open_g_l_renderer.html#a0f866e4d6c3c771d4fdb7ac282c6b3ff">Video::OpenGLRenderer::OpenGLRenderer</a>  (<a class="el" href="class_utility_1_1_window.html">Utility::Window</a> *window)</dt>
+<dd><a class="anchor" id="_todo000038"></a>Disable GPU profiling if not supported.  </dd>
+<dt>Class <a class="el" href="class_video_1_1_render_pass.html">Video::RenderPass</a>  </dt>
+<dd><a class="anchor" id="_todo000036"></a>Better documentation. This is not an intuitive concept (and doesn't map neatly to OpenGL or Vulkan).  </dd>
+<dt>Member <a class="el" href="class_video_1_1_vulkan_command_buffer.html#a3ceccd9cb8ec9d6124c8c09cbf3da639">Video::VulkanCommandBuffer::SetLineWidth</a>  (float width) final</dt>
+<dd><a class="anchor" id="_todo000039"></a>Clamp line width to supported values.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_vulkan_renderer.html#ae860ba0cf78e0d46807842b19c1f3482">Video::VulkanRenderer::GetDescriptorSet</a>  (std::initializer_list&lt; std::pair&lt; Texture *, const Sampler * &gt; &gt; textures)</dt>
-<dd><a class="anchor" id="_todo000038"></a>Have some material object keep track of this instead of treating textures individually.  </dd>
+<dd><a class="anchor" id="_todo000040"></a>Have some material object keep track of this instead of treating textures individually.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_vulkan_sampler.html#a8991da6b35329c701699dfdcff4fb1a0">Video::VulkanSampler::VulkanSampler</a>  (VkDevice device, Filter filter, Clamping clamping)</dt>
-<dd><a class="anchor" id="_todo000041"></a>Anisotropic filtering.  </dd>
+<dd><a class="anchor" id="_todo000043"></a>Anisotropic filtering.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_vulkan_texture.html#a22dc592037ac0838f067da237d2516ce">Video::VulkanTexture::VulkanTexture</a>  (<a class="el" href="class_video_1_1_vulkan_renderer.html" title="Low-level renderer implementing Vulkan.">VulkanRenderer</a> &amp;vulkanRenderer, VkDevice device, VkPhysicalDevice physicalDevice, const glm::uvec2 size, <a class="el" href="class_video_1_1_texture.html#a571ccf58a61cb4760da49381d1cf6bff" title="The type of texture.">Texture::Type</a> type, <a class="el" href="class_video_1_1_texture.html#a1da6ce4f662a7ba7f68ebc65795a852b" title="The format of the texture.">Texture::Format</a> format, int components=0, unsigned char *data=nullptr)</dt>
-<dd><a class="anchor" id="_todo000044"></a>Support textures of different formats.  </dd>
+<dd><a class="anchor" id="_todo000046"></a>Support textures of different formats.  </dd>
+<dt>Member <a class="el" href="class_video_1_1_web_g_p_u_command_buffer.html#a4173474b81e3b91e1b5b43dac877e85b">Video::WebGPUCommandBuffer::SetScissor</a>  (const glm::uvec2 &amp;origin, const glm::uvec2 &amp;size) final</dt>
+<dd><a class="anchor" id="_todo000047"></a>Remove once wgpu has added support for zero-area scissors. <a href="https://github.com/gfx-rs/wgpu/issues/1750">https://github.com/gfx-rs/wgpu/issues/1750</a>  </dd>
 <dt>Member <a class="el" href="class_video_1_1_web_g_p_u_renderer.html#aabeb6603b3e0dabe94921c527ae066eb">Video::WebGPURenderer::BeginFrame</a>  () final</dt>
-<dd><a class="anchor" id="_todo000045"></a>Handle swap chain recreation.  </dd>
+<dd><a class="anchor" id="_todo000048"></a>Handle swap chain recreation.  </dd>
 <dt>Member <a class="el" href="class_video_1_1_web_g_p_u_renderer.html#ad32f46a11d4760ff4bbaaa02a94be78b">Video::WebGPURenderer::ReadImage</a>  (<a class="el" href="class_video_1_1_texture.html" title="A texture.">Texture</a> *texture) final</dt>
-<dd><a class="anchor" id="_todo000047"></a>Doesn't work for some reason. Need to call tick explicitly.  </dd>
-<dt>Member <a class="el" href="class_video_1_1_web_g_p_u_renderer.html#ade7696a77f00a957ae36cc0cda4f0b51">Video::WebGPURenderer::Wait</a>  () final</dt>
-<dd><a class="anchor" id="_todo000046"></a>Doesn't work for some reason. Need to call tick explicitly. </dd>
+<dd><a class="anchor" id="_todo000049"></a>Doesn't work for some reason. Need to call tick explicitly.  </dd>
+<dt>Member <a class="el" href="class_video_1_1_z_binning.html#a3cd84181da098149dd364a44a942c522">Video::ZBinning::ZBinning</a>  (<a class="el" href="class_video_1_1_low_level_renderer.html" title="Low level renderer abstracting the underlaying graphics API (OpenGL or Vulkan).">LowLevelRenderer</a> *lowLevelRenderer, const glm::uvec2 &amp;screenSize)</dt>
+<dd><a class="anchor" id="_todo000031"></a>Remove. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

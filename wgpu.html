@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Hymn to Beauty: src/Video/LowLevelRenderer/WebGPU/WebGPUGraphicsPipeline.hpp File Reference</title>
+<title>Hymn to Beauty: wgpu</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -66,7 +66,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('_web_g_p_u_graphics_pipeline_8hpp.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('wgpu.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,39 +84,52 @@ $(document).ready(function(){initNavTree('_web_g_p_u_graphics_pipeline_8hpp.html
 </iframe>
 </div>
 
-<div class="header">
-  <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">WebGPUGraphicsPipeline.hpp File Reference</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title">wgpu </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="_graphics_pipeline_8hpp_source.html">../Interface/GraphicsPipeline.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_web_g_p_u_8hpp_source.html">WebGPU.hpp</a>&quot;</code><br />
-<code>#include &lt;map&gt;</code><br />
-</div>
-<p><a href="_web_g_p_u_graphics_pipeline_8hpp_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_graphics_pipeline.html">Video::WebGPUGraphicsPipeline</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">WebGPU implementation of <a class="el" href="class_video_1_1_graphics_pipeline.html" title="A graphics pipeline.">GraphicsPipeline</a>.  <a href="class_video_1_1_web_g_p_u_graphics_pipeline.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_video_1_1_web_g_p_u_graphics_pipeline_1_1_render_pass_description.html">Video::WebGPUGraphicsPipeline::RenderPassDescription</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A description of a render pass.  <a href="struct_video_1_1_web_g_p_u_graphics_pipeline_1_1_render_pass_description.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespace_video"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_video.html">Video</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+<div class="textblock"><h2>Installing dependencies</h2>
+<p >Download and install the wgpu-native prerequisites described in the <a href="https://github.com/gfx-rs/wgpu-native/wiki/Getting-Started">docs</a>. You don't need the dependencies for the native examples.</p>
+<h2>Setting up wgpu</h2>
+<p >Open a command prompt and navigate to the <code>externals</code> directory.</p>
+<h3>Download the wgpu-native source code</h3>
+<div class="fragment"><div class="line">git clone https://github.com/gfx-rs/wgpu-native.git wgpu-native</div>
+<div class="line">cd wgpu-native</div>
+<div class="line">git submodule update --init</div>
+</div><!-- fragment --><h3>Build wgpu-native</h3>
+<div class="fragment"><div class="line">cargo update</div>
+<div class="line">cargo build --release</div>
+</div><!-- fragment --><h2>Building for Android</h2>
+<p >You need NDK version 23 or newer.</p>
+<p >Navigate to the <code>externals/wgpu-native</code> directory.</p>
+<h3>Setup aarch64 target</h3>
+<div class="fragment"><div class="line">rustup target add aarch64-linux-android</div>
+</div><!-- fragment --><h3>Setup environment variables</h3>
+<p >If you're using Windows as the host, run: </p><div class="fragment"><div class="line">$env:BINDGEN_EXTRA_CLANG_ARGS=&quot;-isysroot NDK_DIRECTORY/toolchains/llvm/prebuilt/windows-x86_64/sysroot&quot;</div>
+<div class="line">$env:CLANG_PATH=&quot;NDK_DIRECTORY/toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android24-clang++.cmd&quot;</div>
+<div class="line">$env:CC=$env:CLANG_PATH</div>
+<div class="line">$env:CXX=$env:CLANG_PATH</div>
+<div class="line">$env:CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$env:CLANG_PATH</div>
+</div><!-- fragment --><p> Replace <code>NDK_DIRECTORY</code> with the path to your NDK.</p>
+<p >If you're using Linux as the host, run: </p><div class="fragment"><div class="line">export BINDGEN_EXTRA_CLANG_ARGS=&quot;-isysroot NDK_DIRECTORY/toolchains/llvm/prebuilt/linux-x86_64/sysroot&quot;</div>
+<div class="line">export CLANG_PATH=&quot;NDK_DIRECTORY/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang&quot;</div>
+<div class="line">export CC=$CLANG_PATH</div>
+<div class="line">export CXX=$CLANG_PATH++</div>
+<div class="line">export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$CLANG_PATH</div>
+</div><!-- fragment --><p> Replace <code>NDK_DIRECTORY</code> with the path to your NDK.</p>
+<h3>Build wgpu-native</h3>
+<div class="fragment"><div class="line">cargo build --target aarch64-linux-android --release</div>
+</div><!-- fragment --><h2>Configure Hymn to Beauty</h2>
+<p >Configure Hymn to Beauty and enable the WebGPURenderer option.</p>
+<h2>Known issues</h2>
+<p >Local lights will not currently work in wgpu due to missing atomics support. </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_e74635bff93ad8e4f78b71a46ef7ed78.html">Video</a></li><li class="navelem"><a class="el" href="dir_e130a1d0c2bdb58529393c6282128b37.html">LowLevelRenderer</a></li><li class="navelem"><a class="el" href="dir_f18f53dd52cfb2ffe51ba718fb83a1ea.html">WebGPU</a></li><li class="navelem"><a class="el" href="_web_g_p_u_graphics_pipeline_8hpp.html">WebGPUGraphicsPipeline.hpp</a></li>
+    <li class="navelem"><a class="el" href="index.html">Hymn to Beauty</a></li><li class="navelem"><a class="el" href="_getting_started.html">Getting Started</a></li><li class="navelem"><a class="el" href="_building.html">Building</a></li><li class="navelem"><a class="el" href="_building_web_g_p_u.html">Building the WebGPU backend</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>

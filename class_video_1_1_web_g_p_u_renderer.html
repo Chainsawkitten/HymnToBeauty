@@ -193,6 +193,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab77844f25f7de4fbbdaad389de1dd5b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_renderer.html#ab77844f25f7de4fbbdaad389de1dd5b4">HasDepthClipControl</a> () const</td></tr>
 <tr class="memdesc:ab77844f25f7de4fbbdaad389de1dd5b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether depth-clip-control can be used.  <a href="class_video_1_1_web_g_p_u_renderer.html#ab77844f25f7de4fbbdaad389de1dd5b4">More...</a><br /></td></tr>
 <tr class="separator:ab77844f25f7de4fbbdaad389de1dd5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa70cc8d6b454d26becf87457a5e4ca66"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_renderer.html#aa70cc8d6b454d26becf87457a5e4ca66">HasR11G11B10</a> () const</td></tr>
+<tr class="memdesc:aa70cc8d6b454d26becf87457a5e4ca66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether R11G11B10 render targets can be used.  <a href="class_video_1_1_web_g_p_u_renderer.html#aa70cc8d6b454d26becf87457a5e4ca66">More...</a><br /></td></tr>
+<tr class="separator:aa70cc8d6b454d26becf87457a5e4ca66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a889ea8c9b4ebc910a263aa0cde2553"><td class="memItemLeft" align="right" valign="top">WGPUTextureFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_renderer.html#a0a889ea8c9b4ebc910a263aa0cde2553">GetSwapChainFormat</a> () const</td></tr>
 <tr class="memdesc:a0a889ea8c9b4ebc910a263aa0cde2553"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the format of the swap chain.  <a href="class_video_1_1_web_g_p_u_renderer.html#a0a889ea8c9b4ebc910a263aa0cde2553">More...</a><br /></td></tr>
 <tr class="separator:a0a889ea8c9b4ebc910a263aa0cde2553"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -305,7 +308,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Begin a new frame. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000045">Todo:</a></b></dt><dd>Handle swap chain recreation. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000048">Todo:</a></b></dt><dd>Handle swap chain recreation. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#af33f2d773601a9a1d591d66238549aa4">Video::LowLevelRenderer</a>.</p>
 
@@ -1162,6 +1165,26 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa70cc8d6b454d26becf87457a5e4ca66" name="aa70cc8d6b454d26becf87457a5e4ca66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa70cc8d6b454d26becf87457a5e4ca66">&#9670;&nbsp;</a></span>HasR11G11B10()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Video::WebGPURenderer::HasR11G11B10 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get whether R11G11B10 render targets can be used. </p>
+<dl class="section return"><dt>Returns</dt><dd>Whether the device has rg11b10ufloat-renderable. </dd></dl>
+
+</div>
+</div>
 <a id="ae286069b64d3be3d28a9cce16c9c478d" name="ae286069b64d3be3d28a9cce16c9c478d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae286069b64d3be3d28a9cce16c9c478d">&#9670;&nbsp;</a></span>Present()</h2>
 
@@ -1223,7 +1246,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The color image as a char-array. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000047">Todo:</a></b></dt><dd>Doesn't work for some reason. Need to call tick explicitly. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000049">Todo:</a></b></dt><dd>Doesn't work for some reason. Need to call tick explicitly. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#aee373500685c277be0fd2b085473cf1c">Video::LowLevelRenderer</a>.</p>
 
@@ -1289,7 +1312,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Wait for all rendering to finish. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000046">Todo:</a></b></dt><dd>Doesn't work for some reason. Need to call tick explicitly. </dd></dl>
 
 <p>Implements <a class="el" href="class_video_1_1_low_level_renderer.html#afad1282e62dbfa09eb7cf31d5c6b7271">Video::LowLevelRenderer</a>.</p>
 

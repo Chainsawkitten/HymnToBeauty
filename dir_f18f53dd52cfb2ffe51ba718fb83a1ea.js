@@ -1,5 +1,6 @@
 var dir_f18f53dd52cfb2ffe51ba718fb83a1ea =
 [
+    [ "WebGPU.hpp", "_web_g_p_u_8hpp.html", null ],
     [ "WebGPUBuffer.cpp", "_web_g_p_u_buffer_8cpp.html", null ],
     [ "WebGPUBuffer.hpp", "_web_g_p_u_buffer_8hpp.html", [
       [ "Video::WebGPUBuffer", "class_video_1_1_web_g_p_u_buffer.html", "class_video_1_1_web_g_p_u_buffer" ]
