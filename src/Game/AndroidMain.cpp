@@ -17,7 +17,7 @@ void handle_cmd(android_app* app, int32_t cmd) {
             // The window is being shown, get it ready.
             // Start engine.
             engine.configuration.androidWindow = app->window;
-            engine.configuration.graphicsAPI = Video::Renderer::GraphicsAPI::VULKAN;
+            engine.configuration.graphicsAPI = Video::Renderer::GraphicsAPI::WEBGPU;
             engine.Start();
 
             // Load hymn from json file.
