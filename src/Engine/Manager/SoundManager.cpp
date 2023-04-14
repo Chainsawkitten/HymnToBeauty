@@ -52,7 +52,7 @@ void SoundManager::Update() {
         }
 
         // Set position.
-        glm::vec3 position = glm::vec3(entity->GetModelMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        glm::vec3 position = entity->GetWorldPosition();
         ma_sound_set_position(&sound->sound, position.x, position.y, position.z);
 
         /// @todo Set velocity based on physics.
@@ -74,11 +74,11 @@ void SoundManager::Update() {
         Entity* entity = listener->entity;
 
         // Set position
-        glm::vec3 position = entity->position;
+        glm::vec3 position = entity->GetWorldPosition();
         ma_engine_listener_set_position(&engine, 0, position.x, position.y, position.z);
 
         // Set orientation.
-        glm::quat orientation = entity->GetWorldOrientation();
+        glm::quat orientation = entity->GetWorldRotation();
         glm::vec3 forward = orientation * glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 up = orientation * glm::vec3(0.0f, 1.0f, 0.0f);
         ma_engine_listener_set_direction(&engine, 0, forward.x, forward.y, forward.z);
