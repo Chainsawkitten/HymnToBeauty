@@ -353,11 +353,6 @@ ScriptManager::ScriptManager(Utility::Window* window) {
     // Register Entity.
     engine->RegisterObjectType("Entity", 0, asOBJ_REF | asOBJ_NOCOUNT);
     engine->RegisterObjectProperty("Entity", "string name", asOFFSET(Entity, name));
-    engine->RegisterObjectProperty("Entity", "quat rotation", asOFFSET(Entity, rotation));
-    engine->RegisterObjectProperty("Entity", "vec3 position", asOFFSET(Entity, position));
-    engine->RegisterObjectProperty("Entity", "vec3 scale", asOFFSET(Entity, scale));
-    engine->RegisterObjectMethod("Entity", "vec3 GetWorldPosition() const", asMETHOD(Entity, GetWorldPosition), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "void SetWorldPosition(const vec3 &in)", asMETHOD(Entity, SetWorldPosition), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "void Kill()", asMETHOD(Entity, Kill), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "bool IsKilled() const", asMETHOD(Entity, IsKilled), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "void SetEnabled(bool, bool)", asMETHOD(Entity, SetEnabled), asCALL_THISCALL);
@@ -372,14 +367,25 @@ ScriptManager::ScriptManager(Utility::Window* window) {
 
     engine->RegisterGlobalFunction("Entity@ GetEntityByGUID(uint GUID)", asFUNCTIONPR(ActiveHymn::GetEntityByGUID, (unsigned int), Entity*), asCALL_CDECL);
 
+    engine->RegisterObjectMethod("Entity", "const vec3& GetPosition() const", asMETHOD(Entity, GetPosition), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void SetPosition(const vec3 &in)", asMETHOD(Entity, SetPosition), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "vec3 GetWorldPosition() const", asMETHOD(Entity, GetWorldPosition), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void SetWorldPosition(const vec3 &in)", asMETHOD(Entity, SetWorldPosition), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void Move(const vec3 &in)", asMETHOD(Entity, Move), asCALL_THISCALL);
+
+    engine->RegisterObjectMethod("Entity", "const vec3& GetScale() const", asMETHOD(Entity, GetScale), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void SetScale(const vec3 &in)", asMETHOD(Entity, SetScale), asCALL_THISCALL);
+
+    engine->RegisterObjectMethod("Entity", "const quat& GetRotation() const", asMETHOD(Entity, GetRotation), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void SetRotation(const quat& in)", asMETHOD(Entity, SetRotation), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "quat GetWorldRotation()", asMETHOD(Entity, GetWorldRotation), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void SetWorldRotation(const quat& in)", asMETHOD(Entity, SetWorldRotation), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Entity", "void RotateAroundWorldAxis(float, const vec3 &in)", asMETHOD(Entity, RotateAroundWorldAxis), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "void RotateYaw(float angle)", asMETHOD(Entity, RotateYaw), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "void RotatePitch(float angle)", asMETHOD(Entity, RotatePitch), asCALL_THISCALL);
     engine->RegisterObjectMethod("Entity", "void RotateRoll(float angle)", asMETHOD(Entity, RotateRoll), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "void RotateAroundWorldAxis(float, const vec3 &in)", asMETHOD(Entity, RotateAroundWorldAxis), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "quat GetWorldOrientation()", asMETHOD(Entity, GetWorldOrientation), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "void SetWorldOrientation(const quat& in)", asMETHOD(Entity, SetWorldOrientation), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "void SetLocalOrientation(const quat& in)", asMETHOD(Entity, SetLocalOrientation), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Entity", "Entity@ SetParent(Entity@ parent) const", asMETHOD(Entity, SetParent), asCALL_THISCALL);
+
+    engine->RegisterObjectMethod("Entity", "Entity@ SetParent(Entity@ parent)", asMETHOD(Entity, SetParent), asCALL_THISCALL);
 
     // Register components.
     engine->SetDefaultNamespace("Component");
@@ -948,7 +954,7 @@ bool ScriptManager::IsIntersect(Entity* checker, Entity* camera) const {
     RayIntersection rayIntersector;
     float intersectDistance;
     const glm::vec3 rayDirection = MousePicking::GetRayDirection(camera, projection, window);
-    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), rayDirection, checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetModelMatrix(), intersectDistance)) {
+    if (rayIntersector.RayOBBIntersect(camera->GetWorldPosition(), rayDirection, checker->GetComponent<Component::Mesh>()->model->GetAxisAlignedBoundingBox(), checker->GetWorldModelMatrix(), intersectDistance)) {
         if (intersectDistance < 10.0f)
             return true;
         return false;

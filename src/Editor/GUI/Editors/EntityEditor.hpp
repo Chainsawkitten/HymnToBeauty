@@ -96,6 +96,8 @@ class EntityEditor {
     bool visible = false;
     char name[128];
     char stringPropertyBuffer[128];
+    glm::vec3 position;
+    glm::vec3 scale;
 
     struct Editor {
         std::function<void()> addFunction;

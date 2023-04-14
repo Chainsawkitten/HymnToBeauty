@@ -83,48 +83,55 @@ void EntityEditor::Show() {
         ImGui::InputText("Name", name, 128);
         entity->name = name;
         ImGui::Text("Transform");
-        ImGui::ShowHelpMarker("The entity's position, rotation and scale.", 75.f);
+        ImGui::ShowHelpMarker("The entity's position, rotation and scale.", 75.0f);
         ImGui::Indent();
+
+        position = entity->GetPosition();
 
         if (EditorSettings::GetInstance().GetBool("Grid Snap")) {
             int toNearest = EditorSettings::GetInstance().GetLong("Grid Snap Size");
 
-            int value = static_cast<unsigned int>(entity->position.x);
+            int value = static_cast<unsigned int>(position.x);
             int rest = value % toNearest;
 
             if (rest > (toNearest / 2)) {
-                entity->position.x = static_cast<float>((value - rest) + toNearest);
+                position.x = static_cast<float>((value - rest) + toNearest);
             } else {
-                entity->position.x = static_cast<float>(value - rest);
+                position.x = static_cast<float>(value - rest);
             }
 
-            value = static_cast<int>(entity->position.y);
+            value = static_cast<int>(position.y);
             rest = value % toNearest;
 
             if (rest > (toNearest / 2)) {
-                entity->position.y = static_cast<float>((value - rest) + toNearest);
+                position.y = static_cast<float>((value - rest) + toNearest);
             } else {
-                entity->position.y = static_cast<float>((value - rest));
+                position.y = static_cast<float>((value - rest));
             }
 
-            value = static_cast<int>(entity->position.z);
+            value = static_cast<int>(position.z);
             rest = value % toNearest;
 
             if (rest > (toNearest / 2)) {
-                entity->position.z = static_cast<float>((value - rest) + toNearest);
+                position.z = static_cast<float>((value - rest) + toNearest);
             } else {
-                entity->position.z = static_cast<float>(value - rest);
+                position.z = static_cast<float>(value - rest);
             }
         }
 
-        ImGui::DraggableVec3("Position", entity->position);
+        ImGui::DraggableVec3("Position", position);
+        entity->SetPosition(position);
 
-        glm::vec3 eulerAngles = glm::eulerAngles(entity->rotation);
+        glm::vec3 eulerAngles = glm::eulerAngles(entity->GetRotation());
         eulerAngles = glm::degrees(eulerAngles);
-        if (ImGui::InputFloat3("Euler angles", &eulerAngles.x))
-            entity->SetLocalOrientation(glm::quat(glm::radians(eulerAngles)));
+        if (ImGui::InputFloat3("Euler angles", &eulerAngles.x)) {
+            entity->SetRotation(glm::quat(glm::radians(eulerAngles)));
+        }
 
-        ImGui::DraggableVec3("Scale", entity->scale);
+        scale = entity->GetScale();
+        ImGui::DraggableVec3("Scale", scale);
+        entity->SetScale(scale);
+
         ImGui::Text("Unique Identifier: %u", entity->GetUniqueIdentifier());
         ImGui::Unindent();
         if (!entity->IsScene()) {
@@ -154,6 +161,8 @@ void EntityEditor::Show() {
 void EntityEditor::SetEntity(Entity* entity) {
     this->entity = entity;
     strcpy(name, entity->name.c_str());
+    position = entity->GetPosition();
+    scale = entity->GetScale();
 
     auto shapeComp = this->entity->GetComponent<Component::Shape>();
     if (shapeComp != nullptr) {

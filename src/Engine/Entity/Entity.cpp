@@ -53,6 +53,9 @@ Entity* Entity::SetParent(Entity* newParent) {
             parent = newParent;
             newParent->children.push_back(this);
 
+            // The entity we're relative to has changed, so recalculate world matrix.
+            SetDirty(DirtyFlag::WORLD_MATRIX);
+
             return lastParent;
         }
     }
@@ -235,29 +238,63 @@ void Entity::Serialize(Json::Value& node, bool load) {
     Json::Serialize(node, load, "scale", scale, glm::vec3(1.0f, 1.0f, 1.0f));
     Json::Serialize(node, load, "rotation", rotation, glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f)));
     Json::Serialize(node, load, "uid", uniqueIdentifier, 0u);
+
+    if (load) {
+        dirtyMask = DirtyFlag::LOCAL_MATRIX | DirtyFlag::WORLD_MATRIX;
+    }
 }
 
-glm::mat4 Entity::GetModelMatrix() const {
-    glm::mat4 matrix = GetLocalMatrix();
-
-    if (parent != nullptr)
-        matrix = parent->GetModelMatrix() * matrix;
-
-    return matrix;
+const glm::vec3& Entity::GetPosition() const {
+    return position;
 }
 
-glm::mat4 Entity::GetLocalMatrix() const {
-    glm::mat4 matrix = glm::translate(glm::mat4(1.0f), position) * glm::mat4_cast(GetLocalOrientation()) * glm::scale(glm::mat4(1.0f), scale);
-    return matrix;
+void Entity::SetPosition(const glm::vec3& position) {
+    this->position = position;
+    SetDirty();
 }
 
-glm::quat Entity::GetLocalOrientation() const {
+glm::vec3 Entity::GetWorldPosition() const {
+    if (parent != nullptr) {
+        const glm::mat4 matrix = GetWorldModelMatrix();
+        return glm::vec3(matrix[3][0], matrix[3][1], matrix[3][2]);
+    }
+
+    return position;
+}
+
+void Entity::SetWorldPosition(const glm::vec3& worldPos) {
+    if (parent == nullptr) {
+        SetPosition(worldPos);
+    } else {
+        SetPosition(glm::inverse(parent->GetWorldModelMatrix()) * glm::vec4(worldPos, 1.0f));
+    }
+}
+
+void Entity::Move(const glm::vec3& translation) {
+    SetPosition(GetPosition() + translation);
+}
+
+const glm::vec3& Entity::GetScale() const {
+    return scale;
+}
+
+void Entity::SetScale(const glm::vec3& scale) {
+    this->scale = scale;
+    SetDirty();
+}
+
+const glm::quat& Entity::GetRotation() const {
     return rotation;
 }
 
-glm::quat Entity::GetWorldOrientation() const {
+void Entity::SetRotation(const glm::quat& localRot) {
+    rotation = localRot;
+    SetDirty();
+}
+
+glm::quat Entity::GetWorldRotation() const {
     if (parent != nullptr) {
-        auto transform = parent->GetModelMatrix();
+        auto transform = parent->GetWorldModelMatrix();
         transform = transform * glm::mat4_cast(rotation);
         return glm::quat_cast(transform);
     }
@@ -265,54 +302,67 @@ glm::quat Entity::GetWorldOrientation() const {
     return rotation;
 }
 
-glm::vec3 Entity::GetDirection() const {
-    return glm::vec3(GetWorldOrientation() * glm::vec3(0, 0, -1));
-}
-
-glm::vec3 Entity::GetWorldPosition() const {
-    if (parent != nullptr)
-        return glm::vec3(parent->GetModelMatrix() * glm::vec4(position, 1.f));
-
-    return position;
-}
-
-void Entity::SetWorldPosition(const glm::vec3& worldPos) {
-    if (parent == nullptr)
-        position = worldPos;
-    else
-        position = glm::inverse(parent->GetModelMatrix()) * glm::vec4(worldPos, 1);
-}
-
-void Entity::SetWorldOrientation(const glm::quat& worldRot) {
-    if (parent == nullptr)
-        rotation = worldRot;
-    else {
-        glm::quat quater = glm::quat_cast(parent->GetModelMatrix());
+void Entity::SetWorldRotation(const glm::quat& worldRot) {
+    if (parent == nullptr) {
+        SetRotation(worldRot);
+    } else {
+        glm::quat quater = glm::quat_cast(parent->GetWorldModelMatrix());
         quater = glm::inverse(quater) * worldRot;
-        rotation = quater;
+        SetRotation(quater);
     }
 }
 
-void Entity::SetLocalOrientation(const glm::quat& localRot) {
-    rotation = localRot;
+glm::vec3 Entity::GetWorldDirection() const {
+    return glm::vec3(GetWorldRotation() * glm::vec3(0, 0, -1));
 }
 
 void Entity::RotateYaw(float angle) {
-    rotation = glm::rotate(rotation, angle, glm::vec3(0, 1, 0));
+    SetRotation(glm::rotate(GetRotation(), angle, glm::vec3(0, 1, 0)));
 }
 
 void Entity::RotatePitch(float angle) {
-    rotation = glm::rotate(rotation, angle, glm::vec3(1, 0, 0));
+    SetRotation(glm::rotate(GetRotation(), angle, glm::vec3(1, 0, 0)));
 }
 
 void Entity::RotateRoll(float angle) {
-    rotation = glm::rotate(rotation, angle, glm::vec3(0, 0, 1));
+    SetRotation(glm::rotate(GetRotation(), angle, glm::vec3(0, 0, 1)));
 }
 
 void Entity::RotateAroundWorldAxis(float angle, const glm::vec3& axis) {
-    glm::quat invQuat = glm::inverse(glm::quat_cast(GetModelMatrix()));
+    glm::quat invQuat = glm::inverse(glm::quat_cast(GetWorldModelMatrix()));
     glm::vec3 tempVec = glm::rotate(invQuat, axis);
-    rotation = glm::rotate(rotation, angle, tempVec);
+    SetRotation(glm::rotate(GetRotation(), angle, tempVec));
+}
+
+const glm::mat4& Entity::GetLocalMatrix() const {
+    if (dirtyMask & DirtyFlag::LOCAL_MATRIX) {
+        // Calculate rotation * scale.
+        glm::mat3 rotationScaleMatrix = glm::mat3_cast(GetRotation());
+        rotationScaleMatrix[0] *= scale.x;
+        rotationScaleMatrix[1] *= scale.y;
+        rotationScaleMatrix[2] *= scale.z;
+
+        // Position.
+        localMatrix = glm::mat4(rotationScaleMatrix);
+        localMatrix[3] = glm::vec4(GetPosition(), 1.0f);
+
+        dirtyMask &= ~DirtyFlag::LOCAL_MATRIX;
+    }
+
+    return localMatrix;
+}
+
+const glm::mat4& Entity::GetWorldModelMatrix() const {
+    if (dirtyMask & DirtyFlag::WORLD_MATRIX) {
+        worldMatrix = GetLocalMatrix();
+
+        if (parent != nullptr)
+            worldMatrix = parent->GetWorldModelMatrix() * worldMatrix;
+
+        dirtyMask &= ~DirtyFlag::WORLD_MATRIX;
+    }
+
+    return worldMatrix;
 }
 
 void Entity::SetEnabled(bool enabled, bool recursive) {
@@ -408,5 +458,18 @@ void Entity::KillHelper() {
 
     for (Entity* child : children) {
         child->KillHelper();
+    }
+}
+
+void Entity::SetDirty(uint32_t dirtyMask) {
+    if ((this->dirtyMask & dirtyMask) == dirtyMask) {
+        // We (and by extension all children) are already dirty. No need to do anything.
+        return;
+    }
+
+    this->dirtyMask |= dirtyMask;
+
+    for (Entity* child : children) {
+        child->SetDirty(DirtyFlag::WORLD_MATRIX);
     }
 }

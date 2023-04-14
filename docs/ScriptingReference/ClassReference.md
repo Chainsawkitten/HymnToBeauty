@@ -39,6 +39,42 @@ Get child based on its index in child array. Returns null if no child with that 
 `uint GetNumChildren() const`  
 Get the number of children the entity has.
 
+`const vec3& GetPosition() const`  
+Get the position in local space.
+
+`void SetPosition(const vec3& position)`  
+Set the position in local space.
+
+`vec3 GetWorldPosition() const`  
+Get the position in world space.
+
+`void SetWorldPosition(const vec3& position)`  
+Set the position in world space.
+
+`void Move(const vec3& translation)`  
+Move in local space.
+
+`const vec3& GetScale() const`  
+Get the scale in local space.
+
+`void SetScale(const vec3& scale)`  
+Set the scale in local space.
+
+`const quat& GetRotation() const`  
+Get the rotation in local space.
+
+`void SetRotation(const quat& rotation)`  
+Set the rotation in local space.
+
+`quat GetWorldRotation()`  
+Get the rotation in world space.
+
+`void SetWorldRotation(const quat& rotation)`  
+Set the rotation in world space.
+
+`void RotateAroundWorldAxis(float angle, const vec3& axis)`  
+Rotate quaternion style.
+
 `void RotateYaw(float angle)`  
 Rotate the entity around the Y axis.
 
@@ -47,15 +83,6 @@ Rotate the entity around the X axis.
 
 `void RotateRoll(float angle)`  
 Rotate the entity around the Z axis.
-
-`void RotateAroundWorldAxis(float angle, const vec3& axis)`  
-Rotate quaternion style.
-
-`void SetWorldOrientation(quat orientation)`  
-Set the orientation in world space.
-
-`void SetLocalOrientation(quat orientation)`  
-Set the orientation in local space.
 
 `Component::DirectionalLight@ GetDirectionalLight()`  
 Get the entity's directional light component, if it has any. Otherwise returns null.
@@ -87,15 +114,6 @@ Get the entity's sprite component, if it has any. Otherwise returns null.
 ## Properties
 `string name`  
 The name of the entity.
-
-`vec3 position`  
-Position relative to the parent entity.
-
-`vec3 scale`  
-Scale.
-
-`quat rotation`  
-Rotation.
 
 \section DirectionalLight Component::DirectionalLight
 A light that is infinitely far away and thus casts parallel rays. Like the sun.

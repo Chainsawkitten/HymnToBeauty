@@ -79,7 +79,7 @@ Editor::Editor(Utility::Window* window, Video::LowLevelRenderer* lowLevelRendere
     cameraEntity = cameraWorld.CreateEntity("Editor Camera");
     cameraEntity->SetEnabled(false);
     cameraEntity->AddComponent<Component::Camera>();
-    cameraEntity->position.z = 10.0f;
+    cameraEntity->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
     cameraEntity->GetComponent<Component::Camera>()->zFar = 1000.f;
     cameraEntity->GetComponent<Component::Camera>()->layerMask = ~0u;
 
@@ -212,16 +212,16 @@ void Editor::Show(float deltaTime) {
         // Scroll zoom.
         if (Managers().inputManager->GetScrollDown()) {
             if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-                glm::vec3 backward = cameraEntity->GetWorldOrientation() * glm::vec3(0, 0, 1);
-                float speed = 2.0f * deltaTime * glm::length(cameraEntity->position);
-                cameraEntity->position += speed * backward;
+                glm::vec3 backward = cameraEntity->GetWorldRotation() * glm::vec3(0, 0, 1);
+                float speed = 2.0f * deltaTime * glm::length(cameraEntity->GetPosition());
+                cameraEntity->Move(speed * backward);
             }
         }
         if (Managers().inputManager->GetScrollUp()) {
             if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-                glm::vec3 backward = cameraEntity->GetWorldOrientation() * glm::vec3(0, 0, 1);
-                float speed = 2.0f * deltaTime * glm::length(cameraEntity->position);
-                cameraEntity->position += speed * -backward;
+                glm::vec3 backward = cameraEntity->GetWorldRotation() * glm::vec3(0, 0, 1);
+                float speed = 2.0f * deltaTime * glm::length(cameraEntity->GetPosition());
+                cameraEntity->Move(speed * -backward);
             }
         }
 
@@ -262,7 +262,7 @@ void Editor::Show(float deltaTime) {
             // Highlight selected.
             Component::Mesh* mesh = currentEntity->GetComponent<Component::Mesh>();
             if (mesh && mesh->model)
-                Managers().debugDrawingManager->AddMesh(mesh, mesh->entity->GetModelMatrix(), glm::vec3(0.2f, 0.72f, 0.2f));
+                Managers().debugDrawingManager->AddMesh(mesh, mesh->entity->GetWorldModelMatrix(), glm::vec3(0.2f, 0.72f, 0.2f));
         }
     }
 }
@@ -453,8 +453,8 @@ void Editor::ShowMainMenuBar(bool& play) {
             if (Managers().inputManager->Triggered(InputManager::ZOOM)) {
                 if (resourceView.GetScene().entityEditor.GetEntity() != nullptr) {
                     const glm::vec3 tempPos = resourceView.GetScene().entityEditor.GetEntity()->GetWorldPosition();
-                    cameraEntity->position = tempPos + glm::vec3(0, 7, 7);
-                    cameraEntity->SetLocalOrientation(glm::angleAxis(glm::radians(-45.0f), glm::vec3(1, 0, 0)));
+                    cameraEntity->SetPosition(tempPos + glm::vec3(0, 7, 7));
+                    cameraEntity->SetRotation(glm::angleAxis(glm::radians(-45.0f), glm::vec3(1, 0, 0)));
                 }
             }
 
@@ -522,20 +522,20 @@ void Editor::ControlEditorCamera(float deltaTime) {
         lastX = Managers().inputManager->GetCursorX();
         lastY = Managers().inputManager->GetCursorY();
 
-        glm::mat4 orientation = glm::toMat4(glm::inverse(cameraEntity->GetWorldOrientation()));
+        glm::mat4 orientation = glm::toMat4(glm::inverse(cameraEntity->GetWorldRotation()));
         glm::vec3 backward(orientation[0][2], orientation[1][2], orientation[2][2]);
         glm::vec3 right(orientation[0][0], orientation[1][0], orientation[2][0]);
 
         // Move speed scaling.
-        float speed = 10.0f * deltaTime * (glm::abs(cameraEntity->position.y) / 10.0f);
+        float speed = 10.0f * deltaTime * (glm::abs(cameraEntity->GetPosition().y) / 10.0f);
         float constantSpeed = 10.0f * deltaTime;
 
-        if (cameraEntity->position.y > 10.0f || cameraEntity->position.y < -10.0f) {
-            cameraEntity->position += speed * backward * static_cast<float>(Managers().inputManager->Pressed(InputManager::BACKWARD) - Managers().inputManager->Pressed(InputManager::FORWARD));
-            cameraEntity->position += speed * right * static_cast<float>(Managers().inputManager->Pressed(InputManager::RIGHT) - Managers().inputManager->Pressed(InputManager::LEFT));
+        if (cameraEntity->GetPosition().y > 10.0f || cameraEntity->GetPosition().y < -10.0f) {
+            cameraEntity->Move(speed * backward * static_cast<float>(Managers().inputManager->Pressed(InputManager::BACKWARD) - Managers().inputManager->Pressed(InputManager::FORWARD)));
+            cameraEntity->Move(speed * right * static_cast<float>(Managers().inputManager->Pressed(InputManager::RIGHT) - Managers().inputManager->Pressed(InputManager::LEFT)));
         } else {
-            cameraEntity->position += constantSpeed * backward * static_cast<float>(Managers().inputManager->Pressed(InputManager::BACKWARD) - Managers().inputManager->Pressed(InputManager::FORWARD));
-            cameraEntity->position += constantSpeed * right * static_cast<float>(Managers().inputManager->Pressed(InputManager::RIGHT) - Managers().inputManager->Pressed(InputManager::LEFT));
+            cameraEntity->Move(constantSpeed * backward * static_cast<float>(Managers().inputManager->Pressed(InputManager::BACKWARD) - Managers().inputManager->Pressed(InputManager::FORWARD)));
+            cameraEntity->Move(constantSpeed * right * static_cast<float>(Managers().inputManager->Pressed(InputManager::RIGHT) - Managers().inputManager->Pressed(InputManager::LEFT)));
         }
     }
 }
@@ -562,7 +562,7 @@ void Editor::Picking() {
                 const Video::AxisAlignedBoundingBox aabo = mesh != nullptr && mesh->model != nullptr ? mesh->model->GetAxisAlignedBoundingBox() : Video::AxisAlignedBoundingBox(glm::vec3(1.f, 1.f, 1.f), entity->GetWorldPosition(), glm::vec3(-0.25f, -0.25f, -0.25f), glm::vec3(0.25f, 0.25f, 0.25f));
                 // Intersect with aabo.
                 const glm::vec3 rayDirection = MousePicking::GetRayDirection(cameraEntity, projection, window);
-                if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), rayDirection, aabo, entity->GetModelMatrix(), intersectDistance)) {
+                if (rayIntersector.RayOBBIntersect(cameraEntity->GetWorldPosition(), rayDirection, aabo, entity->GetWorldModelMatrix(), intersectDistance)) {
                     if (intersectDistance < lastDistance && intersectDistance > 0.f) {
                         lastDistance = intersectDistance;
                         selectedEntity = entity;
@@ -581,15 +581,17 @@ void Editor::Picking() {
 void Editor::Focus() {
     if (Managers().inputManager->Triggered(InputManager::FOCUS)) {
         if (selectedEntity != nullptr) {
-            const glm::vec3 backward = glm::normalize(cameraEntity->position - selectedEntity->position);
+            const glm::vec3 backward = glm::normalize(cameraEntity->GetPosition() - selectedEntity->GetPosition());
 
-            while (glm::length(selectedEntity->position - cameraEntity->position) > 10)
-                cameraEntity->position -= backward;
+            while (glm::length(selectedEntity->GetPosition() - cameraEntity->GetPosition()) > 10.0f) {
+                cameraEntity->Move(-backward);
+            }
 
-            while (glm::length(selectedEntity->position - cameraEntity->position) < 10)
-                cameraEntity->position += backward;
+            while (glm::length(selectedEntity->GetPosition() - cameraEntity->GetPosition()) < 10.0f) {
+                cameraEntity->Move(backward);
+            }
 
-            const glm::vec3 camDirection = glm::normalize(selectedEntity->position - cameraEntity->position);
+            const glm::vec3 camDirection = glm::normalize(selectedEntity->GetPosition() - cameraEntity->GetPosition());
 
             float yaw = std::atan2(camDirection.x, -camDirection.z);
             cameraEntity->RotateYaw(yaw);
@@ -734,7 +736,7 @@ void Editor::WidgetGizmo(Entity* entity) {
     glm::mat4 projectionMatrix = cameraEntity->GetComponent<Component::Camera>()->GetProjection(glm::vec2(window->GetSize().x, window->GetSize().y));
 
     // View matrix.
-    glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
+    glm::mat4 viewMatrix = glm::inverse(cameraEntity->GetWorldModelMatrix());
 
     // Change operation based on key input.
     if (!ImGuizmo::IsUsing()) {
@@ -759,13 +761,11 @@ void Editor::WidgetGizmo(Entity* entity) {
     if (ImGuizmo::IsUsing()) {
         switch (currentOperation) {
         case ImGuizmo::TRANSLATE: {
-            entity->position.x = currentEntityMatrix[3][0];
-            entity->position.y = currentEntityMatrix[3][1];
-            entity->position.z = currentEntityMatrix[3][2];
+            entity->SetPosition(glm::vec3(currentEntityMatrix[3][0], currentEntityMatrix[3][1], currentEntityMatrix[3][2]));
             break;
         }
         case ImGuizmo::ROTATE: {
-            entity->SetLocalOrientation(glm::toQuat(deltaMatrix) * entity->GetLocalOrientation());
+            entity->SetRotation(glm::toQuat(deltaMatrix) * entity->GetRotation());
             break;
         }
         case ImGuizmo::SCALE: {
@@ -773,9 +773,7 @@ void Editor::WidgetGizmo(Entity* entity) {
             float rotation[3];
             float scale[3];
             ImGuizmo::DecomposeMatrixToComponents(&currentEntityMatrix[0][0], translation, rotation, scale);
-            entity->scale.x = scale[0];
-            entity->scale.y = scale[1];
-            entity->scale.z = scale[2];
+            entity->SetScale(glm::vec3(scale[0], scale[1], scale[2]));
             break;
         }
         }
@@ -818,7 +816,7 @@ void Editor::NewHymnClosed(const std::string& hymn) {
         Hymn().world.CreateRoot();
 
         Entity* player = Hymn().world.GetRoot()->AddChild("Player");
-        player->position.z = 10.f;
+        player->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
         player->AddComponent<Component::Camera>();
         player->AddComponent<Component::Listener>();
 

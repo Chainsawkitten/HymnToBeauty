@@ -161,7 +161,7 @@ void RenderManager::AddCamera(Video::RenderScene& renderScene, const Component::
 
     Entity* cameraEntity = camera.entity;
     renderCamera.position = cameraEntity->GetWorldPosition();
-    renderCamera.viewMatrix = glm::inverse(cameraEntity->GetModelMatrix());
+    renderCamera.viewMatrix = glm::inverse(cameraEntity->GetWorldModelMatrix());
     renderCamera.projectionMatrix = camera.GetProjection(glm::vec2(windowSize) * glm::vec2(camera.viewport.z, camera.viewport.w));
     renderCamera.viewProjectionMatrix = renderCamera.projectionMatrix * renderCamera.viewMatrix;
     renderCamera.zNear = camera.zNear;
@@ -217,7 +217,7 @@ void RenderManager::AddWorldLights(Video::RenderScene& renderScene, bool showLig
         Video::RenderScene::DirectionalLight light;
 
         Entity* lightEntity = directionalLight->entity;
-        light.direction = lightEntity->GetDirection();
+        light.direction = lightEntity->GetWorldDirection();
         light.color = directionalLight->color;
         light.ambientCoefficient = directionalLight->ambientCoefficient;
 
@@ -237,7 +237,7 @@ void RenderManager::AddWorldLights(Video::RenderScene& renderScene, bool showLig
         light.color = spotLight->color;
         light.intensity = spotLight->intensity;
         light.attenuation = spotLight->attenuation;
-        light.direction = lightEntity->GetDirection();
+        light.direction = lightEntity->GetWorldDirection();
         light.coneAngle = spotLight->coneAngle;
 
         renderScene.spotLights.push_back(light);
@@ -292,7 +292,7 @@ void RenderManager::AddMeshes(Video::RenderScene& renderScene) {
             continue;
 
         Video::RenderScene::Mesh mesh;
-        mesh.modelMatrix = entity->GetModelMatrix();
+        mesh.modelMatrix = entity->GetWorldModelMatrix();
         mesh.geometry = meshComp->model;
         mesh.axisAlignedBoundingBox = meshComp->model->GetAxisAlignedBoundingBox();
         mesh.albedo = material->albedo->GetTexture();
@@ -357,22 +357,22 @@ void RenderManager::AddEditorEntities(Video::RenderScene& renderScene, const Deb
             if (shape.GetKind() == ::Physics::Shape::Kind::Sphere) {
                 Managers().debugDrawingManager->AddSphere(shapeComp->entity->GetWorldPosition(), shape.GetSphereData()->radius, glm::vec3(1.0f, 1.0f, 1.0f));
             } else if (shape.GetKind() == ::Physics::Shape::Kind::Plane) {
-                glm::vec3 normal = shapeComp->entity->GetModelMatrix() * glm::vec4(shape.GetPlaneData()->normal, 0.0f);
+                glm::vec3 normal = shapeComp->entity->GetWorldModelMatrix() * glm::vec4(shape.GetPlaneData()->normal, 0.0f);
                 Managers().debugDrawingManager->AddPlane(shapeComp->entity->GetWorldPosition(), normal, glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
             } else if (shape.GetKind() == ::Physics::Shape::Kind::Box) {
                 glm::vec3 dimensions(shape.GetBoxData()->width, shape.GetBoxData()->height, shape.GetBoxData()->depth);
                 glm::vec3 position = shapeComp->entity->GetWorldPosition();
-                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
+                glm::quat orientation = shapeComp->entity->GetWorldRotation();
                 glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
                 Managers().debugDrawingManager->AddCuboid(dimensions, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
             } else if (shape.GetKind() == ::Physics::Shape::Kind::Cylinder) {
                 glm::vec3 position = shapeComp->entity->GetWorldPosition();
-                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
+                glm::quat orientation = shapeComp->entity->GetWorldRotation();
                 glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
                 Managers().debugDrawingManager->AddCylinder(shape.GetCylinderData()->radius, shape.GetCylinderData()->length, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
             } else if (shape.GetKind() == ::Physics::Shape::Kind::Cone) {
                 glm::vec3 position = shapeComp->entity->GetWorldPosition();
-                glm::quat orientation = shapeComp->entity->GetWorldOrientation();
+                glm::quat orientation = shapeComp->entity->GetWorldRotation();
                 glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position) * glm::toMat4(orientation);
                 Managers().debugDrawingManager->AddCone(shape.GetConeData()->radius, shape.GetConeData()->height, transformationMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
             }
@@ -402,7 +402,7 @@ void RenderManager::AddSprites(Video::RenderScene& renderScene) {
 
         Video::RenderScene::Sprite sprite;
         sprite.texture = spriteComp->texture->GetTexture();
-        sprite.modelMatrix = entity->GetModelMatrix();
+        sprite.modelMatrix = entity->GetWorldModelMatrix();
         sprite.size = glm::vec2(sprite.texture->GetTexture()->GetSize()) / spriteComp->pixelsPerUnit;
         sprite.pivot = spriteComp->pivot;
         sprite.tint = glm::vec4(spriteComp->tint, spriteComp->alpha);

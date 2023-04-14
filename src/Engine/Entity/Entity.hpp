@@ -147,35 +147,17 @@ class Entity {
      */
     void Serialize(Json::Value& node, bool load);
 
-    /// Get the model matrix.
+    /// Get the local position.
     /**
-     * @return The model matrix.
+     * @return The entity's position.
      */
-    glm::mat4 GetModelMatrix() const;
+    const glm::vec3& GetPosition() const;
 
-    /// Get the local model matrix.
+    /// Set the local position.
     /**
-     * @return The local model matrix.
+     * @param position The new position.
      */
-    glm::mat4 GetLocalMatrix() const;
-
-    /// Get the rotation of this entity.
-    /**
-     * @return The rotation in local space.
-     */
-    glm::quat GetLocalOrientation() const;
-
-    /// Get orientation of the entity.
-    /**
-     * @return The rotation in world space.
-     */
-    glm::quat GetWorldOrientation() const;
-
-    /// Get direction of the entity.
-    /**
-     * @return The entity's direction.
-     */
-    glm::vec3 GetDirection() const;
+    void SetPosition(const glm::vec3& position);
 
     /// Get the position in the world.
     /**
@@ -189,17 +171,53 @@ class Entity {
      */
     void SetWorldPosition(const glm::vec3& worldPos);
 
-    /// Set the orientation of the entity in world space.
+    /// Move in local space.
     /**
-     * @param worldRot New orientation.
+     * @param translation Movement in local space.
      */
-    void SetWorldOrientation(const glm::quat& worldRot);
+    void Move(const glm::vec3& translation);
 
-    /// Set the local orientation of the entity.
+    /// Get the local scale.
+    /**
+     * @return The entity's scale.
+     */
+    const glm::vec3& GetScale() const;
+
+    /// Set the local scale.
+    /**
+     * @param scale The new scale.
+     */
+    void SetScale(const glm::vec3& scale);
+
+    /// Get the rotation of this entity.
+    /**
+     * @return The rotation in local space.
+     */
+    const glm::quat& GetRotation() const;
+
+    /// Set the local rotation of the entity.
     /**
      * @param localRot The local rotation you want the entity to have.
      */
-    void SetLocalOrientation(const glm::quat& localRot);
+    void SetRotation(const glm::quat& localRot);
+
+    /// Get rotation of the entity.
+    /**
+     * @return The rotation in world space.
+     */
+    glm::quat GetWorldRotation() const;
+
+    /// Set the rotation of the entity in world space.
+    /**
+     * @param worldRot New rotation.
+     */
+    void SetWorldRotation(const glm::quat& worldRot);
+
+    /// Get direction of the entity.
+    /**
+     * @return The entity's direction.
+     */
+    glm::vec3 GetWorldDirection() const;
 
     /// Rotates around the Y axis
     /**
@@ -226,6 +244,18 @@ class Entity {
      */
     void RotateAroundWorldAxis(float angle, const glm::vec3& axis);
 
+    /// Get the local model matrix.
+    /**
+     * @return The local model matrix.
+     */
+    const glm::mat4& GetLocalMatrix() const;
+
+    /// Get the world model matrix.
+    /**
+     * @return The world model matrix.
+     */
+    const glm::mat4& GetWorldModelMatrix() const;
+
     /// Set whether the entity should be enabled.
     /**
      * @param enabled Whether the entity should be enabled.
@@ -241,24 +271,6 @@ class Entity {
 
     /// Name of the entity.
     std::string name;
-
-    /// Position relative to the parent entity.
-    /**
-     * Default: 0.f, 0.f, 0.f
-     */
-    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-
-    /// Scale.
-    /**
-     * Default: 1.f, 1.f, 1.f
-     */
-    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
-    /// Quaternion describing rotation and angle of entity.
-    /**
-     * Default: 0 radians around y axis.
-     */
-    glm::quat rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
     /// Get the entity's UID
     /**
@@ -280,11 +292,17 @@ class Entity {
     bool sceneChosen = false;
 
   private:
+    enum DirtyFlag {
+        LOCAL_MATRIX = 1,
+        WORLD_MATRIX = 2
+    };
+
     template <typename T> void Serialize(Json::Value& node, bool load, const std::string& name);
     Component::SuperComponent* AddComponent(std::type_index componentType);
     Component::SuperComponent* GetComponent(std::type_index componentType) const;
     void KillComponent(std::type_index componentType);
     void KillHelper();
+    void SetDirty(uint32_t dirtyMask = DirtyFlag::LOCAL_MATRIX | DirtyFlag::WORLD_MATRIX);
 
     World* world;
     Entity* parent = nullptr;
@@ -294,9 +312,18 @@ class Entity {
 
     std::map<std::type_index, Component::SuperComponent*> components;
 
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    glm::quat rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
     bool killed = false;
     bool enabled = true;
     unsigned int uniqueIdentifier = 0;
+
+    // Cache matrices.
+    mutable glm::mat4 localMatrix;
+    mutable glm::mat4 worldMatrix;
+    mutable uint32_t dirtyMask = DirtyFlag::LOCAL_MATRIX | DirtyFlag::WORLD_MATRIX;
 };
 
 template <typename T> T* Entity::AddComponent() {

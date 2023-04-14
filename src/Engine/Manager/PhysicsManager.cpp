@@ -54,7 +54,7 @@ void PhysicsManager::Update(float deltaTime) {
         }
 
         auto worldPos = rigidBodyComp->entity->GetWorldPosition();
-        auto worldOrientation = rigidBodyComp->entity->GetWorldOrientation();
+        auto worldOrientation = rigidBodyComp->entity->GetWorldRotation();
         if (rigidBodyComp->ghost) {
             rigidBodyComp->SetPosition(worldPos);
             rigidBodyComp->SetOrientation(worldOrientation);
@@ -100,7 +100,7 @@ void PhysicsManager::UpdateEntityTransforms() {
         auto trans = rigidBodyComp->GetBulletRigidBody()->getWorldTransform();
         if (!rigidBodyComp->ghost && !rigidBodyComp->IsKinematic()) {
             entity->SetWorldPosition(Physics::btToGlm(trans.getOrigin()));
-            entity->SetWorldOrientation(Physics::btToGlm(trans.getRotation()));
+            entity->SetWorldRotation(Physics::btToGlm(trans.getRotation()));
         }
     }
 }

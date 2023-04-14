@@ -528,24 +528,30 @@ void GLTFImporter::LoadNode(GLTF& gltf, Entity* parent, uint32_t index) {
 
     // Translation.
     if (node["translation"] != Json::nullValue) {
-        entity->position.x = node["translation"][0].asFloat();
-        entity->position.y = node["translation"][1].asFloat();
-        entity->position.z = node["translation"][2].asFloat();
+        entity->SetPosition(glm::vec3(
+            node["translation"][0].asFloat(),
+            node["translation"][1].asFloat(),
+            node["translation"][2].asFloat()
+        ));
     }
 
     // Rotation.
     if (node["rotation"] != Json::nullValue) {
-        entity->rotation.x = node["rotation"][0].asFloat();
-        entity->rotation.y = node["rotation"][1].asFloat();
-        entity->rotation.z = node["rotation"][2].asFloat();
-        entity->rotation.w = node["rotation"][3].asFloat();
+        entity->SetRotation(glm::quat(
+            node["rotation"][3].asFloat(),
+            node["rotation"][0].asFloat(),
+            node["rotation"][1].asFloat(),
+            node["rotation"][2].asFloat()
+        ));
     }
 
     // Scale.
     if (node["scale"] != Json::nullValue) {
-        entity->scale.x = node["scale"][0].asFloat();
-        entity->scale.y = node["scale"][1].asFloat();
-        entity->scale.z = node["scale"][2].asFloat();
+        entity->SetScale(glm::vec3(
+            node["scale"][0].asFloat(),
+            node["scale"][1].asFloat(),
+            node["scale"][2].asFloat()
+        ));
     }
 
     /// @todo Matrix.

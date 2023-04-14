@@ -32,7 +32,7 @@ static glm::vec3 ConvertWorldCoords(const glm::vec4& eyeCoords, const glm::mat4&
 }
 
 glm::vec3 GetRayDirection(const Entity* camera, const glm::mat4& projection, const Utility::Window* window) {
-    const glm::mat4 viewMatrix = glm::inverse(camera->GetModelMatrix());
+    const glm::mat4 viewMatrix = glm::inverse(camera->GetWorldModelMatrix());
     double mouseX = Managers().inputManager->GetCursorX();
     double mouseY = Managers().inputManager->GetCursorY();
 
