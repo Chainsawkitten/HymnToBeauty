@@ -5,6 +5,7 @@
 #include <typeindex>
 #include <json/json.h>
 #include <glm/gtc/quaternion.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 #include "../Component/SuperComponent.hpp"
 #include <fstream>

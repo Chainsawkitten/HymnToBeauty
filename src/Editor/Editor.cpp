@@ -581,7 +581,7 @@ void Editor::Picking() {
 void Editor::Focus() {
     if (Managers().inputManager->Triggered(InputManager::FOCUS)) {
         if (selectedEntity != nullptr) {
-            glm::vec3 backward = glm::normalize(cameraEntity->position - selectedEntity->position);
+            const glm::vec3 backward = glm::normalize(cameraEntity->position - selectedEntity->position);
 
             while (glm::length(selectedEntity->position - cameraEntity->position) > 10)
                 cameraEntity->position -= backward;
@@ -589,8 +589,7 @@ void Editor::Focus() {
             while (glm::length(selectedEntity->position - cameraEntity->position) < 10)
                 cameraEntity->position += backward;
 
-            glm::vec3 camDirection = selectedEntity->position - cameraEntity->position;
-            glm::normalize(camDirection);
+            const glm::vec3 camDirection = glm::normalize(selectedEntity->position - cameraEntity->position);
 
             float yaw = std::atan2(camDirection.x, -camDirection.z);
             cameraEntity->RotateYaw(yaw);
