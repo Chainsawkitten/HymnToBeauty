@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"struct_resource_list_1_1_resource_folder.html#a7d48b72568c2f8421add2d8171a66d85":[6,0,26,1,2],
 "struct_resource_list_1_1_resource_folder.html#af25ea088596701a62b985178048e0fc3":[6,0,26,1,1],
 "struct_video_1_1_buffer_allocation.html":[6,0,8,3],
 "struct_video_1_1_buffer_allocation.html":[5,0,13,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "struct_video_1_1_post_processing_1_1_configuration.html#ae54e21e7765bd845e7244238a07f444f":[5,0,13,32,0,4],
 "struct_video_1_1_post_processing_1_1_configuration.html#ae54e21e7765bd845e7244238a07f444f":[6,0,8,31,0,4],
 "struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[6,0,8,31,0,0],
-"struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[5,0,13,32,0,0],
-"struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html#a57bb973419ed033ae517dede3376630d":[5,0,13,32,0,0,3]
+"struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[5,0,13,32,0,0]
 };

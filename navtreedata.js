@@ -69,21 +69,21 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_android_main_8cpp.html",
-"_implementation_8hpp.html",
-"_sphere_8hpp_source.html",
-"_your_first_hymn__scenes_entities.html#ReparenEntity",
+"_implementation_8cpp.html#a8dcb62ad669850d3b81e035dee2b71a4",
+"_sphere_8hpp.html",
+"_your_first_hymn__scenes_entities.html#RenamingScene",
 "class_component_1_1_super_component.html#aa1e0f0198ac50e01c848d6ed026bc188",
 "class_g_u_i_1_1_folder_name_window.html#ae9dce12e48f7bfb2494d75a8edf78eb5",
-"class_hub.html#a715ad901dfab564c8306e0cf1ad60875",
+"class_hub.html#a6b2918b759cb3682cd795b9075c1303a",
 "class_profiling_1_1_timeline.html#a45288b85625c30cf926a71c7edacc037",
-"class_utility_1_1_window.html#a6e52081b7d7a5d6ccd1ca04b82a90d68",
-"class_video_1_1_isocahedron.html#ab700cdcc50e29c1696dc765a43144ee6",
-"class_video_1_1_open_g_l_sampler.html#afbdf5dfe98dcaf923d207406cf99288c",
-"class_video_1_1_texture.html#a3ed1085d89cbe4e1bbda0b79177a904e",
-"class_video_1_1_vulkan_renderer.html#a6bfa4f74d10a4d90c9be14463db70f96",
-"class_video_1_1_web_g_p_u_renderer.html#ad7f375496c11a3eb9a0ca4012723259c",
-"namespace_file_system.html#a3da7b12b043026596e506d03666cc0f5",
-"struct_resource_list_1_1_resource_folder.html#af25ea088596701a62b985178048e0fc3",
+"class_utility_1_1_window.html#a53a47859b3913083cd6b2913063623a6",
+"class_video_1_1_isocahedron.html#aab1b9db766f3fab8a3a91c3e0530c08d",
+"class_video_1_1_open_g_l_sampler.html#a8a972de50640086310144541118657f6",
+"class_video_1_1_texture.html#a3085d9db538563099a9bb4392485f52c",
+"class_video_1_1_vulkan_renderer.html#a681c91e3d618f67e6c74467c061675de",
+"class_video_1_1_web_g_p_u_renderer.html#ad32f46a11d4760ff4bbaaa02a94be78b",
+"namespace_file_system.html#a3858880c6786116aed8955b5e5688cce",
+"struct_resource_list_1_1_resource_folder.html#a7d48b72568c2f8421add2d8171a66d85",
 "struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html#a57bb973419ed033ae517dede3376630d"
 ];
 

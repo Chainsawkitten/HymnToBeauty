@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"_sphere_8hpp.html":[7,0,1,4,0,5],
 "_sphere_8hpp_source.html":[7,0,1,4,0,5],
 "_sphere_shape_editor_8cpp.html":[7,0,1,0,0,0,25],
 "_sphere_shape_editor_8hpp.html":[7,0,1,0,0,0,26],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "_your_first_hymn__scenes_entities.html#DeleteEntity":[0,1,2,4],
 "_your_first_hymn__scenes_entities.html#EditEntity":[0,1,2,5],
 "_your_first_hymn__scenes_entities.html#Navigating3D":[0,1,2,1],
-"_your_first_hymn__scenes_entities.html#NavigatingSceneTree":[0,1,2,0],
-"_your_first_hymn__scenes_entities.html#RenamingScene":[0,1,2,2]
+"_your_first_hymn__scenes_entities.html#NavigatingSceneTree":[0,1,2,0]
 };

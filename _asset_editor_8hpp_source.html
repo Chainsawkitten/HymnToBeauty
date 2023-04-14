@@ -91,41 +91,40 @@ $(document).ready(function(){initNavTree('_asset_editor_8hpp_source.html',''); i
 <a href="_asset_editor_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno"><a class="line" href="namespace_geometry.html">    6</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_geometry.html">Geometry</a> {</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">class </span><a class="code hl_class" href="class_geometry_1_1_model.html">Model</a>;</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>}</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="namespace_g_u_i.html">   10</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_g_u_i.html">GUI</a> {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="class_g_u_i_1_1_asset_editor.html">   12</a></span><span class="keyword">class </span><a class="code hl_class" href="class_g_u_i_1_1_asset_editor.html">AssetEditor</a> {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#ae159c90d3a8b6be91d9a54a3cf810ef1">AssetEditor</a>();</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#aba6c3c44fd391c7b9336999b9c37117c">Show</a>();</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keyword">const</span> <a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>* <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#af5d427a262c646c7e583368a58b28567">GetModel</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#af83d3bbf260250033896bb1d052c2dd7">SetModel</a>(<a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>* model);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#a6257754508daf1724b40c56cf0982762">IsVisible</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#a798adfe77fa7a99de23a6942560f5866">SetVisible</a>(<span class="keywordtype">bool</span> visible);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>* model = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">bool</span> visible = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">char</span> name[128];</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    std::string destination;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>} <span class="comment">// namespace GUI</span></div>
-<div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html">GUI::AssetEditor</a></div><div class="ttdoc">Used to edit models.</div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:12</div></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="namespace_geometry.html">    5</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_geometry.html">Geometry</a> {</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">class </span><a class="code hl_class" href="class_geometry_1_1_model.html">Model</a>;</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>}</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="namespace_g_u_i.html">    9</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_g_u_i.html">GUI</a> {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="class_g_u_i_1_1_asset_editor.html">   11</a></span><span class="keyword">class </span><a class="code hl_class" href="class_g_u_i_1_1_asset_editor.html">AssetEditor</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#ae159c90d3a8b6be91d9a54a3cf810ef1">AssetEditor</a>();</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#aba6c3c44fd391c7b9336999b9c37117c">Show</a>();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">const</span> <a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>* <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#af5d427a262c646c7e583368a58b28567">GetModel</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#af83d3bbf260250033896bb1d052c2dd7">SetModel</a>(<a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>* model);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#a6257754508daf1724b40c56cf0982762">IsVisible</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_g_u_i_1_1_asset_editor.html#a798adfe77fa7a99de23a6942560f5866">SetVisible</a>(<span class="keywordtype">bool</span> visible);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_class" href="class_geometry_1_1_model.html">Geometry::Model</a>* model = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">bool</span> visible = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">char</span> name[128];</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    std::string destination;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>};</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>} <span class="comment">// namespace GUI</span></div>
+<div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html">GUI::AssetEditor</a></div><div class="ttdoc">Used to edit models.</div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:11</div></div>
 <div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html_a6257754508daf1724b40c56cf0982762"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html#a6257754508daf1724b40c56cf0982762">GUI::AssetEditor::IsVisible</a></div><div class="ttdeci">bool IsVisible() const</div><div class="ttdoc">Get whether the window is visible.</div><div class="ttdef"><b>Definition:</b> AssetEditor.cpp:53</div></div>
 <div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html_a798adfe77fa7a99de23a6942560f5866"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html#a798adfe77fa7a99de23a6942560f5866">GUI::AssetEditor::SetVisible</a></div><div class="ttdeci">void SetVisible(bool visible)</div><div class="ttdoc">Set whether the window should be visible.</div><div class="ttdef"><b>Definition:</b> AssetEditor.cpp:57</div></div>
 <div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html_aba6c3c44fd391c7b9336999b9c37117c"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html#aba6c3c44fd391c7b9336999b9c37117c">GUI::AssetEditor::Show</a></div><div class="ttdeci">void Show()</div><div class="ttdoc">Show the editor.</div><div class="ttdef"><b>Definition:</b> AssetEditor.cpp:22</div></div>
@@ -133,8 +132,8 @@ $(document).ready(function(){initNavTree('_asset_editor_8hpp_source.html',''); i
 <div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html_af5d427a262c646c7e583368a58b28567"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html#af5d427a262c646c7e583368a58b28567">GUI::AssetEditor::GetModel</a></div><div class="ttdeci">const Geometry::Model * GetModel() const</div><div class="ttdoc">Get the model being edited.</div><div class="ttdef"><b>Definition:</b> AssetEditor.cpp:41</div></div>
 <div class="ttc" id="aclass_g_u_i_1_1_asset_editor_html_af83d3bbf260250033896bb1d052c2dd7"><div class="ttname"><a href="class_g_u_i_1_1_asset_editor.html#af83d3bbf260250033896bb1d052c2dd7">GUI::AssetEditor::SetModel</a></div><div class="ttdeci">void SetModel(Geometry::Model *model)</div><div class="ttdoc">Set the model to edit.</div><div class="ttdef"><b>Definition:</b> AssetEditor.cpp:45</div></div>
 <div class="ttc" id="aclass_geometry_1_1_model_html"><div class="ttname"><a href="class_geometry_1_1_model.html">Geometry::Model</a></div><div class="ttdoc">Interface of a model loaded from a file.</div><div class="ttdef"><b>Definition:</b> Model.hpp:8</div></div>
-<div class="ttc" id="anamespace_g_u_i_html"><div class="ttname"><a href="namespace_g_u_i.html">GUI</a></div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:10</div></div>
-<div class="ttc" id="anamespace_geometry_html"><div class="ttname"><a href="namespace_geometry.html">Geometry</a></div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:6</div></div>
+<div class="ttc" id="anamespace_g_u_i_html"><div class="ttname"><a href="namespace_g_u_i.html">GUI</a></div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:9</div></div>
+<div class="ttc" id="anamespace_geometry_html"><div class="ttname"><a href="namespace_geometry.html">Geometry</a></div><div class="ttdef"><b>Definition:</b> AssetEditor.hpp:5</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
