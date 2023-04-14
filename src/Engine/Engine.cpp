@@ -27,7 +27,7 @@ bool Engine::Start() {
     window = new Utility::Window(configuration.androidWindow);
 #else
     window = new Utility::Window(configuration.width, configuration.height, configuration.fullscreen, configuration.borderless, "Hymn to Beauty",
-                                 configuration.graphicsAPI == Video::Renderer::GraphicsAPI::VULKAN);
+                                 configuration.graphicsAPI == Video::Renderer::GraphicsAPI::VULKAN || configuration.graphicsAPI == Video::Renderer::GraphicsAPI::WEBGPU);
 #endif
 
     Input::GetInstance().SetWindow(window);
