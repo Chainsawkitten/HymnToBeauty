@@ -247,7 +247,7 @@ glm::mat4 Entity::GetModelMatrix() const {
 }
 
 glm::mat4 Entity::GetLocalMatrix() const {
-    glm::mat4 matrix = glm::translate(glm::mat4(), position) * glm::toMat4(GetLocalOrientation()) * glm::scale(glm::mat4(), scale);
+    glm::mat4 matrix = glm::translate(glm::mat4(1.0f), position) * glm::mat4_cast(GetLocalOrientation()) * glm::scale(glm::mat4(1.0f), scale);
     return matrix;
 }
 
@@ -258,7 +258,7 @@ glm::quat Entity::GetLocalOrientation() const {
 glm::quat Entity::GetWorldOrientation() const {
     if (parent != nullptr) {
         auto transform = parent->GetModelMatrix();
-        transform = transform * glm::toMat4(rotation);
+        transform = transform * glm::mat4_cast(rotation);
         return glm::quat_cast(transform);
     }
 

@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
-#include <glm/gtx/quaternion.hpp>
 #include "../Component/RigidBody.hpp"
 #include "../Component/Shape.hpp"
 #include "../Entity/Entity.hpp"
