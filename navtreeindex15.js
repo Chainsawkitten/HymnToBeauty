@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"struct_resource_list_1_1_resource_folder.html":[6,0,26,1],
+"struct_resource_list_1_1_resource_folder.html#a064a0568ec0913902d0876cb6c6e0098":[6,0,26,1,0],
 "struct_resource_list_1_1_resource_folder.html#a7d48b72568c2f8421add2d8171a66d85":[6,0,26,1,2],
 "struct_resource_list_1_1_resource_folder.html#af25ea088596701a62b985178048e0fc3":[6,0,26,1,1],
 "struct_video_1_1_buffer_allocation.html":[6,0,8,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX15 =
 "struct_video_1_1_post_processing_1_1_configuration.html#adfc7eef9f80a973759a41947b2a792e6":[5,0,13,32,0,6],
 "struct_video_1_1_post_processing_1_1_configuration.html#adfc7eef9f80a973759a41947b2a792e6":[6,0,8,31,0,6],
 "struct_video_1_1_post_processing_1_1_configuration.html#ae54e21e7765bd845e7244238a07f444f":[5,0,13,32,0,4],
-"struct_video_1_1_post_processing_1_1_configuration.html#ae54e21e7765bd845e7244238a07f444f":[6,0,8,31,0,4],
-"struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[6,0,8,31,0,0],
-"struct_video_1_1_post_processing_1_1_configuration_1_1_bloom.html":[5,0,13,32,0,0]
+"struct_video_1_1_post_processing_1_1_configuration.html#ae54e21e7765bd845e7244238a07f444f":[6,0,8,31,0,4]
 };

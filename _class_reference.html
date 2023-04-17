@@ -115,18 +115,36 @@ Entity</h1>
  Get child based on its index in child array. Returns null if no child with that name was found.</p>
 <p ><code>uint GetNumChildren() const</code> <br  />
  Get the number of children the entity has.</p>
+<p ><code>const vec3&amp; GetPosition() const</code> <br  />
+ Get the position in local space.</p>
+<p ><code>void SetPosition(const vec3&amp; position)</code> <br  />
+ Set the position in local space.</p>
+<p ><code>vec3 GetWorldPosition() const</code> <br  />
+ Get the position in world space.</p>
+<p ><code>void SetWorldPosition(const vec3&amp; position)</code> <br  />
+ Set the position in world space.</p>
+<p ><code>void Move(const vec3&amp; translation)</code> <br  />
+ Move in local space.</p>
+<p ><code>const vec3&amp; GetScale() const</code> <br  />
+ Get the scale in local space.</p>
+<p ><code>void SetScale(const vec3&amp; scale)</code> <br  />
+ Set the scale in local space.</p>
+<p ><code>const quat&amp; GetRotation() const</code> <br  />
+ Get the rotation in local space.</p>
+<p ><code>void SetRotation(const quat&amp; rotation)</code> <br  />
+ Set the rotation in local space.</p>
+<p ><code>quat GetWorldRotation()</code> <br  />
+ Get the rotation in world space.</p>
+<p ><code>void SetWorldRotation(const quat&amp; rotation)</code> <br  />
+ Set the rotation in world space.</p>
+<p ><code>void RotateAroundWorldAxis(float angle, const vec3&amp; axis)</code> <br  />
+ Rotate quaternion style.</p>
 <p ><code>void RotateYaw(float angle)</code> <br  />
  Rotate the entity around the Y axis.</p>
 <p ><code>void RotatePitch(float angle)</code> <br  />
  Rotate the entity around the X axis.</p>
 <p ><code>void RotateRoll(float angle)</code> <br  />
  Rotate the entity around the Z axis.</p>
-<p ><code>void RotateAroundWorldAxis(float angle, const vec3&amp; axis)</code> <br  />
- Rotate quaternion style.</p>
-<p ><code>void SetWorldOrientation(quat orientation)</code> <br  />
- Set the orientation in world space.</p>
-<p ><code>void SetLocalOrientation(quat orientation)</code> <br  />
- Set the orientation in local space.</p>
 <p ><code><a class="el" href="class_component_1_1_directional_light.html" title="Component describing a directional light source (like the sun).">Component::DirectionalLight</a>@ GetDirectionalLight()</code> <br  />
  Get the entity's directional light component, if it has any. Otherwise returns null.</p>
 <p ><code><a class="el" href="class_component_1_1_camera.html" title="Component handling a camera through which the world can be rendered.">Component::Camera</a>@ GetCamera()</code> <br  />
@@ -148,12 +166,6 @@ Entity</h1>
 <h2>Properties</h2>
 <p ><code>string name</code> <br  />
  The name of the entity.</p>
-<p ><code>vec3 position</code> <br  />
- Position relative to the parent entity.</p>
-<p ><code>vec3 scale</code> <br  />
- Scale.</p>
-<p ><code>quat rotation</code> <br  />
- Rotation.</p>
 <h1><a class="anchor" id="DirectionalLight"></a>
 Component::DirectionalLight</h1>
 <p >A light that is infinitely far away and thus casts parallel rays. Like the sun.</p>

@@ -9,6 +9,5 @@ var searchData=
   ['resourcemanager_6',['resourceManager',['../class_hub.html#ab23b9546dd66b37eec13eb1da5d5ea5c',1,'Hub']]],
   ['resources_7',['resources',['../struct_resource_list_1_1_resource_folder.html#af25ea088596701a62b985178048e0fc3',1,'ResourceList::ResourceFolder']]],
   ['restart_8',['restart',['../class_active_hymn.html#a219ce4dd434712b86a475a749e9c2bb9',1,'ActiveHymn']]],
-  ['rotation_9',['rotation',['../class_entity.html#a8ad343ffb5f6625d7728b8e5423b1d5a',1,'Entity']]],
-  ['roughnessmetallic_10',['roughnessMetallic',['../class_component_1_1_material.html#a31f7bf9deaa8a91272b667ec244bd3b5',1,'Component::Material::roughnessMetallic()'],['../struct_video_1_1_render_scene_1_1_mesh.html#a811ed5ac88c5b9fceb1a74dbc5154a8a',1,'Video::RenderScene::Mesh::roughnessMetallic()']]]
+  ['roughnessmetallic_9',['roughnessMetallic',['../class_component_1_1_material.html#a31f7bf9deaa8a91272b667ec244bd3b5',1,'Component::Material::roughnessMetallic()'],['../struct_video_1_1_render_scene_1_1_mesh.html#a811ed5ac88c5b9fceb1a74dbc5154a8a',1,'Video::RenderScene::Mesh::roughnessMetallic()']]]
 ];
