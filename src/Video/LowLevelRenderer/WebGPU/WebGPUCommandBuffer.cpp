@@ -253,6 +253,7 @@ void WebGPUCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
     entry.binding = 0;
     entry.buffer = static_cast<const WebGPUBuffer*>(uniformBuffer)->GetBuffer();
     entry.size = uniformBuffer->GetSize();
+    entry.offset = static_cast<const WebGPUBuffer*>(uniformBuffer)->GetOffset();
 
     WGPUBindGroupDescriptor bindGroupDescriptor = {};
     bindGroupDescriptor.layout = currentGraphicsPipeline->GetShaderProgram()->GetBindGroupLayouts()[bindingType];
@@ -280,6 +281,7 @@ void WebGPUCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
         entries[i].binding = i;
         entries[i].buffer = static_cast<const WebGPUBuffer*>(buffer)->GetBuffer();
         entries[i].size = buffer->GetSize();
+        entries[i].offset = static_cast<const WebGPUBuffer*>(buffer)->GetOffset();
 
         ++i;
     }
@@ -554,6 +556,7 @@ void WebGPUCommandBuffer::UpdateUniforms() {
         entries[bindGroupDescriptor.entryCount].binding = 0;
         entries[bindGroupDescriptor.entryCount].buffer = currentUniformBuffer->GetBuffer();
         entries[bindGroupDescriptor.entryCount].size = currentUniformBuffer->GetSize();
+        entries[bindGroupDescriptor.entryCount].offset = currentUniformBuffer->GetOffset();
 
         ++bindGroupDescriptor.entryCount;
     }
