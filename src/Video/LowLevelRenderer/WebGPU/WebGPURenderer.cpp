@@ -21,6 +21,7 @@
 #include "WebGPUSampler.hpp"
 #include "WebGPUGraphicsPipeline.hpp"
 #include "WebGPUComputePipeline.hpp"
+#include "WebGPUBufferAllocator.hpp"
 #include "WebGPURenderTargetAllocator.hpp"
 
 #if ANDROID
@@ -54,6 +55,7 @@ WebGPURenderer::WebGPURenderer(::Utility::Window* window) {
     CreateSwapChain(window);
     CreateSamplers();
 
+    bufferAllocator = new WebGPUBufferAllocator(*this);
     renderTargetAllocator = new WebGPURenderTargetAllocator(*this);
 
     // Blitting.
@@ -68,16 +70,13 @@ WebGPURenderer::WebGPURenderer(::Utility::Window* window) {
     configuration.blendMode = BlendMode::NONE;
     configuration.depthMode = DepthMode::NONE;
     blitGraphicsPipeline = CreateGraphicsPipeline(blitShaderProgram, configuration);
-
-    //TestRendering();
 }
 
 WebGPURenderer::~WebGPURenderer() {
-    ReleaseTemporaryBuffers();
-
     for (uint32_t i = 0; i < static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT); ++i) {
         delete samplers[i];
     }
+    delete bufferAllocator;
     delete renderTargetAllocator;
 
     delete blitGraphicsPipeline;
@@ -100,7 +99,7 @@ CommandBuffer* WebGPURenderer::CreateCommandBuffer() {
 }
 
 void WebGPURenderer::BeginFrame() {
-    ReleaseTemporaryBuffers();
+    bufferAllocator->BeginFrame();
 
     // Acquire next swap chain image.
     currentFrame = wgpuSwapChainGetCurrentTextureView(swapChain);
@@ -126,13 +125,11 @@ void WebGPURenderer::Present() {
 }
 
 Buffer* WebGPURenderer::CreateBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data) {
-    return new WebGPUBuffer(device, bufferUsage, size, data);
+    return bufferAllocator->CreateBuffer(bufferUsage, size, data);
 }
 
 Buffer* WebGPURenderer::CreateTemporaryBuffer(Buffer::BufferUsage bufferUsage, uint32_t size, const void* data) {
-    WebGPUBuffer* buffer = new WebGPUBuffer(device, bufferUsage, size ,data);
-    temporaryBuffers.push_back(buffer);
-    return buffer;
+    return bufferAllocator->CreateTemporaryBuffer(bufferUsage, size, data);
 }
 
 VertexDescription* WebGPURenderer::CreateVertexDescription(unsigned int attributeCount, const VertexDescription::Attribute* attributes, bool indexBuffer) {
@@ -534,13 +531,6 @@ void WebGPURenderer::CreateSamplers() {
                                         static_cast<Sampler::Filter>(i / static_cast<uint32_t>(Sampler::Filter::COUNT)),
                                         static_cast<Sampler::Clamping>(i % static_cast<uint32_t>(Sampler::Filter::COUNT)));
     }
-}
-
-void WebGPURenderer::ReleaseTemporaryBuffers() {
-    for (WebGPUBuffer* buffer : temporaryBuffers) {
-        delete buffer;
-    }
-    temporaryBuffers.clear();
 }
 
 } // namespace Video

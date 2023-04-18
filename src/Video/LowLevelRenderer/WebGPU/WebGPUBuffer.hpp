@@ -13,12 +13,10 @@ class WebGPUBuffer : public Buffer {
   public:
     /// Create new WebGPU buffer.
     /**
-     * @param device The WebGPU device.
      * @param bufferUsage How the buffer will be used.
-     * @param size The size of the buffer.
-     * @param data Data to initialie the buffer with.
+     * @param allocation The allocation to encapsulate.
      */
-    WebGPUBuffer(WGPUDevice device, Buffer::BufferUsage bufferUsage, uint32_t size, const void* data = nullptr);
+    WebGPUBuffer(Buffer::BufferUsage bufferUsage, const BufferAllocation& allocation);
 
     /// Destructor.
     ~WebGPUBuffer() final;
@@ -32,11 +30,20 @@ class WebGPUBuffer : public Buffer {
      */
     WGPUBuffer GetBuffer() const;
 
+    /// Get the offset into the raw buffer.
+    /**
+     * @return The offset into the raw buffer.
+     */
+    uint32_t GetOffset() const;
+
   private:
     WebGPUBuffer(const WebGPUBuffer& other) = delete;
 
+    RawBuffer* rawBuffer;
     WGPUBuffer buffer;
+    uint32_t offset = 0;
     uint32_t size = 0;
+    bool temporaryAllocation;
 };
 
 }

@@ -13,6 +13,7 @@ class Window;
 namespace Video {
 
 class WebGPUBuffer;
+class WebGPUBufferAllocator;
 class WebGPUSampler;
 class WebGPURenderTargetAllocator;
 class WebGPUTexture;
@@ -116,8 +117,6 @@ class WebGPURenderer : public LowLevelRenderer {
     void CreateSwapChain(::Utility::Window* window);
     void CreateSamplers();
 
-    void ReleaseTemporaryBuffers();
-
     WGPUInstance instance;
     WGPUSurface surface;
     WGPUAdapter adapter;
@@ -128,14 +127,13 @@ class WebGPURenderer : public LowLevelRenderer {
 
     WebGPUSampler* samplers[static_cast<uint32_t>(Sampler::Filter::COUNT) * static_cast<uint32_t>(Sampler::Clamping::COUNT)];
     
+    WebGPUBufferAllocator* bufferAllocator;
     WebGPURenderTargetAllocator* renderTargetAllocator;
 
     OptionalFeatures optionalFeatures;
 
     glm::uvec2 swapChainSize;
     WGPUTextureFormat swapChainFormat;
-
-    std::vector<WebGPUBuffer*> temporaryBuffers;
 
     // Blitting to swap chain.
     Shader* blitVertexShader;

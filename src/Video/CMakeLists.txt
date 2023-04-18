@@ -168,6 +168,7 @@ if (WebGPURenderer)
         ${SRCS}
         LowLevelRenderer/WebGPU/WebGPURenderer.cpp
         LowLevelRenderer/WebGPU/WebGPUBuffer.cpp
+        LowLevelRenderer/WebGPU/WebGPUBufferAllocator.cpp
         LowLevelRenderer/WebGPU/WebGPUCommandBuffer.cpp
         LowLevelRenderer/WebGPU/WebGPUComputePipeline.cpp
         LowLevelRenderer/WebGPU/WebGPUGeometryBinding.cpp
@@ -185,6 +186,7 @@ if (WebGPURenderer)
         LowLevelRenderer/WebGPU/WebGPU.hpp
         LowLevelRenderer/WebGPU/WebGPURenderer.hpp
         LowLevelRenderer/WebGPU/WebGPUBuffer.hpp
+        LowLevelRenderer/WebGPU/WebGPUBufferAllocator.hpp
         LowLevelRenderer/WebGPU/WebGPUCommandBuffer.hpp
         LowLevelRenderer/WebGPU/WebGPUComputePipeline.hpp
         LowLevelRenderer/WebGPU/WebGPUGeometryBinding.hpp
