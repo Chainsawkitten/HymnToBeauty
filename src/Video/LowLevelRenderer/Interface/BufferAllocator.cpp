@@ -11,12 +11,14 @@ BufferAllocator::BufferAllocator(uint32_t frames) {
     usedBufferObjects = new std::vector<Buffer*>[frames];
 
     pools = new Pool[frames];
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
     for (uint32_t i = 0; i < frames; ++i) {
         for (uint32_t usage = 0; usage < static_cast<uint32_t>(Buffer::BufferUsage::COUNT); ++usage) {
-            pools[frame].currentRawBuffer[usage] = 0;
-            pools[frame].currentOffset[usage] = 0;
+            pools[i].subPools[usage].currentRawBuffer = 0;
+            pools[i].subPools[usage].currentOffset = 0;
         }
     }
+#endif
 }
 
 BufferAllocator::~BufferAllocator() {
@@ -30,9 +32,17 @@ BufferAllocator::~BufferAllocator() {
         }
 
         for (uint32_t usage = 0; usage < static_cast<uint32_t>(Buffer::BufferUsage::COUNT); ++usage) {
-            for (RawBuffer* rawBuffer : pools[i].rawBuffers[usage]) {
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+            for (RawBuffer* rawBuffer : pools[i].subPools[usage].rawBuffers) {
                 delete rawBuffer;
             }
+#elif HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_WHOLE
+            for (auto& it : pools[i].subPools[usage]) {
+                for (RawBuffer* rawBuffer : it.second.rawBuffers) {
+                    delete rawBuffer;
+                }
+            }
+#endif
         }
     }
     delete[] freeBufferObjects;
@@ -49,8 +59,14 @@ void BufferAllocator::BeginFrame() {
     usedBufferObjects[frame].clear();
 
     for (uint32_t usage = 0; usage < static_cast<uint32_t>(Buffer::BufferUsage::COUNT); ++usage) {
-        pools[frame].currentRawBuffer[usage] = 0;
-        pools[frame].currentOffset[usage] = 0;
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+        pools[frame].subPools[usage].currentRawBuffer = 0;
+        pools[frame].subPools[usage].currentOffset = 0;
+#elif HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_WHOLE
+        for (auto& it : pools[frame].subPools[usage]) {
+            it.second.currentRawBuffer = 0;
+        }
+#endif
     }
 }
 
@@ -92,26 +108,41 @@ BufferAllocation BufferAllocator::AllocateTemporary(Buffer::BufferUsage bufferUs
     /// @todo Handle large allocations.
     assert(size < poolSize);
 
-    // Use next buffer if we've run out of space in the current one.
+    // Get the sub pool.
     uint32_t bufferUsageInt = static_cast<uint32_t>(bufferUsage);
-    if (pools[frame].currentOffset[bufferUsageInt] + size > poolSize) {
-        pools[frame].currentRawBuffer[bufferUsageInt]++;
-        pools[frame].currentOffset[bufferUsageInt] = 0;
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+    SubPool& subPool = pools[frame].subPools[bufferUsageInt];
+#elif HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_WHOLE
+    SubPool& subPool = pools[frame].subPools[bufferUsageInt][size];
+#endif
+
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+    // Use next buffer if we've run out of space in the current one.
+    if (subPool.currentOffset + size > poolSize) {
+        subPool.currentRawBuffer++;
+        subPool.currentOffset = 0;
     }
+#endif
 
     // Get a new allocation if we don't have any more buffers to suballocate from.
-    if (pools[frame].rawBuffers[bufferUsageInt].size() <= pools[frame].currentRawBuffer[bufferUsageInt]) {
-        pools[frame].rawBuffers[bufferUsageInt].push_back(Allocate(bufferUsage, true, poolSize));
+    if (subPool.rawBuffers.size() <= subPool.currentRawBuffer) {
+       subPool.rawBuffers.push_back(Allocate(bufferUsage, true, poolSize));
     }
 
     // Suballocate.
     BufferAllocation allocation;
-    allocation.buffer = pools[frame].rawBuffers[bufferUsageInt][pools[frame].currentRawBuffer[bufferUsageInt]];
-    allocation.offset = pools[frame].currentOffset[bufferUsageInt];
+    allocation.buffer = subPool.rawBuffers[subPool.currentRawBuffer];
     allocation.size = size;
     allocation.temporaryAllocation = true;
 
-    pools[frame].currentOffset[bufferUsageInt] += size;
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+    allocation.offset = subPool.currentOffset;
+    subPool.currentOffset += size;
+#elif HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_WHOLE
+    allocation.offset = 0;
+
+    subPool.currentRawBuffer++;
+#endif
 
     return allocation;
 }
