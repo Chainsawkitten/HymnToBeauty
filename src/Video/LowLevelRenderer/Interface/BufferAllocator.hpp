@@ -2,7 +2,18 @@
 
 #include <cstdint>
 #include <vector>
+#include <map>
 #include "Buffer.hpp"
+
+// There are two different strategies for temporary buffer allocation.
+// HYMN_BUFFER_STRATEGY_WHOLE:
+//  Buffers are allocated of the requested size (eg. a 128B request results in a 128B buffer).
+// HYMN_BUFFER_STRATEGY_SUBALLOCATE
+//  1 MB large buffers are allocated and requests are satisfied by sub-allocating from these (eg. a 128B request results in an offset into a 1MB buffer).
+
+#define HYMN_BUFFER_STRATEGY_SUBALLOCATE 0
+#define HYMN_BUFFER_STRATEGY_WHOLE 1
+#define HYMN_BUFFER_STRATEGY HYMN_BUFFER_STRATEGY_SUBALLOCATE
 
 namespace Video {
 
@@ -92,11 +103,23 @@ class BufferAllocator {
     std::vector<Buffer*>* freeBufferObjects;
     std::vector<Buffer*>* usedBufferObjects;
 
-    struct Pool {
-        std::vector<RawBuffer*> rawBuffers[static_cast<uint32_t>(Buffer::BufferUsage::COUNT)];
-        uint32_t currentRawBuffer[static_cast<uint32_t>(Buffer::BufferUsage::COUNT)];
-        uint32_t currentOffset[static_cast<uint32_t>(Buffer::BufferUsage::COUNT)];
+    struct SubPool {
+        std::vector<RawBuffer*> rawBuffers;
+        uint32_t currentRawBuffer = 0;
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+        uint32_t currentOffset;
+#endif
     };
+
+#if HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_SUBALLOCATE
+    struct Pool {
+        SubPool subPools[static_cast<uint32_t>(Buffer::BufferUsage::COUNT)];
+    };
+#elif HYMN_BUFFER_STRATEGY == HYMN_BUFFER_STRATEGY_WHOLE
+    struct Pool {
+        std::map<uint32_t, SubPool> subPools[static_cast<uint32_t>(Buffer::BufferUsage::COUNT)];
+    };
+#endif
 
     Pool* pools;
 };
