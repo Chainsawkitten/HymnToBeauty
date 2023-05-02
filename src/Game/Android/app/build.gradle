@@ -26,6 +26,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.debug
+            debuggable true
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
     externalNativeBuild {
