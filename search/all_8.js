@@ -4,8 +4,8 @@ var searchData=
   ['handle_5fcmd_1',['handle_cmd',['../_android_main_8cpp.html#a483ba646c5dec83e8db67d646b00302f',1,'AndroidMain.cpp']]],
   ['handledebugmessage_2',['HandleDebugMessage',['../namespace_video.html#aa1c4ea527f6f0b8305b78648895a0e59',1,'Video']]],
   ['haschild_3',['HasChild',['../class_entity.html#afe224c5a6ce94dddf7ec2bf5b4d3275c',1,'Entity']]],
-  ['hascolorattachment_4',['hasColorAttachment',['../struct_video_1_1_vulkan_render_pass_1_1_compatibility.html#adc22ca3a577ee0ecc17aa229a82bdb5a',1,'Video::VulkanRenderPass::Compatibility::hasColorAttachment()'],['../struct_video_1_1_web_g_p_u_graphics_pipeline_1_1_render_pass_description.html#a1141ca60ea88872c089039cded613049',1,'Video::WebGPUGraphicsPipeline::RenderPassDescription::hasColorAttachment()']]],
-  ['hascolorattachment_5',['HasColorAttachment',['../class_video_1_1_vulkan_render_pass.html#a90cca9ffbc333d4d386b0672a0f33752',1,'Video::VulkanRenderPass']]],
+  ['hascolorattachment_4',['HasColorAttachment',['../class_video_1_1_vulkan_render_pass.html#a90cca9ffbc333d4d386b0672a0f33752',1,'Video::VulkanRenderPass']]],
+  ['hascolorattachment_5',['hasColorAttachment',['../struct_video_1_1_vulkan_render_pass_1_1_compatibility.html#adc22ca3a577ee0ecc17aa229a82bdb5a',1,'Video::VulkanRenderPass::Compatibility::hasColorAttachment()'],['../struct_video_1_1_web_g_p_u_graphics_pipeline_1_1_render_pass_description.html#a1141ca60ea88872c089039cded613049',1,'Video::WebGPUGraphicsPipeline::RenderPassDescription::hasColorAttachment()']]],
   ['hasdepthattachment_6',['HasDepthAttachment',['../class_video_1_1_vulkan_render_pass.html#a5c9f78a1efec7c21040efef3bc769cf8',1,'Video::VulkanRenderPass']]],
   ['hasdepthattachment_7',['hasDepthAttachment',['../struct_video_1_1_vulkan_render_pass_1_1_compatibility.html#a505c6bcff89199dc73520ed097e1de09',1,'Video::VulkanRenderPass::Compatibility::hasDepthAttachment()'],['../struct_video_1_1_web_g_p_u_graphics_pipeline_1_1_render_pass_description.html#a2ea499ab402eb4df8c48b66f9090a23e',1,'Video::WebGPUGraphicsPipeline::RenderPassDescription::hasDepthAttachment()']]],
   ['hasdepthclipcontrol_8',['HasDepthClipControl',['../class_video_1_1_web_g_p_u_renderer.html#ab77844f25f7de4fbbdaad389de1dd5b4',1,'Video::WebGPURenderer']]],
@@ -20,5 +20,8 @@ var searchData=
   ['hymn_17',['Hymn',['../class_active_hymn.html#ae5eb408a98330488fe141db6b6e2814b',1,'ActiveHymn::Hymn()'],['../_hymn_8hpp.html#ae5eb408a98330488fe141db6b6e2814b',1,'Hymn():&#160;Hymn.cpp'],['../_hymn_8cpp.html#ae5eb408a98330488fe141db6b6e2814b',1,'Hymn():&#160;Hymn.cpp']]],
   ['hymn_20to_20beauty_18',['Hymn to Beauty',['../index.html',1,'']]],
   ['hymn_2ecpp_19',['Hymn.cpp',['../_hymn_8cpp.html',1,'']]],
-  ['hymn_2ehpp_20',['Hymn.hpp',['../_hymn_8hpp.html',1,'']]]
+  ['hymn_2ehpp_20',['Hymn.hpp',['../_hymn_8hpp.html',1,'']]],
+  ['hymn_5fbuffer_5fstrategy_21',['HYMN_BUFFER_STRATEGY',['../_buffer_allocator_8hpp.html#a399bff153cccee1b4d4aa6fd8b47a7af',1,'BufferAllocator.hpp']]],
+  ['hymn_5fbuffer_5fstrategy_5fsuballocate_22',['HYMN_BUFFER_STRATEGY_SUBALLOCATE',['../_buffer_allocator_8hpp.html#a47eb8f9a29570bf917aa5aa5c018f1ab',1,'BufferAllocator.hpp']]],
+  ['hymn_5fbuffer_5fstrategy_5fwhole_23',['HYMN_BUFFER_STRATEGY_WHOLE',['../_buffer_allocator_8hpp.html#a2a90e5eb92496c0b375f1813b37fa2ed',1,'BufferAllocator.hpp']]]
 ];

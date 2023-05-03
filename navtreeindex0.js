@@ -16,6 +16,9 @@ var NAVTREEINDEX0 =
 "_buffer_8hpp_source.html":[7,0,1,4,3,0,0],
 "_buffer_allocator_8cpp.html":[7,0,1,4,3,0,1],
 "_buffer_allocator_8hpp.html":[7,0,1,4,3,0,2],
+"_buffer_allocator_8hpp.html#a2a90e5eb92496c0b375f1813b37fa2ed":[7,0,1,4,3,0,2,5],
+"_buffer_allocator_8hpp.html#a399bff153cccee1b4d4aa6fd8b47a7af":[7,0,1,4,3,0,2,3],
+"_buffer_allocator_8hpp.html#a47eb8f9a29570bf917aa5aa5c018f1ab":[7,0,1,4,3,0,2,4],
 "_buffer_allocator_8hpp_source.html":[7,0,1,4,3,0,2],
 "_building.html":[0,0],
 "_building_android.html":[0,0,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX0 =
 "_hymn_8hpp_source.html":[7,0,1,1,13],
 "_i_shape_editor_8hpp.html":[7,0,1,0,0,0,14],
 "_i_shape_editor_8hpp_source.html":[7,0,1,0,0,0,14],
-"_implementation_8cpp.html":[7,0,1,0,1,2],
-"_implementation_8cpp.html#a0f6a7e4161fc6ecae9ab7724a9a62535":[7,0,1,0,1,2,2],
-"_implementation_8cpp.html#a18dbb644d50dcac27480d3ea68d9c2ca":[7,0,1,0,1,2,3],
-"_implementation_8cpp.html#a3d4901ea6ceb03ecdb05361aeca832f2":[7,0,1,0,1,2,1]
+"_implementation_8cpp.html":[7,0,1,0,1,2]
 };

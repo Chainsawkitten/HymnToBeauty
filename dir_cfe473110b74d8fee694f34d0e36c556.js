@@ -4,11 +4,7 @@ var dir_cfe473110b74d8fee694f34d0e36c556 =
       [ "Video::Buffer", "class_video_1_1_buffer.html", "class_video_1_1_buffer" ]
     ] ],
     [ "BufferAllocator.cpp", "_buffer_allocator_8cpp.html", null ],
-    [ "BufferAllocator.hpp", "_buffer_allocator_8hpp.html", [
-      [ "Video::RawBuffer", "class_video_1_1_raw_buffer.html", "class_video_1_1_raw_buffer" ],
-      [ "Video::BufferAllocation", "struct_video_1_1_buffer_allocation.html", "struct_video_1_1_buffer_allocation" ],
-      [ "Video::BufferAllocator", "class_video_1_1_buffer_allocator.html", "class_video_1_1_buffer_allocator" ]
-    ] ],
+    [ "BufferAllocator.hpp", "_buffer_allocator_8hpp.html", "_buffer_allocator_8hpp" ],
     [ "CommandBuffer.hpp", "_command_buffer_8hpp.html", [
       [ "Video::CommandBuffer", "class_video_1_1_command_buffer.html", "class_video_1_1_command_buffer" ]
     ] ],

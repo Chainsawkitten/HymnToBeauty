@@ -14,7 +14,8 @@ var hierarchy =
     [ "Video::BufferAllocation", "struct_video_1_1_buffer_allocation.html", null ],
     [ "Video::BufferAllocator", "class_video_1_1_buffer_allocator.html", [
       [ "Video::OpenGLBufferAllocator", "class_video_1_1_open_g_l_buffer_allocator.html", null ],
-      [ "Video::VulkanBufferAllocator", "class_video_1_1_vulkan_buffer_allocator.html", null ]
+      [ "Video::VulkanBufferAllocator", "class_video_1_1_vulkan_buffer_allocator.html", null ],
+      [ "Video::WebGPUBufferAllocator", "class_video_1_1_web_g_p_u_buffer_allocator.html", null ]
     ] ],
     [ "Input::Button", "struct_input_1_1_button.html", null ],
     [ "Video::RenderScene::Camera", "struct_video_1_1_render_scene_1_1_camera.html", null ],
@@ -123,7 +124,8 @@ var hierarchy =
     [ "Utility::Queue< T >", "class_utility_1_1_queue.html", null ],
     [ "Video::RawBuffer", "class_video_1_1_raw_buffer.html", [
       [ "Video::OpenGLRawBuffer", "class_video_1_1_open_g_l_raw_buffer.html", null ],
-      [ "Video::VulkanRawBuffer", "class_video_1_1_vulkan_raw_buffer.html", null ]
+      [ "Video::VulkanRawBuffer", "class_video_1_1_vulkan_raw_buffer.html", null ],
+      [ "Video::WebGPURawBuffer", "class_video_1_1_web_g_p_u_raw_buffer.html", null ]
     ] ],
     [ "RayIntersection", "class_ray_intersection.html", null ],
     [ "Video::Renderer", "class_video_1_1_renderer.html", null ],

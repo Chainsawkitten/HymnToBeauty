@@ -5,6 +5,11 @@ var dir_f18f53dd52cfb2ffe51ba718fb83a1ea =
     [ "WebGPUBuffer.hpp", "_web_g_p_u_buffer_8hpp.html", [
       [ "Video::WebGPUBuffer", "class_video_1_1_web_g_p_u_buffer.html", "class_video_1_1_web_g_p_u_buffer" ]
     ] ],
+    [ "WebGPUBufferAllocator.cpp", "_web_g_p_u_buffer_allocator_8cpp.html", null ],
+    [ "WebGPUBufferAllocator.hpp", "_web_g_p_u_buffer_allocator_8hpp.html", [
+      [ "Video::WebGPURawBuffer", "class_video_1_1_web_g_p_u_raw_buffer.html", "class_video_1_1_web_g_p_u_raw_buffer" ],
+      [ "Video::WebGPUBufferAllocator", "class_video_1_1_web_g_p_u_buffer_allocator.html", "class_video_1_1_web_g_p_u_buffer_allocator" ]
+    ] ],
     [ "WebGPUCommandBuffer.cpp", "_web_g_p_u_command_buffer_8cpp.html", null ],
     [ "WebGPUCommandBuffer.hpp", "_web_g_p_u_command_buffer_8hpp.html", [
       [ "Video::WebGPUCommandBuffer", "class_video_1_1_web_g_p_u_command_buffer.html", "class_video_1_1_web_g_p_u_command_buffer" ]
