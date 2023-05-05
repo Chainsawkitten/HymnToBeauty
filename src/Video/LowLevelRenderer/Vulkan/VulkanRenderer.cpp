@@ -317,10 +317,10 @@ unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
     const glm::uvec2 size = texture->GetSize();
     const uint32_t bufferSize = size.x * size.y * 4 * 1;
 
-    // Create image to map.
-    VkImage image;
+    // Create buffer to map.
+    VkBuffer buffer;
     VkDeviceMemory deviceMemory;
-    Utility::CreateImage2D(device, physicalDevice, size, 1, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_LINEAR, VK_IMAGE_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &image, &deviceMemory);
+    Utility::CreateBuffer(device, physicalDevice, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &buffer, &deviceMemory);
 
     // Create command buffer.
     CommandBuffer* commandBuffer = CreateCommandBuffer();
@@ -330,29 +330,19 @@ unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
     // Transition source image to transfer source layout.
     Utility::TransitionImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
-    // Transition destination image to transfer destination layout.
-    Utility::TransitionImage(vkCommandBuffer, image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-    // Copy image.
+    // Copy image to buffer.
     {
-        VkOffset3D blitSize;
-        blitSize.x = size.x;
-        blitSize.y = size.y;
-        blitSize.z = 1;
+        VkBufferImageCopy imageCopyRegion = {};
+        imageCopyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        imageCopyRegion.imageSubresource.layerCount = 1;
+        imageCopyRegion.imageExtent.width = size.x;
+        imageCopyRegion.imageExtent.height = size.y;
+        imageCopyRegion.imageExtent.depth = 1;
+        imageCopyRegion.bufferRowLength = size.x;
+        imageCopyRegion.bufferImageHeight = size.y;
 
-        VkImageBlit imageBlitRegion{};
-        imageBlitRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imageBlitRegion.srcSubresource.layerCount = 1;
-        imageBlitRegion.srcOffsets[1] = blitSize;
-        imageBlitRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imageBlitRegion.dstSubresource.layerCount = 1;
-        imageBlitRegion.dstOffsets[1] = blitSize;
-
-        vkCmdBlitImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &imageBlitRegion, VK_FILTER_NEAREST);
+        vkCmdCopyImageToBuffer(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, buffer, 1, &imageCopyRegion);
     }
-
-    // Transition destination image to general layout.
-    Utility::TransitionImage(vkCommandBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
 
     // Transition source image back.
     Utility::TransitionImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
@@ -360,7 +350,7 @@ unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
     Submit(commandBuffer);
     Wait();
 
-    // Map image memory and copy data.
+    // Map buffer memory and copy data.
     unsigned char* memory;
     vkMapMemory(device, deviceMemory, 0, bufferSize, 0, reinterpret_cast<void**>(&memory));
 
@@ -370,7 +360,7 @@ unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
     vkUnmapMemory(device, deviceMemory);
 
     // Cleanup.
-    vkDestroyImage(device, image, nullptr);
+    vkDestroyBuffer(device, buffer, nullptr);
     vkFreeMemory(device, deviceMemory, nullptr);
 
     delete commandBuffer;
