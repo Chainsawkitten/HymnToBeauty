@@ -55,6 +55,8 @@
 
 #include "ConservativeRasterization.png.hpp"
 
+#include "DepthClamping.png.hpp"
+
 using namespace Video;
 
 static const unsigned int imageSize = 64;
@@ -1291,6 +1293,125 @@ bool ConservativeRasterization(void* data) {
     // Cleanup
     delete commandBuffer;
     delete graphicsPipeline;
+    lowLevelRenderer->FreeRenderTarget(renderTexture);
+    delete shaderProgram;
+    delete vertexShader;
+    delete fragmentShader;
+
+    return result;
+}
+
+bool DepthClamping(void* data) {
+    assert(data != nullptr);
+
+    LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
+
+    // Create render texture.
+    Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
+
+    // Create shaders.
+    Shader* vertexShader = lowLevelRenderer->CreateShader(DRAWVERTEXTRIANGLE_VERT, Shader::Type::VERTEX_SHADER);
+    Shader* fragmentShader = lowLevelRenderer->CreateShader(DRAWTRIANGLE_FRAG, Shader::Type::FRAGMENT_SHADER);
+    ShaderProgram* shaderProgram = lowLevelRenderer->CreateShaderProgram({ vertexShader, fragmentShader });
+
+    // Create vertex description.
+    VertexDescription* vertexDescription;
+    {
+        // Position.
+        VertexDescription::Attribute attributes[2];
+        attributes[0].size = 3;
+        attributes[0].type = VertexDescription::AttributeType::FLOAT;
+        attributes[0].normalized = false;
+
+        // Color.
+        attributes[1].size = 3;
+        attributes[1].type = VertexDescription::AttributeType::FLOAT;
+        attributes[1].normalized = false;
+
+        vertexDescription = lowLevelRenderer->CreateVertexDescription(2, attributes);
+    }
+
+    // Create graphics pipeline.
+    GraphicsPipeline::Configuration configuration = {};
+    configuration.primitiveType = PrimitiveType::TRIANGLE;
+    configuration.polygonMode = PolygonMode::FILL;
+    configuration.cullFace = CullFace::BACK;
+    configuration.blendMode = BlendMode::NONE;
+    configuration.depthMode = DepthMode::NONE;
+
+    GraphicsPipeline* graphicsPipeline[2];
+    graphicsPipeline[0] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, vertexDescription);
+
+    configuration.depthClamp = true;
+
+    graphicsPipeline[1] = lowLevelRenderer->CreateGraphicsPipeline(shaderProgram, configuration, vertexDescription);
+
+    // Create vertex buffer.
+    Buffer* vertexBuffer[2];
+    {
+        // x, y, z, r, g, b
+        float vertexData[] = {
+            -0.5f, -0.5f, 2.0f, 1.0f, 0.0f, 0.0f,
+             0.0f,  0.5f, 2.0f, 1.0f, 0.0f, 0.0f,
+            -1.0f,  0.5f, 2.0f, 1.0f, 0.0f, 0.0f
+        };
+
+        vertexBuffer[0] = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
+    }
+
+    {
+        // x, y, z, r, g, b
+        float vertexData[] = {
+             0.5f, -0.5f, 2.0f, 0.0f, 1.0f, 0.0f,
+             1.0f,  0.5f, 2.0f, 0.0f, 1.0f, 0.0f,
+             0.0f,  0.5f, 2.0f, 0.0f, 1.0f, 0.0f
+        };
+
+        vertexBuffer[1] = lowLevelRenderer->CreateBuffer(Buffer::BufferUsage::VERTEX_BUFFER, sizeof(vertexData), vertexData);
+    }
+
+    // Create geometry binding.
+    GeometryBinding* geometryBinding[2];
+    geometryBinding[0] = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer[0]);
+    geometryBinding[1] = lowLevelRenderer->CreateGeometryBinding(vertexDescription, vertexBuffer[1]);
+
+    // Create command buffer.
+    CommandBuffer* commandBuffer = lowLevelRenderer->CreateCommandBuffer();
+
+    // Record command buffer.
+    commandBuffer->BeginRenderPass(renderTexture);
+    commandBuffer->BindGraphicsPipeline(graphicsPipeline[0]);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
+    commandBuffer->BindGeometry(geometryBinding[0]);
+    commandBuffer->Draw(3);
+    commandBuffer->BindGraphicsPipeline(graphicsPipeline[1]);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), glm::uvec2(imageSize, imageSize));
+    commandBuffer->BindGeometry(geometryBinding[1]);
+    commandBuffer->Draw(3);
+    commandBuffer->EndRenderPass();
+
+    // Submit the command buffer.
+    lowLevelRenderer->Submit(commandBuffer);
+
+    // Wait for rendering to finish.
+    lowLevelRenderer->Wait();
+
+    // Image verification.
+    ImageVerification imageVerification(lowLevelRenderer, renderTexture);
+    bool result = imageVerification.Compare(DEPTHCLAMPING_PNG, DEPTHCLAMPING_PNG_LENGTH);
+    if (!result) {
+        imageVerification.WritePNG("DepthClamping.png");
+    }
+
+    // Cleanup
+    delete commandBuffer;
+    delete geometryBinding[0];
+    delete geometryBinding[1];
+    delete vertexBuffer[0];
+    delete vertexBuffer[1];
+    delete graphicsPipeline[0];
+    delete graphicsPipeline[1];
+    delete vertexDescription;
     lowLevelRenderer->FreeRenderTarget(renderTexture);
     delete shaderProgram;
     delete vertexShader;

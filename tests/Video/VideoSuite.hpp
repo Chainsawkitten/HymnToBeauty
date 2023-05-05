@@ -142,6 +142,14 @@ bool Attachmentless(void* data);
  */
 bool ConservativeRasterization(void* data);
 
+/// Test depth clamping.
+/**
+ * @param data The low-level renderer.
+ *
+ * @return Whether the test was successful.
+ */
+bool DepthClamping(void* data);
+
 /// Test rendering multiple frames.
 /**
  * @param data The low-level renderer.

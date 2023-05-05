@@ -33,6 +33,7 @@ VideoSuite::VideoSuite(Video::Renderer::GraphicsAPI graphicsAPI) : TestSuite("Vi
     AddTest("DrawLines", DrawLines, &lowLevelRenderer);
     AddTest("Attachmentless", Attachmentless, &lowLevelRenderer);
     AddTest("ConservativeRasterization", ConservativeRasterization, &lowLevelRenderer);
+    AddTest("DepthClamping", DepthClamping, &lowLevelRenderer);
 
     AddTest("MultipleFrames", MultipleFrames, &lowLevelRenderer);
 

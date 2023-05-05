@@ -45,6 +45,7 @@ set(IMAGES
     Video/references/ComputeClearBuffer.png
     Video/references/ComputeSetBuffer.png
     Video/references/ConservativeRasterization.png
+    Video/references/DepthClamping.png
     Video/references/DepthPrePass.png
     Video/references/DrawLines.png
     Video/references/DrawMipmappedTriangle.png
