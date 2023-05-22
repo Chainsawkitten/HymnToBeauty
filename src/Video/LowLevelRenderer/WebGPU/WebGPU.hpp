@@ -2,10 +2,6 @@
 
 #if WEBGPU_BACKEND_DAWN
 #include <dawn/webgpu.h>
-
-/// @todo Remove after updating Dawn
-#define WGPUMipmapFilterMode_Nearest WGPUFilterMode_Nearest
-#define WGPUMipmapFilterMode_Linear WGPUFilterMode_Linear
 #endif
 
 #if WEBGPU_BACKEND_WGPU
