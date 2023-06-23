@@ -61,7 +61,7 @@ using namespace Video;
 
 static const unsigned int imageSize = 64;
 
-bool DrawTriangle(void* data) {
+Result DrawTriangle(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -115,10 +115,10 @@ bool DrawTriangle(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawVertexTriangle(void* data) {
+Result DrawVertexTriangle(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -209,10 +209,10 @@ bool DrawVertexTriangle(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawTexturedTriangle(void* data) {
+Result DrawTexturedTriangle(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -312,10 +312,10 @@ bool DrawTexturedTriangle(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawQuad(void* data) {
+Result DrawQuad(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -419,10 +419,10 @@ bool DrawQuad(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawTriangles(void* data) {
+Result DrawTriangles(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -527,10 +527,10 @@ bool DrawTriangles(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawPushTriangles(void* data) {
+Result DrawPushTriangles(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -632,10 +632,10 @@ bool DrawPushTriangles(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawStorageTriangle(void* data) {
+Result DrawStorageTriangle(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -705,10 +705,10 @@ bool DrawStorageTriangle(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool InvertColors(void* data) {
+Result InvertColors(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -840,10 +840,10 @@ bool InvertColors(void* data) {
     delete invertVertexShader;
     delete invertFragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawMipmappedTriangle(void* data) {
+Result DrawMipmappedTriangle(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -940,10 +940,10 @@ bool DrawMipmappedTriangle(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DepthPrePass(void* data) {
+Result DepthPrePass(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -1057,17 +1057,17 @@ bool DepthPrePass(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DrawLines(void* data) {
+Result DrawLines(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // This test requires fillModeNonSolid
     if (!lowLevelRenderer->GetOptionalFeatures().fillModeNonSolid) {
-        return false;
+        return Result::UNSUPPORTED;
     }
 
     // Create render texture.
@@ -1157,10 +1157,10 @@ bool DrawLines(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool Attachmentless(void* data) {
+Result Attachmentless(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -1236,17 +1236,18 @@ bool Attachmentless(void* data) {
     delete readFragmentShader;
     delete storageBuffer;
 
-    return result;
+    return ToResult(result);
 }
 
-bool ConservativeRasterization(void* data) {
+Result ConservativeRasterization(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
 
     // This is an optional feature.
-    if (!lowLevelRenderer->GetOptionalFeatures().conservativeRasterization)
-        return true;
+    if (!lowLevelRenderer->GetOptionalFeatures().conservativeRasterization) {
+        return Result::UNSUPPORTED;
+    }
 
     // Create render texture.
     Texture* renderTexture = lowLevelRenderer->CreateRenderTarget(glm::uvec2(imageSize, imageSize), Texture::Format::R8G8B8A8);
@@ -1298,10 +1299,10 @@ bool ConservativeRasterization(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool DepthClamping(void* data) {
+Result DepthClamping(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -1417,5 +1418,5 @@ bool DepthClamping(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return result;
+    return ToResult(result);
 }

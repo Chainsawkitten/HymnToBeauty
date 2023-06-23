@@ -36,7 +36,7 @@ using namespace Video;
 
 static const unsigned int imageSize = 64;
 
-bool ComputeSetBuffer(void* data) {
+Result ComputeSetBuffer(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -119,10 +119,10 @@ bool ComputeSetBuffer(void* data) {
     delete computeShaderProgram;
     delete computeShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool ComputeVertexBuffer(void* data) {
+Result ComputeVertexBuffer(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -218,10 +218,10 @@ bool ComputeVertexBuffer(void* data) {
     delete computeShaderProgram;
     delete computeShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool ComputeMultipleBuffers(void* data) {
+Result ComputeMultipleBuffers(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -301,10 +301,10 @@ bool ComputeMultipleBuffers(void* data) {
     delete computeShaderProgram;
     delete computeShader;
 
-    return result;
+    return ToResult(result);
 }
 
-bool ComputeClearBuffer(void* data) {
+Result ComputeClearBuffer(void* data) {
     assert(data != nullptr);
 
     LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
@@ -389,5 +389,5 @@ bool ComputeClearBuffer(void* data) {
     delete computeShaderProgram;
     delete computeShader;
 
-    return result;
+    return ToResult(result);
 }

@@ -44,7 +44,7 @@ class VideoSuite : public TestSuite {
  *
  * @return Whether the test was successful.
  */
-bool DrawTriangle(void* data);
+Result DrawTriangle(void* data);
 
 /// Draw a colored triangle from a vertex buffer.
 /**
@@ -52,7 +52,7 @@ bool DrawTriangle(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawVertexTriangle(void* data);
+Result DrawVertexTriangle(void* data);
 
 /// Draw a textured triangle.
 /**
@@ -60,7 +60,7 @@ bool DrawVertexTriangle(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawTexturedTriangle(void* data);
+Result DrawTexturedTriangle(void* data);
 
 /// Draw a quad using a vertex and index buffer.
 /**
@@ -68,7 +68,7 @@ bool DrawTexturedTriangle(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawQuad(void* data);
+Result DrawQuad(void* data);
 
 /// Draw two colored triangles, offset by a model matrix in uniform buffer and using a depth buffer.
 /**
@@ -76,7 +76,7 @@ bool DrawQuad(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawTriangles(void* data);
+Result DrawTriangles(void* data);
 
 /// Draw two colored triangles, offset by a model matrix in push constants.
 /**
@@ -84,7 +84,7 @@ bool DrawTriangles(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawPushTriangles(void* data);
+Result DrawPushTriangles(void* data);
 
 /// Draw a triangle using vertex pulling from a storage buffer.
 /**
@@ -92,7 +92,7 @@ bool DrawPushTriangles(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawStorageTriangle(void* data);
+Result DrawStorageTriangle(void* data);
 
 /// Draw two triangles, then invert the colors.
 /**
@@ -100,7 +100,7 @@ bool DrawStorageTriangle(void* data);
  *
  * @return Whether the test was successful.
  */
-bool InvertColors(void* data);
+Result InvertColors(void* data);
 
 /// Draw a mipmapped triangle.
 /**
@@ -108,7 +108,7 @@ bool InvertColors(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawMipmappedTriangle(void* data);
+Result DrawMipmappedTriangle(void* data);
 
 /// Use a depth pre-pass to occlude some fragments.
 /**
@@ -116,7 +116,7 @@ bool DrawMipmappedTriangle(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DepthPrePass(void* data);
+Result DepthPrePass(void* data);
 
 /// Draw lines with width.
 /**
@@ -124,7 +124,7 @@ bool DepthPrePass(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DrawLines(void* data);
+Result DrawLines(void* data);
 
 /// Test attachmentless rendering.
 /**
@@ -132,7 +132,7 @@ bool DrawLines(void* data);
  *
  * @return Whether the test was successful.
  */
-bool Attachmentless(void* data);
+Result Attachmentless(void* data);
 
 /// Test conservative rasterization.
 /**
@@ -140,7 +140,7 @@ bool Attachmentless(void* data);
  *
  * @return Whether the test was successful.
  */
-bool ConservativeRasterization(void* data);
+Result ConservativeRasterization(void* data);
 
 /// Test depth clamping.
 /**
@@ -148,7 +148,7 @@ bool ConservativeRasterization(void* data);
  *
  * @return Whether the test was successful.
  */
-bool DepthClamping(void* data);
+Result DepthClamping(void* data);
 
 /// Test rendering multiple frames.
 /**
@@ -156,7 +156,7 @@ bool DepthClamping(void* data);
  *
  * @return Whether the test was successful.
  */
-bool MultipleFrames(void* data);
+Result MultipleFrames(void* data);
 
 /// Test setting buffer contents in a compute shader.
 /**
@@ -164,7 +164,7 @@ bool MultipleFrames(void* data);
  *
  * @return Whether the test was successful.
  */
-bool ComputeSetBuffer(void* data);
+Result ComputeSetBuffer(void* data);
 
 /// Test writing vertex buffer contents in a compute shader.
 /**
@@ -172,7 +172,7 @@ bool ComputeSetBuffer(void* data);
  *
  * @return Whether the test was successful.
  */
-bool ComputeVertexBuffer(void* data);
+Result ComputeVertexBuffer(void* data);
 
 /// Test using multiple storage buffers in a compute shaders.
 /**
@@ -180,7 +180,7 @@ bool ComputeVertexBuffer(void* data);
  *
  * @return Whether the test was successful.
  */
-bool ComputeMultipleBuffers(void* data);
+Result ComputeMultipleBuffers(void* data);
 
 /// Test using ClearBuffer.
 /**
@@ -188,4 +188,4 @@ bool ComputeMultipleBuffers(void* data);
  *
  * @return Whether the test was successful.
  */
-bool ComputeClearBuffer(void* data);
+Result ComputeClearBuffer(void* data);
