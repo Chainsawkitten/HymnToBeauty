@@ -61,12 +61,13 @@ int main(int argc, char* argv[]) {
             videoSuite.Shutdown();
 
             // Print summary of results.
-            const unsigned int total = results.success + results.failure + results.notRun;
+            const unsigned int total = results.success + results.unsupported + results.failure + results.skipped;
             cout << "\n\n"
                  << "Results:\n"
                  << "   Success: " << results.success << " / " << total << "\n"
+                 << "   Unsupported: " << results.unsupported << " / " << total << "\n"
                  << "   Failure: " << results.failure << " / " << total << "\n"
-                 << "   Not run: " << results.notRun << " / " << total << "\n";
+                 << "   Skipped: " << results.skipped << " / " << total << "\n";
 
             if (results.failure > 0) {
                 return 1;

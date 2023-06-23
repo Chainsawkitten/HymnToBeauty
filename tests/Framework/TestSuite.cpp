@@ -4,6 +4,10 @@
 
 using namespace std;
 
+Result ToResult(bool success) {
+    return success ? Result::SUCCESS : Result::FAILURE;
+}
+
 TestSuite::TestSuite(const string& name) {
     this->name = name;
 }
@@ -18,19 +22,27 @@ void TestSuite::Run(const string& suiteName, const string& testName, Results& re
             if (testName.empty() || test.name == testName) {
                 cout << test.name << ": ";
 
-                if (test.function(test.data)) {
+                Result result = test.function(test.data);
+                switch (result) {
+                case Result::SUCCESS:
                     cout << "Success\n";
                     results.success++;
-                } else {
+                    break;
+                case Result::FAILURE:
                     cout << "Fail\n";
                     results.failure++;
+                    break;
+                case Result::UNSUPPORTED:
+                    cout << "Unsupported\n";
+                    results.unsupported++;
+                    break;
                 }
             } else {
-                results.notRun++;
+                results.skipped++;
             }
         }
     } else {
-        results.notRun += tests.size();
+        results.skipped += tests.size();
     }
 }
 
@@ -44,7 +56,7 @@ void TestSuite::Print() const {
     }
 }
 
-void TestSuite::AddTest(const string& name, bool (*function)(void*), void* data) {
+void TestSuite::AddTest(const string& name, Result (*function)(void*), void* data) {
     Test test;
     test.name = name;
     test.function = function;

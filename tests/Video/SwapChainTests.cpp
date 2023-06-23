@@ -21,7 +21,7 @@
 
 using namespace Video;
 
-bool MultipleFrames(void* data) {
+Result MultipleFrames(void* data) {
     assert(data != nullptr);
 
     const uint32_t frameCount = 120;
@@ -133,5 +133,5 @@ bool MultipleFrames(void* data) {
     delete vertexShader;
     delete fragmentShader;
 
-    return true;
+    return Result::SUCCESS;
 }
