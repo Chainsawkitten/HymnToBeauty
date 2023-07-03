@@ -317,6 +317,10 @@ void WebGPURenderer::InitializeWebGPUBackend() {
     // Initialize Dawn
     DawnProcTable procs = dawn::native::GetProcs();
     dawnProcSetProcs(&procs);
+
+    Log(Log::INFO) << "Using Dawn backend.\n";
+#elif WEBGPU_BACKEND_WGPU
+    Log(Log::INFO) << "Using wgpu backend.\n";
 #endif
 }
 
