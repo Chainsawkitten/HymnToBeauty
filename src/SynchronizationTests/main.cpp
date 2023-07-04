@@ -1,5 +1,5 @@
 #include "Framework/Runner.hpp"
-#include "Tests/ExampleTest.hpp"
+#include "Tests/FragFragImage.hpp"
 
 #include <Utility/Log.hpp>
 #include <Video/Renderer.hpp>
@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     Utility::Window* window = new Utility::Window(800, 600, false, false, "Synchronization tests",
         graphicsAPI == Video::Renderer::GraphicsAPI::VULKAN || graphicsAPI == Video::Renderer::GraphicsAPI::WEBGPU);
 
-    ExampleTest test;
+    FragFragImage test;
     RunTest(&test, window, graphicsAPI);
 
     delete window;
