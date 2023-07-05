@@ -3,6 +3,7 @@ set(SRCS
         Framework/Runner.cpp
         Framework/SynchronizationTest.cpp
         Tests/ExampleTest.cpp
+        Tests/FragFragBuffer.cpp
         Tests/FragFragImage.cpp
     )
 
@@ -11,6 +12,7 @@ set(HEADERS
         Framework/Runner.hpp
         Framework/SynchronizationTest.hpp
         Tests/ExampleTest.hpp
+        Tests/FragFragBuffer.hpp
         Tests/FragFragImage.hpp
     )
         
@@ -18,13 +20,16 @@ create_directory_groups(${SRCS} ${HEADERS})
 
 # Setup shaders
 set(SHADER_INCLUDES
-    ""
+    Shaders/Lighting.glsl
 )
 
 set(SHADERS
     Shaders/Blur.frag
     Shaders/Cube.vert
     Shaders/Cube.frag
+    Shaders/CubeTiled.frag
+    Shaders/LightTiling.vert
+    Shaders/LightTiling.frag
     Shaders/PostProcessing.vert
 )
 

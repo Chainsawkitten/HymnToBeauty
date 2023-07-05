@@ -18,6 +18,9 @@ MATERIAL(0, mapAlbedo)
 UNIFORMS
 {
     uint lightCount;
+    uint tileSize;
+    uint maskCount;
+    uint tilesX;
     float gamma;
 } uniforms;
 
@@ -25,6 +28,11 @@ STORAGE_BUFFER(1)
 {
     Light lights[];
 } lightBuffer;
+
+STORAGE_BUFFER(2)
+{
+    highp uint masks[];
+} tileMaskBuffer;
 
 vec3 ApplyPointLight(uint i, vec3 cameraToPos, vec3 albedo, vec3 normal, float metallic, float roughness, vec3 pos, vec3 F0) {
     // Point light
@@ -53,8 +61,16 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
     vec3 F0 = mix(vec3(0.04f), albedo, metallic);
     
     // Point lights.
-    for (uint i = 0; i < uniforms.lightCount; ++i) {
-        Lo += ApplyPointLight(i, cameraToPos, albedo, normal, metallic, roughness, pos, F0);
+    const uvec2 tile = uvec2(gl_FragCoord.xy) / uniforms.tileSize;
+    const uint tileIndex = tile.x + tile.y * uniforms.tilesX;
+    for (uint i = 0; i < uniforms.maskCount; ++i) {
+        highp uint mask = tileMaskBuffer.masks[tileIndex * uniforms.maskCount + i];
+        
+        while (mask != 0u) {
+			highp uint bitIndex = findLSB(mask);
+			Lo += ApplyPointLight(i * 32u + bitIndex, cameraToPos, albedo, normal, metallic, roughness, pos, F0);
+			mask ^= (1u << bitIndex);
+		}
     }
 
     return Lo;
