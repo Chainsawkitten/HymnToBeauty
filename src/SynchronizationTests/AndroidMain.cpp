@@ -5,11 +5,12 @@
 #include <Utility/Log.hpp>
 #include <Utility/Window.hpp>
 #include <Framework/Runner.hpp>
-#include <Tests/ExampleTest.hpp>
+#include <Tests/FragFragImage.hpp>
+#include <Tests/FragFragBuffer.hpp>
 
 static bool started = false;
 Utility::Window* window = nullptr;
-ExampleTest test;
+FragFragBuffer test;
 
 void handle_cmd(android_app* app, int32_t cmd) {
     switch (cmd) {
