@@ -5,6 +5,7 @@ set(SRCS
         Tests/ExampleTest.cpp
         Tests/FragFragBuffer.cpp
         Tests/FragFragImage.cpp
+        Tests/FragVertImage.cpp
     )
 
 set(HEADERS
@@ -14,6 +15,7 @@ set(HEADERS
         Tests/ExampleTest.hpp
         Tests/FragFragBuffer.hpp
         Tests/FragFragImage.hpp
+        Tests/FragVertImage.hpp
     )
         
 create_directory_groups(${SRCS} ${HEADERS})
@@ -30,6 +32,10 @@ set(SHADERS
     Shaders/CubeTiled.frag
     Shaders/LightTiling.vert
     Shaders/LightTiling.frag
+    Shaders/Offset.vert
+    Shaders/Offset.frag
+    Shaders/Plane.vert
+    Shaders/Plane.frag
     Shaders/PostProcessing.vert
 )
 

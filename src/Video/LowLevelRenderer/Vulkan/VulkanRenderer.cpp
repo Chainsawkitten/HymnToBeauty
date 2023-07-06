@@ -1165,7 +1165,7 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
         materialLayoutBindings[i].binding = i;
         materialLayoutBindings[i].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         materialLayoutBindings[i].descriptorCount = 1;
-        materialLayoutBindings[i].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        materialLayoutBindings[i].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
         materialLayoutBindings[i].pImmutableSamplers = nullptr;
 
         layoutCreateInfo.bindingCount = i + 1;
