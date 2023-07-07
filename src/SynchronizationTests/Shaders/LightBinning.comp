@@ -1,0 +1,54 @@
+/*
+Z-binning of lights.
+*/
+
+precision mediump int;
+precision mediump float;
+
+layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+struct Light {
+    vec4 positionDistance;
+    vec4 intensitiesAttenuation;
+};
+
+STORAGE_BUFFER(0)
+{
+    Light lights[];
+} lightBuffer;
+
+STORAGE_BUFFER_RW(1)
+{
+    highp uint masks[];
+} zMaskBuffer;
+
+UNIFORMS
+{
+    uint lightCount;
+    uint maskCount;
+    uint zBins;
+    float zNear;
+    float zFar;
+} uniforms;
+
+void main() {
+    uint lightIndex = gl_GlobalInvocationID.x;
+
+    if (lightIndex >= uniforms.lightCount)
+		return;
+    
+    // Find min and max z-bin.
+    const highp float z = -lightBuffer.lights[lightIndex].positionDistance.z;
+    const highp float radius = lightBuffer.lights[lightIndex].positionDistance.w;
+    highp float zMin = sqrt(max(((z - radius) - uniforms.zNear) / (uniforms.zFar - uniforms.zNear), 0.0));
+    highp float zMax = sqrt(max(((z + radius) - uniforms.zNear) / (uniforms.zFar - uniforms.zNear), 0.0));
+    uint zBinMin = uint(zMin * float(uniforms.zBins));
+    uint zBinMax = min(uint(zMax * float(uniforms.zBins)), uniforms.zBins - 1);
+    
+    // Write light bit to those bins.
+    uint lightMask = lightIndex / 32u;
+    highp uint mask = 1u << (lightIndex % 32u);
+    for (uint i = zBinMin; i <= zBinMax; i++) {
+        atomicOr(zMaskBuffer.masks[i * uniforms.maskCount + lightMask], mask);
+    }
+}
