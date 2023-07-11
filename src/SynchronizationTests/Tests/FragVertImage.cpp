@@ -12,8 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
 
-#include "PostProcessing.vert.hpp"
-#include "Blur.frag.hpp"
 #include "Plane.vert.hpp"
 #include "Plane.frag.hpp"
 #include "Offset.vert.hpp"
