@@ -7,6 +7,9 @@
 #include <Framework/Runner.hpp>
 #include <Tests/FragFragImage.hpp>
 #include <Tests/FragFragBuffer.hpp>
+#include <Tests/FragVertImage.hpp>
+#include <Tests/ComputeFragBuffer.hpp>
+#include <Tests/ComputeVertBuffer.hpp>
 
 static bool started = false;
 Utility::Window* window = nullptr;
@@ -17,7 +20,7 @@ void handle_cmd(android_app* app, int32_t cmd) {
         case APP_CMD_INIT_WINDOW: {
             // The window is being shown, get it ready.
             window = new Utility::Window(app->window);
-            SetupTest(&test, window, Video::Renderer::GraphicsAPI::VULKAN);
+            SetupTest(&test, window, Video::Renderer::GraphicsAPI::WEBGPU);
 
             started = true;
             break;
