@@ -255,8 +255,11 @@ void WebGPUCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
     entry.size = uniformBuffer->GetSize();
     entry.offset = static_cast<const WebGPUBuffer*>(uniformBuffer)->GetOffset();
 
+    const WebGPUShaderProgram* shaderProgram = inRenderPass ? currentGraphicsPipeline->GetShaderProgram() : currentComputePipeline->GetShaderProgram();
+
+
     WGPUBindGroupDescriptor bindGroupDescriptor = {};
-    bindGroupDescriptor.layout = currentGraphicsPipeline->GetShaderProgram()->GetBindGroupLayouts()[bindingType];
+    bindGroupDescriptor.layout = shaderProgram->GetBindGroupLayouts()[bindingType];
     bindGroupDescriptor.entryCount = 1;
     bindGroupDescriptor.entries = &entry;
     WGPUBindGroup uniformBindGroup = wgpuDeviceCreateBindGroup(device, &bindGroupDescriptor);
