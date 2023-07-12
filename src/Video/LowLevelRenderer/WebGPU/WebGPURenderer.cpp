@@ -517,7 +517,7 @@ void WebGPURenderer::CreateSwapChain(::Utility::Window* window) {
     /// @todo Query swap chain format somehow?
     swapChainDescriptor.format = swapChainFormat;
     swapChainDescriptor.usage = WGPUTextureUsage_RenderAttachment;
-    swapChainDescriptor.presentMode = WGPUPresentMode_Fifo;
+    swapChainDescriptor.presentMode = WGPUPresentMode_Mailbox;
 
     swapChain = wgpuDeviceCreateSwapChain(device, surface, &swapChainDescriptor);
 }
