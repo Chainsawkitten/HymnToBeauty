@@ -148,14 +148,14 @@ void WebGPUShaderProgram::AddMaterial(WGPUDevice device, unsigned int count) {
         // Texture
         entries[i] = {};
         entries[i].binding = i;
-        entries[i].visibility = WGPUShaderStage_Fragment;
+        entries[i].visibility = WGPUShaderStage_Fragment | WGPUShaderStage_Vertex;
         entries[i].texture.sampleType = WGPUTextureSampleType_Float;
         entries[i].texture.viewDimension = WGPUTextureViewDimension_2D;
 
         // Sampler
         entries[i + count] = {};
         entries[i + count].binding = i + count;
-        entries[i + count].visibility = WGPUShaderStage_Fragment;
+        entries[i + count].visibility = WGPUShaderStage_Fragment | WGPUShaderStage_Vertex;
         entries[i + count].sampler.type = WGPUSamplerBindingType_Filtering;
     }
 
