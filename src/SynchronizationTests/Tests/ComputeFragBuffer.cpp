@@ -24,8 +24,8 @@ const char* ComputeFragBuffer::GetName() const {
     return "Compute->Frag (Buffer)";
 }
 
-static const uint32_t LIGHT_COUNT = 20;
-static const uint32_t BIN_COUNT = 128;
+static const uint32_t LIGHT_COUNT = 16;
+static const uint32_t BIN_COUNT = 2096;
 
 void ComputeFragBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& screenSize) {
     this->renderer = renderer;

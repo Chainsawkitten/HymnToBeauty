@@ -52,5 +52,5 @@ private:
     Video::Buffer* binBuffer;
     Video::Buffer* binningUniformBuffer;
 
-    const uint32_t instanceCount = 100;
+    const uint32_t instanceCount = 5000;
 };
