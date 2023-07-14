@@ -21,8 +21,8 @@
 
 using namespace Video;
 
-static const uint32_t planeDivisions = 96;
-static const uint32_t offsetInstances = 10;
+static const uint32_t planeDivisions = 32 * 12;
+static const uint32_t offsetInstances = 256;
 
 const char* ComputeVertBuffer::GetName() const {
     return "Compute->Vert (Buffer)";
@@ -34,7 +34,7 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
 
     mainRenderTarget = renderer->CreateRenderTarget(screenSize, Texture::Format::R8G8B8A8);
     depthBuffer = renderer->CreateRenderTarget(screenSize, Texture::Format::D32);
-    offsetImage = renderer->CreateRenderTarget(glm::uvec2(planeDivisions, planeDivisions), Texture::Format::R8);
+    offsetImage = renderer->CreateRenderTarget(glm::uvec2(8, 8), Texture::Format::R8);
     commandBuffer = renderer->CreateCommandBuffer();
 
     // Pipeline to render cubes.
@@ -75,7 +75,7 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
     delete[] vertices;
 
     planeIndexCount = (planeDivisions - 1) * (planeDivisions - 1) * 6;
-    uint16_t* indices = new uint16_t[planeIndexCount];
+    uint32_t* indices = new uint32_t[planeIndexCount];
     for (uint32_t x = 0; x < planeDivisions - 1; ++x) {
         for (uint32_t y = 0; y < planeDivisions - 1; ++y) {
             const uint32_t index = (x + y * (planeDivisions - 1)) * 6;
@@ -88,10 +88,10 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
         }
     }
 
-    planeIndexBuffer = renderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER, sizeof(uint16_t) * planeIndexCount, indices);
+    planeIndexBuffer = renderer->CreateBuffer(Buffer::BufferUsage::INDEX_BUFFER, sizeof(uint32_t) * planeIndexCount, indices);
     delete[] indices;
 
-    planeGeometryBinding = renderer->CreateGeometryBinding(vertexDescription, planeVertexBuffer, GeometryBinding::IndexType::SHORT, planeIndexBuffer);
+    planeGeometryBinding = renderer->CreateGeometryBinding(vertexDescription, planeVertexBuffer, GeometryBinding::IndexType::INT, planeIndexBuffer);
 
     const glm::uvec2 textureSize(64, 64);
     unsigned char* textureData = new unsigned char[textureSize.x * textureSize.y * 3];
@@ -102,17 +102,6 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
     }
     planeAlbedo = renderer->CreateTexture(textureSize, Texture::Format::R8G8B8A8, 3, textureData);
     delete[] textureData;
-
-    // Offset square.
-    unsigned char* offsetTextureData = new unsigned char[planeDivisions * planeDivisions];
-    for (uint32_t x = 0; x < planeDivisions; ++x) {
-        for (uint32_t y = 0; y < planeDivisions; ++y) {
-            glm::vec2 pos = glm::vec2(static_cast<float>(x), static_cast<float>(y)) / static_cast<float>(planeDivisions - 1) - glm::vec2(0.5f, 0.5f);
-            offsetTextureData[x + y * planeDivisions] = std::max(static_cast<int32_t>(128.0f - sqrt(pos.x * pos.x + pos.y * pos.y) * 255.0f), 0);
-        }
-    }
-    offsetTexture = renderer->CreateTexture(glm::uvec2(planeDivisions, planeDivisions), Texture::Format::R8G8B8A8, 1, offsetTextureData);
-    delete[] offsetTextureData;
 
     // Offset uniform buffer.
     struct OffsetUniforms {
@@ -125,7 +114,11 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
     // Offset instance buffer.
     glm::vec2 offsetMatrices[offsetInstances];
     for (uint32_t i = 0; i < offsetInstances; ++i) {
-        offsetMatrices[i] = glm::vec2(static_cast<float>(i) / 10.0f, 0.0f);
+        if (i < 10) {
+            offsetMatrices[i] = glm::vec2(static_cast<float>(i) / 10.0f, 0.0f);
+        } else {
+            offsetMatrices[i] = glm::vec2(static_cast<float>(i) / 10.0f, 1000000.0f);
+        }
     }
 
     offsetInstanceBuffer = renderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(glm::vec2) * offsetInstances, offsetMatrices);
@@ -141,7 +134,7 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
     } matrices;
 
     matrices.viewMatrix = glm::mat4(1.0f);
-    matrices.viewMatrix[3] = glm::vec4(0.0f, 0.0f, -10.0f, 1.0f);
+    matrices.viewMatrix[3] = glm::vec4(0.0f, 0.0f, -10.0f, 3.0f);
     matrices.viewProjectionMatrix = glm::perspective(glm::radians(45.0f), static_cast<float>(screenSize.x) / screenSize.y, 0.1f, 50.0f) * matrices.viewMatrix;
     matrices.planeDivisions = planeDivisions;
 
@@ -165,7 +158,7 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
 
     // Uniform buffer holding lighting data.
     struct UniformData {
-        uint32_t lightCount = 20;
+        uint32_t lightCount = 5;
         float gamma = 1.0f;
     } uniformData;
 
@@ -184,7 +177,7 @@ void ComputeVertBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec
         float z = static_cast<float>(i) * 0.5 + 1.0f;
         glm::vec3 position = matrices.viewMatrix * glm::vec4(x, y, z, 1.0f);
         lights[i].positionDistance = glm::vec4(position.x, position.y, position.z, 10.0f);
-        lights[i].intensitiesAttenuation = glm::vec4(static_cast<float>(i % 3), static_cast<float>((i + 1) % 3), static_cast<float>((i + 2) % 3), 0.005f);
+        lights[i].intensitiesAttenuation = glm::vec4(static_cast<float>(i % 3) * 2.0f, static_cast<float>((i + 1) % 3) * 2.0f, static_cast<float>((i + 2) % 3) * 2.0f, 0.005f);
     }
 
     lightBuffer = renderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * uniformData.lightCount, lights);
@@ -196,7 +189,7 @@ void ComputeVertBuffer::Frame() {
     // First pass does offsets.
     commandBuffer->BindComputePipeline(offsetPipeline);
     commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, offsetUniformBuffer);
-    commandBuffer->BindStorageBuffers({ offsetBuffer, instanceBuffer });
+    commandBuffer->BindStorageBuffers({ offsetBuffer, offsetInstanceBuffer });
     commandBuffer->Dispatch(glm::uvec3(planeDivisions / 8, planeDivisions / 8, 1));
 
     // Second render pass renders a plane.
@@ -239,7 +232,6 @@ void ComputeVertBuffer::Shutdown() {
     delete uniformBuffer;
     delete lightBuffer;
 
-    delete offsetTexture;
     delete offsetInstanceBuffer;
     delete offsetBuffer;
     delete offsetUniformBuffer;

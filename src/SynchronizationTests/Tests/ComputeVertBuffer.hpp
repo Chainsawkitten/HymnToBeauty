@@ -46,7 +46,6 @@ class ComputeVertBuffer : public SynchronizationTest {
       Video::GeometryBinding* planeGeometryBinding;
       Video::Texture* planeAlbedo;
 
-      Video::Texture* offsetTexture;
       Video::Buffer* offsetInstanceBuffer;
       Video::Buffer* offsetBuffer;
       Video::Buffer* offsetUniformBuffer;

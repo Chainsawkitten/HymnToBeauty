@@ -36,7 +36,7 @@ void main () {
     vec4 worldPosition = instances.data[InstanceIndex].modelMatrix * vec4(vertexPosition, 1.0);
     uvec2 texPos = uvec2(vertexTexture * float(matrices.planeDivisions - 1u));
     uint offsetIndex = texPos.x + texPos.y * matrices.planeDivisions;
-    gl_Position = matrices.viewProjectionMatrix * (worldPosition + offsetBuffer.offsets[offsetIndex] * vec4(0.0, 1.0, 0.0, 0.0));
+    gl_Position = matrices.viewProjectionMatrix * (worldPosition + offsetBuffer.offsets[offsetIndex] * vec4(0.0, 0.2, 0.0, 0.0));
     outPosition = vec3(matrices.viewMatrix * worldPosition);
     outNormal = normalize(mat3(instances.data[InstanceIndex].normalMatrix) * vertexNormal);
     outTexCoords = vertexTexture;
