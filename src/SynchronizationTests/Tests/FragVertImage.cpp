@@ -20,7 +20,8 @@
 using namespace Video;
 
 static const uint32_t planeDivisions = 100;
-static const uint32_t offsetInstances = 10;
+static const uint32_t offsetInstances = 2000;
+static const uint32_t planeInstances = 10;
 
 const char* FragVertImage::GetName() const {
     return "Frag->Vert (Image)";
@@ -46,7 +47,7 @@ void FragVertImage::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& s
     configuration.cullFace = CullFace::BACK;
     configuration.blendMode = BlendMode::NONE;
     configuration.depthMode = DepthMode::TEST_WRITE;
-    configuration.depthComparison = DepthComparison::LESS_EQUAL;
+    configuration.depthComparison = DepthComparison::LESS;
 
     vertexDescription = Geometry::VertexType::StaticVertex::GenerateVertexDescription(renderer);
 
@@ -157,7 +158,11 @@ void FragVertImage::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& s
     glm::mat4 offsetMatrices[offsetInstances];
     for (uint32_t i = 0; i < offsetInstances; ++i) {
         offsetMatrices[i] = glm::mat4(1.0f);
-        offsetMatrices[i][3] = glm::vec4(static_cast<float>(i) / 10.0f, 0.0f, 0.0f, 1.0f);
+        if (i < 200) {
+            offsetMatrices[i][3] = glm::vec4(static_cast<float>(i % 10) / 10.0f, 0.0f, 0.0f, 1.0f);
+        } else {
+            offsetMatrices[i][3] = glm::vec4(static_cast<float>(i) / 10.0f, 1000.0f, 0.0f, 1.0f);
+        }
     }
 
     offsetInstanceBuffer = renderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(glm::mat4) * offsetInstances, offsetMatrices);
@@ -192,7 +197,7 @@ void FragVertImage::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& s
 
     // Uniform buffer holding lighting data.
     struct UniformData {
-        uint32_t lightCount = 20;
+        uint32_t lightCount = 5;
         float gamma = 1.0f;
     } uniformData;
 
@@ -208,10 +213,10 @@ void FragVertImage::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& s
     for (uint32_t i = 0; i < uniformData.lightCount; ++i) {
         float x = static_cast<float>(i % 10) * 2.0f;
         float y = static_cast<float>(i / 10) * 2.0f;
-        float z = static_cast<float>(i) * 0.5 + 1.0f;
+        float z = static_cast<float>(i) * 0.5 + 4.0f;
         glm::vec3 position = matrices.viewMatrix * glm::vec4(x, y, z, 1.0f);
         lights[i].positionDistance = glm::vec4(position.x, position.y, position.z, 10.0f);
-        lights[i].intensitiesAttenuation = glm::vec4(static_cast<float>(i % 3), static_cast<float>((i + 1) % 3), static_cast<float>((i + 2) % 3), 0.005f);
+        lights[i].intensitiesAttenuation = glm::vec4(static_cast<float>(i % 3) * 2.0f, static_cast<float>((i + 1) % 3) * 2.0f, static_cast<float>((i + 2) % 3) * 2.0f, 0.005f);
     }
 
     lightBuffer = renderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * uniformData.lightCount, lights);
@@ -244,7 +249,7 @@ void FragVertImage::Frame() {
     commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::MATRICES, matrixBuffer);
     commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, uniformBuffer);
     commandBuffer->BindStorageBuffers({ instanceBuffer, lightBuffer });
-    commandBuffer->DrawIndexed(planeIndexCount);
+    commandBuffer->DrawIndexedInstanced(planeIndexCount, planeInstances);
     commandBuffer->EndRenderPass();
 
     commandBuffer->BlitToSwapChain(mainRenderTarget);

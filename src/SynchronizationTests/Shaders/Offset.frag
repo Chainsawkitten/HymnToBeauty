@@ -13,5 +13,5 @@ MATERIAL(0, mapOffset)
 
 // --- MAIN ---
 void main() {
-    outColor = vec4(texture(mapOffset, inTexCoords).rgb * 0.3, 0.0);
+    outColor = vec4(texture(mapOffset, inTexCoords).rgb * 0.015, 0.0);
 }
