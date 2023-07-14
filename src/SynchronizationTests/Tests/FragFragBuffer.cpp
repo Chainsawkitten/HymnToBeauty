@@ -23,7 +23,7 @@ const char* FragFragBuffer::GetName() const {
     return "Frag->Frag (Buffer)";
 }
 
-static const uint32_t LIGHT_COUNT = 20;
+static const uint32_t LIGHT_COUNT = 4096;
 
 void FragFragBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& screenSize) {
     this->renderer = renderer;
@@ -121,12 +121,13 @@ void FragFragBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& 
     // Uniform buffer holding lighting data.
     struct UniformData {
         uint32_t lightCount = LIGHT_COUNT;
-        uint32_t tileSize = tileSize;
-        uint32_t maskCount = (LIGHT_COUNT - 1) / 32 + 1;
+        uint32_t tileSize;
+        uint32_t maskCount = 1;
         uint32_t tilesX;
         float gamma = 1.0f;
     } uniformData;
 
+    uniformData.tileSize = tileSize;
     tiles = (screenSize - glm::uvec2(1, 1)) / glm::uvec2(tileSize, tileSize) + glm::uvec2(1, 1);
     uniformData.tilesX = tiles.x;
 
@@ -140,12 +141,12 @@ void FragFragBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& 
 
     Light* lights = new Light[uniformData.lightCount];
     for (uint32_t i = 0; i < uniformData.lightCount; ++i) {
-        float x = static_cast<float>(i % 10) * 2.0f;
-        float y = static_cast<float>(i / 10) * 2.0f;
-        float z = static_cast<float>(i) * 0.5 + 1.0f;
+        float x = static_cast<float>(i % 10) * 4.0f + 2.0f;
+        float y = static_cast<float>(i / 2) * 200000.0f;
+        float z = static_cast<float>(i) * 0.5 + 1.5f;
         glm::vec3 position = matrices.viewMatrix * glm::vec4(x, y, z, 1.0f);
-        lights[i].positionDistance = glm::vec4(position.x, position.y, position.z, 10.0f);
-        lights[i].intensitiesAttenuation = glm::vec4(static_cast<float>(i % 3), static_cast<float>((i + 1) % 3), static_cast<float>((i + 2) % 3), 0.005f);
+        lights[i].positionDistance = glm::vec4(position.x, position.y, position.z, 5.0f);
+        lights[i].intensitiesAttenuation = glm::vec4(static_cast<float>(i % 3) * 3.0f, static_cast<float>((i + 1) % 3) * 3.0f, static_cast<float>((i + 2) % 3) * 3.0f, 0.005f);
     }
 
     lightBuffer = renderer->CreateBuffer(Buffer::BufferUsage::STORAGE_BUFFER, sizeof(Light) * uniformData.lightCount, lights);
@@ -157,11 +158,12 @@ void FragFragBuffer::Setup(Video::LowLevelRenderer* renderer, const glm::uvec2& 
 
     // Uniform buffer holding tiling information.
     struct TilingUniforms {
-        uint32_t tileSize = tileSize;
-        uint32_t maskCount = (LIGHT_COUNT - 1) / 32 + 1;
+        uint32_t tileSize;
+        uint32_t maskCount = 1;
         uint32_t tilesX;
     } tilingUniforms;
 
+    tilingUniforms.tileSize = tileSize;
     tilingUniforms.tilesX = tiles.x;
 
     tilingUniformBuffer = renderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, sizeof(tilingUniforms), &tilingUniforms);
@@ -172,9 +174,9 @@ void FragFragBuffer::Frame() {
     commandBuffer->ClearBuffer(tileBuffer);
 
     // First render pass tiles lights.
-    commandBuffer->BeginAttachmentlessRenderPass(screenSize);
+    commandBuffer->BeginAttachmentlessRenderPass(screenSize / 2u, 4);
     commandBuffer->BindGraphicsPipeline(lightTilingPipeline);
-    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
+    commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), screenSize / 2u);
     commandBuffer->BindGeometry(isocahedron->GetGeometryBinding());
     commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::MATRICES, tileMatrixBuffer);
     commandBuffer->BindUniformBuffer(ShaderProgram::BindingType::UNIFORMS, tilingUniformBuffer);

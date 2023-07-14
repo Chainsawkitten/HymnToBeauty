@@ -56,7 +56,7 @@ class FragFragBuffer : public SynchronizationTest {
 
       Video::Isocahedron* isocahedron;
 
-      const uint32_t instanceCount = 100;
-      const uint32_t tileSize = 32;
+      const uint32_t instanceCount = 6000;
+      const uint32_t tileSize = 16;
       glm::uvec2 tiles;
 };
