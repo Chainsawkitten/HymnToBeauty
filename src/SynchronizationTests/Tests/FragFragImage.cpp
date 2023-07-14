@@ -147,7 +147,7 @@ void FragFragImage::Frame() {
     commandBuffer->BindGraphicsPipeline(blurPipeline);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), screenSize);
     commandBuffer->BindMaterial({ {mainRenderTarget, renderer->GetSampler(Sampler::Filter::LINEAR, Sampler::Clamping::CLAMP_TO_EDGE)} });
-    commandBuffer->Draw(3);
+    commandBuffer->Draw(30000);
     commandBuffer->EndRenderPass();
 
     commandBuffer->BlitToSwapChain(postProcessRenderTarget);

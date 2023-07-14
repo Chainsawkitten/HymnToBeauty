@@ -16,8 +16,13 @@ const vec2 uvs[3] = vec2[](
 );
 
 void main () {
-    gl_Position = vec4(positions[VertexIndex], 0.0, 1.0);
-    outTexCoords = uvs[VertexIndex];
+    if (VertexIndex < 3) {
+        gl_Position = vec4(positions[VertexIndex], 0.0, 1.0);
+        outTexCoords = uvs[VertexIndex];
+    } else {
+        gl_Position = vec4(20.0, 20.0, 1.0, 1.0);
+        outTexCoords = vec2(0.0, 0.0);
+    }
 
     FixPosition();
     FixFramebufferCoordinates(outTexCoords);

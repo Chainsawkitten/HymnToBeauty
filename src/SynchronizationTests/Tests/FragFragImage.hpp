@@ -51,5 +51,5 @@ class FragFragImage : public SynchronizationTest {
       Video::Buffer* uniformBuffer;
       Video::Buffer* lightBuffer;
 
-      const uint32_t instanceCount = 100;
+      const uint32_t instanceCount = 5000;
 };
