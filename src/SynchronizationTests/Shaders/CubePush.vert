@@ -26,11 +26,17 @@ STORAGE_BUFFER(0)
     PerInstance data[];
 } instances;
 
+PUSH_CONSTANTS
+{
+    mat4 modelMatrix;
+    mat4 normalMatrix;
+} pushConstants;
+
 void main () {
-    vec4 worldPosition = instances.data[InstanceIndex].modelMatrix * vec4(vertexPosition, 1.0);
+    vec4 worldPosition = pushConstants.modelMatrix * vec4(vertexPosition, 1.0);
     gl_Position = matrices.viewProjectionMatrix * worldPosition;
     outPosition = vec3(matrices.viewMatrix * worldPosition);
-    outNormal = normalize(mat3(instances.data[InstanceIndex].normalMatrix) * vertexNormal);
+    outNormal = normalize(mat3(pushConstants.normalMatrix) * vertexNormal);
     outTexCoords = vertexTexture;
     
     FixPosition();

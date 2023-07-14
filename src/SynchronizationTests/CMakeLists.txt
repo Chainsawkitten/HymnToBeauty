@@ -8,6 +8,7 @@ set(SRCS
         Tests/FragVertImage.cpp
         Tests/ComputeFragBuffer.cpp
         Tests/ComputeVertBuffer.cpp
+        Tests/MultipleFrames.cpp
     )
 
 set(HEADERS
@@ -20,6 +21,7 @@ set(HEADERS
         Tests/FragVertImage.hpp
         Tests/ComputeFragBuffer.hpp
         Tests/ComputeVertBuffer.hpp
+        Tests/MultipleFrames.hpp
     )
         
 create_directory_groups(${SRCS} ${HEADERS})
@@ -32,6 +34,7 @@ set(SHADER_INCLUDES
 set(SHADERS
     Shaders/Blur.frag
     Shaders/Cube.vert
+    Shaders/CubePush.vert
     Shaders/Cube.frag
     Shaders/CubeTiled.frag
     Shaders/CubeZ.frag
