@@ -18,6 +18,9 @@ WebGPUShaderProgram::WebGPUShaderProgram(WGPUDevice device, std::initializer_lis
         bindGroupLayoutIsEmpty[i] = true;
     }
 
+    WGPUShaderStageFlags uniformBufferStages = 0;
+    WGPUShaderStage pushConstantShaderStage = WGPUShaderStage_None;
+    std::vector<WGPUShaderStageFlags> materialStages;
     std::vector<StorageBufferInfo> storageBufferInfos;
     for (const Shader* shader : shaders) {
         const WebGPUShader* webGPUShader = static_cast<const WebGPUShader*>(shader);
@@ -29,6 +32,7 @@ WebGPUShaderProgram::WebGPUShaderProgram(WGPUDevice device, std::initializer_lis
 
         if (reflectionInfo.hasUniforms) {
             hasUniformsBuffer = true;
+            uniformBufferStages |= webGPUShader->GetShaderStage();
         }
 
         for (uint32_t i = 0; i < reflectionInfo.storageBufferCount; i++) {
@@ -44,19 +48,28 @@ WebGPUShaderProgram::WebGPUShaderProgram(WGPUDevice device, std::initializer_lis
         }
 
         if (reflectionInfo.materialCount > 0) {
-            AddMaterial(device, reflectionInfo.materialCount);
+            if (reflectionInfo.materialCount > materialStages.size()) {
+                materialStages.resize(reflectionInfo.materialCount, 0);
+            }
+
+            for (uint32_t i = 0; i < reflectionInfo.materialCount; ++i) {
+                materialStages[i] |= webGPUShader->GetShaderStage();
+            }
         }
 
         // Emulate push constants.
         if (reflectionInfo.pushConstantCount > 0) {
+            assert(pushConstantSize == 0);
             AddPushConstants(device, reflectionInfo.pushConstantCount, reflectionInfo.pushConstants);
+            pushConstantShaderStage = webGPUShader->GetShaderStage();
         }
     }
 
     if (hasUniformsBuffer || pushConstantSize > 0) {
-        AddUniforms(device, hasUniformsBuffer);
+        AddUniforms(device, hasUniformsBuffer, uniformBufferStages, pushConstantShaderStage);
     }
     AddStorageBuffers(device, storageBufferInfos);
+    AddMaterials(device, materialStages);
 }
 
 WebGPUShaderProgram::~WebGPUShaderProgram() {
@@ -134,8 +147,8 @@ void WebGPUShaderProgram::AddStorageBuffers(WGPUDevice device, const std::vector
     delete[] entries;
 }
 
-void WebGPUShaderProgram::AddMaterial(WGPUDevice device, unsigned int count) {
-    if (count == 0) {
+void WebGPUShaderProgram::AddMaterials(WGPUDevice device, const std::vector<WGPUShaderStageFlags>& materialStages) {
+    if (materialStages.empty()) {
         return;
     }
 
@@ -143,24 +156,24 @@ void WebGPUShaderProgram::AddMaterial(WGPUDevice device, unsigned int count) {
     wgpuBindGroupLayoutRelease(bindGroupLayouts[BindingType::MATERIAL]);
 
     // Create new bind group layout.
-    WGPUBindGroupLayoutEntry* entries = new WGPUBindGroupLayoutEntry[count * 2];
-    for (uint32_t i = 0; i < count; ++i) {
+    WGPUBindGroupLayoutEntry* entries = new WGPUBindGroupLayoutEntry[materialStages.size() * 2];
+    for (uint32_t i = 0; i < materialStages.size(); ++i) {
         // Texture
         entries[i] = {};
         entries[i].binding = i;
-        entries[i].visibility = WGPUShaderStage_Fragment | WGPUShaderStage_Vertex;
+        entries[i].visibility = materialStages[i];
         entries[i].texture.sampleType = WGPUTextureSampleType_Float;
         entries[i].texture.viewDimension = WGPUTextureViewDimension_2D;
 
         // Sampler
-        entries[i + count] = {};
-        entries[i + count].binding = i + count;
-        entries[i + count].visibility = WGPUShaderStage_Fragment | WGPUShaderStage_Vertex;
-        entries[i + count].sampler.type = WGPUSamplerBindingType_Filtering;
+        entries[i + materialStages.size()] = {};
+        entries[i + materialStages.size()].binding = i + materialStages.size();
+        entries[i + materialStages.size()].visibility = materialStages[i];
+        entries[i + materialStages.size()].sampler.type = WGPUSamplerBindingType_Filtering;
     }
 
     WGPUBindGroupLayoutDescriptor bindGroupLayout = {};
-    bindGroupLayout.entryCount = count * 2;
+    bindGroupLayout.entryCount = materialStages.size() * 2;
     bindGroupLayout.entries = entries;
 
     bindGroupLayouts[BindingType::MATERIAL] = wgpuDeviceCreateBindGroupLayout(device, &bindGroupLayout);
@@ -175,7 +188,7 @@ void WebGPUShaderProgram::AddPushConstants(WGPUDevice device, unsigned int pushC
     }
 }
 
-void WebGPUShaderProgram::AddUniforms(WGPUDevice device, bool hasUniformsBuffer) {
+void WebGPUShaderProgram::AddUniforms(WGPUDevice device, bool hasUniformsBuffer, WGPUShaderStageFlags uniformBufferStages, WGPUShaderStage pushConstantShaderStage) {
     assert(hasUniformsBuffer || pushConstantSize > 0);
 
     // Release previous (empty) bind group layout.
@@ -189,7 +202,7 @@ void WebGPUShaderProgram::AddUniforms(WGPUDevice device, bool hasUniformsBuffer)
     if (hasUniformsBuffer) {
         entries[bindGroupLayout.entryCount] = {};
         entries[bindGroupLayout.entryCount].binding = 0;
-        entries[bindGroupLayout.entryCount].visibility = WGPUShaderStage_Vertex | WGPUShaderStage_Fragment | WGPUShaderStage_Compute;
+        entries[bindGroupLayout.entryCount].visibility = uniformBufferStages;
         entries[bindGroupLayout.entryCount].buffer.type = WGPUBufferBindingType_Uniform;
         entries[bindGroupLayout.entryCount].buffer.hasDynamicOffset = false;
         entries[bindGroupLayout.entryCount].buffer.minBindingSize = 0;
@@ -200,7 +213,7 @@ void WebGPUShaderProgram::AddUniforms(WGPUDevice device, bool hasUniformsBuffer)
     if (pushConstantSize > 0) {
         entries[bindGroupLayout.entryCount] = {};
         entries[bindGroupLayout.entryCount].binding = 1;
-        entries[bindGroupLayout.entryCount].visibility = WGPUShaderStage_Vertex | WGPUShaderStage_Fragment | WGPUShaderStage_Compute;
+        entries[bindGroupLayout.entryCount].visibility = pushConstantShaderStage;
         entries[bindGroupLayout.entryCount].buffer.type = WGPUBufferBindingType_Uniform;
         entries[bindGroupLayout.entryCount].buffer.hasDynamicOffset = false;
         entries[bindGroupLayout.entryCount].buffer.minBindingSize = 0;
