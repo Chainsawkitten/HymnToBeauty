@@ -67,9 +67,9 @@ class WebGPUShaderProgram : public ShaderProgram {
 
     void AddMatrices(WGPUDevice device);
     void AddStorageBuffers(WGPUDevice device, const std::vector<StorageBufferInfo>& storageBufferInfos);
-    void AddMaterial(WGPUDevice device, unsigned int count);
+    void AddMaterials(WGPUDevice device, const std::vector<WGPUShaderStageFlags>& materialStages);
     void AddPushConstants(WGPUDevice device, unsigned int pushConstantCount, ShaderSource::ReflectionInfo::PushConstant* pushConstants);
-    void AddUniforms(WGPUDevice device, bool hasUniformsBuffer);
+    void AddUniforms(WGPUDevice device, bool hasUniformsBuffer, WGPUShaderStageFlags uniformBufferStages, WGPUShaderStage pushConstantShaderStage);
 
     std::vector<const WebGPUShader*> shaders;
     // And extra bind group for emulated push constants.
