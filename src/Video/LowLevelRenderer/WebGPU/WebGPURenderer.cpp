@@ -368,6 +368,7 @@ void WebGPURenderer::RequestAdapter() {
     options.compatibleSurface = surface;
     options.forceFallbackAdapter = false;
     options.powerPreference = WGPUPowerPreference_HighPerformance;
+    options.backendType = WGPUBackendType_Vulkan;
 
     struct UserData {
         WGPUAdapter adapter = nullptr;
