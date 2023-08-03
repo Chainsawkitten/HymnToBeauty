@@ -2,7 +2,7 @@
 
 #include "../Interface/VertexDescription.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <vector>
 
 namespace Video {

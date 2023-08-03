@@ -2,7 +2,7 @@
 
 #include "../Interface/ShaderProgram.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <initializer_list>
 #include <vector>
 

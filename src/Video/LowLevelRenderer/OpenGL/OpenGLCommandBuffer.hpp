@@ -3,7 +3,7 @@
 #include "../Interface/CommandBuffer.hpp"
 
 #include <vector>
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace Video {
 

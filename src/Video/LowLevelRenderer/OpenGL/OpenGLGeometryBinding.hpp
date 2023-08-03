@@ -2,7 +2,7 @@
 
 #include "../Interface/GeometryBinding.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <cstdint>
 
 namespace Video {

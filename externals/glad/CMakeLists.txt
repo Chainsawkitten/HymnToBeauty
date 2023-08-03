@@ -1,5 +1,6 @@
 add_library(glad STATIC
-    src/glad.c
+    src/gl.c
+    src/vulkan.c
 )
 
 target_include_directories(glad PUBLIC "include/")

@@ -3,7 +3,7 @@
 #include "../Interface/LowLevelRenderer.hpp"
 
 #include "OpenGLCommandBuffer.hpp"
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 struct GLFWwindow;
 

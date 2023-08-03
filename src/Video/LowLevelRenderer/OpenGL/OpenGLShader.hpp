@@ -2,7 +2,7 @@
 
 #include "../Interface/Shader.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <ShaderProcessor/ShaderSource.hpp>
 
 namespace Video {

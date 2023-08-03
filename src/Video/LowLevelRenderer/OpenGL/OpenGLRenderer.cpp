@@ -33,8 +33,9 @@ OpenGLRenderer::OpenGLRenderer(Utility::Window* window) {
     glfwMakeContextCurrent(this->window);
     glfwSwapInterval(1);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (gladLoadGL(glfwGetProcAddress) == 0) {
         Log() << "Failed to initialize OpenGL context\n";
+    }
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

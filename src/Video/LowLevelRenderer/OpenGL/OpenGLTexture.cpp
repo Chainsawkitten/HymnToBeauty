@@ -1,6 +1,6 @@
 #include "OpenGLTexture.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <assert.h>
 
 namespace Video {

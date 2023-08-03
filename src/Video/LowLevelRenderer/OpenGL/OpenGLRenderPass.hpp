@@ -2,7 +2,7 @@
 
 #include "../Interface/RenderPass.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace Video {
 

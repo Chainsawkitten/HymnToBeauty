@@ -2,7 +2,7 @@
 
 #include "../Interface/Texture.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <glm/glm.hpp>
 
 namespace Video {
