@@ -10,10 +10,12 @@
 #include <Tests/FragVertImage.hpp>
 #include <Tests/ComputeFragBuffer.hpp>
 #include <Tests/ComputeVertBuffer.hpp>
+#include <Tests/MultipleFrames.hpp>
+#include <chrono>
 
 static bool started = false;
 Utility::Window* window = nullptr;
-FragFragBuffer test;
+MultipleFrames test;
 
 void handle_cmd(android_app* app, int32_t cmd) {
     switch (cmd) {
@@ -44,6 +46,9 @@ void android_main(struct android_app* app) {
     int events;
     android_poll_source* source;
 
+    uint32_t frame = 0;
+    auto start = std::chrono::steady_clock::now();
+
     // Main loop
     do {
         if (ALooper_pollAll(1, nullptr, &events, (void**)&source) >= 0) {
@@ -53,6 +58,18 @@ void android_main(struct android_app* app) {
 
         if (started) {
             RunFrame();
+
+            if (frame == 1) {
+                start = std::chrono::steady_clock::now();
+            }
+            if (frame == 60) {
+                auto end = std::chrono::steady_clock::now();
+                uint64_t elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+                double milli = static_cast<double>(elapsed) / 1000.0;
+                Log(Log::INFO) << "60 frames: " << milli << " ms " <<  (60000.0 / milli) << " fps\n";
+                frame = 0;
+            }
+            ++frame;
         }
     } while (app->destroyRequested == 0);
 }
