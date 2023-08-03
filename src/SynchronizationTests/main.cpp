@@ -4,6 +4,7 @@
 #include "Tests/FragVertImage.hpp"
 #include "Tests/ComputeFragBuffer.hpp"
 #include "Tests/ComputeVertBuffer.hpp"
+#include "Tests/MultipleFrames.hpp"
 
 #include <Utility/Log.hpp>
 #include <Video/Renderer.hpp>
@@ -11,7 +12,7 @@
 #include <GLFW/glfw3.h>
 
 int main(int argc, char* argv[]) {
-    Video::Renderer::GraphicsAPI graphicsAPI = Video::Renderer::GraphicsAPI::VULKAN;
+    Video::Renderer::GraphicsAPI graphicsAPI = Video::Renderer::GraphicsAPI::WEBGPU;
 
     glfwInit();
     Utility::Window* window = new Utility::Window(800, 600, false, false, "Synchronization tests",
