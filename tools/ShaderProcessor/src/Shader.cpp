@@ -2,8 +2,10 @@
 
 #include <iostream>
 #include <sstream>
-#include <cstdio>
 #include <assert.h>
+#include <ShaderLang.h>
+#include <ResourceLimits.h>
+#include <GlslangToSpv.h>
 
 using namespace std;
 
@@ -60,21 +62,35 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
         }
         outFile << "};" << endl;
 
+        // Initalize glslang to get SPIR-V.
+        glslang::InitializeProcess();
+
         // Vulkan SPIR-V source.
-        vector<char> vulkanSpirvSource = GetVulkanSpirvSource(filename, !vulkan);
+        vector<uint32_t> vulkanSpirvSource = GetVulkanSpirvSource(filename, !vulkan);
         if (vulkan) {
+            if (vulkanSpirvSource.empty()) {
+                return false;
+            }
+
             outFile << "static const uint32_t vulkanSpirv[] = {";
             WriteSpirv(outFile, vulkanSpirvSource);
             outFile << "};" << endl << endl;
         }
 
         // WebGPU SPIR-V source.
-        vector<char> webGPUSpirvSource = GetWebGPUSpirvSource(filename, !webgpu, reflectionInfo);
+        vector<uint32_t> webGPUSpirvSource = GetWebGPUSpirvSource(filename, !webgpu, reflectionInfo);
         if (webgpu) {
+            if (webGPUSpirvSource.empty()) {
+                return false;
+            }
+
             outFile << "static const uint32_t webGPUSpirv[] = {";
             WriteSpirv(outFile, webGPUSpirvSource);
             outFile << "};" << endl << endl;
         }
+
+        // Clean up glslang.
+        glslang::FinalizeProcess();
 
         // Push constants.
         if (reflectionInfo.pushConstantCount > 0) {
@@ -116,14 +132,13 @@ bool Shader::WriteSource(const string& filename, const string& headerName, bool 
 
         outFile << glslSource.length() << ", glsl, ";
         if (vulkan) {
-            outFile << vulkanSpirvSource.size() << ", vulkanSpirv, ";
+            outFile << vulkanSpirvSource.size() * sizeof(uint32_t) << ", vulkanSpirv, ";
         } else {
             outFile << "0, nullptr, ";
         }
         if (webgpu) {
-            outFile << webGPUSpirvSource.size() << ", webGPUSpirv, ";
-        }
-        else {
+            outFile << webGPUSpirvSource.size() * sizeof(uint32_t) << ", webGPUSpirv, ";
+        } else {
             outFile << "0, nullptr, ";
         }
         outFile << (reflectionInfo.hasMatrices ? "true" : "false") << ", ";
@@ -221,10 +236,10 @@ string Shader::GetGlslSource() const {
     return glsl;
 }
 
-vector<char> Shader::GetVulkanSpirvSource(const std::string& filename, bool skip) const {
+vector<uint32_t> Shader::GetVulkanSpirvSource(const std::string& filename, bool skip) const {
     // Early out if we shouldn't get SPIR-V.
     if (skip) {
-        vector<char> spirv;
+        vector<uint32_t> spirv;
         return spirv;
     }
 
@@ -237,11 +252,10 @@ vector<char> Shader::GetVulkanSpirvSource(const std::string& filename, bool skip
     return GetSpirvSource(filename, glsl);
 }
 
-vector<char> Shader::GetWebGPUSpirvSource(const std::string & filename, bool skip, const ShaderSource::ReflectionInfo& reflectionInfo) const {
+vector<uint32_t> Shader::GetWebGPUSpirvSource(const std::string & filename, bool skip, const ShaderSource::ReflectionInfo& reflectionInfo) const {
     // Early out if we shouldn't get SPIR-V.
     if (skip) {
-        vector<char> spirv;
-        return spirv;
+        return vector<uint32_t>();
     }
 
     /// @todo Variants
@@ -253,29 +267,51 @@ vector<char> Shader::GetWebGPUSpirvSource(const std::string & filename, bool ski
     return GetSpirvSource(filename, glsl);
 }
 
-vector<char> Shader::GetSpirvSource(const std::string& filename, const std::string& glsl) const {
-    // Write temporary glsl file as input to glslangvalidator.
-    const string tempGlslFilename = filename + ".temp_for_glslang" + extension;
-    ofstream tempFile(tempGlslFilename);
-    tempFile << glsl;
-    tempFile.close();
+vector<uint32_t> Shader::GetSpirvSource(const std::string& filename, const std::string& glsl) const {
+    // Figure out what type of shader we are compiling.
+    EShLanguage language;
+    if (extension == ".vert") {
+        language = EShLangVertex;
+    } else if (extension == ".frag") {
+        language = EShLangFragment;
+    } else if (extension == ".comp") {
+        language = EShLangCompute;
+    } else {
+        cerr << "Shader needs to have .vert, .frag or .comp extension." << endl;
+        return vector<uint32_t>();
+    }
+    glslang::TShader* shader = new glslang::TShader(language);
 
-    // Run glslangvalidator to generate SPIR-V.
-    const string tempSpirvFilename = filename + ".temp_shader_output.spv";
-    system((string("glslangvalidator -V --target-env vulkan1.0 -o \"") + tempSpirvFilename + "\" \"" + tempGlslFilename + "\"").c_str());
+    // Provide the GLSL source code.
+    const char* glslC = glsl.c_str();
+    shader->setStrings(&glslC, 1);
 
-    // Read back SPIR-V.
-    ifstream file(tempSpirvFilename, ios::binary | ios::ate);
+    // Setup environment.
+    shader->setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 100);
+    shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+    shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
 
-    size_t fileSize = (size_t) file.tellg();
-    vector<char> spirv(fileSize);
-    file.seekg(0);
-    file.read(spirv.data(), fileSize);
-    file.close();
+    if (!shader->parse(GetDefaultResources(), 100, false, EShMsgDefault)) {
+        cerr << shader->getInfoLog();
+        return vector<uint32_t>();
+    }
 
-    // Clean up temp files.
-    remove(tempGlslFilename.c_str());
-    remove(tempSpirvFilename.c_str());
+    // Link to intermediate format.
+    glslang::TProgram* program = new glslang::TProgram();
+    program->addShader(shader);
+
+    if (!program->link(EShMsgDefault)) {
+        cerr << program->getInfoLog();
+        return vector<uint32_t>();
+    }
+
+    // Compile to SPIR-V.
+    vector<unsigned int> spirv;
+    glslang::GlslangToSpv(*program->getIntermediate(language), spirv);
+
+    // Cleanup.
+    delete program;
+    delete shader;
 
     return spirv;
 }
@@ -429,16 +465,12 @@ std::string Shader::GetWebGPUGlsl(const ShaderSource::ReflectionInfo& reflection
     return webGPUSource;
 }
 
-void Shader::WriteSpirv(std::ofstream& file, const std::vector<char>& spirv) {
-    assert(spirv.size() % sizeof(uint32_t) == 0);
-    size_t spirvUintLength = spirv.size() / sizeof(uint32_t);
-    const uint32_t* spirvUintSource = reinterpret_cast<const uint32_t*>(spirv.data());
-    for (size_t i = 0; i < spirvUintLength; i++) {
-        file << spirvUintSource[i];
-        if (i + 1 < spirvUintLength) {
-            file << ",";
-        }
+void Shader::WriteSpirv(std::ofstream& file, const std::vector<uint32_t>& spirv) {
+    assert(!spirv.empty());
+    for (size_t i = 0; i < spirv.size() - 1; i++) {
+        file << spirv[i] << ",";
     }
+    file << spirv[spirv.size() - 1];
 }
 
 string Shader::GetVersionString() {

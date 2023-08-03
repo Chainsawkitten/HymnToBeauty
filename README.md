@@ -15,6 +15,7 @@ Hymn to Beauty uses several third party libraries with their own licenses:
 | [glad](https://github.com/Dav1dde/glad) | Public domain (generated code) |
 | [GLFW](https://github.com/glfw/glfw) | zlib / libpng |
 | [GLM](https://github.com/g-truc/glm) | Modified MIT / MIT |
+| [glslang](https://github.com/KhronosGroup/glslang) | BSD, MIT, Apache, GPLv3 (with Bison exception) |
 | [Headerize](https://github.com/Chainsawkitten/Headerize) | Public domain |
 | [dear imgui](https://github.com/ocornut/imgui) | MIT |
 | [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) | MIT |

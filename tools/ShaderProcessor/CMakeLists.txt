@@ -37,7 +37,7 @@ else()
     endif()
 
     add_executable(ShaderProcessor ${SRCS} ${HEADERS})
-    target_link_libraries(ShaderProcessor ShaderSource)
+    target_link_libraries(ShaderProcessor ShaderSource ShaderLibraries)
 
     set_property(TARGET ShaderProcessor PROPERTY CXX_STANDARD 11)
     set_property(TARGET ShaderProcessor PROPERTY CXX_STANDARD_REQUIRED ON)

@@ -3,8 +3,6 @@
 ## Installing dependencies
 Download and install [Python](https://www.python.org/downloads/).
 
-Download and install the [Vulkan SDK](https://vulkan.lunarg.com/). We need glslang to generate SPIR-V shaders. (TODO: Use Dawn's `vulkan-deps` instead to remove dependency on Vulkan SDK?)
-
 Install [depot_tools](http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up).
 
 ### Windows

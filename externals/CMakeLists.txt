@@ -37,6 +37,20 @@ add_library(glm INTERFACE)
 target_include_directories(glm INTERFACE glm)
 target_compile_definitions(glm INTERFACE GLM_FORCE_CTOR_INIT)
 
+# glslang
+if (NOT ANDROID)
+    set(BUILD_EXTERNAL OFF CACHE BOOL "Don't build glslang externals" FORCE)
+    set(ENABLE_SPVREMAPPER OFF CACHE BOOL "Don't build SPVRemapper" FORCE)
+    set(ENABLE_GLSLANG_BINARIES OFF CACHE BOOL "Don't build glslang binaries" FORCE)
+    set(ENABLE_CTEST OFF CACHE BOOL "Don't build glslang tests" FORCE)
+    set(SKIP_GLSLANG_INSTALL ON CACHE BOOL "Skip installing glslang" FORCE)
+    add_subdirectory(glslang)
+    
+    add_library(ShaderLibraries INTERFACE)
+    target_link_libraries(ShaderLibraries INTERFACE glslang glslang-default-resource-limits SPIRV)
+    target_include_directories(ShaderLibraries INTERFACE glslang/glslang/Public glslang/SPIRV/)
+endif()
+
 # Imgui
 add_library(imgui STATIC imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp)
 target_include_directories(imgui INTERFACE imgui)

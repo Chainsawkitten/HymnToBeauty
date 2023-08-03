@@ -39,12 +39,12 @@ class Shader {
     static std::string VariableName(std::string inputName);
     static std::string GetSource(const std::string& filename);
     std::string GetGlslSource() const;
-    std::vector<char> GetVulkanSpirvSource(const std::string& filename, bool skip) const;
-    std::vector<char> GetWebGPUSpirvSource(const std::string& filename, bool skip, const ShaderSource::ReflectionInfo& reflectionInfo) const;
-    std::vector<char> GetSpirvSource(const std::string& filename, const std::string& glsl) const;
+    std::vector<uint32_t> GetVulkanSpirvSource(const std::string& filename, bool skip) const;
+    std::vector<uint32_t> GetWebGPUSpirvSource(const std::string& filename, bool skip, const ShaderSource::ReflectionInfo& reflectionInfo) const;
+    std::vector<uint32_t> GetSpirvSource(const std::string& filename, const std::string& glsl) const;
     ShaderSource::ReflectionInfo GetReflectionInfo() const;
     std::string GetWebGPUGlsl(const ShaderSource::ReflectionInfo& reflectionInfo) const;
-    static void WriteSpirv(std::ofstream& file, const std::vector<char>& spirv);
+    static void WriteSpirv(std::ofstream& file, const std::vector<uint32_t>& spirv);
     
     static std::string GetVersionString();
     static std::string GetDefaultGlslInclude();
