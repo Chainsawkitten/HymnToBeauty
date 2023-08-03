@@ -4,7 +4,7 @@
 #include "VulkanRenderPass.hpp"
 #include "VulkanTexture.hpp"
 
-#include <vulkan/vulkan.h>
+#include <glad/vulkan.h>
 #include <vector>
 #include <map>
 

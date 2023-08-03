@@ -107,9 +107,7 @@ if(OpenGLRenderer)
 endif()
 
 if(VulkanRenderer)
-    find_package(VULKAN REQUIRED)
-
-    target_link_libraries(Video Vulkan::Vulkan)
+    target_link_libraries(Video glad)
     target_compile_definitions(Video PUBLIC VULKAN_SUPPORT)
 
     set(SRCS

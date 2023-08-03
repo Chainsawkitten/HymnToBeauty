@@ -125,6 +125,8 @@ VulkanRenderer::~VulkanRenderer() {
     vkDestroyDevice(device, nullptr);
     vkDestroySurfaceKHR(instance, surface, nullptr);
     vkDestroyInstance(instance, nullptr);
+
+    gladLoaderUnloadVulkan();
 }
 
 CommandBuffer* VulkanRenderer::CreateCommandBuffer() {
@@ -575,6 +577,11 @@ uint32_t VulkanRenderer::GetFreeQuery() {
 }
 
 void VulkanRenderer::CreateInstance() {
+    // Load Vulkan functions.
+    if (!gladLoaderLoadVulkan(VK_NULL_HANDLE, VK_NULL_HANDLE, VK_NULL_HANDLE)) {
+        Log(Log::ERR) << "Failed to load Vulkan functions.\n";
+    }
+
     // Information about our application.
     VkApplicationInfo applicationInfo = {};
     applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -623,6 +630,11 @@ void VulkanRenderer::CreateInstance() {
     VkResult result = vkCreateInstance(&instanceCreateInfo, nullptr, &instance);
     if (result != VK_SUCCESS) {
         Log(Log::ERR) << "Could not create Vulkan instance.\n";
+    }
+
+    // Re-load Vulkan functions when we have the instance.
+    if (!gladLoaderLoadVulkan(instance, VK_NULL_HANDLE, VK_NULL_HANDLE)) {
+        Log(Log::ERR) << "Failed to re-load Vulkan functions with instance.\n";
     }
 }
 
@@ -711,6 +723,11 @@ void VulkanRenderer::CreateDevice(SwapChainSupport& swapChainSupport) {
         Log(Log::ERR) << "Failed to create device.\n";
     }
 
+    // Reload Vulkan functions once we have the logical device.
+    if (!gladLoaderLoadVulkan(instance, physicalDevice, device)) {
+        Log(Log::ERR) << "Failed to reload Vulkan functions with device.\n";
+    }
+
     // Get the queue to submit work to.
     vkGetDeviceQueue(device, graphicsQueueFamily, 0, &queue);
 }
@@ -748,6 +765,11 @@ VkPhysicalDevice VulkanRenderer::PickPhysicalDevice(const std::vector<const char
     }
 
     Log(Log::INFO) << "Selected device " << bestDevice << ".\n";
+
+    // Reload Vulkan functions when we have the physical device.
+    if (!gladLoaderLoadVulkan(instance, selectedDevice, VK_NULL_HANDLE)) {
+        Log(Log::ERR) << "Failed to reload Vulkan functions with physical device.\n";
+    }
 
     return selectedDevice;
 }
