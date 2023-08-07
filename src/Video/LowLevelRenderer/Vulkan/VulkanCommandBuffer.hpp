@@ -62,11 +62,17 @@ class VulkanCommandBuffer : public CommandBuffer {
     void Dispatch(const glm::uvec3& numGroups, const std::string& name) final;
     void ClearBuffer(Buffer* buffer) final;
 
-    /// Get command buffer.
+    /// Get the command buffer currently being recorded into.
     /**
-     * @return The internal Vulkan command buffer.
+     * @return The current internal Vulkan command buffers.
      */
-    VkCommandBuffer GetCommandBuffer() const;
+    VkCommandBuffer GetCurrentCommandBuffer() const;
+
+    /// Get command buffers.
+    /**
+     * @return The internal Vulkan command buffers.
+     */
+    std::vector<VkCommandBuffer> GetCommandBuffers() const;
 
     /// Finish recording the command buffer.
     void End();
@@ -89,7 +95,7 @@ class VulkanCommandBuffer : public CommandBuffer {
   private:
     VulkanCommandBuffer(const VulkanCommandBuffer& other) = delete;
 
-    void Begin();
+    void AllocateCommandBuffer();
 
     void TransitionTexture(VulkanTexture* texture, VkImageLayout destinationImageLayout);
     void BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFlags stages, bool write);
@@ -99,7 +105,12 @@ class VulkanCommandBuffer : public CommandBuffer {
     VkCommandPool commandPool;
     VulkanRenderPassAllocator& renderPassAllocator;
 
-    VkCommandBuffer* commandBuffer;
+    struct FrameCommandBuffers {
+        uint32_t currentBuffer;
+        std::vector<VkCommandBuffer> commandBuffers;
+    };
+    FrameCommandBuffers* frameCommandBuffers;
+    VkCommandBuffer currentCommandBuffer;
     VkCommandBuffer renderPassCommandBuffer;
     std::vector<VkCommandBuffer>* secondaryCommandBuffers;
     uint32_t currentFrame = 0;
@@ -108,6 +119,7 @@ class VulkanCommandBuffer : public CommandBuffer {
     bool ended = false;
     bool inRenderPass = false;
     bool containsBlitToSwapChain = false;
+    bool renderPassIsAttachmentless = false;
 
     VkClearValue clearValues[2];
     VkRenderPassBeginInfo renderPassBeginInfo;

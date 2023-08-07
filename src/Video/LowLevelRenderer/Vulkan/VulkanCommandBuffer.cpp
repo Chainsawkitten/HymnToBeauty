@@ -30,31 +30,30 @@ VulkanCommandBuffer::VulkanCommandBuffer(VulkanRenderer* vulkanRenderer, VkDevic
     renderPassBeginInfo.pClearValues = clearValues;
 
     swapChainImages = vulkanRenderer->GetSwapChainImageCount();
-    commandBuffer = new VkCommandBuffer[swapChainImages];
-    secondaryCommandBuffers = new std::vector<VkCommandBuffer>[swapChainImages];
-
-    // Allocate command buffer.
-    VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
-    commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    commandBufferAllocateInfo.commandPool = commandPool;
-    commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    commandBufferAllocateInfo.commandBufferCount = swapChainImages;
-
-    if (vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, commandBuffer) != VK_SUCCESS) {
-        Log(Log::ERR) << "Failed to create command buffer.\n";
+    frameCommandBuffers = new FrameCommandBuffers[swapChainImages];
+    for (uint32_t i = 0; i < swapChainImages; ++i) {
+        frameCommandBuffers[i].commandBuffers.clear();
+        frameCommandBuffers[i].currentBuffer = 0;
     }
 
-    Begin();
+    secondaryCommandBuffers = new std::vector<VkCommandBuffer>[swapChainImages];
+
+    AllocateCommandBuffer();
 }
 
 VulkanCommandBuffer::~VulkanCommandBuffer() {
-    vkFreeCommandBuffers(device, commandPool, swapChainImages, commandBuffer);
+    for (uint32_t i = 0; i < swapChainImages; ++i) {
+        if (!frameCommandBuffers[i].commandBuffers.empty()) {
+            vkFreeCommandBuffers(device, commandPool, frameCommandBuffers[i].commandBuffers.size(), frameCommandBuffers[i].commandBuffers.data());
+        }
+    }
+
     for (uint32_t i = 0; i < swapChainImages; ++i) {
         if (!secondaryCommandBuffers[i].empty())
             vkFreeCommandBuffers(device, commandPool, secondaryCommandBuffers[i].size(), secondaryCommandBuffers[i].data());
     }
 
-    delete[] commandBuffer;
+    delete[] frameCommandBuffers;
 }
 
 void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::string& name) {
@@ -142,11 +141,13 @@ void VulkanCommandBuffer::BeginRenderPass(RenderPass* renderPass, const std::str
 
 void VulkanCommandBuffer::BeginRenderPass(Texture* colorAttachment, RenderPass::LoadOperation colorLoadOperation, Texture* depthAttachment, RenderPass::LoadOperation depthLoadOperation, const std::string& name) {
     RenderPass* renderPass = renderPassAllocator.CreateRenderPass(colorAttachment, colorLoadOperation, depthAttachment, depthLoadOperation);
+    renderPassIsAttachmentless = false;
     BeginRenderPass(renderPass, name);
 }
 
 void VulkanCommandBuffer::BeginAttachmentlessRenderPass(const glm::uvec2& size, uint32_t msaaSamples, const std::string& name) {
     RenderPass* renderPass = renderPassAllocator.CreateAttachmentlessRenderPass(size, msaaSamples);
+    renderPassIsAttachmentless = true;
     BeginRenderPass(renderPass, name);
 }
 
@@ -156,19 +157,26 @@ void VulkanCommandBuffer::EndRenderPass() {
     vkEndCommandBuffer(renderPassCommandBuffer);
 
     if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
-        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
+        vkCmdWriteTimestamp(currentCommandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
     }
 
-    vkCmdBeginRenderPass(commandBuffer[currentFrame], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS);
-    vkCmdExecuteCommands(commandBuffer[currentFrame], 1, &renderPassCommandBuffer);
-    vkCmdEndRenderPass(commandBuffer[currentFrame]);
+    vkCmdBeginRenderPass(currentCommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS);
+    vkCmdExecuteCommands(currentCommandBuffer, 1, &renderPassCommandBuffer);
+    vkCmdEndRenderPass(currentCommandBuffer);
 
     if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
-        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
+        vkCmdWriteTimestamp(currentCommandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
     }
 
     inRenderPass = false;
     currentGraphicsPipeline = nullptr;
+
+#if ANDROID
+    if (renderPassIsAttachmentless) {
+        // Work around Mali driver bug.
+        AllocateCommandBuffer();
+    }
+#endif
 }
 
 void VulkanCommandBuffer::BindGraphicsPipeline(GraphicsPipeline* graphicsPipeline) {
@@ -261,7 +269,7 @@ void VulkanCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingTy
         vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), bindingType, 1, &descriptorSet, 0, nullptr);
     } else {
         assert(currentComputePipeline != nullptr);
-        vkCmdBindDescriptorSets(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipelineLayout(), bindingType, 1, &descriptorSet, 0, nullptr);
+        vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipelineLayout(), bindingType, 1, &descriptorSet, 0, nullptr);
     }
 }
 
@@ -286,7 +294,7 @@ void VulkanCommandBuffer::BindStorageBuffers(std::initializer_list<Buffer*> buff
         vkCmdBindDescriptorSets(renderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentGraphicsPipeline->GetPipelineLayout(), ShaderProgram::BindingType::STORAGE_BUFFER, 1, &descriptorSet, 0, nullptr);
     } else {
         assert(currentComputePipeline != nullptr);
-        vkCmdBindDescriptorSets(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipelineLayout(), ShaderProgram::BindingType::STORAGE_BUFFER, 1, &descriptorSet, 0, nullptr);
+        vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipelineLayout(), ShaderProgram::BindingType::STORAGE_BUFFER, 1, &descriptorSet, 0, nullptr);
     }
 }
 
@@ -318,7 +326,7 @@ void VulkanCommandBuffer::PushConstants(const void* data) {
         const VkPushConstantRange* pushConstantRange = currentComputePipeline->GetShaderProgram()->GetPushConstantRange();
         assert(pushConstantRange != nullptr);
 
-        vkCmdPushConstants(commandBuffer[currentFrame], currentComputePipeline->GetPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, pushConstantRange->offset, pushConstantRange->size, data);
+        vkCmdPushConstants(currentCommandBuffer, currentComputePipeline->GetPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, pushConstantRange->offset, pushConstantRange->size, data);
     }
 }
 
@@ -346,7 +354,7 @@ void VulkanCommandBuffer::BlitToSwapChain(Texture* texture) {
 
     // Transition swapchain image to transfer dst optimal.
     VkImage swapChainImage = vulkanRenderer->GetCurrentSwapChainImage();
-    Utility::TransitionImage(commandBuffer[currentFrame], swapChainImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    Utility::TransitionImage(currentCommandBuffer, swapChainImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
     // Blit from render texture to swapchain image.
     VulkanTexture* vulkanTexture = static_cast<VulkanTexture*>(texture);
@@ -375,10 +383,10 @@ void VulkanCommandBuffer::BlitToSwapChain(Texture* texture) {
     blit.dstOffsets[1].y = size.y;
     blit.dstOffsets[1].z = 1;
 
-    vkCmdBlitImage(commandBuffer[currentFrame], vulkanTexture->GetImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, swapChainImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_NEAREST);
+    vkCmdBlitImage(currentCommandBuffer, vulkanTexture->GetImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, swapChainImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_NEAREST);
 
     // Transition swapchain image to present optimal.
-    Utility::TransitionImage(commandBuffer[currentFrame], swapChainImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+    Utility::TransitionImage(currentCommandBuffer, swapChainImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
     containsBlitToSwapChain = true;
 }
@@ -389,7 +397,7 @@ void VulkanCommandBuffer::BindComputePipeline(ComputePipeline* computePipeline) 
 
     currentComputePipeline = static_cast<VulkanComputePipeline*>(computePipeline);
 
-    vkCmdBindPipeline(commandBuffer[currentFrame], VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipeline());
+    vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, currentComputePipeline->GetPipeline());
 }
 
 void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups, const std::string& name) {
@@ -403,13 +411,13 @@ void VulkanCommandBuffer::Dispatch(const glm::uvec3& numGroups, const std::strin
 
         timings.push_back(timing);
 
-        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
+        vkCmdWriteTimestamp(currentCommandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().startQuery);
     }
 
-    vkCmdDispatch(commandBuffer[currentFrame], numGroups.x, numGroups.y, numGroups.z);
+    vkCmdDispatch(currentCommandBuffer, numGroups.x, numGroups.y, numGroups.z);
 
     if (vulkanRenderer->GetOptionalFeatures().timestamps && vulkanRenderer->IsProfiling()) {
-        vkCmdWriteTimestamp(commandBuffer[currentFrame], VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
+        vkCmdWriteTimestamp(currentCommandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, vulkanRenderer->GetQueryPool(), timings.back().endQuery);
     }
 }
 
@@ -424,11 +432,19 @@ void VulkanCommandBuffer::ClearBuffer(Buffer* buffer) {
         BufferBarrier(vulkanBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, true);
     }
 
-    vkCmdFillBuffer(commandBuffer[currentFrame], vulkanBuffer->GetBuffer(), vulkanBuffer->GetOffset(), vulkanBuffer->GetSize(), 0);
+    vkCmdFillBuffer(currentCommandBuffer, vulkanBuffer->GetBuffer(), vulkanBuffer->GetOffset(), vulkanBuffer->GetSize(), 0);
 }
 
-VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const {
-    return commandBuffer[currentFrame];
+VkCommandBuffer VulkanCommandBuffer::GetCurrentCommandBuffer() const {
+    return currentCommandBuffer;
+}
+
+std::vector<VkCommandBuffer> VulkanCommandBuffer::GetCommandBuffers() const {
+    std::vector<VkCommandBuffer> commandBuffers;
+    for (uint32_t i = 0; i < frameCommandBuffers[currentFrame].currentBuffer; ++i) {
+        commandBuffers.push_back(frameCommandBuffers[currentFrame].commandBuffers[i]);
+    }
+    return commandBuffers;
 }
 
 void VulkanCommandBuffer::End() {
@@ -437,7 +453,7 @@ void VulkanCommandBuffer::End() {
     timings.clear();
 
     if (!ended) {
-        if (vkEndCommandBuffer(commandBuffer[currentFrame]) != VK_SUCCESS) {
+        if (vkEndCommandBuffer(currentCommandBuffer) != VK_SUCCESS) {
             Log(Log::ERR) << "Failed to end command buffer.\n";
         }
 
@@ -450,7 +466,11 @@ void VulkanCommandBuffer::NextFrame() {
 
     currentFrame = (currentFrame + 1) % swapChainImages;
 
-    vkResetCommandBuffer(commandBuffer[currentFrame], 0);
+    for (uint32_t i = 0; i < frameCommandBuffers[currentFrame].currentBuffer; ++i) {
+        vkResetCommandBuffer(frameCommandBuffers[currentFrame].commandBuffers[i], 0);
+    }
+    frameCommandBuffers[currentFrame].currentBuffer = 0;
+
     if (!secondaryCommandBuffers[currentFrame].empty()) {
         vkFreeCommandBuffers(device, commandPool, secondaryCommandBuffers[currentFrame].size(), secondaryCommandBuffers[currentFrame].data());
         secondaryCommandBuffers[currentFrame].clear();
@@ -459,7 +479,7 @@ void VulkanCommandBuffer::NextFrame() {
     containsBlitToSwapChain = false;
     ended = false;
 
-    Begin();
+    AllocateCommandBuffer();
 }
 
 bool VulkanCommandBuffer::ContainsBlitToSwapChain() const {
@@ -470,12 +490,40 @@ const std::vector<VulkanCommandBuffer::Timing>& VulkanCommandBuffer::GetTimings(
     return timings;
 }
 
-void VulkanCommandBuffer::Begin() {
+void VulkanCommandBuffer::AllocateCommandBuffer() {
+    assert(!inRenderPass);
+
+    // End previous command buffer.
+    if (frameCommandBuffers[currentFrame].currentBuffer > 0) {
+        vkEndCommandBuffer(currentCommandBuffer);
+    }
+
+    frameCommandBuffers[currentFrame].currentBuffer++;
+
+    if (frameCommandBuffers[currentFrame].commandBuffers.size() < frameCommandBuffers[currentFrame].currentBuffer) {
+        // Allocate command buffer.
+        VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
+        commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        commandBufferAllocateInfo.commandPool = commandPool;
+        commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        commandBufferAllocateInfo.commandBufferCount = 1;
+
+        VkCommandBuffer commandBuffer;
+        if (vkAllocateCommandBuffers(device, &commandBufferAllocateInfo, &commandBuffer) != VK_SUCCESS) {
+            Log(Log::ERR) << "Failed to create command buffer.\n";
+        }
+
+        frameCommandBuffers[currentFrame].commandBuffers.push_back(commandBuffer);
+    }
+
+    currentCommandBuffer = frameCommandBuffers[currentFrame].commandBuffers[frameCommandBuffers[currentFrame].currentBuffer - 1];
+
+    // Begin the command buffer.
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    if (vkBeginCommandBuffer(commandBuffer[currentFrame], &beginInfo) != VK_SUCCESS) {
+    if (vkBeginCommandBuffer(currentCommandBuffer, &beginInfo) != VK_SUCCESS) {
         Log(Log::ERR) << "Failed to begin command buffer.\n";
     }
 
@@ -489,7 +537,7 @@ void VulkanCommandBuffer::TransitionTexture(VulkanTexture* texture, VkImageLayou
     
     // Transition to the desired layout (if it's not already in that layout).
     if (oldLayout != destinationImageLayout) {
-        Utility::TransitionImage(commandBuffer[currentFrame], texture->GetImage(), oldLayout, destinationImageLayout);
+        Utility::TransitionImage(currentCommandBuffer, texture->GetImage(), oldLayout, destinationImageLayout);
         texture->SetImageLayout(destinationImageLayout);
     }
 }
@@ -541,7 +589,7 @@ void VulkanCommandBuffer::BufferBarrier(VulkanBuffer* buffer, VkPipelineStageFla
         memoryBarrier.offset = buffer->GetOffset();
         memoryBarrier.size = buffer->GetSize();
 
-        vkCmdPipelineBarrier(commandBuffer[currentFrame], sourceStages, destinationStages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
+        vkCmdPipelineBarrier(currentCommandBuffer, sourceStages, destinationStages, 0, 0, nullptr, 1, &memoryBarrier, 0, nullptr);
     }
 }
 
