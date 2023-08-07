@@ -83,7 +83,7 @@ void VulkanRawBuffer::Write(uint32_t offset, uint32_t size, const void* data) {
         region.dstOffset = offset;
         region.size = size;
 
-        vkCmdCopyBuffer(vulkanCommandBuffer->GetCommandBuffer(), stagingBuffer, buffer, 1, &region);
+        vkCmdCopyBuffer(vulkanCommandBuffer->GetCurrentCommandBuffer(), stagingBuffer, buffer, 1, &region);
 
         vulkanRenderer.Submit(commandBuffer);
         vulkanRenderer.Wait();

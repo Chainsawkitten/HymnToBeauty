@@ -198,7 +198,7 @@ void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
     vulkanCommandBuffer->End();
 
     // Synchronization.
-    VkCommandBuffer vkCommandBuffer = vulkanCommandBuffer->GetCommandBuffer();
+    std::vector<VkCommandBuffer> vkCommandBuffers = vulkanCommandBuffer->GetCommandBuffers();
     std::vector<VkPipelineStageFlags> waitStages;
     std::vector<VkSemaphore> waitSemaphores;
     std::vector<VkSemaphore> signalSemaphores;
@@ -224,8 +224,8 @@ void VulkanRenderer::Submit(CommandBuffer* commandBuffer) {
     // Submit command buffer to queue.
     VkSubmitInfo submitInfo = {};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &vkCommandBuffer;
+    submitInfo.commandBufferCount = vkCommandBuffers.size();
+    submitInfo.pCommandBuffers = vkCommandBuffers.data();
     submitInfo.waitSemaphoreCount = waitSemaphores.size();
     submitInfo.pWaitSemaphores = waitSemaphores.data();
     submitInfo.pWaitDstStageMask = waitStages.data();
@@ -325,7 +325,7 @@ unsigned char* VulkanRenderer::ReadImage(Texture* texture) {
     // Create command buffer.
     CommandBuffer* commandBuffer = CreateCommandBuffer();
     VulkanCommandBuffer* vulkanCommandBuffer = static_cast<VulkanCommandBuffer*>(commandBuffer);
-    VkCommandBuffer vkCommandBuffer = vulkanCommandBuffer->GetCommandBuffer();
+    VkCommandBuffer vkCommandBuffer = vulkanCommandBuffer->GetCurrentCommandBuffer();
 
     // Transition source image to transfer source layout.
     Utility::TransitionImage(vkCommandBuffer, textureImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -1165,7 +1165,7 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
         materialLayoutBindings[i].binding = i;
         materialLayoutBindings[i].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         materialLayoutBindings[i].descriptorCount = 1;
-        materialLayoutBindings[i].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        materialLayoutBindings[i].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
         materialLayoutBindings[i].pImmutableSamplers = nullptr;
 
         layoutCreateInfo.bindingCount = i + 1;

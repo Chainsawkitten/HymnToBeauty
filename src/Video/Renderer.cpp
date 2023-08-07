@@ -60,7 +60,7 @@ Renderer::Renderer(GraphicsAPI graphicsAPI, Utility::Window* window) {
     this->window = window;
     outputSize = window->GetSize();
 
-    guiCommandBuffer = lowLevelRenderer->CreateCommandBuffer();
+    commandBuffer = lowLevelRenderer->CreateCommandBuffer();
 
     staticRenderProgram = new StaticRenderProgram(lowLevelRenderer);
     spriteRenderProgram = new SpriteRenderProgram(lowLevelRenderer);
@@ -156,10 +156,7 @@ Renderer::~Renderer() {
     delete quadVertexDescription;
     delete quadVertexBuffer;
 
-    delete guiCommandBuffer;
-    for (CommandBuffer* commandBuffer : commandBuffers) {
-        delete commandBuffer;
-    }
+    delete commandBuffer;
     delete lowLevelRenderer;
 }
 
@@ -183,12 +180,6 @@ void Renderer::BeginFrame() {
 void Renderer::Render(const RenderScene& renderScene) {
     bool firstCamera = true;
 
-    // We need two command buffers per camera. One for attachmentless rendering (light binning) and one for main rendering.
-    // We can't do attachmentless rendering and regular rendering in the same command buffer due to a Mali driver bug.
-    while (commandBuffers.size() < renderScene.cameras.size() * 2) {
-        commandBuffers.push_back(lowLevelRenderer->CreateCommandBuffer());
-    }
-
     // Render all cameras.
     for (uint32_t cameraIndex = 0; cameraIndex < renderScene.cameras.size(); ++cameraIndex) {
         PROFILE("Render camera");
@@ -200,14 +191,8 @@ void Renderer::Render(const RenderScene& renderScene) {
 
         UpdateLights(renderScene, cameraIndex);
 
-        // Submit attachmentless rendering in separate command buffer to work around Mali driver bug.
-        lowLevelRenderer->Submit(commandBuffers[cameraIndex * 2]);
-
         std::vector<std::size_t> culledMeshes;
         culledMeshes = FrustumCulling(renderScene, camera);
-
-        // Get main command buffer.
-        CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
 
 		// Depth pre-pass
         depthTexture = lowLevelRenderer->CreateRenderTarget(renderSurfaceSize, Texture::Format::D32);
@@ -253,20 +238,18 @@ void Renderer::Render(const RenderScene& renderScene) {
 
         lowLevelRenderer->FreeRenderTarget(postProcessingTexture);
 
-        lowLevelRenderer->Submit(commandBuffer);
-
         firstCamera = false;
     }
 
-    guiCommandBuffer->BeginRenderPass(outputTexture, RenderPass::LoadOperation::LOAD, nullptr, RenderPass::LoadOperation::DONT_CARE, "GUI");
+    commandBuffer->BeginRenderPass(outputTexture, RenderPass::LoadOperation::LOAD, nullptr, RenderPass::LoadOperation::DONT_CARE, "GUI");
 }
 
 void Renderer::Present() {
-    guiCommandBuffer->EndRenderPass();
-    guiCommandBuffer->BlitToSwapChain(outputTexture);
+    commandBuffer->EndRenderPass();
+    commandBuffer->BlitToSwapChain(outputTexture);
     lowLevelRenderer->FreeRenderTarget(outputTexture);
 
-    lowLevelRenderer->Submit(guiCommandBuffer);
+    lowLevelRenderer->Submit(commandBuffer);
 
     lowLevelRenderer->Present();
 }
@@ -276,7 +259,7 @@ void Renderer::WaitForRender() {
 }
 
 CommandBuffer* Renderer::GetCommandBuffer() {
-    return guiCommandBuffer;
+    return commandBuffer;
 }
 
 Utility::Window* Renderer::GetWindow() {
@@ -338,9 +321,6 @@ void Renderer::UpdateLights(const RenderScene& renderScene, const uint32_t camer
         }
     }
 
-    // Get light command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2];
-
     // Update light buffer.
     zBinning->BinLights(*commandBuffer, directionalLightStructs, lights, camera.projectionMatrix, camera.zNear, camera.zFar);
 }
@@ -367,8 +347,6 @@ std::vector<std::size_t> Renderer::FrustumCulling(const RenderScene& renderScene
 void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const uint32_t cameraIndex) {
     PROFILE("Depth pre-pass");
 
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
     const RenderScene::Camera& camera = renderScene.cameras[cameraIndex];
 
     commandBuffer->BeginRenderPass(nullptr, RenderPass::LoadOperation::DONT_CARE, depthTexture, RenderPass::LoadOperation::CLEAR, "Depth pre-pass");
@@ -389,8 +367,6 @@ void Renderer::RenderDepthPrePass(const RenderScene& renderScene, const std::vec
 void Renderer::RenderOpaques(const RenderScene& renderScene, const std::vector<std::size_t>& culledMeshes, const uint32_t cameraIndex) {
     PROFILE("Render opaques");
 
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
     const RenderScene::Camera& camera = renderScene.cameras[cameraIndex];
 
     // Static meshes.
@@ -407,8 +383,6 @@ void Renderer::RenderOpaques(const RenderScene& renderScene, const std::vector<s
 void Renderer::RenderDebugShapes(const RenderScene& renderScene, const uint32_t cameraIndex) {
     PROFILE("Render debug entities");
 
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
     const RenderScene::Camera& camera = renderScene.cameras[cameraIndex];
 
     // Bind render target.
@@ -454,8 +428,6 @@ void Renderer::RenderDebugShapes(const RenderScene& renderScene, const uint32_t 
 }
 
 void Renderer::RenderIcons(const RenderScene& renderScene, const uint32_t cameraIndex) {
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
     const RenderScene::Camera& camera = renderScene.cameras[cameraIndex];
 
     if (!renderScene.icons.empty()) {
@@ -475,9 +447,6 @@ void Renderer::RenderIcons(const RenderScene& renderScene, const uint32_t camera
 }
 
 void Renderer::PrepareRenderingIcons(const uint32_t cameraIndex, const glm::mat4& viewProjectionMatrix, const glm::vec3& cameraPosition, const glm::vec3& cameraUp) {
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
-
     commandBuffer->BindGraphicsPipeline(iconGraphicsPipeline);
     commandBuffer->BindGeometry(quadGeometryBinding);
     commandBuffer->SetViewportAndScissor(glm::uvec2(0, 0), renderSurfaceSize);
@@ -491,9 +460,6 @@ void Renderer::PrepareRenderingIcons(const uint32_t cameraIndex, const glm::mat4
 }
 
 void Renderer::RenderIcon(const uint32_t cameraIndex, const glm::vec3& position) {
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
-
     struct PushConsts {
         glm::vec4 position;
         glm::vec4 right;
@@ -512,8 +478,6 @@ void Renderer::RenderIcon(const uint32_t cameraIndex, const glm::vec3& position)
 void Renderer::RenderSprites(const RenderScene& renderScene, const uint32_t cameraIndex) {
     PROFILE("Render sprites");
 
-    // Get main command buffer.
-    CommandBuffer* commandBuffer = commandBuffers[cameraIndex * 2 + 1];
     const RenderScene::Camera& camera = renderScene.cameras[cameraIndex];
 
     if (!renderScene.sprites.empty()) {

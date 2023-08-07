@@ -114,8 +114,7 @@ class Renderer {
     Texture* colorTexture;
     Texture* depthTexture;
     Texture* postProcessingTexture;
-    CommandBuffer* guiCommandBuffer;
-    std::vector<CommandBuffer*> commandBuffers;
+    CommandBuffer* commandBuffer;
 
     StaticRenderProgram* staticRenderProgram;
     SpriteRenderProgram* spriteRenderProgram;
