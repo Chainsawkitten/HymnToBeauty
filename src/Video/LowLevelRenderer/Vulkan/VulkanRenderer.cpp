@@ -423,7 +423,7 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(ShaderProgram::BindingType bind
 
         VkDescriptorSet descriptorSet;
         if (vkAllocateDescriptorSets(device, &allocateInfo, &descriptorSet) != VK_SUCCESS) {
-            Log(Log::ERR) << "Failed to allocate descriptor set.\n";
+            Log(Log::ERR) << "Failed to allocate descriptor set (uniform buffer).\n";
         }
 
         cache.push_back(descriptorSet);
@@ -476,7 +476,7 @@ VkDescriptorSet VulkanRenderer::GetStorageBufferDescriptorSet(std::initializer_l
 
         VkDescriptorSet descriptorSet;
         if (vkAllocateDescriptorSets(device, &allocateInfo, &descriptorSet) != VK_SUCCESS) {
-            Log(Log::ERR) << "Failed to allocate descriptor set.\n";
+            Log(Log::ERR) << "Failed to allocate descriptor set (storage buffer).\n";
         }
 
         cache.push_back(descriptorSet);
@@ -528,7 +528,7 @@ VkDescriptorSet VulkanRenderer::GetDescriptorSet(std::initializer_list<std::pair
 
         VkDescriptorSet descriptorSet;
         if (vkAllocateDescriptorSets(device, &allocateInfo, &descriptorSet) != VK_SUCCESS) {
-            Log(Log::ERR) << "Failed to allocate descriptor set.\n";
+            Log(Log::ERR) << "Failed to allocate descriptor set (texture).\n";
         }
 
         cache.push_back(descriptorSet);
@@ -1181,7 +1181,7 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
 }
 
 void VulkanRenderer::CreateDescriptorPool() {
-    const uint32_t maxSets = 1000;
+    const uint32_t maxSets = 2000;
 
     std::vector<VkDescriptorPoolSize> poolSizes;
 
