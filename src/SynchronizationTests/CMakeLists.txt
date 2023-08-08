@@ -2,6 +2,7 @@ set(SRCS
         Framework/Meshes.cpp
         Framework/Runner.cpp
         Framework/SynchronizationTest.cpp
+        Tests/BarrierMerging.cpp
         Tests/ExampleTest.cpp
         Tests/FragFragBuffer.cpp
         Tests/FragFragImage.cpp
@@ -15,6 +16,7 @@ set(HEADERS
         Framework/Meshes.hpp
         Framework/Runner.hpp
         Framework/SynchronizationTest.hpp
+        Tests/BarrierMerging.hpp
         Tests/ExampleTest.hpp
         Tests/FragFragBuffer.hpp
         Tests/FragFragImage.hpp
@@ -48,6 +50,7 @@ set(SHADERS
     Shaders/PlaneBuffer.vert
     Shaders/Plane.frag
     Shaders/PostProcessing.vert
+    Shaders/PostProcessingOffset.vert
 )
 
 # Process shaders.

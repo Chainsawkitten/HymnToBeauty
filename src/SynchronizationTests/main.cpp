@@ -5,6 +5,7 @@
 #include "Tests/ComputeFragBuffer.hpp"
 #include "Tests/ComputeVertBuffer.hpp"
 #include "Tests/MultipleFrames.hpp"
+#include "Tests/BarrierMerging.hpp"
 
 #include <Utility/Log.hpp>
 #include <Video/Renderer.hpp>
@@ -18,7 +19,7 @@ int main(int argc, char* argv[]) {
     Utility::Window* window = new Utility::Window(800, 600, false, false, "Synchronization tests",
         graphicsAPI == Video::Renderer::GraphicsAPI::VULKAN || graphicsAPI == Video::Renderer::GraphicsAPI::WEBGPU);
 
-    ComputeVertBuffer test;
+    BarrierMerging test;
     RunTest(&test, window, graphicsAPI);
 
     delete window;
