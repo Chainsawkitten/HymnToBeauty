@@ -459,7 +459,12 @@ void WebGPURenderer::CreateDevice() {
 #endif
 
     WGPUDeviceDescriptor deviceDescriptor = {};
+#if WEBGPU_BACKEND_WGPU
+    /// @todo Remove when WGPU native headers have been updated.
     deviceDescriptor.requiredFeaturesCount = features.size();
+#else
+    deviceDescriptor.requiredFeatureCount = features.size();
+#endif
     deviceDescriptor.requiredFeatures = features.data();
 
     struct UserData {
