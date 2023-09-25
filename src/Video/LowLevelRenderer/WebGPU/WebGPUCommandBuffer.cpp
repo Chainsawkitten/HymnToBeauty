@@ -14,11 +14,13 @@
 
 namespace Video {
 
-WebGPUCommandBuffer::WebGPUCommandBuffer(WebGPURenderer* renderer) {
+WebGPUCommandBuffer::WebGPUCommandBuffer(WebGPURenderer* renderer, uint32_t frames) {
     this->renderer = renderer;
+    this->frames = frames;
     device = renderer->GetDevice();
     blitGraphicsPipeline = renderer->GetBlitGraphicsPipeline();
     blitSampler = renderer->GetSampler(Sampler::Filter::NEAREST, Sampler::Clamping::CLAMP_TO_EDGE);
+    pushConstantBuffers = new std::vector<PushConstantBuffer>[frames];
 
     NextFrame();
 
@@ -40,8 +42,10 @@ WebGPUCommandBuffer::~WebGPUCommandBuffer() {
 
     wgpuBindGroupRelease(emptyBindGroup);
 
-    for (PushConstantBuffer& buffer : pushConstantBuffers) {
-        delete buffer.buffer;
+    for (uint32_t i = 0; i < frames; ++i) {
+        for (PushConstantBuffer& buffer : pushConstantBuffers[i]) {
+            delete buffer.buffer;
+        }
     }
 }
 
@@ -343,22 +347,22 @@ void WebGPUCommandBuffer::PushConstants(const void* data) {
     assert(GetCurrentShaderProgram()->GetPushConstantSize() > 0);
 
     // Acquire place in push constant buffer.
-    if (currentPushConstantBuffer >= pushConstantBuffers.size()) {
+    if (currentPushConstantBuffer >= pushConstantBuffers[frame].size()) {
         AllocatePushConstantBuffer();
     }
 
-    if (pushConstantBuffers[currentPushConstantBuffer].currentPushConstant >= pushConstantsPerBuffer) {
+    if (pushConstantBuffers[frame][currentPushConstantBuffer].currentPushConstant >= pushConstantsPerBuffer) {
         ++currentPushConstantBuffer;
     }
 
-    if (currentPushConstantBuffer >= pushConstantBuffers.size()) {
+    if (currentPushConstantBuffer >= pushConstantBuffers[frame].size()) {
         AllocatePushConstantBuffer();
     }
 
     // Copy the data.
-    memcpy(&pushConstantBuffers[currentPushConstantBuffer].data[pushConstantSize * pushConstantBuffers[currentPushConstantBuffer].currentPushConstant], data, GetCurrentShaderProgram()->GetPushConstantSize());
+    memcpy(&pushConstantBuffers[frame][currentPushConstantBuffer].data[pushConstantSize * pushConstantBuffers[frame][currentPushConstantBuffer].currentPushConstant], data, GetCurrentShaderProgram()->GetPushConstantSize());
 
-    pushConstantBuffers[currentPushConstantBuffer].currentPushConstant++;
+    pushConstantBuffers[frame][currentPushConstantBuffer].currentPushConstant++;
 
     uniformsHasChanged = true;
 }
@@ -485,7 +489,7 @@ WGPUCommandBuffer WebGPUCommandBuffer::End() {
     EndComputePass();
 
     // Upload push constant data.
-    for (PushConstantBuffer& buffer : pushConstantBuffers) {
+    for (PushConstantBuffer& buffer : pushConstantBuffers[frame]) {
         if (buffer.currentPushConstant > 0) {
             wgpuQueueWriteBuffer(renderer->GetQueue(), buffer.buffer->GetBuffer(), 0, buffer.data, pushConstantSize * buffer.currentPushConstant);
         }
@@ -515,7 +519,8 @@ void WebGPUCommandBuffer::NextFrame() {
     commandEncoder = wgpuDeviceCreateCommandEncoder(device, &encoderDescriptor);
 
     // Clear push constant data.
-    for (PushConstantBuffer& buffer : pushConstantBuffers) {
+    frame = (frame + 1) % frames;
+    for (PushConstantBuffer& buffer : pushConstantBuffers[frame]) {
         buffer.currentPushConstant = 0;
     }
     currentPushConstantBuffer = 0;
@@ -531,7 +536,7 @@ void WebGPUCommandBuffer::AllocatePushConstantBuffer() {
     PushConstantBuffer pushConstantBuffer = {};
     pushConstantBuffer.buffer = static_cast<WebGPUBuffer*>(renderer->CreateBuffer(Buffer::BufferUsage::UNIFORM_BUFFER, pushConstantSize * pushConstantsPerBuffer));
 
-    pushConstantBuffers.push_back(pushConstantBuffer);
+    pushConstantBuffers[frame].push_back(pushConstantBuffer);
 }
 
 void WebGPUCommandBuffer::UpdateUniforms() {
@@ -567,7 +572,7 @@ void WebGPUCommandBuffer::UpdateUniforms() {
     if (shaderProgram->GetPushConstantSize() > 0) {
         // Find the push constant buffer and the offset into it.
         uint32_t whichBuffer = currentPushConstantBuffer;
-        uint32_t offset = pushConstantBuffers[whichBuffer].currentPushConstant;
+        uint32_t offset = pushConstantBuffers[frame][whichBuffer].currentPushConstant;
         if (offset == 0) {
             assert(whichBuffer > 0);
             --whichBuffer;
@@ -578,7 +583,7 @@ void WebGPUCommandBuffer::UpdateUniforms() {
 
         entries[bindGroupDescriptor.entryCount] = {};
         entries[bindGroupDescriptor.entryCount].binding = 1;
-        entries[bindGroupDescriptor.entryCount].buffer = pushConstantBuffers[whichBuffer].buffer->GetBuffer();
+        entries[bindGroupDescriptor.entryCount].buffer = pushConstantBuffers[frame][whichBuffer].buffer->GetBuffer();
         entries[bindGroupDescriptor.entryCount].offset = offset;
         entries[bindGroupDescriptor.entryCount].size = pushConstantSize;
 

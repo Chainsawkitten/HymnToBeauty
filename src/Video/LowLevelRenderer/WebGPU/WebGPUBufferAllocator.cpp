@@ -57,8 +57,8 @@ WGPUBuffer WebGPURawBuffer::GetBuffer() const {
     return buffer;
 }
 
-WebGPUBufferAllocator::WebGPUBufferAllocator(WebGPURenderer& webGPURenderer) : BufferAllocator(1), webGPURenderer(webGPURenderer) {
-    
+WebGPUBufferAllocator::WebGPUBufferAllocator(WebGPURenderer& webGPURenderer, uint32_t frames) : BufferAllocator(frames), webGPURenderer(webGPURenderer) {
+
 }
 
 WebGPUBufferAllocator::~WebGPUBufferAllocator() {
