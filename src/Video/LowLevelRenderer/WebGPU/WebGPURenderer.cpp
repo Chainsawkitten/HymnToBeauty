@@ -44,6 +44,8 @@
 
 namespace Video {
 
+static const uint32_t bufferFramesInFlight = 2;
+
 WebGPURenderer::WebGPURenderer(::Utility::Window* window) {
     optionalFeatures = {};
 
@@ -55,7 +57,7 @@ WebGPURenderer::WebGPURenderer(::Utility::Window* window) {
     CreateSwapChain(window);
     CreateSamplers();
 
-    bufferAllocator = new WebGPUBufferAllocator(*this);
+    bufferAllocator = new WebGPUBufferAllocator(*this, bufferFramesInFlight);
     renderTargetAllocator = new WebGPURenderTargetAllocator(*this);
 
     // Blitting.
@@ -95,7 +97,7 @@ WebGPURenderer::~WebGPURenderer() {
 }
 
 CommandBuffer* WebGPURenderer::CreateCommandBuffer() {
-    return new WebGPUCommandBuffer(this);
+    return new WebGPUCommandBuffer(this, bufferFramesInFlight);
 }
 
 void WebGPURenderer::BeginFrame() {
