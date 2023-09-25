@@ -42,8 +42,9 @@ class WebGPUBufferAllocator : public BufferAllocator {
     /// Create a new buffer allocator.
     /**
      * @param webGPURenderer The WebGPU renderer.
+     * @param frames How many frames before re-using buffers.
      */
-    explicit WebGPUBufferAllocator(WebGPURenderer& webGPURenderer);
+    WebGPUBufferAllocator(WebGPURenderer& webGPURenderer, uint32_t frames);
 
     /// Destructor.
     ~WebGPUBufferAllocator() final;

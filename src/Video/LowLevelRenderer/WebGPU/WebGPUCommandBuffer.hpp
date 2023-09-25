@@ -19,8 +19,9 @@ class WebGPUCommandBuffer : public CommandBuffer {
     /// Create new WebGPU command buffer.
     /**
      * @param renderer The WebGPU renderer.
+     * @param frames How many frames before re-using buffers for push constant emulation.
      */
-    explicit WebGPUCommandBuffer(WebGPURenderer* renderer);
+    WebGPUCommandBuffer(WebGPURenderer* renderer, uint32_t frames = 1);
 
     /// Destructor.
     ~WebGPUCommandBuffer() final;
@@ -103,8 +104,11 @@ class WebGPUCommandBuffer : public CommandBuffer {
         uint32_t currentPushConstant;
     };
 
-    std::vector<PushConstantBuffer> pushConstantBuffers;
-    std::uint32_t currentPushConstantBuffer = 0;
+    uint32_t frames;
+    uint32_t frame = 0;
+    std::vector<PushConstantBuffer>* pushConstantBuffers;
+    uint32_t currentPushConstantBuffer = 0;
+
 
     bool uniformsHasChanged = false;
     const WebGPUBuffer* currentUniformBuffer;
