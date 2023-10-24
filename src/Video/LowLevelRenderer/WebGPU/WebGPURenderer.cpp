@@ -183,11 +183,6 @@ void WebGPURenderer::Wait() {
     std::atomic<bool> finished = false;
     wgpuQueueOnSubmittedWorkDone(
         queue,
-#if WEBGPU_BACKEND_DAWN
-        // Dawn additionally takes a signal value.
-        /// @todo Remove after updating Dawn
-        0,
-#endif
         [](WGPUQueueWorkDoneStatus status, void* userdata) {
             *reinterpret_cast<bool*>(userdata) = true;
         }, &finished);
