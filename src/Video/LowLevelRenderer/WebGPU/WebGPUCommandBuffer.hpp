@@ -35,6 +35,7 @@ class WebGPUCommandBuffer : public CommandBuffer {
     void SetScissor(const glm::uvec2& origin, const glm::uvec2& size) final;
     void SetLineWidth(float width) final;
     void BindGeometry(GeometryBinding* geometryBinding) final;
+    void SetIndexBuffer(Buffer* indexBuffer, GeometryBinding::IndexType format, uint64_t offset) final;
     void BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) final;
     void BindStorageBuffers(std::initializer_list<Buffer*> buffers) final;
     void BindMaterial(std::initializer_list<std::pair<Texture*, const Sampler*>> textures) final;

@@ -253,6 +253,12 @@ void OpenGLCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
     AddCommand(command);
 }
 
+void OpenGLCommandBuffer::SetIndexBuffer(Buffer* indexBuffer, GeometryBinding::IndexType format, uint64_t offset) {
+    assert(false);
+
+    Log(Log::ERR) << "SetIndexBuffer not supported in OpenGL.\n";
+}
+
 void OpenGLCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) {
     assert(uniformBuffer != nullptr);
     assert(uniformBuffer->GetBufferUsage() == Buffer::BufferUsage::UNIFORM_BUFFER);

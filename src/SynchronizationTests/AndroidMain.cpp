@@ -11,18 +11,19 @@
 #include <Tests/ComputeFragBuffer.hpp>
 #include <Tests/ComputeVertBuffer.hpp>
 #include <Tests/MultipleFrames.hpp>
+#include <Tests/PrimitiveRestart.hpp>
 #include <chrono>
 
 static bool started = false;
 Utility::Window* window = nullptr;
-MultipleFrames test;
+PrimitiveRestart test;
 
 void handle_cmd(android_app* app, int32_t cmd) {
     switch (cmd) {
         case APP_CMD_INIT_WINDOW: {
             // The window is being shown, get it ready.
             window = new Utility::Window(app->window);
-            SetupTest(&test, window, Video::Renderer::GraphicsAPI::WEBGPU);
+            SetupTest(&test, window, Video::Renderer::GraphicsAPI::VULKAN);
 
             started = true;
             break;

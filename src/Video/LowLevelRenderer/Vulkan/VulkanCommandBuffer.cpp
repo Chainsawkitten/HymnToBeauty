@@ -258,6 +258,23 @@ void VulkanCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
     }
 }
 
+void VulkanCommandBuffer::SetIndexBuffer(Buffer* indexBuffer, GeometryBinding::IndexType format, uint64_t offset) {
+    VkIndexType indexType;
+    switch (format) {
+    case GeometryBinding::IndexType::SHORT:
+        indexType = VK_INDEX_TYPE_UINT16;
+        break;
+    case GeometryBinding::IndexType::INT:
+        indexType = VK_INDEX_TYPE_UINT32;
+        break;
+    default:
+        assert(false);
+        return;
+    }
+
+    vkCmdBindIndexBuffer(renderPassCommandBuffer, static_cast<VulkanBuffer*>(indexBuffer)->GetBuffer(), static_cast<VkDeviceSize>(offset), indexType);
+}
+
 void VulkanCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) {
     assert(uniformBuffer != nullptr && uniformBuffer->GetBufferUsage() == Buffer::BufferUsage::UNIFORM_BUFFER);
     assert(bindingType == ShaderProgram::BindingType::MATRICES || bindingType == ShaderProgram::BindingType::UNIFORMS);

@@ -240,6 +240,23 @@ void WebGPUCommandBuffer::BindGeometry(GeometryBinding* geometryBinding) {
     }
 }
 
+void WebGPUCommandBuffer::SetIndexBuffer(Buffer* indexBuffer, GeometryBinding::IndexType format, uint64_t offset) {
+    WGPUIndexFormat indexFormat;
+    switch (format) {
+    case GeometryBinding::IndexType::NONE:
+        assert(false);
+        return;
+    case GeometryBinding::IndexType::SHORT:
+        indexFormat = WGPUIndexFormat_Uint16;
+        break;
+    case GeometryBinding::IndexType::INT:
+        indexFormat = WGPUIndexFormat_Uint32;
+        break;
+    }
+
+    wgpuRenderPassEncoderSetIndexBuffer(renderPassEncoder, static_cast<WebGPUBuffer*>(indexBuffer)->GetBuffer(), indexFormat, offset, indexBuffer->GetSize() - offset);
+}
+
 void WebGPUCommandBuffer::BindUniformBuffer(ShaderProgram::BindingType bindingType, Buffer* uniformBuffer) {
     assert(uniformBuffer != nullptr && uniformBuffer->GetBufferUsage() == Buffer::BufferUsage::UNIFORM_BUFFER);
     assert(bindingType == ShaderProgram::BindingType::MATRICES || bindingType == ShaderProgram::BindingType::UNIFORMS);

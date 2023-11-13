@@ -4,13 +4,13 @@
 #include "Types.hpp"
 #include "ShaderProgram.hpp"
 #include "RenderPass.hpp"
+#include "GeometryBinding.hpp"
 #include <initializer_list>
 #include <utility>
 
 namespace Video {
 
 class VertexDescription;
-class GeometryBinding;
 class Texture;
 class Sampler;
 class Buffer;
@@ -98,6 +98,14 @@ class CommandBuffer {
      * @param geometryBinding The geometry to bind.
      */
     virtual void BindGeometry(GeometryBinding* geometryBinding) = 0;
+
+    /// Set the index buffer to use in upcoming draw calls.
+    /**
+     * @param indexBuffer The buffer to use as index buffer.
+     * @param format The index format.
+     * @param offset Offset into the index buffer.
+     */
+    virtual void SetIndexBuffer(Buffer* indexBuffer, GeometryBinding::IndexType format, uint64_t offset) = 0;
 
     /// Bind uniform buffer for use in a shader.
     /**

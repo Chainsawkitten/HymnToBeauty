@@ -10,6 +10,7 @@ set(SRCS
         Tests/ComputeFragBuffer.cpp
         Tests/ComputeVertBuffer.cpp
         Tests/MultipleFrames.cpp
+        Tests/PrimitiveRestart.cpp
     )
 
 set(HEADERS
@@ -24,6 +25,7 @@ set(HEADERS
         Tests/ComputeFragBuffer.hpp
         Tests/ComputeVertBuffer.hpp
         Tests/MultipleFrames.hpp
+        Tests/PrimitiveRestart.hpp
     )
         
 create_directory_groups(${SRCS} ${HEADERS})
@@ -51,6 +53,9 @@ set(SHADERS
     Shaders/Plane.frag
     Shaders/PostProcessing.vert
     Shaders/PostProcessingOffset.vert
+    Shaders/PrimitiveRestart.vert
+    Shaders/PrimitiveRestart.frag
+    Shaders/Sample.frag
 )
 
 # Process shaders.
