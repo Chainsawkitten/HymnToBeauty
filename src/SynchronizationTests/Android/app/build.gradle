@@ -17,7 +17,8 @@ android {
 
         externalNativeBuild {
             cmake {
-                arguments '-DWebGPURenderer=ON'
+                arguments '-DWebGPURenderer=ON',
+                          '-DVulkanRenderer=ON'
                 cppFlags '-std=c++17'
             }
         }
@@ -27,6 +28,10 @@ android {
         release {
             minifyEnabled false
             signingConfig signingConfigs.debug
+            debuggable true
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
     externalNativeBuild {
