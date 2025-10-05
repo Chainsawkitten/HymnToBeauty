@@ -53,6 +53,13 @@ jobs:
       macos-latest
 
     steps:
+    - name: Install CMake
+      uses: lukka/get-cmake@latest
+      with:
+        cmakeVersion: 3.28.3
+        useLocalCache: false
+        useCloudCache: false
+
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
       with:
