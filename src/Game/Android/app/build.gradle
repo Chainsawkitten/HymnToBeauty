@@ -36,7 +36,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('../../../../CMakeLists.txt')
-            version '3.7.0+'
+            version '3.18.1+'
         }
     }
     buildFeatures {
