@@ -5,14 +5,14 @@
 #include <map>
 #include "Log.hpp"
 
-#if ANDROID
+#if __ANDROID__
 #else
 #include <GLFW/glfw3.h>
 #endif
 
 namespace Utility {
 
-#if ANDROID
+#if __ANDROID__
 Window::Window(ANativeWindow* androidWindow) {
     window = androidWindow;
     size = glm::uvec2(ANativeWindow_getWidth(androidWindow), ANativeWindow_getHeight(androidWindow));
@@ -62,7 +62,7 @@ Window::Window(unsigned int width, unsigned int height, bool fullscreen, bool bo
 #endif
 
 Window::~Window() {
-#if ANDROID
+#if __ANDROID__
 #else
     glfwDestroyWindow(window);
 #endif
@@ -77,7 +77,7 @@ const glm::uvec2& Window::GetSize() const {
 }
 
 void Window::Update() {
-#if !ANDROID
+#if !__ANDROID__
     if (glfwWindowShouldClose(window) != GLFW_FALSE)
         shouldClose = true;
 #endif
@@ -88,7 +88,7 @@ bool Window::ShouldClose() const {
 }
 
 void Window::CancelClose() {
-#if ANDROID
+#if __ANDROID__
     Log(Log::ERR) << "Window::CancelClose should not be called on Android.";
 #else
     shouldClose = false;
@@ -97,7 +97,7 @@ void Window::CancelClose() {
 }
 
 void Window::SetWindowMode(bool fullscreen, bool borderless) const {
-#if ANDROID
+#if __ANDROID__
     Log(Log::ERR) << "SetWindowMode not implemented on Android.";
 #else
     glfwSetWindowAttrib(window, GLFW_DECORATED, borderless ? GLFW_FALSE : GLFW_TRUE);
@@ -110,7 +110,7 @@ void Window::SetWindowMode(bool fullscreen, bool borderless) const {
 }
 
 void Window::GetWindowMode(bool& fullscreen, bool& borderless) const {
-#if ANDROID
+#if __ANDROID__
     fullscreen = true;
     borderless = false;
 #else
@@ -119,7 +119,7 @@ void Window::GetWindowMode(bool& fullscreen, bool& borderless) const {
 #endif
 }
 
-#if ANDROID
+#if __ANDROID__
 ANativeWindow* Window::GetAndroidWindow() {
     return window;
 }

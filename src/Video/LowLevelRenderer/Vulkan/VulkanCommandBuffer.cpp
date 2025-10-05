@@ -171,7 +171,7 @@ void VulkanCommandBuffer::EndRenderPass() {
     inRenderPass = false;
     currentGraphicsPipeline = nullptr;
 
-#if ANDROID
+#if __ANDROID__
     if (renderPassIsAttachmentless) {
         // Work around Mali driver bug.
         AllocateCommandBuffer();

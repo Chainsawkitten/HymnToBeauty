@@ -7,7 +7,7 @@ namespace Utility {
 class Window;
 }
 
-#if !ANDROID
+#if !__ANDROID__
 struct GLFWwindow;
 #endif
 
@@ -62,7 +62,7 @@ class Input {
     void Load(const Json::Value& buttonsNode);
 
   private:
-#if !ANDROID
+#if !__ANDROID__
     GLFWwindow* window;
 #endif
 

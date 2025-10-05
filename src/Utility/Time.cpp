@@ -1,6 +1,6 @@
 #include "Time.hpp"
 
-#if ANDROID
+#if __ANDROID__
 #include <time.h>
 #include <unistd.h>
 #else
@@ -9,7 +9,7 @@
 
 namespace Utility {
 
-#if ANDROID
+#if __ANDROID__
 static clockid_t clock;
 static uint64_t startTime;
 
@@ -21,7 +21,7 @@ static uint64_t GetPosixTime() {
 #endif
 
 void InitTime() {
-#if ANDROID
+#if __ANDROID__
     clock = CLOCK_REALTIME;
 
     // Check if monotonic clock is supported.
@@ -39,7 +39,7 @@ void InitTime() {
 }
 
 double GetTime() {
-#if ANDROID
+#if __ANDROID__
     return static_cast<double>(GetPosixTime() - startTime) / 1000000000.0;
 #else
     return glfwGetTime();

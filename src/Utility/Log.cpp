@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cassert>
 
-#if ANDROID
+#if __ANDROID__
 #include <android/log.h>
 #endif
 
@@ -32,7 +32,7 @@ Log::~Log() {
         fileStream << message.str();
 
     // Output the message to standard output as well.
-#if ANDROID
+#if __ANDROID__
     android_LogPriority priority;
     switch (currentChannel) {
     case INFO:

@@ -24,7 +24,7 @@
 #include "WebGPUBufferAllocator.hpp"
 #include "WebGPURenderTargetAllocator.hpp"
 
-#if ANDROID
+#if __ANDROID__
 
 #else
 #include <GLFW/glfw3.h>
@@ -329,7 +329,7 @@ void WebGPURenderer::CreateInstance() {
 }
 
 void WebGPURenderer::CreateSurface(::Utility::Window* window) {
-#if ANDROID
+#if __ANDROID__
     WGPUSurfaceDescriptorFromAndroidNativeWindow platformSurfaceDescriptor = {};
     platformSurfaceDescriptor.chain.next = nullptr;
     platformSurfaceDescriptor.chain.sType = WGPUSType_SurfaceDescriptorFromAndroidNativeWindow;
@@ -508,7 +508,7 @@ void WebGPURenderer::CreateDevice() {
 void WebGPURenderer::CreateSwapChain(::Utility::Window* window) {
     swapChainSize = window->GetSize();
 
-#if ANDROID
+#if __ANDROID__
     swapChainFormat = WGPUTextureFormat_RGBA8Unorm;
 #else
     swapChainFormat = WGPUTextureFormat_BGRA8Unorm;

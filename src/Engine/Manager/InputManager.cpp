@@ -4,7 +4,7 @@
 #include <Utility/Window.hpp>
 #include <map>
 
-#if !ANDROID
+#if !__ANDROID__
 #include <GLFW/glfw3.h>
 
 static std::map<GLFWwindow*, InputManager*> inputMap;
@@ -25,7 +25,7 @@ InputManager::InputManager(Utility::Window* window) {
         buttonData[i].triggered = false;
     }
 
-#if ANDROID
+#if __ANDROID__
     Log(Log::ERR) << "InputManager has not been implemented for Android. No input will be available.\n";
 #else
     glfwWindow = window->GetGLFWWindow();
@@ -45,7 +45,7 @@ InputManager::~InputManager() {
 }
 
 void InputManager::Update() {
-#if !ANDROID
+#if !__ANDROID__
     glfwPollEvents();
 
     lastScroll = scroll;

@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#if ANDROID
+#if __ANDROID__
 #include <game-activity/native_app_glue/android_native_app_glue.h>
 #else
 struct GLFWwindow;
@@ -13,7 +13,7 @@ namespace Utility {
 /// 
 class Window {
   public:
-#if ANDROID
+#if __ANDROID__
     /// Create new window.
     /**
      * @param androidWindow Android window.
@@ -75,7 +75,7 @@ class Window {
      */
     void GetWindowMode(bool& fullscreen, bool& borderless) const;
 
-#if ANDROID
+#if __ANDROID__
     /// Get Android window.
     /**
      * @return The Android window.
@@ -92,7 +92,7 @@ class Window {
   private:
     Window(Window& window) = delete;
 
-#if ANDROID
+#if __ANDROID__
     ANativeWindow* window;
 #else
     GLFWwindow* window;

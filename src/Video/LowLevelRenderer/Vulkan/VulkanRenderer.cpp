@@ -21,7 +21,7 @@
 #include "VulkanComputePipeline.hpp"
 #include "VulkanUtility.hpp"
 
-#if ANDROID
+#if __ANDROID__
 #include <vulkan/vulkan_android.h>
 #else
 #include <glfw/glfw3.h>
@@ -600,7 +600,7 @@ void VulkanRenderer::CreateInstance() {
 
     // Get required instance extensions.
     uint32_t requiredExtensionCount; 
-#if ANDROID
+#if __ANDROID__
     requiredExtensionCount = 2u;
     const char* requiredExtensions[2] = {
         "VK_KHR_surface", "VK_KHR_android_surface"
@@ -658,7 +658,7 @@ bool VulkanRenderer::CheckValidationLayersSupported(const std::vector<const char
 }
 
 void VulkanRenderer::CreateSurface(::Utility::Window* window) {
-#if ANDROID
+#if __ANDROID__
     VkAndroidSurfaceCreateInfoKHR createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
     createInfo.window = window->GetAndroidWindow();
@@ -1137,6 +1137,7 @@ void VulkanRenderer::CreateBakedDescriptorSetLayouts() {
         storageBufferLayoutBindings[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         storageBufferLayoutBindings[i].descriptorCount = 1;
         storageBufferLayoutBindings[i].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
+        storageBufferLayoutBindings[i].pImmutableSamplers = nullptr;
 
         layoutCreateInfo.bindingCount = i + 1;
 

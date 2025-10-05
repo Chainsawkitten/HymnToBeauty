@@ -12,18 +12,18 @@
 #include <Utility/Time.hpp>
 #include <Utility/Window.hpp>
 #include <thread>
-#if !ANDROID
+#if !__ANDROID__
 #include <GLFW/glfw3.h>
 #endif
 
 bool Engine::Start() {
-#if !ANDROID
+#if !__ANDROID__
     if (!glfwInit())
         return false;
 #endif
     Utility::InitTime();
 
-#if ANDROID
+#if __ANDROID__
     window = new Utility::Window(configuration.androidWindow);
 #else
     window = new Utility::Window(configuration.width, configuration.height, configuration.fullscreen, configuration.borderless, "Hymn to Beauty",
@@ -33,7 +33,7 @@ bool Engine::Start() {
     Input::GetInstance().SetWindow(window);
 
     Managers().StartUp(configuration.graphicsAPI, window);
-#if !ANDROID
+#if !__ANDROID__
     Managers().inputManager->AssignButton(InputManager::WINDOWMODE, InputManager::KEYBOARD, GLFW_KEY_F4);
 #endif
 
@@ -61,7 +61,7 @@ void Engine::Update() {
         deltaTime = Utility::GetTime() - lastTime;
         lastTime = Utility::GetTime();
 
-#if !ANDROID
+#if !__ANDROID__
         // Switch between fullscreen and window mode.
         if (Managers().inputManager->Triggered(InputManager::WINDOWMODE)) {
             bool fullscreen, borderless;
@@ -127,7 +127,7 @@ void Engine::Shutdown() {
 
     delete window;
 
-#if !ANDROID
+#if !__ANDROID__
     glfwTerminate();
 #endif
 }

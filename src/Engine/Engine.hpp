@@ -2,7 +2,7 @@
 
 #include <Video/Renderer.hpp>
 
-#if ANDROID
+#if __ANDROID__
 #include <game-activity/native_app_glue/android_native_app_glue.h>
 #endif
 
@@ -52,7 +52,7 @@ class Engine {
 
     /// Engine configuration.
     struct Configuration {
-#if ANDROID
+#if __ANDROID__
         /// The native window to render in.
         ANativeWindow* androidWindow;
 #else

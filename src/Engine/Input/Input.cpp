@@ -4,7 +4,7 @@
 #include <Utility/Log.hpp>
 #include <Utility/Window.hpp>
 
-#if !ANDROID
+#if !__ANDROID__
 #include <GLFW/glfw3.h>
 #endif
 
@@ -14,13 +14,13 @@ Input& Input::GetInstance() {
 }
 
 void Input::SetWindow(Utility::Window* window) {
-#if !ANDROID
+#if !__ANDROID__
     this->window = window->GetGLFWWindow();
 #endif
 }
 
 bool Input::CheckButton(int index) const {
-#if ANDROID
+#if __ANDROID__
     Log(Log::ERR) << "Input::CheckButton not implemented for Android.";
     return 0;
 #else

@@ -14,7 +14,7 @@
 #include <Utility/Log.hpp>
 #include <Utility/Time.hpp>
 #include <Utility/Window.hpp>
-#if !ANDROID
+#if !__ANDROID__
 #include <GLFW/glfw3.h>
 #endif
 
@@ -64,7 +64,7 @@ void SetupTest(SynchronizationTest* test, Utility::Window* window, Video::Render
 }
 
 void RunFrame() {
-#if !ANDROID
+#if !__ANDROID__
     glfwPollEvents();
 #endif
     renderer->BeginFrame();

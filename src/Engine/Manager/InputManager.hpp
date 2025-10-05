@@ -4,7 +4,7 @@
 #include <vector>
 #include <glm/vec2.hpp>
 
-#if !ANDROID
+#if !__ANDROID__
 struct GLFWwindow;
 #endif
 
@@ -124,7 +124,7 @@ class InputManager {
     InputManager(InputManager const&) = delete;
     void operator=(InputManager const&) = delete;
 
-#if !ANDROID
+#if !__ANDROID__
     GLFWwindow* glfwWindow;
 #endif
 
