@@ -68,6 +68,7 @@ void android_main(struct android_app* app) {
                 Managers().profilingManager->SetActive(true);
             } else if (frame == 600) {
                 Managers().profilingManager->SetActive(false, app->activity->externalDataPath);
+                GameActivity_finish(app->activity);
             }
 
             // Draw a frame.
