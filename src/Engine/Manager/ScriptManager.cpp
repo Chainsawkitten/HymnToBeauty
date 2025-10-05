@@ -90,7 +90,9 @@ static std::string VariablesToString(asIScriptContext* ctx, asUINT stackLevel) {
     int numVars = ctx->GetVarCount(stackLevel);
     std::string variables = "Variables:\n";
     for (int n = 0; n < numVars; n++) {
-        int typeId = ctx->GetVarTypeId(n, stackLevel);
+        const char* name;
+        int typeId;
+        ctx->GetVar(n, stackLevel, &name, &typeId);
         void* varPointer = ctx->GetAddressOfVar(n, stackLevel);
         if (typeId == asTYPEID_INT32) {
             variables.append(ctx->GetVarDeclaration(n, stackLevel));

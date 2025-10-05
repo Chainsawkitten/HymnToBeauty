@@ -74,7 +74,13 @@ WebGPUGraphicsPipeline::WebGPUGraphicsPipeline(WebGPURenderer& renderer, const S
     // Depth-stencil state.
     depthStencilState = {};
     depthStencilState.stencilFront.compare = WGPUCompareFunction_Always;
+    depthStencilState.stencilFront.passOp = WGPUStencilOperation_Keep;
+    depthStencilState.stencilFront.failOp = WGPUStencilOperation_Keep;
+    depthStencilState.stencilFront.depthFailOp = WGPUStencilOperation_Keep;
     depthStencilState.stencilBack.compare = WGPUCompareFunction_Always;
+    depthStencilState.stencilBack.passOp = WGPUStencilOperation_Keep;
+    depthStencilState.stencilBack.failOp = WGPUStencilOperation_Keep;
+    depthStencilState.stencilBack.depthFailOp = WGPUStencilOperation_Keep;
 
     switch (configuration.depthComparison) {
     case DepthComparison::LESS:

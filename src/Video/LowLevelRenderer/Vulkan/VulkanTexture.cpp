@@ -111,7 +111,7 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
         CommandBuffer* commandBuffer = vulkanRenderer.CreateCommandBuffer();
         VulkanCommandBuffer* vulkanCommandBuffer = static_cast<VulkanCommandBuffer*>(commandBuffer);
 
-        Utility::TransitionImage(vulkanCommandBuffer->GetCommandBuffer(), image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        Utility::TransitionImage(vulkanCommandBuffer->GetCurrentCommandBuffer(), image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         VkBufferImageCopy bufferImageCopy = {};
         bufferImageCopy.bufferOffset = 0;
@@ -128,7 +128,7 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
         bufferImageCopy.imageExtent.height = size.y;
         bufferImageCopy.imageExtent.depth = 1;
 
-        vkCmdCopyBufferToImage(vulkanCommandBuffer->GetCommandBuffer(), stagingBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &bufferImageCopy);
+        vkCmdCopyBufferToImage(vulkanCommandBuffer->GetCurrentCommandBuffer(), stagingBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &bufferImageCopy);
 
         vulkanRenderer.Submit(commandBuffer);
         vulkanRenderer.Wait();
@@ -148,7 +148,7 @@ VulkanTexture::VulkanTexture(VulkanRenderer& vulkanRenderer, VkDevice device, Vk
         CommandBuffer* commandBuffer = vulkanRenderer.CreateCommandBuffer();
         VulkanCommandBuffer* vulkanCommandBuffer = static_cast<VulkanCommandBuffer*>(commandBuffer);
 
-        Utility::TransitionImage(vulkanCommandBuffer->GetCommandBuffer(), image, VK_IMAGE_LAYOUT_UNDEFINED, currentLayout);
+        Utility::TransitionImage(vulkanCommandBuffer->GetCurrentCommandBuffer(), image, VK_IMAGE_LAYOUT_UNDEFINED, currentLayout);
 
         vulkanRenderer.Submit(commandBuffer);
         vulkanRenderer.Wait();
@@ -217,7 +217,7 @@ void VulkanTexture::GenerateMipMaps(VulkanRenderer& vulkanRenderer, VkPhysicalDe
         barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
 
-        vkCmdPipelineBarrier(vulkanCommandBuffer->GetCommandBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+        vkCmdPipelineBarrier(vulkanCommandBuffer->GetCurrentCommandBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 
         // Blit mip level to lower one.
         VkImageBlit blit = {};
@@ -234,7 +234,7 @@ void VulkanTexture::GenerateMipMaps(VulkanRenderer& vulkanRenderer, VkPhysicalDe
         blit.dstSubresource.baseArrayLayer = 0;
         blit.dstSubresource.layerCount = 1;
 
-        vkCmdBlitImage(vulkanCommandBuffer->GetCommandBuffer(), image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
+        vkCmdBlitImage(vulkanCommandBuffer->GetCurrentCommandBuffer(), image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
 
         // Transition src mip level to VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL.
         barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
@@ -242,7 +242,7 @@ void VulkanTexture::GenerateMipMaps(VulkanRenderer& vulkanRenderer, VkPhysicalDe
         barrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
         barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
-        vkCmdPipelineBarrier(vulkanCommandBuffer->GetCommandBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+        vkCmdPipelineBarrier(vulkanCommandBuffer->GetCurrentCommandBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 
         if (mipWidth > 1)
             mipWidth /= 2;
@@ -257,7 +257,7 @@ void VulkanTexture::GenerateMipMaps(VulkanRenderer& vulkanRenderer, VkPhysicalDe
     barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
     barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
-    vkCmdPipelineBarrier(vulkanCommandBuffer->GetCommandBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+    vkCmdPipelineBarrier(vulkanCommandBuffer->GetCurrentCommandBuffer(), VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 
     vulkanRenderer.Submit(commandBuffer);
     vulkanRenderer.Wait();

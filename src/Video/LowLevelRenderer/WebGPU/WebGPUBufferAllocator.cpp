@@ -57,8 +57,8 @@ WGPUBuffer WebGPURawBuffer::GetBuffer() const {
     return buffer;
 }
 
-WebGPUBufferAllocator::WebGPUBufferAllocator(WebGPURenderer& webGPURenderer) : BufferAllocator(1), webGPURenderer(webGPURenderer) {
-    
+WebGPUBufferAllocator::WebGPUBufferAllocator(WebGPURenderer& webGPURenderer, uint32_t frames) : BufferAllocator(frames), webGPURenderer(webGPURenderer) {
+
 }
 
 WebGPUBufferAllocator::~WebGPUBufferAllocator() {
@@ -79,7 +79,13 @@ RawBuffer* WebGPUBufferAllocator::Allocate(Buffer::BufferUsage bufferUsage, bool
 }
 
 Buffer* WebGPUBufferAllocator::CreateBufferObject(Buffer::BufferUsage bufferUsage, const BufferAllocation& allocation) {
-    return new WebGPUBuffer(bufferUsage, allocation);
+    BufferAllocation realAllocation = allocation;
+    if (bufferUsage == Buffer::BufferUsage::UNIFORM_BUFFER || bufferUsage == Buffer::BufferUsage::STORAGE_BUFFER || bufferUsage == Buffer::BufferUsage::VERTEX_STORAGE_BUFFER) {
+        // Buffer binding sizes must be a multiple of 16.
+        realAllocation.size = (allocation.size + 16 - 1) / 16 * 16;
+    }
+
+    return new WebGPUBuffer(bufferUsage, realAllocation);
 }
 
 }

@@ -44,6 +44,8 @@
 
 namespace Video {
 
+static const uint32_t bufferFramesInFlight = 2;
+
 WebGPURenderer::WebGPURenderer(::Utility::Window* window) {
     optionalFeatures = {};
 
@@ -55,7 +57,7 @@ WebGPURenderer::WebGPURenderer(::Utility::Window* window) {
     CreateSwapChain(window);
     CreateSamplers();
 
-    bufferAllocator = new WebGPUBufferAllocator(*this);
+    bufferAllocator = new WebGPUBufferAllocator(*this, bufferFramesInFlight);
     renderTargetAllocator = new WebGPURenderTargetAllocator(*this);
 
     // Blitting.
@@ -95,7 +97,7 @@ WebGPURenderer::~WebGPURenderer() {
 }
 
 CommandBuffer* WebGPURenderer::CreateCommandBuffer() {
-    return new WebGPUCommandBuffer(this);
+    return new WebGPUCommandBuffer(this, bufferFramesInFlight);
 }
 
 void WebGPURenderer::BeginFrame() {
@@ -181,11 +183,6 @@ void WebGPURenderer::Wait() {
     std::atomic<bool> finished = false;
     wgpuQueueOnSubmittedWorkDone(
         queue,
-#if WEBGPU_BACKEND_DAWN
-        // Dawn additionally takes a signal value.
-        /// @todo Remove after updating Dawn
-        0,
-#endif
         [](WGPUQueueWorkDoneStatus status, void* userdata) {
             *reinterpret_cast<bool*>(userdata) = true;
         }, &finished);
@@ -459,7 +456,12 @@ void WebGPURenderer::CreateDevice() {
 #endif
 
     WGPUDeviceDescriptor deviceDescriptor = {};
+#if WEBGPU_BACKEND_WGPU
+    /// @todo Remove when WGPU native headers have been updated.
     deviceDescriptor.requiredFeaturesCount = features.size();
+#else
+    deviceDescriptor.requiredFeatureCount = features.size();
+#endif
     deviceDescriptor.requiredFeatures = features.data();
 
     struct UserData {

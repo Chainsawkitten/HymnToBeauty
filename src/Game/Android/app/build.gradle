@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.chainsawkitten.hymntobeauty"
-        minSdk 24
-        targetSdk 31
+        minSdk 26
+        targetSdk 29
         versionCode 272
         versionName "1.1.0"
 
@@ -26,12 +26,17 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.debug
+            debuggable true
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
     externalNativeBuild {
         cmake {
             path file('../../../../CMakeLists.txt')
-            version '3.7.0+'
+            version '3.18.1+'
         }
     }
     buildFeatures {
