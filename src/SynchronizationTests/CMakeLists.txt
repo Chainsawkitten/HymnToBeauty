@@ -3,14 +3,17 @@ set(SRCS
         Framework/Runner.cpp
         Framework/SynchronizationTest.cpp
         Tests/BarrierMerging.cpp
+        Tests/BufferUpload.cpp
         Tests/ExampleTest.cpp
         Tests/FragFragBuffer.cpp
         Tests/FragFragImage.cpp
         Tests/FragVertImage.cpp
+        Tests/FragVertImage2.cpp
         Tests/ComputeFragBuffer.cpp
         Tests/ComputeVertBuffer.cpp
         Tests/MultipleFrames.cpp
         Tests/PrimitiveRestart.cpp
+        Tests/ValidationBug.cpp
     )
 
 set(HEADERS
@@ -18,14 +21,17 @@ set(HEADERS
         Framework/Runner.hpp
         Framework/SynchronizationTest.hpp
         Tests/BarrierMerging.hpp
+        Tests/BufferUpload.hpp
         Tests/ExampleTest.hpp
         Tests/FragFragBuffer.hpp
         Tests/FragFragImage.hpp
         Tests/FragVertImage.hpp
+        Tests/FragVertImage2.hpp
         Tests/ComputeFragBuffer.hpp
         Tests/ComputeVertBuffer.hpp
         Tests/MultipleFrames.hpp
         Tests/PrimitiveRestart.hpp
+        Tests/ValidationBug.hpp
     )
         
 create_directory_groups(${SRCS} ${HEADERS})

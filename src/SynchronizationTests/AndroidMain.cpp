@@ -8,22 +8,25 @@
 #include <Tests/FragFragImage.hpp>
 #include <Tests/FragFragBuffer.hpp>
 #include <Tests/FragVertImage.hpp>
+#include <Tests/FragVertImage2.hpp>
 #include <Tests/ComputeFragBuffer.hpp>
 #include <Tests/ComputeVertBuffer.hpp>
 #include <Tests/MultipleFrames.hpp>
+#include <Tests/BarrierMerging.hpp>
+#include <Tests/BufferUpload.hpp>
 #include <Tests/PrimitiveRestart.hpp>
 #include <chrono>
 
 static bool started = false;
 Utility::Window* window = nullptr;
-PrimitiveRestart test;
+FragVertImage2 test;
 
 void handle_cmd(android_app* app, int32_t cmd) {
     switch (cmd) {
         case APP_CMD_INIT_WINDOW: {
             // The window is being shown, get it ready.
             window = new Utility::Window(app->window);
-            SetupTest(&test, window, Video::Renderer::GraphicsAPI::VULKAN);
+            SetupTest(&test, window, Video::Renderer::GraphicsAPI::WEBGPU);
 
             started = true;
             break;
@@ -48,6 +51,7 @@ void android_main(struct android_app* app) {
     android_poll_source* source;
 
     uint32_t frame = 0;
+    uint32_t frame2 = 0;
     auto start = std::chrono::steady_clock::now();
 
     // Main loop
@@ -70,7 +74,12 @@ void android_main(struct android_app* app) {
                 Log(Log::INFO) << "60 frames: " << milli << " ms " <<  (60000.0 / milli) << " fps\n";
                 frame = 0;
             }
+            //if (frame2 == 500) {
+            //    Log(Log::INFO) << "Terminate!\n";
+            //    GameActivity_finish(app->activity);
+            //}
             ++frame;
+            ++frame2;
         }
     } while (app->destroyRequested == 0);
 }

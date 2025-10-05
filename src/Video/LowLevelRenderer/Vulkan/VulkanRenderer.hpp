@@ -117,6 +117,10 @@ class VulkanRenderer : public LowLevelRenderer {
      */
     VkDescriptorSet GetDescriptorSet(std::initializer_list<std::pair<Texture*, const Sampler*>> textures);
 
+    VkDevice GetDevice() {
+        return device;
+    }
+
     /// Get the current frame's query pool.
     /**
      * @return The current frame's query pool.
