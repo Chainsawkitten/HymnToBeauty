@@ -68,6 +68,7 @@ void WebGPUCommandBuffer::BeginRenderPass(Texture* colorAttachment, RenderPass::
     renderPassDescription = {};
 
     if (colorAttachment != nullptr) {
+        passColorAttachment.depthSlice = WGPU_DEPTH_SLICE_UNDEFINED;
         passColorAttachment.view = static_cast<WebGPUTexture*>(colorAttachment)->GetTextureView();
         passColorAttachment.clearValue.r = 0.0;
         passColorAttachment.clearValue.g = 0.0;
@@ -134,6 +135,7 @@ void WebGPUCommandBuffer::BeginAttachmentlessRenderPass(const glm::uvec2& size, 
     WGPURenderPassDescriptor renderPassDescriptor = {};
     renderPassDescriptor.label = name.c_str();
 
+    passColorAttachment.depthSlice = WGPU_DEPTH_SLICE_UNDEFINED;
     passColorAttachment.view = static_cast<WebGPUTexture*>(dummyRenderTarget)->GetTextureView();
     passColorAttachment.clearValue.r = 0.0;
     passColorAttachment.clearValue.g = 0.0;
