@@ -67,7 +67,9 @@ void main () {
 
 	// Dither.
 	if (uniforms.ditherEnable != 0) {
-		color = dither(color, inTexCoords, uniforms.time);
+        // Workaround for AMD driver bug.
+        const vec2 coords = inTexCoords;
+		color = dither(color, coords, uniforms.time);
 	}
     
     outColor = vec4(color,  texture(colorSampler, inTexCoords).a);

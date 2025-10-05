@@ -80,12 +80,12 @@ vec3 calculateNormal(in vec3 normal, in vec3 tangent, in vec3 normalFromMap) {
 }
 
 //Calc ratio between specular and diffuse reflection, surface reflections
-vec3 FresnelSchlick(float cosTheta, vec3 F0) {
+vec3 FresnelSchlick(in float cosTheta, in vec3 F0) {
     cosTheta = 1.0f - cosTheta;
     return F0 + (1.0f - F0) * cosTheta * cosTheta * cosTheta * cosTheta * cosTheta;
 }
 
-float DistributionGGX(vec3 N, vec3 H, float roughness) {
+float DistributionGGX(in vec3 N, in vec3 H, float roughness) {
     float a = roughness * roughness;
     float a2 = a * a;
     float NdotH = max(dot(N, H), 0.0f);
@@ -108,7 +108,7 @@ float GemetrySchlickGGX(float NdotV, float roughness) {
     return nom/denom;
 }
 
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
+float GeometrySmith(in vec3 N, in vec3 V, in vec3 L, float roughness) {
     float NdotV = max(dot(N,V), 0.0f);
     float NdotL = max(dot(N,L), 0.0f);
     float ggx1 = GemetrySchlickGGX(NdotV, roughness);
@@ -117,7 +117,7 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
     return clamp((ggx1 * ggx2), 0.f, 1.0f);
 }
 
-vec3 ApplyLight(vec3 surfaceToLight, vec3 cameraToPos, vec3 radiance, vec3 albedo, vec3 normal, float metallic, float roughness, vec3 F0) {
+vec3 ApplyLight(in vec3 surfaceToLight, in vec3 cameraToPos, in vec3 radiance, in vec3 albedo, in vec3 normal, in float metallic, in float roughness, in vec3 F0) {
     vec3 H = normalize(cameraToPos + surfaceToLight);
     
     // Cook-torrance brdf.
@@ -189,9 +189,9 @@ vec3 ApplySpotPointLight(uint i, vec3 cameraToPos, vec3 albedo, vec3 normal, flo
 
 vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 pos) {
     vec3 Lo = vec3(0.0);
-    vec3 cameraToPos = normalize(-pos);
+    const vec3 cameraToPos = normalize(-pos);
     
-    vec3 F0 = mix(vec3(0.04f), albedo, metallic);
+    const vec3 F0 = mix(vec3(0.04f), albedo, metallic);
     
     // Directional lights.
     for(int i = 0; i < uniforms.directionalLightCount; i++) {
@@ -217,16 +217,29 @@ vec3 ApplyLights(vec3 albedo, vec3 normal, float metallic, float roughness, vec3
     return Lo;
 }
 
+/*vec3 GetLight(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 pos) {
+    vec3 color = vec3(0.0, 0.0, 0.0);
+    for(int i = 0; i < uniforms.directionalLightCount; i++) {
+        color = albedo * directionalLightBuffer.lights[i].intensitiesAmbientCoefficient.w;
+    }
+    return color;
+}*/
+
 // --- MAIN ---
 void main() {
     vec3 albedo = texture(mapAlbedo, inTexCoords).rgb;
     albedo = pow(albedo, vec3(uniforms.gamma)); // Apply if texture not in sRGB
-    vec3 normal = calculateNormal(inNormal, inTangent, texture(mapNormal, inTexCoords).rgb);
-    vec2 roughnessMetallic = texture(mapRoughnessMetallic, inTexCoords).gb;
-    vec3 pos = inPosition;
+    const vec3 normalFromMap = texture(mapNormal, inTexCoords).rgb;
+    const vec3 normal = calculateNormal(inNormal, inTangent, normalFromMap);
+    const vec2 roughnessMetallic = texture(mapRoughnessMetallic, inTexCoords).gb;
+    const vec3 pos = inPosition;
 
     // Shade fragment.
-    vec3 color = ApplyLights(albedo, normal, roughnessMetallic.r, roughnessMetallic.g, pos);
+    // Work around AMD driver bug.
+    const float metallic = 1.0;
+    const float roughness = 1.0;
+    const vec3 color = ApplyLights(albedo, normal, metallic, roughness, pos);
+    //vec3 color = GetLight(albedo, normal, metallic, roughness, pos);
 
     outColor = vec4(color, 1.0f);
 }
