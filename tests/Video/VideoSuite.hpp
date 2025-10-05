@@ -189,3 +189,5 @@ Result ComputeMultipleBuffers(void* data);
  * @return Whether the test was successful.
  */
 Result ComputeClearBuffer(void* data);
+
+Result DawnShader(void* data);

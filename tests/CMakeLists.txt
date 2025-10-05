@@ -36,6 +36,7 @@ set(SHADERS
     Video/shaders/MultipleFrames.vert
     Video/shaders/MultipleFrames.frag
     Video/shaders/StorageBuffer.frag
+    Video/shaders/DawnShader.comp
 )
 
 # Setup images.

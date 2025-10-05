@@ -11,6 +11,7 @@
 #include <Video/LowLevelRenderer/Interface/VertexDescription.hpp>
 #include <Video/LowLevelRenderer/Interface/GeometryBinding.hpp>
 #include <Video/LowLevelRenderer/Interface/GraphicsPipeline.hpp>
+#include <Video/LowLevelRenderer/Interface/ComputePipeline.hpp>
 #include <Video/LowLevelRenderer/Interface/CommandBuffer.hpp>
 #include <Video/Texture/Texture2D.hpp>
 
@@ -56,6 +57,12 @@
 #include "ConservativeRasterization.png.hpp"
 
 #include "DepthClamping.png.hpp"
+
+#include "DawnShader.comp.hpp"
+
+#include <Video/LowLevelRenderer/Vulkan/VulkanRenderer.hpp>
+#include <cstdio>
+#include <cassert>
 
 using namespace Video;
 
@@ -1419,4 +1426,49 @@ Result DepthClamping(void* data) {
     delete fragmentShader;
 
     return ToResult(result);
+}
+
+Result DawnShader(void* data) {
+    assert(data != nullptr);
+
+    LowLevelRenderer* lowLevelRenderer = *static_cast<LowLevelRenderer**>(data);
+
+    /*FILE* file = fopen("shader.spv", "rb");
+
+    fseek(file, 0, SEEK_END);
+    const long fileSize = ftell(file);
+    assert(fileSize % 4 == 0);
+    uint32_t* spirv = new uint32_t[fileSize / 4 + 4096]; // Extra padding to be 200% certain it's not a buffer overflow.
+
+    fseek(file, 0, SEEK_SET);
+    fread(spirv, sizeof(uint32_t), fileSize / 4, file);
+
+    fclose(file);
+
+    VkShaderModuleCreateInfo createInfo;
+    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.pNext = nullptr;
+    createInfo.flags = 0;
+    createInfo.codeSize = fileSize;
+    createInfo.pCode = spirv;
+
+    VkDevice device = static_cast<VulkanRenderer*>(lowLevelRenderer)->device;
+
+    VkShaderModule shaderModule;
+    VkResult result = vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule);
+    if (result == VK_SUCCESS) {
+        vkDestroyShaderModule(device, shaderModule, nullptr);
+    }
+
+    delete[] spirv;*/
+
+    Shader* shader = lowLevelRenderer->CreateShader(DAWNSHADER_COMP, Shader::Type::COMPUTE_SHADER);
+    ShaderProgram* shaderProgram = lowLevelRenderer->CreateShaderProgram({ shader });
+    ComputePipeline* pipeline = lowLevelRenderer->CreateComputePipeline(shaderProgram);
+
+    delete pipeline;
+    delete shaderProgram;
+    delete shader;
+
+    return ToResult(true);
 }
