@@ -1,6 +1,6 @@
 var class_video_1_1_web_g_p_u_command_buffer =
 [
-    [ "WebGPUCommandBuffer", "class_video_1_1_web_g_p_u_command_buffer.html#a094428dfb56d862f1f4f4a95092ced31", null ],
+    [ "WebGPUCommandBuffer", "class_video_1_1_web_g_p_u_command_buffer.html#aa2b6f6eb12cc9f6f5a26e89b2d4aba0d", null ],
     [ "~WebGPUCommandBuffer", "class_video_1_1_web_g_p_u_command_buffer.html#a79dd063a9b6cc3b45ee569aeb17b78c5", null ],
     [ "BeginAttachmentlessRenderPass", "class_video_1_1_web_g_p_u_command_buffer.html#a4686dab4986839d3204762bcbdc52306", null ],
     [ "BeginRenderPass", "class_video_1_1_web_g_p_u_command_buffer.html#a9e059d4a8d80456933036f352986fc36", null ],

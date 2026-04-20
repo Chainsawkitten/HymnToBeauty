@@ -181,9 +181,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace48f8d38093194fef437f3df3d2499e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#ace48f8d38093194fef437f3df3d2499e">ClearBuffer</a> (<a class="el" href="class_video_1_1_buffer.html">Buffer</a> *buffer) final</td></tr>
 <tr class="memdesc:ace48f8d38093194fef437f3df3d2499e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear a buffer (fill with 0).  <a href="class_video_1_1_vulkan_command_buffer.html#ace48f8d38093194fef437f3df3d2499e">More...</a><br /></td></tr>
 <tr class="separator:ace48f8d38093194fef437f3df3d2499e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1822700936a7db80e1fd5eae122aad73"><td class="memItemLeft" align="right" valign="top">VkCommandBuffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#a1822700936a7db80e1fd5eae122aad73">GetCommandBuffer</a> () const</td></tr>
-<tr class="memdesc:a1822700936a7db80e1fd5eae122aad73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get command buffer.  <a href="class_video_1_1_vulkan_command_buffer.html#a1822700936a7db80e1fd5eae122aad73">More...</a><br /></td></tr>
-<tr class="separator:a1822700936a7db80e1fd5eae122aad73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6def12241d960d0a484fa6d347875a31"><td class="memItemLeft" align="right" valign="top">VkCommandBuffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#a6def12241d960d0a484fa6d347875a31">GetCurrentCommandBuffer</a> () const</td></tr>
+<tr class="memdesc:a6def12241d960d0a484fa6d347875a31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the command buffer currently being recorded into.  <a href="class_video_1_1_vulkan_command_buffer.html#a6def12241d960d0a484fa6d347875a31">More...</a><br /></td></tr>
+<tr class="separator:a6def12241d960d0a484fa6d347875a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c0e449d72229f54cc5b2500d5bdfc32"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkCommandBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#a5c0e449d72229f54cc5b2500d5bdfc32">GetCommandBuffers</a> () const</td></tr>
+<tr class="memdesc:a5c0e449d72229f54cc5b2500d5bdfc32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get command buffers.  <a href="class_video_1_1_vulkan_command_buffer.html#a5c0e449d72229f54cc5b2500d5bdfc32">More...</a><br /></td></tr>
+<tr class="separator:a5c0e449d72229f54cc5b2500d5bdfc32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ef8aeb41e9e59db5636eb5345378609"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_vulkan_command_buffer.html#a0ef8aeb41e9e59db5636eb5345378609">End</a> ()</td></tr>
 <tr class="memdesc:a0ef8aeb41e9e59db5636eb5345378609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finish recording the command buffer.  <a href="class_video_1_1_vulkan_command_buffer.html#a0ef8aeb41e9e59db5636eb5345378609">More...</a><br /></td></tr>
 <tr class="separator:a0ef8aeb41e9e59db5636eb5345378609"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1034,14 +1037,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1822700936a7db80e1fd5eae122aad73" name="a1822700936a7db80e1fd5eae122aad73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1822700936a7db80e1fd5eae122aad73">&#9670;&nbsp;</a></span>GetCommandBuffer()</h2>
+<a id="a5c0e449d72229f54cc5b2500d5bdfc32" name="a5c0e449d72229f54cc5b2500d5bdfc32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c0e449d72229f54cc5b2500d5bdfc32">&#9670;&nbsp;</a></span>GetCommandBuffers()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">VkCommandBuffer Video::VulkanCommandBuffer::GetCommandBuffer </td>
+          <td class="memname">std::vector&lt; VkCommandBuffer &gt; Video::VulkanCommandBuffer::GetCommandBuffers </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1049,8 +1052,28 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get command buffer. </p>
-<dl class="section return"><dt>Returns</dt><dd>The internal Vulkan command buffer. </dd></dl>
+<p>Get command buffers. </p>
+<dl class="section return"><dt>Returns</dt><dd>The internal Vulkan command buffers. </dd></dl>
+
+</div>
+</div>
+<a id="a6def12241d960d0a484fa6d347875a31" name="a6def12241d960d0a484fa6d347875a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6def12241d960d0a484fa6d347875a31">&#9670;&nbsp;</a></span>GetCurrentCommandBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkCommandBuffer Video::VulkanCommandBuffer::GetCurrentCommandBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the command buffer currently being recorded into. </p>
+<dl class="section return"><dt>Returns</dt><dd>The current internal Vulkan command buffers. </dd></dl>
 
 </div>
 </div>

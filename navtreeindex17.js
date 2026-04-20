@@ -1,5 +1,7 @@
 var NAVTREEINDEX17 =
 {
+"structtrigger_event_1_1_event_struct.html#a7e920a2420eb01dff147e875f669295c":[5,0,11,0,0],
+"structtrigger_event_1_1_event_struct.html#a7e920a2420eb01dff147e875f669295c":[6,0,6,0,0],
 "structtrigger_event_1_1_event_struct.html#ac720ade94c2153242fcff65390a451e1":[5,0,11,0,4],
 "structtrigger_event_1_1_event_struct.html#ac720ade94c2153242fcff65390a451e1":[6,0,6,0,4],
 "structtrigger_event_1_1_event_struct.html#ae219ec5f412ff8e17914792de19580f8":[5,0,11,0,1],

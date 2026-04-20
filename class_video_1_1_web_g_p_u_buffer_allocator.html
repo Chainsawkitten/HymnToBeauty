@@ -108,9 +108,9 @@ Inheritance diagram for Video::WebGPUBufferAllocator:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4819fe144735c9293979b810f39834ec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_buffer_allocator.html#a4819fe144735c9293979b810f39834ec">WebGPUBufferAllocator</a> (<a class="el" href="class_video_1_1_web_g_p_u_renderer.html">WebGPURenderer</a> &amp;webGPURenderer)</td></tr>
-<tr class="memdesc:a4819fe144735c9293979b810f39834ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new buffer allocator.  <a href="class_video_1_1_web_g_p_u_buffer_allocator.html#a4819fe144735c9293979b810f39834ec">More...</a><br /></td></tr>
-<tr class="separator:a4819fe144735c9293979b810f39834ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27370ae6ee321931890e3d74a189d1c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_buffer_allocator.html#a27370ae6ee321931890e3d74a189d1c7">WebGPUBufferAllocator</a> (<a class="el" href="class_video_1_1_web_g_p_u_renderer.html">WebGPURenderer</a> &amp;webGPURenderer, uint32_t frames)</td></tr>
+<tr class="memdesc:a27370ae6ee321931890e3d74a189d1c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new buffer allocator.  <a href="class_video_1_1_web_g_p_u_buffer_allocator.html#a27370ae6ee321931890e3d74a189d1c7">More...</a><br /></td></tr>
+<tr class="separator:a27370ae6ee321931890e3d74a189d1c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa88013c229918ca1749a893a6672888"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_buffer_allocator.html#afa88013c229918ca1749a893a6672888">~WebGPUBufferAllocator</a> () final</td></tr>
 <tr class="memdesc:afa88013c229918ca1749a893a6672888"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_video_1_1_web_g_p_u_buffer_allocator.html#afa88013c229918ca1749a893a6672888">More...</a><br /></td></tr>
 <tr class="separator:afa88013c229918ca1749a893a6672888"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,34 +141,37 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >WebGPU implementation of <a class="el" href="class_video_1_1_buffer_allocator.html" title="Responsible for allocating buffers.">BufferAllocator</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4819fe144735c9293979b810f39834ec" name="a4819fe144735c9293979b810f39834ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4819fe144735c9293979b810f39834ec">&#9670;&nbsp;</a></span>WebGPUBufferAllocator()</h2>
+<a id="a27370ae6ee321931890e3d74a189d1c7" name="a27370ae6ee321931890e3d74a189d1c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27370ae6ee321931890e3d74a189d1c7">&#9670;&nbsp;</a></span>WebGPUBufferAllocator()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Video::WebGPUBufferAllocator::WebGPUBufferAllocator </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_video_1_1_web_g_p_u_renderer.html">WebGPURenderer</a> &amp;&#160;</td>
-          <td class="paramname"><em>webGPURenderer</em></td><td>)</td>
+          <td class="paramname"><em>webGPURenderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>frames</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Create a new buffer allocator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">webGPURenderer</td><td>The WebGPU renderer. </td></tr>
+    <tr><td class="paramname">frames</td><td>How many frames before re-using buffers. </td></tr>
   </table>
   </dd>
 </dl>

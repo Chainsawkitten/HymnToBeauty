@@ -109,9 +109,9 @@ Inheritance diagram for Video::WebGPUCommandBuffer:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a094428dfb56d862f1f4f4a95092ced31"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_command_buffer.html#a094428dfb56d862f1f4f4a95092ced31">WebGPUCommandBuffer</a> (<a class="el" href="class_video_1_1_web_g_p_u_renderer.html">WebGPURenderer</a> *renderer)</td></tr>
-<tr class="memdesc:a094428dfb56d862f1f4f4a95092ced31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new WebGPU command buffer.  <a href="class_video_1_1_web_g_p_u_command_buffer.html#a094428dfb56d862f1f4f4a95092ced31">More...</a><br /></td></tr>
-<tr class="separator:a094428dfb56d862f1f4f4a95092ced31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2b6f6eb12cc9f6f5a26e89b2d4aba0d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_command_buffer.html#aa2b6f6eb12cc9f6f5a26e89b2d4aba0d">WebGPUCommandBuffer</a> (<a class="el" href="class_video_1_1_web_g_p_u_renderer.html">WebGPURenderer</a> *renderer, uint32_t frames=1)</td></tr>
+<tr class="memdesc:aa2b6f6eb12cc9f6f5a26e89b2d4aba0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new WebGPU command buffer.  <a href="class_video_1_1_web_g_p_u_command_buffer.html#aa2b6f6eb12cc9f6f5a26e89b2d4aba0d">More...</a><br /></td></tr>
+<tr class="separator:aa2b6f6eb12cc9f6f5a26e89b2d4aba0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79dd063a9b6cc3b45ee569aeb17b78c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_1_1_web_g_p_u_command_buffer.html#a79dd063a9b6cc3b45ee569aeb17b78c5">~WebGPUCommandBuffer</a> () final</td></tr>
 <tr class="memdesc:a79dd063a9b6cc3b45ee569aeb17b78c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_video_1_1_web_g_p_u_command_buffer.html#a79dd063a9b6cc3b45ee569aeb17b78c5">More...</a><br /></td></tr>
 <tr class="separator:a79dd063a9b6cc3b45ee569aeb17b78c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,34 +201,37 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >WebGPU implementation of <a class="el" href="class_video_1_1_command_buffer.html" title="A buffer into which rendering commands are recorded.">CommandBuffer</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a094428dfb56d862f1f4f4a95092ced31" name="a094428dfb56d862f1f4f4a95092ced31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a094428dfb56d862f1f4f4a95092ced31">&#9670;&nbsp;</a></span>WebGPUCommandBuffer()</h2>
+<a id="aa2b6f6eb12cc9f6f5a26e89b2d4aba0d" name="aa2b6f6eb12cc9f6f5a26e89b2d4aba0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2b6f6eb12cc9f6f5a26e89b2d4aba0d">&#9670;&nbsp;</a></span>WebGPUCommandBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Video::WebGPUCommandBuffer::WebGPUCommandBuffer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_video_1_1_web_g_p_u_renderer.html">WebGPURenderer</a> *&#160;</td>
-          <td class="paramname"><em>renderer</em></td><td>)</td>
+          <td class="paramname"><em>renderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>frames</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Create new WebGPU command buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">renderer</td><td>The WebGPU renderer. </td></tr>
+    <tr><td class="paramname">frames</td><td>How many frames before re-using buffers for push constant emulation. </td></tr>
   </table>
   </dd>
 </dl>
